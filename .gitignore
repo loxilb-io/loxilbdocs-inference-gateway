@@ -1,0 +1,17 @@
+/site/
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+.claude/
+.serena/
+.mcp.json
+.codegraph/
+claudedocs/
+.planning/
+
+# leak-scan lives in the private working repo (its patterns name internal identifiers)
+tools/
