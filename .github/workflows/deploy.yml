@@ -1,0 +1,47 @@
+name: deploy
+
+# Publishes the documentation to GitHub Pages with mike-based versioning.
+#   - push to main            -> updates the "latest" alias
+#   - tag  vX.Y.Z             -> publishes that version and repoints "latest"
+# Enable GitHub Pages (Settings -> Pages -> Deploy from branch -> gh-pages)
+# before the first run.
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Configure git for mike
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Publish (main -> latest)
+        if: startsWith(github.ref, 'refs/heads/')
+        run: mike deploy --push --update-aliases latest
+
+      - name: Publish (tag -> version + latest)
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          mike deploy --push --update-aliases "$VERSION" latest
+          mike set-default --push latest

@@ -1,0 +1,14 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 LoxiLB Slack community
+    url: https://www.loxilb.io/members
+    about: Ask questions and chat with LoxiLB developers and users.
+  - name: 📖 Read the documentation
+    url: https://loxilb-io.github.io/loxilbdocs-inference-gateway/
+    about: Getting started, AI gateway, KV-cache-aware routing, and reference guides.
+  - name: 🧩 Gateway source code & API
+    url: https://github.com/loxilb-io/loxilb-inference-gateway
+    about: Report bugs in the gateway itself (not the docs) in the code repository.
+  - name: 🗨️ Upstream LoxiLB discussions
+    url: https://github.com/loxilb-io/loxilb/discussions
+    about: General LoxiLB Q&A and design discussion.

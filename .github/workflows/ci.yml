@@ -1,0 +1,79 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  hygiene:
+    name: Repository hygiene
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: No internal / AI-assistant / planning artifacts
+        run: |
+          echo "Scanning for files that must never be published..."
+          matches=$(find . -path ./.git -prune -o \
+            \( -iname 'CLAUDE.md' -o -iname 'AGENTS.md' -o -iname 'GEMINI.md' \
+               -o -iname '*-PLAN.md' -o -iname 'CONTENT-MAP.md' \
+               -o -iname 'CORRECTION-BACKLOG.md' -o -iname 'STYLE-CONTRACT.md' \
+               -o -iname 'SANITIZATION-CHECKLIST.md' -o -name '.planning' \
+               -o -name '.serena' -o -name '.mcp.json' -o -name '.codegraph' \
+               -o -name 'claudedocs' \) -print)
+          if [ -n "$matches" ]; then
+            echo "::error::Internal or AI-assistant artifacts must not be committed:"
+            echo "$matches"
+            exit 1
+          fi
+          echo "OK — none found."
+
+      - name: No authorship trailers or absolute developer paths
+        run: |
+          fail=0
+          if grep -rIn "Co-Authored-By" docs mkdocs.yml 2>/dev/null; then
+            echo "::error::Remove Co-Authored-By trailers."; fail=1
+          fi
+          if grep -rIn "/Users/" docs 2>/dev/null; then
+            echo "::error::Remove absolute developer paths (/Users/...)."; fail=1
+          fi
+          exit $fail
+
+  build:
+    name: Strict docs build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: mkdocs build --strict
+        run: mkdocs build --strict
+
+  links:
+    name: Link check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          args: --config .lychee.toml --no-progress './docs/**/*.md' './*.md'
+          fail: true
+
+  prose:
+    name: Prose lint
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: errata-ai/vale-action@reviewdog
+        with:
+          files: docs
+          fail_on_error: false

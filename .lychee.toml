@@ -1,0 +1,15 @@
+# Link-checker configuration (https://github.com/lycheeverse/lychee)
+timeout = 20
+max_retries = 3
+accept = [200, 206, 429]
+
+# Hosts that rate-limit or block automated checkers (not broken links)
+exclude = [
+  "https://www.loxilb.io",
+  "https://join.slack.com",
+  "https://www.linkedin.com",
+  "https://img.shields.io",
+]
+
+# Don't check anchors on external pages
+exclude_link_local = false

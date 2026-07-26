@@ -15,3 +15,12 @@ claudedocs/
 
 # leak-scan lives in the private working repo (its patterns name internal identifiers)
 tools/
+
+# Internal planning / design / migration docs — never publish
+*-PLAN.md
+CONTENT-MAP.md
+CORRECTION-BACKLOG.md
+STYLE-CONTRACT.md
+SANITIZATION-CHECKLIST.md
+GUIDE.md
+REQUIREMENT.md
