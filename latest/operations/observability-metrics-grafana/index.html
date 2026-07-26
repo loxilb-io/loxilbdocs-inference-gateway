@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#grafana-dashboards" class="md-skip">
+        <a href="#grafana-dashboards-observability" class="md-skip">
           Skip to content
         </a>
       
@@ -1403,6 +1403,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1419,6 +1437,274 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observability-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observability surface
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Observability surface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#global-pd-in-flight-footprint-gauge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global P/D in-flight footprint (gauge)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-admission-blocked-counter-counter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global admission-blocked counter (counter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-stage-tier-15-latency-histogram-histogram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-stage Tier-1.5 latency histogram (histogram)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#histogram-reconstruction-and-the-microsecondsecond-note" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Histogram reconstruction and the microsecond→second note
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operator-caveat-metric-name-inconsistency-tier15_-vs-t15_" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operator caveat: metric-name inconsistency (tier15_ vs t15_)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grafana-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grafana dashboard
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Grafana dashboard">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#template-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#row-1-fleet-health-6-panels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Row 1 — Fleet health (6 panels)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#row-2-latency-3-panels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Row 2 — Latency (3 panels)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#row-3-rejection-and-pressure-3-panels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Row 3 — Rejection and pressure (3 panels)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alerts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alerts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-panels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred panels
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deferred panels">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kv-cache-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KV cache inventory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-15-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier-1.5 diagnostics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kv-stage-latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KV stage latency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admission-detail-and-controller-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admission detail and controller state
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metric-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metric inventory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1850,6 +2136,263 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observability-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observability surface
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Observability surface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#global-pd-in-flight-footprint-gauge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global P/D in-flight footprint (gauge)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-admission-blocked-counter-counter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global admission-blocked counter (counter)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#per-stage-tier-15-latency-histogram-histogram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Per-stage Tier-1.5 latency histogram (histogram)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#histogram-reconstruction-and-the-microsecondsecond-note" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Histogram reconstruction and the microsecond→second note
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operator-caveat-metric-name-inconsistency-tier15_-vs-t15_" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operator caveat: metric-name inconsistency (tier15_ vs t15_)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grafana-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grafana dashboard
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Grafana dashboard">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#template-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#row-1-fleet-health-6-panels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Row 1 — Fleet health (6 panels)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#row-2-latency-3-panels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Row 2 — Latency (3 panels)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#row-3-rejection-and-pressure-3-panels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Row 3 — Rejection and pressure (3 panels)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alerts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alerts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deferred-panels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deferred panels
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deferred panels">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kv-cache-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KV cache inventory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-15-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier-1.5 diagnostics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kv-stage-latency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        KV stage latency
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admission-detail-and-controller-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admission detail and controller state
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metric-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metric inventory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1865,11 +2408,489 @@
 
 
 
-<h1 id="grafana-dashboards">Grafana Dashboards<a class="headerlink" href="#grafana-dashboards" title="Permanent link">&para;</a></h1>
+<h1 id="grafana-dashboards-observability">Grafana Dashboards &amp; Observability<a class="headerlink" href="#grafana-dashboards-observability" title="Permanent link">&para;</a></h1>
+<p>LoxiLB exports the KV-cache-aware AI routing pipeline as Prometheus metrics and ships a Grafana dashboard so operators can diagnose Tier-1.5 routing in under a minute instead of grepping <code>/metrics</code> by hand. This page documents the observability surface — the key metrics, the PromQL that drives each dashboard panel, and the alert set that ships with it.</p>
 <div class="admonition note">
-<p class="admonition-title">Scaffold</p>
-<p>Phase-0 skeleton stub. Content lands in Phases 2-6 per the content map.</p>
+<p class="admonition-title">Audience</p>
+<p>Infrastructure operators, DevOps engineers, and platform SREs running AI inference clusters behind LoxiLB.</p>
 </div>
+<p>For the routing behaviour these metrics describe, see <a href="../../ai-gateway/kv-caching/">KV-Cache Routing</a>.</p>
+<hr />
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>KV-cache-aware routing is enabled on the service: fullproxy <code>mode=4</code> with <code>pd_disagg_mode: true</code> (see <a href="../../ai-gateway/kv-caching/">KV-Cache Routing</a>).</li>
+<li>Prometheus is scraping the LoxiLB <code>/metrics</code> endpoint. A <strong>10-second</strong> scrape interval is recommended — it matches LoxiLB's internal metric snapshot cadence, so a faster interval only re-reads the same values.</li>
+<li>Grafana has the Prometheus instance configured as a data source.</li>
+</ul>
+<p>The metric snapshot the data plane publishes is refreshed every 10 seconds. Gauges reflect the point-in-time value at the last snapshot; counters are monotonic; histograms are reconstructed from cumulative bucket counts (see below).</p>
+<hr />
+<h2 id="observability-surface">Observability surface<a class="headerlink" href="#observability-surface" title="Permanent link">&para;</a></h2>
+<p>The routing pipeline exposes roughly 50 Prometheus series spanning the AI gateway, the sockproxy P/D path, the KV subscriber, and the AI controller. The three signals below are the ones operators reach for first when answering "is the system saturated?" and "why is KV routing slow?".</p>
+<h3 id="global-pd-in-flight-footprint-gauge">Global P/D in-flight footprint (gauge)<a class="headerlink" href="#global-pd-in-flight-footprint-gauge" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Metric:</strong> <code>loxilb_pd_admission_inflight</code></li>
+<li><strong>Type:</strong> Gauge — rises and falls.</li>
+<li><strong>Meaning:</strong> P/D requests currently held in-flight across all connections and endpoints. This is the real-time load LoxiLB is carrying for P/D workloads, aggregated globally rather than per-endpoint.</li>
+<li><strong>Use it for:</strong> capacity planning and tuning the global admission cap. Compare against your configured <code>LLB_PD_MAX_TOTAL_INFLIGHT</code>; sustained readings near the cap mean you are about to shed load.</li>
+</ul>
+<h3 id="global-admission-blocked-counter-counter">Global admission-blocked counter (counter)<a class="headerlink" href="#global-admission-blocked-counter-counter" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Metric:</strong> <code>loxilb_pd_admission_total_blocked_total</code></li>
+<li><strong>Type:</strong> Counter — monotonic.</li>
+<li><strong>Meaning:</strong> Total <code>accept()</code>s blocked by the global P/D total-inflight cap. When the cap is hit the SYN is left in the listen backlog and never accepted into LoxiLB — the request never enters the proxy at all.</li>
+<li><strong>Distinct from per-endpoint shed:</strong> per-EP admission shedding happens <em>after</em> accept, before dispatch. This counter is the earliest possible back-pressure signal — a rising rate is your first warning of over-subscription and tells you to raise <code>LLB_PD_MAX_TOTAL_INFLIGHT</code> or add capacity.</li>
+</ul>
+<h3 id="per-stage-tier-15-latency-histogram-histogram">Per-stage Tier-1.5 latency histogram (histogram)<a class="headerlink" href="#per-stage-tier-15-latency-histogram-histogram" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Metric:</strong> <code>loxilb_pd_kv_stage_duration_seconds</code></li>
+<li><strong>Type:</strong> Histogram (labelled).</li>
+<li><strong>Labels:</strong><ul>
+<li><code>stage</code> — <code>tokenize</code> (tokenizer step), <code>hash</code> (CBOR + chained block hash), <code>cgo</code> (best-worker selection crossing), <code>scan</code> (inventory scan).</li>
+<li><code>outcome</code> — <code>hit</code> (Tier-1.5 selected an endpoint) or <code>miss</code> (fell through to the next tier).</li>
+</ul>
+</li>
+<li><strong>Bucket bounds (seconds):</strong> <code>0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0</code>. These mirror the time-to-first-byte histogram so the two are directly comparable.</li>
+<li><strong>Meaning:</strong> This is <em>the</em> diagnostic for "why is KV routing slow?". Without a per-stage split you can see a slow request but not whether tokenization, hashing, the best-worker selection, or the inventory scan is the bottleneck. The <code>hit</code>/<code>miss</code> split reveals whether the routing cost is being repaid in time-to-first-token savings.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Reading the histogram in PromQL</p>
+<p>Use <code>histogram_quantile()</code> over the <code>_bucket</code> series, and narrow with the labels — for example the p95 of the hashing stage on cache hits:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_kv_stage_duration_seconds_bucket</span><span class="p">{</span><span class="nl">stage</span><span class="o">=</span><span class="p">&quot;</span><span class="s">hash</span><span class="p">&quot;,</span><span class="w"> </span><span class="nl">outcome</span><span class="o">=</span><span class="p">&quot;</span><span class="s">hit</span><span class="p">&quot;}[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+</code></pre></div></p>
+</div>
+<h3 id="histogram-reconstruction-and-the-microsecondsecond-note">Histogram reconstruction and the microsecond→second note<a class="headerlink" href="#histogram-reconstruction-and-the-microsecondsecond-note" title="Permanent link">&para;</a></h3>
+<p>The stage histogram (and the TTFB histogram) is published as <strong>cumulative per-bucket counts</strong> taken from the data plane, then reconstructed into Prometheus observations at snapshot time. The reconstruction takes the current and previous cumulative bucket arrays, the current and previous sample counts, the bucket-bound array, and an overflow bound, and replays the per-range deltas as observations.</p>
+<div class="admonition warning">
+<p class="admonition-title">Unit conversion — microseconds to seconds</p>
+<p>The data-plane atomics accumulate stage latency in <strong>microseconds</strong>, but Prometheus histograms in this dashboard are expressed in <strong>seconds</strong> (bucket bounds <code>0.001</code>, <code>0.005</code>, …). Any tooling that reads the raw sum series directly must divide by 1,000,000 to get seconds. The exported <code>loxilb_pd_kv_stage_duration_seconds</code> series is already converted — this note matters only if you build derived queries against the underlying counters.</p>
+</div>
+<h3 id="operator-caveat-metric-name-inconsistency-tier15_-vs-t15_">Operator caveat: metric-name inconsistency (<code>tier15_</code> vs <code>t15_</code>)<a class="headerlink" href="#operator-caveat-metric-name-inconsistency-tier15_-vs-t15_" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Inconsistent naming in the KV-tier series</p>
+<p>The KV-tier series are <strong>not consistently named</strong> — some use the <code>tier15_</code> prefix and others abbreviate to <code>t15_</code>. In particular the hit counter is <code>loxilb_pd_kv_tier15_hits_total</code> while the fall-through counter is <code>loxilb_pd_kv_t15_fallthrough_total</code>. When writing your own PromQL, copy the exact series name from <code>/metrics</code> rather than assuming a uniform prefix — a query that guesses <code>tier15_</code> for a <code>t15_</code> series (or vice-versa) silently returns no data. Where a series name is not confirmed against a live <code>/metrics</code> scrape, treat the names below as descriptive and verify before alerting on them.</p>
+</div>
+<hr />
+<h2 id="grafana-dashboard">Grafana dashboard<a class="headerlink" href="#grafana-dashboard" title="Permanent link">&para;</a></h2>
+<p><strong>Title:</strong> LoxiLB AI Gateway — KV-Cache Routing · <strong>UID:</strong> <code>loxilb-ai-kv-routing</code> · <strong>Refresh:</strong> 10s (matches the scrape interval) · <strong>Data source:</strong> Prometheus (<code>$datasource</code>, defaults to <code>Prometheus</code>).</p>
+<p>The dashboard is deliberately small: <strong>12 panels across 3 rows</strong>. Operators open it during a page and get about a minute, not twenty panels. Every panel answers either "is something wrong?" or "where is the problem?" — nothing is there for curiosity alone. Deeper diagnostic panels are documented under <a href="#deferred-panels">Deferred panels</a> and added only when a real question demands them.</p>
+<h3 id="template-variables">Template variables<a class="headerlink" href="#template-variables" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Type</th>
+<th>Source</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>datasource</code></td>
+<td>datasource</td>
+<td>Prometheus</td>
+<td>Override the Prometheus server</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>query</td>
+<td>model label from <code>loxilb_ai_requests_total</code></td>
+<td>Filter by served model</td>
+</tr>
+<tr>
+<td><code>service</code></td>
+<td>query</td>
+<td>service label from the P/D endpoint-info series</td>
+<td>Filter per service</td>
+</tr>
+<tr>
+<td><code>endpoint</code></td>
+<td>query</td>
+<td>endpoint label from the KV subscriber series</td>
+<td>Drill into a specific endpoint</td>
+</tr>
+</tbody>
+</table>
+<h3 id="row-1-fleet-health-6-panels">Row 1 — Fleet health (6 panels)<a class="headerlink" href="#row-1-fleet-health-6-panels" title="Permanent link">&para;</a></h3>
+<p><em>Is the system alive and under capacity?</em></p>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Type</th>
+<th>PromQL</th>
+<th>Alert</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RPS</td>
+<td>Stat</td>
+<td><code>sum(rate(loxilb_ai_requests_total[1m]))</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>In-Flight</td>
+<td>Stat</td>
+<td><code>loxilb_pd_admission_inflight</code></td>
+<td>Warning at <code>cap × 0.8</code> (panel threshold)</td>
+</tr>
+<tr>
+<td>Active Streams</td>
+<td>Stat</td>
+<td><code>sum(loxilb_ai_active_streams)</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>KV Hit Rate</td>
+<td>Stat</td>
+<td><code>rate(loxilb_pd_kv_tier15_hits_total[5m]) / (rate(loxilb_pd_kv_tier15_hits_total[5m]) + rate(loxilb_pd_kv_t15_fallthrough_total[5m])) * 100</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>KV Sub Uptime</td>
+<td>Stat</td>
+<td><code>avg(loxilb_kv_subscriber_connected) * 100</code></td>
+<td>Critical below 100%</td>
+</tr>
+<tr>
+<td>HTTP 5xx %</td>
+<td>Stat</td>
+<td><code>rate(loxilb_http_status_5xx_total[1m]) / rate(loxilb_http_responses_total[1m]) * 100</code></td>
+<td>Critical above 1%</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The KV Hit Rate query is the canonical example of the naming caveat above: it mixes the <code>tier15_</code> hit series with the <code>t15_</code> fall-through series in a single ratio. Copy it verbatim.</p>
+</div>
+<h3 id="row-2-latency-3-panels">Row 2 — Latency (3 panels)<a class="headerlink" href="#row-2-latency-3-panels" title="Permanent link">&para;</a></h3>
+<p><em>Where is latency coming from?</em></p>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Type</th>
+<th>PromQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prefill p95</td>
+<td>Time series (p50/p95/p99 lines)</td>
+<td><code>histogram_quantile(0.95, rate(loxilb_ai_pd_prefill_duration_seconds_bucket[5m]))</code></td>
+</tr>
+<tr>
+<td>Decode TTFT p95</td>
+<td>Time series (p50/p95/p99 lines)</td>
+<td><code>histogram_quantile(0.95, rate(loxilb_ai_pd_decode_ttft_seconds_bucket[5m]))</code></td>
+</tr>
+<tr>
+<td>Per-EP Prefill</td>
+<td>Time series (per endpoint)</td>
+<td><code>histogram_quantile(0.95, rate(loxilb_ai_pd_prefill_duration_per_ep_seconds_bucket[5m]))</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="row-3-rejection-and-pressure-3-panels">Row 3 — Rejection and pressure (3 panels)<a class="headerlink" href="#row-3-rejection-and-pressure-3-panels" title="Permanent link">&para;</a></h3>
+<p><em>Is the system rejecting requests?</em></p>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Type</th>
+<th>PromQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Blocked (Global)</td>
+<td>Stat</td>
+<td><code>rate(loxilb_pd_admission_total_blocked_total[5m])</code></td>
+</tr>
+<tr>
+<td>CB Flips</td>
+<td>Stat</td>
+<td><code>rate(loxilb_pd_cb_flips_total[5m])</code></td>
+</tr>
+<tr>
+<td>Subscriber State</td>
+<td>Table</td>
+<td><code>loxilb_kv_subscriber_connected</code> per endpoint — 1 = green, 0 = red</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="alerts">Alerts<a class="headerlink" href="#alerts" title="Permanent link">&para;</a></h2>
+<p>These ship with the dashboard. Tune the thresholds to your fleet — the admission thresholds in particular derive from your configured <code>LLB_PD_MAX_TOTAL_INFLIGHT</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Alert</th>
+<th>Condition</th>
+<th>Severity</th>
+<th>Cooldown</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KV Sub Disconnect</td>
+<td><code>loxilb_kv_subscriber_connected == 0</code> for &gt; 2m</td>
+<td>Critical</td>
+<td>5m</td>
+</tr>
+<tr>
+<td>Admission Saturated</td>
+<td><code>loxilb_pd_admission_inflight &gt; (LLB_PD_MAX_TOTAL_INFLIGHT × 0.8)</code> for &gt; 1m</td>
+<td>Warning</td>
+<td>5m</td>
+</tr>
+<tr>
+<td>Global Valve Blocking</td>
+<td><code>rate(loxilb_pd_admission_total_blocked_total[1m]) &gt; 10</code></td>
+<td>Critical</td>
+<td>10m</td>
+</tr>
+<tr>
+<td>CB Flapping</td>
+<td><code>rate(loxilb_pd_cb_flips_total[5m]) &gt; 2</code></td>
+<td>Warning</td>
+<td>10m</td>
+</tr>
+</tbody>
+</table>
+<p>Additional alerts to add as your workload matures:</p>
+<table>
+<thead>
+<tr>
+<th>Alert</th>
+<th>Condition</th>
+<th>Severity</th>
+<th>Cooldown</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KV Inventory Eviction</td>
+<td><code>rate(loxilb_kv_inv_cap_evictions_total[5m]) &gt; 0</code></td>
+<td>Warning</td>
+<td>15m</td>
+</tr>
+<tr>
+<td>Tier-1.5 Hit Rate Low</td>
+<td>hit rate &lt; 10% for &gt; 10m while <code>kvExactMode=1</code></td>
+<td>Warning</td>
+<td>15m</td>
+</tr>
+<tr>
+<td>Controller Stale</td>
+<td><code>loxilb_pd_ctrl_mode == 1</code> for &gt; 5m</td>
+<td>Warning</td>
+<td>10m</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="deferred-panels">Deferred panels<a class="headerlink" href="#deferred-panels" title="Permanent link">&para;</a></h2>
+<p>The panels below are fully specified but kept off the default dashboard. Add them as collapsible rows when an operator asks a question they answer — that is faster than shipping 25 panels nobody reads.</p>
+<h3 id="kv-cache-inventory">KV cache inventory<a class="headerlink" href="#kv-cache-inventory" title="Permanent link">&para;</a></h3>
+<p><em>Which endpoint holds the most cache? Is eviction happening?</em></p>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Type</th>
+<th>PromQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Blocks per EP</td>
+<td>Bars</td>
+<td><code>loxilb_pd_kv_blocks_total</code> grouped by endpoint</td>
+</tr>
+<tr>
+<td>Eviction Rate</td>
+<td>Stat</td>
+<td><code>sum(rate(loxilb_kv_inv_cap_evictions_total[5m]))</code></td>
+</tr>
+<tr>
+<td>Trie Nodes</td>
+<td>Stat</td>
+<td><code>loxilb_pd_trie_nodes</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="tier-15-diagnostics">Tier-1.5 diagnostics<a class="headerlink" href="#tier-15-diagnostics" title="Permanent link">&para;</a></h3>
+<p><em>Why is our hit rate low? What are we missing on?</em></p>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Type</th>
+<th>PromQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Miss Reasons</td>
+<td>Pie (top 5)</td>
+<td><code>sum by (reason) (rate(loxilb_pd_kv_t15_miss_reason_total[1m]))</code></td>
+</tr>
+<tr>
+<td>Hits vs Fallback</td>
+<td>Time series (stacked)</td>
+<td><code>sum(rate(loxilb_pd_kv_tier15_hits_total[1m]))</code> vs <code>rate(loxilb_pd_kv_t15_fallthrough_total[1m])</code></td>
+</tr>
+<tr>
+<td>Spills</td>
+<td>Time series</td>
+<td><code>rate(loxilb_pd_kv_tier15_spills_total[1m])</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="kv-stage-latency">KV stage latency<a class="headerlink" href="#kv-stage-latency" title="Permanent link">&para;</a></h3>
+<p><em>KV routing seems slow — which stage is the bottleneck?</em> Drives off the per-stage histogram above.</p>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Type</th>
+<th>PromQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stage Latency p50/p95/p99</td>
+<td>Time series (3 lines)</td>
+<td><code>histogram_quantile(0.95, rate(loxilb_pd_kv_stage_duration_seconds_bucket{stage=~"$stage", outcome=~"$outcome"}[1m]))</code> (repeat for 0.5 / 0.99)</td>
+</tr>
+<tr>
+<td>Stage Throughput</td>
+<td>Stacked bar</td>
+<td><code>sum by (stage) (rate(loxilb_pd_kv_stage_duration_seconds_count[1m]))</code></td>
+</tr>
+<tr>
+<td>Hit vs Miss p50</td>
+<td>Time series</td>
+<td><code>histogram_quantile(0.5, rate(loxilb_pd_kv_stage_duration_seconds_bucket{outcome="hit"}[1m]))</code> and the same with <code>outcome="miss"</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="admission-detail-and-controller-state">Admission detail and controller state<a class="headerlink" href="#admission-detail-and-controller-state" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Type</th>
+<th>PromQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Per-EP Shed vs Parked</td>
+<td>Time series (stacked)</td>
+<td><code>rate(loxilb_pd_admission_shed_total[1m])</code> vs <code>rate(loxilb_pd_admission_queued_total[1m])</code></td>
+</tr>
+<tr>
+<td>Reconnect Rate</td>
+<td>Time series</td>
+<td><code>rate(loxilb_kv_subscriber_reconnect_total[5m])</code></td>
+</tr>
+<tr>
+<td>Alpha Decay</td>
+<td>Time series</td>
+<td><code>loxilb_pd_ctrl_alpha</code> (1.0 = Smart, 0.0 = Autonomous)</td>
+</tr>
+<tr>
+<td>Ctrl Mode</td>
+<td>Stat</td>
+<td><code>loxilb_pd_ctrl_mode</code> → 0 = Autonomous, 1 = Stale, 2 = Smart</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="metric-inventory">Metric inventory<a class="headerlink" href="#metric-inventory" title="Permanent link">&para;</a></h2>
+<p>The routing pipeline groups its exported series roughly as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Approx. count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI gateway</td>
+<td>14</td>
+</tr>
+<tr>
+<td>Sockproxy P/D</td>
+<td>22</td>
+</tr>
+<tr>
+<td>KV subscriber</td>
+<td>4</td>
+</tr>
+<tr>
+<td>KV agent</td>
+<td>1</td>
+</tr>
+<tr>
+<td>AI controller</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+<p>The three signals featured on this page — the admission in-flight gauge, the global admission-blocked counter, and the per-stage Tier-1.5 latency histogram — are the highest-value additions to that surface for day-to-day operations.</p>
+<p>Some locality signals are not yet available as metrics and are called out here so you do not build panels around series that do not exist:</p>
+<ul>
+<li>LMCache hit/match locality rates — no data-plane counter is exported today; requires upstream LMCache integration.</li>
+<li>Per-endpoint KV block-utilization percentage — requires per-EP block capacity to be tracked, which is not yet exported as a gauge.</li>
+</ul>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>What to check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KV Hit Rate panel shows "No data"</td>
+<td>Series-name mismatch — a <code>t15_</code>/<code>tier15_</code> prefix guessed wrong</td>
+<td>Copy the exact series names from a live <code>/metrics</code> scrape; verify both the hit and fall-through series exist</td>
+</tr>
+<tr>
+<td>In-Flight climbs and Blocked (Global) starts rising</td>
+<td>Global admission cap reached; SYNs held in listen backlog</td>
+<td>Raise <code>LLB_PD_MAX_TOTAL_INFLIGHT</code> or add backend capacity; confirm the Admission Saturated alert fired</td>
+</tr>
+<tr>
+<td>Stage histogram panels empty</td>
+<td>Stage timing not being recorded, or KV-exact routing not enabled</td>
+<td>Confirm <code>mode=4</code> + <code>pd_disagg_mode: true</code> and that traffic is actually hitting the Tier-1.5 path</td>
+</tr>
+<tr>
+<td>KV Sub Uptime below 100%</td>
+<td>A KV subscriber lost its connection to a backend</td>
+<td>Use the Subscriber State table to find the red endpoint; check reconnect rate</td>
+</tr>
+<tr>
+<td>Latency panels flat/empty</td>
+<td>Prometheus not scraping, or scrape interval mismatched</td>
+<td>Confirm the target is up and scraping <code>/metrics</code> at ~10s</td>
+</tr>
+</tbody>
+</table>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../ai-gateway/kv-caching/">KV-Cache Routing</a> — the routing behaviour these metrics describe.</li>
+</ul>
 
 
 

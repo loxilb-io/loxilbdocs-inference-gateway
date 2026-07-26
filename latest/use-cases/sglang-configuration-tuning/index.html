@@ -1117,6 +1117,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang Config & Tuning
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1133,6 +1151,307 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-configuration-surface-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Configuration surface at a glance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-rest-rule-fields-sglang-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. REST rule fields (SGLang mode)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. REST rule fields (SGLang mode)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-service-level-servicearguments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Service-level (serviceArguments)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-endpoint-level-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Endpoint-level (endpoints[])
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-worked-example-single-role-sglang-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Worked example — single-role SGLang service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-worked-example-two-vip-coexistence-one-gateway-both-engines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Worked example — two-VIP coexistence (one gateway, both engines)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-config-time-validation-guards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Config-time validation guards
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-loxilb-environment-variables-sglang-relevant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. LoxiLB environment variables (SGLang-relevant)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-sglang-server-side-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. SGLang server-side configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. SGLang server-side configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-enabling-kv-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Enabling KV events
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-page-size-parity-the-deadliest-knob" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 --page-size parity (the deadliest knob)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-dp-ranks-and-port-planning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 DP ranks and port planning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-co-residency-memory-split" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Co-residency memory split
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-per-layer-enablement-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Per-layer enablement matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-parity-triad-and-tuning-playbook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Parity triad and tuning playbook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Parity triad and tuning playbook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-the-parity-triad-must-match-or-tier-15-silently-degrades-to-the-fallback-selector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 The parity triad (must match or Tier 1.5 silently degrades to the fallback selector)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-page-size-choice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Page-size choice
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-rank-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Rank count
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-watchdog-threshold-loxilb_kv_zero_hit_n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Watchdog threshold (LOXILB_KV_ZERO_HIT_N)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-coexistence-memory-split" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Coexistence memory split
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-miss-path-selector-and-shared-knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 Miss-path selector and shared knobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-observability-quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Observability quick reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-troubleshooting-playbook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Troubleshooting playbook
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1850,6 +2169,296 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-configuration-surface-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Configuration surface at a glance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-rest-rule-fields-sglang-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. REST rule fields (SGLang mode)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. REST rule fields (SGLang mode)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-service-level-servicearguments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Service-level (serviceArguments)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-endpoint-level-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Endpoint-level (endpoints[])
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-worked-example-single-role-sglang-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Worked example — single-role SGLang service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-worked-example-two-vip-coexistence-one-gateway-both-engines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Worked example — two-VIP coexistence (one gateway, both engines)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-config-time-validation-guards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Config-time validation guards
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-loxilb-environment-variables-sglang-relevant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. LoxiLB environment variables (SGLang-relevant)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-sglang-server-side-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. SGLang server-side configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. SGLang server-side configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-enabling-kv-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Enabling KV events
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-page-size-parity-the-deadliest-knob" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 --page-size parity (the deadliest knob)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-dp-ranks-and-port-planning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 DP ranks and port planning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-co-residency-memory-split" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Co-residency memory split
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-per-layer-enablement-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Per-layer enablement matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-parity-triad-and-tuning-playbook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Parity triad and tuning playbook
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Parity triad and tuning playbook">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-the-parity-triad-must-match-or-tier-15-silently-degrades-to-the-fallback-selector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 The parity triad (must match or Tier 1.5 silently degrades to the fallback selector)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-page-size-choice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Page-size choice
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-rank-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Rank count
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-watchdog-threshold-loxilb_kv_zero_hit_n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Watchdog threshold (LOXILB_KV_ZERO_HIT_N)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-coexistence-memory-split" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Coexistence memory split
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-miss-path-selector-and-shared-knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 Miss-path selector and shared knobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-observability-quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Observability quick reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-troubleshooting-playbook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Troubleshooting playbook
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1866,10 +2475,761 @@
 
 
 <h1 id="sglang-configuration-and-tuning">SGLang Configuration and Tuning<a class="headerlink" href="#sglang-configuration-and-tuning" title="Permanent link">&para;</a></h1>
-<div class="admonition note">
-<p class="admonition-title">Scaffold</p>
-<p>Phase-0 skeleton stub. Content lands in Phases 2-6 per the content map.</p>
+<p>Every operator-facing knob for the single-role SGLang KV-exact routing path: the REST rule
+fields, the config-time validation guards, the SGLang-relevant LoxiLB environment variables, the
+SGLang server flags, and a tuning, observability, and troubleshooting playbook. Read
+<a href="../sglang-routing/">SGLang Routing</a> for <em>what each piece does</em> and
+<a href="../vllm-vs-sglang/">vLLM vs SGLang</a> for the contract-by-contract contrast; this page is the
+<em>how-to-configure</em> companion.</p>
+<hr />
+<h2 id="1-configuration-surface-at-a-glance">1. Configuration surface at a glance<a class="headerlink" href="#1-configuration-surface-at-a-glance" title="Permanent link">&para;</a></h2>
+<p>The SGLang path is configured in <strong>three planes</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Plane</th>
+<th>Where configured</th>
+<th>Key knobs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rule shape (single-role KV-exact)</td>
+<td>REST rule</td>
+<td><code>mode:4</code> (fullproxy), <code>kvExactMode:3</code>, <code>sel</code> (the miss-path selector)</td>
+</tr>
+<tr>
+<td>Engine identity</td>
+<td>REST rule</td>
+<td><code>kvEngineType:"sglang"</code> (immutable), <code>kvHashAlgo</code> <strong>omitted</strong></td>
+</tr>
+<tr>
+<td>Hash parity</td>
+<td>REST rule + SGLang flag</td>
+<td><code>kvBlockSize</code> <strong>= SGLang <code>--page-size</code></strong> (read back from <code>/get_server_info</code>)</td>
+</tr>
+<tr>
+<td>Event feed</td>
+<td>REST rule + SGLang flag</td>
+<td><code>kvZmqPort</code> + <code>kvDpRankCount</code> ⇔ <code>--kv-events-config</code> port + <code>--dp-size</code></td>
+</tr>
+<tr>
+<td>Silent-failure tripwire</td>
+<td>LoxiLB env</td>
+<td><code>LOXILB_KV_ZERO_HIT_N</code> (zero-hit watchdog threshold, default 50)</td>
+</tr>
+<tr>
+<td>Blend law / inventory caps</td>
+<td>LoxiLB env (shared)</td>
+<td><code>LOXILB_KV_LB_MODE</code>, <code>LOXILB_KV_MAX_BLOCKS</code>, … — <strong>process-global across vLLM and SGLang VIPs</strong></td>
+</tr>
+<tr>
+<td>SGLang server</td>
+<td>container launch flags</td>
+<td><code>--kv-events-config</code>, <code>--page-size</code>, <code>--dp-size</code>, <code>--mem-fraction-static</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Environment variables are read once at process start</strong> — changing any <code>LOXILB_*</code> / <code>LLB_*</code>
+value requires recreating the LoxiLB container. REST rules can be re-posted at runtime — <strong>except
+<code>kvEngineType</code>, which is immutable after create</strong> (§3).</p>
+<p>What the SGLang path deliberately does <strong>not</strong> have (all vLLM/P/D-only):</p>
+<ul>
+<li>No <code>pd_disagg_mode</code>, no <code>ep_role</code> tags, no NIXL ports — mode 3 is <strong>rejected</strong> with P/D.</li>
+<li>No <code>LLB_KV_NONE_HASH_SEED</code> / <code>PYTHONHASHSEED</code> parity leg — SGLang block 0 has no parent hash.</li>
+<li>No admission gate / 429 / park logic — a Tier-1.5 miss falls to the rule's <strong>own selector</strong>.</li>
+<li><code>kvWarmupSec</code> is accepted but <strong>currently inert in production</strong> (both engines).</li>
+</ul>
+<hr />
+<h2 id="2-rest-rule-fields-sglang-mode">2. REST rule fields (SGLang mode)<a class="headerlink" href="#2-rest-rule-fields-sglang-mode" title="Permanent link">&para;</a></h2>
+<p>Endpoint: <code>POST http://&lt;loxilb&gt;:11111/netlox/v1/config/loadbalancer</code>. All <code>kv*</code> fields are
+<strong>camelCase</strong>; a wrong-cased field is silently dropped by the API. There is <strong>no <code>loxicmd</code> flag
+for any <code>kv*</code> field</strong> — the SGLang surface is REST-only.</p>
+<h3 id="21-service-level-servicearguments">2.1 Service-level (<code>serviceArguments</code>)<a class="headerlink" href="#21-service-level-servicearguments" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Values</th>
+<th>Meaning for an SGLang rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mode</code></td>
+<td>int</td>
+<td>0</td>
+<td>must be <strong>4</strong></td>
+<td>fullproxy — <strong>required</strong> for <code>kvExactMode:3</code> (validated, §3)</td>
+</tr>
+<tr>
+<td><code>sel</code></td>
+<td>int</td>
+<td>0 (rr)</td>
+<td>0–10</td>
+<td>the <strong>miss-path selector</strong>: on a Tier-1.5 miss the rule's own selector routes (no P/D Tier-2). For cache-friendly misses pair with <code>sel:8</code> (prefix-hash CHWBL)</td>
+</tr>
+<tr>
+<td><code>security</code></td>
+<td>int</td>
+<td>0</td>
+<td>0–3</td>
+<td><code>0-plain, 1-https, 2-tls, 3-e2ehttps</code></td>
+</tr>
+<tr>
+<td><code>kvExactMode</code></td>
+<td>int64</td>
+<td>0</td>
+<td>0–3</td>
+<td><strong>3 = zmq single-role</strong>. 0 off, 1 zmq P/D (vLLM), 2 reserved</td>
+</tr>
+<tr>
+<td><code>kvEngineType</code></td>
+<td>string</td>
+<td><code>"vllm"</code></td>
+<td><code>"vllm"</code> | <code>"sglang"</code></td>
+<td>KV-event engine behind this rule. <strong>Immutable after create</strong> (§3); drives the hash-algo default; one framework per VIP:port</td>
+</tr>
+<tr>
+<td><code>kvDpRankCount</code></td>
+<td>int32</td>
+<td>1</td>
+<td>1–8 (0 ⇒ 1)</td>
+<td>SGLang data-parallel rank count. Rank N subscribes at <code>kvZmqPort+N</code>; all ranks union into <strong>one</strong> per-EP inventory. Must equal SGLang <code>--dp-size</code></td>
+</tr>
+<tr>
+<td><code>kvBlockSize</code></td>
+<td>int64</td>
+<td>16</td>
+<td>≥1</td>
+<td><strong>Must equal SGLang <code>--page-size</code></strong> — which is <em>model-dependent</em>; read it back from <code>/get_server_info</code> (§5.2). A mismatch is <strong>silent</strong> (the watchdog is the tripwire)</td>
+</tr>
+<tr>
+<td><code>kvZmqPort</code></td>
+<td>int64</td>
+<td>5557</td>
+<td>1–65535</td>
+<td>SGLang KV-events PUB base port (rank 0). 5557 is the canonical contract port; co-resident fleets shift it (§5.3)</td>
+</tr>
+<tr>
+<td><code>kvHashAlgo</code></td>
+<td>string</td>
+<td><code>sha256_cbor</code></td>
+<td><strong>omit</strong></td>
+<td><strong>OMIT for SGLang rules.</strong> The enum is <code>["sha256_cbor","xxhash_cbor"]</code> — there is no <code>sha256_sglang</code> value; the engine default maps <code>sglang</code>+unset ⇒ algo 2. An explicit algo always wins — and never matches SGLang hashes</td>
+</tr>
+<tr>
+<td><code>kvWarmupSec</code></td>
+<td>int64</td>
+<td>30</td>
+<td>≥0</td>
+<td>accepted, <strong>currently a no-op</strong> in production</td>
+</tr>
+<tr>
+<td><code>host</code></td>
+<td>string</td>
+<td>—</td>
+<td>—</td>
+<td>host key (reference configs set it to the VIP)</td>
+</tr>
+<tr>
+<td><code>probeRetries</code></td>
+<td>int</td>
+<td>0</td>
+<td>—</td>
+<td>health-probe retries (probe state does not feed exclusion)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-endpoint-level-endpoints">2.2 Endpoint-level (<code>endpoints[]</code>)<a class="headerlink" href="#22-endpoint-level-endpoints" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>endpointIP</code></td>
+<td>SGLang backend IP</td>
+</tr>
+<tr>
+<td><code>targetPort</code></td>
+<td>SGLang OpenAI serving port</td>
+</tr>
+<tr>
+<td><code>weight</code></td>
+<td>endpoint weight</td>
+</tr>
+<tr>
+<td><code>ep_role</code></td>
+<td><strong>do not set</strong> — single-role EPs are role-less; mode 3 admits all EPs into the Tier-1.5 candidate mask</td>
+</tr>
+<tr>
+<td><code>nixl_port</code></td>
+<td><strong>do not set</strong> — no P/D KV handoff on this path</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-worked-example-single-role-sglang-service">2.3 Worked example — single-role SGLang service<a class="headerlink" href="#23-worked-example-single-role-sglang-service" title="Permanent link">&para;</a></h3>
+<p>A VIP at <code>10.10.10.254:9090</code> in front of three role-less SGLang EPs, KV events at <code>:5561</code>, page
+size read back from the server (here: 16):</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>-d<span class="w"> </span>@-<span class="w"> </span><span class="s">&lt;&lt;&#39;JSON&#39;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="s">{</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="s">  &quot;serviceArguments&quot;: {</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s">    &quot;externalIP&quot;: &quot;10.10.10.254&quot;, &quot;port&quot;: 9090, &quot;protocol&quot;: &quot;tcp&quot;,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s">    &quot;sel&quot;: 0, &quot;mode&quot;: 4, &quot;security&quot;: 0, &quot;host&quot;: &quot;10.10.10.254&quot;,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s">    &quot;probeRetries&quot;: 1,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s">    &quot;kvExactMode&quot;: 3,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s">    &quot;kvEngineType&quot;: &quot;sglang&quot;,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s">    &quot;kvBlockSize&quot;: 16,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="s">    &quot;kvZmqPort&quot;: 5561,</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s">    &quot;kvDpRankCount&quot;: 3,</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s">    &quot;kvWarmupSec&quot;: 30</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="s">  },</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="s">  &quot;endpoints&quot;: [</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="s">    {&quot;endpointIP&quot;: &quot;35.35.35.1&quot;, &quot;targetPort&quot;: 30000, &quot;weight&quot;: 1},</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="s">    {&quot;endpointIP&quot;: &quot;36.36.36.1&quot;, &quot;targetPort&quot;: 30000, &quot;weight&quot;: 1},</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="s">    {&quot;endpointIP&quot;: &quot;37.37.37.1&quot;, &quot;targetPort&quot;: 30000, &quot;weight&quot;: 1}</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="s">  ]</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="s">}</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="s">JSON</span>
+</code></pre></div>
 </div>
+<div class="tabbed-block">
+<div class="admonition info">
+<p class="admonition-title">Coming soon</p>
+<p>AI-aware <code>loxicmd</code> subcommands are planned. The <code>kv*</code> rule fields are REST-only today —
+use the curl form.</p>
+</div>
+</div>
+</div>
+</div>
+<p>Notes: no <code>pd_disagg_mode</code>, no <code>ep_role</code>, <code>kvHashAlgo</code> omitted (the only correct spelling via
+REST). <code>kvBlockSize: 16</code> is <strong>illustrative</strong> — always substitute the value your own
+<code>/get_server_info</code> reports. Delete with:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/externalipaddress/10.10.10.254/port/9090/protocol/tcp
+</code></pre></div>
+<h3 id="24-worked-example-two-vip-coexistence-one-gateway-both-engines">2.4 Worked example — two-VIP coexistence (one gateway, both engines)<a class="headerlink" href="#24-worked-example-two-vip-coexistence-one-gateway-both-engines" title="Permanent link">&para;</a></h3>
+<p><strong>One</strong> LoxiLB process, <strong>one</strong> VIP IP, two rules keyed by port — an unmodified vLLM P/D rule
+beside an SGLang single-role rule. Same-IP / different-engine is <strong>accepted</strong> (that IS the
+coexistence story) and logs one engine-mix WARN.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Rule 1 — 10.10.10.254:8080 — the unmodified vLLM P/D shape (unchanged)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>-d<span class="w"> </span>@-<span class="w"> </span><span class="s">&lt;&lt;&#39;JSON&#39;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s">{</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s">  &quot;serviceArguments&quot;: {</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s">    &quot;externalIP&quot;: &quot;10.10.10.254&quot;, &quot;port&quot;: 8080, &quot;protocol&quot;: &quot;tcp&quot;,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s">    &quot;sel&quot;: 0, &quot;mode&quot;: 4, &quot;security&quot;: 0, &quot;host&quot;: &quot;10.10.10.254&quot;, &quot;probeRetries&quot;: 1,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s">    &quot;pd_disagg_mode&quot;: true,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s">    &quot;kvExactMode&quot;: 1, &quot;kvZmqPort&quot;: 5557,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s">    &quot;kvHashAlgo&quot;: &quot;sha256_cbor&quot;, &quot;kvWarmupSec&quot;: 20, &quot;kvBlockSize&quot;: 16</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s">  },</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s">  &quot;endpoints&quot;: [</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s">    { &quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1 },</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s">    { &quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2 },</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s">    { &quot;endpointIP&quot;: &quot;33.33.33.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1 },</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s">    { &quot;endpointIP&quot;: &quot;34.34.34.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2 }</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s">  ]</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s">}</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s">JSON</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="c1"># Rule 2 — 10.10.10.254:9090 — the SGLang single-role shape (kvHashAlgo omitted)</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>-d<span class="w"> </span>@-<span class="w"> </span><span class="s">&lt;&lt;&#39;JSON&#39;</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="s">{</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="s">  &quot;serviceArguments&quot;: {</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="s">    &quot;externalIP&quot;: &quot;10.10.10.254&quot;, &quot;port&quot;: 9090, &quot;protocol&quot;: &quot;tcp&quot;,</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="s">    &quot;sel&quot;: 0, &quot;mode&quot;: 4, &quot;security&quot;: 0, &quot;host&quot;: &quot;10.10.10.254&quot;, &quot;probeRetries&quot;: 1,</span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="s">    &quot;kvExactMode&quot;: 3, &quot;kvEngineType&quot;: &quot;sglang&quot;,</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="s">    &quot;kvDpRankCount&quot;: 3, &quot;kvZmqPort&quot;: 5561,</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="s">    &quot;kvWarmupSec&quot;: 20, &quot;kvBlockSize&quot;: 16</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="s">  },</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="s">  &quot;endpoints&quot;: [</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="s">    { &quot;endpointIP&quot;: &quot;35.35.35.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1 },</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="s">    { &quot;endpointIP&quot;: &quot;36.36.36.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1 },</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="s">    { &quot;endpointIP&quot;: &quot;37.37.37.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1 }</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="s">  ]</span>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="s">}</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="s">JSON</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="admonition info">
+<p class="admonition-title">Coming soon</p>
+<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
+</div>
+</div>
+</div>
+</div>
+<p>Port planning here: vLLM publishes at <code>:5557</code>; the SGLang rule's 3 DP ranks subscribe at
+<code>:5561</code>/<code>:5562</code>/<code>:5563</code> per EP. Cross-VIP inventory isolation is enforced automatically by
+per-service inventory scoping — no operator knob needed.</p>
+<hr />
+<h2 id="3-config-time-validation-guards">3. Config-time validation guards<a class="headerlink" href="#3-config-time-validation-guards" title="Permanent link">&para;</a></h2>
+<p>Every rejection below happens at rule POST time — before the eRule lookup, so create <strong>and</strong>
+update are both covered. What the operator sees is the exact error string.</p>
+<table>
+<thead>
+<tr>
+<th>Rejected config</th>
+<th>Exact error returned</th>
+<th>Why it exists</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kvExactMode:3</code> + <code>pd_disagg_mode:true</code></td>
+<td><code>kv-exact single-role mode is incompatible with pd-disagg (use kvExactMode=1 for P/D)</code></td>
+<td>mode 3 and the P/D ladder are separate entries into Tier 1.5; combining them would double-run selection</td>
+</tr>
+<tr>
+<td><code>kvExactMode:3</code> without <code>mode:4</code></td>
+<td><code>kv-exact single-role mode requires mode=fullproxy</code></td>
+<td>Tier 1.5 lives in the fullproxy data path — only fullproxy rules reach it</td>
+</tr>
+<tr>
+<td><code>kvEngineType</code> outside {<code>""</code>,<code>"vllm"</code>,<code>"sglang"</code>}</td>
+<td><code>kv-engine-type must be one of "vllm", "sglang"</code></td>
+<td>allowlist — an unknown engine is rejected, never silently treated as vllm</td>
+</tr>
+<tr>
+<td><code>kvDpRankCount</code> &gt; 8</td>
+<td><code>kv-dp-rank-count must be within 1..8 (0 = default 1)</code></td>
+<td>rank N subscribes at <code>kvZmqPort+N</code> on every EP host — the cap bounds the port-range walk. 0 is accepted and defaults to 1</td>
+</tr>
+<tr>
+<td><code>kvEngineType</code> changed on a live rule</td>
+<td><code>lbrule-exist error: cant modify rule kv engine type (delete and recreate)</code></td>
+<td>a live engine flip would silently re-key the whole Tier-1.5 hash space; the engine is <strong>immutable</strong></td>
+</tr>
+<tr>
+<td>Two rules on one VIP IP with different engines</td>
+<td><strong>ACCEPTED</strong> + one WARN naming both engines</td>
+<td>that IS the multi-framework coexistence story (§2.4); the WARN keeps it observable</td>
+</tr>
+</tbody>
+</table>
+<p>The sanctioned way to change an engine: <code>DELETE</code> the rule, then <code>POST</code> the new one — rule teardown
+already stops all <code>(ep, rank)</code> subscribers and drops the service inventory.</p>
+<hr />
+<h2 id="4-loxilb-environment-variables-sglang-relevant">4. LoxiLB environment variables (SGLang-relevant)<a class="headerlink" href="#4-loxilb-environment-variables-sglang-relevant" title="Permanent link">&para;</a></h2>
+<p>Set with <code>docker run -e …</code>; read once at startup.</p>
+<table>
+<thead>
+<tr>
+<th>Var</th>
+<th>Default</th>
+<th>Accepted</th>
+<th>Effect on an SGLang deployment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LOXILB_KV_ZERO_HIT_N</code></td>
+<td><strong>50</strong></td>
+<td>positive int</td>
+<td>zero-hit watchdog threshold: N consecutive KV-exact lookups scoring zero hits against a <strong>non-empty eligible inventory</strong> ⇒ one <code>[KV_ZEROHIT]</code> WARN (per transition edge) + <code>loxilb_pd_kv_zero_hit_watchdog_total{service_id}</code> increments. Invalid/zero/negative ⇒ default 50 + one-shot WARN — the watchdog is <strong>never disabled</strong>. Lower it (e.g. 5) only on test rigs where a deliberate mismatch leg should fire fast</td>
+</tr>
+<tr>
+<td><code>LOXILB_KV_MAX_BLOCKS</code></td>
+<td>1,000,000</td>
+<td>int 1000–100,000,000</td>
+<td>per-EP inventory cap (FIFO eviction). Shared across engines; DP ranks union into one per-EP inventory, so a high-rank EP fills it faster — watch <code>loxilb_kv_inv_cap_evictions_total</code></td>
+</tr>
+<tr>
+<td><code>LOXILB_KV_LB_MODE</code> + blend family (<code>LOXILB_KV_MEAN_LOAD_FACTOR</code>, <code>LOXILB_KV_LOAD_PENALTY</code>, <code>LOXILB_KV_SPILL_RELIEF</code>, <code>LOXILB_KV_CAP_SUM_MILLI</code>)</td>
+<td>see the shared config reference</td>
+<td>—</td>
+<td>the Tier-1.5 blend law applies unchanged to the single-role path. ⚠ <strong>Process-global across ALL KV VIPs, vLLM and SGLang alike</strong> — per-rule override is not yet available</td>
+</tr>
+<tr>
+<td><code>LOXILB_KV_TLOAD_LOG</code></td>
+<td>off</td>
+<td><code>1</code></td>
+<td>per-selection <code>[KV_INV] totalLoad=</code> diagnostics</td>
+</tr>
+<tr>
+<td><code>LLB_KV_HASH_DEBUG</code></td>
+<td>off</td>
+<td><code>1</code></td>
+<td><code>[KV_HASH]</code> per-block forensics; the SGLang path has a dedicated emit reporting the first-8 published value</td>
+</tr>
+<tr>
+<td><code>LLB_KV_NONE_HASH_SEED</code></td>
+<td>unset</td>
+<td>—</td>
+<td><strong>inert for SGLang rules</strong> — the SGLang contract has no NONE_HASH/parent seed. Keep it set for any co-resident vLLM rule; it does not affect algo-2 hashing</td>
+</tr>
+</tbody>
+</table>
+<p>Fixed internals worth knowing (constants, not env): subscriber reconnect backoff <strong>5 s</strong>, seq-gap
+forward tolerance <strong>64</strong> — a gap within the window KEEPs the warm inventory, a larger jump CLEARs
+it.</p>
+<hr />
+<h2 id="5-sglang-server-side-configuration">5. SGLang server-side configuration<a class="headerlink" href="#5-sglang-server-side-configuration" title="Permanent link">&para;</a></h2>
+<p>Use a <strong>recent SGLang release</strong> whose page-hash contract matches the one LoxiLB expects. Do not
+update the image mid-deployment without re-checking the hash contract (a drift shows up as a
+zero-hit watchdog fire, not a crash).</p>
+<h3 id="51-enabling-kv-events">5.1 Enabling KV events<a class="headerlink" href="#51-enabling-kv-events" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>sglang<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span>--ipc<span class="o">=</span>host<span class="w"> </span>--shm-size<span class="w"> </span>16g<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>-v<span class="w"> </span>/root/.cache/huggingface:/root/.cache/huggingface<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>&lt;sglang-image&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>python3<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span>--model-path<span class="w"> </span>&lt;model&gt;<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span>--mem-fraction-static<span class="w"> </span><span class="m">0</span>.35<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span>--kv-events-config<span class="w"> </span><span class="s1">&#39;{&quot;publisher&quot;:&quot;zmq&quot;,&quot;endpoint&quot;:&quot;tcp://*:5561&quot;}&#39;</span>
+</code></pre></div>
+<ul>
+<li><code>--kv-events-config</code> is the whole feed: <code>"publisher":"zmq"</code> + a <code>tcp://*:&lt;port&gt;</code> bind. Use <code>*</code>
+  (bind mode) — a concrete local IP in connect-mode publishes nothing, silently.</li>
+<li>The port in the endpoint <strong>must equal the rule's <code>kvZmqPort</code></strong> (rank 0).</li>
+<li>Gate readiness on <strong>both</strong> surfaces: <code>/health</code> (process up) then <code>/health_generate</code> (a real
+  generation completes — model loaded, KV cache allocated). <code>/health</code> alone passes long before the
+  cache exists.</li>
+<li>Self-confirm the publisher actually bound: <code>ss -tln | grep :5561</code> on the EP must show a
+  listener. This failure is otherwise silent.</li>
+</ul>
+<h3 id="52-page-size-parity-the-deadliest-knob">5.2 <code>--page-size</code> parity (the deadliest knob)<a class="headerlink" href="#52-page-size-parity-the-deadliest-knob" title="Permanent link">&para;</a></h3>
+<p><code>kvBlockSize</code> on the rule <strong>must equal SGLang's effective page size</strong> — and SGLang's <code>--page-size</code>
+default is <strong>model-dependent; never assume 16</strong>. Always read it back:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;ep&gt;:30000/get_server_info<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s1">&#39;&quot;page_size&quot;[: ]*[0-9]*&#39;</span>
+</code></pre></div>
+<p>and set the rule's <code>kvBlockSize</code> to exactly that number. All EPs behind one rule must report the
+<strong>same</strong> page size (homogeneous EPs required). A mismatch does not error anywhere — Tier 1.5
+simply never scores a hit and all traffic quietly takes the fallback selector; the zero-hit
+watchdog (§8) is the runtime tripwire for exactly this.</p>
+<h3 id="53-dp-ranks-and-port-planning">5.3 DP ranks and port planning<a class="headerlink" href="#53-dp-ranks-and-port-planning" title="Permanent link">&para;</a></h3>
+<p>With <code>--dp-size N</code>, SGLang publishes KV events <strong>per DP rank</strong>, each rank on its own consecutive
+port with its own seq counter:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>rank 0 → kvZmqPort      rank 1 → kvZmqPort+1   …   rank N−1 → kvZmqPort+N−1
+</code></pre></div>
+<ul>
+<li>Set the rule's <code>kvDpRankCount</code> <strong>equal to</strong> <code>--dp-size</code> (bounds 1–8). LoxiLB starts one
+  subscriber goroutine per <code>(ep, rank)</code>; all ranks union into one per-EP inventory.</li>
+<li><strong>Do not undercount:</strong> ZMQ connect does not fail on a missing endpoint, so a too-small rank
+  count silently drops the higher ranks' warmth. Do not overcount either: extra subscribers spin
+  on reconnect.</li>
+<li><strong>The <code>:5557</code> collision (co-resident hosts):</strong> 5557 is the canonical contract port, but on a
+  host where a vLLM KV-events publisher already runs (<code>--network host</code>), it is taken. Shift the
+  SGLang base to a free port (e.g. <code>5561</code>, leaving room for ranks at <code>5562</code>/<code>5563</code>). LoxiLB
+  subscribes the per-rule <code>kvZmqPort</code>, so any free port works — keep the rule and the server config
+  equal, and <strong>never kill the vLLM publisher to free the port</strong>.</li>
+</ul>
+<h3 id="54-co-residency-memory-split">5.4 Co-residency memory split<a class="headerlink" href="#54-co-residency-memory-split" title="Permanent link">&para;</a></h3>
+<p>When SGLang runs <strong>beside</strong> vLLM prefills on the same GPU, split the memory explicitly — e.g. vLLM
+<code>--gpu-memory-utilization 0.55</code> + SGLang <code>--mem-fraction-static 0.35</code> (the remainder is headroom).
+Two coupled cautions when you shrink a co-resident vLLM:</p>
+<ol>
+<li><strong>Uniform block-count pin.</strong> Reducing vLLM's split changes its <code>num_gpu_blocks</code>; a NIXL P/D
+   mesh must agree on block count (heterogeneous counts trip the <code>num_external_tokens</code> assert).
+   Probe one EP at the reduced split and pin the probed value fleet-wide.</li>
+<li><strong>If two weight copies don't fit,</strong> fall back to a smaller SGLang model — and switch the
+   gateway's staged tokenizer to match, or KV-exact hashing silently never matches.</li>
+</ol>
+<p>Tokenizer staging is engine-agnostic: the served model's HF <code>tokenizer.json</code> at
+<code>/etc/loxilb/tokenizers/&lt;model-slug&gt;/tokenizer.json</code> (slug = model id with <code>/</code> → <code>__</code>).</p>
+<hr />
+<h2 id="6-per-layer-enablement-matrix">6. Per-layer enablement matrix<a class="headerlink" href="#6-per-layer-enablement-matrix" title="Permanent link">&para;</a></h2>
+<p>What turns each piece on, and the fastest check that it engaged (metrics on
+<code>GET http://&lt;loxilb&gt;:11111/netlox/v1/metrics</code> unless noted):</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Enable</th>
+<th>Verify</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single-role Tier 1.5</td>
+<td>rule: <code>mode:4</code> + <code>kvExactMode:3</code> + <code>kvEngineType:"sglang"</code></td>
+<td><code>loxilb_pd_kv_tier15_hits_total{ep_idx}</code> advances on a shared-prefix burst; <code>[KV_SR] … single-role Tier-1.5 HIT -&gt; EP&lt;n&gt;</code> in the C log</td>
+</tr>
+<tr>
+<td>Hash contract</td>
+<td>omit <code>kvHashAlgo</code> on an sglang rule</td>
+<td><code>[KV_CONFIG]</code> line shows the rule landing with <code>kv_engine_type=1</code>; <code>[KV_HASH] … algo=sha256_sglang</code> with <code>LLB_KV_HASH_DEBUG=1</code></td>
+</tr>
+<tr>
+<td>Event feed</td>
+<td>SGLang <code>--kv-events-config</code> + rule <code>kvZmqPort</code></td>
+<td><code>loxilb_kv_subscriber_connected{service,ep}</code> = 1 per EP; <code>loxilb_pd_kv_blocks_total{endpoint}</code> &gt; 0 after traffic</td>
+</tr>
+<tr>
+<td>Multi-rank fan-out</td>
+<td><code>kvDpRankCount</code> = <code>--dp-size</code></td>
+<td>inventory (<code>GET /netlox/v1/config/ai/kv/inventory?service_id=&lt;id&gt;&amp;ep_idx=&lt;n&gt;</code>) grows past any single rank's contribution; <code>kv-subscriber: ep N rank R …</code> lines for every rank</td>
+</tr>
+<tr>
+<td>Zero-hit watchdog</td>
+<td>always on (threshold <code>LOXILB_KV_ZERO_HIT_N</code>)</td>
+<td>healthy: <code>loxilb_pd_kv_zero_hit_watchdog_total{service_id}</code> stays <strong>0</strong></td>
+</tr>
+<tr>
+<td>Blend law on misses</td>
+<td><code>LOXILB_KV_LB_MODE</code> (shared)</td>
+<td><code>loxilb_pd_kv_tier15_spills_total</code> under hot-prefix load</td>
+</tr>
+<tr>
+<td>Cross-VIP isolation</td>
+<td>automatic (per-service scoping)</td>
+<td>during single-VIP traffic, the <em>other</em> VIP's tier15/inventory deltas stay 0</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-parity-triad-and-tuning-playbook">7. Parity triad and tuning playbook<a class="headerlink" href="#7-parity-triad-and-tuning-playbook" title="Permanent link">&para;</a></h2>
+<h3 id="71-the-parity-triad-must-match-or-tier-15-silently-degrades-to-the-fallback-selector">7.1 The parity triad (must match or Tier 1.5 silently degrades to the fallback selector)<a class="headerlink" href="#71-the-parity-triad-must-match-or-tier-15-silently-degrades-to-the-fallback-selector" title="Permanent link">&para;</a></h3>
+<p>The SGLang triad is <strong>different</strong> from vLLM's — no seed leg, a page-size leg instead of
+block-size-16, and the algo leg is an <em>omission</em>:</p>
+<table>
+<thead>
+<tr>
+<th>SGLang setting</th>
+<th>Must match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>effective page size (from <code>/get_server_info</code>, model-dependent)</td>
+<td>rule <code>kvBlockSize</code> — <strong>exactly</strong></td>
+</tr>
+<tr>
+<td>hash contract (a matching recent SGLang release)</td>
+<td>rule <code>kvHashAlgo</code> <strong>omitted</strong> + <code>kvEngineType:"sglang"</code> (⇒ <code>sha256_sglang</code>)</td>
+</tr>
+<tr>
+<td>served model's tokenizer</td>
+<td>staged at <code>/etc/loxilb/tokenizers/&lt;slug&gt;/tokenizer.json</code> on the LoxiLB host</td>
+</tr>
+</tbody>
+</table>
+<p>There is <strong>no</strong> <code>PYTHONHASHSEED</code> / <code>LLB_KV_NONE_HASH_SEED</code> leg. One extra structural leg the triad
+implies: <code>kvDpRankCount</code> = <code>--dp-size</code> and <code>kvZmqPort</code> = the publisher port (a broken feed leg
+shows as empty inventory rather than zero hits — §8 tells them apart).</p>
+<h3 id="72-page-size-choice">7.2 Page-size choice<a class="headerlink" href="#72-page-size-choice" title="Permanent link">&para;</a></h3>
+<p>Prefer the model's default page size and set <code>kvBlockSize</code> to the read-back value. If you override
+<code>--page-size</code> for engine-side reasons, larger pages mean fewer, coarser hash blocks — cheaper
+hashing and smaller inventories, but a shared prefix must be at least one full page long to score
+any overlap. Whatever you choose, <strong>change both sides together</strong> and re-read <code>/get_server_info</code>
+after any server relaunch.</p>
+<h3 id="73-rank-count">7.3 Rank count<a class="headerlink" href="#73-rank-count" title="Permanent link">&para;</a></h3>
+<p><code>kvDpRankCount</code> is not a tuning knob — it is a topology fact (= <code>--dp-size</code>), bounded 1–8.
+Operationally relevant: <code>AllBlocksCleared</code> from <strong>any</strong> rank clears the <strong>whole</strong> shared EP
+inventory (over-clear by design) — expect brief warmth loss on DP fleets after a single-rank
+restart; it re-grows in seconds under traffic. For cache affinity, prefer more EPs over more ranks
+(more ranks dilute per-rank warmth while the union inventory still reports the block present).</p>
+<h3 id="74-watchdog-threshold-loxilb_kv_zero_hit_n">7.4 Watchdog threshold (<code>LOXILB_KV_ZERO_HIT_N</code>)<a class="headerlink" href="#74-watchdog-threshold-loxilb_kv_zero_hit_n" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>50 (default)</strong> is the production setting: late enough to ride out a cold start / post-clear
+  rebuild, early enough to flag a bad configuration fast.</li>
+<li>Lower (5–10) on test rigs and CICD where you <em>want</em> a deliberate mismatch to fire within a
+  handful of lookups.</li>
+<li>Raising it above 50 mainly delays detection; the streak only counts lookups against a
+  <strong>non-empty eligible inventory</strong>, so quiet services don't creep toward the threshold.</li>
+<li>A single Tier-1.5 hit resets the streak and re-arms the WARN.</li>
+</ul>
+<h3 id="75-coexistence-memory-split">7.5 Coexistence memory split<a class="headerlink" href="#75-coexistence-memory-split" title="Permanent link">&para;</a></h3>
+<p>Start from a validated split (e.g. 0.55 vLLM / 0.35 SGLang on 24 GB-class GPUs, §5.4). Shrink the
+SGLang fraction first if the vLLM side is the production-critical tenant; if SGLang <code>/health</code>
+never comes up at your split, the model does not fit — use the fallback model path, don't shave
+the fraction below what the KV cache needs (that silently guts the radix cache and with it any
+routing win).</p>
+<h3 id="76-miss-path-selector-and-shared-knobs">7.6 Miss-path selector and shared knobs<a class="headerlink" href="#76-miss-path-selector-and-shared-knobs" title="Permanent link">&para;</a></h3>
+<p>On a Tier-1.5 miss the rule's <strong>own selector</strong> routes. <code>sel:0</code> (RR) is a fine baseline; <code>sel:8</code>
+(prefix-hash CHWBL) keeps even the miss path cache-friendly. The blend-law and inventory-cap
+tuning is identical to vLLM — remember those env knobs are shared by every KV VIP on the process.</p>
+<hr />
+<h2 id="8-observability-quick-reference">8. Observability quick reference<a class="headerlink" href="#8-observability-quick-reference" title="Permanent link">&para;</a></h2>
+<p>Metrics: <code>GET http://&lt;loxilb&gt;:11111/netlox/v1/metrics</code>.
+Inventory snapshot: <code>GET /netlox/v1/config/ai/kv/inventory?service_id=&lt;rule#&gt;&amp;ep_idx=&lt;n&gt;</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Labels</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loxilb_pd_kv_zero_hit_watchdog_total</code></td>
+<td><code>service_id</code></td>
+<td><strong>the</strong> silent-parity-failure signal. <code>service_id</code> = the rule number, so two-VIP setups attribute per arm. Nonzero delta ⇒ parity is broken</td>
+</tr>
+<tr>
+<td><code>loxilb_pd_kv_tier15_hits_total</code></td>
+<td><code>ep_idx</code></td>
+<td>Tier-1.5 hits — increments for single-role hits too. <code>ep_idx</code> carries no service label: for cross-VIP attribution, steer test traffic to numerically disjoint indexes per VIP</td>
+</tr>
+<tr>
+<td><code>loxilb_pd_kv_t15_miss_reason_total</code> / <code>…_fallthrough_total</code></td>
+<td><code>reason</code> / —</td>
+<td>guard-ladder misses. On a mode-3 rule a fallthrough lands in the rule's own selector</td>
+</tr>
+<tr>
+<td><code>loxilb_kv_subscriber_connected</code> / <code>…_reconnect_total</code> / <code>…_recv_error_total</code></td>
+<td><code>service</code>,<code>ep</code></td>
+<td>subscriber health. <strong>All DP ranks of an EP share one label pair</strong> — over-conservative during a single-rank rebuild</td>
+</tr>
+<tr>
+<td><code>loxilb_pd_kv_blocks_total</code></td>
+<td><code>endpoint</code></td>
+<td>the shared per-EP union inventory size</td>
+</tr>
+<tr>
+<td><code>loxilb_kv_inv_cap_evictions_total</code></td>
+<td>—</td>
+<td><code>LOXILB_KV_MAX_BLOCKS</code> cap pressure (union of all ranks)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Log markers (grep keys):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Marker</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[KV_SR] … single-role Tier-1.5 HIT -&gt; EP&lt;n&gt;</code></td>
+<td>mode-3 routing decision (miss = no line; the rule's selector routes)</td>
+</tr>
+<tr>
+<td><code>[KV_ZEROHIT] service &lt;id&gt;: N consecutive KV-exact lookups scored ZERO hits …</code></td>
+<td>zero-hit WARN — one per transition edge; probable cause named in the line (page-size/algo drift)</td>
+</tr>
+<tr>
+<td><code>kv-subscriber: ep N rank R seq gap A -&gt; B … decision=KEEP\|CLEAR</code></td>
+<td>mid-stream gap decision: <code>KEEP</code> = small hop within the 64-seq window (warm inventory retained), <code>CLEAR</code> = large jump (publisher likely restarted)</td>
+</tr>
+<tr>
+<td><code>kv-subscriber: AllBlocksCleared received for ep N (rank R) — clearing shared inventory</code></td>
+<td>union over-clear (any rank clears the whole EP)</td>
+</tr>
+<tr>
+<td><code>[KV_CONFIG] … kv_engine_type= kv_dp_rank_count= kv_svc_id=</code></td>
+<td>the rule's KV parameters as the data plane parsed them — the first thing to check after a POST</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Go markers need stderr capture</p>
+<p>The <code>kv-subscriber:</code> and <code>[KV_ZEROHIT]</code> lines are Go <strong>stderr</strong> output; a stock
+<code>docker exec -dt</code> launch discards them. Relaunch with <code>… loxilb &gt;&gt;/var/log/loxilb-go.log 2&gt;&amp;1</code>
+before asserting on them. C-plane markers (<code>[KV_SR]</code>, <code>[KV_CONFIG]</code>) go to the container's
+stdout log as usual.</p>
+</div>
+<p><strong>Silent-degradation patterns to alert on:</strong></p>
+<ol>
+<li><strong>Zero hits, non-empty inventory</strong> — <code>zero_hit_watchdog_total</code> climbing with <code>blocks_total</code> &gt;
+   0 ⇒ parity broken: <code>kvBlockSize</code> ≠ page-size, explicit <code>kvHashAlgo</code> on an sglang rule, or wrong
+   tokenizer.</li>
+<li><strong>Empty inventory, subscriber connected</strong> — <code>blocks_total</code> = 0 with <code>kv_subscriber_connected</code> =
+   1 ⇒ the server isn't publishing (missing <code>--kv-events-config</code>, connect-mode endpoint, or wrong
+   port — ZMQ SUB "connects" happily to nothing).</li>
+<li><strong>Partial warmth (one rank silent)</strong> — inventory grows but plateaus and one rank never logs;
+   <code>kvDpRankCount</code> too small or a rank port collision.</li>
+<li><strong>Repeated <code>decision=CLEAR</code></strong> without EP restarts — the publisher is flapping or two processes
+   fight over one port; warmth never accumulates.</li>
+</ol>
+<hr />
+<h2 id="9-troubleshooting-playbook">9. Troubleshooting playbook<a class="headerlink" href="#9-troubleshooting-playbook" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Check</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zero Tier-1.5 hits; traffic works but <code>tier15_hits_total</code> flat and <code>zero_hit_watchdog_total</code> climbing</td>
+<td><strong><code>kvBlockSize</code> ≠ SGLang <code>--page-size</code></strong> (the deadliest, fully silent) — or an explicit <code>kvHashAlgo</code> on the rule</td>
+<td><code>curl &lt;ep&gt;:30000/get_server_info \| grep page_size</code> vs the rule; <code>[KV_CONFIG]</code> line for the algo that landed</td>
+<td>recreate the rule with <code>kvBlockSize</code> = the read-back page size and <code>kvHashAlgo</code> omitted</td>
+</tr>
+<tr>
+<td>Inventory empty on all EPs; subscriber connected</td>
+<td>wrong <code>kvZmqPort</code> (ZMQ connect never fails), server launched without <code>--kv-events-config</code>, or connect-mode endpoint</td>
+<td><code>ss -tln \| grep &lt;port&gt;</code> on the EP (must show a listener); the server's launch flags; <code>kv-subscriber:</code> lines</td>
+<td>fix the server flag to <code>tcp://*:&lt;port&gt;</code> and/or set the rule <code>kvZmqPort</code> to the bound port</td>
+</tr>
+<tr>
+<td>Inventory empty AND no subscribers started</td>
+<td>rule shape wrong: <code>kvExactMode</code> ≠ 3 on a role-less rule, or mode 0</td>
+<td><code>[KV_CONFIG]</code> for the mode that landed; subscriber series count</td>
+<td>set <code>kvExactMode:3</code> (single-role) — or add proper <code>ep_role</code> tags if you meant a vLLM P/D rule</td>
+</tr>
+<tr>
+<td>One DP rank silent — warmth lower than expected</td>
+<td>rank port collision on the EP host, or <code>kvDpRankCount</code> &lt; <code>--dp-size</code></td>
+<td><code>ss -tln</code> on the EP for every port in <code>[kvZmqPort, kvZmqPort+N)</code>; count distinct <code>rank R</code> log lines</td>
+<td>move the whole base port to a free range and recreate the rule to match; set <code>kvDpRankCount</code> = <code>--dp-size</code></td>
+</tr>
+<tr>
+<td>Rule update rejected: <code>cant modify rule kv engine type (delete and recreate)</code></td>
+<td>attempted in-place <code>kvEngineType</code> change (immutability)</td>
+<td>— expected behavior</td>
+<td><code>DELETE</code> the rule, then <code>POST</code> the new engine's rule</td>
+</tr>
+<tr>
+<td>Rule POST rejected with a <code>kv-exact single-role…</code> or <code>kv-engine-type…</code> error</td>
+<td>one of the §3 guards</td>
+<td>match the exact string against the §3 table</td>
+<td>fix the named field (<code>mode:4</code>, drop <code>pd_disagg_mode</code>, engine spelling, rank ≤ 8)</td>
+</tr>
+<tr>
+<td>EP restarted; inventory dropped to 0</td>
+<td><strong>working as designed</strong>: a large seq gap or <code>AllBlocksCleared</code> clears stale inventory instead of routing on phantom hashes</td>
+<td><code>kv-subscriber: … decision=CLEAR</code> or <code>AllBlocksCleared received for ep N</code> marker; inventory re-grows under fresh traffic</td>
+<td>none — alert only if it does NOT re-grow (then check the feed)</td>
+</tr>
+<tr>
+<td><code>[KV_ZEROHIT]</code> mid-run</td>
+<td>parity drifted mid-run (server relaunch changed page size / model / image)</td>
+<td>re-read <code>/get_server_info</code> on every EP; compare against the rule</td>
+<td>fix parity, then re-run — a watchdog-fired window is void</td>
+</tr>
+<tr>
+<td>Go-side markers absent entirely</td>
+<td>stderr discarded by the container launch</td>
+<td><code>docker logs</code> shows only C/entrypoint output</td>
+<td>relaunch loxilb with <code>&gt;&gt;/var/log/loxilb-go.log 2&gt;&amp;1</code> (§8)</td>
+</tr>
+</tbody>
+</table>
+<p>When results look wrong, check the harness/client first, then the §8 metrics, then the code — the
+most common "routing bug" is a broken parity leg.</p>
+<hr />
+<h2 id="10-see-also">10. See also<a class="headerlink" href="#10-see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../sglang-routing/">SGLang Routing</a> — the architecture behind every knob here: the single-role
+  seam, the SGLang hash contract, the multi-rank subscriber, and per-service inventory isolation.</li>
+<li><a href="../vllm-vs-sglang/">vLLM vs SGLang</a> — the contract-by-contract comparison behind the parity
+  triad.</li>
+<li><a href="../../ai-gateway/kv-caching/">KV-Cache Routing</a> — the shared Tier-1.5 mechanism and the vLLM
+  path this one is the SGLang companion to.</li>
+<li><a href="../../ai-gateway/configuration-reference/">Configuration Reference</a> — the full
+  <code>serviceArguments</code> field table and the engine-agnostic env knob families.</li>
+</ul>
 
 
 
