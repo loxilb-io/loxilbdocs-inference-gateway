@@ -245,6 +245,24 @@ P/D disaggregation requires vLLM's **`NixlConnector`**. Prefill nodes run with `
     TCP-only host. See [Deploy: P/D Disaggregation](../use-cases/deploy-pd-disaggregation.md) for a
     full cloud walkthrough.
 
+### vLLM engine setup essentials
+
+Three things distinguish a P/D-capable launch from a plain vLLM one. The full copy-paste reference
+lives in the deploy guide — the essentials:
+
+- **`--kv-transfer-config` differs by role.** Prefill runs `"kv_role":"kv_producer"`, decode runs
+  `"kv_role":"kv_consumer"` — both use the `NixlConnector` with `"kv_buffer_device":"cpu"` on
+  TCP-only hosts.
+- **`--kv-events-config` is prefill-only.** Only prefill publishes KV inventory
+  (`{"enable_kv_cache_events":true,"publisher":"zmq","endpoint":"tcp://*:5557","topic":""}`); decode
+  omits it entirely.
+- **The parity flags must match loxilb** for KV-exact routing to engage: `PYTHONHASHSEED=0`,
+  `--prefix-caching-hash-algo sha256_cbor` (not the default `sha256`), and `--block-size 16` (equal
+  to the rule's `kvBlockSize`).
+
+See [Deploy: P/D Disaggregation](../use-cases/deploy-pd-disaggregation.md) for the full prefill and
+decode launch commands, the decode NIXL block-count contract, and the full-mesh redeploy discipline.
+
 ---
 
 ## Verify

@@ -219,6 +219,106 @@ Use a **recent SGLang release** whose page-hash contract matches the one LoxiLB 
 update the image mid-deployment without re-checking the hash contract (a drift shows up as a
 zero-hit watchdog fire, not a crash).
 
+### 5.0 Launching SGLang for KV-cache routing
+
+This is the canonical launch recipe every SGLang EP behind a KV-exact rule must follow. The
+subsections after it (5.1–5.4) drill into individual knobs; start here for the whole command.
+
+```bash
+docker run -d --name sglang \
+  --gpus all --network host --ipc=host --shm-size 16g \
+  -e PYTHONHASHSEED=0 \
+  -v /root/.cache/huggingface:/root/.cache/huggingface \
+  lmsysorg/sglang \
+  python3 -m sglang.launch_server \
+    --model-path <model> --host 0.0.0.0 --port 30000 \
+    --mem-fraction-static 0.85 \
+    --dp-size 1 \
+    --kv-events-config '{"publisher":"zmq","endpoint":"tcp://*:5557"}'
+```
+
+Flag-by-flag, and why each one is load-bearing for KV-cache routing:
+
+- **`--gpus all --network host --ipc=host --shm-size 16g`** — `--network host` puts the ZMQ
+  publisher on the host's port namespace so LoxiLB can subscribe to it directly (and is what makes
+  the co-resident `:5557` collision in §5.3 possible). `--ipc=host --shm-size 16g` give the engine
+  the shared-memory budget its workers need; too small a `--shm-size` surfaces as loader crashes,
+  not routing errors.
+- **`-e PYTHONHASHSEED=0`** — set for determinism hygiene across the fleet. Note it is **not** a
+  parity leg for the SGLang hash contract the way it is for vLLM: SGLang block 0 has no parent and
+  no `NONE_HASH`, so the published page hashes do not depend on it (§7.1). Keep it uniform anyway —
+  it costs nothing and avoids surprises if the same host also runs a vLLM publisher.
+- **`python3 -m sglang.launch_server --model-path <model> --host 0.0.0.0 --port 30000`** — the
+  OpenAI-compatible serving entry point. `--port` is the request port your rule's `targetPort`
+  points at; it is **not** the KV-events port (that is the `--kv-events-config` endpoint below).
+- **`--mem-fraction-static <frac>`** — see the counter-intuitive semantics immediately below.
+- **`--kv-events-config '{"publisher":"zmq","endpoint":"tcp://*:5557"}'`** — the whole KV-events
+  feed. **SGLang takes only `publisher` and `endpoint`** — there is **no `enable_kv_cache_events`
+  key and no `topic` key** (both are vLLM-only; see [vLLM vs SGLang](vllm-vs-sglang.md)). Bind with
+  `tcp://*:<port>` — a concrete local IP in connect mode publishes nothing, silently. The port here
+  must equal the rule's `kvZmqPort` (rank 0).
+
+#### `--mem-fraction-static` is counter-intuitive
+
+`--mem-fraction-static` is measured **against device-visible FREE memory, not total** — and
+`(1 − frac)` is reserved as headroom. The trap: a **LOWER** fraction leaves a **SMALLER** KV pool,
+not a larger one. Two working baselines:
+
+| Scenario | Setting | CUDA graphs |
+|---|---|---|
+| **Standalone** SGLang (owns the GPU) | `--mem-fraction-static 0.85` | ON (default) |
+| **Co-resident** with vLLM prefills on one GPU | `--mem-fraction-static 0.72` + `--disable-cuda-graph` | OFF |
+
+When SGLang shares a GPU, drop the fraction to leave room for the other tenant *and* add
+`--disable-cuda-graph` — CUDA graph capture reserves extra memory that a co-resident split usually
+cannot spare. Do **not** shave the fraction below what the KV cache needs to fit the model: that
+silently guts the radix cache and with it any routing win (§7.5). If SGLang `/health` never comes
+up at your split, the model does not fit — use a smaller model, don't starve the cache.
+
+#### Read the page size back before you set `kvBlockSize`
+
+SGLang's effective **page size defaults to 1** and is **model-dependent — never assume 16**. The
+rule's `kvBlockSize` **must equal the effective page size** or cache-aware routing silently never
+fires. Read it back from the running server and set the rule to exactly that value:
+
+```bash
+curl -s http://<ep>:30000/get_server_info | grep -o '"page_size"[: ]*[0-9]*'
+```
+
+All EPs behind one rule must report the **same** page size (homogeneous pool). See §5.2 for the
+full parity discussion.
+
+#### DP-rank port planning
+
+With `--dp-size N`, SGLang publishes KV events **per data-parallel rank**: rank *k* binds
+`ZMQ_PORT + k`. Set the rule's **`kvDpRankCount` equal to `--dp-size`** (bounds 1–8). On a
+`--network host` box where a vLLM publisher already owns `:5557`, the base collides — **move the
+SGLang base to a free port** (e.g. `5561`, leaving `5562`/`5563` for ranks) and set the rule's
+`kvZmqPort` to match. LoxiLB subscribes whatever `kvZmqPort` says, so any free port works. Keep the
+whole consecutive range `[kvZmqPort, kvZmqPort + N − 1]` free, and **never kill the vLLM publisher
+to free the port** — that starves the vLLM rule. Full treatment in §5.3.
+
+#### Gate on health before wiring the rule
+
+Bring the EP up and confirm it is genuinely ready **before** posting or trusting the rule:
+
+```bash
+curl -s http://<ep>:30000/health            # process is up (passes early — cache may not exist yet)
+curl -s http://<ep>:30000/health_generate   # a real generation completes → model loaded + KV cache allocated
+```
+
+`/health` alone passes long before the KV cache exists, so gate readiness on **both**, ending with
+`/health_generate`. For a **cold run** (or to reset warmth between comparison passes), flush the
+engine cache first so the first request is a true cold miss:
+
+```bash
+curl -s -X POST http://<ep>:30000/flush_cache
+```
+
+Then self-confirm the publisher actually bound before expecting any inventory:
+`ss -tln | grep :5557` (or your chosen base port) on the EP must show a listener — this failure is
+otherwise silent.
+
 ### 5.1 Enabling KV events
 
 ```bash

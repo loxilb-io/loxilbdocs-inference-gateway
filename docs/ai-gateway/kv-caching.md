@@ -330,6 +330,98 @@ silently falls through. Walk the triad for your engine:
    one-shot queries, consider [GPU-aware selection](vllm-integration.md)
    (`sel: 9`) instead.
 
+## Tiered caching with LMCache (advanced)
+
+!!! warning "Advanced — gate this before rollout"
+    LMCache adds a second KV cache tier *inside* the engine. It is powerful for
+    prefill-heavy, high-reuse workloads, but it composes vLLM, LMCache, and NIXL — a
+    stack with **no official compatibility matrix** — and several of its failure modes
+    are silent. Validate it on a staging fleet and pin every component's version before
+    you put it in front of traffic. Everything above (block-hash routing) works without
+    LMCache; this is an optional add-on, not a prerequisite.
+
+Everything earlier on this page moves *hashes, not tensors*: LoxiLB routes a request to
+the endpoint that already holds the prefix. LMCache is complementary and lives one layer
+down — it gives each engine a **larger place to keep KV** so a prefix survives eviction
+from the GPU cache. LoxiLB still does the routing; LMCache changes what "the endpoint
+already holds this" can mean.
+
+### What it is
+
+LMCache is wired into vLLM as a **MultiConnector** that composes two connectors:
+
+- `LMCacheConnectorV1` — the tiered KV store: a **CPU** KV tier (and, optionally, a
+  remote or peer-to-peer tier) layered *under* the GPU KV cache. When a prefix is
+  evicted from GPU memory, its KV can be retrieved from the CPU tier instead of
+  recomputed.
+- `NixlConnector` — the same P/D transfer connector used for prefill/decode KV handoff.
+
+Composing both lets one vLLM process both participate in P/D transfer *and* back its GPU
+cache with a CPU tier. LMCache runs on the **prefill tier only** — decode nodes are
+excluded from the connector config.
+
+### Configuration surface
+
+LMCache is configured entirely on the **vLLM launch**, not on the LoxiLB rule — LoxiLB's
+KV-exact contract is unchanged. The moving parts:
+
+| Setting | Where | Note |
+|---|---|---|
+| `--kv-transfer-config` | vLLM flag | MultiConnector JSON naming `LMCacheConnectorV1` + `NixlConnector` |
+| `LMCACHE_CONFIG_FILE` | env | Path to `lmcache.yaml` (tier sizes, remote backend, chunk size) |
+| `PROMETHEUS_MULTIPROC_DIR` | env | **Must be identical across all vLLM and LMCache processes** (see hazards) |
+| chunk size | `lmcache.yaml` | Default **256 tokens**; a prefix must exceed one chunk to be stored |
+| decode nodes | topology | **Excluded** — LMCache is configured on prefill nodes only |
+
+The `--kv-transfer-config` is a MultiConnector document (rather than a single
+`NixlConnector` object as in the plain P/D case). Keep the engine image tag pinned
+(e.g. `vllm/vllm-openai:v0.17.0`): LMCache and NIXL versions travel with the image and a
+bump can change the wire behavior.
+
+### Metrics
+
+LMCache exports its own `lmcache:*` Prometheus series. Read the **hit counter**, not the
+rate gauge:
+
+| Metric | Use |
+|---|---|
+| `lmcache:num_hit_tokens` | **Authoritative** hit counter — this is the number to trust |
+| `lmcache:retrieve_hit_rate` | **STALE gauge** — can read `1.0` with zero retrieves; informational only, never gate on it |
+| `lmcache:local_cache_usage` | CPU-tier occupancy |
+| `lmcache:remote_cache_usage` | Remote/P2P-tier occupancy (if configured) |
+| `lmcache:time_to_retrieve` | Retrieval latency from a lower tier |
+
+!!! warning "`lmcache:retrieve_hit_rate` lies"
+    The rate gauge is not reset/recomputed the way you would expect — it can sit at
+    `1.0` even when no retrieval has happened. Judge effectiveness by the delta on
+    `lmcache:num_hit_tokens` over a known workload, not by the rate.
+
+### Hazards (read before enabling)
+
+- **No official compat matrix.** vLLM × LMCache × NIXL has no vendor-published
+  compatibility table. Pin all three (via the engine image tag) and validate the exact
+  combination you will run.
+- **Nested NIXL layout.** Because NIXL appears both as the P/D connector and under
+  LMCache, the nested NIXL **must force the HND cache layout** (per vLLM
+  [PR #21789](https://github.com/vllm-project/vllm/pull/21789)). Without it, P/D KV
+  transfer can **silently corrupt** — no error, wrong tokens.
+- **Prefix caching hides retrievals.** With vLLM prefix caching **ON**, an immediate
+  re-issue of the same prompt is served straight from the **GPU** cache, so LMCache
+  never retrieves and its counters stay flat — making it look broken. To exercise
+  LMCache, **evict first**: drive enough distinct traffic to exceed `num_gpu_blocks` so
+  the prefix leaves the GPU cache, *then* re-issue.
+- **`PROMETHEUS_MULTIPROC_DIR` must be set and shared.** If it is unset or differs
+  between the vLLM and LMCache processes, **all `lmcache:*` series vanish** — you lose
+  every metric silently. Set it identically for every process in the deployment.
+
+!!! tip "Parity triad still applies underneath"
+    LMCache changes the KV *storage tiers*, not the block-hash contract. LoxiLB's
+    routing still depends on the parity triad — `PYTHONHASHSEED` / `LLB_KV_NONE_HASH_SEED`,
+    `--block-size` / `kvBlockSize`, and `--prefix-caching-hash-algo` / `kvHashAlgo`.
+    Before you attribute a hit-rate change to LMCache, run the read-only preflight in
+    [Configuration & Tuning → Environment parity & preflight](../use-cases/configuration-tuning.md#environment-parity-preflight)
+    to confirm the triad and the version/platform matrix are still intact.
+
 ## Next steps
 
 - [KV-Cache-Aware Routing (use-case)](../use-cases/kv-cache-aware-routing.md) — flagship deep dive: architecture and the vLLM hash contract in full.

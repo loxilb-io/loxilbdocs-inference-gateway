@@ -164,6 +164,134 @@ Plus tokenizer staging on the LoxiLB host: the served model's `tokenizer.json` a
     controller-less deployment, and on controller staleness its influence decays back to neutral.
     Enabling it is out of scope for this page.
 
+## Environment parity & preflight
+
+Tier 1.5 is a byte-exact hash contract between the engine and LoxiLB. Most "cache
+routing doesn't work" reports are not bugs — they are a parity leg that drifted, and
+the failure is **silent**: LoxiLB keeps serving, but it degrades to round-robin
+instead of cache-matching. Run the preflight below *before* trusting any hit-rate
+number.
+
+### The parity triad
+
+All three must agree, or you are measuring round-robin (0% hash overlap):
+
+| Leg | Engine side | LoxiLB side |
+|---|---|---|
+| Hash seed | `PYTHONHASHSEED=0` (engine container env) | `LLB_KV_NONE_HASH_SEED=0` (LoxiLB env) |
+| Block / page size | vLLM `--block-size 16` (or SGLang effective page size) | rule `kvBlockSize` |
+| Hash algorithm | vLLM `--prefix-caching-hash-algo sha256_cbor` | rule `kvHashAlgo: "sha256_cbor"` |
+
+The seed and block-size legs live in *process environment and launch flags*, which a
+redeploy or an image bump can silently change. Treat the triad as a single unit — never
+change one leg without re-checking the other two.
+
+### Read-only preflight (inspect the running container)
+
+You do not need to trust what a deploy script *intended* to launch — read what the
+container is *actually* running. These commands are read-only and safe on a live host:
+
+```bash
+# The full launch command line (untruncated) for every running container
+docker ps --no-trunc
+
+# The effective environment of a specific engine container —
+# confirm PYTHONHASHSEED and any VLLM_* flags actually took
+docker inspect --format '{{range .Config.Env}}{{println .}}{{end}}' <engine-container>
+
+# Same for the LoxiLB container — confirm LLB_KV_NONE_HASH_SEED and LOXILB_KV_* are set
+docker inspect --format '{{range .Config.Env}}{{println .}}{{end}}' <loxilb-container>
+```
+
+Cross-check the three triad legs across both outputs, then confirm `kvBlockSize` /
+`kvHashAlgo` on the live rule with `GET /netlox/v1/config/loadbalancer/all`. If the
+engine's launch line shows no `--kv-events-config` (vLLM) the publisher never bound and
+the inventory will stay empty regardless of parity.
+
+!!! tip "Turn on hash forensics only when hunting a mismatch"
+    Set `LLB_KV_HASH_DEBUG=1` on the LoxiLB container to surface per-block hash
+    decisions in the log — this makes a drifted seed or block size obvious. It is
+    verbose; keep it off in steady state (testbed-only).
+
+### Version / platform matrix
+
+The eBPF/XDP data plane and the KV wire contract are sensitive to the host kernel and
+the engine image tag. Pin these:
+
+| Component | Use | Avoid / note |
+|---|---|---|
+| OS | Ubuntu 24.04 | — |
+| NVIDIA driver | 570.x | — |
+| Host kernel | **6.8** | **Avoid 6.12.53+, 6.14, and 6.17.5+** — a BPF-verifier regression in those series breaks the eBPF data plane |
+| Engine image | pin an explicit tag, e.g. `vllm/vllm-openai:v0.17.0` | An unpinned/`latest` tag can silently change the KV wire contract and break parity |
+| `--max-model-len` | identical fleet-wide | A mismatched member skews block accounting |
+
+!!! warning "Kernel choice gates the data plane"
+    The BPF-verifier regression is a hard blocker, not a performance note: on an affected
+    kernel the XDP program fails to load and AI routing never comes up. Verify the host
+    kernel (`uname -r`) is on the 6.8 line before deploying LoxiLB.
+
+### LoxiLB runtime environment (parity- and admission-relevant)
+
+These process-environment knobs are read once at container start (see the env tables
+above for the full list); the ones below are the parity/preflight-critical subset:
+
+| Var | Default | Set to | Why |
+|---|---|---|---|
+| `LLB_PD_PREFILL_TIMEOUT_SEC` | 30 | **180** for long-context (≈32k) fleets | The 30 s default returns `504 pd_prefill_timeout` on most long-context requests under load |
+| `LOXILB_KV_LB_MODE` | (unset → `hard`) | `off` \| `hard` \| `soft` \| `adaptive` | Set **explicitly** for reproducible measurements; leaving it implicit hides which law is active |
+| `LLB_PD_MAX_INFLIGHT_PER_EP` | 0 (off) | per-EP in-flight cap | Admission gate — opt-in |
+| `LLB_PD_QUEUE_DEPTH_PER_EP` | 0 (off) | park-queue depth | Admission gate — opt-in |
+| `LLB_PD_MAX_PARK_SEC` | 0 (off) | parked-request reap deadline | Admission gate — opt-in |
+| `LLB_PD_MAX_TOTAL_INFLIGHT` | 0 (off) | global valve | Admission gate — opt-in |
+| `LLB_KV_HASH_DEBUG` | 0 (off) | `1` while debugging | Per-block hash decisions in the log (verbose) |
+
+The four admission knobs are **default-off** — the data plane behaves identically to a
+gate-less deployment until you set them. Enable them only with a latency SLO to protect
+(see [Admission](#admission-opt-in-protection-not-throughput) in the tuning playbook).
+
+## Capacity contrast for heterogeneous fleets
+
+Capacity-aware routing (the Tier-2 blend arm, `sel: 9`) only *does* anything when your
+endpoints actually differ in KV capacity. On a uniform fleet every endpoint has the same
+`num_gpu_blocks`, so the capacity term is constant and you cannot observe — or validate —
+capacity routing at all. To exercise it, synthesize a spread.
+
+### Synthesize a KV-capacity spread with `gpu_mem_util`
+
+The KV pool size a vLLM instance exposes scales with `--gpu-memory-utilization`. Launch
+fleet members at deliberately different fractions to fan out `num_gpu_blocks`:
+
+| `--gpu-memory-utilization` | Relative KV pool | Role in the contrast |
+|---|---|---|
+| `0.35` | small | low-capacity endpoint |
+| `0.6` | medium | mid-capacity endpoint |
+| `0.9` | large | high-capacity endpoint |
+
+Across that 0.35 → 0.9 range you get roughly a **4–5× spread** in `num_gpu_blocks`. The
+capacity-blend arm only becomes observable once the spread is **≥ 4×** — below that the
+differences are within noise and routing looks capacity-blind even when it is working.
+
+!!! warning "Do not ship a synthesized spread"
+    Under-utilizing GPU memory on purpose is a *test* posture to make capacity routing
+    observable — it wastes KV capacity. Return every endpoint to its real
+    `gpu_mem_util` (typically `0.9`) for production.
+
+### Verify the spread landed
+
+Read the live block count each engine actually allocated — do not assume the fraction
+mapped cleanly:
+
+```bash
+# Per endpoint: the number of GPU KV blocks vLLM allocated
+curl -s http://<endpoint-ip>:8100/metrics | grep 'vllm:cache_config_info'
+```
+
+`vllm:cache_config_info` carries `num_gpu_blocks` as a label. Confirm
+`max(num_gpu_blocks) ≥ 4 × min(num_gpu_blocks)` across the fleet before concluding that
+capacity routing is (or is not) firing — a smaller spread is the more likely reason a
+capacity-blind result shows up than a routing fault.
+
 ## Per-layer enablement matrix
 
 What turns each layer on, and the *fastest* check that it engaged (metrics on

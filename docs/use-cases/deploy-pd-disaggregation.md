@@ -103,6 +103,93 @@ Identical to the prefill launch, except: `--port 8200`, `"kv_role":"kv_consumer"
 | `--block-size 16` | Must equal the rule's `kvBlockSize`. | Hashes computed over different token spans → no match. |
 | `--kv-events-config endpoint tcp://*:5557` | `*` binds PUB mode; `127.0.0.1` puts ZMQ in connect mode and **nothing is published**. | `blocks_total` stays 0 forever. |
 
+### 4.4 Copy-paste launch reference — prefill and decode
+
+The two launches below are the full, exact commands with every load-bearing flag spelled out.
+Prefill **publishes** KV events; decode does **not**. Substitute `<MODEL>`, the node IPs, and the
+memory fraction for your hardware. Both use `vllm/vllm-openai:v0.17.0`.
+
+=== "Prefill node (kv_producer, publishes)"
+    ```bash
+    docker run -d --name vllm-prefill --gpus all --network host \
+      -e VLLM_NIXL_SIDE_CHANNEL_HOST=<prefill-node-ip> \   # routable IP, NEVER 0.0.0.0
+      -e VLLM_NIXL_SIDE_CHANNEL_PORT=5600 \                # == the endpoint's nixl_port in the rule
+      -e UCX_TLS=tcp \                                      # TCP transport (no RDMA/GDRcopy)
+      -e UCX_NET_DEVICES=all \
+      -e PYTHONHASHSEED=0 \                                # parity triad leg 1
+      vllm/vllm-openai:v0.17.0 \
+        --model <MODEL> --host 0.0.0.0 --port 8100 \
+        --max-model-len 8192 \
+        --gpu-memory-utilization 0.90 \
+        --block-size 16 \                                  # parity triad leg 2 (== rule kvBlockSize)
+        --prefix-caching-hash-algo sha256_cbor \           # parity triad leg 3 (NOT default "sha256")
+        --enforce-eager --enable-request-id-headers \
+        --kv-transfer-config '{"kv_connector":"NixlConnector","kv_role":"kv_producer","kv_buffer_device":"cpu","kv_load_failure_policy":"fail"}' \
+        --kv-events-config '{"enable_kv_cache_events":true,"publisher":"zmq","endpoint":"tcp://*:5557","topic":""}'
+    ```
+=== "Decode node (kv_consumer, no publish)"
+    ```bash
+    docker run -d --name vllm-decode --gpus all --network host \
+      -e VLLM_NIXL_SIDE_CHANNEL_HOST=<decode-node-ip> \    # routable IP, NEVER 0.0.0.0
+      -e VLLM_NIXL_SIDE_CHANNEL_PORT=5600 \
+      -e UCX_TLS=tcp \
+      -e UCX_NET_DEVICES=all \
+      -e PYTHONHASHSEED=0 \
+      vllm/vllm-openai:v0.17.0 \
+        --model <MODEL> --host 0.0.0.0 --port 8200 \
+        --max-model-len 8192 \
+        --gpu-memory-utilization 0.90 \
+        --block-size 16 \
+        --prefix-caching-hash-algo sha256_cbor \
+        --enforce-eager --enable-request-id-headers \
+        --kv-transfer-config '{"kv_connector":"NixlConnector","kv_role":"kv_consumer","kv_buffer_device":"cpu","kv_load_failure_policy":"fail"}'
+        # NO --kv-events-config on decode — decode never publishes inventory
+    ```
+
+!!! note "The two launches differ in exactly three places"
+    `kv_role` (`kv_producer` vs `kv_consumer`), the serving `--port` (`8100` vs `8200`), and the
+    **presence of `--kv-events-config`** (prefill only). Everything else — the parity triad, the NIXL
+    side channel on `:5600`, `kv_buffer_device:"cpu"` paired with `UCX_TLS=tcp` (RDMA-free) — is
+    identical on both roles. Keep `--max-model-len` identical fleet-wide.
+
+### 4.5 The decode NIXL block-count contract
+
+The NIXL producer and consumer must agree on GPU block counts. If the decode engine advertises a
+different `num_gpu_blocks` than the prefill set, the handoff trips with `num_external_tokens == 0`
+and the decode silently **recomputes** instead of reusing the transferred KV — you lose the entire
+P/D benefit while latency merely looks "high."
+
+Fix it on the **decode** side, one of two ways:
+
+- `--no-enable-prefix-caching` — the simplest fix; the decode accepts any external block layout, or
+- `--num-gpu-blocks-override <N>` — pin the block count, where **`N` = the MIN `num_gpu_blocks`
+  across the prefill set**. On heterogeneous fleets (mixed GPU memory), pin **every** mesh member to
+  the same uniform override so producer and consumer agree.
+
+Read the effective count back from each engine before trusting the mesh:
+
+```bash
+curl -s http://<node-ip>:8100/metrics | grep 'vllm:cache_config_info'
+# reconcile the num_gpu_blocks label across every prefill and decode engine
+```
+
+!!! warning "`num_external_tokens == 0` is a silent failure"
+    There is no error — decode simply recomputes. Always reconcile `num_gpu_blocks` across the mesh
+    before believing a P/D deployment is transferring KV.
+
+### 4.6 Full-mesh redeploy discipline
+
+The NIXL mesh is a fully-connected producer/consumer set. **A partial restart wedges it** — bringing
+one prefill back against a mesh the others already joined leaves stale peer state, and the new node
+never handshakes cleanly. Never restart a single engine in place.
+
+When any engine's launch flags change, redeploy the **whole** mesh in order:
+
+1. **Tear everything down** — stop all prefill and decode engines.
+2. **Bring decode up first**, and wait until it is healthy (`GET /health`).
+3. **Bring the prefills up**, and wait until each is healthy.
+4. **Re-verify** the inventory plane (§8) before sending real traffic.
+
 ---
 
 ## 5. loxilb configuration
@@ -162,6 +249,109 @@ The KV-exact rule body (`:9003`), posted to `http://<VIP>:11111/netlox/v1/config
     `pd_disagg_mode`, `pd_cache_aware_mode`, `ep_role`, `nixl_port`, `security` are **snake_case**;
     `kvExactMode`, `kvZmqPort`, `kvHashAlgo`, `kvBlockSize`, `externalIP`, `targetPort` are
     **camelCase**. Mixing them up silently drops the field — the API does not error.
+
+### 5.3 BYO fleet provisioning — the inventory model
+
+For a reproducible bring-your-own-hardware deployment, drive the whole fleet from a **single
+inventory** (one source of truth, zero hardcoded hosts). Describe each host once; every launch
+command and every rule body derives from it.
+
+Per-host attributes:
+
+| Attribute | Values / notes |
+|-----------|----------------|
+| `ip` | routable address on the shared low-latency subnet |
+| `ssh_user` / `ssh_key` | provisioning access |
+| `role` | `ep` (GPU engine) · `loxilb` (LB host) · `client` (load driver) |
+| `pd_role` | `prefill` or `decode` (EP hosts only) |
+| `gpu_type` / `num_gpus` | hardware descriptor |
+| `vllm_port` | `8100` for prefill, `8200` for decode |
+| `gpu_mem_util` | `--gpu-memory-utilization` fraction (default `0.9`) |
+
+Plus a single `loxilb_rest { ip, port: 11111 }` entry for the API endpoint.
+
+The `role` / `pd_role` split maps directly onto the pools and their ports:
+
+| Pool | Count | KV role | Ports |
+|------|-------|---------|-------|
+| Prefill | ≥ 2 | `kv_producer` | vLLM `:8100`, ZMQ PUB `:5557`, NIXL `:5600` |
+| Decode | ≥ 1 | `kv_consumer` | vLLM `:8200`, NIXL `:5600` |
+| loxilb | 1 | — | REST `:11111`, VIPs `:9003` (KV-exact) / `:9000` (RR baseline) |
+| client | ≥ 1 | — | — |
+
+Both prefill and decode run the NIXL side channel on `:5600`; only prefill runs the ZMQ publisher on
+`:5557`.
+
+### 5.4 Running loxilb on the fleet
+
+On the `loxilb` host, run the gateway as a privileged host-network container so its eBPF/XDP hooks
+attach to the real NIC. Mount the tokenizer tree (§5.5) and set the parity env:
+
+=== "curl"
+    ```bash
+    docker run -u root --cap-add SYS_ADMIN --privileged --network host -dit \
+      --restart unless-stopped --name loxilb \
+      -v /etc/loxilb/tokenizers:/etc/loxilb/tokenizers \   # per-model tokenizers, loaded at startup
+      -v /etc/loxilb/certs:/etc/loxilb/certs \
+      -e LLB_KV_NONE_HASH_SEED=0 \                          # parity: matches vLLM PYTHONHASHSEED=0
+      ghcr.io/loxilb-io/loxilb-inference-gateway:latest-u24 -p
+    ```
+=== "loxicmd"
+    !!! info "Coming soon"
+        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+
+!!! danger "NEVER `pkill loxilb` — always `docker stop -t 30 loxilb`"
+    loxilb holds XDP/eBPF hooks on the host NIC. A `pkill` / `SIGKILL` leaves those hooks attached
+    and **wedges the host's networking** — the box can lose connectivity until reboot. Always stop it
+    gracefully with `docker stop -t 30 loxilb` so it detaches the data-plane hooks cleanly.
+
+### 5.5 Staging per-model tokenizers
+
+loxilb tokenizes prompts itself to compute block hashes, so each served model's tokenizer must be
+staged on the loxilb host **before** the rule goes live. The directory name is the model id with
+every `/` rewritten to `__`:
+
+```
+/etc/loxilb/tokenizers/<model-id with '/' → '__'>/tokenizer.json
+# e.g.  Qwen/Qwen2.5-7B-Instruct  →  /etc/loxilb/tokenizers/Qwen__Qwen2.5-7B-Instruct/tokenizer.json
+```
+
+The tree is read at container startup. A missing or wrong tokenizer dir does **not** error — it
+produces a KV-exact MISS on the tokenize step (visible as
+`loxilb_pd_kv_t15_miss_reason_total{reason="tokenize"}`), and routing silently falls through to
+round-robin. Switching the model a rule serves means staging that model's tokenizer dir first.
+
+### 5.6 Synthesizing a capacity contrast
+
+Capacity-aware selection is only **observable** when the prefill endpoints actually differ in KV
+capacity. On identical GPUs you can synthesize the spread through each host's `gpu_mem_util`:
+
+| `gpu_mem_util` per prefill host | Effect |
+|---------------------------------|--------|
+| `0.35` / `0.6` / `0.9` | ~4–5× spread in `num_gpu_blocks` across the pool |
+
+You need at least a **≥ 4× spread** for capacity-aware behavior to be measurable. Verify the spread
+you actually got before drawing conclusions:
+
+```bash
+for ip in <prefill-1-ip> <prefill-2-ip> <prefill-3-ip>; do
+  echo -n "$ip "; curl -s http://$ip:8100/metrics | grep 'vllm:cache_config_info'
+done
+# compare the num_gpu_blocks labels — max should be >= 4x min
+```
+
+### 5.7 The two-rule A/B pattern
+
+To prove KV-exact routing is doing something, run it side by side against a round-robin baseline over
+the **same** backends — two VIPs, identical endpoint lists, different selectors:
+
+| VIP | Selector | Key fields |
+|-----|----------|-----------|
+| `:9003` | **KV-exact** | `mode:4`, `pd_disagg_mode:true`, `kvExactMode:1`, `kvZmqPort:5557`, `kvHashAlgo:"sha256_cbor"`, `kvWarmupSec`, `kvBlockSize:16`; endpoints carry `ep_role` 1/2 + `nixl_port:5600` |
+| `:9000` | **RR baseline** | `mode:4`, `pd_disagg_mode:true`, `pd_cache_aware_mode:false`, `pd_session_ttl_sec` |
+
+Drive identical traffic at both VIPs and compare. See §5.2 for the full four-way rule table and the
+KV-exact rule body, and [KV-Cache-Aware Routing](kv-cache-aware-routing.md) for reading the result.
 
 ---
 
@@ -270,6 +460,18 @@ index.
    prefix).
 
 When correct, hits pin to a single `ep_idx` under a shared prefix — that is the affinity signature.
+
+### 8.3 Quick "did it fire?" checks for a fresh BYO fleet
+
+Three fast signals that the KV plane came up on a newly provisioned fleet (full recipe in §8.2 and
+[KV-Cache-Aware Routing](kv-cache-aware-routing.md)):
+
+1. **`loxilb_pd_kv_tier15_hits_total` advances** after the first warm same-prefix request. A flat
+   delta means broken parity — you are silently on round-robin, so abort and fix §6.
+2. **`loxilb_kv_subscriber_connected` climbs by N** — one per prefill EP — after posting an
+   N-prefill rule.
+3. **Publishers are actually listening** — on each prefill host, `ss -tln | grep 5557` shows at
+   least one listener. Missing ⇒ the prefill's `--kv-events-config` never took.
 
 ---
 

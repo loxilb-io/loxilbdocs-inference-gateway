@@ -234,6 +234,22 @@ python -m sglang.launch_server --model <MODEL> --port 30000 \
 Use a recent SGLang release; the event-publisher and page-size behavior above
 apply to current builds.
 
+### Launching SGLang
+
+The full container recipe — `docker run … lmsysorg/sglang python3 -m
+sglang.launch_server …`, the counter-intuitive `--mem-fraction-static`
+semantics, DP-rank port planning, and health gating — lives in
+[SGLang Configuration and Tuning §5](sglang-configuration-tuning.md). Three
+launch-to-rule invariants are all you need to keep in mind here:
+
+- **`--page-size` == rule `kvBlockSize`** — the page size is model-dependent
+  (default 1, never assume 16); read it back from `/get_server_info` and set
+  `kvBlockSize` to exactly that value.
+- **`--dp-size` == rule `kvDpRankCount`** — rank *N* publishes at
+  `kvZmqPort + N`; the rule must subscribe every rank.
+- **`kvHashAlgo` omitted** — omission is what selects the SGLang hash
+  algorithm; any explicit value scores zero forever.
+
 ## Verify
 
 Confirm the rule landed and that KV-exact is actually firing:
@@ -260,6 +276,33 @@ Signals that the contract is healthy:
   than any single DP rank's contribution.
 - KV-exact hit counters advance while the **zero-hit watchdog counter stays
   flat**.
+
+### Verify it fired
+
+Metrics silently degrade to round-robin on a broken parity leg, so prove
+engagement before trusting any result. Send a handful of **warm** requests that
+share a leading prefix (repeat the same prompt is enough), then check
+`GET http://<loxilb>:11111/netlox/v1/metrics`:
+
+1. **`kv_subscriber_connected` grew by the EP count.** An N-endpoint rule should
+   add N to `loxilb_kv_subscriber_connected{service,ep}` once subscribers
+   attach. Fewer than N means some EPs never subscribed — check `kvZmqPort` and,
+   for DP fleets, that `kvDpRankCount` == `--dp-size`.
+2. **Per-EP block gauges are non-zero.** `loxilb_pd_kv_blocks_total{endpoint}`
+   must climb above 0 on every EP within the warmup+ingest window as the workers
+   publish `BlockStored` events. Zero here with a connected subscriber means the
+   server isn't publishing (missing `--kv-events-config`, a connect-mode
+   endpoint, or the wrong port).
+3. **Hits actually advance.** `loxilb_pd_kv_tier15_hits_total` must increase
+   under the warm burst.
+
+!!! warning "A zero-hit state after warm traffic almost always means `kvBlockSize` != page-size"
+    If subscribers are connected and `blocks_total` is non-empty but
+    `tier15_hits_total` stays flat (and the zero-hit watchdog is climbing), the
+    usual cause is a **`kvBlockSize` ≠ SGLang `--page-size` mismatch** — the
+    single most common silent failure. Re-read `/get_server_info` on every EP
+    and set `kvBlockSize` to exactly the reported page size. Next-likeliest is an
+    explicit `kvHashAlgo` on the rule (must be omitted) or a wrong tokenizer.
 
 ## Troubleshoot
 

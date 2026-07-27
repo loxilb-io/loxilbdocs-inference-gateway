@@ -164,6 +164,43 @@ inventory (stale entries are harmless by construction); a larger jump **clears**
 likely restarted). Both decisions emit a structured `kv-subscriber: ep N rank R seq gap A -> B …
 decision=KEEP|CLEAR` marker.
 
+### 4.1 KV-event publisher config, side by side
+
+The `--kv-events-config` JSON is the single most confused piece of the recipe, because the two
+engines take **different keys**. Copying a vLLM config onto an SGLang launch (or the reverse) is a
+common way to end up with a silent zero-hit rule.
+
+| | vLLM (prefill EPs only) | SGLang (per DP rank) |
+|---|---|---|
+| **Launch flag** | `--kv-events-config '{"enable_kv_cache_events":true,"publisher":"zmq","endpoint":"tcp://*:5557","topic":""}'` | `--kv-events-config '{"publisher":"zmq","endpoint":"tcp://*:5557"}'` |
+| `enable_kv_cache_events` | **required** — the feed is off without it | **not a key** — omit it; SGLang publishes whenever the flag is present |
+| `topic` | present, usually `""` | **not a key** — omit it |
+| `publisher` / `endpoint` | `zmq` + `tcp://*:<port>` bind | same |
+| Who publishes | **prefill EPs only** — decode EPs must **omit** the flag entirely | **every DP rank** — rank *N* binds `endpoint`'s base port `+ N` |
+| Publishers per EP | 1 (per prefill EP) | `--dp-size` N |
+
+So SGLang's config is strictly the vLLM config with the two vLLM-only keys (`enable_kv_cache_events`
+and `topic`) **removed**. Both bind with `tcp://*:<port>` — a concrete IP in connect mode publishes
+nothing, silently — and the port must equal the rule's `kvZmqPort` (rank 0 for SGLang).
+
+### 4.2 The rule-side `kvExactMode` difference
+
+The engine choice also changes the **rule** shape, not just the launch flag. The two arms enter
+Tier 1.5 through different `kvExactMode` values and they are mutually exclusive on one rule:
+
+| | vLLM P/D | SGLang single-role |
+|---|---|---|
+| `kvExactMode` | **1** | **3** |
+| Paired with | `pd_disagg_mode: true` + `ep_role` tags | *no* `pd_disagg_mode`, role-less EPs |
+| `kvEngineType` | `"vllm"` (default) | `"sglang"` (immutable after create) |
+| Combining the two | — | `kvExactMode:3` + `pd_disagg_mode:true` is **rejected** at POST: single-role mode is incompatible with P/D |
+
+`kvExactMode:3` (single-role, engine-native cache) exists precisely because Tier 1.5 was otherwise
+reachable only inside the P/D ladder (`kvExactMode:1`). It is **incompatible with P/D** — a rule is
+either a vLLM P/D rule or an SGLang single-role rule, never both. Both use `mode:4` (fullproxy) and
+honor `kvWarmupSec`; see [SGLang Configuration and Tuning §3](sglang-configuration-tuning.md) for
+the exact validation errors.
+
 ---
 
 ## 5. Multi-DP-rank routing semantics
