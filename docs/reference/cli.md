@@ -47,9 +47,9 @@ A config file names one or more targets and, for HTTP mode, the per-client beare
 tokens and their roles:
 
 ```yaml
-default_target: llb1
+default_target: gateway-1
 targets:
-  llb1:
+  gateway-1:
     url: http://10.10.10.254:11111
     # username/password_env or token_env when LoxiLB runs with --userservice
     # tls_ca / insecure_skip_verify / timeout_sec as needed
@@ -62,7 +62,7 @@ alertmanager_url: ""                     # enables alerts_active when set
 ```
 
 !!! note "Targets are names, not URLs"
-    Tool calls accept only the configured target **name** (e.g. `llb1`) in their
+    Tool calls accept only the configured target **name** (e.g. `gateway-1`) in their
     `target` argument. Raw URLs are rejected as an anti-SSRF measure.
 
 ### Authenticating to the gateway
@@ -241,7 +241,7 @@ as an MCP tool call and the equivalent REST call the bridge makes on your behalf
       "params": {
         "name": "lb_create",
         "arguments": {
-          "target": "llb1",
+          "target": "gateway-1",
           "external_ip": "10.10.10.254",
           "port": 8080,
           "protocol": "tcp",
@@ -321,7 +321,7 @@ read across all three surfaces:
 
 === "MCP (available today)"
     ```
-    ai_apikey_create { "target": "llb1", "tenant": "acme", ... }
+    ai_apikey_create { "target": "gateway-1", "tenant": "acme", ... }
     ```
 
 === "REST (available today)"

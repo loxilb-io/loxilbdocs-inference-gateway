@@ -40,7 +40,7 @@ ZMQ events stay fast. Addresses below are placeholders — substitute your own.
 
 | Node  | Role                          | Ports                                        |
 |-------|-------------------------------|----------------------------------------------|
-| llb1  | loxilb LB + REST              | REST `:11111`, VIPs `:9000–9003`             |
+| gateway-1  | loxilb LB + REST              | REST `:11111`, VIPs `:9000–9003`             |
 | gpu1  | **Prefill-1** (kv_producer)   | vLLM `:8100`, ZMQ PUB `:5557`, NIXL `:5600`  |
 | gpu2  | **Prefill-2** (kv_producer)   | vLLM `:8100`, ZMQ PUB `:5557`, NIXL `:5600`  |
 | gpu3  | **Decode-1** (kv_consumer)    | vLLM `:8200`, NIXL `:5600`                    |
