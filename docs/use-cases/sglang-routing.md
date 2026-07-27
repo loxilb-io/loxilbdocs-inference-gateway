@@ -92,7 +92,7 @@ gates, all of which must open for a single-role rule to route.
    selector. At mode 1 the added disjunct is provably never true, so the P/D
    candidate mask stays byte-identical.
 2. **Go subscriber-start gate** — the subscriber fan-out started KV subscribers
-   only for prefill endpoints at mode 1; a single-role rule would get no
+   only for prefill endpoints at `kvExactMode: 1`; a single-role rule would get no
    subscribers and permanently empty inventories. At mode 3 the gateway starts
    subscribers for **all** endpoint indexes.
 3. **Single-role `active_conns` accounting** — the KV blend keys on per-endpoint

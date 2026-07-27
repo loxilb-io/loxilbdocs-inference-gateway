@@ -149,7 +149,7 @@ Configure a rule with `POST /netlox/v1/config/loadbalancer` on port `11111`.
 Both examples below mirror the reference topologies (VIP `10.10.10.254`, prefill
 endpoints `31.31.31.1 / 33.33.33.1 / 35.35.35.1`).
 
-### vLLM KV-exact rule (mode 1)
+### vLLM KV-exact rule (`kvExactMode: 1`)
 
 A fullproxy P/D service carrying `kvExactMode: 1`. Prefill endpoints
 (`ep_role: 1`) are the KV-selection candidates; decode endpoints (`ep_role: 2`)
