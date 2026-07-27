@@ -187,7 +187,7 @@ are never Tier-1.5 targets.
     !!! info "Coming soon"
         AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
 
-### SGLang KV-exact rule (mode 3)
+### SGLang KV-exact rule (`kvExactMode: 3`)
 
 A single-role service: `kvExactMode: 3`, `kvEngineType: "sglang"`, no `ep_role`
 on the endpoints (every endpoint is a KV candidate), `kvHashAlgo` **omitted**,
@@ -259,8 +259,8 @@ curl -s "http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=0
 - `service_id` — numeric service identifier (uint32); `ep_idx` — the endpoint
   index within the service. Both query parameters are required.
 - `total` — number of blocks currently tracked for that endpoint. A non-zero,
-  growing `total` on your KV-candidate endpoints (prefill EPs for mode 1; all EPs
-  for mode 3) is the proof the subscriber is connected and ingesting.
+  growing `total` on your KV-candidate endpoints (prefill EPs for `kvExactMode: 1`;
+  all EPs for `kvExactMode: 3`) is the proof the subscriber is connected and ingesting.
 - `block_idx` is a synthetic sequence index (map iteration order), not a semantic
   block position. For SGLang, an endpoint's inventory is the **union** of all its
   ranks.

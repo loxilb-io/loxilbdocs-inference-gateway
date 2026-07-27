@@ -82,8 +82,11 @@ The CHWBL knobs also apply to `sel: 10` (WRR-hash). They are ignored for every o
 | `chwbl_replication` | int | `100` | `1`–`1024` | Virtual nodes per physical endpoint. Higher improves ring distribution at the cost of memory. For `sel: 10` this is the total vnode count, split proportionally by weight. |
 | `chwbl_enable_cache_salt` | bool | `false` | — | When `true`, requires a `cache_salt` field in each request and folds it into the hash, enforcing strict multi-tenant cache isolation. When `false`, `cache_salt` is optional. |
 
-!!! warning "Verify the effective `chwbl_mean_load_factor` default"
-    The swagger schema documents a default of `125`, but the runtime binary may initialize this to a different value (reported around `175`). Confirm the effective default against your running gateway before depending on it, and set the field explicitly if the exact ceiling matters.
+!!! warning "`chwbl_mean_load_factor`: schema default 125 is not applied on omit"
+    The API schema annotates `default: 125`, but that value is **not applied when the field is
+    omitted** — an omitted field falls to the runtime data-plane initialization of **175**
+    (a 1.75× mean ceiling). In other words: set the field explicitly to get your value; leave it out
+    and the effective out-of-box ceiling is 175. Set it explicitly if the exact ceiling matters.
 
 ### `chwbl_prefix_hash_flags` bits
 

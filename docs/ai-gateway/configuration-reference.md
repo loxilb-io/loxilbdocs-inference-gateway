@@ -147,7 +147,7 @@ every other `sel` value. See [LLM Routing](llm-routing.md).
 |---|---|---|---|---|
 | `chwbl_prefix_hash_level` | integer | `1` | `1`, `2`, `3` | Prefix-hash depth: `1`=system prompt+model, `2`=+session context, `3`=+RAG. |
 | `chwbl_prefix_hash_flags` | integer | `0` | `0`–`255` (bitflags) | Optional-field inclusion. Bit0=LoRA, 1=image, 2=audio, 3=cache_salt, 4=tools, 5=session, 6=RAG template, 7=RAG docs. `0`=auto-detect. |
-| `chwbl_mean_load_factor` | integer | `125` ⚠️ | `100`–`300` | Max load factor %: `max_load = avg_load × factor / 100`. `125` allows 25% overload. **⚠️ Schema default is `125`; a running binary may initialise this to `175` — verify against your build before relying on the default.** |
+| `chwbl_mean_load_factor` | integer | `125` (schema) ⚠️ | `100`–`300` | Max load factor %: `max_load = avg_load × factor / 100`. `125` allows 25% overload. **⚠️ The schema `default: 125` is only applied when you set the field; an omitted field falls to the runtime default of `175` (1.75×). Set it explicitly for a predictable ceiling.** |
 | `chwbl_replication` | integer | `100` | `1`–`1024` | Virtual nodes per endpoint. Higher = better distribution, more memory. For WRR-HASH this is the total vnode count distributed by weight. |
 | `chwbl_enable_cache_salt` | boolean | `false` | `true`/`false` | Require a `cache_salt` field in requests for strict multi-tenant isolation. `false` = `cache_salt` optional. |
 
