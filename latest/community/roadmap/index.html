@@ -1773,6 +1773,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1789,6 +1807,69 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#available-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Available today
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#in-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In progress
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maturing-experimental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maturing / experimental
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#longer-term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Longer term
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1850,6 +1931,58 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#available-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Available today
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#in-progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In progress
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#maturing-experimental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maturing / experimental
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#longer-term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Longer term
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1866,10 +1999,49 @@
 
 
 <h1 id="roadmap">Roadmap<a class="headerlink" href="#roadmap" title="Permanent link">&para;</a></h1>
-<div class="admonition note">
-<p class="admonition-title">Scaffold</p>
-<p>Phase-0 skeleton stub. Content lands in Phases 2-6 per the content map.</p>
-</div>
+<p>This page describes the direction of the LoxiLB Inference Gateway. It is a guide to intent, not a
+commitment to dates — priorities are shaped by the community and by real deployment feedback. The
+authoritative, up-to-the-minute view is the
+<a href="https://github.com/loxilb-io/loxilb-inference-gateway/issues">issue tracker</a>.</p>
+<h2 id="available-today">Available today<a class="headerlink" href="#available-today" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Model-name routing</strong> — per-model backend pools with wildcard fallback.</li>
+<li><strong>KV-cache-aware routing</strong> (Tier 1.5) for vLLM and SGLang, driven by the engines' native
+  KV-event contracts.</li>
+<li><strong>Prefill/decode disaggregation</strong> routing over a NIXL-connected topology.</li>
+<li><strong>Consistent-hash cache routing</strong> (CHWBL) and GPU-aware selection.</li>
+<li><strong>OpenAI-compatible SSE streaming</strong> with token accounting.</li>
+<li><strong>MCP gateway</strong> with session-sticky routing.</li>
+<li><strong>API key and tenant rate-limit management</strong> (control plane).</li>
+<li><strong>OPA L4 policy</strong> integration and <strong>mTLS</strong> for AI backends.</li>
+<li>A <strong>Prometheus + Grafana</strong> monitoring stack and the <strong><code>loxilb-mcp</code></strong> management surface.</li>
+</ul>
+<h2 id="in-progress">In progress<a class="headerlink" href="#in-progress" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Data-plane enforcement for API keys and rate limits.</strong> Today, API-key authentication (401/403)
+  and per-tenant rate limiting (429) are <strong>control-plane CRUD only</strong> — the gateway stores and
+  manages keys and limits but does not yet reject requests in the data path. Wiring this enforcement
+  into the data path is an active work item. (SSE stream lifecycle and token accounting are already
+  wired.)</li>
+<li><strong><code>loxicmd</code> subcommands for AI features.</strong> The current management surface is the REST API and
+  <code>loxilb-mcp</code>; first-class <code>loxicmd</code> AI subcommands are planned. Documentation is structured so
+  those examples can slot in beside the existing REST forms.</li>
+</ul>
+<h2 id="maturing-experimental">Maturing / experimental<a class="headerlink" href="#maturing-experimental" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Adaptive routing controller</strong> (<code>loxilb-ai-controller</code>) — TTFT-aware, capacity-weighted prefill
+  selection for heterogeneous fleets. Experimental and off by default.</li>
+<li><strong>Tiered caching with LMCache</strong> — a CPU (and optional remote) KV tier beneath the GPU cache.
+  Advanced; gate before production rollout.</li>
+</ul>
+<h2 id="longer-term">Longer term<a class="headerlink" href="#longer-term" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Broader serving-engine coverage and more turnkey deployment recipes.</li>
+<li>Expanded dashboards and alerting for inference-specific SLOs.</li>
+</ul>
+<p>Have a use case or a feature request? Open an issue in the
+<a href="https://github.com/loxilb-io/loxilb-inference-gateway/issues">code repository</a> or say hello on
+<a href="https://www.loxilb.io/members">Slack</a>.</p>
 
 
 

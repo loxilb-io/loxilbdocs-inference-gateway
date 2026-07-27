@@ -1745,6 +1745,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1761,6 +1779,69 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#two-repositories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two repositories
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributing-to-the-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contributing to the docs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#correctness-comes-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Correctness comes first
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#community" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1850,6 +1931,58 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#two-repositories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two repositories
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributing-to-the-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contributing to the docs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#correctness-comes-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Correctness comes first
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#community" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1866,10 +1999,60 @@
 
 
 <h1 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h1>
-<div class="admonition note">
-<p class="admonition-title">Scaffold</p>
-<p>Phase-0 skeleton stub. Content lands in Phases 2-6 per the content map.</p>
-</div>
+<p>The LoxiLB Inference Gateway is an open-source project and contributions are welcome —
+whether you are fixing a typo, improving an example, or documenting a feature that isn't
+covered yet.</p>
+<h2 id="two-repositories">Two repositories<a class="headerlink" href="#two-repositories" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Repository</th>
+<th>What it holds</th>
+<th>Where to contribute</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway">loxilb-inference-gateway</a></td>
+<td>The gateway source code, REST API spec (<code>api/swagger.yml</code>), and CI scenarios (<code>cicd/</code>)</td>
+<td>Code, API, and behavior changes</td>
+</tr>
+<tr>
+<td><a href="https://github.com/loxilb-io/loxilbdocs-inference-gateway">loxilbdocs-inference-gateway</a></td>
+<td>This documentation site</td>
+<td>Documentation changes</td>
+</tr>
+</tbody>
+</table>
+<p>Report a bug in the gateway itself in the <strong>code</strong> repository; report a documentation problem
+(inaccuracy, broken link, missing content) in the <strong>docs</strong> repository.</p>
+<h2 id="contributing-to-the-docs">Contributing to the docs<a class="headerlink" href="#contributing-to-the-docs" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Fork the docs repository and branch from <code>main</code>.</li>
+<li>Preview locally:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>mkdocs<span class="w"> </span>serve<span class="w">            </span><span class="c1"># http://127.0.0.1:8000</span>
+</code></pre></div></li>
+<li>Make sure the strict build passes (this is what CI runs):
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
+</code></pre></div></li>
+<li>Open a pull request and fill in the template.</li>
+</ol>
+<p>The full workflow and style conventions are in
+<a href="https://github.com/loxilb-io/loxilbdocs-inference-gateway/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.</p>
+<h2 id="correctness-comes-first">Correctness comes first<a class="headerlink" href="#correctness-comes-first" title="Permanent link">&para;</a></h2>
+<p>Every documented field, default, enum, endpoint, and runnable example must be traceable to the
+code repository — <code>api/swagger.yml</code> / <code>api/swagger-extras.yml</code> for the API contract, or a working
+<code>cicd/</code> scenario for examples. If a page and the code disagree, the code wins. When a capability
+is partial or still on the roadmap, we say so with a status note rather than implying it works.</p>
+<h2 id="community">Community<a class="headerlink" href="#community" title="Permanent link">&para;</a></h2>
+<ul>
+<li>💬 Slack: <a href="https://www.loxilb.io/members">loxilb.io/members</a></li>
+<li>🧩 Upstream LoxiLB: <a href="https://github.com/loxilb-io/loxilb">github.com/loxilb-io/loxilb</a></li>
+<li>🔒 Security issues: see the <a href="https://github.com/loxilb-io/loxilbdocs-inference-gateway/blob/main/SECURITY.md">security policy</a> — do not open a public issue.</li>
+</ul>
+<p>By participating you agree to the project's
+<a href="https://github.com/loxilb-io/loxilbdocs-inference-gateway/blob/main/CODE_OF_CONDUCT.md">Code of Conduct</a>.</p>
 
 
 
