@@ -857,10 +857,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#vllm-kv-exact-rule-mode-1" class="md-nav__link">
+  <a href="#vllm-kv-exact-rule-kvexactmode-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        vLLM KV-exact rule (mode 1)
+        vLLM KV-exact rule (kvExactMode: 1)
       
     </span>
   </a>
@@ -2233,10 +2233,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#vllm-kv-exact-rule-mode-1" class="md-nav__link">
+  <a href="#vllm-kv-exact-rule-kvexactmode-1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        vLLM KV-exact rule (mode 1)
+        vLLM KV-exact rule (kvExactMode: 1)
       
     </span>
   </a>
@@ -2621,7 +2621,7 @@ falls through to the load-based tier. There is no request error.</p>
 <p>Configure a rule with <code>POST /netlox/v1/config/loadbalancer</code> on port <code>11111</code>.
 Both examples below mirror the reference topologies (VIP <code>10.10.10.254</code>, prefill
 endpoints <code>31.31.31.1 / 33.33.33.1 / 35.35.35.1</code>).</p>
-<h3 id="vllm-kv-exact-rule-mode-1">vLLM KV-exact rule (mode 1)<a class="headerlink" href="#vllm-kv-exact-rule-mode-1" title="Permanent link">&para;</a></h3>
+<h3 id="vllm-kv-exact-rule-kvexactmode-1">vLLM KV-exact rule (<code>kvExactMode: 1</code>)<a class="headerlink" href="#vllm-kv-exact-rule-kvexactmode-1" title="Permanent link">&para;</a></h3>
 <p>A fullproxy P/D service carrying <code>kvExactMode: 1</code>. Prefill endpoints
 (<code>ep_role: 1</code>) are the KV-selection candidates; decode endpoints (<code>ep_role: 2</code>)
 are never Tier-1.5 targets.</p>
