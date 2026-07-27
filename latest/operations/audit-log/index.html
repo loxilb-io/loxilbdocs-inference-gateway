@@ -27,7 +27,7 @@
     
     
       
-        <title>Audit Log - LoxiLB Inference Gateway</title>
+        <title>Logging & Audit - LoxiLB Inference Gateway</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#audit-log" class="md-skip">
+        <a href="#logging-audit" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Audit Log
+              Logging & Audit
             
           </span>
         </div>
@@ -1459,6 +1459,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging & Audit
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1466,7 +1484,7 @@
   <span class="md-ellipsis">
     
   
-    Audit Log
+    Logging & Audit
   
 
     
@@ -1475,6 +1493,114 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#structured-logging-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Structured logging configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Structured logging configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#production-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#development-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#log-files-rotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Log files &amp; rotation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Log files &amp; rotation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#built-in-rotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in rotation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loxilb-mcp-audit-trail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        loxilb-mcp audit trail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is not covered
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1850,6 +1976,103 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#structured-logging-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Structured logging configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Structured logging configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#production-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#development-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#log-files-rotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Log files &amp; rotation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Log files &amp; rotation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#built-in-rotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Built-in rotation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loxilb-mcp-audit-trail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        loxilb-mcp audit trail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-not-covered" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is not covered
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1865,11 +2088,180 @@
 
 
 
-<h1 id="audit-log">Audit Log<a class="headerlink" href="#audit-log" title="Permanent link">&para;</a></h1>
+<h1 id="logging-audit">Logging &amp; Audit<a class="headerlink" href="#logging-audit" title="Permanent link">&para;</a></h1>
+<p>The Inference Gateway writes structured operational logs from the LoxiLB process and a separate action audit trail from the <code>loxilb-mcp</code> management surface. This page covers how to configure both, where the files land, and how they are rotated.</p>
 <div class="admonition note">
-<p class="admonition-title">Scaffold</p>
-<p>Phase-0 skeleton stub. Content lands in Phases 2-6 per the content map.</p>
+<p class="admonition-title">Audience</p>
+<p>Infrastructure operators, DevOps engineers, and platform SREs who need durable logs for troubleshooting and an audit record of management actions.</p>
 </div>
+<hr />
+<h2 id="structured-logging-configuration">Structured logging configuration<a class="headerlink" href="#structured-logging-configuration" title="Permanent link">&para;</a></h2>
+<p>LoxiLB emits structured log events to files under a configurable log directory. Three startup options control this behaviour. Each can be set as a command-line flag or, where noted, an environment variable.</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Env var</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--loglevel</code></td>
+<td>—</td>
+<td><code>debug</code></td>
+<td>Minimum severity emitted. One of <code>trace</code>, <code>debug</code>, <code>info</code>, <code>error</code>, <code>warning</code>, <code>notice</code>, <code>critical</code>, <code>emergency</code>, <code>alert</code>.</td>
+</tr>
+<tr>
+<td><code>--log-dir</code></td>
+<td><code>LOXILB_LOG_DIR</code></td>
+<td><code>/var/log/loxilb/</code></td>
+<td>Directory the log files are written to.</td>
+</tr>
+<tr>
+<td><code>--log-format</code></td>
+<td><code>LOXILB_LOG_FORMAT</code></td>
+<td><code>both</code></td>
+<td>Output format: <code>json</code>, <code>text</code>, or <code>both</code>.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">These are startup options</p>
+<p>All three are read once, when the process starts. Changing a value requires a restart of LoxiLB to take effect.</p>
+</div>
+<h3 id="production-example">Production example<a class="headerlink" href="#production-example" title="Permanent link">&para;</a></h3>
+<p>Emit machine-readable JSON only, at <code>info</code> and above — the right balance of signal and volume for a log aggregator (Loki, Elasticsearch, Splunk):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>loxilb<span class="w"> </span>--log-dir<span class="o">=</span>/var/log/loxilb/<span class="w"> </span>--log-format<span class="o">=</span>json<span class="w"> </span>--loglevel<span class="o">=</span>info
+</code></pre></div>
+<p>The equivalent using environment variables (convenient for containers and systemd units):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">LOXILB_LOG_DIR</span><span class="o">=</span>/var/log/loxilb/<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">LOXILB_LOG_FORMAT</span><span class="o">=</span>json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>loxilb<span class="w"> </span>--loglevel<span class="o">=</span>info
+</code></pre></div>
+<h3 id="development-example">Development example<a class="headerlink" href="#development-example" title="Permanent link">&para;</a></h3>
+<p>Emit both formats at full <code>debug</code> verbosity so you get human-readable plaintext for terminal triage alongside the JSON stream:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>loxilb<span class="w"> </span>--log-dir<span class="o">=</span>/tmp/loxilb-logs/<span class="w"> </span>--log-format<span class="o">=</span>both<span class="w"> </span>--loglevel<span class="o">=</span>debug
+</code></pre></div>
+<hr />
+<h2 id="log-files-rotation">Log files &amp; rotation<a class="headerlink" href="#log-files-rotation" title="Permanent link">&para;</a></h2>
+<p>All log files are written to the directory named by <code>--log-dir</code> (default <code>/var/log/loxilb/</code>). Which files appear depends on <code>--log-format</code>:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Plane</th>
+<th>Format</th>
+<th>Written when <code>--log-format</code> is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loxilb-audit.json.log</code></td>
+<td>Control plane</td>
+<td>Structured JSON, one object per line</td>
+<td><code>json</code> or <code>both</code></td>
+</tr>
+<tr>
+<td><code>loxilb&lt;HOSTNAME&gt;.log</code></td>
+<td>Control plane</td>
+<td>Human-readable plaintext</td>
+<td><code>text</code> or <code>both</code></td>
+</tr>
+<tr>
+<td><code>loxilb-dp-audit.json.log</code></td>
+<td>Data plane</td>
+<td>Structured JSON, one object per line</td>
+<td><code>json</code> or <code>both</code></td>
+</tr>
+<tr>
+<td><code>loxilb-dp&lt;HOSTNAME&gt;.log</code></td>
+<td>Data plane</td>
+<td>Human-readable plaintext</td>
+<td><code>text</code> or <code>both</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>&lt;HOSTNAME&gt;</code> is the value of the <code>$HOSTNAME</code> environment variable at process start. If it is empty, the plaintext files are simply <code>loxilb.log</code> and <code>loxilb-dp.log</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Confirm the files are being written</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ls<span class="w"> </span>-lh<span class="w"> </span>/var/log/loxilb/
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Follow the structured JSON stream (pretty-printed)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/loxilb/loxilb-audit.json.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Follow the human-readable stream</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/loxilb/loxilb.log
+</code></pre></div>
+<h3 id="built-in-rotation">Built-in rotation<a class="headerlink" href="#built-in-rotation" title="Permanent link">&para;</a></h3>
+<p>Rotation is handled inside the gateway — there is no need to configure an external <code>logrotate</code> unit. When a structured log file would exceed its size limit it is rotated in place: the current file is renamed with a UTC timestamp (<code>&lt;base&gt;-&lt;timestamp&gt;.log</code>), gzip-compressed, and old backups are pruned by count and age. The same rotation covers the <code>loxilb-mcp</code> audit trail described below.</p>
+<p>The structured log files rotate with these production defaults:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Flag</th>
+<th>Env var</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rotate above size (MB)</td>
+<td><code>--log-max-size</code></td>
+<td><code>LOXILB_LOG_MAX_SIZE</code></td>
+<td><code>50</code></td>
+</tr>
+<tr>
+<td>Backups kept per file</td>
+<td><code>--log-max-backups</code></td>
+<td><code>LOXILB_LOG_MAX_BACKUPS</code></td>
+<td><code>4</code></td>
+</tr>
+<tr>
+<td>Retention (days)</td>
+<td><code>--log-max-age</code></td>
+<td><code>LOXILB_LOG_MAX_AGE</code></td>
+<td><code>28</code></td>
+</tr>
+<tr>
+<td>Skip gzip of backups</td>
+<td><code>--log-no-compress</code></td>
+<td><code>LOXILB_LOG_NO_COMPRESS</code></td>
+<td>off (backups are compressed)</td>
+</tr>
+</tbody>
+</table>
+<p>Setting <code>--log-max-size=0</code> disables rotation and lets a file grow unbounded — not recommended in production. Rotated backups keep the <code>.log</code> / <code>.log.gz</code> naming so they remain easy to locate and archive.</p>
+<div class="admonition tip">
+<p class="admonition-title">Persist logs in Docker</p>
+<p>A container's filesystem is discarded when the container is removed, taking <code>/var/log/loxilb/</code> with it. Mount a host volume at the log directory so logs (and their rotated backups) survive restarts and redeploys:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span>run<span class="w"> </span>...<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">LOXILB_LOG_DIR</span><span class="o">=</span>/var/log/loxilb/<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">LOXILB_LOG_FORMAT</span><span class="o">=</span>json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>-v<span class="w"> </span>loxilb-logs:/var/log/loxilb/<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>&lt;loxilb-image&gt;<span class="w"> </span>--loglevel<span class="o">=</span>info
+</code></pre></div>
+</div>
+<hr />
+<h2 id="loxilb-mcp-audit-trail">loxilb-mcp audit trail<a class="headerlink" href="#loxilb-mcp-audit-trail" title="Permanent link">&para;</a></h2>
+<p>The <a href="../../reference/cli/"><code>loxilb-mcp</code></a> management surface keeps its own audit log: every tool call an agent or operator makes against the gateway is recorded, separately from LoxiLB's operational logs. Use it to answer "who changed what, and when".</p>
+<p>The audit log is an append-only JSON-lines file named <code>audit.jsonl</code>. It is written to the audit directory, resolved in this order:</p>
+<ol>
+<li>the <code>--audit-dir</code> flag, if set;</li>
+<li>the <code>audit_dir</code> field in the <code>loxilb-mcp</code> config file;</li>
+<li>otherwise <code>~/.loxilb-mcp/</code> (created with <code>0700</code> permissions).</li>
+</ol>
+<p>Each line is one event. Recorded event kinds include tool calls, authentication rejections, request-origin rejections, rate-limit hits, and autopilot executions. A typical record carries the timestamp, event kind, client and target names, the tool and its arguments, the outcome (<code>ok</code>), any error, latency, and the remote address:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="nt">&quot;ts&quot;</span><span class="p">:</span><span class="s2">&quot;2026-07-27T09:14:02.481Z&quot;</span><span class="p">,</span><span class="nt">&quot;kind&quot;</span><span class="p">:</span><span class="s2">&quot;tool_call&quot;</span><span class="p">,</span><span class="nt">&quot;client&quot;</span><span class="p">:</span><span class="s2">&quot;oncall&quot;</span><span class="p">,</span><span class="nt">&quot;target&quot;</span><span class="p">:</span><span class="s2">&quot;gateway-1&quot;</span><span class="p">,</span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="s2">&quot;lb_create&quot;</span><span class="p">,</span><span class="nt">&quot;args&quot;</span><span class="p">:{</span><span class="nt">&quot;externalIP&quot;</span><span class="p">:</span><span class="s2">&quot;10.10.10.254&quot;</span><span class="p">},</span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nt">&quot;latency_ms&quot;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="nt">&quot;remote&quot;</span><span class="p">:</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">}</span>
+</code></pre></div>
+<p>Secret-shaped argument values (tokens, passwords, API keys, and similar) are masked as <code>[REDACTED]</code> before the event is written, so credentials never land in the audit file.</p>
+<p>The audit log is rotated by the same built-in mechanism as the structured logs, with a longer forensic window: it rotates above <strong>20 MB</strong>, keeps <strong>8</strong> gzipped backups, and retains them for <strong>90 days</strong>.</p>
+<p>For the full <code>loxilb-mcp</code> command surface, transports, and role model, see the <a href="../../reference/cli/">CLI Reference</a>.</p>
+<hr />
+<h2 id="what-is-not-covered">What is not covered<a class="headerlink" href="#what-is-not-covered" title="Permanent link">&para;</a></h2>
+<p>This page documents the logging and audit capabilities that ship in the open-source Inference Gateway. Advanced structured audit-logging features — a runtime API for changing per-category log levels without a restart, compliance-oriented export formats, and long-term audit warehousing — are outside the scope of this gateway and are intentionally not documented here. Configure log severity through the <code>--loglevel</code> startup option, and ship the JSON files to your own aggregator for retention and search.</p>
+<p>For the metrics side of observability, see <a href="../observability-metrics-grafana/">Grafana Dashboards &amp; Observability</a>.</p>
 
 
 
