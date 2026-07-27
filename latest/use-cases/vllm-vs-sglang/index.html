@@ -1226,6 +1226,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="4. Event-stream differences">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-kv-event-publisher-config-side-by-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 KV-event publisher config, side by side
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-the-rule-side-kvexactmode-difference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 The rule-side kvExactMode difference
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2102,6 +2130,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="4. Event-stream differences">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-kv-event-publisher-config-side-by-side" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 KV-event publisher config, side by side
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-the-rule-side-kvexactmode-difference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 The rule-side kvExactMode difference
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2445,6 +2501,93 @@ mid-stream gap within the forward tolerance (<code>kvSeqResumeWindow = 64</code>
 inventory (stale entries are harmless by construction); a larger jump <strong>clears</strong> it (the publisher
 likely restarted). Both decisions emit a structured <code>kv-subscriber: ep N rank R seq gap A -&gt; B …
 decision=KEEP|CLEAR</code> marker.</p>
+<h3 id="41-kv-event-publisher-config-side-by-side">4.1 KV-event publisher config, side by side<a class="headerlink" href="#41-kv-event-publisher-config-side-by-side" title="Permanent link">&para;</a></h3>
+<p>The <code>--kv-events-config</code> JSON is the single most confused piece of the recipe, because the two
+engines take <strong>different keys</strong>. Copying a vLLM config onto an SGLang launch (or the reverse) is a
+common way to end up with a silent zero-hit rule.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>vLLM (prefill EPs only)</th>
+<th>SGLang (per DP rank)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Launch flag</strong></td>
+<td><code>--kv-events-config '{"enable_kv_cache_events":true,"publisher":"zmq","endpoint":"tcp://*:5557","topic":""}'</code></td>
+<td><code>--kv-events-config '{"publisher":"zmq","endpoint":"tcp://*:5557"}'</code></td>
+</tr>
+<tr>
+<td><code>enable_kv_cache_events</code></td>
+<td><strong>required</strong> — the feed is off without it</td>
+<td><strong>not a key</strong> — omit it; SGLang publishes whenever the flag is present</td>
+</tr>
+<tr>
+<td><code>topic</code></td>
+<td>present, usually <code>""</code></td>
+<td><strong>not a key</strong> — omit it</td>
+</tr>
+<tr>
+<td><code>publisher</code> / <code>endpoint</code></td>
+<td><code>zmq</code> + <code>tcp://*:&lt;port&gt;</code> bind</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Who publishes</td>
+<td><strong>prefill EPs only</strong> — decode EPs must <strong>omit</strong> the flag entirely</td>
+<td><strong>every DP rank</strong> — rank <em>N</em> binds <code>endpoint</code>'s base port <code>+ N</code></td>
+</tr>
+<tr>
+<td>Publishers per EP</td>
+<td>1 (per prefill EP)</td>
+<td><code>--dp-size</code> N</td>
+</tr>
+</tbody>
+</table>
+<p>So SGLang's config is strictly the vLLM config with the two vLLM-only keys (<code>enable_kv_cache_events</code>
+and <code>topic</code>) <strong>removed</strong>. Both bind with <code>tcp://*:&lt;port&gt;</code> — a concrete IP in connect mode publishes
+nothing, silently — and the port must equal the rule's <code>kvZmqPort</code> (rank 0 for SGLang).</p>
+<h3 id="42-the-rule-side-kvexactmode-difference">4.2 The rule-side <code>kvExactMode</code> difference<a class="headerlink" href="#42-the-rule-side-kvexactmode-difference" title="Permanent link">&para;</a></h3>
+<p>The engine choice also changes the <strong>rule</strong> shape, not just the launch flag. The two arms enter
+Tier 1.5 through different <code>kvExactMode</code> values and they are mutually exclusive on one rule:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>vLLM P/D</th>
+<th>SGLang single-role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kvExactMode</code></td>
+<td><strong>1</strong></td>
+<td><strong>3</strong></td>
+</tr>
+<tr>
+<td>Paired with</td>
+<td><code>pd_disagg_mode: true</code> + <code>ep_role</code> tags</td>
+<td><em>no</em> <code>pd_disagg_mode</code>, role-less EPs</td>
+</tr>
+<tr>
+<td><code>kvEngineType</code></td>
+<td><code>"vllm"</code> (default)</td>
+<td><code>"sglang"</code> (immutable after create)</td>
+</tr>
+<tr>
+<td>Combining the two</td>
+<td>—</td>
+<td><code>kvExactMode:3</code> + <code>pd_disagg_mode:true</code> is <strong>rejected</strong> at POST: single-role mode is incompatible with P/D</td>
+</tr>
+</tbody>
+</table>
+<p><code>kvExactMode:3</code> (single-role, engine-native cache) exists precisely because Tier 1.5 was otherwise
+reachable only inside the P/D ladder (<code>kvExactMode:1</code>). It is <strong>incompatible with P/D</strong> — a rule is
+either a vLLM P/D rule or an SGLang single-role rule, never both. Both use <code>mode:4</code> (fullproxy) and
+honor <code>kvWarmupSec</code>; see <a href="../sglang-configuration-tuning/">SGLang Configuration and Tuning §3</a> for
+the exact validation errors.</p>
 <hr />
 <h2 id="5-multi-dp-rank-routing-semantics">5. Multi-DP-rank routing semantics<a class="headerlink" href="#5-multi-dp-rank-routing-semantics" title="Permanent link">&para;</a></h2>
 <p>SGLang's <code>--dp-size N</code> runs N data-parallel attention workers inside one server process: <strong>one

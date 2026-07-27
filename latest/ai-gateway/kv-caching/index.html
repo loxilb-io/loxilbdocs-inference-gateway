@@ -956,6 +956,67 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#tiered-caching-with-lmcache-advanced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tiered caching with LMCache (advanced)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tiered caching with LMCache (advanced)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration surface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hazards-read-before-enabling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hazards (read before enabling)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2271,6 +2332,67 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#tiered-caching-with-lmcache-advanced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tiered caching with LMCache (advanced)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tiered caching with LMCache (advanced)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-it-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration-surface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration surface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hazards-read-before-enabling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hazards (read before enabling)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2673,6 +2795,142 @@ silently falls through. Walk the triad for your engine:</p>
    one-shot queries, consider <a href="../vllm-integration/">GPU-aware selection</a>
    (<code>sel: 9</code>) instead.</li>
 </ol>
+<h2 id="tiered-caching-with-lmcache-advanced">Tiered caching with LMCache (advanced)<a class="headerlink" href="#tiered-caching-with-lmcache-advanced" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Advanced — gate this before rollout</p>
+<p>LMCache adds a second KV cache tier <em>inside</em> the engine. It is powerful for
+prefill-heavy, high-reuse workloads, but it composes vLLM, LMCache, and NIXL — a
+stack with <strong>no official compatibility matrix</strong> — and several of its failure modes
+are silent. Validate it on a staging fleet and pin every component's version before
+you put it in front of traffic. Everything above (block-hash routing) works without
+LMCache; this is an optional add-on, not a prerequisite.</p>
+</div>
+<p>Everything earlier on this page moves <em>hashes, not tensors</em>: LoxiLB routes a request to
+the endpoint that already holds the prefix. LMCache is complementary and lives one layer
+down — it gives each engine a <strong>larger place to keep KV</strong> so a prefix survives eviction
+from the GPU cache. LoxiLB still does the routing; LMCache changes what "the endpoint
+already holds this" can mean.</p>
+<h3 id="what-it-is">What it is<a class="headerlink" href="#what-it-is" title="Permanent link">&para;</a></h3>
+<p>LMCache is wired into vLLM as a <strong>MultiConnector</strong> that composes two connectors:</p>
+<ul>
+<li><code>LMCacheConnectorV1</code> — the tiered KV store: a <strong>CPU</strong> KV tier (and, optionally, a
+  remote or peer-to-peer tier) layered <em>under</em> the GPU KV cache. When a prefix is
+  evicted from GPU memory, its KV can be retrieved from the CPU tier instead of
+  recomputed.</li>
+<li><code>NixlConnector</code> — the same P/D transfer connector used for prefill/decode KV handoff.</li>
+</ul>
+<p>Composing both lets one vLLM process both participate in P/D transfer <em>and</em> back its GPU
+cache with a CPU tier. LMCache runs on the <strong>prefill tier only</strong> — decode nodes are
+excluded from the connector config.</p>
+<h3 id="configuration-surface">Configuration surface<a class="headerlink" href="#configuration-surface" title="Permanent link">&para;</a></h3>
+<p>LMCache is configured entirely on the <strong>vLLM launch</strong>, not on the LoxiLB rule — LoxiLB's
+KV-exact contract is unchanged. The moving parts:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Where</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--kv-transfer-config</code></td>
+<td>vLLM flag</td>
+<td>MultiConnector JSON naming <code>LMCacheConnectorV1</code> + <code>NixlConnector</code></td>
+</tr>
+<tr>
+<td><code>LMCACHE_CONFIG_FILE</code></td>
+<td>env</td>
+<td>Path to <code>lmcache.yaml</code> (tier sizes, remote backend, chunk size)</td>
+</tr>
+<tr>
+<td><code>PROMETHEUS_MULTIPROC_DIR</code></td>
+<td>env</td>
+<td><strong>Must be identical across all vLLM and LMCache processes</strong> (see hazards)</td>
+</tr>
+<tr>
+<td>chunk size</td>
+<td><code>lmcache.yaml</code></td>
+<td>Default <strong>256 tokens</strong>; a prefix must exceed one chunk to be stored</td>
+</tr>
+<tr>
+<td>decode nodes</td>
+<td>topology</td>
+<td><strong>Excluded</strong> — LMCache is configured on prefill nodes only</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>--kv-transfer-config</code> is a MultiConnector document (rather than a single
+<code>NixlConnector</code> object as in the plain P/D case). Keep the engine image tag pinned
+(e.g. <code>vllm/vllm-openai:v0.17.0</code>): LMCache and NIXL versions travel with the image and a
+bump can change the wire behavior.</p>
+<h3 id="metrics">Metrics<a class="headerlink" href="#metrics" title="Permanent link">&para;</a></h3>
+<p>LMCache exports its own <code>lmcache:*</code> Prometheus series. Read the <strong>hit counter</strong>, not the
+rate gauge:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lmcache:num_hit_tokens</code></td>
+<td><strong>Authoritative</strong> hit counter — this is the number to trust</td>
+</tr>
+<tr>
+<td><code>lmcache:retrieve_hit_rate</code></td>
+<td><strong>STALE gauge</strong> — can read <code>1.0</code> with zero retrieves; informational only, never gate on it</td>
+</tr>
+<tr>
+<td><code>lmcache:local_cache_usage</code></td>
+<td>CPU-tier occupancy</td>
+</tr>
+<tr>
+<td><code>lmcache:remote_cache_usage</code></td>
+<td>Remote/P2P-tier occupancy (if configured)</td>
+</tr>
+<tr>
+<td><code>lmcache:time_to_retrieve</code></td>
+<td>Retrieval latency from a lower tier</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title"><code>lmcache:retrieve_hit_rate</code> lies</p>
+<p>The rate gauge is not reset/recomputed the way you would expect — it can sit at
+<code>1.0</code> even when no retrieval has happened. Judge effectiveness by the delta on
+<code>lmcache:num_hit_tokens</code> over a known workload, not by the rate.</p>
+</div>
+<h3 id="hazards-read-before-enabling">Hazards (read before enabling)<a class="headerlink" href="#hazards-read-before-enabling" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>No official compat matrix.</strong> vLLM × LMCache × NIXL has no vendor-published
+  compatibility table. Pin all three (via the engine image tag) and validate the exact
+  combination you will run.</li>
+<li><strong>Nested NIXL layout.</strong> Because NIXL appears both as the P/D connector and under
+  LMCache, the nested NIXL <strong>must force the HND cache layout</strong> (per vLLM
+  <a href="https://github.com/vllm-project/vllm/pull/21789">PR #21789</a>). Without it, P/D KV
+  transfer can <strong>silently corrupt</strong> — no error, wrong tokens.</li>
+<li><strong>Prefix caching hides retrievals.</strong> With vLLM prefix caching <strong>ON</strong>, an immediate
+  re-issue of the same prompt is served straight from the <strong>GPU</strong> cache, so LMCache
+  never retrieves and its counters stay flat — making it look broken. To exercise
+  LMCache, <strong>evict first</strong>: drive enough distinct traffic to exceed <code>num_gpu_blocks</code> so
+  the prefix leaves the GPU cache, <em>then</em> re-issue.</li>
+<li><strong><code>PROMETHEUS_MULTIPROC_DIR</code> must be set and shared.</strong> If it is unset or differs
+  between the vLLM and LMCache processes, <strong>all <code>lmcache:*</code> series vanish</strong> — you lose
+  every metric silently. Set it identically for every process in the deployment.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Parity triad still applies underneath</p>
+<p>LMCache changes the KV <em>storage tiers</em>, not the block-hash contract. LoxiLB's
+routing still depends on the parity triad — <code>PYTHONHASHSEED</code> / <code>LLB_KV_NONE_HASH_SEED</code>,
+<code>--block-size</code> / <code>kvBlockSize</code>, and <code>--prefix-caching-hash-algo</code> / <code>kvHashAlgo</code>.
+Before you attribute a hit-rate change to LMCache, run the read-only preflight in
+<a href="../../use-cases/configuration-tuning/#environment-parity-preflight">Configuration &amp; Tuning → Environment parity &amp; preflight</a>
+to confirm the triad and the version/platform matrix are still intact.</p>
+</div>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../use-cases/kv-cache-aware-routing/">KV-Cache-Aware Routing (use-case)</a> — flagship deep dive: architecture and the vLLM hash contract in full.</li>

@@ -878,6 +878,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#vllm-engine-setup-essentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vLLM engine setup essentials
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2148,6 +2159,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#vllm-engine-setup-essentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vLLM engine setup essentials
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2553,6 +2575,22 @@ GDRcopy/RDMA (for example AWS <code>g5.xlarge</code> with A10G), that fails duri
 TCP-only host. See <a href="../../use-cases/deploy-pd-disaggregation/">Deploy: P/D Disaggregation</a> for a
 full cloud walkthrough.</p>
 </div>
+<h3 id="vllm-engine-setup-essentials">vLLM engine setup essentials<a class="headerlink" href="#vllm-engine-setup-essentials" title="Permanent link">&para;</a></h3>
+<p>Three things distinguish a P/D-capable launch from a plain vLLM one. The full copy-paste reference
+lives in the deploy guide — the essentials:</p>
+<ul>
+<li><strong><code>--kv-transfer-config</code> differs by role.</strong> Prefill runs <code>"kv_role":"kv_producer"</code>, decode runs
+  <code>"kv_role":"kv_consumer"</code> — both use the <code>NixlConnector</code> with <code>"kv_buffer_device":"cpu"</code> on
+  TCP-only hosts.</li>
+<li><strong><code>--kv-events-config</code> is prefill-only.</strong> Only prefill publishes KV inventory
+  (<code>{"enable_kv_cache_events":true,"publisher":"zmq","endpoint":"tcp://*:5557","topic":""}</code>); decode
+  omits it entirely.</li>
+<li><strong>The parity flags must match loxilb</strong> for KV-exact routing to engage: <code>PYTHONHASHSEED=0</code>,
+  <code>--prefix-caching-hash-algo sha256_cbor</code> (not the default <code>sha256</code>), and <code>--block-size 16</code> (equal
+  to the rule's <code>kvBlockSize</code>).</li>
+</ul>
+<p>See <a href="../../use-cases/deploy-pd-disaggregation/">Deploy: P/D Disaggregation</a> for the full prefill and
+decode launch commands, the decode NIXL block-count contract, and the full-mesh redeploy discipline.</p>
 <hr />
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
 <p><strong>1. Confirm the service carries P/D config:</strong></p>

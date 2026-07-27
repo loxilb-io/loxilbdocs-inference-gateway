@@ -1117,33 +1117,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-guard-ladder-miss-reasons" class="md-nav__link">
+  <a href="#6-parity-preflight-inspect-what-is-actually-running" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Guard ladder &amp; miss reasons
+        6. Parity preflight — inspect what is actually running
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7-configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Configuration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="7. Configuration">
+    <nav class="md-nav" aria-label="6. Parity preflight — inspect what is actually running">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#71-rest-the-load-balancer-rule" class="md-nav__link">
+  <a href="#61-the-parity-triad-as-an-operational-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.1 REST — the load-balancer rule
+        6.1 The parity triad as an operational checklist
       
     </span>
   </a>
@@ -1151,10 +1140,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#72-environment-variables-loxilb-process" class="md-nav__link">
+  <a href="#62-the-read-only-preflight-read-the-live-container-not-the-script" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.2 Environment variables (LoxiLB process)
+        6.2 The read-only preflight — read the live container, not the script
       
     </span>
   </a>
@@ -1162,10 +1151,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#73-tokenizer-staging" class="md-nav__link">
+  <a href="#63-version-platform-matrix" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.3 Tokenizer staging
+        6.3 Version / platform matrix
       
     </span>
   </a>
@@ -1173,10 +1162,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#74-vllm-side-must-match-the-rule" class="md-nav__link">
+  <a href="#64-vllm-metric-families-the-collector-needs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.4 vLLM side (must match the rule)
+        6.4 vLLM metric families the collector needs
       
     </span>
   </a>
@@ -1184,10 +1173,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#75-onboarding-a-new-model-one-model-per-rule" class="md-nav__link">
+  <a href="#65-loxilb-runtime-env-worth-setting-explicitly" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.5 Onboarding a new model (one model per rule)
+        6.5 loxilb runtime env worth setting explicitly
       
     </span>
   </a>
@@ -1200,22 +1189,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-verify" class="md-nav__link">
+  <a href="#7-guard-ladder-miss-reasons" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Verify
+        7. Guard ladder &amp; miss reasons
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8. Verify">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Configuration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#81-inspect-the-live-inventory" class="md-nav__link">
+  <a href="#81-rest-the-load-balancer-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8.1 Inspect the live inventory
+        8.1 REST — the load-balancer rule
       
     </span>
   </a>
@@ -1223,10 +1223,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#82-prometheus-metrics" class="md-nav__link">
+  <a href="#82-environment-variables-loxilb-process" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8.2 Prometheus metrics
+        8.2 Environment variables (LoxiLB process)
       
     </span>
   </a>
@@ -1234,10 +1234,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#83-healthy-warm-route-signature" class="md-nav__link">
+  <a href="#83-tokenizer-staging" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8.3 Healthy warm-route signature
+        8.3 Tokenizer staging
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-vllm-side-must-match-the-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 vLLM side (must match the rule)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-onboarding-a-new-model-one-model-per-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 Onboarding a new model (one model per rule)
       
     </span>
   </a>
@@ -1250,10 +1272,121 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-troubleshoot" class="md-nav__link">
+  <a href="#9-verify-it-actually-fired-the-mandatory-post-config-check" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Troubleshoot
+        9. Verify it actually fired — the mandatory post-config check
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Verify it actually fired — the mandatory post-config check">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-step-1-the-engagement-assertion-on-get-netloxv1metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Step 1 — the engagement assertion on GET /netlox/v1/metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-step-2-inventory-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Step 2 — inventory check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-step-3-subscriber-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 Step 3 — subscriber count
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-step-4-publisher-side-sanity-on-the-engine-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 Step 4 — publisher-side sanity (on the engine host)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-verify-inventory-metrics-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Verify — inventory &amp; metrics reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Verify — inventory &amp; metrics reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-inspect-the-live-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Inspect the live inventory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-prometheus-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Prometheus metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-healthy-warm-route-signature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Healthy warm-route signature
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-troubleshoot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Troubleshoot
       
     </span>
   </a>
@@ -1261,15 +1394,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#10-known-limits" class="md-nav__link">
+  <a href="#12-known-limits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10. Known limits
+        12. Known limits
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="10. Known limits">
+    <nav class="md-nav" aria-label="12. Known limits">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1285,6 +1418,28 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-advanced-ai-controller-experimental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Advanced: AI controller (experimental)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-advanced-lmcache-tiered-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Advanced: LMCache tiered cache
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2255,33 +2410,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-guard-ladder-miss-reasons" class="md-nav__link">
+  <a href="#6-parity-preflight-inspect-what-is-actually-running" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Guard ladder &amp; miss reasons
+        6. Parity preflight — inspect what is actually running
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#7-configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Configuration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="7. Configuration">
+    <nav class="md-nav" aria-label="6. Parity preflight — inspect what is actually running">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#71-rest-the-load-balancer-rule" class="md-nav__link">
+  <a href="#61-the-parity-triad-as-an-operational-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.1 REST — the load-balancer rule
+        6.1 The parity triad as an operational checklist
       
     </span>
   </a>
@@ -2289,10 +2433,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#72-environment-variables-loxilb-process" class="md-nav__link">
+  <a href="#62-the-read-only-preflight-read-the-live-container-not-the-script" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.2 Environment variables (LoxiLB process)
+        6.2 The read-only preflight — read the live container, not the script
       
     </span>
   </a>
@@ -2300,10 +2444,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#73-tokenizer-staging" class="md-nav__link">
+  <a href="#63-version-platform-matrix" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.3 Tokenizer staging
+        6.3 Version / platform matrix
       
     </span>
   </a>
@@ -2311,10 +2455,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#74-vllm-side-must-match-the-rule" class="md-nav__link">
+  <a href="#64-vllm-metric-families-the-collector-needs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.4 vLLM side (must match the rule)
+        6.4 vLLM metric families the collector needs
       
     </span>
   </a>
@@ -2322,10 +2466,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#75-onboarding-a-new-model-one-model-per-rule" class="md-nav__link">
+  <a href="#65-loxilb-runtime-env-worth-setting-explicitly" class="md-nav__link">
     <span class="md-ellipsis">
       
-        7.5 Onboarding a new model (one model per rule)
+        6.5 loxilb runtime env worth setting explicitly
       
     </span>
   </a>
@@ -2338,22 +2482,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#8-verify" class="md-nav__link">
+  <a href="#7-guard-ladder-miss-reasons" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8. Verify
+        7. Guard ladder &amp; miss reasons
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="8. Verify">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Configuration">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#81-inspect-the-live-inventory" class="md-nav__link">
+  <a href="#81-rest-the-load-balancer-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8.1 Inspect the live inventory
+        8.1 REST — the load-balancer rule
       
     </span>
   </a>
@@ -2361,10 +2516,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#82-prometheus-metrics" class="md-nav__link">
+  <a href="#82-environment-variables-loxilb-process" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8.2 Prometheus metrics
+        8.2 Environment variables (LoxiLB process)
       
     </span>
   </a>
@@ -2372,10 +2527,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#83-healthy-warm-route-signature" class="md-nav__link">
+  <a href="#83-tokenizer-staging" class="md-nav__link">
     <span class="md-ellipsis">
       
-        8.3 Healthy warm-route signature
+        8.3 Tokenizer staging
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-vllm-side-must-match-the-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 vLLM side (must match the rule)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-onboarding-a-new-model-one-model-per-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 Onboarding a new model (one model per rule)
       
     </span>
   </a>
@@ -2388,10 +2565,121 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#9-troubleshoot" class="md-nav__link">
+  <a href="#9-verify-it-actually-fired-the-mandatory-post-config-check" class="md-nav__link">
     <span class="md-ellipsis">
       
-        9. Troubleshoot
+        9. Verify it actually fired — the mandatory post-config check
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Verify it actually fired — the mandatory post-config check">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-step-1-the-engagement-assertion-on-get-netloxv1metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Step 1 — the engagement assertion on GET /netlox/v1/metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-step-2-inventory-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Step 2 — inventory check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-step-3-subscriber-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 Step 3 — subscriber count
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-step-4-publisher-side-sanity-on-the-engine-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 Step 4 — publisher-side sanity (on the engine host)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-verify-inventory-metrics-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Verify — inventory &amp; metrics reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Verify — inventory &amp; metrics reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-inspect-the-live-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Inspect the live inventory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-prometheus-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Prometheus metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-healthy-warm-route-signature" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Healthy warm-route signature
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-troubleshoot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Troubleshoot
       
     </span>
   </a>
@@ -2399,15 +2687,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#10-known-limits" class="md-nav__link">
+  <a href="#12-known-limits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10. Known limits
+        12. Known limits
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="10. Known limits">
+    <nav class="md-nav" aria-label="12. Known limits">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2423,6 +2711,28 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-advanced-ai-controller-experimental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Advanced: AI controller (experimental)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-advanced-lmcache-tiered-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Advanced: LMCache tiered cache
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2543,7 +2853,7 @@ use <code>mode=4</code> (fullproxy). There is no eBPF fast-path involvement in t
 <h2 id="4-end-to-end-call-flow">4. End-to-end call flow<a class="headerlink" href="#4-end-to-end-call-flow" title="Permanent link">&para;</a></h2>
 <p><strong>Control path (rule creation).</strong> An operator POSTs a load-balancer rule with <code>kvExactMode: 1</code> and endpoints tagged prefill / decode. For every prefill endpoint, LoxiLB starts a subscriber that dials the worker's ZeroMQ port. Initial dial failure does not kill the subscriber — it retries on an interval, so the rule can be created before vLLM is up. The warmup window (Guard B) starts counting from subscriber start.</p>
 <p><strong>Ingest path (event → inventory).</strong> vLLM publishes a multi-frame message <code>[topic | sequence | payload]</code>. The subscriber parses the sequence; a gap triggers a replay. <code>BlockStored</code> adds hashes, <code>BlockRemoved</code> removes them, <code>AllBlocksCleared</code> empties the set. On any receive error the socket is rebuilt, and on reconnect the inventory is cleared.</p>
-<p><strong>Request path (request → worker).</strong> For each proxied request on a <code>kvExactMode=1</code> rule, the data plane runs the guard ladder (§6):</p>
+<p><strong>Request path (request → worker).</strong> For each proxied request on a <code>kvExactMode=1</code> rule, the data plane runs the guard ladder (§7):</p>
 <ol>
 <li><strong>Extract</strong> prompt text and model from the request. The body must be OpenAI JSON (<code>{"model": ..., "prompt"/"messages": ...}</code>); a <code>text/plain</code> body leaves the model empty and every request silently falls through to round-robin.</li>
 <li><strong>Tokenize</strong> the prompt via the control-plane tokenizer pool, loading the model's staged <code>tokenizer.json</code>.</li>
@@ -2584,10 +2894,174 @@ use <code>mode=4</code> (fullproxy). There is no eBPF fast-path involvement in t
 <p class="admonition-title">Silent failure on any contract mismatch</p>
 <p>Get block size, hash algorithm, seed, or tokenizer wrong and there is <strong>no error</strong> — hashes
 simply never match, inventory overlap stays 0, and routing quietly falls back to round-robin.
-Always verify engagement with the metrics in §8 rather than assuming it worked.</p>
+Always verify engagement with the metrics in §9 rather than assuming it worked.</p>
 </div>
 <hr />
-<h2 id="6-guard-ladder-miss-reasons">6. Guard ladder &amp; miss reasons<a class="headerlink" href="#6-guard-ladder-miss-reasons" title="Permanent link">&para;</a></h2>
+<h2 id="6-parity-preflight-inspect-what-is-actually-running">6. Parity preflight — inspect what is actually running<a class="headerlink" href="#6-parity-preflight-inspect-what-is-actually-running" title="Permanent link">&para;</a></h2>
+<p>The parity contract in §5 is only worth anything if the <em>running</em> engine and the <em>running</em> loxilb agree on it. Deploy scripts drift from live containers; someone edits an env var by hand; an image tag rolls. Before you send a single request, run this <strong>read-only</strong> preflight — it inspects what the containers were launched with, not what you meant to launch them with.</p>
+<h3 id="61-the-parity-triad-as-an-operational-checklist">6.1 The parity triad as an operational checklist<a class="headerlink" href="#61-the-parity-triad-as-an-operational-checklist" title="Permanent link">&para;</a></h3>
+<p>All three legs, or you are silently measuring round-robin:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Leg</th>
+<th>Engine side</th>
+<th>loxilb side</th>
+<th>Rule field</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Hash seed</td>
+<td><code>PYTHONHASHSEED=0</code></td>
+<td><code>LLB_KV_NONE_HASH_SEED=0</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Block / page size</td>
+<td>vLLM <code>--block-size 16</code> (SGLang: effective page size)</td>
+<td>—</td>
+<td><code>kvBlockSize</code> == that value</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Hash algorithm</td>
+<td><code>--prefix-caching-hash-algo *_cbor</code></td>
+<td>—</td>
+<td><code>kvHashAlgo</code> matches</td>
+</tr>
+</tbody>
+</table>
+<p>The seeds must be <em>equal</em>, not necessarily zero — but <code>0</code> on both sides is the reproducible default and the value the rest of these docs assume.</p>
+<h3 id="62-the-read-only-preflight-read-the-live-container-not-the-script">6.2 The read-only preflight — read the live container, not the script<a class="headerlink" href="#62-the-read-only-preflight-read-the-live-container-not-the-script" title="Permanent link">&para;</a></h3>
+<p>Never trust the deploy script; read what Docker actually launched. These commands mutate nothing:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># the engine&#39;s real launch command (flags exactly as passed)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>docker<span class="w"> </span>ps<span class="w"> </span>--no-trunc<span class="w"> </span>--format<span class="w"> </span><span class="s1">&#39;{{.Names}}\t{{.Command}}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;vllm|sglang&#39;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># the engine&#39;s real environment — confirm the seed and int-hash flag</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>docker<span class="w"> </span>inspect<span class="w"> </span>&lt;engine-container&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span>--format<span class="w"> </span><span class="s1">&#39;{{range .Config.Env}}{{println .}}{{end}}&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;PYTHONHASHSEED|VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES&#39;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># loxilb&#39;s real environment — confirm the seed matches and note the LB knobs</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>docker<span class="w"> </span>inspect<span class="w"> </span>&lt;loxilb-container&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span>--format<span class="w"> </span><span class="s1">&#39;{{range .Config.Env}}{{println .}}{{end}}&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;LLB_KV_NONE_HASH_SEED|LOXILB_KV_LB_MODE|LLB_PD_PREFILL_TIMEOUT_SEC&#39;</span>
+</code></pre></div>
+<p>If <code>PYTHONHASHSEED</code> and <code>LLB_KV_NONE_HASH_SEED</code> differ — or either is set while the other is unset — every seeded block hash is corrupt and overlap will read zero. Fix that before doing anything else. The loxilb container image is <code>ghcr.io/loxilb-io/loxilb-inference-gateway:latest-u24</code>.</p>
+<h3 id="63-version-platform-matrix">6.3 Version / platform matrix<a class="headerlink" href="#63-version-platform-matrix" title="Permanent link">&para;</a></h3>
+<p>The eBPF data plane and the KV wire contract are both platform-sensitive. Pin these:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Pin to</th>
+<th>Avoid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OS</td>
+<td>Ubuntu 24.04</td>
+<td>—</td>
+</tr>
+<tr>
+<td>NVIDIA driver</td>
+<td>570.x</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Kernel</strong></td>
+<td><strong>6.8</strong></td>
+<td><strong>6.12.53+, 6.14, 6.17.5+</strong> — a BPF-verifier regression breaks the eBPF data plane</td>
+</tr>
+<tr>
+<td>Engine image tag</td>
+<td>a pinned release (e.g. a fixed <code>vllm/vllm-openai</code> tag)</td>
+<td><code>:latest</code> — pinning freezes the KV wire contract</td>
+</tr>
+<tr>
+<td><code>--max-model-len</code></td>
+<td>identical fleet-wide</td>
+<td>mixed values across the mesh</td>
+</tr>
+</tbody>
+</table>
+<h3 id="64-vllm-metric-families-the-collector-needs">6.4 vLLM metric families the collector needs<a class="headerlink" href="#64-vllm-metric-families-the-collector-needs" title="Permanent link">&para;</a></h3>
+<p>loxilb's telemetry collector consumes a fixed set of vLLM Prometheus families. A missing one does not raise an error — it silently invalidates the decision it feeds:</p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vllm:num_requests_waiting</code>, <code>vllm:num_requests_running</code></td>
+<td>queue / load signals</td>
+</tr>
+<tr>
+<td><code>vllm:kv_cache_usage_perc</code></td>
+<td>the v1-engine name — the <strong>v0 engine called it <code>gpu_cache_usage_perc</code></strong>; watch for this drift when reading dashboards</td>
+</tr>
+<tr>
+<td><code>vllm:cache_config_info</code></td>
+<td>carries <code>num_gpu_blocks</code> (the capacity fingerprint)</td>
+</tr>
+<tr>
+<td><code>vllm:prompt_tokens_total</code>, <code>vllm:generation_tokens_total</code></td>
+<td>throughput</td>
+</tr>
+<tr>
+<td><code>vllm:time_to_first_token_seconds</code></td>
+<td>histogram — the <code>_bucket</code> series must exist</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Lazy metric registration — warm up before you assert</p>
+<p>vLLM registers its request-stat families <strong>only after the first request</strong>. Assert the metric
+schema against a <em>warmed</em> engine — fire one warm-up request before scraping. On a cold engine the
+request-stat families read as "missing" and you will chase a phantom collector bug that does not
+exist.</p>
+</div>
+<h3 id="65-loxilb-runtime-env-worth-setting-explicitly">6.5 loxilb runtime env worth setting explicitly<a class="headerlink" href="#65-loxilb-runtime-env-worth-setting-explicitly" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Set to</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LLB_PD_PREFILL_TIMEOUT_SEC</code></td>
+<td><code>30</code></td>
+<td><code>180</code> for long context</td>
+<td>At ~32k-token prompts the default trips a <code>504 pd_prefill_timeout</code> before prefill completes.</td>
+</tr>
+<tr>
+<td><code>LOXILB_KV_LB_MODE</code></td>
+<td>mode-dependent</td>
+<td><code>off</code> | <code>hard</code> | <code>soft</code> | <code>adaptive</code></td>
+<td>Sets the load-blend policy (see §12); set it explicitly for reproducible runs rather than leaning on the built-in default.</td>
+</tr>
+<tr>
+<td><code>LLB_KV_HASH_DEBUG</code></td>
+<td>unset</td>
+<td><code>1</code></td>
+<td>Surfaces per-block hash decisions for byte-level parity forensics; zero cost when unset.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-guard-ladder-miss-reasons">7. Guard ladder &amp; miss reasons<a class="headerlink" href="#7-guard-ladder-miss-reasons" title="Permanent link">&para;</a></h2>
 <p>Every request runs a fixed ladder. Each miss increments exactly one reason counter and the request falls through to round-robin:</p>
 <table>
 <thead>
@@ -2648,31 +3122,31 @@ until a real connect actually fails and the retry excludes it. This reactive, co
 exclusion is intended behavior — the fail-open posture is the safety net.</p>
 </div>
 <hr />
-<h2 id="7-configuration">7. Configuration<a class="headerlink" href="#7-configuration" title="Permanent link">&para;</a></h2>
-<h3 id="71-rest-the-load-balancer-rule">7.1 REST — the load-balancer rule<a class="headerlink" href="#71-rest-the-load-balancer-rule" title="Permanent link">&para;</a></h3>
+<h2 id="8-configuration">8. Configuration<a class="headerlink" href="#8-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="81-rest-the-load-balancer-rule">8.1 REST — the load-balancer rule<a class="headerlink" href="#81-rest-the-load-balancer-rule" title="Permanent link">&para;</a></h3>
 <p>Create one fullproxy (<code>mode=4</code>) rule per model. Tag prefill endpoints <code>ep_role: 1</code> and decode endpoints <code>ep_role: 2</code>; only prefill endpoints are subscribed for KV events.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="s1">  &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="s1">    &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s1">    &quot;port&quot;: 8080,</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">    &quot;protocol&quot;: &quot;tcp&quot;,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">    &quot;sel&quot;: 3,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">    &quot;mode&quot;: 4,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">    &quot;kvExactMode&quot;: 1,</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s1">    &quot;kvZmqPort&quot;: 5557,</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s1">    &quot;kvHashAlgo&quot;: &quot;sha256_cbor&quot;,</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="s1">    &quot;kvBlockSize&quot;: 16,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="s1">    &quot;kvWarmupSec&quot;: 30</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="s1">  },</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="s1">  &quot;endpoints&quot;: [</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="s1">    { &quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1 },</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="s1">    { &quot;endpointIP&quot;: &quot;31.31.31.2&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2 }</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="s1">  ]</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="s1">}&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="s1">  &quot;serviceArguments&quot;: {</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s1">    &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">    &quot;port&quot;: 8080,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">    &quot;protocol&quot;: &quot;tcp&quot;,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">    &quot;sel&quot;: 3,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">    &quot;mode&quot;: 4,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">    &quot;kvExactMode&quot;: 1,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">    &quot;kvZmqPort&quot;: 5557,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">    &quot;kvHashAlgo&quot;: &quot;sha256_cbor&quot;,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">    &quot;kvBlockSize&quot;: 16,</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s1">    &quot;kvWarmupSec&quot;: 30</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s1">  },</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s1">  &quot;endpoints&quot;: [</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s1">    { &quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1 },</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s1">    { &quot;endpointIP&quot;: &quot;31.31.31.2&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2 }</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s1">  ]</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s1">}&#39;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -2738,7 +3212,7 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="72-environment-variables-loxilb-process">7.2 Environment variables (LoxiLB process)<a class="headerlink" href="#72-environment-variables-loxilb-process" title="Permanent link">&para;</a></h3>
+<h3 id="82-environment-variables-loxilb-process">8.2 Environment variables (LoxiLB process)<a class="headerlink" href="#82-environment-variables-loxilb-process" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2757,17 +3231,17 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="73-tokenizer-staging">7.3 Tokenizer staging<a class="headerlink" href="#73-tokenizer-staging" title="Permanent link">&para;</a></h3>
+<h3 id="83-tokenizer-staging">8.3 Tokenizer staging<a class="headerlink" href="#83-tokenizer-staging" title="Permanent link">&para;</a></h3>
 <p>Stage the model's HuggingFace <code>tokenizer.json</code> at <code>/etc/loxilb/tokenizers/&lt;model-slug&gt;/tokenizer.json</code>, where the slug replaces <code>/</code> with <code>__</code> (e.g. <code>Qwen/Qwen3-0.6B</code> → <code>Qwen__Qwen3-0.6B</code>). No network fetch happens at runtime; a missing tokenizer fires Guard E for that model (fail-open to round-robin).</p>
-<h3 id="74-vllm-side-must-match-the-rule">7.4 vLLM side (must match the rule)<a class="headerlink" href="#74-vllm-side-must-match-the-rule" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">PYTHONHASHSEED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>vllm<span class="w"> </span>serve<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span>--block-size<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--prefix-caching-hash-algo<span class="w"> </span>sha256_cbor<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--kv-events-config<span class="w"> </span><span class="s1">&#39;{&quot;enable_kv_cache_events&quot;: true, &quot;publisher&quot;: &quot;zmq&quot;,</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">                       &quot;endpoint&quot;: &quot;tcp://*:5557&quot;}&#39;</span>
+<h3 id="84-vllm-side-must-match-the-rule">8.4 vLLM side (must match the rule)<a class="headerlink" href="#84-vllm-side-must-match-the-rule" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">PYTHONHASHSEED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>vllm<span class="w"> </span>serve<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span>--block-size<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--prefix-caching-hash-algo<span class="w"> </span>sha256_cbor<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--kv-events-config<span class="w"> </span><span class="s1">&#39;{&quot;enable_kv_cache_events&quot;: true, &quot;publisher&quot;: &quot;zmq&quot;,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s1">                       &quot;endpoint&quot;: &quot;tcp://*:5557&quot;}&#39;</span>
 </code></pre></div>
 <p>Use the upstream <code>vllm/vllm-openai</code> image. On CPU builds, remember <code>--block-size 16</code> (the CPU default of 128 suppresses events for short prompts).</p>
-<h3 id="75-onboarding-a-new-model-one-model-per-rule">7.5 Onboarding a new model (one model per rule)<a class="headerlink" href="#75-onboarding-a-new-model-one-model-per-rule" title="Permanent link">&para;</a></h3>
+<h3 id="85-onboarding-a-new-model-one-model-per-rule">8.5 Onboarding a new model (one model per rule)<a class="headerlink" href="#85-onboarding-a-new-model-one-model-per-rule" title="Permanent link">&para;</a></h3>
 <p>LoxiLB is model-agnostic — no rebuild is needed to serve a different model. Onboarding is pure config plus file staging. The catch is that the tokenizer, <code>kvBlockSize</code>, and <code>kvHashAlgo</code>/vLLM-version are per-deployment facts you must get right, and getting them wrong <strong>fails silently</strong>. The recommended production topology is <strong>one model per rule</strong>, so each rule carries exactly one correct set of KV parameters.</p>
 <p>Per-model prerequisites:</p>
 <table>
@@ -2812,14 +3286,83 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 </tbody>
 </table>
 <hr />
-<h2 id="8-verify">8. Verify<a class="headerlink" href="#8-verify" title="Permanent link">&para;</a></h2>
-<p>Because the failure is silent, always confirm the tier actually engaged.</p>
-<h3 id="81-inspect-the-live-inventory">8.1 Inspect the live inventory<a class="headerlink" href="#81-inspect-the-live-inventory" title="Permanent link">&para;</a></h3>
+<h2 id="9-verify-it-actually-fired-the-mandatory-post-config-check">9. Verify it actually fired — the mandatory post-config check<a class="headerlink" href="#9-verify-it-actually-fired-the-mandatory-post-config-check" title="Permanent link">&para;</a></h2>
+<p><strong>Run this every time you create or change a KV rule.</strong> Because every parity failure degrades <em>silently</em> to round-robin, a config that "looks fine" and a config that is quietly load-balancing blind are indistinguishable without this check. Treat the four steps below as a go/no-go gate: until all four pass, any TTFT or throughput number you record reflects round-robin, <strong>not</strong> KV-aware routing.</p>
+<h3 id="91-step-1-the-engagement-assertion-on-get-netloxv1metrics">9.1 Step 1 — the engagement assertion on <code>GET /netlox/v1/metrics</code><a class="headerlink" href="#91-step-1-the-engagement-assertion-on-get-netloxv1metrics" title="Permanent link">&para;</a></h3>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># per-endpoint 64-bit hash inventory (raw-middleware endpoint)</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=&lt;id&gt;&amp;ep_idx=0&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/metrics<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;loxilb_pd_kv|kv_subscriber_connected&#39;</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="admonition info">
+<p class="admonition-title">Coming soon</p>
+<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
+</div>
+</div>
+</div>
+</div>
+<p>Assert, in order:</p>
+<table>
+<thead>
+<tr>
+<th>Assertion</th>
+<th>Meaning</th>
+<th>If it fails</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loxilb_pd_kv_blocks_total &gt; 0</code></td>
+<td>inventory ingested from at least one prefill endpoint</td>
+<td>events not arriving — check <code>kvZmqPort</code> vs the publisher and the <code>ep_role: 1</code> tag</td>
+</tr>
+<tr>
+<td><code>loxilb_pd_kv_tier15_hits_total</code> <strong>advances after the first cold request</strong></td>
+<td>the tier is making real decisions</td>
+<td><strong>flat delta = broken parity; you are silently measuring round-robin → ABORT</strong> and walk the §5 / §6 checklist before benchmarking</td>
+</tr>
+<tr>
+<td><code>loxilb_pd_kv_t15_fallthrough_total</code> stays roughly flat under warm traffic</td>
+<td>requests aren't spilling to round-robin</td>
+<td>rising fallthrough = overlap not scoring — parity or warmup</td>
+</tr>
+</tbody>
+</table>
+<p>The middle assertion is the whole test. Fire one <strong>cold</strong> request to populate the inventory, then a <strong>warm</strong> request that shares its prefix; <code>loxilb_pd_kv_tier15_hits_total</code> <strong>must</strong> increment. A flat counter means overlap is zero and the tier is inert — abort and fix parity, do not benchmark a silently round-robining rule.</p>
+<h3 id="92-step-2-inventory-check">9.2 Step 2 — inventory check<a class="headerlink" href="#92-step-2-inventory-check" title="Permanent link">&para;</a></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">curl</label><label for="__tabbed_3_2">loxicmd</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=&lt;id&gt;&amp;ep_idx=0&quot;</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="admonition info">
+<p class="admonition-title">Coming soon</p>
+<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
+</div>
+</div>
+</div>
+</div>
+<p>Confirm each prefill endpoint's block gauge is <strong>non-zero</strong> within the warmup + ingest window. A zero gauge after warm traffic almost always means <code>kvBlockSize</code> ≠ the engine's effective block/page size.</p>
+<h3 id="93-step-3-subscriber-count">9.3 Step 3 — subscriber count<a class="headerlink" href="#93-step-3-subscriber-count" title="Permanent link">&para;</a></h3>
+<p><code>kv_subscriber_connected</code> should climb by <strong>N</strong> after you create an N-prefill-endpoint rule. Fewer than N means a subscriber failed to dial its publisher — re-check the endpoint's <code>kvZmqPort</code> and that the engine is up.</p>
+<h3 id="94-step-4-publisher-side-sanity-on-the-engine-host">9.4 Step 4 — publisher-side sanity (on the engine host)<a class="headerlink" href="#94-step-4-publisher-side-sanity-on-the-engine-host" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ss<span class="w"> </span>-tln<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>:5557
+</code></pre></div>
+<p>This must show at least one listener. If it is empty, the engine's <code>--kv-events-config</code> never took effect and <strong>no events are being published at all</strong> — loxilb has nothing to subscribe to. (Substitute the port you set on the engine and in <code>kvZmqPort</code>.)</p>
+<hr />
+<h2 id="10-verify-inventory-metrics-reference">10. Verify — inventory &amp; metrics reference<a class="headerlink" href="#10-verify-inventory-metrics-reference" title="Permanent link">&para;</a></h2>
+<p>Section 9 is the go/no-go gate; this section is the deeper reference for the same signals once the tier is live.</p>
+<h3 id="101-inspect-the-live-inventory">10.1 Inspect the live inventory<a class="headerlink" href="#101-inspect-the-live-inventory" title="Permanent link">&para;</a></h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">curl</label><label for="__tabbed_4_2">loxicmd</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># per-endpoint 64-bit hash inventory (raw-middleware endpoint)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=&lt;id&gt;&amp;ep_idx=0&quot;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -2831,7 +3374,7 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 </div>
 </div>
 <p>After <code>kvWarmupSec</code> under cache-friendly traffic, a prefill endpoint's inventory should be <strong>non-empty</strong>.</p>
-<h3 id="82-prometheus-metrics">8.2 Prometheus metrics<a class="headerlink" href="#82-prometheus-metrics" title="Permanent link">&para;</a></h3>
+<h3 id="102-prometheus-metrics">10.2 Prometheus metrics<a class="headerlink" href="#102-prometheus-metrics" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2879,10 +3422,10 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 </tbody>
 </table>
 <p><strong>Dual proof.</strong> Trust neither signal alone. A metrics-only check cannot catch a proxy that <em>decides</em> correctly but <em>delivers</em> elsewhere. Confirm both: the response identifies the expected backend (delivery) <strong>and</strong> <code>tier15_hits{ep_idx}</code> incremented for that endpoint (decision).</p>
-<h3 id="83-healthy-warm-route-signature">8.3 Healthy warm-route signature<a class="headerlink" href="#83-healthy-warm-route-signature" title="Permanent link">&para;</a></h3>
+<h3 id="103-healthy-warm-route-signature">10.3 Healthy warm-route signature<a class="headerlink" href="#103-healthy-warm-route-signature" title="Permanent link">&para;</a></h3>
 <p>Under cache-friendly traffic you expect <code>tier15_hits{ep_idx}</code> climbing while the <code>miss_reason</code> counters stay flat, and each prefill endpoint's <code>pd_kv_blocks_total</code> non-zero. For byte-level parity forensics, set <code>LLB_KV_HASH_DEBUG=1</code> and compare a computed block hash against the model's vLLM-published hash for the same prompt.</p>
 <hr />
-<h2 id="9-troubleshoot">9. Troubleshoot<a class="headerlink" href="#9-troubleshoot" title="Permanent link">&para;</a></h2>
+<h2 id="11-troubleshoot">11. Troubleshoot<a class="headerlink" href="#11-troubleshoot" title="Permanent link">&para;</a></h2>
 <p>Silent-failure decoder for "tokenizer loaded but still routing round-robin":</p>
 <table>
 <thead>
@@ -2902,16 +3445,20 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 </tr>
 <tr>
 <td>Tokenizer loaded, inventory non-empty, overlap still 0</td>
-<td><code>kvBlockSize</code>, <code>kvHashAlgo</code>/vLLM-version, or seed mismatch — walk the §5 contract.</td>
+<td><code>kvBlockSize</code>, <code>kvHashAlgo</code>/vLLM-version, or seed mismatch — walk the §5 contract, then re-run the §6 preflight.</td>
 </tr>
 <tr>
 <td>Everything looks right for <code>kvWarmupSec</code> after start</td>
 <td>Guard B is suppressing the tier during warmup by design; wait out the window.</td>
 </tr>
+<tr>
+<td><code>504 pd_prefill_timeout</code> on long prompts</td>
+<td>Prefill exceeds <code>LLB_PD_PREFILL_TIMEOUT_SEC</code> (default 30) — raise to 180 for long context (§6.5).</td>
+</tr>
 </tbody>
 </table>
 <hr />
-<h2 id="10-known-limits">10. Known limits<a class="headerlink" href="#10-known-limits" title="Permanent link">&para;</a></h2>
+<h2 id="12-known-limits">12. Known limits<a class="headerlink" href="#12-known-limits" title="Permanent link">&para;</a></h2>
 <ol>
 <li><strong>Parity is all-or-nothing.</strong> Any mismatch in seed, block size, hash algorithm, or tokenizer yields zero overlap and a silent fall-back to round-robin. Watch <code>t15_miss_reason{reason="no_worker"}</code> against a non-empty <code>pd_kv_blocks_total</code>.</li>
 <li><strong>OpenAI JSON bodies required.</strong> A non-JSON body fires Guard D (<code>model_empty</code>) → silent round-robin.</li>
@@ -2923,11 +3470,52 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 <li><strong>The tier is reachable only in the prefill/decode selection flow.</strong> A plain single-pool vLLM service does not use this tier — partition endpoints by role to enable it.</li>
 </ol>
 <h3 id="load-blind-argmax-capacity-weighted-blend">Load-blind argmax → capacity-weighted blend<a class="headerlink" href="#load-blind-argmax-capacity-weighted-blend" title="Permanent link">&para;</a></h3>
-<p>Raw argmax scores by overlap <em>count</em> and nothing else, so it is <strong>load-blind</strong>: if many clients share one hot preamble, they all route to the same prefill endpoint while its siblings idle — cache affinity actively fighting load balancing. To resolve this, LoxiLB can blend the cache-affinity winner with a CHWBL-style capacity-weighted bounded-load selector: the overlap winner keeps the route while it stays under its capacity-weighted cap, and <em>spills</em> to the next endpoint once it is over, so a hot prefix can no longer herd every request onto one worker. This blended mode is the shipped default and can be tuned or disabled through the process environment; the pure overlap-argmax selector remains available for workloads where affinity should always win.</p>
+<p>Raw argmax scores by overlap <em>count</em> and nothing else, so it is <strong>load-blind</strong>: if many clients share one hot preamble, they all route to the same prefill endpoint while its siblings idle — cache affinity actively fighting load balancing. To resolve this, LoxiLB can blend the cache-affinity winner with a CHWBL-style capacity-weighted bounded-load selector: the overlap winner keeps the route while it stays under its capacity-weighted cap, and <em>spills</em> to the next endpoint once it is over, so a hot prefix can no longer herd every request onto one worker. This blended mode is the shipped default and can be tuned or disabled through the process environment (<code>LOXILB_KV_LB_MODE</code>, §6.5); the pure overlap-argmax selector remains available for workloads where affinity should always win.</p>
+<hr />
+<h2 id="13-advanced-ai-controller-experimental">13. Advanced: AI controller (experimental)<a class="headerlink" href="#13-advanced-ai-controller-experimental" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Experimental — no CI coverage, default OFF</p>
+<p>The AI controller is an optional, experimental component. <strong>No automated CI scenario ships for
+it</strong>, and it is disabled by default. Most deployments never enable it; the tiers documented above
+are the shipped, supported path. Enable it only if you have a specific heterogeneous-fleet need
+and are prepared to operate an unproven component.</p>
+</div>
+<p><strong>What it is.</strong> <code>loxilb-ai-controller</code> is a <em>separate</em> container that consumes fleet telemetry and emits per-endpoint routing-weight advice back to loxilb — capacity- and throughput-weighted prefill selection layered on top of cache affinity. It runs as a plain container (<strong>no host networking, no XDP</strong>), binds to a private address, and exposes gRPC on <code>:18856</code> and a Prometheus <code>/metrics</code> endpoint on <code>:18857</code>.</p>
+<p><strong>Registry YAML shape.</strong> The controller is driven by a registry file that declares the service and the expected shape of each endpoint:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">service</span><span class="p">:</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10.10.10.254:8080:tcp&quot;</span><span class="w">   </span><span class="c1"># &lt;vip&gt;:&lt;port&gt;:&lt;proto&gt;</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">vip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10.10.10.254&quot;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nt">epoch_period_sec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w">             </span><span class="c1"># staleness deadline = 3x epoch</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nt">hosts</span><span class="p">:</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="nt">ep0</span><span class="p">:</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="nt">gpu_model</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;gpu&gt;&quot;</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="nt">hbm_gb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prefill</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">    </span><span class="nt">ep_idx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">    </span><span class="nt">expected_num_gpu_blocks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8192</span><span class="w">   </span><span class="c1"># calibration fingerprint</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">    </span><span class="nt">serving_throughput_prior</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">  </span><span class="nt">ep2</span><span class="p">:</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">    </span><span class="nt">gpu_model</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;gpu&gt;&quot;</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">    </span><span class="nt">hbm_gb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">40</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prefill</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">    </span><span class="nt">ep_idx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">    </span><span class="nt">expected_num_gpu_blocks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4096</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="w">    </span><span class="nt">serving_throughput_prior</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
+</code></pre></div>
+<p><strong>Calibration-fingerprint fallback.</strong> Each endpoint's <em>live</em> <code>num_gpu_blocks</code> (from <code>vllm:cache_config_info</code>) must match its declared <code>expected_num_gpu_blocks</code>. On drift, the controller treats the capacity reading as untrustworthy and <strong>falls back to the static priors</strong> rather than routing on a mis-provisioned or stale capacity number — a deliberate safety discipline, not a failure.</p>
+<p><strong>When to use it.</strong> Reach for the controller only on <strong>heterogeneous fleets</strong> — mixed GPU models or HBM sizes where you want capacity- or throughput-weighted prefill selection beyond the built-in CHWBL blend (§12). Homogeneous deployments gain nothing from it and should leave it off.</p>
+<hr />
+<h2 id="14-advanced-lmcache-tiered-cache">14. Advanced: LMCache tiered cache<a class="headerlink" href="#14-advanced-lmcache-tiered-cache" title="Permanent link">&para;</a></h2>
+<p><strong>What it adds.</strong> LMCache wires into vLLM as a <code>MultiConnector</code> composing <code>LMCacheConnectorV1</code> with the <code>NixlConnector</code>, adding a <strong>CPU KV tier</strong> (and an optional remote/P2P tier) <em>beneath</em> the GPU KV cache. When a prefix is evicted from GPU it can still be retrieved from the CPU tier instead of recomputed, extending effective prefix-cache hit rates past raw GPU capacity. It attaches to the <strong>prefill</strong> tier; decode nodes are excluded.</p>
+<p>This is <strong>orthogonal</strong> to LoxiLB's KV-cache-aware routing: LoxiLB still routes on the block hashes vLLM publishes, exactly as described above — LMCache only changes <em>where inside the worker</em> a hit is serviced. It also carries real deployment hazards (there is no official vLLM × LMCache × NIXL compatibility matrix, nested NIXL has cache-layout requirements, and <code>lmcache:retrieve_hit_rate</code> is a stale gauge that can read <code>1.0</code> with zero retrieves) and should be gated before rollout.</p>
+<p>For the full connector configuration, the authoritative <code>lmcache:*</code> metrics, and the hazard checklist, see <strong><a href="../../ai-gateway/kv-caching/">KV-Cache Routing (AI Gateway)</a></strong>.</p>
 <hr />
 <h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../../ai-gateway/kv-caching/">KV-Cache Routing (AI Gateway)</a> — control-plane concepts and field reference.</li>
+<li><a href="../../ai-gateway/kv-caching/">KV-Cache Routing (AI Gateway)</a> — control-plane concepts, field reference, and LMCache tiered-cache details.</li>
 <li><a href="../routing-hierarchy/">Routing Hierarchy</a> — the full selection ladder and where this tier fits.</li>
 </ul>
 

@@ -1274,6 +1274,67 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#50-launching-sglang-for-kv-cache-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.0 Launching SGLang for KV-cache routing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.0 Launching SGLang for KV-cache routing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#-mem-fraction-static-is-counter-intuitive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --mem-fraction-static is counter-intuitive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-the-page-size-back-before-you-set-kvblocksize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read the page size back before you set kvBlockSize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dp-rank-port-planning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DP-rank port planning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-on-health-before-wiring-the-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gate on health before wiring the rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#51-enabling-kv-events" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2282,6 +2343,67 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#50-launching-sglang-for-kv-cache-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.0 Launching SGLang for KV-cache routing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.0 Launching SGLang for KV-cache routing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#-mem-fraction-static-is-counter-intuitive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        --mem-fraction-static is counter-intuitive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-the-page-size-back-before-you-set-kvblocksize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read the page size back before you set kvBlockSize
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dp-rank-port-planning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DP-rank port planning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-on-health-before-wiring-the-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gate on health before wiring the rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#51-enabling-kv-events" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2882,14 +3004,108 @@ it.</p>
 <p>Use a <strong>recent SGLang release</strong> whose page-hash contract matches the one LoxiLB expects. Do not
 update the image mid-deployment without re-checking the hash contract (a drift shows up as a
 zero-hit watchdog fire, not a crash).</p>
+<h3 id="50-launching-sglang-for-kv-cache-routing">5.0 Launching SGLang for KV-cache routing<a class="headerlink" href="#50-launching-sglang-for-kv-cache-routing" title="Permanent link">&para;</a></h3>
+<p>This is the canonical launch recipe every SGLang EP behind a KV-exact rule must follow. The
+subsections after it (5.1–5.4) drill into individual knobs; start here for the whole command.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>sglang<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--gpus<span class="w"> </span>all<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span>--ipc<span class="o">=</span>host<span class="w"> </span>--shm-size<span class="w"> </span>16g<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">PYTHONHASHSEED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>-v<span class="w"> </span>/root/.cache/huggingface:/root/.cache/huggingface<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>lmsysorg/sglang<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span>python3<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span>--model-path<span class="w"> </span>&lt;model&gt;<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span>--mem-fraction-static<span class="w"> </span><span class="m">0</span>.85<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span>--dp-size<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span>--kv-events-config<span class="w"> </span><span class="s1">&#39;{&quot;publisher&quot;:&quot;zmq&quot;,&quot;endpoint&quot;:&quot;tcp://*:5557&quot;}&#39;</span>
+</code></pre></div>
+<p>Flag-by-flag, and why each one is load-bearing for KV-cache routing:</p>
+<ul>
+<li><strong><code>--gpus all --network host --ipc=host --shm-size 16g</code></strong> — <code>--network host</code> puts the ZMQ
+  publisher on the host's port namespace so LoxiLB can subscribe to it directly (and is what makes
+  the co-resident <code>:5557</code> collision in §5.3 possible). <code>--ipc=host --shm-size 16g</code> give the engine
+  the shared-memory budget its workers need; too small a <code>--shm-size</code> surfaces as loader crashes,
+  not routing errors.</li>
+<li><strong><code>-e PYTHONHASHSEED=0</code></strong> — set for determinism hygiene across the fleet. Note it is <strong>not</strong> a
+  parity leg for the SGLang hash contract the way it is for vLLM: SGLang block 0 has no parent and
+  no <code>NONE_HASH</code>, so the published page hashes do not depend on it (§7.1). Keep it uniform anyway —
+  it costs nothing and avoids surprises if the same host also runs a vLLM publisher.</li>
+<li><strong><code>python3 -m sglang.launch_server --model-path &lt;model&gt; --host 0.0.0.0 --port 30000</code></strong> — the
+  OpenAI-compatible serving entry point. <code>--port</code> is the request port your rule's <code>targetPort</code>
+  points at; it is <strong>not</strong> the KV-events port (that is the <code>--kv-events-config</code> endpoint below).</li>
+<li><strong><code>--mem-fraction-static &lt;frac&gt;</code></strong> — see the counter-intuitive semantics immediately below.</li>
+<li><strong><code>--kv-events-config '{"publisher":"zmq","endpoint":"tcp://*:5557"}'</code></strong> — the whole KV-events
+  feed. <strong>SGLang takes only <code>publisher</code> and <code>endpoint</code></strong> — there is <strong>no <code>enable_kv_cache_events</code>
+  key and no <code>topic</code> key</strong> (both are vLLM-only; see <a href="../vllm-vs-sglang/">vLLM vs SGLang</a>). Bind with
+  <code>tcp://*:&lt;port&gt;</code> — a concrete local IP in connect mode publishes nothing, silently. The port here
+  must equal the rule's <code>kvZmqPort</code> (rank 0).</li>
+</ul>
+<h4 id="-mem-fraction-static-is-counter-intuitive"><code>--mem-fraction-static</code> is counter-intuitive<a class="headerlink" href="#-mem-fraction-static-is-counter-intuitive" title="Permanent link">&para;</a></h4>
+<p><code>--mem-fraction-static</code> is measured <strong>against device-visible FREE memory, not total</strong> — and
+<code>(1 − frac)</code> is reserved as headroom. The trap: a <strong>LOWER</strong> fraction leaves a <strong>SMALLER</strong> KV pool,
+not a larger one. Two working baselines:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Setting</th>
+<th>CUDA graphs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Standalone</strong> SGLang (owns the GPU)</td>
+<td><code>--mem-fraction-static 0.85</code></td>
+<td>ON (default)</td>
+</tr>
+<tr>
+<td><strong>Co-resident</strong> with vLLM prefills on one GPU</td>
+<td><code>--mem-fraction-static 0.72</code> + <code>--disable-cuda-graph</code></td>
+<td>OFF</td>
+</tr>
+</tbody>
+</table>
+<p>When SGLang shares a GPU, drop the fraction to leave room for the other tenant <em>and</em> add
+<code>--disable-cuda-graph</code> — CUDA graph capture reserves extra memory that a co-resident split usually
+cannot spare. Do <strong>not</strong> shave the fraction below what the KV cache needs to fit the model: that
+silently guts the radix cache and with it any routing win (§7.5). If SGLang <code>/health</code> never comes
+up at your split, the model does not fit — use a smaller model, don't starve the cache.</p>
+<h4 id="read-the-page-size-back-before-you-set-kvblocksize">Read the page size back before you set <code>kvBlockSize</code><a class="headerlink" href="#read-the-page-size-back-before-you-set-kvblocksize" title="Permanent link">&para;</a></h4>
+<p>SGLang's effective <strong>page size defaults to 1</strong> and is <strong>model-dependent — never assume 16</strong>. The
+rule's <code>kvBlockSize</code> <strong>must equal the effective page size</strong> or cache-aware routing silently never
+fires. Read it back from the running server and set the rule to exactly that value:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;ep&gt;:30000/get_server_info<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s1">&#39;&quot;page_size&quot;[: ]*[0-9]*&#39;</span>
+</code></pre></div>
+<p>All EPs behind one rule must report the <strong>same</strong> page size (homogeneous pool). See §5.2 for the
+full parity discussion.</p>
+<h4 id="dp-rank-port-planning">DP-rank port planning<a class="headerlink" href="#dp-rank-port-planning" title="Permanent link">&para;</a></h4>
+<p>With <code>--dp-size N</code>, SGLang publishes KV events <strong>per data-parallel rank</strong>: rank <em>k</em> binds
+<code>ZMQ_PORT + k</code>. Set the rule's <strong><code>kvDpRankCount</code> equal to <code>--dp-size</code></strong> (bounds 1–8). On a
+<code>--network host</code> box where a vLLM publisher already owns <code>:5557</code>, the base collides — <strong>move the
+SGLang base to a free port</strong> (e.g. <code>5561</code>, leaving <code>5562</code>/<code>5563</code> for ranks) and set the rule's
+<code>kvZmqPort</code> to match. LoxiLB subscribes whatever <code>kvZmqPort</code> says, so any free port works. Keep the
+whole consecutive range <code>[kvZmqPort, kvZmqPort + N − 1]</code> free, and <strong>never kill the vLLM publisher
+to free the port</strong> — that starves the vLLM rule. Full treatment in §5.3.</p>
+<h4 id="gate-on-health-before-wiring-the-rule">Gate on health before wiring the rule<a class="headerlink" href="#gate-on-health-before-wiring-the-rule" title="Permanent link">&para;</a></h4>
+<p>Bring the EP up and confirm it is genuinely ready <strong>before</strong> posting or trusting the rule:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;ep&gt;:30000/health<span class="w">            </span><span class="c1"># process is up (passes early — cache may not exist yet)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;ep&gt;:30000/health_generate<span class="w">   </span><span class="c1"># a real generation completes → model loaded + KV cache allocated</span>
+</code></pre></div>
+<p><code>/health</code> alone passes long before the KV cache exists, so gate readiness on <strong>both</strong>, ending with
+<code>/health_generate</code>. For a <strong>cold run</strong> (or to reset warmth between comparison passes), flush the
+engine cache first so the first request is a true cold miss:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;ep&gt;:30000/flush_cache
+</code></pre></div>
+<p>Then self-confirm the publisher actually bound before expecting any inventory:
+<code>ss -tln | grep :5557</code> (or your chosen base port) on the EP must show a listener — this failure is
+otherwise silent.</p>
 <h3 id="51-enabling-kv-events">5.1 Enabling KV events<a class="headerlink" href="#51-enabling-kv-events" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>sglang<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span>--ipc<span class="o">=</span>host<span class="w"> </span>--shm-size<span class="w"> </span>16g<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>-v<span class="w"> </span>/root/.cache/huggingface:/root/.cache/huggingface<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>&lt;sglang-image&gt;<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>python3<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span>--model-path<span class="w"> </span>&lt;model&gt;<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span>--mem-fraction-static<span class="w"> </span><span class="m">0</span>.35<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span>--kv-events-config<span class="w"> </span><span class="s1">&#39;{&quot;publisher&quot;:&quot;zmq&quot;,&quot;endpoint&quot;:&quot;tcp://*:5561&quot;}&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>sglang<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span>--ipc<span class="o">=</span>host<span class="w"> </span>--shm-size<span class="w"> </span>16g<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>-v<span class="w"> </span>/root/.cache/huggingface:/root/.cache/huggingface<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span>&lt;sglang-image&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span>python3<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span>--model-path<span class="w"> </span>&lt;model&gt;<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span>--mem-fraction-static<span class="w"> </span><span class="m">0</span>.35<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span>--kv-events-config<span class="w"> </span><span class="s1">&#39;{&quot;publisher&quot;:&quot;zmq&quot;,&quot;endpoint&quot;:&quot;tcp://*:5561&quot;}&#39;</span>
 </code></pre></div>
 <ul>
 <li><code>--kv-events-config</code> is the whole feed: <code>"publisher":"zmq"</code> + a <code>tcp://*:&lt;port&gt;</code> bind. Use <code>*</code>
@@ -2904,7 +3120,7 @@ zero-hit watchdog fire, not a crash).</p>
 <h3 id="52-page-size-parity-the-deadliest-knob">5.2 <code>--page-size</code> parity (the deadliest knob)<a class="headerlink" href="#52-page-size-parity-the-deadliest-knob" title="Permanent link">&para;</a></h3>
 <p><code>kvBlockSize</code> on the rule <strong>must equal SGLang's effective page size</strong> — and SGLang's <code>--page-size</code>
 default is <strong>model-dependent; never assume 16</strong>. Always read it back:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;ep&gt;:30000/get_server_info<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s1">&#39;&quot;page_size&quot;[: ]*[0-9]*&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;ep&gt;:30000/get_server_info<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s1">&#39;&quot;page_size&quot;[: ]*[0-9]*&#39;</span>
 </code></pre></div>
 <p>and set the rule's <code>kvBlockSize</code> to exactly that number. All EPs behind one rule must report the
 <strong>same</strong> page size (homogeneous EPs required). A mismatch does not error anywhere — Tier 1.5
@@ -2913,7 +3129,7 @@ watchdog (§8) is the runtime tripwire for exactly this.</p>
 <h3 id="53-dp-ranks-and-port-planning">5.3 DP ranks and port planning<a class="headerlink" href="#53-dp-ranks-and-port-planning" title="Permanent link">&para;</a></h3>
 <p>With <code>--dp-size N</code>, SGLang publishes KV events <strong>per DP rank</strong>, each rank on its own consecutive
 port with its own seq counter:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>rank 0 → kvZmqPort      rank 1 → kvZmqPort+1   …   rank N−1 → kvZmqPort+N−1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>rank 0 → kvZmqPort      rank 1 → kvZmqPort+1   …   rank N−1 → kvZmqPort+N−1
 </code></pre></div>
 <ul>
 <li>Set the rule's <code>kvDpRankCount</code> <strong>equal to</strong> <code>--dp-size</code> (bounds 1–8). LoxiLB starts one

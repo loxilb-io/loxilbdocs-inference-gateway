@@ -1220,6 +1220,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#launching-sglang" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Launching SGLang
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1230,6 +1247,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Verify">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verify-it-fired" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify it fired
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2174,6 +2208,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#launching-sglang" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Launching SGLang
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2184,6 +2235,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Verify">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verify-it-fired" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify it fired
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2530,6 +2598,21 @@ size:</p>
 </code></pre></div>
 <p>Use a recent SGLang release; the event-publisher and page-size behavior above
 apply to current builds.</p>
+<h3 id="launching-sglang">Launching SGLang<a class="headerlink" href="#launching-sglang" title="Permanent link">&para;</a></h3>
+<p>The full container recipe — <code>docker run … lmsysorg/sglang python3 -m
+sglang.launch_server …</code>, the counter-intuitive <code>--mem-fraction-static</code>
+semantics, DP-rank port planning, and health gating — lives in
+<a href="../sglang-configuration-tuning/">SGLang Configuration and Tuning §5</a>. Three
+launch-to-rule invariants are all you need to keep in mind here:</p>
+<ul>
+<li><strong><code>--page-size</code> == rule <code>kvBlockSize</code></strong> — the page size is model-dependent
+  (default 1, never assume 16); read it back from <code>/get_server_info</code> and set
+  <code>kvBlockSize</code> to exactly that value.</li>
+<li><strong><code>--dp-size</code> == rule <code>kvDpRankCount</code></strong> — rank <em>N</em> publishes at
+  <code>kvZmqPort + N</code>; the rule must subscribe every rank.</li>
+<li><strong><code>kvHashAlgo</code> omitted</strong> — omission is what selects the SGLang hash
+  algorithm; any explicit value scores zero forever.</li>
+</ul>
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
 <p>Confirm the rule landed and that KV-exact is actually firing:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
@@ -2560,6 +2643,33 @@ apply to current builds.</p>
 <li>KV-exact hit counters advance while the <strong>zero-hit watchdog counter stays
   flat</strong>.</li>
 </ul>
+<h3 id="verify-it-fired">Verify it fired<a class="headerlink" href="#verify-it-fired" title="Permanent link">&para;</a></h3>
+<p>Metrics silently degrade to round-robin on a broken parity leg, so prove
+engagement before trusting any result. Send a handful of <strong>warm</strong> requests that
+share a leading prefix (repeat the same prompt is enough), then check
+<code>GET http://&lt;loxilb&gt;:11111/netlox/v1/metrics</code>:</p>
+<ol>
+<li><strong><code>kv_subscriber_connected</code> grew by the EP count.</strong> An N-endpoint rule should
+   add N to <code>loxilb_kv_subscriber_connected{service,ep}</code> once subscribers
+   attach. Fewer than N means some EPs never subscribed — check <code>kvZmqPort</code> and,
+   for DP fleets, that <code>kvDpRankCount</code> == <code>--dp-size</code>.</li>
+<li><strong>Per-EP block gauges are non-zero.</strong> <code>loxilb_pd_kv_blocks_total{endpoint}</code>
+   must climb above 0 on every EP within the warmup+ingest window as the workers
+   publish <code>BlockStored</code> events. Zero here with a connected subscriber means the
+   server isn't publishing (missing <code>--kv-events-config</code>, a connect-mode
+   endpoint, or the wrong port).</li>
+<li><strong>Hits actually advance.</strong> <code>loxilb_pd_kv_tier15_hits_total</code> must increase
+   under the warm burst.</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">A zero-hit state after warm traffic almost always means <code>kvBlockSize</code> != page-size</p>
+<p>If subscribers are connected and <code>blocks_total</code> is non-empty but
+<code>tier15_hits_total</code> stays flat (and the zero-hit watchdog is climbing), the
+usual cause is a <strong><code>kvBlockSize</code> ≠ SGLang <code>--page-size</code> mismatch</strong> — the
+single most common silent failure. Re-read <code>/get_server_info</code> on every EP
+and set <code>kvBlockSize</code> to exactly the reported page size. Next-likeliest is an
+explicit <code>kvHashAlgo</code> on the rule (must be omitted) or a wrong tokenizer.</p>
+</div>
 <h2 id="troubleshoot">Troubleshoot<a class="headerlink" href="#troubleshoot" title="Permanent link">&para;</a></h2>
 <h3 id="zero-hit-watchdog-the-silent-parity-tripwire">Zero-hit watchdog — the silent-parity tripwire<a class="headerlink" href="#zero-hit-watchdog-the-silent-parity-tripwire" title="Permanent link">&para;</a></h3>
 <p>The deadliest SGLang misconfiguration is silent: if <code>kvBlockSize</code> ≠ <code>--page-size</code>
