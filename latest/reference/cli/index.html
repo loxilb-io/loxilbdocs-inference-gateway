@@ -2407,9 +2407,9 @@ authenticated, ideal for a shared operator endpoint).</p>
 </div>
 <p>A config file names one or more targets and, for HTTP mode, the per-client bearer
 tokens and their roles:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">default_target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">llb1</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">default_target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gateway-1</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">targets</span><span class="p">:</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">llb1</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">gateway-1</span><span class="p">:</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://10.10.10.254:11111</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="c1"># username/password_env or token_env when LoxiLB runs with --userservice</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="c1"># tls_ca / insecure_skip_verify / timeout_sec as needed</span>
@@ -2422,7 +2422,7 @@ tokens and their roles:</p>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Targets are names, not URLs</p>
-<p>Tool calls accept only the configured target <strong>name</strong> (e.g. <code>llb1</code>) in their
+<p>Tool calls accept only the configured target <strong>name</strong> (e.g. <code>gateway-1</code>) in their
 <code>target</code> argument. Raw URLs are rejected as an anti-SSRF measure.</p>
 </div>
 <h3 id="authenticating-to-the-gateway">Authenticating to the gateway<a class="headerlink" href="#authenticating-to-the-gateway" title="Permanent link">&para;</a></h3>
@@ -2767,7 +2767,7 @@ as an MCP tool call and the equivalent REST call the bridge makes on your behalf
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lb_create&quot;</span><span class="p">,</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">&quot;arguments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="nt">&quot;target&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;llb1&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="nt">&quot;target&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;gateway-1&quot;</span><span class="p">,</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">      </span><span class="nt">&quot;external_ip&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10.10.10.254&quot;</span><span class="p">,</span>
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">      </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8080</span><span class="p">,</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">      </span><span class="nt">&quot;protocol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tcp&quot;</span><span class="p">,</span>
@@ -2852,7 +2852,7 @@ not exist yet.</p>
 </div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ai_apikey_create { &quot;target&quot;: &quot;llb1&quot;, &quot;tenant&quot;: &quot;acme&quot;, ... }
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>ai_apikey_create { &quot;target&quot;: &quot;gateway-1&quot;, &quot;tenant&quot;: &quot;acme&quot;, ... }
 </code></pre></div>
 </div>
 <div class="tabbed-block">
