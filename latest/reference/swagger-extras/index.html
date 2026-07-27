@@ -1574,6 +1574,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    swagger-extras (raw)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1590,6 +1608,69 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#get-configaikvinventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /config/ai/kv/inventory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patch-configaiapikeykey_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PATCH /config/ai/apikey/{key_id}
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configopawatcher-opa-l4-policy-watcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /config/opa/watcher — OPA L4 policy watcher
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1850,6 +1931,58 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#get-configaikvinventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GET /config/ai/kv/inventory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patch-configaiapikeykey_id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PATCH /config/ai/apikey/{key_id}
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configopawatcher-opa-l4-policy-watcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        /config/opa/watcher — OPA L4 policy watcher
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1866,10 +1999,334 @@
 
 
 <h1 id="swagger-extras-raw-middleware">swagger-extras (Raw Middleware)<a class="headerlink" href="#swagger-extras-raw-middleware" title="Permanent link">&para;</a></h1>
-<div class="admonition note">
-<p class="admonition-title">Scaffold</p>
-<p>Phase-0 skeleton stub. Content lands in Phases 2-6 per the content map.</p>
+<p>Reference for the in-scope endpoints served directly by the API-server's global middleware, outside
+the generated OpenAPI pipeline.</p>
+<div class="admonition warning">
+<p class="admonition-title">Not in the generated clients — drive with raw curl</p>
+<p>The endpoints on this page are handled by the API-server's global middleware, so they <strong>bypass
+go-swagger code generation</strong> and are <strong>absent from <code>swagger.yml</code> and from any generated client
+or SDK</strong>. There is no typed method for them — call them with raw <code>curl</code> (or an equivalent raw
+HTTP request). They are maintained by hand in <code>api/swagger-extras.yml</code> in the code repository.</p>
 </div>
+<p>All requests use the same base URL and auth as the rest of the API:</p>
+<ul>
+<li><strong>Base URL:</strong> <code>http://&lt;host&gt;:11111/netlox/v1</code></li>
+<li><strong>Authentication:</strong> <code>Authorization: Bearer &lt;token&gt;</code></li>
+</ul>
+<hr />
+<h2 id="get-configaikvinventory">GET <code>/config/ai/kv/inventory</code><a class="headerlink" href="#get-configaikvinventory" title="Permanent link">&para;</a></h2>
+<p>Read-only admin endpoint that dumps the per-block 64-bit hash inventory tracked for <strong>one endpoint</strong>
+of an AI service. Use it to verify that KV-cache-aware routing is populating block hashes and to
+compare loxilb's inventory against a backend's block hashes when debugging a hash-contract mismatch.</p>
+<p><strong>Query parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service_id</code></td>
+<td>query</td>
+<td>integer (uint32)</td>
+<td>yes</td>
+<td>Numeric service identifier.</td>
+</tr>
+<tr>
+<td><code>ep_idx</code></td>
+<td>query</td>
+<td>integer</td>
+<td>yes</td>
+<td>Endpoint index within the service.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response <code>200</code> fields</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service_id</code></td>
+<td>integer</td>
+<td>Echoed service identifier.</td>
+</tr>
+<tr>
+<td><code>ep_idx</code></td>
+<td>integer</td>
+<td>Echoed endpoint index.</td>
+</tr>
+<tr>
+<td><code>hash_algo</code></td>
+<td>string</td>
+<td>Hash algorithm used for the block keys.</td>
+</tr>
+<tr>
+<td><code>blocks</code></td>
+<td>array</td>
+<td>Per-block entries.</td>
+</tr>
+<tr>
+<td><code>blocks[].block_idx</code></td>
+<td>integer</td>
+<td>Synthetic sequence index (map iteration order — <strong>not</strong> a semantic block position).</td>
+</tr>
+<tr>
+<td><code>blocks[].hash_uint64</code></td>
+<td>integer (uint64)</td>
+<td>64-bit block hash key.</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>integer</td>
+<td>Number of blocks in the inventory.</td>
+</tr>
+</tbody>
+</table>
+<p>Other responses: <code>400</code> (invalid <code>service_id</code>/<code>ep_idx</code>), <code>404</code> (service or endpoint not found),
+<code>405</code> (method not allowed — GET only), <code>503</code> (KV inventory provider not registered). Errors use a
+minimal <code>{ "error": "..." }</code> envelope.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;http://&lt;host&gt;:11111/netlox/v1/config/ai/kv/inventory?service_id=1&amp;ep_idx=0&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>See <a href="../../ai-gateway/kv-caching/">KV-Cache Routing</a> for how the inventory relates to the block-hash
+contract.</p>
+<hr />
+<h2 id="patch-configaiapikeykey_id">PATCH <code>/config/ai/apikey/{key_id}</code><a class="headerlink" href="#patch-configaiapikeykey_id" title="Permanent link">&para;</a></h2>
+<p>Updates the allowed-model list and/or the enabled flag of an existing API key. This is the <strong>only</strong>
+method on this path served by middleware — the other API-key operations (POST/GET/DELETE) are part
+of the generated spec and are covered on the <a href="../api/#ai-api-keys-tenants">API Reference</a> page.</p>
+<p><strong>Path parameters</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>key_id</code></td>
+<td>path</td>
+<td>string</td>
+<td>yes</td>
+<td>API key identifier.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Request body fields</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>allowed_models</code></td>
+<td>array of string</td>
+<td>Replacement list of models the key may access.</td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td>Enable or disable the key.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Responses</strong></p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>204</code></td>
+<td>Key updated (no body).</td>
+</tr>
+<tr>
+<td><code>400</code></td>
+<td>Missing <code>key_id</code> or invalid request body.</td>
+</tr>
+<tr>
+<td><code>404</code></td>
+<td>Key not found.</td>
+</tr>
+<tr>
+<td><code>500</code></td>
+<td>Update failed.</td>
+</tr>
+</tbody>
+</table>
+<p>Error responses use the <code>{ "error": "..." }</code> envelope.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>PATCH<span class="w"> </span>http://&lt;host&gt;:11111/netlox/v1/config/ai/apikey/key-abc123<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s1">    &quot;allowed_models&quot;: [&quot;meta-llama/Llama-3.1-8B-Instruct&quot;],</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">    &quot;enabled&quot;: true</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">  }&#39;</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Data-plane enforcement: roadmap</p>
+<p>API-key authentication (401/403) and per-tenant rate limiting (429) are <strong>control-plane CRUD
+only</strong> today — the gateway stores and manages keys/limits but does not yet reject requests in
+the data path. SSE stream lifecycle and token accounting <strong>are</strong> wired.</p>
+</div>
+<hr />
+<h2 id="configopawatcher-opa-l4-policy-watcher"><code>/config/opa/watcher</code> — OPA L4 policy watcher<a class="headerlink" href="#configopawatcher-opa-l4-policy-watcher" title="Permanent link">&para;</a></h2>
+<p>Configure, inspect, and remove the OPA L4 policy watcher. The watcher polls a third-party OPA server
+for L4 policy and applies it. <code>POST</code> is <strong>SSRF-guarded</strong>: URLs resolving to private or reserved IP
+ranges are rejected, so the OPA server must be reachable at a routable address.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td>Return the watcher configuration and runtime status.</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>Configure (or replace) and start the watcher.</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>Stop and remove the watcher (succeeds even when none is configured).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>POST request body (<code>OPAWatcherConfig</code>)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>opa_url</code></td>
+<td>string</td>
+<td>yes</td>
+<td>—</td>
+<td>Base URL of the OPA server (e.g. <code>http://opa:8181</code>).</td>
+</tr>
+<tr>
+<td><code>policy_path</code></td>
+<td>string</td>
+<td>no</td>
+<td><code>loxilb/l4</code></td>
+<td>OPA policy path to poll.</td>
+</tr>
+<tr>
+<td><code>poll_interval_sec</code></td>
+<td>integer</td>
+<td>no</td>
+<td><code>30</code></td>
+<td>Poll interval in seconds.</td>
+</tr>
+<tr>
+<td><code>fail_open</code></td>
+<td>boolean</td>
+<td>no</td>
+<td><code>false</code></td>
+<td>Allow traffic when OPA is unreachable (<code>false</code> = fail-closed).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>GET response</strong> returns the configured fields above plus runtime status:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td><code>not_configured</code>, <code>running</code>, or <code>stopped</code>.</td>
+</tr>
+<tr>
+<td><code>last_sync_at</code></td>
+<td>string</td>
+<td>RFC 3339 timestamp of the last successful sync.</td>
+</tr>
+<tr>
+<td><code>rules_count</code></td>
+<td>integer</td>
+<td>Number of rules currently loaded.</td>
+</tr>
+<tr>
+<td><code>circuit_breaker_state</code></td>
+<td>integer</td>
+<td>Circuit-breaker state for the OPA connection.</td>
+</tr>
+<tr>
+<td><code>last_error</code></td>
+<td>string</td>
+<td>Last error message, if any.</td>
+</tr>
+</tbody>
+</table>
+<p><code>POST</code> returns <code>200</code> with <code>{ "result": "..." }</code>; <code>400</code> on invalid JSON, missing <code>opa_url</code>, or an
+SSRF-blocked URL; <code>405</code> on method mismatch. <code>DELETE</code> returns <code>200</code> with <code>{ "result": "..." }</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Configure and start the watcher</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;host&gt;:11111/netlox/v1/config/opa/watcher<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">    &quot;opa_url&quot;: &quot;http://opa:8181&quot;,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">    &quot;policy_path&quot;: &quot;loxilb/l4&quot;,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">    &quot;poll_interval_sec&quot;: 30,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">    &quot;fail_open&quot;: false</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">  }&#39;</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># Inspect status</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;host&gt;:11111/netlox/v1/config/opa/watcher<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">No automated CI scenario ships for the OPA L4 watcher.</p>
+<p>Configure and validate it manually against your own OPA server. The
+<a href="../../security/opa-l4/">OPA L4 Policy</a> page walks through standing up a third-party OPA server,
+writing the rego policy, and wiring it to the watcher.</p>
+</div>
+<hr />
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../security/opa-l4/">OPA L4 Policy</a> — end-to-end OPA server setup and policy wiring.</li>
+<li><a href="../../ai-gateway/kv-caching/">KV-Cache Routing</a> — how the block-hash inventory drives routing.</li>
+<li><a href="../api/">API Reference</a> — the generated-spec endpoints.</li>
+</ul>
 
 
 

@@ -1546,6 +1546,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API (swagger)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1562,6 +1580,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#load-balancer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Load Balancer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ai-api-keys-tenants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI — API Keys &amp; Tenants
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ai-gpu-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI — GPU &amp; Workers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1850,6 +1942,69 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#load-balancer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Load Balancer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ai-api-keys-tenants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI — API Keys &amp; Tenants
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ai-gpu-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI — GPU &amp; Workers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1866,10 +2021,283 @@
 
 
 <h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
+<p>REST reference for the in-scope LoxiLB Inference Gateway control-plane surface, grouped by resource.</p>
+<p>All endpoints are served under a single base URL and secured with a bearer token.</p>
+<ul>
+<li><strong>Base URL:</strong> <code>http://&lt;host&gt;:11111/netlox/v1</code></li>
+<li><strong>Authentication:</strong> <code>Authorization: Bearer &lt;token&gt;</code> on every request.</li>
+<li><strong>Content type:</strong> requests and responses are <code>application/json</code> (the load-balancer <code>PATCH</code>
+  additionally accepts <code>application/merge-patch+json</code>).</li>
+</ul>
 <div class="admonition note">
-<p class="admonition-title">Scaffold</p>
-<p>Phase-0 skeleton stub. Content lands in Phases 2-6 per the content map.</p>
+<p class="admonition-title">Authoritative source</p>
+<p>This page documents the in-scope resources by hand. The full generated OpenAPI definition —
+every field, type, default, and enum — lives in <code>api/swagger.yml</code> in the code repository and is
+the authoritative contract. Endpoints served by the API-server's global middleware are <strong>not</strong>
+in <code>swagger.yml</code>; they are documented separately in <a href="../swagger-extras/">swagger-extras (raw middleware)</a>.</p>
 </div>
+<hr />
+<h2 id="load-balancer">Load Balancer<a class="headerlink" href="#load-balancer" title="Permanent link">&para;</a></h2>
+<p>The load-balancer resource is the core primitive: every AI routing feature is expressed as a
+load-balancer rule with an AI-aware <code>serviceArguments</code> body. <code>mode=4</code> (fullproxy) is the
+prerequisite for AI routing.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/config/loadbalancer</code></td>
+<td>Create a load-balancer service.</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/config/loadbalancer/all</code></td>
+<td>List all services (optional <code>projectId</code> query filter — convenience only, not an authz boundary).</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/config/loadbalancer/all</code></td>
+<td>Delete all services.</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/config/loadbalancer/id/{id}</code></td>
+<td>Get one service by its stable opaque id.</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/config/loadbalancer/externalipaddress/{ip}/port/{port}/protocol/{proto}</code></td>
+<td>Get one service by its VIP/port/protocol composite key.</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/config/loadbalancer/externalipaddress/{ip}/port/{port}/protocol/{proto}</code></td>
+<td>Apply an RFC 7386 JSON merge-patch (immutable fields — <code>security</code>, <code>mode</code>, <code>protocol</code>, VIP key — are rejected with 400).</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/config/loadbalancer/externalipaddress/{ip}/port/{port}/protocol/{proto}</code></td>
+<td>Delete one service by composite key.</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/config/loadbalancer/name/{lb_name}</code></td>
+<td>Delete one service by name.</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/config/loadbalancer/externalipaddress/{ip}/port/{port}/protocol/{proto}/status</code></td>
+<td>Lifecycle status (<code>adminStateUp</code>, <code>operatingStatus</code>, <code>lastUpdated</code>).</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/config/loadbalancer/externalipaddress/{ip}/port/{port}/protocol/{proto}/stats</code></td>
+<td>Per-service statistics (<code>activeConnections</code>, <code>bytesIn</code>, <code>bytesOut</code>, <code>totalConnections</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>serviceArguments</code> body carries all AI routing knobs (<code>sel</code>, <code>mode</code>, <code>security</code>, <code>model_name</code>,
+KV-cache, P/D, CHWBL, SSE, and mTLS fields). See the
+<a href="../../ai-gateway/configuration-reference/">Configuration Reference</a> for the complete field table.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;host&gt;:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">      &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">      &quot;port&quot;: 8080,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">      &quot;protocol&quot;: &quot;tcp&quot;,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s1">      &quot;sel&quot;: 8,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">      &quot;mode&quot;: 4,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="s1">      &quot;security&quot;: 0,</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s1">      &quot;model_name&quot;: &quot;&quot;</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s1">    },</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="s1">    &quot;endpoints&quot;: [</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="s1">      { &quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1 }</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="s1">    ]</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="s1">  }&#39;</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="admonition info">
+<p class="admonition-title">Coming soon</p>
+<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
+</div>
+</div>
+</div>
+</div>
+<hr />
+<h2 id="ai-api-keys-tenants">AI — API Keys &amp; Tenants<a class="headerlink" href="#ai-api-keys-tenants" title="Permanent link">&para;</a></h2>
+<p>CRUD for per-tenant API keys and per-tenant rate limits. The raw key value is returned <strong>only</strong> at
+creation time.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/config/ai/apikey</code></td>
+<td>Create an API key for a tenant (returns <code>raw_key</code> + <code>key_id</code>, once).</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/config/ai/apikey</code></td>
+<td>List API keys (optional <code>tenant_id</code> query filter). Summaries only — never <code>raw_key</code>.</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/config/ai/apikey/{key_id}</code></td>
+<td>Get one API key summary.</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/config/ai/apikey/{key_id}</code></td>
+<td>Permanently delete an API key.</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/config/ai/tenant/ratelimit</code></td>
+<td>Create or update a tenant's rate limit (<code>rps</code>, <code>tokens_per_min</code>).</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/config/ai/tenant/ratelimit/{tenant_id}</code></td>
+<td>Get a tenant's rate-limit configuration.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Updating a key's models or enabled flag</p>
+<p>Editing <code>allowed_models</code> / <code>enabled</code> on an existing key is a <code>PATCH</code> served by global
+middleware and is <strong>absent from the generated spec</strong> — see
+<a href="../swagger-extras/">swagger-extras (raw middleware)</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Data-plane enforcement: roadmap</p>
+<p>API-key authentication (401/403) and per-tenant rate limiting (429) are <strong>control-plane CRUD
+only</strong> today — the gateway stores and manages keys/limits but does not yet reject requests in
+the data path. SSE stream lifecycle and token accounting <strong>are</strong> wired.</p>
+</div>
+<p>Representative request — create an API key:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;host&gt;:11111/netlox/v1/config/ai/apikey<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s1">    &quot;tenant_id&quot;: &quot;team-inference&quot;,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">    &quot;name&quot;: &quot;batch-jobs&quot;,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">    &quot;allowed_models&quot;: [&quot;meta-llama/Llama-3.1-8B-Instruct&quot;],</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">    &quot;rate_limit_rps&quot;: 20,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">    &quot;burst_size&quot;: 40,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s1">    &quot;tokens_per_min&quot;: 100000</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s1">  }&#39;</span>
+</code></pre></div>
+<p>See <a href="../../ai-gateway/api-key-management/">API Key Management</a> for the full lifecycle and field
+semantics.</p>
+<hr />
+<h2 id="ai-gpu-workers">AI — GPU &amp; Workers<a class="headerlink" href="#ai-gpu-workers" title="Permanent link">&para;</a></h2>
+<p>Enable GPU-aware routing (<code>sel=9</code>), inspect its state, prune stale conversation affinity, and feed
+per-worker GPU metrics into routing decisions.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/config/gpu/enable</code></td>
+<td>Activate GPU-aware routing and start the conversation-cleanup thread.</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/config/gpu/disable</code></td>
+<td>Deactivate GPU-aware routing and revert to standard CHWBL.</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/config/gpu/status</code></td>
+<td>Get GPU monitoring state and statistics.</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/config/gpu/conversations/cleanup</code></td>
+<td>Remove stale conversation mappings (optional <code>max_age_hours</code> query, default 1).</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/config/worker/metrics</code></td>
+<td>Push GPU metrics for one worker (<code>endpoint_ip</code>, <code>queued_requests</code>, <code>kv_cache_usage_perc</code>, …).</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/config/worker/metrics</code></td>
+<td>Get current GPU metrics for all tracked workers.</td>
+</tr>
+</tbody>
+</table>
+<p>Representative request — read GPU monitoring status:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;host&gt;:11111/netlox/v1/config/gpu/status<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="security">Security<a class="headerlink" href="#security" title="Permanent link">&para;</a></h2>
+<p>The OPA L4 policy watcher is configured through <code>/config/opa/watcher</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/config/opa/watcher</code></td>
+<td>Get watcher configuration and runtime status.</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/config/opa/watcher</code></td>
+<td>Configure and start the watcher (SSRF-guarded).</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/config/opa/watcher</code></td>
+<td>Stop and remove the watcher.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Raw middleware</p>
+<p><code>/config/opa/watcher</code> is served by the API-server's global middleware, so its real request and
+response contract (<code>OPAWatcherConfig</code>) is <strong>not</strong> in the generated spec. Full field tables and
+a worked example are on the <a href="../swagger-extras/">swagger-extras (raw middleware)</a> page.</p>
+</div>
+<hr />
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../ai-gateway/configuration-reference/">Configuration Reference</a> — the complete
+  <code>serviceArguments</code> field table.</li>
+<li><a href="../swagger-extras/">swagger-extras (raw middleware)</a> — endpoints absent from generated clients.</li>
+</ul>
 
 
 
