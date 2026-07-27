@@ -868,10 +868,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#sglang-kv-exact-rule-mode-3" class="md-nav__link">
+  <a href="#sglang-kv-exact-rule-kvexactmode-3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        SGLang KV-exact rule (mode 3)
+        SGLang KV-exact rule (kvExactMode: 3)
       
     </span>
   </a>
@@ -2244,10 +2244,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#sglang-kv-exact-rule-mode-3" class="md-nav__link">
+  <a href="#sglang-kv-exact-rule-kvexactmode-3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        SGLang KV-exact rule (mode 3)
+        SGLang KV-exact rule (kvExactMode: 3)
       
     </span>
   </a>
@@ -2663,7 +2663,7 @@ are never Tier-1.5 targets.</p>
 </div>
 </div>
 </div>
-<h3 id="sglang-kv-exact-rule-mode-3">SGLang KV-exact rule (mode 3)<a class="headerlink" href="#sglang-kv-exact-rule-mode-3" title="Permanent link">&para;</a></h3>
+<h3 id="sglang-kv-exact-rule-kvexactmode-3">SGLang KV-exact rule (<code>kvExactMode: 3</code>)<a class="headerlink" href="#sglang-kv-exact-rule-kvexactmode-3" title="Permanent link">&para;</a></h3>
 <p>A single-role service: <code>kvExactMode: 3</code>, <code>kvEngineType: "sglang"</code>, no <code>ep_role</code>
 on the endpoints (every endpoint is a KV candidate), <code>kvHashAlgo</code> <strong>omitted</strong>,
 and <code>kvDpRankCount</code> equal to the SGLang <code>--dp-size</code>.</p>
@@ -2729,8 +2729,8 @@ endpoint:</p>
 <li><code>service_id</code> — numeric service identifier (uint32); <code>ep_idx</code> — the endpoint
   index within the service. Both query parameters are required.</li>
 <li><code>total</code> — number of blocks currently tracked for that endpoint. A non-zero,
-  growing <code>total</code> on your KV-candidate endpoints (prefill EPs for mode 1; all EPs
-  for mode 3) is the proof the subscriber is connected and ingesting.</li>
+  growing <code>total</code> on your KV-candidate endpoints (prefill EPs for <code>kvExactMode: 1</code>;
+  all EPs for <code>kvExactMode: 3</code>) is the proof the subscriber is connected and ingesting.</li>
 <li><code>block_idx</code> is a synthetic sequence index (map iteration order), not a semantic
   block position. For SGLang, an endpoint's inventory is the <strong>union</strong> of all its
   ranks.</li>

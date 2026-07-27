@@ -2427,8 +2427,11 @@
 </tbody>
 </table>
 <div class="admonition warning">
-<p class="admonition-title">Verify the effective <code>chwbl_mean_load_factor</code> default</p>
-<p>The swagger schema documents a default of <code>125</code>, but the runtime binary may initialize this to a different value (reported around <code>175</code>). Confirm the effective default against your running gateway before depending on it, and set the field explicitly if the exact ceiling matters.</p>
+<p class="admonition-title"><code>chwbl_mean_load_factor</code>: schema default 125 is not applied on omit</p>
+<p>The API schema annotates <code>default: 125</code>, but that value is <strong>not applied when the field is
+omitted</strong> — an omitted field falls to the runtime data-plane initialization of <strong>175</strong>
+(a 1.75× mean ceiling). In other words: set the field explicitly to get your value; leave it out
+and the effective out-of-box ceiling is 175. Set it explicitly if the exact ceiling matters.</p>
 </div>
 <h3 id="chwbl_prefix_hash_flags-bits"><code>chwbl_prefix_hash_flags</code> bits<a class="headerlink" href="#chwbl_prefix_hash_flags-bits" title="Permanent link">&para;</a></h3>
 <p>Set individual bits (sum their values) to fold additional request features into the prefix hash. <code>0</code> means auto-detect.</p>

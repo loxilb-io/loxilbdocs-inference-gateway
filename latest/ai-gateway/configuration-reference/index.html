@@ -2853,9 +2853,9 @@ every other <code>sel</code> value. See <a href="../llm-routing/">LLM Routing</a
 <tr>
 <td><code>chwbl_mean_load_factor</code></td>
 <td>integer</td>
-<td><code>125</code> ⚠️</td>
+<td><code>125</code> (schema) ⚠️</td>
 <td><code>100</code>–<code>300</code></td>
-<td>Max load factor %: <code>max_load = avg_load × factor / 100</code>. <code>125</code> allows 25% overload. <strong>⚠️ Schema default is <code>125</code>; a running binary may initialise this to <code>175</code> — verify against your build before relying on the default.</strong></td>
+<td>Max load factor %: <code>max_load = avg_load × factor / 100</code>. <code>125</code> allows 25% overload. <strong>⚠️ The schema <code>default: 125</code> is only applied when you set the field; an omitted field falls to the runtime default of <code>175</code> (1.75×). Set it explicitly for a predictable ceiling.</strong></td>
 </tr>
 <tr>
 <td><code>chwbl_replication</code></td>
