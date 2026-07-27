@@ -94,7 +94,7 @@ nav:
       - Monitoring & Metrics: operations/monitoring.md
       - Grafana Dashboards: operations/observability-metrics-grafana.md
       - Troubleshooting: operations/troubleshooting.md
-      - Audit Log: operations/audit-log.md
+      - Logging & Audit: operations/audit-log.md
   - Reference:
       - API (swagger): reference/api.md
       - swagger-extras (raw): reference/swagger-extras.md
