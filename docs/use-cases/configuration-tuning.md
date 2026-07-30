@@ -108,8 +108,9 @@ The P/D and `kv*` fields are **REST-only** — there is no `loxicmd` flag for th
     ```
 
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2022:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=chwbl --host=10.10.10.254 --chwbl-hash-level=2 --chwbl-load-factor=125 --chwbl-replication=100
+    ```
 
 ## LoxiLB process environment variables
 

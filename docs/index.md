@@ -77,8 +77,9 @@ A pool of identical vLLM replicas behind one OpenAI-compatible VIP, with CHWBL p
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --select=chwbl --mode=fullproxy --host=10.10.10.254 --chwbl-hash-level=2 --chwbl-replication=100
+    ```
 
 ## Where to go next
 

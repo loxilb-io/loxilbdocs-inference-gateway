@@ -156,8 +156,9 @@ Configure a P/D service with `POST /netlox/v1/config/loadbalancer` on the loxilb
     ```
 
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --security=https --pd-disagg --sse-mode --host=10.10.10.254 --monitor --probetype=http --probeport=8000 --probereq=/health --probetimeout=5 --proberetries=2 --ep-role=prefill,decode --nixl-port=9001,9002
+    ```
 
 ### Cache-Aware, Multi-Endpoint
 
@@ -199,8 +200,9 @@ To scale to multiple prefill and decode endpoints with session stickiness and pr
     ```
 
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2023:8000 --endpoints=31.31.31.1:1,33.33.33.1:1,32.32.32.1:1,34.34.34.1:1 --mode=fullproxy --security=https --pd-disagg --pd-cache-aware --pd-session-ttl=600 --pd-cache-threshold=20 --pd-balance-abs-threshold=3 --sse-mode --host=10.10.10.254 --monitor --probetype=http --probeport=8000 --probereq=/health --probetimeout=5 --proberetries=2 --ep-role=prefill,prefill,decode,decode --nixl-port=9001,9003,9002,9004
+    ```
 
 **Tuning guidance:**
 

@@ -17,8 +17,10 @@ Metrics collection is **off by default**. Until it is enabled the endpoint answe
     curl -X POST http://127.0.0.1:11111/netlox/v1/config/metrics
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    # Enable Prometheus metrics collection
+    loxicmd set metrics --enable
+    ```
 
 Once enabled, LoxiLB serves metrics in Prometheus text format from a control-plane REST route on port **11111**:
 

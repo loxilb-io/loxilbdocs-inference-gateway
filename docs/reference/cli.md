@@ -1,15 +1,17 @@
 # CLI Reference
 
-The current command surface for the LoxiLB Inference Gateway is **`loxilb-mcp`**, a
-Model Context Protocol (MCP) server that exposes the gateway's management and
-observability operations as guarded tools. Point an MCP-capable agent at it, or
-drive it programmatically over JSON-RPC.
+The LoxiLB Inference Gateway can be managed three ways: the AI-aware **`loxicmd`**
+CLI, the **`loxilb-mcp`** Model Context Protocol server, and the [REST API](api.md)
+directly. This page documents **`loxilb-mcp`**, an MCP server that exposes the
+gateway's management and observability operations as guarded tools — point an
+MCP-capable agent at it, or drive it programmatically over JSON-RPC. The `loxicmd`
+examples appear beside the MCP and REST forms in the tabbed blocks throughout the docs.
 
 !!! info "Which tool do I use?"
-    An AI-aware `loxicmd` is planned but not shipped yet — the `loxicmd` AI
-    subcommand tree is currently an empty stub. Until it lands, manage the gateway
-    with **`loxilb-mcp`** (this page) or the [REST API](api.md) directly on port
-    `11111`.
+    `loxicmd` now ships AI-aware subcommands — `apikey`, `ratelimit`, `metrics`,
+    `gpu`, `opa`, `sni`, KV inventory, and AI-aware `create`/`delete lb`. You can
+    also manage the gateway with **`loxilb-mcp`** (this page) or the
+    [REST API](api.md) directly on port `11111`.
 
 ## Overview
 
@@ -266,8 +268,9 @@ as an MCP tool call and the equivalent REST call the bridge makes on your behalf
     ```
 
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the MCP or REST form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=31.31.31.1:1 --mode=fullproxy
+    ```
 
 !!! note "`mode: 4` is required for AI routing"
     Fullproxy mode (`mode=4`) is the prerequisite for all AI routing features.
@@ -297,27 +300,23 @@ config (`prometheus_url`). This example reads active AI streams per model:
     ```
 
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the MCP or REST form today.
+    !!! info "loxicmd"
+        No loxicmd equivalent — use the MCP `promql_query` tool or query Prometheus directly.
 
-## loxicmd (coming later)
+## loxicmd
 
-An AI-aware `loxicmd` — with subcommands for API keys, rate limits, GPU mode, and
-KV-cache inventory — is planned. It is **not available yet**: the `loxicmd` AI
-subcommand tree is currently an empty stub. Until it ships, use `loxilb-mcp`
-(above) or the [REST API](api.md).
+The AI-aware `loxicmd` is available now. It provides AI verbs for the gateway:
+`create`/`delete lb` with AI flags, `create`/`get`/`set`/`delete apikey`,
+`set`/`get ratelimit`, `set`/`get metrics`, `set`/`get gpu`,
+`set`/`get`/`delete opa`, `create sni`, and `get kvinventory`.
 
-When `loxicmd` lands, its examples will slot in beside the MCP and REST forms in
-the tabbed blocks on this page and throughout the docs, so the same operation will
-read across all three surfaces:
+Its examples sit beside the MCP and REST forms in the tabbed blocks on this page
+and throughout the docs, so the same operation reads across all three surfaces:
 
-=== "loxicmd (planned)"
-    !!! info "Coming soon"
-        ```
-        loxicmd create ai apikey --tenant acme --models gpt-oss --rps 50
-        ```
-        Illustrative only — the flags above are not final and this command does
-        not exist yet.
+=== "loxicmd"
+    ```bash
+    loxicmd create apikey --tenant-id=acme --allowed-models=gpt-oss --rps=50
+    ```
 
 === "MCP (available today)"
     ```

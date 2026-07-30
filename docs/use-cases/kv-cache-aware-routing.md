@@ -255,8 +255,9 @@ Create one fullproxy (`mode=4`) rule per model. Tag prefill endpoints `ep_role: 
     }'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=31.31.31.1:1,31.31.31.2:1 --mode=fullproxy --select=persist --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --kv-warmup=30 --ep-role=prefill,decode
+    ```
 
 KV fields (all match the swagger `serviceArguments` defaults):
 
@@ -322,8 +323,8 @@ Per-model prerequisites:
       | grep -E 'loxilb_pd_kv|kv_subscriber_connected'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    !!! info "loxicmd"
+        `loxicmd get metrics` reports only whether metrics are enabled; scrape the `/netlox/v1/metrics` endpoint directly for series.
 
 Assert, in order:
 
@@ -342,8 +343,9 @@ The middle assertion is the whole test. Fire one **cold** request to populate th
     curl -s "http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=<id>&ep_idx=0"
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd get kvinventory --service-id=<id> --ep-idx=0
+    ```
 
 Confirm each prefill endpoint's block gauge is **non-zero** within the warmup + ingest window. A zero gauge after warm traffic almost always means `kvBlockSize` ≠ the engine's effective block/page size.
 
@@ -373,8 +375,10 @@ Section 9 is the go/no-go gate; this section is the deeper reference for the sam
     curl -s "http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=<id>&ep_idx=0"
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    # per-endpoint 64-bit hash inventory
+    loxicmd get kvinventory --service-id=<id> --ep-idx=0
+    ```
 
 After `kvWarmupSec` under cache-friendly traffic, a prefill endpoint's inventory should be **non-empty**.
 

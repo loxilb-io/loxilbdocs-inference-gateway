@@ -195,8 +195,9 @@ role-less endpoints and three DP ranks (subscribing at `5561`, `5562`, `5563`).
     ```
 
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=9090:80 --endpoints=35.35.35.1:1,36.36.36.1:1,37.37.37.1:1 --mode=fullproxy --select=chwbl --kv-exact-mode=3 --kv-engine-type=sglang --kv-dp-ranks=3 --kv-zmq-port=5561 --kv-block-size=16
+    ```
 
 !!! warning "Set `kvBlockSize` to the served model's page size"
     `kvBlockSize: 16` above is the lab publisher's page size. For a real SGLang
@@ -265,8 +266,13 @@ Confirm the rule landed and that KV-exact is actually firing:
     ```
 
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    # The rule is present with the SGLang engine
+    loxicmd get lb
+
+    # Per-endpoint published block-hash inventory for the service
+    loxicmd get kvinventory --service-id=<RULE> --ep-idx=0
+    ```
 
 Signals that the contract is healthy:
 

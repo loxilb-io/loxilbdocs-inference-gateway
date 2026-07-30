@@ -77,8 +77,9 @@ affinity — a good starting point and a control against which to measure cache-
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=rr --security=https --monitor --probetype=http --probeport=8000 --probereq=/v1/models
+    ```
 
 The `monitor` + `probe*` fields add an HTTP health check on `/v1/models`; they are optional but
 recommended so unhealthy backends are pulled from rotation.
@@ -162,8 +163,16 @@ more precisely (better cache reuse for that context) at the cost of a coarser sp
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    # Level 1 — hash on model + system prompt only (broadest sharing)
+    loxicmd create lb 10.10.10.254 --tcp=2021:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=chwbl --security=https --chwbl-hash-level=1
+
+    # Level 2 — add session/conversation context to the hash
+    loxicmd create lb 10.10.10.254 --tcp=2022:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=chwbl --security=https --chwbl-hash-level=2 --chwbl-load-factor=125 --chwbl-replication=100
+
+    # Level 3 — full prompt / RAG documents in the hash (tightest binding)
+    loxicmd create lb 10.10.10.254 --tcp=2023:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=chwbl --security=https --chwbl-hash-level=3 --chwbl-load-factor=250 --chwbl-replication=200
+    ```
 
 !!! tip "Start at Level 1"
     Level 1 gives the broadest cache sharing and the most even spread. Move to Level 2/3 only when
@@ -217,8 +226,9 @@ still preserving prefix locality.
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=31.31.31.1:8,32.32.32.1:2 --mode=fullproxy --select=chwbl-wrr --security=https --chwbl-hash-level=1
+    ```
 
 Here `31.31.31.1` receives roughly 4× the traffic of `32.32.32.1` (weights `8` vs `2`). All CHWBL
 tuning knobs above apply unchanged.
@@ -255,8 +265,9 @@ least-loaded GPU.
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=gpuaware --security=https
+    ```
 
 Metrics scraping must be configured for scoring to have data — see
 [vLLM Integration](vllm-integration.md).
@@ -308,8 +319,9 @@ stickiness (see [MCP Gateway](mcp-gateway.md)).
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=persist --security=https --session-header-name=X-Session-ID
+    ```
 
 To key on a cookie, query parameter, or Basic-Auth user instead, set `session_header_name` to
 `cookie:JSESSIONID`, `query:session_id`, or `basic-auth` respectively.

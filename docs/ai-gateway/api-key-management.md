@@ -99,8 +99,9 @@ retrieved again.
       }'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create apikey --tenant-id=cicd-tenant --name=app-key-1 --allowed-models=Qwen/Qwen3-0.6B,llama-3 --rps=5 --burst=10 --tokens-per-min=1000 --enabled
+    ```
 
 Response (`201 Created`):
 
@@ -135,8 +136,13 @@ Response (`201 Created`):
       "http://10.10.10.254:11111/netlox/v1/config/ai/apikey/<key_id>"
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    # List all keys for a tenant
+    loxicmd get apikey --tenant-id=cicd-tenant
+
+    # Get one key by ID
+    loxicmd get apikey <key_id>
+    ```
 
 ### Revoke a key
 
@@ -150,8 +156,9 @@ returns `404`.
       "http://10.10.10.254:11111/netlox/v1/config/ai/apikey/<key_id>"
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd delete apikey <key_id>
+    ```
 
 ### Update a key (raw middleware)
 
@@ -172,8 +179,9 @@ returns `204 No Content`.
       }'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd set apikey <key_id> --allowed-models=llama-3 --enabled=false
+    ```
 
 ## Tenant rate limits
 
@@ -208,8 +216,13 @@ required.
       "http://10.10.10.254:11111/netlox/v1/config/ai/tenant/ratelimit/cicd-tenant"
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    # Set / update
+    loxicmd set ratelimit --tenant-id=cicd-tenant --rps=50 --tokens-per-min=2000
+
+    # Read
+    loxicmd get ratelimit cicd-tenant
+    ```
 
 `POST` returns `204 No Content`. `GET` returns the current entry, including the
 `rps` and `tokens_per_min` you set.

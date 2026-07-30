@@ -248,8 +248,11 @@ series you expect.
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd set metrics --enable
+    # Confirm the current setting
+    loxicmd get metrics
+    ```
 
 **Verify it fired:**
 

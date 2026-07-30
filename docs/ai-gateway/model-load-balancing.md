@@ -102,8 +102,9 @@ The example below reproduces the `ai-model-routing` scenario: three rules on VIP
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=31.31.31.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b --inatimeout=30
+    ```
 
 ### Rule 2 — `mistral-7b` pool
 
@@ -133,8 +134,9 @@ The example below reproduces the `ai-model-routing` scenario: three rules on VIP
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2021:8080 --endpoints=32.32.32.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=mistral-7b --inatimeout=30
+    ```
 
 ### Rule 3 — wildcard fallback
 
@@ -166,8 +168,9 @@ An empty `model_name` (`""`) makes this rule the catch-all for any model that do
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2022:8080 --endpoints=33.33.33.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --inatimeout=30
+    ```
 
 !!! tip "Per-pool selection algorithm"
     `sel` can differ per pool. `sel: 0` (round-robin) is the default and is fine for even backends.

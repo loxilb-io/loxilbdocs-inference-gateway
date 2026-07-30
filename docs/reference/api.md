@@ -61,8 +61,9 @@ KV-cache, P/D, CHWBL, SSE, and mTLS fields). See the
       }'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=31.31.31.1:1 --select=chwbl --mode=fullproxy
+    ```
 
 ---
 

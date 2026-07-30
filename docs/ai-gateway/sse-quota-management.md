@@ -87,8 +87,9 @@ backend at `31.31.31.1:8080`. Adjust addresses for your environment.
       }'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=31.31.31.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=sse-test --sse-mode --max-stream-duration=120 --backend-keepalive-interval=60 --inatimeout=60
+    ```
 
 To bound a stream aggressively — for example a debugging service that should
 never hold a connection longer than 10 seconds — lower `max_stream_duration_sec`:
@@ -120,8 +121,9 @@ never hold a connection longer than 10 seconds — lower `max_stream_duration_se
       }'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2022:8080 --endpoints=31.31.31.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=cap-test --sse-mode --max-stream-duration=10 --backend-keepalive-interval=60 --inatimeout=60
+    ```
 
 ## Verify
 
@@ -134,8 +136,9 @@ check the `sse_mode`, `max_stream_duration_sec`, and
     curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd get lb
+    ```
 
 **2. Drive a slow-drip stream.** Send a streaming chat-completion whose gaps
 between chunks exceed the idle timeout. With `sse_mode=true` the stream survives

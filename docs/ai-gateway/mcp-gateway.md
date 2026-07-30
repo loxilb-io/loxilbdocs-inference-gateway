@@ -84,8 +84,9 @@ certificate directory (`/opt/loxilb/cert/`: `server.crt`, `server.key`,
       }'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=rr --security=https --session-header-name=mcp-session-id --host=10.10.10.254 --trace-type=mcp
+    ```
 
 ### Persist service (`sel=3`, session affinity)
 
@@ -117,8 +118,9 @@ session.
       }'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2021:8080 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=persist --security=https --session-header-name=mcp-session-id --host=10.10.10.254 --trace-type=mcp
+    ```
 
 !!! note "End-to-end TLS variant"
     To terminate TLS on both legs — frontend and backend — set `security: 3`
@@ -136,8 +138,9 @@ session.
     curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd get lb
+    ```
 
 **2. Probe MCP over the VIP.** Point an MCP client (or plain `curl`) at the
 HTTPS VIP endpoint, trusting the CA you staged:

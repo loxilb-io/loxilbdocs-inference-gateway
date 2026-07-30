@@ -332,8 +332,9 @@ scenario.
     }'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=8080:80 --endpoints=31.31.31.1:1,32.32.32.1:1,33.33.33.1:1,34.34.34.1:1,35.35.35.1:1,36.36.36.1:1 --mode=fullproxy --host=10.10.10.254 --pd-disagg --proberetries=1 --kv-exact-mode=1 --kv-block-size=16 --kv-hash-algo=sha256_cbor --kv-zmq-port=5557 --kv-warmup=30 --kv-engine-type=vllm --ep-role=prefill,decode,prefill,decode,prefill,decode
+    ```
 
 A CHWBL prefix-cache variant (no P/D) swaps `serviceArguments` for:
 
@@ -369,8 +370,13 @@ Confirm the rule landed and inspect its state:
     curl -s 'http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=<id>&ep_idx=0' | jq .
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    # List all rules (VIP, mode, sel, endpoints)
+    loxicmd get lb
+
+    # KV-cache per-block hash inventory (kvExactMode rules)
+    loxicmd get kvinventory --service-id=<id> --ep-idx=0
+    ```
 
 ## See also
 

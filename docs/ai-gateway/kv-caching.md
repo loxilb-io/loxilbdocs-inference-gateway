@@ -184,8 +184,9 @@ are never Tier-1.5 targets.
       }'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=8080:8080 --endpoints=31.31.31.1:1,32.32.32.1:1,33.33.33.1:1,34.34.34.1:1,35.35.35.1:1,36.36.36.1:1 --mode=fullproxy --pd-disagg --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-warmup=30 --kv-block-size=16 --ep-role=prefill,decode,prefill,decode,prefill,decode
+    ```
 
 ### SGLang KV-exact rule (`kvExactMode: 3`)
 
@@ -219,8 +220,9 @@ and `kvDpRankCount` equal to the SGLang `--dp-size`.
       }'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=9090:8080 --endpoints=35.35.35.1:1,36.36.36.1:1,37.37.37.1:1 --mode=fullproxy --kv-exact-mode=3 --kv-engine-type=sglang --kv-dp-ranks=3 --kv-zmq-port=5561 --kv-warmup=30 --kv-block-size=16
+    ```
 
 With `kvDpRankCount: 3` and `kvZmqPort: 5561`, loxilb subscribes to ranks at
 `5561`, `5562`, and `5563` on each endpoint and unions them into one inventory

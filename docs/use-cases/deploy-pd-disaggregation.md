@@ -242,8 +242,11 @@ The KV-exact rule body (`:9003`), posted to `http://<VIP>:11111/netlox/v1/config
       ]}'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    # NOTE: loxicmd applies one --tcp target port to every endpoint; the decode EP's
+    # targetPort 8200 (curl) cannot be set per-endpoint — post it via REST if it differs.
+    loxicmd create lb <VIP> --tcp=9003:8100 --endpoints=<prefill-1-ip>:1,<prefill-2-ip>:1,<decode-1-ip>:1 --mode=fullproxy --select=rr --host=<VIP> --pd-disagg --proberetries=1 --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-warmup=60 --kv-block-size=16 --ep-role=prefill,prefill,decode --nixl-port=5600,5600,5600
+    ```
 
 !!! warning "Field-casing trap"
     `pd_disagg_mode`, `pd_cache_aware_mode`, `ep_role`, `nixl_port`, `security` are **snake_case**;
@@ -297,8 +300,8 @@ attach to the real NIC. Mount the tokenizer tree (§5.5) and set the parity env:
       ghcr.io/loxilb-io/loxilb-inference-gateway:latest-u24 -p
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    !!! info "loxicmd"
+        Deployment step — not a loxicmd operation.
 
 !!! danger "NEVER `pkill loxilb` — always `docker stop -t 30 loxilb`"
     loxilb holds XDP/eBPF hooks on the host NIC. A `pkill` / `SIGKILL` leaves those hooks attached

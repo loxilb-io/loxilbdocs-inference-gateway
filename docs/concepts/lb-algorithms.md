@@ -136,8 +136,9 @@ For example, `chwbl_prefix_hash_flags: 192` folds both the RAG template (bit 6) 
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=8080:8080 --endpoints=31.31.31.1:1,32.32.32.1:1,33.33.33.1:1 --mode=fullproxy --select=chwbl --backend-protocol=http1 --chwbl-hash-level=2 --chwbl-hash-flags=0 --chwbl-load-factor=125 --chwbl-replication=100
+    ```
 
 ---
 
@@ -179,8 +180,9 @@ If `session_header_name` is empty and `sel: 3` is set, persistence falls back to
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=8080:8080 --endpoints=31.31.31.1:1,32.32.32.1:1,33.33.33.1:1 --mode=fullproxy --select=persist --backend-protocol=http1 --session-header-name=X-Session-ID
+    ```
 
 ---
 
@@ -196,8 +198,9 @@ List the LB rules and confirm the `sel` value in effect:
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd get lb
+    ```
 
 ---
 

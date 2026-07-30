@@ -102,9 +102,9 @@ size read back from the server (here: 16):
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. The `kv*` rule fields are REST-only today —
-        use the curl form.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=9090:30000 --endpoints=35.35.35.1:1,36.36.36.1:1,37.37.37.1:1 --mode=fullproxy --select=rr --host=10.10.10.254 --proberetries=1 --kv-exact-mode=3 --kv-engine-type=sglang --kv-block-size=16 --kv-zmq-port=5561 --kv-dp-ranks=3 --kv-warmup=30
+    ```
 
 Notes: no `pd_disagg_mode`, no `ep_role`, `kvHashAlgo` omitted (the only correct spelling via
 REST). `kvBlockSize: 16` is **illustrative** — always substitute the value your own
@@ -166,8 +166,13 @@ coexistence story) and logs one engine-mix WARN.
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    # Rule 1 — 10.10.10.254:8080 — the unmodified vLLM P/D shape (unchanged)
+    loxicmd create lb 10.10.10.254 --tcp=8080:80 --endpoints=31.31.31.1:1,32.32.32.1:1,33.33.33.1:1,34.34.34.1:1 --mode=fullproxy --select=rr --host=10.10.10.254 --proberetries=1 --pd-disagg --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-warmup=20 --kv-block-size=16 --ep-role=prefill,decode,prefill,decode
+
+    # Rule 2 — 10.10.10.254:9090 — the SGLang single-role shape (kvHashAlgo omitted)
+    loxicmd create lb 10.10.10.254 --tcp=9090:80 --endpoints=35.35.35.1:1,36.36.36.1:1,37.37.37.1:1 --mode=fullproxy --select=rr --host=10.10.10.254 --proberetries=1 --kv-exact-mode=3 --kv-engine-type=sglang --kv-dp-ranks=3 --kv-zmq-port=5561 --kv-warmup=20 --kv-block-size=16
+    ```
 
 Port planning here: vLLM publishes at `:5557`; the SGLang rule's 3 DP ranks subscribe at
 `:5561`/`:5562`/`:5563` per EP. Cross-VIP inventory isolation is enforced automatically by

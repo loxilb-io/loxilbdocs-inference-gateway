@@ -91,8 +91,9 @@ loxilb can actively health-check each vLLM backend and take failing endpoints ou
     ```
 
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --backend-protocol=http1 --monitor --probetype=http --probeport=8000 --probereq=/health --probetimeout=5 --proberetries=2
+    ```
 
 A backend that fails its probe is reported with `"inActiveEP": true` in `GET /config/loadbalancer/all` and is skipped by endpoint selection until it recovers.
 
@@ -196,8 +197,13 @@ Enable GPU-aware routing on loxilb, then set `sel: 9` on the service.
     ```
 
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    # 1. Enable GPU-aware routing
+    loxicmd set gpu --enable
+
+    # 2. Create the service with sel: 9
+    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=31.31.31.1:1,32.32.32.1:1,33.33.33.1:1 --mode=fullproxy --select=gpuaware --backend-protocol=http1 --monitor --probetype=http --probeport=8000 --probereq=/health --probetimeout=5 --proberetries=2
+    ```
 
 **vLLM launch** (each instance):
 

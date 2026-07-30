@@ -77,8 +77,9 @@ Each model pool is its own LB rule with a distinct `model_name`. Create one per 
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=31.31.31.1:1 --mode=fullproxy --backend-protocol=http1 --model-name=llama-70b
+    ```
 
 To add the wildcard catch-all, create another rule with `model_name` set to the empty string `""`.
 
@@ -111,8 +112,9 @@ List the rules on the VIP and confirm each carries the expected `model_name` and
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd get lb
+    ```
 
 Send a probe with a known and an unknown model to confirm matching and the 503 fall-through:
 

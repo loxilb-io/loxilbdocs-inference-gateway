@@ -97,8 +97,9 @@ own certificate to a TLS backend. This uses `mode=4` (FullProxy) and `security=2
           }'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=443:8443 --endpoints=31.31.31.1:1 --mode=fullproxy --security=e2ehttps --mtls-client-cert-mode=required --mtls-client-ca-path=/opt/loxilb/cert/client_ca_bundle.crt --mtls-require-client-cn --mtls-client-cn-pattern='*.corp.example.com' --mtls-client-crl-path=/opt/loxilb/cert/client_crl.pem --mtls-backend-verify-server --mtls-backend-ca-path=/opt/loxilb/cert/backend_ca.crt --mtls-backend-cert-path=/opt/loxilb/cert/loxilb_client.crt --mtls-backend-key-path=/opt/loxilb/cert/loxilb_client.key
+    ```
 
 ## Verify
 
@@ -110,8 +111,9 @@ Confirm the rule was created with the mTLS objects intact:
       -H 'Authorization: Bearer <api-token>'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd get lb
+    ```
 
 Then exercise the front side. A client presenting a valid, non-revoked certificate whose CN
 matches the pattern should connect; one without a cert (under `client_cert_mode: required`) should

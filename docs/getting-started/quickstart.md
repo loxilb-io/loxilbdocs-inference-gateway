@@ -132,9 +132,16 @@ empty `model_name` (`""`) makes the rule a **wildcard** catch-all.
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form
-        today.
+    ```bash
+    # Rule 1 — port 2020 → llama-70b pool
+    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=31.31.31.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b --inatimeout=30
+
+    # Rule 2 — port 2021 → mistral-7b pool
+    loxicmd create lb 10.10.10.254 --tcp=2021:8080 --endpoints=32.32.32.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=mistral-7b --inatimeout=30
+
+    # Rule 3 — port 2022 → wildcard pool (model_name "")
+    loxicmd create lb 10.10.10.254 --tcp=2022:8080 --endpoints=33.33.33.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --inatimeout=30
+    ```
 
 !!! tip "Field casing matters"
     `model_name`, `path_prefix`, `path_match_mode`, and `inactiveTimeOut` must
@@ -215,9 +222,9 @@ should see all three services, each with its `model_name` and single endpoint:
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form
-        today.
+    ```bash
+    loxicmd get lb
+    ```
 
 Pipe it through `jq` to confirm the model-to-port mapping at a glance:
 

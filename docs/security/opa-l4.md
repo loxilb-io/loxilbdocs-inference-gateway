@@ -177,8 +177,9 @@ starts polling and reconciling rules.
     # {"result":"Success"}
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd set opa --opa-url http://opa.example.com:8181 --policy-path loxilb/l4 --poll-interval-sec 30
+    ```
 
 A `400` here means invalid JSON, a missing `opa_url`, or a URL blocked by the SSRF guard — see
 [Troubleshoot](#troubleshoot).
@@ -193,8 +194,9 @@ Poll the watcher's status to confirm it is running and syncing.
       -H 'Authorization: Bearer <api-token>'
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd get opa
+    ```
 
 The status object reports:
 
@@ -221,8 +223,9 @@ Stop polling and tear down the watcher. This succeeds even if no watcher is conf
     # {"result":"Success"}
     ```
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd delete opa
+    ```
 
 ## Operations
 

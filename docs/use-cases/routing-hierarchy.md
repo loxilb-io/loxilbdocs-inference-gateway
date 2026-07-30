@@ -314,8 +314,19 @@ Both shapes are created with `POST /netlox/v1/config/loadbalancer` on port `1111
     ```
 
 === "loxicmd"
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    P/D-disaggregated rule with Tier 1.5 KV-exact:
+
+    ```bash
+    # NOTE: loxicmd applies one --tcp target port to every endpoint; the decode EP's
+    # targetPort 8200 (curl) cannot be set per-endpoint — post it via REST if it differs.
+    loxicmd create lb 10.10.10.254 --tcp=2020:8100 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=rr --host=10.10.10.254 --pd-disagg --pd-cache-aware --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --ep-role=prefill,decode --nixl-port=5600,5600
+    ```
+
+    Single-pool CHWBL rule (`sel:8`) — cache affinity without P/D:
+
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=2021:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=chwbl --host=10.10.10.254 --chwbl-hash-level=1
+    ```
 
 ## Verify
 

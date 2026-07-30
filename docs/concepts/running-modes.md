@@ -63,8 +63,9 @@ A minimal fullproxy rule (CHWBL prefix affinity over two vLLM replicas):
 
 === "loxicmd"
 
-    !!! info "Coming soon"
-        AI-aware `loxicmd` subcommands are planned. Use the REST/curl form today.
+    ```bash
+    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=chwbl --host=10.10.10.254
+    ```
 
 ## Frontend TLS: the `security` enum
 
