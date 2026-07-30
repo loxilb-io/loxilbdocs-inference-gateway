@@ -3150,10 +3150,8 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,31.31.31.2:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>persist<span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5557</span><span class="w"> </span>--kv-hash-algo<span class="o">=</span>sha256_cbor<span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span><span class="w"> </span>--kv-warmup<span class="o">=</span><span class="m">30</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,decode
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -3234,11 +3232,11 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 <h3 id="83-tokenizer-staging">8.3 Tokenizer staging<a class="headerlink" href="#83-tokenizer-staging" title="Permanent link">&para;</a></h3>
 <p>Stage the model's HuggingFace <code>tokenizer.json</code> at <code>/etc/loxilb/tokenizers/&lt;model-slug&gt;/tokenizer.json</code>, where the slug replaces <code>/</code> with <code>__</code> (e.g. <code>Qwen/Qwen3-0.6B</code> → <code>Qwen__Qwen3-0.6B</code>). No network fetch happens at runtime; a missing tokenizer fires Guard E for that model (fail-open to round-robin).</p>
 <h3 id="84-vllm-side-must-match-the-rule">8.4 vLLM side (must match the rule)<a class="headerlink" href="#84-vllm-side-must-match-the-rule" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nv">PYTHONHASHSEED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>vllm<span class="w"> </span>serve<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span>--block-size<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--prefix-caching-hash-algo<span class="w"> </span>sha256_cbor<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--kv-events-config<span class="w"> </span><span class="s1">&#39;{&quot;enable_kv_cache_events&quot;: true, &quot;publisher&quot;: &quot;zmq&quot;,</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s1">                       &quot;endpoint&quot;: &quot;tcp://*:5557&quot;}&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">PYTHONHASHSEED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>vllm<span class="w"> </span>serve<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span>--block-size<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--prefix-caching-hash-algo<span class="w"> </span>sha256_cbor<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>--kv-events-config<span class="w"> </span><span class="s1">&#39;{&quot;enable_kv_cache_events&quot;: true, &quot;publisher&quot;: &quot;zmq&quot;,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s1">                       &quot;endpoint&quot;: &quot;tcp://*:5557&quot;}&#39;</span>
 </code></pre></div>
 <p>Use the upstream <code>vllm/vllm-openai</code> image. On CPU builds, remember <code>--block-size 16</code> (the CPU default of 128 suppresses events for short prompts).</p>
 <h3 id="85-onboarding-a-new-model-one-model-per-rule">8.5 Onboarding a new model (one model per rule)<a class="headerlink" href="#85-onboarding-a-new-model-one-model-per-rule" title="Permanent link">&para;</a></h3>
@@ -3292,14 +3290,14 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/metrics<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;loxilb_pd_kv|kv_subscriber_connected&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/metrics<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;loxilb_pd_kv|kv_subscriber_connected&#39;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
+<p class="admonition-title">loxicmd</p>
+<p><code>loxicmd get metrics</code> reports only whether metrics are enabled; scrape the <code>/netlox/v1/metrics</code> endpoint directly for series.</p>
 </div>
 </div>
 </div>
@@ -3336,14 +3334,12 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">curl</label><label for="__tabbed_3_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=&lt;id&gt;&amp;ep_idx=0&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=&lt;id&gt;&amp;ep_idx=0&quot;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>kvinventory<span class="w"> </span>--service-id<span class="o">=</span>&lt;id&gt;<span class="w"> </span>--ep-idx<span class="o">=</span><span class="m">0</span>
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -3351,7 +3347,7 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 <h3 id="93-step-3-subscriber-count">9.3 Step 3 — subscriber count<a class="headerlink" href="#93-step-3-subscriber-count" title="Permanent link">&para;</a></h3>
 <p><code>kv_subscriber_connected</code> should climb by <strong>N</strong> after you create an N-prefill-endpoint rule. Fewer than N means a subscriber failed to dial its publisher — re-check the endpoint's <code>kvZmqPort</code> and that the engine is up.</p>
 <h3 id="94-step-4-publisher-side-sanity-on-the-engine-host">9.4 Step 4 — publisher-side sanity (on the engine host)<a class="headerlink" href="#94-step-4-publisher-side-sanity-on-the-engine-host" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ss<span class="w"> </span>-tln<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>:5557
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>ss<span class="w"> </span>-tln<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>:5557
 </code></pre></div>
 <p>This must show at least one listener. If it is empty, the engine's <code>--kv-events-config</code> never took effect and <strong>no events are being published at all</strong> — loxilb has nothing to subscribe to. (Substitute the port you set on the engine and in <code>kvZmqPort</code>.)</p>
 <hr />
@@ -3361,15 +3357,14 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">curl</label><label for="__tabbed_4_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># per-endpoint 64-bit hash inventory (raw-middleware endpoint)</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=&lt;id&gt;&amp;ep_idx=0&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># per-endpoint 64-bit hash inventory (raw-middleware endpoint)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=&lt;id&gt;&amp;ep_idx=0&quot;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># per-endpoint 64-bit hash inventory</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>kvinventory<span class="w"> </span>--service-id<span class="o">=</span>&lt;id&gt;<span class="w"> </span>--ep-idx<span class="o">=</span><span class="m">0</span>
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -3482,28 +3477,28 @@ and are prepared to operate an unproven component.</p>
 </div>
 <p><strong>What it is.</strong> <code>loxilb-ai-controller</code> is a <em>separate</em> container that consumes fleet telemetry and emits per-endpoint routing-weight advice back to loxilb — capacity- and throughput-weighted prefill selection layered on top of cache affinity. It runs as a plain container (<strong>no host networking, no XDP</strong>), binds to a private address, and exposes gRPC on <code>:18856</code> and a Prometheus <code>/metrics</code> endpoint on <code>:18857</code>.</p>
 <p><strong>Registry YAML shape.</strong> The controller is driven by a registry file that declares the service and the expected shape of each endpoint:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">service</span><span class="p">:</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10.10.10.254:8080:tcp&quot;</span><span class="w">   </span><span class="c1"># &lt;vip&gt;:&lt;port&gt;:&lt;proto&gt;</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">vip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10.10.10.254&quot;</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nt">epoch_period_sec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w">             </span><span class="c1"># staleness deadline = 3x epoch</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nt">hosts</span><span class="p">:</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="nt">ep0</span><span class="p">:</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span><span class="nt">gpu_model</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;gpu&gt;&quot;</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span><span class="nt">hbm_gb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
-<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prefill</span>
-<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
-<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="w">    </span><span class="nt">ep_idx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">    </span><span class="nt">expected_num_gpu_blocks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8192</span><span class="w">   </span><span class="c1"># calibration fingerprint</span>
-<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">    </span><span class="nt">serving_throughput_prior</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
-<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">  </span><span class="nt">ep2</span><span class="p">:</span>
-<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">    </span><span class="nt">gpu_model</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;gpu&gt;&quot;</span>
-<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">    </span><span class="nt">hbm_gb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">40</span>
-<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prefill</span>
-<a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
-<a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="w">    </span><span class="nt">ep_idx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">    </span><span class="nt">expected_num_gpu_blocks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4096</span>
-<a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="w">    </span><span class="nt">serving_throughput_prior</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">service</span><span class="p">:</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10.10.10.254:8080:tcp&quot;</span><span class="w">   </span><span class="c1"># &lt;vip&gt;:&lt;port&gt;:&lt;proto&gt;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">vip</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10.10.10.254&quot;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="nt">epoch_period_sec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w">             </span><span class="c1"># staleness deadline = 3x epoch</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="nt">hosts</span><span class="p">:</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span><span class="nt">ep0</span><span class="p">:</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="nt">gpu_model</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;gpu&gt;&quot;</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">    </span><span class="nt">hbm_gb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prefill</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">    </span><span class="nt">ep_idx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">    </span><span class="nt">expected_num_gpu_blocks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8192</span><span class="w">   </span><span class="c1"># calibration fingerprint</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="w">    </span><span class="nt">serving_throughput_prior</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="w">  </span><span class="nt">ep2</span><span class="p">:</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="w">    </span><span class="nt">gpu_model</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;gpu&gt;&quot;</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="w">    </span><span class="nt">hbm_gb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">40</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prefill</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8000</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="w">    </span><span class="nt">ep_idx</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="w">    </span><span class="nt">expected_num_gpu_blocks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4096</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="w">    </span><span class="nt">serving_throughput_prior</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.5</span>
 </code></pre></div>
 <p><strong>Calibration-fingerprint fallback.</strong> Each endpoint's <em>live</em> <code>num_gpu_blocks</code> (from <code>vllm:cache_config_info</code>) must match its declared <code>expected_num_gpu_blocks</code>. On drift, the controller treats the capacity reading as untrustworthy and <strong>falls back to the static priors</strong> rather than routing on a mis-provisioned or stale capacity number — a deliberate safety discipline, not a failure.</p>
 <p><strong>When to use it.</strong> Reach for the controller only on <strong>heterogeneous fleets</strong> — mixed GPU models or HBM sizes where you want capacity- or throughput-weighted prefill selection beyond the built-in CHWBL blend (§12). Homogeneous deployments gain nothing from it and should leave it off.</p>

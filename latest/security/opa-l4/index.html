@@ -2576,10 +2576,8 @@ starts polling and reconciling rules.</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>loxicmd<span class="w"> </span><span class="nb">set</span><span class="w"> </span>opa<span class="w"> </span>--opa-url<span class="w"> </span>http://opa.example.com:8181<span class="w"> </span>--policy-path<span class="w"> </span>loxilb/l4<span class="w"> </span>--poll-interval-sec<span class="w"> </span><span class="m">30</span>
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -2590,15 +2588,13 @@ starts polling and reconciling rules.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">curl</label><label for="__tabbed_3_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb-host&gt;:11111/netlox/v1/config/opa/watcher<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;api-token&gt;&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb-host&gt;:11111/netlox/v1/config/opa/watcher<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;api-token&gt;&#39;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>opa
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -2644,16 +2640,14 @@ starts polling and reconciling rules.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">curl</label><label for="__tabbed_4_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://&lt;loxilb-host&gt;:11111/netlox/v1/config/opa/watcher<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;api-token&gt;&#39;</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># {&quot;result&quot;:&quot;Success&quot;}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://&lt;loxilb-host&gt;:11111/netlox/v1/config/opa/watcher<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;api-token&gt;&#39;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># {&quot;result&quot;:&quot;Success&quot;}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>loxicmd<span class="w"> </span>delete<span class="w"> </span>opa
+</code></pre></div>
 </div>
 </div>
 </div>

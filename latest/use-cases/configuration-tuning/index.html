@@ -2878,10 +2878,8 @@ omitted — an omitted field falls to the runtime data-plane initialization of <
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2022</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,32.32.32.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>chwbl<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--chwbl-hash-level<span class="o">=</span><span class="m">2</span><span class="w"> </span>--chwbl-load-factor<span class="o">=</span><span class="m">125</span><span class="w"> </span>--chwbl-replication<span class="o">=</span><span class="m">100</span>
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -3099,15 +3097,15 @@ change one leg without re-checking the other two.</p>
 <h3 id="read-only-preflight-inspect-the-running-container">Read-only preflight (inspect the running container)<a class="headerlink" href="#read-only-preflight-inspect-the-running-container" title="Permanent link">&para;</a></h3>
 <p>You do not need to trust what a deploy script <em>intended</em> to launch — read what the
 container is <em>actually</em> running. These commands are read-only and safe on a live host:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># The full launch command line (untruncated) for every running container</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>docker<span class="w"> </span>ps<span class="w"> </span>--no-trunc
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># The effective environment of a specific engine container —</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># confirm PYTHONHASHSEED and any VLLM_* flags actually took</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>docker<span class="w"> </span>inspect<span class="w"> </span>--format<span class="w"> </span><span class="s1">&#39;{{range .Config.Env}}{{println .}}{{end}}&#39;</span><span class="w"> </span>&lt;engine-container&gt;
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># Same for the LoxiLB container — confirm LLB_KV_NONE_HASH_SEED and LOXILB_KV_* are set</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>docker<span class="w"> </span>inspect<span class="w"> </span>--format<span class="w"> </span><span class="s1">&#39;{{range .Config.Env}}{{println .}}{{end}}&#39;</span><span class="w"> </span>&lt;loxilb-container&gt;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># The full launch command line (untruncated) for every running container</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>ps<span class="w"> </span>--no-trunc
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># The effective environment of a specific engine container —</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># confirm PYTHONHASHSEED and any VLLM_* flags actually took</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>docker<span class="w"> </span>inspect<span class="w"> </span>--format<span class="w"> </span><span class="s1">&#39;{{range .Config.Env}}{{println .}}{{end}}&#39;</span><span class="w"> </span>&lt;engine-container&gt;
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># Same for the LoxiLB container — confirm LLB_KV_NONE_HASH_SEED and LOXILB_KV_* are set</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>docker<span class="w"> </span>inspect<span class="w"> </span>--format<span class="w"> </span><span class="s1">&#39;{{range .Config.Env}}{{println .}}{{end}}&#39;</span><span class="w"> </span>&lt;loxilb-container&gt;
 </code></pre></div>
 <p>Cross-check the three triad legs across both outputs, then confirm <code>kvBlockSize</code> /
 <code>kvHashAlgo</code> on the live rule with <code>GET /netlox/v1/config/loadbalancer/all</code>. If the
@@ -3270,8 +3268,8 @@ observable — it wastes KV capacity. Return every endpoint to its real
 <h3 id="verify-the-spread-landed">Verify the spread landed<a class="headerlink" href="#verify-the-spread-landed" title="Permanent link">&para;</a></h3>
 <p>Read the live block count each engine actually allocated — do not assume the fraction
 mapped cleanly:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Per endpoint: the number of GPU KV blocks vLLM allocated</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;endpoint-ip&gt;:8100/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;vllm:cache_config_info&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Per endpoint: the number of GPU KV blocks vLLM allocated</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;endpoint-ip&gt;:8100/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;vllm:cache_config_info&#39;</span>
 </code></pre></div>
 <p><code>vllm:cache_config_info</code> carries <code>num_gpu_blocks</code> as a label. Confirm
 <code>max(num_gpu_blocks) ≥ 4 × min(num_gpu_blocks)</code> across the fleet before concluding that

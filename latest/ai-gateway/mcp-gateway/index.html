@@ -2271,10 +2271,8 @@ certificate directory (<code>/opt/loxilb/cert/</code>: <code>server.crt</code>, 
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,32.32.32.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>rr<span class="w"> </span>--security<span class="o">=</span>https<span class="w"> </span>--session-header-name<span class="o">=</span>mcp-session-id<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--trace-type<span class="o">=</span>mcp
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -2285,33 +2283,31 @@ session.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">      &quot;externalIP&quot;:          &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">      &quot;port&quot;:                 2021,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">      &quot;protocol&quot;:            &quot;tcp&quot;,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">      &quot;sel&quot;:                  3,</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s1">      &quot;mode&quot;:                 4,</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s1">      &quot;security&quot;:             1,</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="s1">      &quot;session_header_name&quot;: &quot;mcp-session-id&quot;,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="s1">      &quot;host&quot;:                &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="s1">      &quot;trace_type&quot;:          &quot;mcp&quot;</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="s1">    },</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="s1">    &quot;endpoints&quot;: [</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1},</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1}</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="s1">    ]</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="s1">  }&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">      &quot;externalIP&quot;:          &quot;10.10.10.254&quot;,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">      &quot;port&quot;:                 2021,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">      &quot;protocol&quot;:            &quot;tcp&quot;,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">      &quot;sel&quot;:                  3,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">      &quot;mode&quot;:                 4,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">      &quot;security&quot;:             1,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">      &quot;session_header_name&quot;: &quot;mcp-session-id&quot;,</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s1">      &quot;host&quot;:                &quot;10.10.10.254&quot;,</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s1">      &quot;trace_type&quot;:          &quot;mcp&quot;</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s1">    },</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s1">    &quot;endpoints&quot;: [</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1},</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1}</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s1">    ]</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="s1">  }&#39;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2021</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,32.32.32.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>persist<span class="w"> </span>--security<span class="o">=</span>https<span class="w"> </span>--session-header-name<span class="o">=</span>mcp-session-id<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--trace-type<span class="o">=</span>mcp
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -2328,20 +2324,18 @@ session.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">curl</label><label for="__tabbed_3_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>lb
+</code></pre></div>
 </div>
 </div>
 </div>
 <p><strong>2. Probe MCP over the VIP.</strong> Point an MCP client (or plain <code>curl</code>) at the
 HTTPS VIP endpoint, trusting the CA you staged:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://10.10.10.254:2020/mcp
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://10.10.10.254:2020/mcp
 </code></pre></div>
 <p>Repeat the round-robin probe several times and confirm responses come from
 different backend servers (server1 / server2 / server3).</p>

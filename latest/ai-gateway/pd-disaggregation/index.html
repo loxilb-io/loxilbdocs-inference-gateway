@@ -2478,10 +2478,8 @@ endpoint.</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,32.32.32.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--security<span class="o">=</span>https<span class="w"> </span>--pd-disagg<span class="w"> </span>--sse-mode<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--monitor<span class="w"> </span>--probetype<span class="o">=</span>http<span class="w"> </span>--probeport<span class="o">=</span><span class="m">8000</span><span class="w"> </span>--probereq<span class="o">=</span>/health<span class="w"> </span>--probetimeout<span class="o">=</span><span class="m">5</span><span class="w"> </span>--proberetries<span class="o">=</span><span class="m">2</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,decode<span class="w"> </span>--nixl-port<span class="o">=</span><span class="m">9001</span>,9002
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -2490,44 +2488,42 @@ endpoint.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s1">      &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s1">      &quot;port&quot;: 2023,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s1">      &quot;protocol&quot;: &quot;tcp&quot;,</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s1">      &quot;sel&quot;: 0,</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s1">      &quot;mode&quot;: 4,</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">      &quot;security&quot;: 1,</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s1">      &quot;pd_disagg_mode&quot;: true,</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s1">      &quot;pd_cache_aware_mode&quot;: true,</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s1">      &quot;pd_session_ttl_sec&quot;: 600,</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s1">      &quot;pd_cache_threshold&quot;: 20,</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s1">      &quot;pd_balance_abs_threshold&quot;: 3,</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s1">      &quot;sse_mode&quot;: true,</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="s1">      &quot;host&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="s1">      &quot;monitor&quot;: true,</span>
-<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="s1">      &quot;probetype&quot;: &quot;http&quot;,</span>
-<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="s1">      &quot;probeport&quot;: 8000,</span>
-<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="s1">      &quot;probereq&quot;: &quot;/health&quot;,</span>
-<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="s1">      &quot;probeTimeout&quot;: 5,</span>
-<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="s1">      &quot;probeRetries&quot;: 2</span>
-<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="s1">    },</span>
-<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="s1">    &quot;endpoints&quot;: [</span>
-<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1, &quot;nixl_port&quot;: 9001},</span>
-<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;33.33.33.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1, &quot;nixl_port&quot;: 9003},</span>
-<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2, &quot;nixl_port&quot;: 9002},</span>
-<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;34.34.34.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2, &quot;nixl_port&quot;: 9004}</span>
-<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="s1">    ]</span>
-<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="s1">  }&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s1">      &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s1">      &quot;port&quot;: 2023,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s1">      &quot;protocol&quot;: &quot;tcp&quot;,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s1">      &quot;sel&quot;: 0,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s1">      &quot;mode&quot;: 4,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s1">      &quot;security&quot;: 1,</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="s1">      &quot;pd_disagg_mode&quot;: true,</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="s1">      &quot;pd_cache_aware_mode&quot;: true,</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="s1">      &quot;pd_session_ttl_sec&quot;: 600,</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="s1">      &quot;pd_cache_threshold&quot;: 20,</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="s1">      &quot;pd_balance_abs_threshold&quot;: 3,</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="s1">      &quot;sse_mode&quot;: true,</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="s1">      &quot;host&quot;: &quot;10.10.10.254&quot;,</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="s1">      &quot;monitor&quot;: true,</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="s1">      &quot;probetype&quot;: &quot;http&quot;,</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="s1">      &quot;probeport&quot;: 8000,</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="s1">      &quot;probereq&quot;: &quot;/health&quot;,</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="s1">      &quot;probeTimeout&quot;: 5,</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="s1">      &quot;probeRetries&quot;: 2</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="s1">    },</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="s1">    &quot;endpoints&quot;: [</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1, &quot;nixl_port&quot;: 9001},</span>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;33.33.33.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1, &quot;nixl_port&quot;: 9003},</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2, &quot;nixl_port&quot;: 9002},</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;34.34.34.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2, &quot;nixl_port&quot;: 9004}</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="s1">    ]</span>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="s1">  }&#39;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2023</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,33.33.33.1:1,32.32.32.1:1,34.34.34.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--security<span class="o">=</span>https<span class="w"> </span>--pd-disagg<span class="w"> </span>--pd-cache-aware<span class="w"> </span>--pd-session-ttl<span class="o">=</span><span class="m">600</span><span class="w"> </span>--pd-cache-threshold<span class="o">=</span><span class="m">20</span><span class="w"> </span>--pd-balance-abs-threshold<span class="o">=</span><span class="m">3</span><span class="w"> </span>--sse-mode<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--monitor<span class="w"> </span>--probetype<span class="o">=</span>http<span class="w"> </span>--probeport<span class="o">=</span><span class="m">8000</span><span class="w"> </span>--probereq<span class="o">=</span>/health<span class="w"> </span>--probetimeout<span class="o">=</span><span class="m">5</span><span class="w"> </span>--proberetries<span class="o">=</span><span class="m">2</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,prefill,decode,decode<span class="w"> </span>--nixl-port<span class="o">=</span><span class="m">9001</span>,9003,9002,9004
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -2542,27 +2538,27 @@ endpoint.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Prefill node</label><label for="__tabbed_3_2">Decode node</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_HOST</span><span class="o">=</span><span class="m">31</span>.31.31.1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_PORT</span><span class="o">=</span><span class="m">9001</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">UCX_TLS</span><span class="o">=</span>tcp<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span>vllm/vllm-openai:v0.17.0<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span>--model<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span>--enable-request-id-headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span>--kv-transfer-config<span class="w"> </span><span class="s1">&#39;{&quot;kv_connector&quot;:&quot;NixlConnector&quot;,&quot;kv_role&quot;:&quot;kv_producer&quot;,&quot;kv_buffer_device&quot;:&quot;cpu&quot;}&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_HOST</span><span class="o">=</span><span class="m">31</span>.31.31.1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_PORT</span><span class="o">=</span><span class="m">9001</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">UCX_TLS</span><span class="o">=</span>tcp<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span>vllm/vllm-openai:v0.17.0<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span>--model<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span>--enable-request-id-headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span>--kv-transfer-config<span class="w"> </span><span class="s1">&#39;{&quot;kv_connector&quot;:&quot;NixlConnector&quot;,&quot;kv_role&quot;:&quot;kv_producer&quot;,&quot;kv_buffer_device&quot;:&quot;cpu&quot;}&#39;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_HOST</span><span class="o">=</span><span class="m">32</span>.32.32.1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_PORT</span><span class="o">=</span><span class="m">9002</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">UCX_TLS</span><span class="o">=</span>tcp<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span>vllm/vllm-openai:v0.17.0<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span>--model<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span>--enable-request-id-headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span>--kv-transfer-config<span class="w"> </span><span class="s1">&#39;{&quot;kv_connector&quot;:&quot;NixlConnector&quot;,&quot;kv_role&quot;:&quot;kv_consumer&quot;,&quot;kv_buffer_device&quot;:&quot;cpu&quot;}&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_HOST</span><span class="o">=</span><span class="m">32</span>.32.32.1<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_PORT</span><span class="o">=</span><span class="m">9002</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">UCX_TLS</span><span class="o">=</span>tcp<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span>vllm/vllm-openai:v0.17.0<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span>--model<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">    </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">    </span>--enable-request-id-headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">    </span>--kv-transfer-config<span class="w"> </span><span class="s1">&#39;{&quot;kv_connector&quot;:&quot;NixlConnector&quot;,&quot;kv_role&quot;:&quot;kv_consumer&quot;,&quot;kv_buffer_device&quot;:&quot;cpu&quot;}&#39;</span>
 </code></pre></div>
 </div>
 </div>
@@ -2594,17 +2590,17 @@ decode launch commands, the decode NIXL block-count contract, and the full-mesh 
 <hr />
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
 <p><strong>1. Confirm the service carries P/D config:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.lbAttr[] | select(.serviceArguments.pd_disagg_mode==true)&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.lbAttr[] | select(.serviceArguments.pd_disagg_mode==true)&#39;</span>
 </code></pre></div>
 <p><strong>2. Confirm endpoints are healthy</strong> — the health probe marks each endpoint active once <code>/health</code> responds. An endpoint that fails the probe reports <code>"inActiveEP": true</code> in the same listing.</p>
 <p><strong>3. Send a request and confirm two-phase routing</strong> — with a real vLLM backend, the response <code>id</code> embeds both worker addresses when P/D is active:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:2020/v1/completions<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;model&quot;:&quot;Qwen/Qwen3-0.6B&quot;,&quot;prompt&quot;:&quot;hello&quot;,&quot;max_tokens&quot;:8}&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.id&#39;</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1"># P/D active   -&gt; id embeds prefill and decode addresses</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1"># P/D inactive -&gt; plain completion id</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:2020/v1/completions<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;model&quot;:&quot;Qwen/Qwen3-0.6B&quot;,&quot;prompt&quot;:&quot;hello&quot;,&quot;max_tokens&quot;:8}&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.id&#39;</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># P/D active   -&gt; id embeds prefill and decode addresses</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># P/D inactive -&gt; plain completion id</span>
 </code></pre></div>
 <hr />
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>

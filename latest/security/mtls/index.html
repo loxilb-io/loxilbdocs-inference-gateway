@@ -2237,10 +2237,8 @@ own certificate to a TLS backend. This uses <code>mode=4</code> (FullProxy) and 
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">443</span>:8443<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--security<span class="o">=</span>e2ehttps<span class="w"> </span>--mtls-client-cert-mode<span class="o">=</span>required<span class="w"> </span>--mtls-client-ca-path<span class="o">=</span>/opt/loxilb/cert/client_ca_bundle.crt<span class="w"> </span>--mtls-require-client-cn<span class="w"> </span>--mtls-client-cn-pattern<span class="o">=</span><span class="s1">&#39;*.corp.example.com&#39;</span><span class="w"> </span>--mtls-client-crl-path<span class="o">=</span>/opt/loxilb/cert/client_crl.pem<span class="w"> </span>--mtls-backend-verify-server<span class="w"> </span>--mtls-backend-ca-path<span class="o">=</span>/opt/loxilb/cert/backend_ca.crt<span class="w"> </span>--mtls-backend-cert-path<span class="o">=</span>/opt/loxilb/cert/loxilb_client.crt<span class="w"> </span>--mtls-backend-key-path<span class="o">=</span>/opt/loxilb/cert/loxilb_client.key
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -2249,27 +2247,25 @@ own certificate to a TLS backend. This uses <code>mode=4</code> (FullProxy) and 
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb-host&gt;:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;api-token&gt;&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb-host&gt;:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;api-token&gt;&#39;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>lb
+</code></pre></div>
 </div>
 </div>
 </div>
 <p>Then exercise the front side. A client presenting a valid, non-revoked certificate whose CN
 matches the pattern should connect; one without a cert (under <code>client_cert_mode: required</code>) should
 be rejected at the TLS handshake:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Should succeed (valid client cert + matching CN):</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>-v<span class="w"> </span>https://10.10.10.254/v1/models<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--cert<span class="w"> </span>client.crt<span class="w"> </span>--key<span class="w"> </span>client.key<span class="w"> </span>--cacert<span class="w"> </span>vip_ca.crt
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Should be rejected at handshake (no client cert, mode=required):</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>curl<span class="w"> </span>-v<span class="w"> </span>https://10.10.10.254/v1/models<span class="w"> </span>--cacert<span class="w"> </span>vip_ca.crt
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Should succeed (valid client cert + matching CN):</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>curl<span class="w"> </span>-v<span class="w"> </span>https://10.10.10.254/v1/models<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--cert<span class="w"> </span>client.crt<span class="w"> </span>--key<span class="w"> </span>client.key<span class="w"> </span>--cacert<span class="w"> </span>vip_ca.crt
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1"># Should be rejected at handshake (no client cert, mode=required):</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>curl<span class="w"> </span>-v<span class="w"> </span>https://10.10.10.254/v1/models<span class="w"> </span>--cacert<span class="w"> </span>vip_ca.crt
 </code></pre></div>
 <h2 id="troubleshoot">Troubleshoot<a class="headerlink" href="#troubleshoot" title="Permanent link">&para;</a></h2>
 <ul>

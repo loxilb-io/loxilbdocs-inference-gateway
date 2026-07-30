@@ -2309,11 +2309,15 @@ empty <code>model_name</code> (<code>""</code>) makes the rule a <strong>wildcar
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form
-today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Rule 1 — port 2020 → llama-70b pool</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--path-prefix<span class="o">=</span>/<span class="w"> </span>--path-match-mode<span class="o">=</span>prefix<span class="w"> </span>--model-name<span class="o">=</span>llama-70b<span class="w"> </span>--inatimeout<span class="o">=</span><span class="m">30</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Rule 2 — port 2021 → mistral-7b pool</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2021</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">32</span>.32.32.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--path-prefix<span class="o">=</span>/<span class="w"> </span>--path-match-mode<span class="o">=</span>prefix<span class="w"> </span>--model-name<span class="o">=</span>mistral-7b<span class="w"> </span>--inatimeout<span class="o">=</span><span class="m">30</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Rule 3 — port 2022 → wildcard pool (model_name &quot;&quot;)</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2022</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">33</span>.33.33.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--path-prefix<span class="o">=</span>/<span class="w"> </span>--path-match-mode<span class="o">=</span>prefix<span class="w"> </span>--inatimeout<span class="o">=</span><span class="m">30</span>
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -2326,16 +2330,16 @@ looks like a routing miss rather than an error.</p>
 <h2 id="step-3-test-model-name-routing">Step 3 — Test model-name routing<a class="headerlink" href="#step-3-test-model-name-routing" title="Permanent link">&para;</a></h2>
 <h3 id="route-by-x-model-header">Route by <code>X-Model</code> header<a class="headerlink" href="#route-by-x-model-header" title="Permanent link">&para;</a></h3>
 <p>Send the model in the <code>X-Model</code> header to the <code>llama-70b</code> rule on port 2020:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;X-Model: llama-70b&quot;</span><span class="w"> </span>http://10.10.10.254:2020/
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># → server-llama</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;X-Model: llama-70b&quot;</span><span class="w"> </span>http://10.10.10.254:2020/
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># → server-llama</span>
 </code></pre></div>
 <h3 id="route-by-json-body-model-field">Route by JSON body <code>model</code> field<a class="headerlink" href="#route-by-json-body-model-field" title="Permanent link">&para;</a></h3>
 <p>Omit the header and let the gateway read the model from an OpenAI-compatible
 body. This request hits the <code>mistral-7b</code> rule on port 2021:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:2021/<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;model&quot;:&quot;mistral-7b&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;hi&quot;}]}&#39;</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># → server-mistral</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:2021/<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;model&quot;:&quot;mistral-7b&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;hi&quot;}]}&#39;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># → server-mistral</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Header overrides body</p>
@@ -2346,19 +2350,19 @@ routes to the <strong>llama</strong> pool.</p>
 <h3 id="wildcard-fallback">Wildcard fallback<a class="headerlink" href="#wildcard-fallback" title="Permanent link">&para;</a></h3>
 <p>The port 2022 rule has <code>model_name: ""</code>, so it serves any request — including
 one with no model at all:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:2022/
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># → server-wild</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:2022/
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># → server-wild</span>
 </code></pre></div>
 <p>An empty <code>X-Model</code> header falls through to the wildcard the same way:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;X-Model: &quot;</span><span class="w"> </span>http://10.10.10.254:2022/
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># → server-wild</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;X-Model: &quot;</span><span class="w"> </span>http://10.10.10.254:2022/
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># → server-wild</span>
 </code></pre></div>
 <h3 id="no-match-returns-503">No-match returns 503<a class="headerlink" href="#no-match-returns-503" title="Permanent link">&para;</a></h3>
 <p>Port 2020 serves only <code>llama-70b</code> and has no wildcard behind it. A request for a
 model it does not serve gets an HTTP <strong>503</strong> with a <code>model_unavailable</code> body:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-w<span class="w"> </span><span class="s2">&quot;\n%{http_code}\n&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;X-Model: unknown-xyz&quot;</span><span class="w"> </span>http://10.10.10.254:2020/
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># → ...model_unavailable...</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># → 503</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-w<span class="w"> </span><span class="s2">&quot;\n%{http_code}\n&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;X-Model: unknown-xyz&quot;</span><span class="w"> </span>http://10.10.10.254:2020/
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># → ...model_unavailable...</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># → 503</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Model matching is case-sensitive</p>
@@ -2372,21 +2376,18 @@ should see all three services, each with its <code>model_name</code> and single 
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form
-today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>lb
+</code></pre></div>
 </div>
 </div>
 </div>
 <p>Pipe it through <code>jq</code> to confirm the model-to-port mapping at a glance:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.lbAttr[].serviceArguments | {port, model_name, mode}&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.lbAttr[].serviceArguments | {port, model_name, mode}&#39;</span>
 </code></pre></div>
 <h2 id="troubleshoot">Troubleshoot<a class="headerlink" href="#troubleshoot" title="Permanent link">&para;</a></h2>
 <table>

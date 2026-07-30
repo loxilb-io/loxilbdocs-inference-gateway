@@ -2259,18 +2259,17 @@
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Enable Prometheus metrics collection</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>loxicmd<span class="w"> </span><span class="nb">set</span><span class="w"> </span>metrics<span class="w"> </span>--enable
+</code></pre></div>
 </div>
 </div>
 </div>
 <p>Once enabled, LoxiLB serves metrics in Prometheus text format from a control-plane REST route on port <strong>11111</strong>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>GET http://127.0.0.1:11111/netlox/v1/metrics
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>GET http://127.0.0.1:11111/netlox/v1/metrics
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Confirm the endpoint is live and returning Prometheus text</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:11111/netlox/v1/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Confirm the endpoint is live and returning Prometheus text</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:11111/netlox/v1/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">The endpoint is a control-plane route</p>
@@ -2281,16 +2280,16 @@
 <p>A complete, deploy-as-code monitoring stack ships publicly in the code repository at <a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/main/deploy/monitoring"><code>deploy/monitoring/</code></a> in <code>loxilb-io/loxilb-inference-gateway</code>. It brings up two pinned containers — Prometheus and Grafana — on the host network, with the Grafana data source and all dashboards provisioned automatically.</p>
 <h3 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h3>
 <p>Run the stack <strong>on the LoxiLB host</strong> so scraping never depends on external routing:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>deploy/monitoring
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># 1. Set Grafana admin credentials</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env<span class="w">            </span><span class="c1"># then edit the password</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1"># 2. Bring up Prometheus + Grafana (host network)</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1"># 3. Enable metrics collection (endpoint answers 503 until enabled)</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:11111/netlox/v1/config/metrics
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">cd</span><span class="w"> </span>deploy/monitoring
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># 1. Set Grafana admin credentials</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env<span class="w">            </span><span class="c1"># then edit the password</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># 2. Bring up Prometheus + Grafana (host network)</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1"># 3. Enable metrics collection (endpoint answers 503 until enabled)</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:11111/netlox/v1/config/metrics
 </code></pre></div>
 <ul>
 <li><strong>Prometheus:</strong> <code>http://&lt;host&gt;:9090</code></li>
@@ -2307,8 +2306,8 @@
 <ul>
 <li><strong>Default — same-host, network-isolated plaintext scrape.</strong> Run Prometheus on the LoxiLB host and scrape <code>http://127.0.0.1:11111</code>. Bind the plain listener to localhost (<code>--host 127.0.0.1</code>) or firewall <code>:11111</code>. No certificates, no tokens.</li>
 <li><strong>If an API auth mode is enabled</strong> (<code>--userservice</code> / <code>--oauth2</code> / manual token), the <code>Bearer</code> security check runs in the handler on <strong>every</strong> listener. <code>/metrics</code> then returns <strong><code>401 Unauthorized</code> without a token</strong> on both <code>:11111</code> and <code>:8091</code>, so the scraper must send <code>Authorization: Bearer &lt;token&gt;</code>:
-  <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># prometheus.yml scrape_config</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">authorization</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">Bearer</span><span class="p p-Indicator">,</span><span class="nt"> credentials</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;token&gt;&quot;</span><span class="w"> </span><span class="p p-Indicator">}</span>
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># prometheus.yml scrape_config</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">authorization</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">Bearer</span><span class="p p-Indicator">,</span><span class="nt"> credentials</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&lt;token&gt;&quot;</span><span class="w"> </span><span class="p p-Indicator">}</span>
 </code></pre></div>
   LoxiLB user JWTs are short-lived (~24 h) and there is no long-lived service token today — rely on network isolation, or accept token rotation. Do not enable API auth and expect an unattended scrape to keep working indefinitely.</li>
 <li><strong>Optional — transport encryption across an untrusted network.</strong> If you must scrape across a network, start LoxiLB with <code>--tls</code> and scrape <code>https://&lt;host&gt;:8091</code>, adding a <code>tls_config</code> in <code>prometheus.yml</code>. This <strong>encrypts the channel but does not authenticate the scraper</strong> — the client-cert path is stock transport hardening, not a product auth boundary, and the <code>Bearer</code> rule above still applies if API auth is on.</li>
@@ -2619,11 +2618,11 @@
 <hr />
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
 <p>After enabling metrics and starting the stack, confirm the pipeline end to end:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Target is up (1 = healthy scrape)</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;http://&lt;host&gt;:9090/api/v1/query?query=up{job=&quot;loxilb&quot;}&#39;</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Core health gauges are present</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:11111/netlox/v1/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;loxilb_(healthy|lb_rules)&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Target is up (1 = healthy scrape)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;http://&lt;host&gt;:9090/api/v1/query?query=up{job=&quot;loxilb&quot;}&#39;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Core health gauges are present</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://127.0.0.1:11111/netlox/v1/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;loxilb_(healthy|lb_rules)&#39;</span>
 </code></pre></div>
 <p>In Grafana, open <strong>LoxiLB / Overview</strong>: the <em>Gateway up</em> tile should be green, <em>LB rules</em> should reflect your configuration, and CPU/memory/disk gauges should read live values.</p>
 <hr />

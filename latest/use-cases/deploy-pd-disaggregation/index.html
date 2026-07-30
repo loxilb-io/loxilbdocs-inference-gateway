@@ -2861,10 +2861,10 @@ its own baselines:</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># NOTE: loxicmd applies one --tcp target port to every endpoint; the decode EP&#39;s</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># targetPort 8200 (curl) cannot be set per-endpoint — post it via REST if it differs.</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span>&lt;VIP&gt;<span class="w"> </span>--tcp<span class="o">=</span><span class="m">9003</span>:8100<span class="w"> </span>--endpoints<span class="o">=</span>&lt;prefill-1-ip&gt;:1,&lt;prefill-2-ip&gt;:1,&lt;decode-1-ip&gt;:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>rr<span class="w"> </span>--host<span class="o">=</span>&lt;VIP&gt;<span class="w"> </span>--pd-disagg<span class="w"> </span>--proberetries<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5557</span><span class="w"> </span>--kv-hash-algo<span class="o">=</span>sha256_cbor<span class="w"> </span>--kv-warmup<span class="o">=</span><span class="m">60</span><span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,prefill,decode<span class="w"> </span>--nixl-port<span class="o">=</span><span class="m">5600</span>,5600,5600
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -2963,18 +2963,18 @@ attach to the real NIC. Mount the tokenizer tree (§5.5) and set the parity env:
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">curl</label><label for="__tabbed_3_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>--cap-add<span class="w"> </span>SYS_ADMIN<span class="w"> </span>--privileged<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span>-dit<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>--restart<span class="w"> </span>unless-stopped<span class="w"> </span>--name<span class="w"> </span>loxilb<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span>-v<span class="w"> </span>/etc/loxilb/tokenizers:/etc/loxilb/tokenizers<span class="w"> </span><span class="se">\ </span><span class="w">  </span><span class="c1"># per-model tokenizers, loaded at startup</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span>-v<span class="w"> </span>/etc/loxilb/certs:/etc/loxilb/certs<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">LLB_KV_NONE_HASH_SEED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="se">\ </span><span class="w">                         </span><span class="c1"># parity: matches vLLM PYTHONHASHSEED=0</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">  </span>ghcr.io/loxilb-io/loxilb-inference-gateway:latest-u24<span class="w"> </span>-p
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>--cap-add<span class="w"> </span>SYS_ADMIN<span class="w"> </span>--privileged<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span>-dit<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>--restart<span class="w"> </span>unless-stopped<span class="w"> </span>--name<span class="w"> </span>loxilb<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>-v<span class="w"> </span>/etc/loxilb/tokenizers:/etc/loxilb/tokenizers<span class="w"> </span><span class="se">\ </span><span class="w">  </span><span class="c1"># per-model tokenizers, loaded at startup</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span>-v<span class="w"> </span>/etc/loxilb/certs:/etc/loxilb/certs<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">LLB_KV_NONE_HASH_SEED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="se">\ </span><span class="w">                         </span><span class="c1"># parity: matches vLLM PYTHONHASHSEED=0</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">  </span>ghcr.io/loxilb-io/loxilb-inference-gateway:latest-u24<span class="w"> </span>-p
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
+<p class="admonition-title">loxicmd</p>
+<p>Deployment step — not a loxicmd operation.</p>
 </div>
 </div>
 </div>
@@ -2989,8 +2989,8 @@ gracefully with <code>docker stop -t 30 loxilb</code> so it detaches the data-pl
 <p>loxilb tokenizes prompts itself to compute block hashes, so each served model's tokenizer must be
 staged on the loxilb host <strong>before</strong> the rule goes live. The directory name is the model id with
 every <code>/</code> rewritten to <code>__</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>/etc/loxilb/tokenizers/&lt;model-id with &#39;/&#39; → &#39;__&#39;&gt;/tokenizer.json
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a># e.g.  Qwen/Qwen2.5-7B-Instruct  →  /etc/loxilb/tokenizers/Qwen__Qwen2.5-7B-Instruct/tokenizer.json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>/etc/loxilb/tokenizers/&lt;model-id with &#39;/&#39; → &#39;__&#39;&gt;/tokenizer.json
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a># e.g.  Qwen/Qwen2.5-7B-Instruct  →  /etc/loxilb/tokenizers/Qwen__Qwen2.5-7B-Instruct/tokenizer.json
 </code></pre></div>
 <p>The tree is read at container startup. A missing or wrong tokenizer dir does <strong>not</strong> error — it
 produces a KV-exact MISS on the tokenize step (visible as
@@ -3015,10 +3015,10 @@ capacity. On identical GPUs you can synthesize the spread through each host's <c
 </table>
 <p>You need at least a <strong>≥ 4× spread</strong> for capacity-aware behavior to be measurable. Verify the spread
 you actually got before drawing conclusions:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">for</span><span class="w"> </span>ip<span class="w"> </span><span class="k">in</span><span class="w"> </span>&lt;prefill-1-ip&gt;<span class="w"> </span>&lt;prefill-2-ip&gt;<span class="w"> </span>&lt;prefill-3-ip&gt;<span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ip</span><span class="s2"> &quot;</span><span class="p">;</span><span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>http://<span class="nv">$ip</span>:8100/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;vllm:cache_config_info&#39;</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="k">done</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># compare the num_gpu_blocks labels — max should be &gt;= 4x min</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">for</span><span class="w"> </span>ip<span class="w"> </span><span class="k">in</span><span class="w"> </span>&lt;prefill-1-ip&gt;<span class="w"> </span>&lt;prefill-2-ip&gt;<span class="w"> </span>&lt;prefill-3-ip&gt;<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ip</span><span class="s2"> &quot;</span><span class="p">;</span><span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>http://<span class="nv">$ip</span>:8100/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;vllm:cache_config_info&#39;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">done</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># compare the num_gpu_blocks labels — max should be &gt;= 4x min</span>
 </code></pre></div>
 <h3 id="57-the-two-rule-ab-pattern">5.7 The two-rule A/B pattern<a class="headerlink" href="#57-the-two-rule-ab-pattern" title="Permanent link">&para;</a></h3>
 <p>To prove KV-exact routing is doing something, run it side by side against a round-robin baseline over
@@ -3089,22 +3089,22 @@ missing/mismatched tokenizer produces different token ids → different hashes �
 <hr />
 <h2 id="7-end-to-end-request-sequence-client-response">7. End-to-end request sequence (client → response)<a class="headerlink" href="#7-end-to-end-request-sequence-client-response" title="Permanent link">&para;</a></h2>
 <p>Observed flow for a request whose prefix is already cached on Prefill-2 (2 prefill, 1 decode):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>CLIENT            loxilb VIP :9003 (eBPF fullproxy, mode 4)      PREFILL-2:8100      DECODE-1:8200
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>  │  TCP SYN ───────────►│ (eBPF intercept; L7 proxy terminates)      │                   │
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>  │  POST /v1/completions│                                            │                   │
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>  │  {model,prompt} ────►│ KV-EXACT SELECT:                           │                   │
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>  │                      │  1. tokenize(prompt) via staged tokenizer  │                   │
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>  │                      │  2. block-hash (cbor+sha256, blk16, seed0) │                   │
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>  │                      │  3. overlap vs inventory → argmax prefill  │                   │
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>  │                      │     (or MISS → round-robin if 0 overlap)   │                   │
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>  │                      │  4. exclusion mask (down / CB-open EPs)     │                   │
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>  │                      │  5. select decode endpoint                 │                   │
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>  │                      │── prefill compute (cache HIT, skip recompute)►│                 │
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>  │                      │                                            │── KV via NIXL ───►│
-<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>  │                      │── decode (kv_transfer_params) ─────────────────────────────────►│
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>  │  200 OK {id=...      │◄─────────────────── response ──────────────────────────────────│
-<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>  │  prefill_addr_...    │                                            │                   │
-<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>  │  decode_addr_...} ◄──│                                            │                   │
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>CLIENT            loxilb VIP :9003 (eBPF fullproxy, mode 4)      PREFILL-2:8100      DECODE-1:8200
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>  │  TCP SYN ───────────►│ (eBPF intercept; L7 proxy terminates)      │                   │
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>  │  POST /v1/completions│                                            │                   │
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>  │  {model,prompt} ────►│ KV-EXACT SELECT:                           │                   │
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>  │                      │  1. tokenize(prompt) via staged tokenizer  │                   │
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>  │                      │  2. block-hash (cbor+sha256, blk16, seed0) │                   │
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>  │                      │  3. overlap vs inventory → argmax prefill  │                   │
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>  │                      │     (or MISS → round-robin if 0 overlap)   │                   │
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>  │                      │  4. exclusion mask (down / CB-open EPs)     │                   │
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>  │                      │  5. select decode endpoint                 │                   │
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>  │                      │── prefill compute (cache HIT, skip recompute)►│                 │
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>  │                      │                                            │── KV via NIXL ───►│
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>  │                      │── decode (kv_transfer_params) ─────────────────────────────────►│
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>  │  200 OK {id=...      │◄─────────────────── response ──────────────────────────────────│
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>  │  prefill_addr_...    │                                            │                   │
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>  │  decode_addr_...} ◄──│                                            │                   │
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Operator gold: the routing decision is in the response id</p>
@@ -3115,7 +3115,7 @@ routing decision per request straight off the response — no instrumentation ne
 <hr />
 <h2 id="8-observability-the-metrics-that-exist-and-a-prometheus-gotcha">8. Observability — the metrics that exist (and a Prometheus gotcha)<a class="headerlink" href="#8-observability-the-metrics-that-exist-and-a-prometheus-gotcha" title="Permanent link">&para;</a></h2>
 <p>Scrape on the loxilb host (the metrics port need not be exposed off-box):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:11111/netlox/v1/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;loxilb_(pd_kv|kv_|pd_)&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:11111/netlox/v1/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;loxilb_(pd_kv|kv_|pd_)&#39;</span>
 </code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Prometheus lazy-emission gotcha</p>
@@ -3126,25 +3126,25 @@ then scrape. Also note the <strong><code>loxilb_</code> prefix</strong>: a scrap
 <code>pd_kv_tier15_hits_total</code> will never match; the real name is <code>loxilb_pd_kv_tier15_hits_total</code>.</p>
 </div>
 <h3 id="81-the-kv-pd-metric-set">8.1 The KV / P/D metric set<a class="headerlink" href="#81-the-kv-pd-metric-set" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a># --- routing decisions ---
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>loxilb_pd_kv_tier15_hits_total{ep_idx=&quot;N&quot;}        COUNTER  KV-exact HITS, per prefill EP index (1-based)
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>loxilb_pd_kv_t15_fallthrough_total                COUNTER  requests that skipped KV-exact → round-robin
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>loxilb_pd_kv_t15_miss_reason_total{reason=&quot;...&quot;}  COUNTER  misses by guard reason:
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>                                                           mode_off, warmup, text_empty, model_empty,
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>                                                           tokenize, hashes, no_worker, excluded
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>loxilb_pd_fallback_to_normal_total                COUNTER  P/D selection failed → fell back to normal LB
-<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>loxilb_pd_cb_flips_total                          COUNTER  per-EP circuit-breaker state flips
-<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a># --- inventory / subscriber health ---
-<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>loxilb_pd_kv_blocks_total{endpoint=&quot;&lt;svc&gt;:&lt;ep_idx&gt;&quot;}   GAUGE  blocks held per prefill EP (the inventory)
-<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>loxilb_kv_subscriber_connected{service,ep}             GAUGE  1 = loxilb&#39;s ZMQ SUB is connected to that prefill EP
-<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>loxilb_kv_agent_up                                     GAUGE  KV agent liveness
-<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a># --- P/D serving + capacity ---
-<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>loxilb_ai_pd_requests_total                       COUNTER  total P/D requests
-<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>loxilb_ai_pd_kv_params_found_total                COUNTER  requests carrying kv_transfer_params
-<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>loxilb_ai_pd_prefill_duration_seconds             HISTO    prefill-leg latency
-<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>loxilb_ai_pd_decode_ttft_seconds                  HISTO    decode TTFT
-<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>loxilb_pd_sessions_active / loxilb_pd_trie_nodes  GAUGE    session-affinity + prefix-trie size
-<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>proxy_pd_kv_params_overflow_total                 COUNTER  kv_params buffer overflow (should stay 0)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a># --- routing decisions ---
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>loxilb_pd_kv_tier15_hits_total{ep_idx=&quot;N&quot;}        COUNTER  KV-exact HITS, per prefill EP index (1-based)
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>loxilb_pd_kv_t15_fallthrough_total                COUNTER  requests that skipped KV-exact → round-robin
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>loxilb_pd_kv_t15_miss_reason_total{reason=&quot;...&quot;}  COUNTER  misses by guard reason:
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>                                                           mode_off, warmup, text_empty, model_empty,
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>                                                           tokenize, hashes, no_worker, excluded
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>loxilb_pd_fallback_to_normal_total                COUNTER  P/D selection failed → fell back to normal LB
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>loxilb_pd_cb_flips_total                          COUNTER  per-EP circuit-breaker state flips
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a># --- inventory / subscriber health ---
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>loxilb_pd_kv_blocks_total{endpoint=&quot;&lt;svc&gt;:&lt;ep_idx&gt;&quot;}   GAUGE  blocks held per prefill EP (the inventory)
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>loxilb_kv_subscriber_connected{service,ep}             GAUGE  1 = loxilb&#39;s ZMQ SUB is connected to that prefill EP
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>loxilb_kv_agent_up                                     GAUGE  KV agent liveness
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a># --- P/D serving + capacity ---
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>loxilb_ai_pd_requests_total                       COUNTER  total P/D requests
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>loxilb_ai_pd_kv_params_found_total                COUNTER  requests carrying kv_transfer_params
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>loxilb_ai_pd_prefill_duration_seconds             HISTO    prefill-leg latency
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>loxilb_ai_pd_decode_ttft_seconds                  HISTO    decode TTFT
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a>loxilb_pd_sessions_active / loxilb_pd_trie_nodes  GAUGE    session-affinity + prefix-trie size
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>proxy_pd_kv_params_overflow_total                 COUNTER  kv_params buffer overflow (should stay 0)
 </code></pre></div>
 <p>The <code>blocks_total</code> endpoint label <code>&lt;svc&gt;:&lt;ep_idx&gt;</code> is 1-based per service (<code>1:1</code>/<code>1:2</code>/<code>1:3</code> =
 1st/2nd/3rd prefill EP in registration order); <code>tier15_hits_total</code> uses <code>ep_idx="N"</code> for the same
@@ -3235,9 +3235,9 @@ requests pin to the cached prefill endpoint and inventory grew.</p>
 <li><strong>Replay</strong> 8 follow-up requests with the same prefix. Read each response <code>id</code>.</li>
 </ol>
 <p>Expected signature:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>WARM routed to a prefill EP     →  blocks_total{1:2}: 0 → 5
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>SAME-PREFIX routes              =  same prefill EP on all 8 follow-ups (8/8 pinned)
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>fallthrough_delta = 1   miss_delta = 1   (the cold warm request only)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>WARM routed to a prefill EP     →  blocks_total{1:2}: 0 → 5
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>SAME-PREFIX routes              =  same prefill EP on all 8 follow-ups (8/8 pinned)
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>fallthrough_delta = 1   miss_delta = 1   (the cold warm request only)
 </code></pre></div>
 <p>That is the correct result: <strong>1 cold miss (expected), then 100% affinity to the cached endpoint.</strong>
 Any other shape points back to the parity triad (§6) or the ZMQ inventory plane (§9).</p>

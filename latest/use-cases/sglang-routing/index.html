@@ -2558,10 +2558,8 @@ role-less endpoints and three DP ranks (subscribing at <code>5561</code>, <code>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">9090</span>:80<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">35</span>.35.35.1:1,36.36.36.1:1,37.37.37.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>chwbl<span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">3</span><span class="w"> </span>--kv-engine-type<span class="o">=</span>sglang<span class="w"> </span>--kv-dp-ranks<span class="o">=</span><span class="m">3</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5561</span><span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span>
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -2592,9 +2590,9 @@ silently (see the watchdog below).</p>
 </ul>
 <p>On the SGLang side, launch each worker with a matching event config and page
 size:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model<span class="w"> </span>&lt;MODEL&gt;<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--kv-events-config<span class="w"> </span><span class="s1">&#39;{&quot;publisher&quot;:&quot;zmq&quot;,&quot;endpoint&quot;:&quot;tcp://*:5561&quot;}&#39;</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Then: read /get_server_info and set the rule&#39;s kvBlockSize to that page size.</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>python<span class="w"> </span>-m<span class="w"> </span>sglang.launch_server<span class="w"> </span>--model<span class="w"> </span>&lt;MODEL&gt;<span class="w"> </span>--port<span class="w"> </span><span class="m">30000</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--kv-events-config<span class="w"> </span><span class="s1">&#39;{&quot;publisher&quot;:&quot;zmq&quot;,&quot;endpoint&quot;:&quot;tcp://*:5561&quot;}&#39;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Then: read /get_server_info and set the rule&#39;s kvBlockSize to that page size.</span>
 </code></pre></div>
 <p>Use a recent SGLang release; the event-publisher and page-size behavior above
 apply to current builds.</p>
@@ -2618,19 +2616,21 @@ launch-to-rule invariants are all you need to keep in mind here:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># The rule is present with the SGLang engine</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>jq<span class="w"> </span><span class="s1">&#39;.lbAttr[] | select(.serviceArguments.port==9090)&#39;</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># Per-endpoint published block-hash inventory for the service</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=&lt;RULE&gt;&amp;ep_idx=0&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># The rule is present with the SGLang engine</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>jq<span class="w"> </span><span class="s1">&#39;.lbAttr[] | select(.serviceArguments.port==9090)&#39;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1"># Per-endpoint published block-hash inventory for the service</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=&lt;RULE&gt;&amp;ep_idx=0&quot;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="admonition info">
-<p class="admonition-title">Coming soon</p>
-<p>AI-aware <code>loxicmd</code> subcommands are planned. Use the REST/curl form today.</p>
-</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># The rule is present with the SGLang engine</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>lb
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Per-endpoint published block-hash inventory for the service</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>kvinventory<span class="w"> </span>--service-id<span class="o">=</span>&lt;RULE&gt;<span class="w"> </span>--ep-idx<span class="o">=</span><span class="m">0</span>
+</code></pre></div>
 </div>
 </div>
 </div>
@@ -2682,9 +2682,9 @@ lookups that had an eligible, non-empty inventory (all-excluded endpoints are an
 expected miss, not a parity signal). The streak resets on that service's own
 best score. At the threshold it emits one WARN per transition edge and
 increments a Prometheus counter on every occurrence at or past the threshold:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>[KV_ZEROHIT] service 7: 50 consecutive KV-exact lookups scored ZERO hits against a
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>non-empty inventory — probable cause: kvBlockSize/page-size mismatch or hash-algo
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>drift; KV-exact is effectively OFF for this service
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>[KV_ZEROHIT] service 7: 50 consecutive KV-exact lookups scored ZERO hits against a
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>non-empty inventory — probable cause: kvBlockSize/page-size mismatch or hash-algo
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>drift; KV-exact is effectively OFF for this service
 </code></pre></div>
 <p>The threshold defaults to 50 (<code>LOXILB_KV_ZERO_HIT_N</code>) and is never fully
 disabled. The metric <code>loxilb_pd_kv_zero_hit_watchdog_total{service_id}</code> is
