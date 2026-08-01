@@ -68,6 +68,22 @@ The shipped `prometheus.yml` targets `127.0.0.1:11111` over plain HTTP with `met
 !!! note "Keep the scrape interval at 10s"
     The interval matches LoxiLB's internal 10-second stats sweep. Scraping faster only re-reads the same snapshot; scraping slower halves the resolution of per-sweep sampled gauges. Don't lower it.
 
+### Side-car exporters need their own scrape jobs
+
+The shipped `prometheus.yml` scrapes exactly two targets: the LoxiLB gateway (`127.0.0.1:11111`) and Prometheus itself. Two optional side-car components serve **separate** `/metrics` endpoints that are *not* scraped by default:
+
+- **`loxilb-ai-controller`** — serves on `--metrics-addr` (default `:18857`, env `AICTRL_METRICS_ADDR`). Source of all `aictrl_*` series, including the *TTFT prediction error p90* panel on the AI Gateway dashboard.
+- **`loxilb-kv-agent`** — serves on `--listen` (default `:9099`).
+
+If you run either component, add a scrape job or those panels stay empty:
+
+```yaml
+# prometheus.yml — additional scrape_configs
+- job_name: loxilb-ai-controller
+  static_configs:
+    - targets: ["127.0.0.1:18857"]
+```
+
 ### Security model
 
 The default posture is **network isolation**, and it is deliberate: because `/metrics` is a control-plane REST route, it can only be protected by control-plane mechanisms.

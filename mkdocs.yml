@@ -90,6 +90,11 @@ nav:
   - Security:
       - OPA L4 Policy: security/opa-l4.md
       - mTLS for AI Backends: security/mtls.md
+  - Management & UI:
+      - Overview: management/overview.md
+      - Management Plane (UI + OAM): management/management-plane.md
+      - LoxiLB UI: management/loxilb-ui.md
+      - LoxiLB OAM API: management/loxilb-oam.md
   - Operations:
       - Monitoring & Metrics: operations/monitoring.md
       - Grafana Dashboards: operations/observability-metrics-grafana.md

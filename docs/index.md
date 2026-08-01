@@ -93,6 +93,11 @@ A pool of identical vLLM replicas behind one OpenAI-compatible VIP, with CHWBL p
 - **[AI Gateway](ai-gateway/overview.md)** — model routing, KV-cache routing, P/D, SSE, MCP.
 - **[LLM Integration Use-Cases](use-cases/kv-cache-aware-routing.md)** — flagship, end-to-end
   routing walkthroughs for vLLM and SGLang.
+- **[Management & UI](management/overview.md)** — the web dashboard ([LoxiLB UI](management/loxilb-ui.md)),
+  the fleet management API ([LoxiLB OAM](management/loxilb-oam.md)), and how to deploy them
+  together as a [management plane](management/management-plane.md).
+- **[Operations → Monitoring](operations/monitoring.md)** — the Prometheus + Grafana stack with
+  provisioned dashboards and alerts.
 
 ## Where it fits (scope and non-goals)
 
