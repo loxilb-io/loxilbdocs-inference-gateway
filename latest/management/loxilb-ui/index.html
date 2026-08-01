@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/sse-quota-management/">
+        <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/management/loxilb-ui/">
       
       
-        <link rel="prev" href="../vllm-integration/">
+        <link rel="prev" href="../management-plane/">
       
       
-        <link rel="next" href="../api-key-management/">
+        <link rel="next" href="../loxilb-oam/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>SSE & Quota - LoxiLB Inference Gateway</title>
+        <title>LoxiLB UI - LoxiLB Inference Gateway</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#sse-and-quota-management" class="md-skip">
+        <a href="#loxilb-ui" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              SSE & Quota
+              LoxiLB UI
             
           </span>
         </div>
@@ -572,8 +572,6 @@
       
   
   
-    
-  
   
   
     
@@ -586,11 +584,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
@@ -611,7 +609,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -629,7 +627,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../overview/" class="md-nav__link">
+      <a href="../../ai-gateway/overview/" class="md-nav__link">
         
   
   
@@ -657,7 +655,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../model-load-balancing/" class="md-nav__link">
+      <a href="../../ai-gateway/model-load-balancing/" class="md-nav__link">
         
   
   
@@ -685,7 +683,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../llm-routing/" class="md-nav__link">
+      <a href="../../ai-gateway/llm-routing/" class="md-nav__link">
         
   
   
@@ -713,7 +711,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../kv-caching/" class="md-nav__link">
+      <a href="../../ai-gateway/kv-caching/" class="md-nav__link">
         
   
   
@@ -741,7 +739,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../pd-disaggregation/" class="md-nav__link">
+      <a href="../../ai-gateway/pd-disaggregation/" class="md-nav__link">
         
   
   
@@ -769,7 +767,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../vllm-integration/" class="md-nav__link">
+      <a href="../../ai-gateway/vllm-integration/" class="md-nav__link">
         
   
   
@@ -794,37 +792,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    SSE & Quota
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/sse-quota-management/" class="md-nav__link">
         
   
   
@@ -840,98 +811,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#concept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Concept
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Concept">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Fields
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configuration
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verify
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshoot" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Troubleshoot
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -944,7 +823,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../api-key-management/" class="md-nav__link">
+      <a href="../../ai-gateway/api-key-management/" class="md-nav__link">
         
   
   
@@ -972,7 +851,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mcp-gateway/" class="md-nav__link">
+      <a href="../../ai-gateway/mcp-gateway/" class="md-nav__link">
         
   
   
@@ -1000,7 +879,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../configuration-reference/" class="md-nav__link">
+      <a href="../../ai-gateway/configuration-reference/" class="md-nav__link">
         
   
   
@@ -1430,8 +1309,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -1442,11 +1323,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
         
           
           <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
@@ -1467,7 +1348,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1485,7 +1366,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../management/overview/" class="md-nav__link">
+      <a href="../overview/" class="md-nav__link">
         
   
   
@@ -1513,7 +1394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../management/management-plane/" class="md-nav__link">
+      <a href="../management-plane/" class="md-nav__link">
         
   
   
@@ -1538,10 +1419,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../management/loxilb-ui/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoxiLB UI
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1557,6 +1465,131 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-you-can-do-from-the-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What you can do from the UI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-docker-compose-standalone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A — Docker Compose (standalone)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-kubernetes-kustomize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B — Kubernetes (Kustomize)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-c-development-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option C — Development server
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1569,7 +1602,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../management/loxilb-oam/" class="md-nav__link">
+      <a href="../loxilb-oam/" class="md-nav__link">
         
   
   
@@ -2137,22 +2170,55 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#concept" class="md-nav__link">
+  <a href="#what-you-can-do-from-the-ui" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Concept
+        What you can do from the UI
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Concept">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment options
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment options">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#fields" class="md-nav__link">
+  <a href="#option-a-docker-compose-standalone" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fields
+        Option A — Docker Compose (standalone)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-kubernetes-kustomize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B — Kubernetes (Kustomize)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-c-development-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option C — Development server
       
     </span>
   </a>
@@ -2165,10 +2231,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
+  <a href="#configuration-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Configuration
+        Configuration reference
       
     </span>
   </a>
@@ -2187,10 +2253,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshoot" class="md-nav__link">
+  <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshoot
+        Troubleshooting
       
     </span>
   </a>
@@ -2198,10 +2264,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
+  <a href="#see-also" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Related
+        See also
       
     </span>
   </a>
@@ -2225,241 +2291,243 @@
 
 
 
-<h1 id="sse-and-quota-management">SSE and Quota Management<a class="headerlink" href="#sse-and-quota-management" title="Permanent link">&para;</a></h1>
-<p>Tune how the LoxiLB AI Gateway handles Server-Sent Events (SSE) streaming for
-OpenAI-compatible LLM endpoints, and understand how per-request token usage is
-recorded as streams complete.</p>
-<h2 id="concept">Concept<a class="headerlink" href="#concept" title="Permanent link">&para;</a></h2>
-<p>Streaming chat completions keep a single HTTP response open for the entire
-generation. The backend emits <code>Content-Type: text/event-stream</code> and drips
-<code>data:</code> chunks — often with long gaps between tokens — until it sends the
-<code>data: [DONE]</code> sentinel. A conventional idle timeout would tear such a
-connection down mid-generation, truncating the answer.</p>
-<p>When you run a service in fullproxy mode (<code>mode=4</code>) with <code>sse_mode=true</code>, the
-gateway recognizes the event-stream response and manages its lifecycle:</p>
-<ul>
-<li><strong>Idle-timeout suppression</strong> — while an SSE stream is active, the normal
-  <code>inactiveTimeOut</code> is suppressed, so a slow-drip response is never cut off for
-  lack of bytes.</li>
-<li><strong><code>[DONE]</code> detection</strong> — the gateway scans for the <code>data: [DONE]</code> terminator
-  and closes the connection cleanly, so keep-alive sockets do not hang.</li>
-<li><strong>Absolute duration cap</strong> — <code>max_stream_duration_sec</code> bounds a runaway stream
-  with a wall-clock ceiling.</li>
-<li><strong>Backend keepalive</strong> — <code>backend_keepalive_interval_sec</code> keeps the backend TCP
-  connection-tracking entry alive through cloud NAT during long streams.</li>
-<li><strong>Token bookkeeping</strong> — as each stream ends, the gateway reads the final
-  <code>usage</code> block and records the request's prompt/completion token counts against
-  the calling key and tenant.</li>
-</ul>
-<p>The SSE lifecycle and token accounting are wired in the data path. Quota
-<em>enforcement</em> — rejecting the next request once a limit is crossed — is not.
-See the admonition below.</p>
-<div class="admonition warning">
-<p class="admonition-title">Data-plane enforcement: roadmap</p>
-<p>API-key authentication (401/403) and per-tenant rate limiting (429) are <strong>control-plane CRUD
-only</strong> today — the gateway stores and manages keys/limits but does not yet reject requests in
-the data path. SSE stream lifecycle and token accounting <strong>are</strong> wired.</p>
+<h1 id="loxilb-ui">LoxiLB UI<a class="headerlink" href="#loxilb-ui" title="Permanent link">&para;</a></h1>
+<p>A modern React web dashboard for operating LoxiLB and the Inference Gateway — every AI-gateway feature, classic L4/L7 load balancing, networking, and security is configurable from the browser, with role-based access control and live monitoring charts.</p>
+<div class="admonition note">
+<p class="admonition-title">Audience</p>
+<p>Operators who want a graphical control surface instead of (or alongside) <code>loxicmd</code> and raw REST.</p>
 </div>
-<h3 id="fields">Fields<a class="headerlink" href="#fields" title="Permanent link">&para;</a></h3>
-<p>These are the <code>serviceArguments</code> that govern SSE behavior. Defaults and types
-follow the REST schema exactly.</p>
+<p>Repository: <a href="https://github.com/loxilb-io/loxilb-ui">loxilb-io/loxilb-ui</a> · License: MIT · Stack: React 18 + TypeScript + Material-UI, served as a static SPA by nginx.</p>
+<hr />
+<h2 id="what-you-can-do-from-the-ui">What you can do from the UI<a class="headerlink" href="#what-you-can-do-from-the-ui" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Field</th>
-<th>Type</th>
-<th>Default</th>
-<th>Meaning</th>
+<th>Area</th>
+<th>Capabilities</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>sse_mode</code></td>
-<td>bool</td>
-<td><code>false</code></td>
-<td>Enable SSE streaming handling. When <code>true</code>, idle-timeout is suppressed while a <code>text/event-stream</code> response is active. Required for streaming chat-completion endpoints.</td>
+<td><strong>AI Gateway</strong></td>
+<td>Model-based routing, weighted CHWBL, KV-cache-aware routing, prefill/decode disaggregation, SSE streaming services, MCP session routing, API-key and per-tenant rate-limit management</td>
 </tr>
 <tr>
-<td><code>max_stream_duration_sec</code></td>
-<td>int32</td>
-<td><code>0</code></td>
-<td>Absolute wall-clock cap for an SSE stream, in seconds. <code>0</code> uses the system hard cap of 86400s (24h). Set a lower value (e.g. <code>300</code>) to bound runaway streams.</td>
+<td><strong>Load balancing</strong></td>
+<td>L4/L7 rules across all modes (dnat, onearm, fullnat, dsr, fullproxy), all selection algorithms (rr, hash, priority, persist, lc, chwbl), health probes, TLS termination, mTLS</td>
 </tr>
 <tr>
-<td><code>backend_keepalive_interval_sec</code></td>
-<td>int32</td>
-<td><code>0</code></td>
-<td>Sets <code>SO_KEEPALIVE</code> + <code>TCP_KEEPIDLE</code> on the backend socket, in seconds. <code>0</code> disables it. Recommended value is <code>60</code> for most cloud environments where NAT idle-evicts long-lived flows.</td>
+<td><strong>Networking</strong></td>
+<td>BGP, BFD, VLAN/VXLAN, routes, FDB, ports, neighbors</td>
+</tr>
+<tr>
+<td><strong>Security &amp; traffic</strong></td>
+<td>Firewall rules, IP filters, rate limits, conntrack view, traffic mirrors, QoS, SNI certificates</td>
+</tr>
+<tr>
+<td><strong>Operations</strong></td>
+<td>IPsec VPN, HA cluster state, instance configuration snapshots (backup/restore wizard), real-time Prometheus-backed charts</td>
+</tr>
+<tr>
+<td><strong>Access control</strong></td>
+<td>JWT login with server-side session revocation; <code>admin</code> / <code>operator</code> / <code>viewer</code> roles with route guards; English, Korean, and Japanese localization</td>
 </tr>
 </tbody>
 </table>
+<p>The UI is a pure frontend: it talks to the <a href="../loxilb-oam/">OAM management API</a> (default port 8080, base path <code>/oam</code>), which authenticates every request and proxies configuration to your gateway instances. A reachable OAM deployment is a prerequisite for every install mode below.</p>
+<hr />
+<h2 id="deployment-options">Deployment options<a class="headerlink" href="#deployment-options" title="Permanent link">&para;</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Recommended: the management-plane bundle</p>
+<p>The easiest production path is the <a href="../management-plane/">management-plane bundle</a> — UI + OAM + MySQL behind one TLS edge, from a single <code>.env</code>. The standalone modes below are for teams that deploy the UI tier separately.</p>
+</div>
 <div class="admonition note">
-<p class="admonition-title">Token accounting is per-completed-stream</p>
-<p>The gateway extracts token usage from the terminal <code>usage</code> object of the
-stream. Counts are attributed to the API key and tenant, recorded, and
-exposed for observability. They are <strong>counted and recorded, but not</strong> yet
-used to block subsequent requests — enforcement is on the roadmap.</p>
+<p class="admonition-title">Official container image</p>
+<p>Tagged releases publish <code>ghcr.io/loxilb-io/loxilb-ui</code> (first release: <code>v0.9.0</code>) — Cosign-signed, with SLSA provenance and SBOM attestations. Verify it is pullable from your host with <code>docker manifest inspect ghcr.io/loxilb-io/loxilb-ui:v0.9.0</code>; if the registry denies the pull, the package is not (yet) public and you can build from source instead — the standalone Compose files below always build from the repository (<code>up --build</code>).</p>
 </div>
-<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>Create a fullproxy service with SSE handling enabled. The example targets a lab
-VIP <code>10.10.10.254</code> on the LoxiLB REST port <code>11111</code>, routing to a streaming
-backend at <code>31.31.31.1:8080</code>. Adjust addresses for your environment.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
+<h3 id="option-a-docker-compose-standalone">Option A — Docker Compose (standalone)<a class="headerlink" href="#option-a-docker-compose-standalone" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/loxilb-io/loxilb-ui.git
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>loxilb-ui
+</code></pre></div>
+<p>Pick one of the three SSL modes:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">HTTPS, self-signed (default)</label><label for="__tabbed_1_2">HTTP only</label><label for="__tabbed_1_3">Commercial certificate</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">      &quot;externalIP&quot;:                    &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">      &quot;port&quot;:                           2020,</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">      &quot;protocol&quot;:                      &quot;tcp&quot;,</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s1">      &quot;sel&quot;:                            0,</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">      &quot;mode&quot;:                           4,</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="s1">      &quot;host&quot;:                          &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s1">      &quot;path_prefix&quot;:                   &quot;/&quot;,</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s1">      &quot;path_match_mode&quot;:               &quot;prefix&quot;,</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="s1">      &quot;model_name&quot;:                    &quot;sse-test&quot;,</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="s1">      &quot;sse_mode&quot;:                       true,</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="s1">      &quot;max_stream_duration_sec&quot;:        120,</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="s1">      &quot;backend_keepalive_interval_sec&quot;: 60,</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="s1">      &quot;inactiveTimeOut&quot;:                60</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="s1">    },</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="s1">    &quot;endpoints&quot;: [</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1}</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="s1">    ]</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="s1">  }&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker-compose<span class="w"> </span>up<span class="w"> </span>--build<span class="w"> </span>-d
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># UI at https://&lt;host&gt;:3443 (self-signed cert auto-generated)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--path-prefix<span class="o">=</span>/<span class="w"> </span>--path-match-mode<span class="o">=</span>prefix<span class="w"> </span>--model-name<span class="o">=</span>sse-test<span class="w"> </span>--sse-mode<span class="w"> </span>--max-stream-duration<span class="o">=</span><span class="m">120</span><span class="w"> </span>--backend-keepalive-interval<span class="o">=</span><span class="m">60</span><span class="w"> </span>--inatimeout<span class="o">=</span><span class="m">60</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<p>To bound a stream aggressively — for example a debugging service that should
-never hold a connection longer than 10 seconds — lower <code>max_stream_duration_sec</code>:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">      &quot;externalIP&quot;:                    &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">      &quot;port&quot;:                           2022,</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">      &quot;protocol&quot;:                      &quot;tcp&quot;,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">      &quot;sel&quot;:                            0,</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">      &quot;mode&quot;:                           4,</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">      &quot;host&quot;:                          &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">      &quot;path_prefix&quot;:                   &quot;/&quot;,</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s1">      &quot;path_match_mode&quot;:               &quot;prefix&quot;,</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s1">      &quot;model_name&quot;:                    &quot;cap-test&quot;,</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s1">      &quot;sse_mode&quot;:                       true,</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s1">      &quot;max_stream_duration_sec&quot;:        10,</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s1">      &quot;backend_keepalive_interval_sec&quot;: 60,</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s1">      &quot;inactiveTimeOut&quot;:                60</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s1">    },</span>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="s1">    &quot;endpoints&quot;: [</span>
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1}</span>
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="s1">    ]</span>
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="s1">  }&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.http.yml<span class="w"> </span>up<span class="w"> </span>--build<span class="w"> </span>-d
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># UI at http://&lt;host&gt;:3000</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2022</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--path-prefix<span class="o">=</span>/<span class="w"> </span>--path-match-mode<span class="o">=</span>prefix<span class="w"> </span>--model-name<span class="o">=</span>cap-test<span class="w"> </span>--sse-mode<span class="w"> </span>--max-stream-duration<span class="o">=</span><span class="m">10</span><span class="w"> </span>--backend-keepalive-interval<span class="o">=</span><span class="m">60</span><span class="w"> </span>--inatimeout<span class="o">=</span><span class="m">60</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># place cert.pem and key.pem in ./ssl/ first</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>docker-compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.commercial.yml<span class="w"> </span>up<span class="w"> </span>--build<span class="w"> </span>-d
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># UI at https://&lt;host&gt;:3443 with your certificate</span>
 </code></pre></div>
 </div>
 </div>
 </div>
+<p>Point the container at your OAM backend by overriding the environment in the compose file (or a <code>docker-compose.override.yml</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BACKEND_URL</code></td>
+<td><code>https://oam.example.com</code></td>
+<td>OAM backend that nginx proxies <code>/api/oam/*</code> to (<code>&lt;BACKEND_URL&gt;/oam/</code>)</td>
+</tr>
+<tr>
+<td><code>BACKEND_HOST</code></td>
+<td><code>oam.example.com</code></td>
+<td><code>Host</code> header sent to the backend</td>
+</tr>
+<tr>
+<td><code>FRONTEND_URL</code></td>
+<td><code>http://localhost:3000</code></td>
+<td>Origin/Referer the proxy presents</td>
+</tr>
+<tr>
+<td><code>PUBLIC_PATH</code></td>
+<td><code>/netlox</code></td>
+<td>URL prefix the SPA is served under</td>
+</tr>
+<tr>
+<td><code>SSL_MODE</code></td>
+<td>varies by compose file</td>
+<td><code>enabled</code> (self-signed HTTPS), <code>disabled</code> (HTTP), <code>commercial</code> (your certs)</td>
+</tr>
+</tbody>
+</table>
+<p>A helper script wraps the three modes: <code>./deploy.sh [http|https|commercial] [up|down|restart|logs|status]</code>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Port 3000 collides with Grafana</p>
+<p>The gateway's <a href="../../operations/monitoring/">reference monitoring stack</a> runs Grafana on host port 3000. If both run on the same host, remap the UI's published port in the compose file.</p>
+</div>
+<h3 id="option-b-kubernetes-kustomize">Option B — Kubernetes (Kustomize)<a class="headerlink" href="#option-b-kubernetes-kustomize" title="Permanent link">&para;</a></h3>
+<p>Plain manifests with Kustomize support ship in <a href="https://github.com/loxilb-io/loxilb-ui/tree/main/k8s"><code>k8s/</code></a> — namespace <code>loxilb-system</code>, a 3-replica nginx Deployment with rolling updates, <code>/health</code> liveness/readiness probes, a non-root security context, a PodDisruptionBudget, a ClusterIP Service on 80/443, and an nginx-class Ingress with TLS.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># 1. Pin the released image (k8s/kustomization.yaml already targets</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1">#    ghcr.io/loxilb-io/loxilb-ui — set newTag to the release, e.g. v0.9.0).</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1">#    Alternatively build and push to your own registry and reference that</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1">#    image instead.</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># 2. Create the TLS secret and deploy</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>./k8s/generate-tls-secret.sh<span class="w">          </span><span class="c1"># self-signed loxilb-ui-tls secret</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-k<span class="w"> </span>k8s/
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="c1"># 3. Watch the rollout</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>kubectl<span class="w"> </span>-n<span class="w"> </span>loxilb-system<span class="w"> </span>rollout<span class="w"> </span>status<span class="w"> </span>deploy/loxilb-ui
+</code></pre></div>
+<p>The shipped Ingress uses host <code>loxilb-ui.example.com</code> and routes <code>/netlox</code> to the UI and <code>/api</code> to an OAM backend Service — adjust the host, TLS secret, and backend Service name to your environment. <code>k8s/deploy.sh</code> scripts the same flow with <code>IMAGE_TAG</code>, <code>DOMAIN</code>, and <code>SKIP_INGRESS</code> knobs.</p>
+<div class="admonition note">
+<p class="admonition-title">No Helm chart</p>
+<p>The project ships Kustomize/plain manifests only. There is no Helm chart today.</p>
+</div>
+<h3 id="option-c-development-server">Option C — Development server<a class="headerlink" href="#option-c-development-server" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>npm<span class="w"> </span>ci<span class="w">          </span><span class="c1"># Node.js 22.x</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>npm<span class="w"> </span>start<span class="w">       </span><span class="c1"># dev server on :3000, API target from .env.development</span>
+</code></pre></div>
+<p>Set <code>REACT_APP_API_URL</code> in <code>.env.development</code> to your OAM endpoint (e.g. <code>http://oam.example.com:8080/oam</code>). See the repository's <a href="https://github.com/loxilb-io/loxilb-ui#readme">README</a> for the full development, testing (Vitest + Playwright E2E), and API-codegen workflow.</p>
+<hr />
+<h2 id="configuration-reference">Configuration reference<a class="headerlink" href="#configuration-reference" title="Permanent link">&para;</a></h2>
+<p>Two layers — don't confuse them:</p>
+<p><strong>Build-time (React, baked into the static bundle):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Production value</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>REACT_APP_API_URL</code></td>
+<td><code>/api/oam</code></td>
+<td>OAM API base. In production it is a <em>same-origin path</em> that nginx (or Caddy) proxies to the backend; only dev builds point at an absolute URL</td>
+</tr>
+<tr>
+<td><code>REACT_APP_PUBLIC_URL</code></td>
+<td><code>/netlox</code></td>
+<td>Path prefix the app is served under</td>
+</tr>
+<tr>
+<td><code>REACT_APP_ENV</code></td>
+<td><code>production</code></td>
+<td>Build profile</td>
+</tr>
+<tr>
+<td><code>REACT_APP_REPATCH_INTERVAL</code></td>
+<td>e.g. <code>5000</code></td>
+<td>Data-refresh polling interval (ms)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Runtime (nginx container, substituted at startup):</strong> the <code>BACKEND_URL</code> / <code>BACKEND_HOST</code> / <code>FRONTEND_URL</code> / <code>PUBLIC_PATH</code> / <code>SSL_MODE</code> table above. Because the API base is a same-origin path, switching OAM backends requires only a container restart with new runtime env — no rebuild.</p>
+<p>Authentication is a JWT bearer token obtained from OAM's <code>/oam/login</code>, stored client-side and attached to every request; OAM revokes sessions server-side on logout.</p>
+<hr />
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
-<p><strong>1. Confirm the service exists with SSE enabled.</strong> List load balancer rules and
-check the <code>sse_mode</code>, <code>max_stream_duration_sec</code>, and
-<code>backend_keepalive_interval_sec</code> fields:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">curl</label><label for="__tabbed_3_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># nginx serving and healthy</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://&lt;host&gt;:3443/health
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># SPA delivered under the /netlox prefix</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://&lt;host&gt;:3443/netlox/<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-5
 </code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>lb
-</code></pre></div>
-</div>
-</div>
-</div>
-<p><strong>2. Drive a slow-drip stream.</strong> Send a streaming chat-completion whose gaps
-between chunks exceed the idle timeout. With <code>sse_mode=true</code> the stream survives
-to completion and ends with <code>data: [DONE]</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-N<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="s2">&quot;http://10.10.10.254:2020/v1/chat/completions&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;model&quot;:&quot;mock-model&quot;,&quot;stream&quot;:true,</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="s1">       &quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;tell me a long story&quot;}]}&#39;</span>
-</code></pre></div>
-<p>You should see incremental <code>data:</code> chunks arrive over time, a final chunk
-carrying a <code>usage</code> object (for example <code>"total_tokens": 100</code>), and a closing
-<code>data: [DONE]</code>. The connection then closes cleanly rather than hanging.</p>
-<p><strong>3. Confirm the duration cap.</strong> Against the <code>2022</code> service above (cap = 10s),
-a stream that would run longer is terminated at the ceiling — proof that
-<code>max_stream_duration_sec</code> is honored.</p>
-<h2 id="troubleshoot">Troubleshoot<a class="headerlink" href="#troubleshoot" title="Permanent link">&para;</a></h2>
+<p>Then log in with an OAM account. A <code>viewer</code> sees dashboards read-only; <code>operator</code> and <code>admin</code> can change configuration.</p>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Symptom</th>
 <th>Likely cause</th>
-<th>Action</th>
+<th>What to check</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Stream is cut off after a few seconds of silence</td>
-<td><code>sse_mode</code> is <code>false</code>, so <code>inactiveTimeOut</code> fired</td>
-<td>Set <code>sse_mode: true</code> on the service and re-create the rule.</td>
+<td>Blank page at <code>/</code></td>
+<td>SPA served under <code>/netlox</code></td>
+<td>Browse to <code>https://&lt;host&gt;:3443/netlox/</code></td>
 </tr>
 <tr>
-<td>Connection hangs open after the response finishes</td>
-<td>Backend did not emit <code>data: [DONE]</code>; the gateway had nothing to detect</td>
-<td>Confirm the backend sends the OpenAI <code>[DONE]</code> sentinel. As a backstop, set a finite <code>max_stream_duration_sec</code>.</td>
+<td>Login page loads but login fails / network errors</td>
+<td>UI cannot reach OAM through the proxy</td>
+<td><code>BACKEND_URL</code>/<code>BACKEND_HOST</code> point at a reachable OAM; <code>curl -sk https://&lt;host&gt;:3443/api/oam/health</code></td>
 </tr>
 <tr>
-<td>Long streams drop midway in a cloud environment</td>
-<td>Cloud NAT evicted the idle backend flow</td>
-<td>Set <code>backend_keepalive_interval_sec: 60</code> so keepalives refresh the NAT/conntrack entry.</td>
+<td>CORS errors in the browser console</td>
+<td>OAM's allowlist doesn't include the UI origin</td>
+<td>Add the exact origin to <code>OAM_ALLOWED_ORIGINS</code> on the OAM side</td>
 </tr>
 <tr>
-<td>A stream never ends and holds a socket indefinitely</td>
-<td>No absolute ceiling configured (<code>max_stream_duration_sec: 0</code> ⇒ 24h)</td>
-<td>Lower <code>max_stream_duration_sec</code> to a sane bound (e.g. <code>300</code>).</td>
+<td>Browser warns about the certificate</td>
+<td>Self-signed <code>SSL_MODE=enabled</code></td>
+<td>Expected for the default mode; use <code>commercial</code> mode or the management-plane bundle's edge TLS for trusted certs</td>
 </tr>
 <tr>
-<td>Token counts do not appear per key/tenant</td>
-<td>Backend omitted the terminal <code>usage</code> block</td>
-<td>Ensure the backend includes <code>usage</code> in its final streamed chunk; the gateway reads counts from there.</td>
+<td>Immediate logout / 401 loops</td>
+<td>JWT expired or revoked, or OAM restarted with a new <code>OAM_JWT_SECRET</code></td>
+<td>Log in again; keep <code>OAM_JWT_SECRET</code> stable across OAM restarts</td>
 </tr>
 <tr>
-<td>A key over its token budget is still served</td>
-<td>Quota is counted and recorded, but enforcement (429) is not wired in the data path</td>
-<td>Expected today — usage is recorded, not enforced. Track the roadmap item above.</td>
+<td>K8s pods <code>ImagePullBackOff</code></td>
+<td>Image tag not pullable from the cluster</td>
+<td>Verify <code>docker manifest inspect ghcr.io/loxilb-io/loxilb-ui:&lt;tag&gt;</code> succeeds; otherwise build and push your own image and reference it in <code>k8s/kustomization.yaml</code></td>
 </tr>
 </tbody>
 </table>
-<div class="admonition tip">
-<p class="admonition-title">Non-SSE services are unaffected</p>
-<p>Leaving <code>sse_mode</code> at its default <code>false</code> preserves the normal idle-timeout
-behavior for plain request/response HTTP backends. Only enable it on
-services that serve <code>text/event-stream</code> responses.</p>
-</div>
-<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../api-key-management/">API Key Management</a> — where keys, tenants, and the
-  token limits referenced above are created and managed.</li>
-<li><a href="../configuration-reference/">Configuration Reference</a> — the full
-  <code>serviceArguments</code> field table.</li>
-<li><a href="../overview/">Overview</a> — the opt-in AI routing model and request lifecycle.</li>
+<li><a href="../management-plane/">Deploy the Management Plane</a> — UI + OAM + MySQL in one bundle (recommended).</li>
+<li><a href="../loxilb-oam/">LoxiLB OAM API</a> — the backend the UI requires.</li>
 </ul>
 
 
