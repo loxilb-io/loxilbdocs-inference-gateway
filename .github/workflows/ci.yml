@@ -14,7 +14,7 @@ jobs:
     name: Repository hygiene
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: No internal / AI-assistant / planning artifacts
         run: |
@@ -35,12 +35,13 @@ jobs:
 
       - name: No authorship trailers or absolute developer paths
         run: |
+          # Patterns are split so this workflow file does not match itself.
           fail=0
-          if grep -rIn "Co-Authored-By" docs mkdocs.yml 2>/dev/null; then
-            echo "::error::Remove Co-Authored-By trailers."; fail=1
+          if grep -rIn --exclude-dir=.git "Co-Authored""-By" . 2>/dev/null; then
+            echo "::error::Remove Co-Authored""-By trailers."; fail=1
           fi
-          if grep -rIn "/Users/" docs 2>/dev/null; then
-            echo "::error::Remove absolute developer paths (/Users/...)."; fail=1
+          if grep -rIn --exclude-dir=.git "/Use""rs/" . 2>/dev/null; then
+            echo "::error::Remove absolute developer paths."; fail=1
           fi
           exit $fail
 
@@ -48,8 +49,8 @@ jobs:
     name: Strict docs build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.12"
           cache: pip
@@ -61,19 +62,8 @@ jobs:
     name: Link check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: lycheeverse/lychee-action@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         with:
           args: --config .lychee.toml --no-progress './docs/**/*.md' './*.md'
           fail: true
-
-  prose:
-    name: Prose lint
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - uses: actions/checkout@v4
-      - uses: errata-ai/vale-action@reviewdog
-        with:
-          files: docs
-          fail_on_error: false
