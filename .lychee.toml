@@ -13,6 +13,7 @@ exclude = [
   "https://join.slack.com",
   "https://www.linkedin.com",
   "https://img.shields.io",
+  "https://www.openpolicyagent.org",
 
   # loxilb-io repositories that are still private: the CI token is scoped to
   # this repository only, so GitHub answers 404 for them. Remove these once
