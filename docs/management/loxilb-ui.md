@@ -134,6 +134,8 @@ Authentication is a JWT bearer token obtained from OAM's `/oam/login`, stored cl
 ## Verify
 
 ```bash
+# -k skips CA verification for the default self-signed cert; verify the CA in production
+
 # nginx serving and healthy
 curl -sk https://<host>:3443/health
 

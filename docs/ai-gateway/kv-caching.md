@@ -51,7 +51,7 @@ the API schema — defaults and ranges are authoritative).
 | `kvBlockSize` | int | `16` | `≥ 1` | Tokens per hashed block. **Must match** the engine's block/page size. |
 | `kvHashAlgo` | string | `sha256_cbor` | `sha256_cbor`, `xxhash_cbor` | Block hash algorithm. Must match the engine. **Omit for SGLang** (see below). |
 | `kvZmqPort` | int | `5557` | `1`–`65535` | ZMQ PUB port on each KV endpoint that loxilb subscribes to. |
-| `kvWarmupSec` | int | `30` | `≥ 0` | Seconds to wait after a subscriber connects before Tier 1.5 activates, so the inventory can populate. |
+| `kvWarmupSec` | int | `30` | `≥ 0` | **Accepted but currently inert** — intended as a Tier 1.5 warmup delay after subscriber connect, but the timer is never armed; Tier 1.5 activates without waiting. Do not design procedures around it. |
 | `kvEngineType` | string | `vllm` | `vllm`, `sglang` | KV-event engine behind this rule. One framework per VIP; **immutable after create** (delete + recreate to change). Drives the hash-algo default. |
 | `kvDpRankCount` | int | `1` | `1`–`8` | SGLang data-parallel rank count (`= --dp-size`). Rank *N* publishes at `kvZmqPort + N`; all ranks union into one per-endpoint inventory. |
 
@@ -312,8 +312,10 @@ silently falls through. Walk the triad for your engine:
 
 1. **Mode** — the rule must be `mode: 4` (fullproxy). Lower modes cannot read
    the prompt body.
-2. **Warmup** — Tier 1.5 waits `kvWarmupSec` (default 30s) after a subscriber
-   connects. Give the inventory time to populate before testing.
+2. **Inventory** — give the ZMQ subscriber time to receive KV events and populate
+   the inventory before testing. (`kvWarmupSec` does **not** gate this — the field
+   is accepted but currently inert; Tier 1.5 activates as soon as inventory and
+   routing conditions are met.)
 3. **Tokenizer** — verify `/etc/loxilb/tokenizers/<slug>/tokenizer.json` exists,
    is readable by loxilb, and the slug (`/` → `__`) matches the served `model`
    name exactly.

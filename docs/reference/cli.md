@@ -54,7 +54,8 @@ targets:
   gateway-1:
     url: http://10.10.10.254:11111
     # username/password_env or token_env when LoxiLB runs with --userservice
-    # tls_ca / insecure_skip_verify / timeout_sec as needed
+    # tls_ca / timeout_sec as needed
+    # insecure_skip_verify disables TLS verification — development only, never production
 clients:                       # HTTP-mode bearer tokens, one per client
   - { name: dashboard, role: viewer,   token_env: MCP_VIEWER_TOKEN }
   - { name: oncall,    role: operator, token_env: MCP_OPERATOR_TOKEN }

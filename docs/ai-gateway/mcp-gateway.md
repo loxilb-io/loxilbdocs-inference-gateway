@@ -146,6 +146,7 @@ session.
 HTTPS VIP endpoint, trusting the CA you staged:
 
 ```bash
+# -k skips CA verification in the lab (self-signed cert); verify the CA in production
 curl -sk https://10.10.10.254:2020/mcp
 ```
 
