@@ -66,7 +66,7 @@ to round-robin (see §9), while a broken KV-transfer plane fails requests outrig
 
 ---
 
-## 4. vLLM configuration (the part most people get wrong)
+## 4. vLLM configuration (commonly misconfigured)
 
 ### 4.1 Prefill node (kv_producer + KV-event publish)
 
@@ -206,7 +206,7 @@ docker run -u root --cap-add SYS_ADMIN --restart unless-stopped --privileged \
   -e LLB_KV_NONE_HASH_SEED=0 \                             # PARITY: must match vLLM PYTHONHASHSEED
   -e LOXILB_KV_MAX_BLOCKS=1000000 \                        # per-EP inventory cap (read at subscriber init)
   -e LLB_KV_HASH_DEBUG=1 \                                 # test-only: [KV_HASH] forensic logger
-  --name loxilb loxilb/loxilb:latest -p
+  --name loxilb ghcr.io/loxilb-io/loxilb-inference-gateway:latest -p
 ```
 
 ### 5.2 The LB rules — four modes to compare
@@ -404,7 +404,7 @@ CLIENT            loxilb VIP :9003 (eBPF fullproxy, mode 4)      PREFILL-2:8100 
   │  decode_addr_...} ◄──│                                            │                   │
 ```
 
-!!! tip "Operator gold: the routing decision is in the response id"
+!!! tip "The routing decision is visible in the response id"
     loxilb stamps the chosen pair into the completion `id`:
     `cmpl-___prefill_addr_<prefill-2-ip>:5600___decode_addr_<decode-1-ip>:5600_…`. You can read the
     routing decision per request straight off the response — no instrumentation needed.

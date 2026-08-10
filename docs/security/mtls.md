@@ -47,7 +47,7 @@ the backend.
 
 | Field | Type | Default | Meaning |
 |---|---|---|---|
-| `verify_server_cert` | boolean | `false` | `true` enables backend server-cert verification (`SSL_VERIFY_PEER`). `false` skips verification (`SSL_VERIFY_NONE`) — the backward-compatible default. |
+| `verify_server_cert` | boolean | `false` | `true` enables backend server-cert verification (`SSL_VERIFY_PEER`). `false` skips verification (`SSL_VERIFY_NONE`) — the backward-compatible default. **Set `true` in production**: with the default, LoxiLB accepts any certificate the backend presents. |
 | `backend_ca_path` | string | — | Path to the backend CA bundle (PEM) used to verify the server cert. Empty falls back to the system CA store (`/etc/ssl/certs/`). Example: `/opt/loxilb/cert/backend_ca.crt`. |
 | `client_cert_path` | string | — | Path to LoxiLB's client certificate presented to the backend for mTLS, e.g. `/opt/loxilb/cert/loxilb_client.crt`. |
 | `client_key_path` | string | — | Path to LoxiLB's private key for backend mTLS, e.g. `/opt/loxilb/cert/loxilb_client.key`. |

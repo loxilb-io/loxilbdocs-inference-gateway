@@ -345,7 +345,7 @@ docker run -d --name sglang --gpus all --network host --ipc=host --shm-size 16g 
 - Self-confirm the publisher actually bound: `ss -tln | grep :5561` on the EP must show a
   listener. This failure is otherwise silent.
 
-### 5.2 `--page-size` parity (the deadliest knob)
+### 5.2 `--page-size` parity (the most critical parity knob)
 
 `kvBlockSize` on the rule **must equal SGLang's effective page size** — and SGLang's `--page-size`
 default is **model-dependent; never assume 16**. Always read it back:

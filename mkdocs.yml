@@ -55,7 +55,11 @@ plugins:
   - search:
       lang: en
   - autorefs
-  - tags
+
+extra:
+  version:
+    provider: mike
+    default: latest
 
 nav:
   - Home: index.md

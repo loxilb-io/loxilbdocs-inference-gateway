@@ -7,7 +7,7 @@ This repository contains documentation. If you find a security issue in the docu
 this documentation (for example, an example that leaks a credential or teaches an insecure
 configuration), please report it privately.
 
-Email **[loxilb@netlox.io](mailto:loxilb@netlox.io)** with:
+Email **[loxilb-devel@netlox.io](mailto:loxilb-devel@netlox.io)** with:
 
 - a description of the issue and its impact,
 - the affected page(s) or component, and

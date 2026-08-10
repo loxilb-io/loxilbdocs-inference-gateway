@@ -111,7 +111,7 @@ block 2:  SHA256( <block-1 full digest> ‖ 21000000 … 30000000 )
           published int64 = 5689809685380680247  → uint64 0x4ef643c350b14a37
 ```
 
-**The signed-wrap teeth.** For the single token `[0]`, the digest starts `0xdf3f619804a92fdb…` —
+**Signed-wrap pitfall.** For the single token `[0]`, the digest starts `0xdf3f619804a92fdb…` —
 byte 0 ≥ `0x80`, so SGLang publishes **−2360060374177730597** on the wire; LoxiLB's int64→uint64
 cast must land on exactly `0xdf3f619804a92fdb`, or Tier 1.5 silently never intersects. A page-size
 32 block that also wraps negative (`0xb9e5c32b50351992` ↔ −5051416816229475950) confirms the

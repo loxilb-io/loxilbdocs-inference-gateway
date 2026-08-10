@@ -124,6 +124,7 @@ For a commercial certificate, drop `cert.pem` + `key.pem` into `certs/edge/` ins
 # All services up ("healthy" for mysql and oam-loxilb)
 docker compose -f docker-compose.yml -f docker-compose.dev.yml ps
 
+# -k skips CA verification for the self-signed edge cert; verify the CA in production
 # Edge liveness
 curl -sk https://oam.example.com/healthz
 
@@ -142,7 +143,7 @@ In production, OAM should verify TLS when talking to each managed gateway:
 
 ```bash
 # 1. Generate a per-instance server certificate signed by a bundle-local CA
-scripts/generate-instance-certs.sh 192.0.2.10 lb2.internal
+scripts/generate-instance-certs.sh 192.0.2.10 lb2.example.com
 ```
 
 ```bash

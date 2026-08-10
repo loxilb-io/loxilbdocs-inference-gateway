@@ -37,6 +37,11 @@ docker run -u root --cap-add SYS_ADMIN --restart unless-stopped --privileged \
   ghcr.io/loxilb-io/loxilb-inference-gateway:latest
 ```
 
+!!! note "If the image pull is denied"
+    If `docker pull` is denied, the GHCR package is not yet public. Build the image from
+    source instead — see [System Requirements](../reference/system-requirements.md) for the
+    build-from-source steps.
+
 The container runs with host networking privileges, so the REST API is reachable
 on the host at port `11111`. If you instead run with an explicit port mapping,
 publish `11111` (for example `-p 11111:11111`) so the API is reachable from your
