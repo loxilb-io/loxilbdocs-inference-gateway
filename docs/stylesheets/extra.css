@@ -1,0 +1,28 @@
+/* Left navigation: make section grouping easier to distinguish.
+   Scoped to the desktop sidebar; the mobile drawer keeps Material's
+   default layout, which handles nesting on its own. */
+@media screen and (min-width: 76.25em) {
+  /* Space groups apart and separate them with a hairline */
+  .md-nav--primary .md-nav__item--section {
+    margin-top: 1.2em;
+    padding-top: 1em;
+    border-top: 1px solid var(--md-default-fg-color--lightest);
+  }
+
+  /* Section labels as small uppercase eyebrows */
+  .md-nav--primary .md-nav__item--section > .md-nav__link {
+    margin-bottom: 0.5em;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--md-default-fg-color--light);
+  }
+
+  /* Indent a group's pages and tie them together with a guide line */
+  .md-nav--primary .md-nav__item--section > .md-nav {
+    margin-left: 0.1em;
+    padding-left: 0.7em;
+    border-left: 1px solid var(--md-default-fg-color--lightest);
+  }
+}
