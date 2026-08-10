@@ -2475,11 +2475,13 @@
 <p>Authentication is a JWT bearer token obtained from OAM's <code>/oam/login</code>, stored client-side and attached to every request; OAM revokes sessions server-side on logout.</p>
 <hr />
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># nginx serving and healthy</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://&lt;host&gt;:3443/health
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># SPA delivered under the /netlox prefix</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://&lt;host&gt;:3443/netlox/<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-5
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># -k skips CA verification for the default self-signed cert; verify the CA in production</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1"># nginx serving and healthy</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://&lt;host&gt;:3443/health
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1"># SPA delivered under the /netlox prefix</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://&lt;host&gt;:3443/netlox/<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-5
 </code></pre></div>
 <p>Then log in with an OAM account. A <code>viewer</code> sees dashboards read-only; <code>operator</code> and <code>admin</code> can change configuration.</p>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>

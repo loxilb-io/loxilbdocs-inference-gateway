@@ -2641,6 +2641,17 @@ IP ranges</strong>. Bind OPA where LoxiLB can reach it at a <strong>routable</st
 public/routable IP), not a loopback or link-local address. In a lab, place OPA on the same
 routable network segment LoxiLB uses for its lab addresses.</p>
 </div>
+<div class="admonition danger">
+<p class="admonition-title">Protect the OPA server itself</p>
+<p>OPA's REST data API is <strong>unauthenticated by default</strong>, and because <code>opa_url</code> must be
+routable, a carelessly placed OPA server can be reachable by more than just LoxiLB —
+anyone who can reach it can read and <strong>rewrite your policies</strong>. Before production:
+firewall the OPA port (<code>8181</code>) so only the LoxiLB host(s) can reach it, run OPA with
+authentication and authorization enabled
+(<code>opa run --server --authentication=token --authorization=basic ...</code>), and prefer TLS
+(<code>--tls-cert-file</code>/<code>--tls-private-key-file</code>). See the
+<a href="https://www.openpolicyagent.org/docs/latest/security/">OPA security guide</a>.</p>
+</div>
 <h3 id="2-author-a-rego-policy-at-package-loxilbl4">2. Author a Rego policy at package <code>loxilb.l4</code><a class="headerlink" href="#2-author-a-rego-policy-at-package-loxilbl4" title="Permanent link">&para;</a></h3>
 <p>LoxiLB queries <code>POST &lt;opa_url&gt;/v1/data/&lt;policy_path&gt;</code> with an <code>input</code> document describing the L4
 connection. The policy must live in the package that matches <code>policy_path</code> (default <code>loxilb/l4</code>

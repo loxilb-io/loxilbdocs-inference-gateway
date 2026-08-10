@@ -2503,11 +2503,12 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># All services up (&quot;healthy&quot; for mysql and oam-loxilb)</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.dev.yml<span class="w"> </span>ps
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Edge liveness</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://oam.example.com/healthz
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># OAM API health through the edge</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://oam.example.com/api/oam/health
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># -k skips CA verification for the self-signed edge cert; verify the CA in production</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># Edge liveness</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://oam.example.com/healthz
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1"># OAM API health through the edge</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://oam.example.com/api/oam/health
 </code></pre></div>
 <p>Then open <strong><code>https://&lt;host&gt;/netlox/</code></strong> in a browser and log in as <code>admin</code> with <code>OAM_DEFAULT_ADMIN_PASSWORD</code>. Change the password immediately after first login.</p>
 <div class="admonition tip">

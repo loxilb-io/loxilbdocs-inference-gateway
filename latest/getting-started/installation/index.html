@@ -2237,6 +2237,12 @@ on port <strong>11111</strong> inside the container.</p>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>--name<span class="w"> </span>loxilb<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>ghcr.io/loxilb-io/loxilb-inference-gateway:latest
 </code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">If the image pull is denied</p>
+<p>If <code>docker pull</code> is denied, the GHCR package is not yet public. Build the image from
+source instead — see <a href="../../reference/system-requirements/">System Requirements</a> for the
+build-from-source steps.</p>
+</div>
 <p>The container runs with host networking privileges, so the REST API is reachable
 on the host at port <code>11111</code>. If you instead run with an explicit port mapping,
 publish <code>11111</code> (for example <code>-p 11111:11111</code>) so the API is reachable from your

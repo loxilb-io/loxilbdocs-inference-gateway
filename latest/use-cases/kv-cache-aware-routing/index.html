@@ -3022,7 +3022,7 @@ use <code>mode=4</code> (fullproxy). There is no eBPF fast-path involvement in t
 </ul>
 <hr />
 <h2 id="4-end-to-end-call-flow">4. End-to-end call flow<a class="headerlink" href="#4-end-to-end-call-flow" title="Permanent link">&para;</a></h2>
-<p><strong>Control path (rule creation).</strong> An operator POSTs a load-balancer rule with <code>kvExactMode: 1</code> and endpoints tagged prefill / decode. For every prefill endpoint, LoxiLB starts a subscriber that dials the worker's ZeroMQ port. Initial dial failure does not kill the subscriber — it retries on an interval, so the rule can be created before vLLM is up. The warmup window (Guard B) starts counting from subscriber start.</p>
+<p><strong>Control path (rule creation).</strong> An operator POSTs a load-balancer rule with <code>kvExactMode: 1</code> and endpoints tagged prefill / decode. For every prefill endpoint, LoxiLB starts a subscriber that dials the worker's ZeroMQ port. Initial dial failure does not kill the subscriber — it retries on an interval, so the rule can be created before vLLM is up. (A warmup window — Guard B — is defined in the guard ladder but is currently inert; see §7.)</p>
 <p><strong>Ingest path (event → inventory).</strong> vLLM publishes a multi-frame message <code>[topic | sequence | payload]</code>. The subscriber parses the sequence; a gap triggers a replay. <code>BlockStored</code> adds hashes, <code>BlockRemoved</code> removes them, <code>AllBlocksCleared</code> empties the set. On any receive error the socket is rebuilt, and on reconnect the inventory is cleared.</p>
 <p><strong>Request path (request → worker).</strong> For each proxied request on a <code>kvExactMode=1</code> rule, the data plane runs the guard ladder (§7):</p>
 <ol>
@@ -3034,7 +3034,7 @@ use <code>mode=4</code> (fullproxy). There is no eBPF fast-path involvement in t
 <li>On any guard miss the request falls through to round-robin over prefill endpoints and the miss counters increment. On success the hit counter for the chosen endpoint increments.</li>
 </ol>
 <h3 id="worked-example-two-prompts-end-to-end">Worked example — two prompts, end to end<a class="headerlink" href="#worked-example-two-prompts-end-to-end" title="Permanent link">&para;</a></h3>
-<p>Topology: two prefill endpoints (EP0, EP2) and one decode endpoint (EP1); <code>kvBlockSize=16</code>, <code>kvHashAlgo=sha256_cbor</code>, warmup elapsed. Both clients share an application <strong>system preamble</strong> that tokenizes to exactly 32 tokens (two full blocks) — the classic shared-prefix pattern (RAG preamble, few-shot header, system prompt).</p>
+<p>Topology: two prefill endpoints (EP0, EP2) and one decode endpoint (EP1); <code>kvBlockSize=16</code>, <code>kvHashAlgo=sha256_cbor</code>, inventory populated. Both clients share an application <strong>system preamble</strong> that tokenizes to exactly 32 tokens (two full blocks) — the classic shared-prefix pattern (RAG preamble, few-shot header, system prompt).</p>
 <ul>
 <li><strong>Prompt A</strong> (Client A): preamble + question A → 40 tokens → blocks <code>B1</code> (t1–16), <code>B2</code> (t17–32), <code>B3</code> (t33–40, partial).</li>
 <li><strong>Prompt B</strong> (Client B): <em>same preamble</em> + question B → 38 tokens → <code>B1</code>, <code>B2</code> identical, <code>B3'</code> different.</li>
@@ -3250,7 +3250,7 @@ exist.</p>
 </tr>
 <tr>
 <td>B</td>
-<td>still inside the warmup window (<code>kvWarmupSec</code> after subscriber start; inventory still filling)</td>
+<td><em>(currently inert)</em> Defined as the <code>kvWarmupSec</code> warmup window after subscriber start, but the timer is never armed in the shipped data path — this guard never fires, and <code>reason="warmup"</code> always reads 0.</td>
 <td><code>warmup</code></td>
 </tr>
 <tr>
@@ -3365,7 +3365,7 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 <td><code>kvWarmupSec</code></td>
 <td><code>30</code></td>
 <td>≥0</td>
-<td>Guard-B window after subscriber start.</td>
+<td>Guard-B window — accepted but currently inert (Guard B never fires; see §7).</td>
 </tr>
 <tr>
 <td><code>kvEngineType</code></td>
@@ -3496,7 +3496,7 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 <tr>
 <td><code>loxilb_pd_kv_t15_fallthrough_total</code> stays roughly flat under warm traffic</td>
 <td>requests aren't spilling to round-robin</td>
-<td>rising fallthrough = overlap not scoring — parity or warmup</td>
+<td>rising fallthrough = overlap not scoring — usually a parity mismatch</td>
 </tr>
 </tbody>
 </table>
@@ -3514,7 +3514,7 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 </div>
 </div>
 </div>
-<p>Confirm each prefill endpoint's block gauge is <strong>non-zero</strong> within the warmup + ingest window. A zero gauge after warm traffic almost always means <code>kvBlockSize</code> ≠ the engine's effective block/page size.</p>
+<p>Confirm each prefill endpoint's block gauge is <strong>non-zero</strong> within the ingest window. A zero gauge after warm traffic almost always means <code>kvBlockSize</code> ≠ the engine's effective block/page size.</p>
 <h3 id="93-step-3-subscriber-count">9.3 Step 3 — subscriber count<a class="headerlink" href="#93-step-3-subscriber-count" title="Permanent link">&para;</a></h3>
 <p><code>kv_subscriber_connected</code> should climb by <strong>N</strong> after you create an N-prefill-endpoint rule. Fewer than N means a subscriber failed to dial its publisher — re-check the endpoint's <code>kvZmqPort</code> and that the engine is up.</p>
 <h3 id="94-step-4-publisher-side-sanity-on-the-engine-host">9.4 Step 4 — publisher-side sanity (on the engine host)<a class="headerlink" href="#94-step-4-publisher-side-sanity-on-the-engine-host" title="Permanent link">&para;</a></h3>
@@ -3539,7 +3539,7 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 </div>
 </div>
 </div>
-<p>After <code>kvWarmupSec</code> under cache-friendly traffic, a prefill endpoint's inventory should be <strong>non-empty</strong>.</p>
+<p>Shortly after startup under cache-friendly traffic (allow the subscriber a few seconds to ingest KV events), a prefill endpoint's inventory should be <strong>non-empty</strong>.</p>
 <h3 id="102-prometheus-metrics">10.2 Prometheus metrics<a class="headerlink" href="#102-prometheus-metrics" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -3614,8 +3614,8 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 <td><code>kvBlockSize</code>, <code>kvHashAlgo</code>/vLLM-version, or seed mismatch — walk the §5 contract, then re-run the §6 preflight.</td>
 </tr>
 <tr>
-<td>Everything looks right for <code>kvWarmupSec</code> after start</td>
-<td>Guard B is suppressing the tier during warmup by design; wait out the window.</td>
+<td>Everything looks right but the tier stays cold just after start</td>
+<td>Inventory is still filling from KV events — not <code>kvWarmupSec</code> (Guard B is currently inert). Wait for the first events to ingest, then re-check the block gauge.</td>
 </tr>
 <tr>
 <td><code>504 pd_prefill_timeout</code> on long prompts</td>
@@ -3632,7 +3632,7 @@ exclusion is intended behavior — the fail-open posture is the safety net.</p>
 <li><strong>Inventory has no LoxiLB-side eviction.</strong> Sizing is governed by vLLM's own cache limits plus <code>BlockRemoved</code> / <code>AllBlocksCleared</code>.</li>
 <li><strong>Probe-down is not exclusion.</strong> Health-probe state does not reach the data plane; exclusion requires a connect-failure retry, admin down, or an open circuit breaker.</li>
 <li><strong>CPU vLLM defaults to <code>--block-size 128</code></strong> — no events for short prompts; always set <code>16</code>.</li>
-<li><strong>Warmup is a fixed timer.</strong> The tier is suppressed for <code>kvWarmupSec</code> after subscriber start regardless of whether the inventory is populated.</li>
+<li><strong><code>kvWarmupSec</code> is currently inert.</strong> The field is accepted, validated, and stored, but the warmup timer is never armed in the shipped data path — the tier is <strong>not</strong> suppressed after subscriber start and activates as soon as routing conditions are met. Do not design procedures around the warmup window.</li>
 <li><strong>The tier is reachable only in the prefill/decode selection flow.</strong> A plain single-pool vLLM service does not use this tier — partition endpoints by role to enable it.</li>
 </ol>
 <h3 id="load-blind-argmax-capacity-weighted-blend">Load-blind argmax → capacity-weighted blend<a class="headerlink" href="#load-blind-argmax-capacity-weighted-blend" title="Permanent link">&para;</a></h3>

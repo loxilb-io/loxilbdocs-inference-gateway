@@ -2966,7 +2966,7 @@ overlap silently drops to zero. See <a href="../kv-caching/">KV-Cache Routing</a
 <td>int64</td>
 <td><code>30</code></td>
 <td>≥0</td>
-<td>Seconds to wait after the ZMQ subscriber connects before activating Tier 1.5 (lets inventory populate).</td>
+<td><strong>Accepted but currently inert on all paths.</strong> Intended as a Tier 1.5 warmup delay after subscriber connect, but the timer is never armed in the shipped data path — Tier 1.5 activates without waiting. Do not design procedures around it.</td>
 </tr>
 <tr>
 <td><code>kvEngineType</code></td>
@@ -3264,7 +3264,7 @@ client-cert verification and backend re-encryption. Additional TLS-tuning fields
 <td>boolean</td>
 <td><code>false</code></td>
 <td><code>true</code>/<code>false</code></td>
-<td><code>true</code>=<code>SSL_VERIFY_PEER</code>; <code>false</code>=<code>SSL_VERIFY_NONE</code> (no backend verification, compat default).</td>
+<td><code>true</code>=<code>SSL_VERIFY_PEER</code>; <code>false</code>=<code>SSL_VERIFY_NONE</code> (no backend verification, compat default). <strong>Set <code>true</code> in production</strong> — the default accepts any backend certificate.</td>
 </tr>
 <tr>
 <td><code>backend_ca_path</code></td>

@@ -2676,7 +2676,7 @@ the API schema — defaults and ranges are authoritative).</p>
 <td>int</td>
 <td><code>30</code></td>
 <td><code>≥ 0</code></td>
-<td>Seconds to wait after a subscriber connects before Tier 1.5 activates, so the inventory can populate.</td>
+<td><strong>Accepted but currently inert</strong> — intended as a Tier 1.5 warmup delay after subscriber connect, but the timer is never armed; Tier 1.5 activates without waiting. Do not design procedures around it.</td>
 </tr>
 <tr>
 <td><code>kvEngineType</code></td>
@@ -2942,8 +2942,10 @@ silently falls through. Walk the triad for your engine:</p>
 <ol>
 <li><strong>Mode</strong> — the rule must be <code>mode: 4</code> (fullproxy). Lower modes cannot read
    the prompt body.</li>
-<li><strong>Warmup</strong> — Tier 1.5 waits <code>kvWarmupSec</code> (default 30s) after a subscriber
-   connects. Give the inventory time to populate before testing.</li>
+<li><strong>Inventory</strong> — give the ZMQ subscriber time to receive KV events and populate
+   the inventory before testing. (<code>kvWarmupSec</code> does <strong>not</strong> gate this — the field
+   is accepted but currently inert; Tier 1.5 activates as soon as inventory and
+   routing conditions are met.)</li>
 <li><strong>Tokenizer</strong> — verify <code>/etc/loxilb/tokenizers/&lt;slug&gt;/tokenizer.json</code> exists,
    is readable by loxilb, and the slug (<code>/</code> → <code>__</code>) matches the served <code>model</code>
    name exactly.</li>

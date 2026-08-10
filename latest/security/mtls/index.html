@@ -2330,7 +2330,7 @@ the backend.</p>
 <td><code>verify_server_cert</code></td>
 <td>boolean</td>
 <td><code>false</code></td>
-<td><code>true</code> enables backend server-cert verification (<code>SSL_VERIFY_PEER</code>). <code>false</code> skips verification (<code>SSL_VERIFY_NONE</code>) — the backward-compatible default.</td>
+<td><code>true</code> enables backend server-cert verification (<code>SSL_VERIFY_PEER</code>). <code>false</code> skips verification (<code>SSL_VERIFY_NONE</code>) — the backward-compatible default. <strong>Set <code>true</code> in production</strong>: with the default, LoxiLB accepts any certificate the backend presents.</td>
 </tr>
 <tr>
 <td><code>backend_ca_path</code></td>

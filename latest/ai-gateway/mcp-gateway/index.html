@@ -2506,7 +2506,8 @@ session.</p>
 </div>
 <p><strong>2. Probe MCP over the VIP.</strong> Point an MCP client (or plain <code>curl</code>) at the
 HTTPS VIP endpoint, trusting the CA you staged:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://10.10.10.254:2020/mcp
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># -k skips CA verification in the lab (self-signed cert); verify the CA in production</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://10.10.10.254:2020/mcp
 </code></pre></div>
 <p>Repeat the round-robin probe several times and confirm responses come from
 different backend servers (server1 / server2 / server3).</p>

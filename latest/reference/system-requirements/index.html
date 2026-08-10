@@ -2217,7 +2217,7 @@
 <tr>
 <td>Image</td>
 <td><code>ghcr.io/loxilb-io/loxilb-inference-gateway:latest</code></td>
-<td>Public, upstream-maintained</td>
+<td>Upstream-maintained. If the registry denies the pull, the package is not yet public — build from source (see below).</td>
 </tr>
 <tr>
 <td>Capabilities</td>
@@ -2382,8 +2382,17 @@ P/D deployments. Pin the host kernel before rolling out GPU routing.</p>
 <p>Prebuilt tokenizer static library (linked by the KV-cache router):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">arch</span><span class="o">=</span><span class="k">$(</span>arch<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>s/aarch64/arm64/<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>s/x86_64/amd64/<span class="k">)</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>wget<span class="w"> </span>-q<span class="w"> </span>https://github.com/daulet/tokenizers/releases/download/v1.27.0/libtokenizers.linux-<span class="si">${</span><span class="nv">arch</span><span class="si">}</span>.tar.gz
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>sudo<span class="w"> </span>tar<span class="w"> </span>-xzf<span class="w"> </span>libtokenizers.linux-<span class="si">${</span><span class="nv">arch</span><span class="si">}</span>.tar.gz<span class="w"> </span>-C<span class="w"> </span>/usr/local/lib/
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>sha256sum<span class="w"> </span>libtokenizers.linux-<span class="si">${</span><span class="nv">arch</span><span class="si">}</span>.tar.gz<span class="w">   </span><span class="c1"># verify before installing as root</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>sudo<span class="w"> </span>tar<span class="w"> </span>-xzf<span class="w"> </span>libtokenizers.linux-<span class="si">${</span><span class="nv">arch</span><span class="si">}</span>.tar.gz<span class="w"> </span>-C<span class="w"> </span>/usr/local/lib/
 </code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Verify the download before extracting as root</p>
+<p>This extracts a third-party binary artifact into a system library path with root
+privileges. The upstream release does not publish a checksum manifest, so record the
+<code>sha256sum</code> output the first time you fetch a release version and verify every later
+download (and every other host) against that recorded digest before running the
+<code>sudo tar</code> step.</p>
+</div>
 <p>Clone with the eBPF submodule and build:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>https://github.com/loxilb-io/loxilb-inference-gateway.git
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">cd</span><span class="w"> </span>loxilb-inference-gateway
