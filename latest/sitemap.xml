@@ -2,174 +2,174 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/api-key-management/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/configuration-reference/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/kv-caching/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/llm-routing/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/mcp-gateway/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/model-load-balancing/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/overview/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/pd-disaggregation/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/sse-quota-management/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/vllm-integration/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/community/contributing/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/community/faq/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/community/roadmap/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/concepts/ai-routing-model/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/concepts/architecture/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/concepts/lb-algorithms/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/concepts/running-modes/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/getting-started/installation/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/getting-started/quickstart/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/management/loxilb-oam/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/management/loxilb-ui/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/management/management-plane/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/management/overview/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/audit-log/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/monitoring/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/observability-metrics-grafana/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/troubleshooting/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/reference/api/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/reference/cli/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/reference/configuration/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/reference/swagger-extras/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/reference/system-requirements/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/security/mtls/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/security/opa-l4/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/configuration-tuning/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/deploy-pd-disaggregation/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/kv-cache-aware-routing/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/performance-methodology/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/routing-hierarchy/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/sglang-configuration-tuning/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/sglang-routing/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/vllm-vs-sglang/</loc>
-         <lastmod>2026-08-09</lastmod>
+         <lastmod>2026-08-10</lastmod>
     </url>
 </urlset>
