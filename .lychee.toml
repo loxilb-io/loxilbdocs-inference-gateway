@@ -3,12 +3,24 @@ timeout = 20
 max_retries = 3
 accept = [200, 206, 429]
 
+# Example/lab addresses in configuration samples are not real endpoints —
+# skip anything that resolves to a private, loopback, or link-local IP.
+exclude_all_private = true
+
 # Hosts that rate-limit or block automated checkers (not broken links)
 exclude = [
   "https://www.loxilb.io",
   "https://join.slack.com",
   "https://www.linkedin.com",
   "https://img.shields.io",
+  "https://www.openpolicyagent.org",
+
+  # loxilb-io repositories that are still private: the CI token is scoped to
+  # this repository only, so GitHub answers 404 for them. Remove these once
+  # the repositories flip public.
+  "https://github.com/loxilb-io/loxilb-inference-gateway",
+  "https://github.com/loxilb-io/loxilb-oam",
+  "https://github.com/loxilb-io/loxilb-ui",
 ]
 
 # Link-local IPs are already covered by exclude_all_private above
