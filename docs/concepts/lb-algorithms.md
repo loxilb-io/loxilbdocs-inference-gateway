@@ -60,7 +60,7 @@ Routes to the least-loaded GPU using live metrics scraped from each backend (que
 **When to use for LLM serving:** throughput-oriented pools of largely independent requests, where balancing GPU queues matters more than reusing a prior prompt's cache. GPU-aware routing depends on a working metrics feed from the backends — see [vLLM Integration](../ai-gateway/vllm-integration.md).
 
 !!! warning "GPU-aware routing: advanced, no automated CI scenario"
-    `sel: 9` is exercised only by an internal parity script today; no runnable end-to-end CI testbed ships for it. Treat it as advanced and validate against your own fleet before relying on it in production.
+    No automated end-to-end CI scenario ships for `sel: 9` yet. Treat it as advanced and validate against your own fleet before relying on it in production.
 
 ### `sel: 10` — WRR-hash (weighted consistent hash)
 

@@ -73,7 +73,7 @@ The sync is push-based, event-driven, and eventually consistent:
 
 ## 4. End-to-end call flow
 
-**Control path (rule creation).** An operator POSTs a load-balancer rule with `kvExactMode: 1` and endpoints tagged prefill / decode. For every prefill endpoint, LoxiLB starts a subscriber that dials the worker's ZeroMQ port. Initial dial failure does not kill the subscriber — it retries on an interval, so the rule can be created before vLLM is up. The warmup window (Guard B) starts counting from subscriber start.
+**Control path (rule creation).** An operator POSTs a load-balancer rule with `kvExactMode: 1` and endpoints tagged prefill / decode. For every prefill endpoint, LoxiLB starts a subscriber that dials the worker's ZeroMQ port. Initial dial failure does not kill the subscriber — it retries on an interval, so the rule can be created before vLLM is up. (A warmup window — Guard B — is defined in the guard ladder but is currently inert; see §7.)
 
 **Ingest path (event → inventory).** vLLM publishes a multi-frame message `[topic | sequence | payload]`. The subscriber parses the sequence; a gap triggers a replay. `BlockStored` adds hashes, `BlockRemoved` removes them, `AllBlocksCleared` empties the set. On any receive error the socket is rebuilt, and on reconnect the inventory is cleared.
 
@@ -88,7 +88,7 @@ The sync is push-based, event-driven, and eventually consistent:
 
 ### Worked example — two prompts, end to end
 
-Topology: two prefill endpoints (EP0, EP2) and one decode endpoint (EP1); `kvBlockSize=16`, `kvHashAlgo=sha256_cbor`, warmup elapsed. Both clients share an application **system preamble** that tokenizes to exactly 32 tokens (two full blocks) — the classic shared-prefix pattern (RAG preamble, few-shot header, system prompt).
+Topology: two prefill endpoints (EP0, EP2) and one decode endpoint (EP1); `kvBlockSize=16`, `kvHashAlgo=sha256_cbor`, inventory populated. Both clients share an application **system preamble** that tokenizes to exactly 32 tokens (two full blocks) — the classic shared-prefix pattern (RAG preamble, few-shot header, system prompt).
 
 - **Prompt A** (Client A): preamble + question A → 40 tokens → blocks `B1` (t1–16), `B2` (t17–32), `B3` (t33–40, partial).
 - **Prompt B** (Client B): *same preamble* + question B → 38 tokens → `B1`, `B2` identical, `B3'` different.
@@ -210,7 +210,7 @@ Every request runs a fixed ladder. Each miss increments exactly one reason count
 | Guard | Fires when… | `reason` label |
 |---|---|---|
 | A | `kvExactMode == 0` (feature off for this rule) | `mode_off` |
-| B | still inside the warmup window (`kvWarmupSec` after subscriber start; inventory still filling) | `warmup` |
+| B | *(currently inert)* Defined as the `kvWarmupSec` warmup window after subscriber start, but the timer is never armed in the shipped data path — this guard never fires, and `reason="warmup"` always reads 0. | `warmup` |
 | C | no prompt text in the request | `text_empty` |
 | D | no model resolvable (model field and `X-Model` header both empty — e.g. a non-JSON body) | `model_empty` |
 | E | tokenizer missing or failed for the model slug | `tokenize` |
@@ -267,7 +267,7 @@ KV fields (all match the swagger `serviceArguments` defaults):
 | `kvBlockSize` | `16` | ≥1 | Must equal vLLM `--block-size`. |
 | `kvHashAlgo` | `sha256_cbor` | `sha256_cbor`, `xxhash_cbor` | Must match vLLM's `--prefix-caching-hash-algo`. |
 | `kvZmqPort` | `5557` | `1–65535` | The worker's KV-event PUB port. |
-| `kvWarmupSec` | `30` | ≥0 | Guard-B window after subscriber start. |
+| `kvWarmupSec` | `30` | ≥0 | Guard-B window — accepted but currently inert (Guard B never fires; see §7). |
 | `kvEngineType` | `vllm` | `vllm`, `sglang` | Engine identity; VIP-immutable. |
 | `kvDpRankCount` | `1` | `1–8` | SGLang data-parallel rank count. |
 
@@ -332,7 +332,7 @@ Assert, in order:
 |---|---|---|
 | `loxilb_pd_kv_blocks_total > 0` | inventory ingested from at least one prefill endpoint | events not arriving — check `kvZmqPort` vs the publisher and the `ep_role: 1` tag |
 | `loxilb_pd_kv_tier15_hits_total` **advances after the first cold request** | the tier is making real decisions | **flat delta = broken parity; you are silently measuring round-robin → ABORT** and walk the §5 / §6 checklist before benchmarking |
-| `loxilb_pd_kv_t15_fallthrough_total` stays roughly flat under warm traffic | requests aren't spilling to round-robin | rising fallthrough = overlap not scoring — parity or warmup |
+| `loxilb_pd_kv_t15_fallthrough_total` stays roughly flat under warm traffic | requests aren't spilling to round-robin | rising fallthrough = overlap not scoring — usually a parity mismatch |
 
 The middle assertion is the whole test. Fire one **cold** request to populate the inventory, then a **warm** request that shares its prefix; `loxilb_pd_kv_tier15_hits_total` **must** increment. A flat counter means overlap is zero and the tier is inert — abort and fix parity, do not benchmark a silently round-robining rule.
 
@@ -347,7 +347,7 @@ The middle assertion is the whole test. Fire one **cold** request to populate th
     loxicmd get kvinventory --service-id=<id> --ep-idx=0
     ```
 
-Confirm each prefill endpoint's block gauge is **non-zero** within the warmup + ingest window. A zero gauge after warm traffic almost always means `kvBlockSize` ≠ the engine's effective block/page size.
+Confirm each prefill endpoint's block gauge is **non-zero** within the ingest window. A zero gauge after warm traffic almost always means `kvBlockSize` ≠ the engine's effective block/page size.
 
 ### 9.3 Step 3 — subscriber count
 
@@ -380,7 +380,7 @@ Section 9 is the go/no-go gate; this section is the deeper reference for the sam
     loxicmd get kvinventory --service-id=<id> --ep-idx=0
     ```
 
-After `kvWarmupSec` under cache-friendly traffic, a prefill endpoint's inventory should be **non-empty**.
+Shortly after startup under cache-friendly traffic (allow the subscriber a few seconds to ingest KV events), a prefill endpoint's inventory should be **non-empty**.
 
 ### 10.2 Prometheus metrics
 
@@ -411,7 +411,7 @@ Silent-failure decoder for "tokenizer loaded but still routing round-robin":
 | `t15_miss_reason{reason="model_empty"}` climbs request-for-request | Client is not sending OpenAI JSON, or the model field / `X-Model` header is missing. |
 | Tokenizer loaded, inventory empty | Prefill endpoint not tagged `ep_role: 1`, wrong `kvZmqPort`, or vLLM KV-events not enabled. |
 | Tokenizer loaded, inventory non-empty, overlap still 0 | `kvBlockSize`, `kvHashAlgo`/vLLM-version, or seed mismatch — walk the §5 contract, then re-run the §6 preflight. |
-| Everything looks right for `kvWarmupSec` after start | Guard B is suppressing the tier during warmup by design; wait out the window. |
+| Everything looks right but the tier stays cold just after start | Inventory is still filling from KV events — not `kvWarmupSec` (Guard B is currently inert). Wait for the first events to ingest, then re-check the block gauge. |
 | `504 pd_prefill_timeout` on long prompts | Prefill exceeds `LLB_PD_PREFILL_TIMEOUT_SEC` (default 30) — raise to 180 for long context (§6.5). |
 
 ---
@@ -424,7 +424,7 @@ Silent-failure decoder for "tokenizer loaded but still routing round-robin":
 4. **Inventory has no LoxiLB-side eviction.** Sizing is governed by vLLM's own cache limits plus `BlockRemoved` / `AllBlocksCleared`.
 5. **Probe-down is not exclusion.** Health-probe state does not reach the data plane; exclusion requires a connect-failure retry, admin down, or an open circuit breaker.
 6. **CPU vLLM defaults to `--block-size 128`** — no events for short prompts; always set `16`.
-7. **Warmup is a fixed timer.** The tier is suppressed for `kvWarmupSec` after subscriber start regardless of whether the inventory is populated.
+7. **`kvWarmupSec` is currently inert.** The field is accepted, validated, and stored, but the warmup timer is never armed in the shipped data path — the tier is **not** suppressed after subscriber start and activates as soon as routing conditions are met. Do not design procedures around the warmup window.
 8. **The tier is reachable only in the prefill/decode selection flow.** A plain single-pool vLLM service does not use this tier — partition endpoints by role to enable it.
 
 ### Load-blind argmax → capacity-weighted blend

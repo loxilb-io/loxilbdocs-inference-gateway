@@ -36,16 +36,20 @@ All AI control-plane endpoints require a bearer token obtained from the LoxiLB
 auth service. Acquire a token by logging in, then pass it on every request:
 
 ```bash
-# Obtain a JWT (admin credentials shown; use your own)
+# Obtain a JWT (replace <ADMIN_PASSWORD> with your admin password)
 TOKEN=$(curl -s -X POST \
   http://10.10.10.254:11111/netlox/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"Admin123!"}' \
+  -d '{"username":"admin","password":"<ADMIN_PASSWORD>"}' \
   | python3 -c "import sys,json; print(json.load(sys.stdin).get('token',''))")
 
 # Every AI request carries the token
 #   -H "Authorization: Bearer $TOKEN"
 ```
+
+!!! warning "Change the default admin password"
+    A fresh install ships with a stock admin password. Change it immediately after first
+    login and never run a reachable deployment with default credentials.
 
 The global authentication scheme is `Authorization: Bearer <token>`.
 
