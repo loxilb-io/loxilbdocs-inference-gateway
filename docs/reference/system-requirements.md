@@ -10,7 +10,7 @@ The gateway ships as a single container image and runs on a Linux host with Dock
 |---|---|---|
 | Host OS | Linux | eBPF/XDP data plane is Linux-only |
 | Container runtime | Docker | Published image; `docker run` deployment |
-| Image | `ghcr.io/loxilb-io/loxilb-inference-gateway:latest` | Public, upstream-maintained |
+| Image | `ghcr.io/loxilb-io/loxilb-inference-gateway:latest` | Upstream-maintained. If the registry denies the pull, the package is not yet public — build from source (see below). |
 | Capabilities | `--cap-add SYS_ADMIN --privileged` | Required to load and attach the eBPF/XDP programs |
 | REST API port | `11111` (`/netlox/v1/...`) | Configuration and metrics API |
 | CPU architectures | `amd64`, `arm64` | Multi-arch image |
@@ -96,8 +96,16 @@ Prebuilt tokenizer static library (linked by the KV-cache router):
 ```bash
 arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/)
 wget -q https://github.com/daulet/tokenizers/releases/download/v1.27.0/libtokenizers.linux-${arch}.tar.gz
+sha256sum libtokenizers.linux-${arch}.tar.gz   # verify before installing as root
 sudo tar -xzf libtokenizers.linux-${arch}.tar.gz -C /usr/local/lib/
 ```
+
+!!! warning "Verify the download before extracting as root"
+    This extracts a third-party binary artifact into a system library path with root
+    privileges. The upstream release does not publish a checksum manifest, so record the
+    `sha256sum` output the first time you fetch a release version and verify every later
+    download (and every other host) against that recorded digest before running the
+    `sudo tar` step.
 
 Clone with the eBPF submodule and build:
 

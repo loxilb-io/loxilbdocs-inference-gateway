@@ -38,6 +38,39 @@ implement — if a capability is partial or roadmap, say so with a status admoni
    ```
 4. Open a pull request. Fill in the PR template and link any related issue.
 
+## Commit messages
+
+Use [Conventional Commits](https://www.conventionalcommits.org/), e.g.:
+
+```
+docs(kv-caching): correct kvBlockSize default for CPU vLLM
+fix(nav): repair broken relative link in llm-routing
+ci(linkcheck): exclude hosts that block automated checkers
+```
+
+Give the PR a Conventional Commits style title as well — it becomes the squash-merge commit
+message.
+
+## Sign your commits (DCO)
+
+We require a [Developer Certificate of Origin (DCO)](https://developercertificate.org/) sign-off on
+every commit. The sign-off certifies that you wrote the change or otherwise have the right to
+submit it under the project's license.
+
+Add a `Signed-off-by` line to each commit — it must match the git author name and email:
+
+```
+Signed-off-by: Your Name <your.name@example.com>
+```
+
+Git adds it automatically with the `-s` flag:
+
+```bash
+git commit -s -m "docs(kv-caching): correct kvBlockSize default for CPU vLLM"
+```
+
+If you forgot on an unpushed commit, amend it with `git commit --amend -s`.
+
 ## Style conventions
 
 - One `# H1` per page, followed by a one- to two-sentence purpose line.

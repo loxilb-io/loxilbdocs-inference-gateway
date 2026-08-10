@@ -13,7 +13,7 @@ GEMINI.md
 claudedocs/
 .planning/
 
-# leak-scan lives in the private working repo (its patterns name internal identifiers)
+# Local tooling and scratch scripts — not part of the published docs
 tools/
 
 # Internal planning / design / migration docs — never publish
