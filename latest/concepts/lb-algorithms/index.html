@@ -87,6 +87,10 @@
       
     </div>
     
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
     
       
 
@@ -2541,7 +2545,7 @@
 <p><strong>When to use for LLM serving:</strong> throughput-oriented pools of largely independent requests, where balancing GPU queues matters more than reusing a prior prompt's cache. GPU-aware routing depends on a working metrics feed from the backends — see <a href="../../ai-gateway/vllm-integration/">vLLM Integration</a>.</p>
 <div class="admonition warning">
 <p class="admonition-title">GPU-aware routing: advanced, no automated CI scenario</p>
-<p><code>sel: 9</code> is exercised only by an internal parity script today; no runnable end-to-end CI testbed ships for it. Treat it as advanced and validate against your own fleet before relying on it in production.</p>
+<p>No automated end-to-end CI scenario ships for <code>sel: 9</code> yet. Treat it as advanced and validate against your own fleet before relying on it in production.</p>
 </div>
 <h3 id="sel-10-wrr-hash-weighted-consistent-hash"><code>sel: 10</code> — WRR-hash (weighted consistent hash)<a class="headerlink" href="#sel-10-wrr-hash-weighted-consistent-hash" title="Permanent link">&para;</a></h3>
 <p>Uses the same prefix-hashing machinery as CHWBL, but distributes the virtual nodes on the ring proportionally to endpoint <code>weight</code>. You get CHWBL's prefix-cache locality <em>and</em> a deliberate, weight-driven traffic split across uneven backends.</p>
@@ -2859,7 +2863,7 @@ and the effective out-of-box ceiling is 175. Set it explicitly if the exact ceil
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

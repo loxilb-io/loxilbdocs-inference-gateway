@@ -87,6 +87,10 @@
       
     </div>
     
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
     
       
 
@@ -1346,10 +1350,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#52-page-size-parity-the-deadliest-knob" class="md-nav__link">
+  <a href="#52-page-size-parity-the-most-critical-parity-knob" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.2 --page-size parity (the deadliest knob)
+        5.2 --page-size parity (the most critical parity knob)
       
     </span>
   </a>
@@ -2586,10 +2590,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#52-page-size-parity-the-deadliest-knob" class="md-nav__link">
+  <a href="#52-page-size-parity-the-most-critical-parity-knob" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5.2 --page-size parity (the deadliest knob)
+        5.2 --page-size parity (the most critical parity knob)
       
     </span>
   </a>
@@ -3287,7 +3291,7 @@ otherwise silent.</p>
 <li>Self-confirm the publisher actually bound: <code>ss -tln | grep :5561</code> on the EP must show a
   listener. This failure is otherwise silent.</li>
 </ul>
-<h3 id="52-page-size-parity-the-deadliest-knob">5.2 <code>--page-size</code> parity (the deadliest knob)<a class="headerlink" href="#52-page-size-parity-the-deadliest-knob" title="Permanent link">&para;</a></h3>
+<h3 id="52-page-size-parity-the-most-critical-parity-knob">5.2 <code>--page-size</code> parity (the most critical parity knob)<a class="headerlink" href="#52-page-size-parity-the-most-critical-parity-knob" title="Permanent link">&para;</a></h3>
 <p><code>kvBlockSize</code> on the rule <strong>must equal SGLang's effective page size</strong> — and SGLang's <code>--page-size</code>
 default is <strong>model-dependent; never assume 16</strong>. Always read it back:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;ep&gt;:30000/get_server_info<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s1">&#39;&quot;page_size&quot;[: ]*[0-9]*&#39;</span>
@@ -3673,7 +3677,7 @@ most common "routing bug" is a broken parity leg.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

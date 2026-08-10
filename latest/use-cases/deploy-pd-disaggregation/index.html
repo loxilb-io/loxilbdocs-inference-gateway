@@ -87,6 +87,10 @@
       
     </div>
     
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
     
       
 
@@ -1229,15 +1233,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-vllm-configuration-the-part-most-people-get-wrong" class="md-nav__link">
+  <a href="#4-vllm-configuration-commonly-misconfigured" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. vLLM configuration (the part most people get wrong)
+        4. vLLM configuration (commonly misconfigured)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="4. vLLM configuration (the part most people get wrong)">
+    <nav class="md-nav" aria-label="4. vLLM configuration (commonly misconfigured)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2413,15 +2417,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-vllm-configuration-the-part-most-people-get-wrong" class="md-nav__link">
+  <a href="#4-vllm-configuration-commonly-misconfigured" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. vLLM configuration (the part most people get wrong)
+        4. vLLM configuration (commonly misconfigured)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="4. vLLM configuration (the part most people get wrong)">
+    <nav class="md-nav" aria-label="4. vLLM configuration (commonly misconfigured)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -2809,7 +2813,7 @@ ZMQ events stay fast. Addresses below are placeholders — substitute your own.<
 P/D disaggregation work. They are independent — a broken inventory plane silently degrades routing
 to round-robin (see §9), while a broken KV-transfer plane fails requests outright (503/timeout).</p>
 <hr />
-<h2 id="4-vllm-configuration-the-part-most-people-get-wrong">4. vLLM configuration (the part most people get wrong)<a class="headerlink" href="#4-vllm-configuration-the-part-most-people-get-wrong" title="Permanent link">&para;</a></h2>
+<h2 id="4-vllm-configuration-commonly-misconfigured">4. vLLM configuration (commonly misconfigured)<a class="headerlink" href="#4-vllm-configuration-commonly-misconfigured" title="Permanent link">&para;</a></h2>
 <h3 id="41-prefill-node-kv_producer-kv-event-publish">4.1 Prefill node (kv_producer + KV-event publish)<a class="headerlink" href="#41-prefill-node-kv_producer-kv-event-publish" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>vllm<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_HOST</span><span class="o">=</span>&lt;this-node-ip&gt;<span class="w"> </span><span class="se">\ </span><span class="w">         </span><span class="c1"># MUST be the node IP, NOT 0.0.0.0</span>
@@ -3278,7 +3282,7 @@ missing/mismatched tokenizer produces different token ids → different hashes �
 <a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>  │  decode_addr_...} ◄──│                                            │                   │
 </code></pre></div>
 <div class="admonition tip">
-<p class="admonition-title">Operator gold: the routing decision is in the response id</p>
+<p class="admonition-title">The routing decision is visible in the response id</p>
 <p>loxilb stamps the chosen pair into the completion <code>id</code>:
 <code>cmpl-___prefill_addr_&lt;prefill-2-ip&gt;:5600___decode_addr_&lt;decode-1-ip&gt;:5600_…</code>. You can read the
 routing decision per request straight off the response — no instrumentation needed.</p>
@@ -3479,7 +3483,7 @@ Any other shape points back to the parity triad (§6) or the ZMQ inventory plane
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

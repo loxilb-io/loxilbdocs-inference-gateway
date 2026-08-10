@@ -87,6 +87,10 @@
       
     </div>
     
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
     
       
 
@@ -2518,7 +2522,7 @@
 <h2 id="step-6-secure-the-link-to-your-gateways">Step 6 — Secure the link to your gateways<a class="headerlink" href="#step-6-secure-the-link-to-your-gateways" title="Permanent link">&para;</a></h2>
 <p>In production, OAM should verify TLS when talking to each managed gateway:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># 1. Generate a per-instance server certificate signed by a bundle-local CA</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>scripts/generate-instance-certs.sh<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>lb2.internal
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>scripts/generate-instance-certs.sh<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>lb2.example.com
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># 2. Install the certificate on each gateway host and restart with TLS</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1">#    (copy certs/instance-ca/&lt;host&gt;/server.crt and server.key</span>
@@ -2654,7 +2658,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

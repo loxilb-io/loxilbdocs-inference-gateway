@@ -87,6 +87,10 @@
       
     </div>
     
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
     
       
 
@@ -2598,7 +2602,7 @@ hashes — but <strong>every step of the recipe differs</strong>.</p>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>block 2:  SHA256( &lt;block-1 full digest&gt; ‖ 21000000 … 30000000 )
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>          published int64 = 5689809685380680247  → uint64 0x4ef643c350b14a37
 </code></pre></div>
-<p><strong>The signed-wrap teeth.</strong> For the single token <code>[0]</code>, the digest starts <code>0xdf3f619804a92fdb…</code> —
+<p><strong>Signed-wrap pitfall.</strong> For the single token <code>[0]</code>, the digest starts <code>0xdf3f619804a92fdb…</code> —
 byte 0 ≥ <code>0x80</code>, so SGLang publishes <strong>−2360060374177730597</strong> on the wire; LoxiLB's int64→uint64
 cast must land on exactly <code>0xdf3f619804a92fdb</code>, or Tier 1.5 silently never intersects. A page-size
 32 block that also wraps negative (<code>0xb9e5c32b50351992</code> ↔ −5051416816229475950) confirms the
@@ -2915,7 +2919,7 @@ gateway from cross-matching. Trees never needed reconciling across engines eithe
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
