@@ -14,13 +14,6 @@ exclude = [
   "https://www.linkedin.com",
   "https://img.shields.io",
   "https://www.openpolicyagent.org",
-
-  # loxilb-io repositories that are still private: the CI token is scoped to
-  # this repository only, so GitHub answers 404 for them. Remove these once
-  # the repositories flip public.
-  "https://github.com/loxilb-io/loxilb-inference-gateway",
-  "https://github.com/loxilb-io/loxilb-oam",
-  "https://github.com/loxilb-io/loxilb-ui",
 ]
 
 # Link-local IPs are already covered by exclude_all_private above
