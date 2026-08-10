@@ -206,7 +206,7 @@ docker run -u root --cap-add SYS_ADMIN --restart unless-stopped --privileged \
   -e LLB_KV_NONE_HASH_SEED=0 \                             # PARITY: must match vLLM PYTHONHASHSEED
   -e LOXILB_KV_MAX_BLOCKS=1000000 \                        # per-EP inventory cap (read at subscriber init)
   -e LLB_KV_HASH_DEBUG=1 \                                 # test-only: [KV_HASH] forensic logger
-  --name loxilb loxilb/loxilb:latest -p
+  --name loxilb ghcr.io/loxilb-io/loxilb-inference-gateway:latest -p
 ```
 
 ### 5.2 The LB rules — four modes to compare

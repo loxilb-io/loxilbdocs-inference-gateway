@@ -124,6 +124,7 @@ For a commercial certificate, drop `cert.pem` + `key.pem` into `certs/edge/` ins
 # All services up ("healthy" for mysql and oam-loxilb)
 docker compose -f docker-compose.yml -f docker-compose.dev.yml ps
 
+# -k skips CA verification for the self-signed edge cert; verify the CA in production
 # Edge liveness
 curl -sk https://oam.example.com/healthz
 

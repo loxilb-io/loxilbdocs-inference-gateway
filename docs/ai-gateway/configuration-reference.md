@@ -125,7 +125,7 @@ overlap silently drops to zero. See [KV-Cache Routing](kv-caching.md).
 | `kvBlockSize` | int64 | `16` | ≥1 | Token block size for hash computation. **Must match** vLLM `--block-size` / SGLang `--page-size`. (CPU vLLM defaults to 128 — override to 16.) |
 | `kvHashAlgo` | string | `sha256_cbor` | `sha256_cbor`, `xxhash_cbor` | Block-hash algorithm; must match the engine's configured algorithm. **For SGLang, OMIT this field** (engine identity implies the SGLang algorithm; an explicit value scores 0). |
 | `kvZmqPort` | int64 | `5557` | `1`–`65535` | ZMQ PUB port on the (prefill) endpoints publishing KV-cache events. |
-| `kvWarmupSec` | int64 | `30` | ≥0 | Seconds to wait after the ZMQ subscriber connects before activating Tier 1.5 (lets inventory populate). |
+| `kvWarmupSec` | int64 | `30` | ≥0 | **Accepted but currently inert on all paths.** Intended as a Tier 1.5 warmup delay after subscriber connect, but the timer is never armed in the shipped data path — Tier 1.5 activates without waiting. Do not design procedures around it. |
 | `kvEngineType` | string | `vllm` | `vllm`, `sglang` | KV-event engine for this VIP. **Immutable after create** (delete + recreate to change). One framework per VIP. |
 | `kvDpRankCount` | int32 | `1` | `1`–`8` | SGLang data-parallel rank count. Rank N publishes at `kvZmqPort+N`; all ranks union into one per-EP inventory. |
 
@@ -224,7 +224,7 @@ Backend server verification and loxilb client-cert presentation. Only valid with
 
 | Field | Type | Default | Allowed / Enum | Notes |
 |---|---|---|---|---|
-| `verify_server_cert` | boolean | `false` | `true`/`false` | `true`=`SSL_VERIFY_PEER`; `false`=`SSL_VERIFY_NONE` (no backend verification, compat default). |
+| `verify_server_cert` | boolean | `false` | `true`/`false` | `true`=`SSL_VERIFY_PEER`; `false`=`SSL_VERIFY_NONE` (no backend verification, compat default). **Set `true` in production** — the default accepts any backend certificate. |
 | `backend_ca_path` | string | — | filesystem path (PEM) | Backend CA bundle. Empty uses the system CA store (`/etc/ssl/certs/`). |
 | `client_cert_path` | string | — | filesystem path (PEM) | loxilb's client cert for backend mTLS. |
 | `client_key_path` | string | — | filesystem path (PEM) | loxilb's private key for backend mTLS. |

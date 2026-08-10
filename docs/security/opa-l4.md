@@ -77,6 +77,16 @@ curl -s http://<opa-host>:8181/health
     public/routable IP), not a loopback or link-local address. In a lab, place OPA on the same
     routable network segment LoxiLB uses for its lab addresses.
 
+!!! danger "Protect the OPA server itself"
+    OPA's REST data API is **unauthenticated by default**, and because `opa_url` must be
+    routable, a carelessly placed OPA server can be reachable by more than just LoxiLB —
+    anyone who can reach it can read and **rewrite your policies**. Before production:
+    firewall the OPA port (`8181`) so only the LoxiLB host(s) can reach it, run OPA with
+    authentication and authorization enabled
+    (`opa run --server --authentication=token --authorization=basic ...`), and prefer TLS
+    (`--tls-cert-file`/`--tls-private-key-file`). See the
+    [OPA security guide](https://www.openpolicyagent.org/docs/latest/security/).
+
 ### 2. Author a Rego policy at package `loxilb.l4`
 
 LoxiLB queries `POST <opa_url>/v1/data/<policy_path>` with an `input` document describing the L4
