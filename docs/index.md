@@ -19,8 +19,7 @@ them.
 
 !!! info "License"
     The LoxiLB Inference Gateway is licensed under the **Apache License 2.0**, the same as
-    upstream loxilb. Any older reference to an MIT license is incorrect — Apache-2.0 is
-    authoritative.
+    upstream loxilb.
 
 !!! note "Every AI feature is opt-in"
     AI routing is enabled per load-balancer rule. With no AI fields set, the gateway behaves

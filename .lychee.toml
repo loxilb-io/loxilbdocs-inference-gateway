@@ -23,5 +23,5 @@ exclude = [
   "https://github.com/loxilb-io/loxilb-ui",
 ]
 
-# Don't check anchors on external pages
+# Link-local IPs are already covered by exclude_all_private above
 exclude_link_local = false

@@ -395,7 +395,7 @@ rate gauge:
 | `lmcache:remote_cache_usage` | Remote/P2P-tier occupancy (if configured) |
 | `lmcache:time_to_retrieve` | Retrieval latency from a lower tier |
 
-!!! warning "`lmcache:retrieve_hit_rate` lies"
+!!! warning "`lmcache:retrieve_hit_rate` is misleading"
     The rate gauge is not reset/recomputed the way you would expect — it can sit at
     `1.0` even when no retrieval has happened. Judge effectiveness by the delta on
     `lmcache:num_hit_tokens` over a known workload, not by the rate.

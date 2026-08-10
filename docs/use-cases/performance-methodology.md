@@ -341,8 +341,7 @@ mistake.
    quality. For a clean comparison, drive every arm through the **same** serving topology, or
    reframe the claim to name the difference.
 3. **The correctness floor is absolute.** The invalid-HTTP-framing count **must be zero** on every
-   published run. A fast number over a subtly broken path is not a performance result — it is a bug
-   with good latency.
+   published run. A fast number over a subtly broken path is not a performance result.
 4. **Routing knobs are load-dependent.** A policy that wins at one offered rate can lose at another.
    Always report the **rate**, and prefer a load-adaptive policy when you need a single setting
    across a range.

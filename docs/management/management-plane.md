@@ -143,7 +143,7 @@ In production, OAM should verify TLS when talking to each managed gateway:
 
 ```bash
 # 1. Generate a per-instance server certificate signed by a bundle-local CA
-scripts/generate-instance-certs.sh 192.0.2.10 lb2.internal
+scripts/generate-instance-certs.sh 192.0.2.10 lb2.example.com
 ```
 
 ```bash
