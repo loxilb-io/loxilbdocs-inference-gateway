@@ -12,17 +12,17 @@ or SGLang backend pool. Streaming responses are relayed back to the client as SS
 
 ```text
                         LoxiLB Inference Gateway
-                   ┌──────────────────────────────────┐
+                   ┌───────────────────────────────────┐
    OpenAI-         │  Control plane (Go)               │
    compatible      │    REST API  :11111 /netlox/v1    │
    HTTP / SSE      │    KV-cache selector · P/D coord  │
    clients ───────▶│    routing tables / rules         │        vLLM / SGLang
-                   │            │ programs              │        backend pools
-                   │            ▼                       │      ┌──────────────┐
-                   │  Data plane                        │─────▶│ prefill pool │
-                   │    eBPF (L4)  +  sockproxy (L7)    │─────▶│ decode pool  │
-                   │    fullproxy userspace HTTP proxy  │─────▶│ SGLang pool  │
-                   └──────────────────────────────────┘      └──────┬───────┘
+                   │            │ programs             │        backend pools
+                   │            ▼                      │      ┌──────────────┐
+                   │  Data plane                       │─────▶│ prefill pool │
+                   │    eBPF (L4)  +  sockproxy (L7)   │─────▶│ decode pool  │
+                   │    fullproxy userspace HTTP proxy │─────▶│ SGLang pool  │
+                   └───────────────────────────────────┘      └──────┬───────┘
                             ▲                                        │
                             └──── KV-cache events (ZMQ) ─────────────┘
 ```
