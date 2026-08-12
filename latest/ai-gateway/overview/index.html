@@ -2339,31 +2339,30 @@ first — they explain the endpoint model that all examples below build on.</p>
 <hr />
 <h2 id="request-lifecycle-through-the-fullproxy">Request lifecycle through the fullproxy<a class="headerlink" href="#request-lifecycle-through-the-fullproxy" title="Permanent link">&para;</a></h2>
 <p>Every request follows the same fullproxy data path. Understanding these stages is the key to configuring and troubleshooting the gateway.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>flowchart TD
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    CLIENT([Client request&lt;br/&gt;POST /v1/chat/completions]) --&gt; TLS
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    subgraph ingress [&quot;Ingress (fullproxy, mode 4)&quot;]
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        TLS{&quot;TLS termination&lt;br/&gt;(security: 1 / 2 / 3)&quot;}
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        TLS --&gt; PARSE[&quot;HTTP body parsing&lt;br/&gt;extract: model, prompt,&lt;br/&gt;session identifiers&quot;]
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    end
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    subgraph routing [&quot;Routing decision&quot;]
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        PARSE --&gt; STAGE1{&quot;Stage 1: model pool&lt;br/&gt;selection (model_name)&quot;}
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        STAGE1 --&gt;|&quot;no match&quot;| R503([503 model_unavailable])
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        STAGE1 --&gt;|&quot;matched / wildcard&quot;| STAGE2{&quot;Stage 2: endpoint&lt;br/&gt;selection (sel algorithm)&quot;}
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    end
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    subgraph backend [&quot;Backend forwarding&quot;]
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        STAGE2 --&gt; FWD[&quot;Forward to selected&lt;br/&gt;backend endpoint&quot;]
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        FWD --&gt; STREAM[&quot;SSE response&lt;br/&gt;streaming&quot;]
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>        STREAM --&gt; COUNT[&quot;Token accounting&lt;br/&gt;(counted / recorded)&quot;]
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        COUNT --&gt; RESP([Response to client])
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    end
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    style ingress fill:#e1f5fe,stroke:#0288d1
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    style routing fill:#e8f5e9,stroke:#43a047
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    style backend fill:#fff3e0,stroke:#f57c00
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    CLIENT([Client request&lt;br/&gt;POST /v1/chat/completions]) --&gt; TLS
+
+    subgraph ingress ["Ingress (fullproxy, mode 4)"]
+        TLS{"TLS termination&lt;br/&gt;(security: 1 / 2 / 3)"}
+        TLS --&gt; PARSE["HTTP body parsing&lt;br/&gt;extract: model, prompt,&lt;br/&gt;session identifiers"]
+    end
+
+    subgraph routing ["Routing decision"]
+        PARSE --&gt; STAGE1{"Stage 1: model pool&lt;br/&gt;selection (model_name)"}
+        STAGE1 --&gt;|"no match"| R503([503 model_unavailable])
+        STAGE1 --&gt;|"matched / wildcard"| STAGE2{"Stage 2: endpoint&lt;br/&gt;selection (sel algorithm)"}
+    end
+
+    subgraph backend ["Backend forwarding"]
+        STAGE2 --&gt; FWD["Forward to selected&lt;br/&gt;backend endpoint"]
+        FWD --&gt; STREAM["SSE response&lt;br/&gt;streaming"]
+        STREAM --&gt; COUNT["Token accounting&lt;br/&gt;(counted / recorded)"]
+        COUNT --&gt; RESP([Response to client])
+    end
+
+    style ingress fill:#e1f5fe,stroke:#0288d1
+    style routing fill:#e8f5e9,stroke:#43a047
+    style backend fill:#fff3e0,stroke:#f57c00</code></pre>
 <h3 id="stages-explained">Stages explained<a class="headerlink" href="#stages-explained" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2447,40 +2446,39 @@ today. Use <code>mode: 4</code> for all AI routing. See <a href="../../concepts/
 <hr />
 <h2 id="feature-map">Feature map<a class="headerlink" href="#feature-map" title="Permanent link">&para;</a></h2>
 <p>The AI Gateway documentation is organized around the request lifecycle. Each feature has its own guide:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>flowchart TD
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    OV[&quot;AI Gateway Overview&lt;br/&gt;(this page)&quot;]
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    subgraph routing [&quot;Routing &amp; selection&quot;]
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        MLB[&quot;Model Load Balancing&lt;br/&gt;Stage 1: model_name pools&quot;]
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        LLM[&quot;LLM Routing&lt;br/&gt;Stage 2: CHWBL / GPU-aware&quot;]
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        KV[&quot;KV-Cache Routing&lt;br/&gt;block-hash matching&quot;]
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        PD[&quot;P/D Disaggregation&lt;br/&gt;prefill / decode split&quot;]
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        VLLM[&quot;vLLM Integration&lt;br/&gt;backend protocol &amp; metrics&quot;]
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    end
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    subgraph streaming [&quot;Streaming &amp; access&quot;]
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>        SSE[&quot;SSE &amp; Quota&lt;br/&gt;stream lifecycle, token accounting&quot;]
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>        API[&quot;API Key Management&lt;br/&gt;keys &amp; tenant limits (CRUD)&quot;]
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>        MCP[&quot;MCP Gateway&lt;br/&gt;session-affinity L7&quot;]
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    end
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    subgraph ref [&quot;Reference&quot;]
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>        CFG[&quot;Configuration Reference&lt;br/&gt;all serviceArguments&quot;]
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    end
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>    OV --&gt; MLB --&gt; LLM
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>    LLM --&gt; KV
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>    LLM --&gt; PD
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>    LLM --&gt; VLLM
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>    OV --&gt; SSE
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>    OV --&gt; API
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>    OV --&gt; MCP
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>    OV --&gt; CFG
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>    style routing fill:#e8f5e9,stroke:#43a047
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>    style streaming fill:#fff3e0,stroke:#f57c00
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>    style ref fill:#fce4ec,stroke:#e91e63
-</code></pre></div>
+<pre class="mermaid"><code>flowchart TD
+    OV["AI Gateway Overview&lt;br/&gt;(this page)"]
+
+    subgraph routing ["Routing &amp; selection"]
+        MLB["Model Load Balancing&lt;br/&gt;Stage 1: model_name pools"]
+        LLM["LLM Routing&lt;br/&gt;Stage 2: CHWBL / GPU-aware"]
+        KV["KV-Cache Routing&lt;br/&gt;block-hash matching"]
+        PD["P/D Disaggregation&lt;br/&gt;prefill / decode split"]
+        VLLM["vLLM Integration&lt;br/&gt;backend protocol &amp; metrics"]
+    end
+
+    subgraph streaming ["Streaming &amp; access"]
+        SSE["SSE &amp; Quota&lt;br/&gt;stream lifecycle, token accounting"]
+        API["API Key Management&lt;br/&gt;keys &amp; tenant limits (CRUD)"]
+        MCP["MCP Gateway&lt;br/&gt;session-affinity L7"]
+    end
+
+    subgraph ref ["Reference"]
+        CFG["Configuration Reference&lt;br/&gt;all serviceArguments"]
+    end
+
+    OV --&gt; MLB --&gt; LLM
+    LLM --&gt; KV
+    LLM --&gt; PD
+    LLM --&gt; VLLM
+    OV --&gt; SSE
+    OV --&gt; API
+    OV --&gt; MCP
+    OV --&gt; CFG
+
+    style routing fill:#e8f5e9,stroke:#43a047
+    style streaming fill:#fff3e0,stroke:#f57c00
+    style ref fill:#fce4ec,stroke:#e91e63</code></pre>
 <table>
 <thead>
 <tr>
@@ -2587,10 +2585,10 @@ cannot inspect HTTP bodies for model routing. See
 <hr />
 <h2 id="verify-the-gateway-is-running">Verify the gateway is running<a class="headerlink" href="#verify-the-gateway-is-running" title="Permanent link">&para;</a></h2>
 <p>Confirm the REST API is up:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;VIP&gt;:11111/netlox/v1/version
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;VIP&gt;:11111/netlox/v1/version
 </code></pre></div>
 <p>List all configured load-balancer rules — this is the authoritative inventory of your AI Gateway services, including each rule's <code>model_name</code>, <code>mode</code>, and <code>sel</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;VIP&gt;:11111/netlox/v1/config/loadbalancer/all
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;VIP&gt;:11111/netlox/v1/config/loadbalancer/all
 </code></pre></div>
 <p>Each rule in the response should show <code>mode: 4</code> and the <code>model_name</code> you configured. If a service is missing or shows a different mode, re-check the create call.</p>
 <hr />

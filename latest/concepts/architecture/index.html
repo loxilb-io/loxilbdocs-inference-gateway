@@ -2206,17 +2206,17 @@ The gateway terminates the connection at its L7 fullproxy (<code>mode: 4</code>)
 requested model, headers, body, prompt prefix — selects an endpoint, and proxies to the vLLM
 or SGLang backend pool. Streaming responses are relayed back to the client as SSE.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>                        LoxiLB Inference Gateway
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                   ┌──────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                   ┌───────────────────────────────────┐
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>   OpenAI-         │  Control plane (Go)               │
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>   compatible      │    REST API  :11111 /netlox/v1    │
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>   HTTP / SSE      │    KV-cache selector · P/D coord  │
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>   clients ───────▶│    routing tables / rules         │        vLLM / SGLang
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                   │            │ programs              │        backend pools
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                   │            ▼                       │      ┌──────────────┐
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                   │  Data plane                        │─────▶│ prefill pool │
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                   │    eBPF (L4)  +  sockproxy (L7)    │─────▶│ decode pool  │
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>                   │    fullproxy userspace HTTP proxy  │─────▶│ SGLang pool  │
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>                   └──────────────────────────────────┘      └──────┬───────┘
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                   │            │ programs             │        backend pools
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                   │            ▼                      │      ┌──────────────┐
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                   │  Data plane                       │─────▶│ prefill pool │
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                   │    eBPF (L4)  +  sockproxy (L7)   │─────▶│ decode pool  │
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>                   │    fullproxy userspace HTTP proxy │─────▶│ SGLang pool  │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>                   └───────────────────────────────────┘      └──────┬───────┘
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>                            ▲                                        │
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>                            └──── KV-cache events (ZMQ) ─────────────┘
 </code></pre></div>
