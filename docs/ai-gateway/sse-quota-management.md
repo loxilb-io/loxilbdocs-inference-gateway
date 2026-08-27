@@ -1,185 +1,202 @@
 # SSE and Quota Management
 
-Tune how the LoxiLB AI Gateway handles Server-Sent Events (SSE) streaming for
-OpenAI-compatible LLM endpoints, and understand how per-request token usage is
-recorded as streams complete.
+Server-Sent Events (SSE) keep an HTTP response open while an inference engine
+streams tokens. LoxiLB protects this long-lived path from normal idle reaping,
+requests usage accounting, and settles token-quota reservations when the
+response completes.
 
-## Concept
+!!! danger "Quota enforcement requires the independent key store"
+    SSE relay behavior is part of fullproxy, but API-key and token-quota admission uses the
+    PostgreSQL store configured by `--aikey-db-*`, not the management user service. With no
+    `--aikey-db-host`, the current data path admits requests without key checks. Verify a
+    missing-key request returns `401` before relying on quota enforcement.
 
-Streaming chat completions keep a single HTTP response open for the entire
-generation. The backend emits `Content-Type: text/event-stream` and drips
-`data:` chunks — often with long gaps between tokens — until it sends the
-`data: [DONE]` sentinel. A conventional idle timeout would tear such a
-connection down mid-generation, truncating the answer.
+## Stream lifecycle
 
-When you run a service in fullproxy mode (`mode=4`) with `sse_mode=true`, the
-gateway recognizes the event-stream response and manages its lifecycle:
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Gateway as LoxiLB Gateway
+    participant Engine as Inference engine
 
-- **Idle-timeout suppression** — while an SSE stream is active, the normal
-  `inactiveTimeOut` is suppressed, so a slow-drip response is never cut off for
-  lack of bytes.
-- **`[DONE]` detection** — the gateway scans for the `data: [DONE]` terminator
-  and closes the connection cleanly, so keep-alive sockets do not hang.
-- **Absolute duration cap** — `max_stream_duration_sec` bounds a runaway stream
-  with a wall-clock ceiling.
-- **Backend keepalive** — `backend_keepalive_interval_sec` keeps the backend TCP
-  connection-tracking entry alive through cloud NAT during long streams.
-- **Token bookkeeping** — as each stream ends, the gateway reads the final
-  `usage` block and records the request's prompt/completion token counts against
-  the calling key and tenant.
-
-The SSE lifecycle and token accounting are wired in the data path. Quota
-*enforcement* — rejecting the next request once a limit is crossed — is not.
-See the admonition below.
-
-!!! warning "Data-plane enforcement: roadmap"
-    API-key authentication (401/403) and per-tenant rate limiting (429) are **control-plane CRUD
-    only** today — the gateway stores and manages keys/limits but does not yet reject requests in
-    the data path. SSE stream lifecycle and token accounting **are** wired.
-
-### Fields
-
-These are the `serviceArguments` that govern SSE behavior. Defaults and types
-follow the REST schema exactly.
-
-| Field | Type | Default | Meaning |
-|---|---|---|---|
-| `sse_mode` | bool | `false` | Enable SSE streaming handling. When `true`, idle-timeout is suppressed while a `text/event-stream` response is active. Required for streaming chat-completion endpoints. |
-| `max_stream_duration_sec` | int32 | `0` | Absolute wall-clock cap for an SSE stream, in seconds. `0` uses the system hard cap of 86400s (24h). Set a lower value (e.g. `300`) to bound runaway streams. |
-| `backend_keepalive_interval_sec` | int32 | `0` | Sets `SO_KEEPALIVE` + `TCP_KEEPIDLE` on the backend socket, in seconds. `0` disables it. Recommended value is `60` for most cloud environments where NAT idle-evicts long-lived flows. |
-
-!!! note "Token accounting is per-completed-stream"
-    The gateway extracts token usage from the terminal `usage` object of the
-    stream. Counts are attributed to the API key and tenant, recorded, and
-    exposed for observability. They are **counted and recorded, but not** yet
-    used to block subsequent requests — enforcement is on the roadmap.
-
-## Configuration
-
-Create a fullproxy service with SSE handling enabled. The example targets a lab
-VIP `10.10.10.254` on the LoxiLB REST port `11111`, routing to a streaming
-backend at `31.31.31.1:8080`. Adjust addresses for your environment.
-
-=== "curl"
-    ```bash
-    curl -s -X POST \
-      http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
-      -H "Content-Type: application/json" \
-      -d '{
-        "serviceArguments": {
-          "externalIP":                    "10.10.10.254",
-          "port":                           2020,
-          "protocol":                      "tcp",
-          "sel":                            0,
-          "mode":                           4,
-          "host":                          "10.10.10.254",
-          "path_prefix":                   "/",
-          "path_match_mode":               "prefix",
-          "model_name":                    "sse-test",
-          "sse_mode":                       true,
-          "max_stream_duration_sec":        120,
-          "backend_keepalive_interval_sec": 60,
-          "inactiveTimeOut":                60
-        },
-        "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8080, "weight": 1}
-        ]
-      }'
-    ```
-=== "loxicmd"
-    ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=31.31.31.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=sse-test --sse-mode --max-stream-duration=120 --backend-keepalive-interval=60 --inatimeout=60
-    ```
-
-To bound a stream aggressively — for example a debugging service that should
-never hold a connection longer than 10 seconds — lower `max_stream_duration_sec`:
-
-=== "curl"
-    ```bash
-    curl -s -X POST \
-      http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
-      -H "Content-Type: application/json" \
-      -d '{
-        "serviceArguments": {
-          "externalIP":                    "10.10.10.254",
-          "port":                           2022,
-          "protocol":                      "tcp",
-          "sel":                            0,
-          "mode":                           4,
-          "host":                          "10.10.10.254",
-          "path_prefix":                   "/",
-          "path_match_mode":               "prefix",
-          "model_name":                    "cap-test",
-          "sse_mode":                       true,
-          "max_stream_duration_sec":        10,
-          "backend_keepalive_interval_sec": 60,
-          "inactiveTimeOut":                60
-        },
-        "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8080, "weight": 1}
-        ]
-      }'
-    ```
-=== "loxicmd"
-    ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2022:8080 --endpoints=31.31.31.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=cap-test --sse-mode --max-stream-duration=10 --backend-keepalive-interval=60 --inatimeout=60
-    ```
-
-## Verify
-
-**1. Confirm the service exists with SSE enabled.** List load balancer rules and
-check the `sse_mode`, `max_stream_duration_sec`, and
-`backend_keepalive_interval_sec` fields:
-
-=== "curl"
-    ```bash
-    curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
-    ```
-=== "loxicmd"
-    ```bash
-    loxicmd get lb
-    ```
-
-**2. Drive a slow-drip stream.** Send a streaming chat-completion whose gaps
-between chunks exceed the idle timeout. With `sse_mode=true` the stream survives
-to completion and ends with `data: [DONE]`:
-
-```bash
-curl -N -X POST \
-  "http://10.10.10.254:2020/v1/chat/completions" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"mock-model","stream":true,
-       "messages":[{"role":"user","content":"tell me a long story"}]}'
+    Client->>Gateway: POST with stream=true and X-Api-Key
+    Note over Gateway: Authenticate and reserve<br/>prompt estimate + completion ceiling
+    Gateway->>Engine: Forward request with usage reporting enabled
+    Engine-->>Gateway: Content-Type: text/event-stream
+    loop Generated chunks
+        Engine-->>Gateway: data: {...}
+        Gateway-->>Client: Relay chunk
+    end
+    Engine-->>Gateway: usage and data: [DONE]
+    Note over Gateway: Release reservation<br/>charge actual or estimated tokens
+    Gateway-->>Client: Final chunks and close
 ```
 
-You should see incremental `data:` chunks arrive over time, a final chunk
-carrying a `usage` object (for example `"total_tokens": 100`), and a closing
-`data: [DONE]`. The connection then closes cleanly rather than hanging.
+With `mode: 4` and `sse_mode: true`, the Gateway:
 
-**3. Confirm the duration cap.** Against the `2022` service above (cap = 10s),
-a stream that would run longer is terminated at the ceiling — proof that
-`max_stream_duration_sec` is honored.
+- suppresses ordinary inactivity reaping while an SSE response is active;
+- detects the OpenAI-compatible `data: [DONE]` terminator;
+- applies an absolute stream-duration ceiling;
+- can enable backend TCP keepalive for network idle periods;
+- reserves tokens before dispatch and settles usage after completion;
+- excludes time paused by the configured fullproxy byte shaper from idle and
+  stream-duration accounting.
 
-## Troubleshoot
+## Configuration fields
+
+| Field | Default | Meaning |
+|---|---:|---|
+| `sse_mode` | `false` | Enables event-stream lifecycle and AI Gateway request handling |
+| `max_stream_duration_sec` | `0` | Absolute limit in seconds; `0` uses the system ceiling of 86,400 seconds |
+| `backend_keepalive_interval_sec` | `0` | Backend TCP keepalive idle interval; `0` disables it |
+| `inactiveTimeOut` | Rule default | Normal inactivity timeout; suppressed while an SSE stream is active |
+
+Choose a finite stream duration that covers legitimate generations and still
+bounds stuck connections. Set keepalive from your network's measured idle
+behavior rather than copying a value blindly.
+
+## Configure a streaming rule
+
+Use TLS and a protected control-plane header outside an isolated lab:
+
+```bash
+export CONTROL_API="https://gateway.example.com/netlox/v1"
+install -m 600 /dev/null ./control-plane.headers
+printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
+```
+
+The example addresses use documentation-only ranges. Replace all addresses and
+the model with your environment:
+
+```bash
+curl --fail-with-body --silent --show-error \
+  --request POST "$CONTROL_API/config/loadbalancer" \
+  --header @control-plane.headers \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "serviceArguments": {
+      "externalIP": "192.0.2.20",
+      "port": 2020,
+      "protocol": "tcp",
+      "sel": 0,
+      "mode": 4,
+      "host": "192.0.2.20",
+      "path_prefix": "/",
+      "path_match_mode": "prefix",
+      "model_name": "example-stream-model",
+      "sse_mode": true,
+      "max_stream_duration_sec": 300,
+      "backend_keepalive_interval_sec": 60,
+      "inactiveTimeOut": 60
+    },
+    "endpoints": [
+      {"endpointIP": "198.51.100.20", "targetPort": 8000, "weight": 1}
+    ]
+  }'
+```
+
+Read the rule back and confirm `mode`, `sse_mode`, duration, keepalive, and
+model before sending traffic.
+
+## Verify streaming and quota accounting
+
+Store the inference key in a protected header file:
+
+```bash
+install -m 600 /dev/null ./inference.headers
+printf 'X-Api-Key: %s\n' "$INFERENCE_API_KEY" > ./inference.headers
+
+curl --no-buffer --fail-with-body --silent --show-error \
+  --header @inference.headers \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "model": "example-stream-model",
+    "stream": true,
+    "stream_options": {"include_usage": true},
+    "messages": [{"role": "user", "content": "Reply briefly."}],
+    "max_tokens": 32
+  }' \
+  "https://ai.example.com/v1/chat/completions"
+```
+
+A healthy stream produces incremental `data:` records, a terminal usage
+object, and `[DONE]`. The active-stream gauge rises during the request and
+returns after completion. Token counters increase for the tenant and model.
+
+The Gateway can request usage reporting and reserve prompt/completion tokens
+only after buffering a complete, contiguous, positive-`Content-Length` JSON
+body. Chunked, partial, and oversized bodies skip parsing and
+`include_usage` injection. If usage is absent or unreadable, the fallback
+estimate can undercount the actual prompt; the estimated-token and
+missing-usage series are signals to verify framing and engine compatibility.
+
+## Quota behavior for streams
+
+For a complete, contiguous, positive-`Content-Length` JSON body, admission
+reserves the prompt estimate plus the declared completion ceiling. Both
+aggregate tenant TPM and tenant-and-model TPM must have enough capacity. After
+completion, the reservation is credited back and replaced with the actual
+extracted charge or the estimate. Chunked, partial, and oversized bodies skip
+pre-admission reservation and settle afterward from readable usage or the
+fallback estimate, which may undercount prompt use.
+
+If a final charge creates debt, the already-served stream is not interrupted;
+later requests receive `429` until continuous refill restores headroom. An
+eligible buffered request that cannot fit before dispatch receives `429`
+without consuming GPU work. This pre-dispatch guarantee does not apply to the
+skipped body shapes above.
+
+While peer quota state is warming, the gateway returns
+`429 token_quota_warming` with `Retry-After: 1`. The default warm-up deadline is
+three seconds. If no peer state arrives before that deadline, the current
+compatibility path fails open; alert on this event and verify synchronization
+instead of treating the timeout as healthy quota state.
+
+See [AI Traffic Governance](ai-traffic-governance.md) for `burst_pct`, model
+limits, and status-code diagnosis.
+
+## Shaping interaction
+
+A policer attached to a fullproxy rule becomes a bidirectional L7 payload
+shaper. A shaped stream may take longer than the configured duration in wall
+time because periods deliberately paused by the shaper are excluded. An
+unshaped slow stream is still bounded by `max_stream_duration_sec`.
+
+This exclusion prevents the Gateway's own pacing policy from being mistaken
+for an idle or runaway stream. It does not disable duration protection for
+backend-generated slowness.
+
+## Troubleshooting
 
 | Symptom | Likely cause | Action |
 |---|---|---|
-| Stream is cut off after a few seconds of silence | `sse_mode` is `false`, so `inactiveTimeOut` fired | Set `sse_mode: true` on the service and re-create the rule. |
-| Connection hangs open after the response finishes | Backend did not emit `data: [DONE]`; the gateway had nothing to detect | Confirm the backend sends the OpenAI `[DONE]` sentinel. As a backstop, set a finite `max_stream_duration_sec`. |
-| Long streams drop midway in a cloud environment | Cloud NAT evicted the idle backend flow | Set `backend_keepalive_interval_sec: 60` so keepalives refresh the NAT/conntrack entry. |
-| A stream never ends and holds a socket indefinitely | No absolute ceiling configured (`max_stream_duration_sec: 0` ⇒ 24h) | Lower `max_stream_duration_sec` to a sane bound (e.g. `300`). |
-| Token counts do not appear per key/tenant | Backend omitted the terminal `usage` block | Ensure the backend includes `usage` in its final streamed chunk; the gateway reads counts from there. |
-| A key over its token budget is still served | Quota is counted and recorded, but enforcement (429) is not wired in the data path | Expected today — usage is recorded, not enforced. Track the roadmap item above. |
+| Stream ends during a quiet gap | SSE handling is off or response is not recognized as event-stream | Confirm `mode: 4`, `sse_mode: true`, and backend content type |
+| Connection remains open | Backend omitted `[DONE]` or failed to close | Inspect sanitized backend output and keep a finite duration cap |
+| Long streams fail across a network idle period | Intermediary removed the backend flow | Configure and validate backend keepalive; also check external proxy timeouts |
+| Stream ends at a fixed duration | Absolute cap reached | Increase only after confirming legitimate generation time |
+| Estimated/missing metrics rise | Usage object absent, split, or incompatible | Verify engine usage format and streaming configuration |
+| Request receives `429` before backend traffic | Reservation exceeds current aggregate or model headroom | Check declared completion ceiling, `burst_pct`, and utilization |
+| Stream completes but next request gets `429` | Final usage produced quota debt | Wait for refill or correct an undersized limit; do not retry in a tight loop |
+| Shaped stream survives beyond wall-clock cap | Time was paused by the shaper | Expected; confirm QoS park metrics and effective policy |
 
-!!! tip "Non-SSE services are unaffected"
-    Leaving `sse_mode` at its default `false` preserves the normal idle-timeout
-    behavior for plain request/response HTTP backends. Only enable it on
-    services that serve `text/event-stream` responses.
+## Security and cleanup
 
-## Related
+Streaming bodies can contain sensitive prompts and model output. Do not capture
+complete streams in routine logs. Redact `X-Api-Key`, authorization headers,
+prompt content, and usage correlated with customer identities.
 
-- [API Key Management](api-key-management.md) — where keys, tenants, and the
-  token limits referenced above are created and managed.
-- [Configuration Reference](configuration-reference.md) — the full
-  `serviceArguments` field table.
-- [Overview](overview.md) — the opt-in AI routing model and request lifecycle.
+Delete the example rule using its complete key, including `model_name` when the
+delete route requires the keyed model value. Then remove local secret files:
+
+```bash
+rm -f ./control-plane.headers ./inference.headers
+unset CONTROL_PLANE_TOKEN INFERENCE_API_KEY
+```
+
+## Related pages
+
+- [AI Traffic Governance](ai-traffic-governance.md)
+- [API Key Management](api-key-management.md)
+- [AI Quotas and QoS](../operations/ai-qos.md)
+- [AI Key Store Operations](../operations/ai-key-store.md)
+- [Monitoring and Metrics](../operations/monitoring.md)

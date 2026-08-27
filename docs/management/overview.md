@@ -1,6 +1,9 @@
 # Management & UI Overview
 
-The LoxiLB Inference Gateway ships with a full management ecosystem — a web dashboard, a multi-instance management API, and a Prometheus/Grafana monitoring stack — so a production fleet can be operated from a browser and a single pane of glass instead of raw REST calls.
+The LoxiLB Inference Gateway ecosystem includes a web dashboard, a
+multi-instance management API, and a Prometheus/Grafana monitoring stack. Each
+component has its own release and security boundary; qualify the exact
+UI/OAM/Gateway combination before using it for production changes.
 
 !!! note "Audience"
     Platform teams and AI-infrastructure operators deploying the gateway in production and looking for day-2 tooling: UI, central management, and observability.
@@ -9,35 +12,36 @@ The LoxiLB Inference Gateway ships with a full management ecosystem — a web da
 
 ## The components
 
-```
-                 browser
-                    │
-                    ▼
-        ┌──────────────────────┐
-        │      loxilb-ui       │  React dashboard (SPA)
-        └──────────┬───────────┘
-                   │  /api/oam/*
-                   ▼
-        ┌──────────────────────┐        ┌─────────────────────────┐
-        │      loxilb-oam      │──MySQL │  Prometheus + Grafana   │
-        │  management API      │        │  (reference monitoring  │
-        └──────────┬───────────┘        │   stack)                │
-                   │  /netlox/v1/*      └───────────┬─────────────┘
-                   │  (TLS-verified)                │ scrape /netlox/v1/metrics
-                   ▼                                ▼
-        ┌─────────────────────────────────────────────────┐
-        │        LoxiLB Inference Gateway instance(s)     │
-        │        (REST API :11111 plain / :8091 TLS)      │
-        └─────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    B["Operator browser"] --> U["loxilb-ui<br/>React SPA"]
+    U -->|"/api/oam/* + OAM JWT"| O["loxilb-oam<br/>management API"]
+    O --> DB["OAM PostgreSQL"]
+    O -->|"/netlox/v1/*<br/>TLS is transport only"| G["Inference Gateway instances"]
+    P["Prometheus"] -->|"scrape /netlox/v1/metrics"| G
+    P --> GR["Grafana"]
+
+    style O fill:#e1f5fe,stroke:#0288d1
+    style G fill:#fff9c4,stroke:#f9a825
 ```
 
 | Component | What it gives you | Repository | License |
 |-----------|-------------------|------------|---------|
-| **LoxiLB UI** | Web dashboard: L4/L7 LB management, AI Gateway configuration (model routing, KV-cache routing, P/D disaggregation, API keys, rate limits), networking (BGP/BFD/VLAN), security rules, IPsec, HA state, snapshots, live monitoring charts, RBAC, i18n (EN/KO/JA) | [loxilb-io/loxilb-ui](https://github.com/loxilb-io/loxilb-ui) | MIT |
-| **LoxiLB OAM** | Central management API for a *fleet* of gateway instances: JWT auth with server-side revocation, admin/operator/viewer RBAC, authenticated proxy to every instance, encrypted config snapshots, remote firmware lifecycle | [loxilb-io/loxilb-oam](https://github.com/loxilb-io/loxilb-oam) | Apache-2.0 |
+| **LoxiLB UI** | Web dashboard for supported L4/L7, AI Gateway, networking, security, snapshot, and monitoring surfaces; visible capabilities depend on the selected UI/OAM/Gateway releases | [loxilb-io/loxilb-ui](https://github.com/loxilb-io/loxilb-ui) | MIT |
+| **LoxiLB OAM** | Central management API for a fleet: OAM user authentication/RBAC, proxying, snapshot storage, and lifecycle functions. Gateway authentication remains a separate boundary. | [loxilb-io/loxilb-oam](https://github.com/loxilb-io/loxilb-oam) | Apache-2.0 |
 | **Monitoring stack** | Prometheus + Grafana with six provisioned dashboards (Overview, L4, L7, AI Gateway, Security, Bootstrap) and a production alert-rule set | [loxilb-io/loxilb-inference-gateway](https://github.com/loxilb-io/loxilb-inference-gateway/tree/main/deploy/monitoring) (`deploy/monitoring/`) | Apache-2.0 |
 
-The UI never talks to a gateway directly: the browser calls the OAM API (`/api/oam/*`), and OAM proxies to each registered gateway's REST API (`/netlox/v1/*`) with per-request RBAC. The monitoring stack is independent of both — it scrapes the gateway's `/metrics` endpoint directly.
+The UI never talks to a gateway directly: the browser calls the OAM API
+(`/api/oam/*`), and OAM applies its RBAC before proxying to a registered
+Gateway. OAM currently forwards the caller's `Authorization` header; it does
+not translate an OAM JWT into a Gateway user-service, OAuth, or manual token.
+If Gateway management authentication is enabled, validate a supported
+credential integration before production. If it is disabled, restrict the
+Gateway listener so operators cannot bypass OAM. TLS authenticates/encrypts the
+connection but does not authorize an API mutation.
+
+The monitoring stack is independent of both and scrapes the Gateway metrics
+endpoint directly.
 
 ---
 
@@ -46,12 +50,15 @@ The UI never talks to a gateway directly: the browser calls the OAM API (`/api/o
 | You want | Deploy | Guide |
 |----------|--------|-------|
 | Dashboards, metrics, and alerts for the gateway | Monitoring stack only | [Monitoring & Metrics](../operations/monitoring.md) |
-| A web UI to configure and operate one or more gateways | Management plane (UI + OAM + MySQL, one `docker compose up`) | [Deploy the Management Plane](management-plane.md) |
+| A web UI to configure and operate one or more gateways | Management plane (UI + OAM + PostgreSQL, one `docker compose up`) | [Deploy the Management Plane](management-plane.md) |
 | Everything | Both — they are independent and compose cleanly | Both guides |
 | Only the management API (headless, your own tooling on top) | OAM standalone | [LoxiLB OAM API](loxilb-oam.md) |
 
-!!! tip "Start with the management-plane bundle"
-    The [management-plane bundle](management-plane.md) is the recommended path for the UI: one Compose file brings up the UI, the OAM API, and MySQL behind a TLS-terminating Caddy edge, with a single `.env` for all configuration. Deploying [loxilb-ui](loxilb-ui.md) or [loxilb-oam](loxilb-oam.md) standalone is documented for teams that need to split the tiers.
+!!! tip "Start with the management-plane bundle in a staging environment"
+    The [management-plane bundle](management-plane.md) is the shortest path to
+    evaluate the UI: one Compose file brings up UI, OAM, and PostgreSQL behind a TLS
+    edge. Promote it only after release pinning, backup/restore tests, and the
+    OAM-to-Gateway authentication boundary are validated.
 
 ---
 
@@ -74,4 +81,5 @@ The UI never talks to a gateway directly: the browser calls the OAM API (`/api/o
 - [Deploy the Management Plane](management-plane.md) — the recommended step-by-step install.
 - [LoxiLB UI](loxilb-ui.md) — features, standalone deployment, configuration reference.
 - [LoxiLB OAM API](loxilb-oam.md) — standalone deployment, security model, configuration reference.
+- [Management API Authentication](../security/management-api-authentication.md) — Gateway-side authentication and authorization boundary.
 - [Monitoring & Metrics](../operations/monitoring.md) and [Grafana Dashboards](../operations/observability-metrics-grafana.md) — the observability stack.

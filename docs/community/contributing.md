@@ -31,6 +31,18 @@ Report a bug in the gateway itself in the **code** repository; report a document
 The full workflow and style conventions are in
 [CONTRIBUTING.md](https://github.com/loxilb-io/loxilbdocs-inference-gateway/blob/main/CONTRIBUTING.md).
 
+## Visual and security style
+
+Follow the layout and terminology of neighboring pages. Use Mermaid for request paths, decisions,
+state transitions, and component relationships when it improves understanding; keep the same
+semantic color palette and explain the diagram in adjacent text or a table. Validate diagrams in
+both light and dark themes.
+
+Public pages and diagrams must not contain personal information, private topology, credentials,
+internal identifiers, private registry names, or unpublished performance claims. Security and HA
+behavior must be traceable to the current source contract and must state operational limitations
+instead of implying a guarantee.
+
 ## Correctness comes first
 
 Every documented field, default, enum, endpoint, and runnable example must be traceable to the

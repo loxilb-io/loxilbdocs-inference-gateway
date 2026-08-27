@@ -1,266 +1,256 @@
 # API Key Management
 
-Create, list, inspect, and revoke AI Gateway API keys and per-tenant rate-limit
-configuration through the LoxiLB control-plane REST API.
+Use the AI Gateway key API to create, inspect, rotate, and revoke
+workload credentials. On a `mode: 4` rule with `sse_mode: true` or
+`pd_disagg_mode: true`, the request path actively enforces key validity, model
+allow-lists, per-key request rate, and tenant request rate. Plain fullproxy
+rules do not enter this gate.
 
-!!! warning "Data-plane enforcement: roadmap"
-    API-key authentication (401/403) and per-tenant rate limiting (429) are **control-plane CRUD
-    only** today — the gateway stores and manages keys/limits but does not yet reject requests in
-    the data path. SSE stream lifecycle and token accounting **are** wired.
+## Request path
 
-## Concept
+```mermaid
+flowchart LR
+    C([Client]) --> K{"X-Api-Key<br/>valid?"}
+    K -->|no| R401([401 invalid_api_key])
+    K -->|yes| M{"Requested model<br/>allowed?"}
+    M -->|no| R403([403 model_not_allowed])
+    M -->|yes| L{"Key and tenant<br/>rate buckets allow?"}
+    L -->|no| R429([429 rate limit])
+    L -->|yes| B["Inference backend"]
 
-The AI Gateway maintains a registry of API keys, each owned by a tenant and
-carrying an allow-list of models plus request- and token-rate limits. This page
-covers the **management** of that registry — the create/read/delete lifecycle of
-keys and the create/read lifecycle of tenant rate limits.
+    style B fill:#e8f5e9,stroke:#43a047
+    style R401 fill:#ffcdd2,stroke:#e53935
+    style R403 fill:#ffcdd2,stroke:#e53935
+    style R429 fill:#fff9c4,stroke:#f9a825
+```
 
-!!! note "What this feature does — and does not — do today"
-    **Does:** persist API keys and tenant limits, return the raw key exactly once
-    at creation, list/get/delete keys, and set/get per-tenant rate limits — all
-    over the authenticated REST control plane.
+API-key configuration uses an independent PostgreSQL data-plane store. It does
+not depend on the management user service. Management operations use a
+control-plane bearer identity when management authentication is configured;
+inference requests use `X-Api-Key` and never use the management bearer token.
 
-    **Does not (yet):** validate a caller's key or enforce a limit in the data
-    path. The gateway does **not** currently return `401`/`403` for an unknown or
-    disabled key, nor `429` when a tenant exceeds its RPS or token budget. These
-    checks are on the roadmap; until then, treat the stored keys and limits as a
-    managed inventory, not as an active gate.
+!!! warning "Development-source behavior"
+    The independent key store and authentication-plane separation described on this page are
+    implemented in the current development source but have not completed release qualification.
+    Confirm the flags and API schema exposed by the exact image you deploy.
 
-Keys and limits are stored in the gateway's backing database, so the control
-plane must be started with user-service and a database configured for these
-endpoints to be available.
+!!! danger "Key checks require both a store and an AI-processing rule"
+    The current data-plane key gate runs only for `mode: 4` rules that also set
+    `sse_mode: true` or `pd_disagg_mode: true`. A plain `mode: 4` rule remains keyless even when
+    `--aikey-db-host` is configured. If the store is unset, the gated paths also admit requests
+    without validating `X-Api-Key`. Configure both prerequisites, then prove a missing-key request
+    returns `401` on every protected VIP before exposure.
 
-## Authentication
+!!! danger "A key store does not protect the management listener"
+    The key lifecycle routes are registered independently of `--userservice`. If none of the
+    management authentication modes (`--userservice`, `--oauth2`, or `--manualtoken`) is enabled,
+    the current authorizer grants management requests unrestricted access. Before exposing port
+    `11111`, enable one management authentication mode and verify an unauthenticated key-creation
+    request returns `401`.
 
-All AI control-plane endpoints require a bearer token obtained from the LoxiLB
-auth service. Acquire a token by logging in, then pass it on every request:
+## Security rules
+
+- Use TLS for both control-plane and inference traffic outside an isolated
+  lab.
+- Create one key per workload and environment, with the smallest model list and
+  rate limits it needs.
+- The create response is the only place that returns the raw key. List and get
+  return metadata only.
+- Never put a raw key in a URL, log, metric label, Git repository, screenshot,
+  or support ticket.
+- Prefer protected header files or a secret-aware client over credentials in
+  command arguments.
+
+Prepare a management header file:
 
 ```bash
-# Obtain a JWT (replace <ADMIN_PASSWORD> with your admin password)
-TOKEN=$(curl -s -X POST \
-  http://10.10.10.254:11111/netlox/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"<ADMIN_PASSWORD>"}' \
-  | python3 -c "import sys,json; print(json.load(sys.stdin).get('token',''))")
-
-# Every AI request carries the token
-#   -H "Authorization: Bearer $TOKEN"
+export CONTROL_API="https://gateway.example.com/netlox/v1"
+install -m 600 /dev/null ./control-plane.headers
+printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
 ```
 
-!!! warning "Change the default admin password"
-    A fresh install ships with a stock admin password. Change it immediately after first
-    login and never run a reachable deployment with default credentials.
-
-The global authentication scheme is `Authorization: Bearer <token>`.
-
-## API key CRUD
-
-### Endpoints
+## Endpoints
 
 | Method | Path | Purpose |
 |---|---|---|
-| `POST` | `/config/ai/apikey` | Create a key; returns the raw key **once** |
-| `GET` | `/config/ai/apikey?tenant_id=<id>` | List keys, optionally filtered by tenant |
-| `GET` | `/config/ai/apikey/{key_id}` | Get a single key summary (no raw key) |
-| `DELETE` | `/config/ai/apikey/{key_id}` | Permanently revoke a key |
+| `POST` | `/config/ai/apikey` | Create a key; raw value is returned once |
+| `GET` | `/config/ai/apikey?tenant_id=...` | List key summaries, optionally by tenant |
+| `GET` | `/config/ai/apikey/{key_id}` | Read one key summary |
+| `PATCH` | `/config/ai/apikey/{key_id}` | Replace `allowed_models` and/or change `enabled`; raw-middleware route |
+| `DELETE` | `/config/ai/apikey/{key_id}` | Permanently delete a key |
+| `POST` | `/config/ai/tenant/ratelimit` | Set tenant RPS and token quotas |
+| `GET` | `/config/ai/tenant/ratelimit/{tenant_id}` | Read tenant limits |
 
-### Create request fields
+## Create a key
 
-The create body maps to the `ApiKeyCreateRequest` schema. Only `tenant_id` is
-required.
+Only `tenant_id` is required, but a production key should be explicitly
+scoped:
 
-| Field | Type | Required | Meaning |
-|---|---|---|---|
-| `tenant_id` | string | yes | Tenant that owns the key |
-| `name` | string | no | Human-readable label |
-| `allowed_models` | string[] | no | Model identifiers this key may access (empty ⇒ no model restriction recorded) |
-| `rate_limit_rps` | int64 | no | Maximum requests per second recorded for this key |
-| `burst_size` | int64 | no | Burst capacity above the steady-state RPS |
-| `tokens_per_min` | int64 | no | Maximum LLM tokens per minute recorded for this key |
-| `expires_at` | string (RFC3339) | no | Optional expiry timestamp |
-| `enabled` | bool | no | Whether the key is active; absent ⇒ enabled |
+```bash
+curl --fail-with-body --silent --show-error \
+  --request POST "$CONTROL_API/config/ai/apikey" \
+  --header @control-plane.headers \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "tenant_id": "team-a",
+    "name": "chat-service",
+    "allowed_models": ["example-chat-model"],
+    "rate_limit_rps": 5,
+    "burst_size": 10,
+    "tokens_per_min": 0,
+    "enabled": true
+  }' > ./new-key.json
 
-### Create a key
-
-The response contains `raw_key` and `key_id`. The raw key (prefixed `lxb_`) is
-returned **only** in this creation response — store it securely; it cannot be
-retrieved again.
-
-=== "curl"
-    ```bash
-    curl -s -X POST \
-      http://10.10.10.254:11111/netlox/v1/config/ai/apikey \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $TOKEN" \
-      -d '{
-        "tenant_id":       "cicd-tenant",
-        "name":            "app-key-1",
-        "allowed_models":  ["Qwen/Qwen3-0.6B", "llama-3"],
-        "rate_limit_rps":  5,
-        "burst_size":      10,
-        "tokens_per_min":  1000,
-        "enabled":         true
-      }'
-    ```
-=== "loxicmd"
-    ```bash
-    loxicmd create apikey --tenant-id=cicd-tenant --name=app-key-1 --allowed-models=Qwen/Qwen3-0.6B,llama-3 --rps=5 --burst=10 --tokens-per-min=1000 --enabled
-    ```
-
-Response (`201 Created`):
-
-```json
-{
-  "raw_key": "lxb_XXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-  "key_id":  "b1f0…"
-}
+jq '{key_id, raw_key_present: (.raw_key | type == "string")}' ./new-key.json
 ```
 
-!!! warning "The raw key is shown once"
-    Only `raw_key` at creation contains the plaintext secret. Every subsequent
-    `GET` returns an `ApiKeySummary` that omits it. If the value is lost, delete
-    the key and create a new one.
+Expected result: `201 Created`, with `key_id` and `raw_key`. Move the raw value
+directly into your secret manager, then securely remove the temporary file.
 
-### List and get keys
-
-`GET` responses return `ApiKeySummary` objects — `key_id`, `tenant_id`, `name`,
-`allowed_models`, the recorded limits, `created_at`, `expires_at`, and `enabled`
-— never the raw key.
-
-=== "curl"
-    ```bash
-    # List all keys for a tenant
-    curl -s \
-      -H "Authorization: Bearer $TOKEN" \
-      "http://10.10.10.254:11111/netlox/v1/config/ai/apikey?tenant_id=cicd-tenant"
-
-    # Get one key by ID
-    curl -s \
-      -H "Authorization: Bearer $TOKEN" \
-      "http://10.10.10.254:11111/netlox/v1/config/ai/apikey/<key_id>"
-    ```
-=== "loxicmd"
-    ```bash
-    # List all keys for a tenant
-    loxicmd get apikey --tenant-id=cicd-tenant
-
-    # Get one key by ID
-    loxicmd get apikey <key_id>
-    ```
-
-### Revoke a key
-
-`DELETE` returns `204 No Content`; a subsequent `GET` on the same `key_id`
-returns `404`.
-
-=== "curl"
-    ```bash
-    curl -s -o /dev/null -w "%{http_code}\n" -X DELETE \
-      -H "Authorization: Bearer $TOKEN" \
-      "http://10.10.10.254:11111/netlox/v1/config/ai/apikey/<key_id>"
-    ```
-=== "loxicmd"
-    ```bash
-    loxicmd delete apikey <key_id>
-    ```
-
-### Update a key (raw middleware)
-
-`allowed_models` and `enabled` can be updated in place with `PATCH`. This path is
-served by the API-server middleware and is **absent from the generated clients** —
-drive it with raw `curl`. The path parameter is `{key_id}`; a successful update
-returns `204 No Content`.
-
-=== "curl"
-    ```bash
-    curl -s -o /dev/null -w "%{http_code}\n" -X PATCH \
-      http://10.10.10.254:11111/netlox/v1/config/ai/apikey/<key_id> \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $TOKEN" \
-      -d '{
-        "allowed_models": ["llama-3"],
-        "enabled":        false
-      }'
-    ```
-=== "loxicmd"
-    ```bash
-    loxicmd set apikey <key_id> --allowed-models=llama-3 --enabled=false
-    ```
-
-## Tenant rate limits
-
-Per-tenant limits are managed independently of individual keys.
-
-| Method | Path | Purpose |
+| Field | Type | Meaning |
 |---|---|---|
-| `POST` | `/config/ai/tenant/ratelimit` | Create or update a tenant's limit |
-| `GET` | `/config/ai/tenant/ratelimit/{tenant_id}` | Read a tenant's current limit |
+| `tenant_id` | String | Owning tenant; required |
+| `name` | String | Non-secret operator label |
+| `api_key` | String | Optional caller-supplied key for a controlled credential import; write-only |
+| `allowed_models` | String array | Exact model identifiers this key may use |
+| `rate_limit_rps` | Integer | Per-key requests per second; `0` disables this limit |
+| `burst_size` | Integer | Per-key request bucket capacity |
+| `tokens_per_min` | Integer | Persisted and returned by the key API, but **not enforced** by the current data path; use tenant/model TPM |
+| `expires_at` | RFC 3339 timestamp | Optional key expiry |
+| `enabled` | Boolean | Defaults to enabled when omitted |
 
-The create/update body maps to `TenantRateLimitMod`; only `tenant_id` is
-required.
+An empty model list records no model restriction. Prefer an explicit list when
+the workload should use only known models.
 
-| Field | Type | Required | Meaning |
-|---|---|---|---|
-| `tenant_id` | string | yes | Tenant identifier |
-| `rps` | int64 | no | Maximum requests per second for the tenant |
-| `tokens_per_min` | int64 | no | Maximum LLM tokens per minute for the tenant |
+Per-key `tokens_per_min` is currently a round-trip schema field, not an
+enforcement control. Configure aggregate and per-model token budgets through
+the tenant rate-limit API and verify their `429` behavior independently.
 
-=== "curl"
-    ```bash
-    # Set / update
-    curl -s -o /dev/null -w "%{http_code}\n" -X POST \
-      http://10.10.10.254:11111/netlox/v1/config/ai/tenant/ratelimit \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $TOKEN" \
-      -d '{"tenant_id":"cicd-tenant","rps":50,"tokens_per_min":2000}'
+The normal path omits `api_key`, lets the Gateway generate the credential, and
+receives it once as `raw_key`. The development contract also accepts a
+caller-supplied key between 16 and 512 printable, non-space ASCII characters.
+That path stores only its SHA-256 hash and never echoes the supplied value.
 
-    # Read
-    curl -s \
-      -H "Authorization: Bearer $TOKEN" \
-      "http://10.10.10.254:11111/netlox/v1/config/ai/tenant/ratelimit/cicd-tenant"
-    ```
-=== "loxicmd"
-    ```bash
-    # Set / update
-    loxicmd set ratelimit --tenant-id=cicd-tenant --rps=50 --tokens-per-min=2000
+!!! warning "Imported-key response boundary"
+    The current handler returns an empty `raw_key` value for an imported key, while the development
+    Swagger description says the field is omitted and its response schema still marks `raw_key` as
+    required. Do not automate against empty-versus-absent behavior until the release contract
+    resolves this mismatch. Generated-key responses are unaffected.
 
-    # Read
-    loxicmd get ratelimit cicd-tenant
-    ```
+## List and inspect without exposing the secret
 
-`POST` returns `204 No Content`. `GET` returns the current entry, including the
-`rps` and `tokens_per_min` you set.
+```bash
+curl --fail-with-body --silent --show-error \
+  --get "$CONTROL_API/config/ai/apikey" \
+  --header @control-plane.headers \
+  --data-urlencode 'tenant_id=team-a' \
+  | jq 'map({key_id, name, allowed_models, enabled, expires_at})'
 
-## Verify
+curl --fail-with-body --silent --show-error \
+  --header @control-plane.headers \
+  "$CONTROL_API/config/ai/apikey/$KEY_ID" \
+  | jq '{key_id, tenant_id, name, allowed_models, enabled, expires_at}'
+```
 
-1. **Create returns a raw key.** A `POST /config/ai/apikey` returns `201` with a
-   `raw_key` beginning `lxb_` and a `key_id`.
-2. **Tenant isolation.** `GET /config/ai/apikey?tenant_id=<id>` lists only that
-   tenant's keys.
-3. **Summary omits the secret.** `GET /config/ai/apikey/{key_id}` returns the
-   key's `tenant_id` and `name` but no plaintext key.
-4. **Rate limit round-trips.** After a `POST` to
-   `/config/ai/tenant/ratelimit`, the matching `GET` returns the same `rps` and
-   `tokens_per_min`.
-5. **Revocation is durable.** `DELETE` returns `204`; a follow-up `GET` returns
-   `404`.
+Verify that neither response contains `raw_key` nor `key_hash`. Avoid listing
+all tenants unless your role and operational need require it.
 
-## Troubleshoot
+## Disable, rotate, and delete
+
+Disable is reversible and is useful for a controlled cutover:
+
+```bash
+curl --fail-with-body --silent --show-error \
+  --request PATCH \
+  --header @control-plane.headers \
+  --header 'Content-Type: application/json' \
+  --data '{"enabled":false}' \
+  "$CONTROL_API/config/ai/apikey/$OLD_KEY_ID"
+```
+
+Expected result: `204 No Content`. The route is described in the companion
+`swagger-extras.yml` contract because it is dispatched before the generated
+OpenAPI handler chain.
+
+1. Create a replacement with the same or narrower permissions.
+2. Store it in the workload's secret manager.
+3. Roll the workload to the replacement.
+4. Verify authorized requests succeed and old-key traffic has stopped.
+5. Permanently delete the old key:
+
+```bash
+curl --fail-with-body --silent --show-error \
+  --request DELETE \
+  --header @control-plane.headers \
+  "$CONTROL_API/config/ai/apikey/$OLD_KEY_ID"
+```
+
+Expected result: `204 No Content`; subsequent get returns not found. On the
+current development data path, prove that inference use fails on the same
+`mode: 4` rule with `sse_mode: true` or `pd_disagg_mode: true`; a plain
+fullproxy rule does not enter the key gate. A delete is permanent—create a new
+key if access is needed again.
+
+Disable, allow-list changes, and delete evict the local authentication and
+key-summary caches before the operation returns. The development HA path also
+sends a best-effort invalidation to peers. An unreachable or older peer may
+continue using a cached entry until its five-minute cache TTL expires, so do
+not describe peer invalidation as an instantaneous cluster-wide revocation
+guarantee.
+
+## Verify data-plane enforcement
+
+Write the inference header without printing its value:
+
+```bash
+install -m 600 /dev/null ./inference.headers
+printf 'X-Api-Key: %s\n' "$INFERENCE_API_KEY" > ./inference.headers
+```
+
+| Test | Expected response |
+|---|---|
+| Valid key and allowed model | Backend response |
+| No key or unknown key | `401 invalid_api_key` |
+| Disabled, expired, or revoked key | `401` |
+| Valid key, disallowed model | `403 model_not_allowed` |
+| Burst over key or tenant request bucket | `429` |
+
+Run destructive or throttling probes only with a dedicated non-production
+tenant. Never print the test key in the result.
+
+## Tenant limits
+
+Tenant RPS, aggregate TPM, per-model TPM, and token burst capacity use the
+tenant rate-limit API. These limits are shared by the tenant's keys and are
+explained step by step in [AI Traffic Governance](ai-traffic-governance.md).
+
+## Troubleshooting
 
 | Symptom | Likely cause | Action |
 |---|---|---|
-| `401 Unauthorized` on any AI endpoint | Missing or expired bearer token | Re-login at `/auth/login` and resend with `-H "Authorization: Bearer $TOKEN"`. |
-| Create returns `400` | Body missing required `tenant_id`, or malformed JSON | Include `tenant_id`; validate the JSON body. |
-| Endpoints return errors even with a valid token | Control plane started without user-service / database | Start LoxiLB with the user-service and a reachable database backing the key store. |
-| Lost the raw key | Raw key is returned only once, at creation | Delete the key and create a new one. |
-| `PATCH` request 404s from a generated client | The `PATCH` route is middleware-only, not in generated clients | Call it with raw `curl` against `/config/ai/apikey/{key_id}`. |
-| A request with an unknown/disabled key still succeeds | Data-plane key validation is not wired yet | Expected today — see the roadmap admonition; do not rely on keys as an access gate. |
-| A tenant over its RPS/token limit is not throttled | Data-plane rate limiting (429) is not wired yet | Expected today — limits are recorded, not enforced. |
+| Create returns `400` | Missing tenant or invalid body | Validate JSON and provide a non-empty `tenant_id` |
+| Management call returns `401` | Management credential missing or expired | Refresh through the approved identity workflow |
+| Management call returns `403` | Authenticated viewer or unknown role attempted a mutation | Use an explicitly authorized administrator; do not widen the viewer role |
+| Key or quota call returns `503 ai_key_store_unconfigured` | `--aikey-db-host` is unset | Stop exposure, configure the independent key store, and re-run missing-key probes |
+| Key or quota call returns `503 ai_key_store_unavailable` | A configured store did not initialize or is unreachable | Restore the store and verify the reconnect; do not bypass the key check |
+| Inference call returns `401` | Key missing, unknown, disabled, expired, or revoked | Inspect summary by `key_id`; do not log the raw key |
+| Inference call returns `403` | Effective model is not allowed | Compare the exact model with `allowed_models` |
+| Inference call returns `429` | Key/tenant RPS or token quota | Inspect the error reason, `Retry-After`, and metrics |
+| Key cannot be recovered | Raw value was not stored | Revoke the record and rotate to a new key |
+| CRUD fails despite valid management auth | Independent PostgreSQL key store unavailable | Restore the data-plane store securely; management-user health does not prove key-store health |
 
-## Related
+## Cleanup
 
-- [SSE and Quota Management](sse-quota-management.md) — token accounting that
-  records usage against these keys and tenants.
-- [Configuration Reference](configuration-reference.md) — full serviceArguments
-  and schema reference.
-- [Overview](overview.md) — the AI routing model and request lifecycle.
+```bash
+rm -f ./new-key.json ./control-plane.headers ./inference.headers
+unset CONTROL_PLANE_TOKEN INFERENCE_API_KEY KEY_ID OLD_KEY_ID
+```
+
+## Related pages
+
+- [AI Traffic Governance](ai-traffic-governance.md)
+- [SSE and Quota Management](sse-quota-management.md)
+- [AI Quotas and QoS](../operations/ai-qos.md)
+- [AI Key Store Operations](../operations/ai-key-store.md)
+- [Management API Authentication](../security/management-api-authentication.md)
+- [Monitoring and Metrics](../operations/monitoring.md)

@@ -13,7 +13,7 @@ The gateway does not switch into "AI mode" globally. Each LB rule decides on its
 - **Scope is the rule, not the box.** One gateway can run AI-aware rules and plain rules side by side. Enabling model routing on one VIP has no effect on any other.
 
 !!! warning "Fullproxy is the prerequisite"
-    All AI routing requires `mode: 4` (fullproxy). Only fullproxy terminates the connection and reassembles the HTTP request, which is what lets the gateway read headers and the JSON body. In DNAT, DSR, or other L4 modes the payload is never inspected, so `model_name`, KV routing, and CHWBL prefix hashing cannot apply. The `mode: 6` (aigw) enum value exists but is experimental and unexercised — do not build on it. See [Running Modes](running-modes.md).
+    All AI routing requires `mode: 4` (fullproxy). Only fullproxy terminates the connection and reassembles the HTTP request, which is what lets the gateway read headers and the JSON body. In DNAT, DSR, or other L4 modes the payload is never inspected, so `model_name`, KV routing, and CHWBL prefix hashing cannot apply. See [Running Modes](running-modes.md).
 
 ---
 
@@ -33,27 +33,45 @@ The extracted model name is matched against the `model_name` on each LB rule sha
 
 Model-name matching is **case-sensitive** and exact — `mistral-7b` and `MISTRAL-7B` are different models.
 
+!!! danger "Use one model identity"
+    Routing resolves `X-Model` before the body, while the current authorization check resolves
+    the body before the header. Until those paths share one canonical value, reject requests
+    where both are present and disagree. Otherwise a client can be authorized against one model
+    and routed to another pool.
+
+!!! warning "HTTP/2 is not feature-equivalent"
+    Current HTTP/2 forwarding supplies no model to pool lookup, makes selector 9 round-robin,
+    and does not connect selector 10, P/D, or KV-exact routing. Keep AI-aware rules on HTTP/1.1
+    until an HTTP/2-capable release passes explicit model and selector tests.
+
 ### Worked example
 
-Three rules on VIP `10.10.10.254`, each a distinct `model_name` pool:
+Three rules on the same listener, VIP `10.10.10.254:2020`, each a distinct
+`model_name` pool. A wildcard belongs to that same listener; placing it on another port
+does not provide fallback for requests sent to port `2020`.
 
 | Port | `model_name` | Backend pool |
 |---|---|---|
-| `2020` | `llama-70b` | `31.31.31.1:8080` |
-| `2021` | `mistral-7b` | `32.32.32.1:8080` |
-| `2022` | `""` (wildcard) | `33.33.33.1:8080` |
+| `2020` | `llama-70b` | `192.0.2.1:8080` |
+| `2020` | `mistral-7b` | `198.51.100.1:8080` |
+| `2020` | `""` (wildcard) | `203.0.113.1:8080` |
 
 | Request | Resolves to |
 |---|---|
 | `X-Model: llama-70b` on port 2020 | llama pool |
-| `{"model": "mistral-7b", ...}` on port 2021 | mistral pool |
-| plain request, no model, on port 2022 | wildcard pool |
+| `{"model": "mistral-7b", ...}` on port 2020 | mistral pool |
+| plain request, no model, on port 2020 | wildcard pool |
 | `X-Model: llama-70b` **and** `{"model": "mistral-7b"}` | llama pool (header wins) |
 | `X-Model: unknown-xyz`, no wildcard | **HTTP 503** `model_unavailable` |
 
 ### Configure a model-routing rule
 
 Each model pool is its own LB rule with a distinct `model_name`. Create one per model, plus an optional wildcard rule.
+
+!!! warning "Protect the management API"
+    The `curl` examples use plain HTTP for an isolated lab. On a shared or production network,
+    use an authenticated, TLS-protected management endpoint and load its authorization header
+    from a permission-restricted file.
 
 === "curl"
 
@@ -67,10 +85,13 @@ Each model pool is its own LB rule with a distinct `model_name`. Create one per 
           "protocol": "tcp",
           "mode": 4,
           "backend_protocol": "http1",
+          "host": "10.10.10.254",
+          "path_prefix": "/",
+          "path_match_mode": "prefix",
           "model_name": "llama-70b"
         },
         "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8080, "weight": 1}
+          {"endpointIP": "192.0.2.1", "targetPort": 8080, "weight": 1}
         ]
       }'
     ```
@@ -78,22 +99,38 @@ Each model pool is its own LB rule with a distinct `model_name`. Create one per 
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=31.31.31.1:1 --mode=fullproxy --backend-protocol=http1 --model-name=llama-70b
+    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=192.0.2.1:1 --mode=fullproxy --backend-protocol=http1 --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b
     ```
 
-To add the wildcard catch-all, create another rule with `model_name` set to the empty string `""`.
+To add the wildcard catch-all, create another rule with the same VIP, port, protocol, host,
+and path fields, and set `model_name` to the empty string `""`.
 
 ---
 
 ## Layered selection, at a high level
 
-Model-name routing chooses *which pool* serves a request. Within that pool, the gateway then chooses *which endpoint* using a layered cascade that prefers cache locality first and load balance last:
+Model-name routing chooses *which pool* serves a request. Endpoint selection then depends on
+the configured topology; there is not one universal ladder.
 
-1. **Prefix / session affinity** — a returning session or a shared prompt prefix routes back to the endpoint that already holds its KV cache (CHWBL prefix hashing, or `sel: 3` persist).
-2. **KV-exact match** — the endpoint whose live block inventory holds the most matching KV blocks for this specific prompt wins.
-3. **Load** — when neither affinity nor an exact cache match applies, the request goes to the least-loaded endpoint.
+```mermaid
+flowchart TD
+    POOL[Matched model pool] --> TOPO{P/D enabled?}
+    TOPO -->|Yes| SESSION[Session hint, then optional trie]
+    SESSION --> KV1[Optional KV-exact mode 1]
+    KV1 --> LOAD[P/D load fallback]
+    TOPO -->|No| KV3{KV-exact mode 3?}
+    KV3 -->|Hit| WARM[Matching endpoint]
+    KV3 -->|Miss or disabled| SEL[Rule selector: RR, persist, CHWBL, GPU-aware]
 
-Each layer is itself opt-in through the rule's `sel` value and KV settings, so you enable exactly the depth of routing your workload needs.
+    style SESSION fill:#e1f5fe,stroke:#0288d1
+    style KV1 fill:#e8f5e9,stroke:#43a047
+    style KV3 fill:#e8f5e9,stroke:#43a047
+```
+
+On P/D mode 1, session/trie choices precede KV-exact and the role-specific load fallback.
+On role-less mode 3, a KV miss falls directly to the rule's `sel` algorithm; it does not enter
+the P/D session, trie, or admission ladder. Without KV-exact, `sel: 3`, `8`, and `10` provide
+session or content affinity without a live block inventory.
 
 !!! tip "Go deeper"
     This is the high-level shape only. The full selection ladder — including the exact tier order, the block-hash matching contract, and the selection-law math — is covered in [Routing Hierarchy](../use-cases/routing-hierarchy.md). The `sel` algorithms that drive each layer are documented in [Load-Balancing Algorithms](lb-algorithms.md).
@@ -116,7 +153,8 @@ List the rules on the VIP and confirm each carries the expected `model_name` and
     loxicmd get lb
     ```
 
-Send a probe with a known and an unknown model to confirm matching and the 503 fall-through:
+If you created only the named rule above and intentionally did not add a wildcard, send a known
+and an unknown model to confirm matching and the 503 fall-through:
 
 ```bash
 # Matches the llama pool

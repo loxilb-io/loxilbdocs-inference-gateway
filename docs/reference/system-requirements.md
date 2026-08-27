@@ -10,64 +10,105 @@ The gateway ships as a single container image and runs on a Linux host with Dock
 |---|---|---|
 | Host OS | Linux | eBPF/XDP data plane is Linux-only |
 | Container runtime | Docker | Published image; `docker run` deployment |
-| Image | `ghcr.io/loxilb-io/loxilb-inference-gateway:latest` | Upstream-maintained. If the registry denies the pull, the package is not yet public — build from source (see below). |
+| Image | `ghcr.io/loxilb-io/loxilb-inference-gateway:<release-tag>` | Use a reviewed release tag or digest; avoid a mutable tag for production and rollback evidence. |
 | Capabilities | `--cap-add SYS_ADMIN --privileged` | Required to load and attach the eBPF/XDP programs |
-| REST API port | `11111` (`/netlox/v1/...`) | Configuration and metrics API |
+| Container network | `--network host` in the documented deployment | Exposes the management listener and configured load-balanced service ports on the host network |
+| Plain REST API port | `11111` (`/netlox/v1/...`) | Configuration and metrics API; isolated-lab use only unless protected by a verified proxy/network boundary |
+| TLS REST API port | `8091` | Gateway TLS management listener when configured |
+| HA peer ports | TCP `22222` and `22223` for the default clustered `--rpc=netrpc` mode | Connection-tracking and sockproxy/rate-limit xSync; current transports have no built-in authentication or encryption, so allow only exact peers over a protected network |
 | CPU architectures | `amd64`, `arm64` | Multi-arch image |
 | Persistent volume | `-v /opt/loxilb/config:/etc/loxilb` | Snapshot survives container recreation/upgrade |
 
 Minimal run command:
 
 ```bash
+export LOXILB_IMAGE="ghcr.io/loxilb-io/loxilb-inference-gateway:REPLACE_WITH_RELEASE_TAG"
 docker run -u root --cap-add SYS_ADMIN --restart unless-stopped --privileged \
-  -dit -v /dev/log:/dev/log -v /opt/loxilb/config:/etc/loxilb \
-  --name loxilb ghcr.io/loxilb-io/loxilb-inference-gateway:latest
+  -dit --network host -v /dev/log:/dev/log -v /opt/loxilb/config:/etc/loxilb \
+  --name loxilb "$LOXILB_IMAGE"
 ```
 
+!!! danger "A privileged network container is a security boundary"
+    `--privileged` gives the container broad host access so it can attach the eBPF/XDP data
+    path. Run the Gateway on a dedicated or appropriately isolated host, restrict access to
+    the Docker socket and management API, and use the minimum network exposure required by
+    the deployment. Record the exact image digest before an upgrade.
+
 !!! warning "Mount `/etc/loxilb` to a host path"
-    The gateway persists its full configuration snapshot to `/etc/loxilb/snapshot.json`
+    The gateway persists its supported configuration snapshot to `/etc/loxilb/snapshot.json`
     inside the container and boot-restores it automatically. Without the
     `-v /opt/loxilb/config:/etc/loxilb` mount, configuration survives a container
     *restart* but is **lost when the container is recreated** — which is exactly what an
     image upgrade does. Always bind-mount `/etc/loxilb` from the host.
 
-The REST API listens on port `11111`. All configuration in this documentation is one REST call to `http://<host>:11111/netlox/v1/config/loadbalancer`.
+The REST API listens on port `11111` under `/netlox/v1`. Load-balancer rules use
+`/config/loadbalancer`; keys, quotas, policies, metrics, and logs use their own documented
+endpoints. Keep the management listener on a trusted network and use TLS outside an isolated lab.
+
+If AI API keys or tenant/model limits are configured, the current feature
+branch uses a separate PostgreSQL AI key store. That database is not part of
+`snapshot.json`; provision, protect, monitor, and back it up independently. See
+[AI Key Store](../operations/ai-key-store.md).
 
 ## Supported OS images
 
-The gateway image is built on Ubuntu. Three bases are published, one per supported Ubuntu LTS release; the default `latest` tag is the Ubuntu 22.04 build.
+The release workflow publishes multi-architecture images with Ubuntu 22.04 and Ubuntu 24.04
+bases. The repository also contains an Ubuntu 20.04 Dockerfile for a source build, but the release
+workflow does not publish an Ubuntu 20.04 image variant.
 
-| Ubuntu release | Dockerfile | Notes |
+| Ubuntu release | Dockerfile | Published image tag |
 |---|---|---|
-| 22.04 LTS | `Dockerfile` | Default build (`latest`) |
-| 20.04 LTS | `Dockerfile.u20` | Older-kernel hosts |
-| 24.04 LTS | `Dockerfile.u24` | Recommended for GPU / KV-cache-aware routing (see below) |
+| 22.04 LTS | `Dockerfile` | `<release-tag>` |
+| 24.04 LTS | `Dockerfile.u24` | `<release-tag>-u24` |
+| 20.04 LTS | `Dockerfile.u20` | Not published by the current release workflow; build locally if required |
 
 !!! note
-    These are the OS bases of the gateway *container image*. The underlying host can run
-    any modern Linux distribution that supports Docker and eBPF/XDP; the classic
-    load-balancing test matrix additionally covers RedHat 9.
+    These are the OS bases of the Gateway *container image*. The underlying host must provide a
+    Linux kernel, container runtime, privileges, interfaces, and eBPF/XDP support compatible with
+    the selected data path. Validate the exact host distribution and kernel before production.
 
-## GPU / KV-cache-aware routing (advanced)
+## Build-profile-dependent features
 
-KV-cache-aware and Prefill/Decode (P/D) routing add requirements on the **GPU serving nodes** and on the **host kernel** running the gateway's eBPF data plane. GPU nodes run the serving engine (vLLM or SGLang); the gateway itself does not need a GPU.
+An endpoint in Swagger can still be backed by a stub when its build tag is not
+selected. Verify the immutable image and a feature status/health response before
+depending on it.
+
+| Feature | Default Ubuntu 22.04 image | Ubuntu 24.04 image | Additional build gate |
+|---|---|---|---|
+| HTTP and L4 tracing | Trace build options are not passed by `Dockerfile` | Built with HTTP/L4 trace options | Validate OTLP export and overhead |
+| Presidio PII detection | Stub | Stub | Source build with `HAVE_PII_DETECTION=1`; request-only qualification |
+| Llama Firewall | Stub | Stub | No supported release build profile currently defined |
+| NVIDIA DOCA DPU offload | Stub/non-DPU | Stub/non-DPU | Source/hardware build with `HAVE_DOCA=1` plus SDK, driver, firmware, and target validation |
+| mTLS | Built by the current release Dockerfiles | Built by the current release Dockerfiles | Configure certificates and verify the exact service path |
+
+See [Application and L4 Tracing](../operations/tracing.md),
+[AI Safety Scanning](../security/ai-safety.md), and
+[DPU Offload Observability](../operations/dpu-offload.md) for operational
+boundaries.
+
+## Engine-aware and KV-cache routing (advanced)
+
+KV-cache-aware and Prefill/Decode (P/D) routing add requirements on the **serving nodes** and on the **host kernel** running the gateway's eBPF data plane. Serving nodes run vLLM, SGLang, TensorRT-LLM, or llama.cpp; the Gateway itself does not need a GPU. The supported feature set is engine-specific, so check the [Engine Capability Matrix](../concepts/engine-capability-matrix.md) before configuring KV or P/D fields.
 
 | Component | Recommended / required |
 |---|---|
-| Gateway image | Ubuntu 24.04 (`Dockerfile.u24`) |
-| NVIDIA driver (GPU nodes) | 570.x |
-| Host kernel | 6.8 |
-| Kernel versions to avoid | 6.12.53+, 6.14, 6.17.5+ |
-| P/D KV transport | NIXL side channel (producer/consumer) |
-| Serving engine | vLLM or SGLang on the GPU nodes |
+| Gateway image | A published Ubuntu 22.04 or `-u24` release image, pinned by tag or digest |
+| GPU software | A driver, runtime, and engine combination supported by the chosen serving-engine release |
+| Host kernel | A Linux kernel validated with the Gateway's eBPF/XDP data path and required hooks |
+| P/D transport | Engine-specific: do not reuse vLLM NIXL, SGLang bootstrap, or TensorRT-LLM fields across engines |
+| Serving engine | A validated vLLM, SGLang, TensorRT-LLM, or llama.cpp build; advanced capabilities differ by engine |
 
-!!! warning "Kernel range that breaks the eBPF data plane"
-    Kernels **6.12.53+, 6.14, and 6.17.5+** fall in a BPF-verifier regression range that
-    breaks the eBPF data plane. Use kernel **6.8** on the gateway host for KV-cache-aware /
-    P/D deployments. Pin the host kernel before rolling out GPU routing.
+!!! warning "Do not infer compatibility from version numbers alone"
+    Kernel, driver, engine, tokenizer, and transport compatibility can change independently.
+    Pin the complete tested combination, verify eBPF program attachment and backend readiness on
+    the target host, and run the engine-specific validation procedure before production traffic.
 
-For prefill/decode disaggregation, prefill and decode pools exchange KV cache over a NIXL side channel — each worker's NIXL port must match the corresponding rule field. See the deployment and tuning guides:
+For prefill/decode disaggregation, the coordination and state-transfer contract depends on the
+engine. Do not copy vLLM settings into an SGLang or TensorRT-LLM rule. See the engine chooser
+and deployment guides:
 
+- [Choose an Inference Engine](../getting-started/choose-your-engine.md) — select a supported engine and topology
+- [P/D Disaggregation](../ai-gateway/pd-disaggregation.md) — compare the engine-specific request paths
 - [Deploy P/D disaggregation](../use-cases/deploy-pd-disaggregation.md) — provisioning the prefill/decode fleet and NIXL mesh
 - [Configuration & tuning](../use-cases/configuration-tuning.md) — parity requirements, block/page-size, hash-algo, and verification
 
@@ -78,8 +119,8 @@ Building is only needed if you are modifying the gateway; most users run the pub
 | Requirement | Value | Notes |
 |---|---|---|
 | Host OS | Linux | macOS cannot build eBPF/CGO parts |
-| Go | ≥ 1.25 | Control-plane build |
-| Docker | Required once | Regenerates swagger API models on first clean build |
+| Go | ≥ 1.25.0 | Control-plane build (`go.mod`) |
+| Docker | Conditional | Required for explicit Swagger generation, or when generated API model files are missing; a normal clean `make build` does not regenerate models that are present |
 | eBPF toolchain | apt packages (below) | Compiles the `loxilb-ebpf` submodule |
 | Tokenizer library | `daulet/tokenizers` v1.27.0 | Prebuilt static lib the KV-cache router links against |
 
@@ -102,10 +143,9 @@ sudo tar -xzf libtokenizers.linux-${arch}.tar.gz -C /usr/local/lib/
 
 !!! warning "Verify the download before extracting as root"
     This extracts a third-party binary artifact into a system library path with root
-    privileges. The upstream release does not publish a checksum manifest, so record the
-    `sha256sum` output the first time you fetch a release version and verify every later
-    download (and every other host) against that recorded digest before running the
-    `sudo tar` step.
+    privileges. Compare the digest with trusted release metadata or an organization-approved
+    checksum before running the `sudo tar` step. If no independent trusted digest is available,
+    do not treat a locally calculated checksum as proof of origin.
 
 Clone with the eBPF submodule and build:
 
@@ -115,20 +155,30 @@ cd loxilb-inference-gateway
 make build
 ```
 
-`make build` compiles the eBPF data plane, regenerates the swagger API models via Docker on the first run, then builds the Go control plane into the `./loxilb` binary.
+`make build` compiles the eBPF data plane and builds the Go control plane into
+the `./loxilb` binary. Swagger generation is an explicit step, except that the
+build can invoke it when required generated model files are missing; Docker is
+not used for Swagger regeneration on every normal clean build.
+
+Optional PII and DPU builds add native dependencies and are not equivalent to
+the standard release image. Build them only from a reviewed dependency set,
+produce an SBOM, scan/sign the artifact, and validate it on the target Linux
+kernel and hardware before promotion.
 
 ## Versioning
 
-The inference gateway is a fork of upstream loxilb. Releases are tagged so the upstream baseline is readable at a glance:
+Release tags follow this pattern:
 
 ```
-v<upstream-loxilb-version>-igw.<n>
+vMAJOR.MINOR.PATCH[.BUILD][-rc.N]
 ```
 
-For example, `v0.9.8.6-igw.1` is inference-gateway iteration `1` forked from upstream loxilb `0.9.8.6`.
+Stable examples use three or four numeric components. A release candidate appends `-rc.N`.
+Ubuntu 24.04 images add `-u24` after the release tag; this suffix is an image variant, not part of
+the Git release tag.
 
 !!! note "Behaves as upstream loxilb by default"
     Every AI capability is opt-in per load-balancer rule. With no AI features enabled, the
-    gateway behaves exactly like the upstream loxilb release its tag names — classic L4/L7
-    load balancing is unchanged. If you only need the base cloud-native load balancer, this
-    image is a drop-in for upstream loxilb.
+    Gateway retains its classic L4/L7 load-balancing paths. Validate migration and compatibility
+    for the exact release and deployment rather than assuming binary or state equivalence with a
+    separate upstream build.

@@ -9,17 +9,18 @@ selection internals, and read this page for the wire, launch flags, and debuggin
 
 ---
 
-## 1. The one thing to internalize first: KV-aware routing runs ONLY in P/D mode
+## 1. Choose the KV-exact topology before you deploy
 
-loxilb's KV-exact selector is invoked **only** when the service is a P/D-disaggregated rule with
-both roles present:
+LoxiLB supports two KV-exact topologies: mode 1 for a P/D-disaggregated pool and mode 3 for a
+role-less single pool. This guide is intentionally about **P/D mode 1**, whose selector is invoked
+only when both roles are present:
 
 ```
 pd_disagg_mode == true  &&  n_prefill_eps > 0  &&  n_decode_eps > 0
 ```
 
-A plain single-pool fullproxy service **never** invokes KV routing, no matter what `kvExactMode`
-you set. In practice:
+A single-pool deployment can use `kvExactMode: 3`, but it has no prefill/decode handoff and is
+outside this guide. For the P/D deployment described here:
 
 - The rule must be `mode: 4` (fullproxy) with `pd_disagg_mode: true`, and endpoints tagged
   `ep_role: 1` (prefill) and `ep_role: 2` (decode) — at least one of each.
@@ -30,6 +31,11 @@ you set. In practice:
 
 This also means the backing vLLM instances must run **real disaggregation** (NIXL `kv_producer` /
 `kv_consumer`) — see §4. Plain (non-disaggregated) vLLM instances will not work.
+
+For the role-less alternative, use `mode: 4`, disable P/D, omit endpoint roles, and set
+`kvExactMode: 3`; all endpoints publish inventory and are KV candidates. See
+[Engine Capability Matrix](../concepts/engine-capability-matrix.md) before choosing between the
+two shapes.
 
 ---
 
@@ -61,8 +67,9 @@ ZMQ events stay fast. Addresses below are placeholders — substitute your own.
 | **KV transfer** | the computed KV tensors                         | prefill GPU → CPU → TCP/UCX `:5600` → CPU → decode GPU                    |
 
 The **inventory** plane is what makes routing cache-aware; the **KV-transfer** plane is what makes
-P/D disaggregation work. They are independent — a broken inventory plane silently degrades routing
-to round-robin (see §9), while a broken KV-transfer plane fails requests outright (503/timeout).
+P/D disaggregation work. They are independent — a broken inventory plane silently degrades a
+mode-1 rule to P/D minimum-load selection with round-robin only as a tie-break (see §9), while a
+broken KV-transfer plane fails requests outright (503/timeout).
 
 ---
 
@@ -98,10 +105,10 @@ Identical to the prefill launch, except: `--port 8200`, `"kv_role":"kv_consumer"
 | `kv_buffer_device: "cpu"` | Instances without GDRcopy/RDMA can't do CUDA-aware UCX on `UCX_TLS=tcp`. Routes KV GPU→CPU→TCP→CPU→GPU. | vLLM crashes in the NIXL/UCX shared thread on the first request. |
 | `UCX_TLS=tcp` | Forces the TCP transport when there is no RDMA fabric. | UCX init crash / hang. |
 | `VLLM_NIXL_SIDE_CHANNEL_HOST=<node-ip>` | Peers must dial a reachable IP, never `0.0.0.0`. | Decode can't pull KV → request hangs/fails. |
-| `--prefix-caching-hash-algo sha256_cbor` | vLLM's **default is pickle-`"sha256"`** (non-portable, NOT what loxilb computes). loxilb computes the CBOR variant. | 0% hash intersection → every request silently falls through to round-robin. |
+| `--prefix-caching-hash-algo sha256_cbor` | vLLM's **default is pickle-`"sha256"`** (non-portable, NOT what loxilb computes). loxilb computes the CBOR variant. | 0% hash intersection → mode 1 silently falls through to P/D minimum-load selection. |
 | `PYTHONHASHSEED=0` | Seeds vLLM's `NONE_HASH` (first-block parent) deterministically; must match loxilb's `LLB_KV_NONE_HASH_SEED`. | First block never matches → broken affinity. |
 | `--block-size 16` | Must equal the rule's `kvBlockSize`. | Hashes computed over different token spans → no match. |
-| `--kv-events-config endpoint tcp://*:5557` | `*` binds PUB mode; `127.0.0.1` puts ZMQ in connect mode and **nothing is published**. | `blocks_total` stays 0 forever. |
+| `--kv-events-config endpoint tcp://*:5557` | `*` binds PUB mode; `127.0.0.1` puts ZMQ in connect mode and **nothing is published**. | `loxilb_pd_kv_blocks` stays 0 forever. |
 
 ### 4.4 Copy-paste launch reference — prefill and decode
 
@@ -200,14 +207,20 @@ A natively-launched `loxilb` process has no eBPF VIP intercept wired — `curl V
 connection-refused. You **must** run the container:
 
 ```bash
+export LOXILB_IMAGE='ghcr.io/loxilb-io/loxilb-inference-gateway:<released-version>'
+
 docker run -u root --cap-add SYS_ADMIN --restart unless-stopped --privileged \
   --network host -dit \
-  -v /etc/loxilb/tokenizers:/etc/loxilb/tokenizers \       # tokenizer for block hashing (see §6)
-  -e LLB_KV_NONE_HASH_SEED=0 \                             # PARITY: must match vLLM PYTHONHASHSEED
-  -e LOXILB_KV_MAX_BLOCKS=1000000 \                        # per-EP inventory cap (read at subscriber init)
-  -e LLB_KV_HASH_DEBUG=1 \                                 # test-only: [KV_HASH] forensic logger
-  --name loxilb ghcr.io/loxilb-io/loxilb-inference-gateway:latest -p
+  -v /etc/loxilb/tokenizers:/etc/loxilb/tokenizers \
+  -e LLB_KV_NONE_HASH_SEED=0 \
+  -e LOXILB_KV_MAX_BLOCKS=1000000 \
+  --name loxilb "$LOXILB_IMAGE" -p
 ```
+
+Replace `<released-version>` with an explicitly reviewed release tag, or set
+`LOXILB_IMAGE` to an immutable digest. Do not use `latest` for production. Enable
+`LLB_KV_HASH_DEBUG=1` only during short, access-controlled parity troubleshooting because it
+produces verbose per-block diagnostics.
 
 ### 5.2 The LB rules — four modes to compare
 
@@ -221,6 +234,10 @@ its own baselines:
 | `:9000`  | true, `pd_cache_aware_mode:false`             | round-robin across prefill EPs   | **P/D-RR baseline** (apples-to-apples for KV-exact) |
 | `:9002`  | true, `pd_cache_aware_mode:true` (`pd_cache_threshold:20`, `pd_balance_abs_threshold:3`) | heuristic cache-affinity | heuristic mode |
 | `:9003`  | true, **`kvExactMode:1`** (`kvZmqPort:5557`, `kvHashAlgo:sha256_cbor`, `kvWarmupSec:60`, `kvBlockSize:16`) | KV-exact overlap | the method |
+
+`kvWarmupSec` is accepted but currently inert because the production path does not arm its
+start timestamp. Do not sleep for 60 seconds and assume the inventory is ready; verify
+subscriber connectivity and nonzero block inventory instead.
 
 The KV-exact rule body (`:9003`), posted to `http://<VIP>:11111/netlox/v1/config/loadbalancer`:
 
@@ -292,16 +309,21 @@ attach to the real NIC. Mount the tokenizer tree (§5.5) and set the parity env:
 
 === "curl"
     ```bash
+    export LOXILB_IMAGE='ghcr.io/loxilb-io/loxilb-inference-gateway:<released-version>'
+
     docker run -u root --cap-add SYS_ADMIN --privileged --network host -dit \
       --restart unless-stopped --name loxilb \
-      -v /etc/loxilb/tokenizers:/etc/loxilb/tokenizers \   # per-model tokenizers, loaded at startup
+      -v /etc/loxilb/tokenizers:/etc/loxilb/tokenizers \
       -v /etc/loxilb/certs:/etc/loxilb/certs \
-      -e LLB_KV_NONE_HASH_SEED=0 \                          # parity: matches vLLM PYTHONHASHSEED=0
-      ghcr.io/loxilb-io/loxilb-inference-gateway:latest-u24 -p
+      -e LLB_KV_NONE_HASH_SEED=0 \
+      "$LOXILB_IMAGE" -p
     ```
 === "loxicmd"
     !!! info "loxicmd"
         Deployment step — not a loxicmd operation.
+
+Replace `<released-version>` with a reviewed release tag or use an immutable digest. Never
+promote a moving tag directly into production.
 
 !!! danger "NEVER `pkill loxilb` — always `docker stop -t 30 loxilb`"
     loxilb holds XDP/eBPF hooks on the host NIC. A `pkill` / `SIGKILL` leaves those hooks attached
@@ -321,20 +343,24 @@ every `/` rewritten to `__`:
 
 The tree is read at container startup. A missing or wrong tokenizer dir does **not** error — it
 produces a KV-exact MISS on the tokenize step (visible as
-`loxilb_pd_kv_t15_miss_reason_total{reason="tokenize"}`), and routing silently falls through to
-round-robin. Switching the model a rule serves means staging that model's tokenizer dir first.
+`loxilb_pd_kv_tier15_miss_reason_total{reason="tokenize"}`), and a mode-1 P/D rule silently falls
+through to minimum-load selection. Switching the model a rule serves means staging that model's
+tokenizer dir first.
 
 ### 5.6 Synthesizing a capacity contrast
 
-Capacity-aware selection is only **observable** when the prefill endpoints actually differ in KV
-capacity. On identical GPUs you can synthesize the spread through each host's `gpu_mem_util`:
+The rule in this guide uses `sel: 0`, whose Tier-2 score is active connections plus queued
+requests. It does not consume a capacity contrast. The procedure below is retained only to prepare
+a discriminating fleet for a future selector-9 validation after its activation blocker is fixed.
+
+On identical GPUs you can synthesize a KV-capacity spread through each host's `gpu_mem_util`:
 
 | `gpu_mem_util` per prefill host | Effect |
 |---------------------------------|--------|
 | `0.35` / `0.6` / `0.9` | ~4–5× spread in `num_gpu_blocks` across the pool |
 
-You need at least a **≥ 4× spread** for capacity-aware behavior to be measurable. Verify the spread
-you actually got before drawing conclusions:
+Use at least a **≥ 4× spread** for a future capacity-aware experiment. Verify the spread you
+actually got before running that post-fix test:
 
 ```bash
 for ip in <prefill-1-ip> <prefill-2-ip> <prefill-3-ip>; do
@@ -376,7 +402,8 @@ rewritten to `__` (e.g. `Qwen/Qwen2.5-7B-Instruct` → `Qwen__Qwen2.5-7B-Instruc
 missing/mismatched tokenizer produces different token ids → different hashes → no matches.
 
 !!! warning "If any leg disagrees, there is no error"
-    Every request just falls through to round-robin. This is the single most common
+    Every request takes the topology-specific fallback. For this mode-1 P/D recipe, that means
+    minimum-load selection with round-robin only as a tie-break. This is the single most common
     "it's not working" cause. Detection is in §9.
 
 ---
@@ -385,29 +412,37 @@ missing/mismatched tokenizer produces different token ids → different hashes �
 
 Observed flow for a request whose prefix is already cached on Prefill-2 (2 prefill, 1 decode):
 
-```
-CLIENT            loxilb VIP :9003 (eBPF fullproxy, mode 4)      PREFILL-2:8100      DECODE-1:8200
-  │  TCP SYN ───────────►│ (eBPF intercept; L7 proxy terminates)      │                   │
-  │  POST /v1/completions│                                            │                   │
-  │  {model,prompt} ────►│ KV-EXACT SELECT:                           │                   │
-  │                      │  1. tokenize(prompt) via staged tokenizer  │                   │
-  │                      │  2. block-hash (cbor+sha256, blk16, seed0) │                   │
-  │                      │  3. overlap vs inventory → argmax prefill  │                   │
-  │                      │     (or MISS → round-robin if 0 overlap)   │                   │
-  │                      │  4. exclusion mask (down / CB-open EPs)     │                   │
-  │                      │  5. select decode endpoint                 │                   │
-  │                      │── prefill compute (cache HIT, skip recompute)►│                 │
-  │                      │                                            │── KV via NIXL ───►│
-  │                      │── decode (kv_transfer_params) ─────────────────────────────────►│
-  │  200 OK {id=...      │◄─────────────────── response ──────────────────────────────────│
-  │  prefill_addr_...    │                                            │                   │
-  │  decode_addr_...} ◄──│                                            │                   │
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant G as LoxiLB fullproxy :9003
+    participant P as Prefill-2 :8100
+    participant D as Decode-1 :8200
+
+    C->>G: POST /v1/completions with model and prompt
+    Note over G: Tokenize with staged tokenizer<br/>Compute canonical block hashes<br/>Score inventory overlap<br/>Exclude unhealthy or CB-open endpoints
+    alt Positive overlap on Prefill-2
+        G->>P: Run prefill using cached prefix
+    else KV-exact miss
+        Note over G: Continue to P/D Tier-2 load fallback
+        G->>P: Run prefill on selected healthy endpoint
+    end
+    P->>D: Transfer KV state with NIXL
+    G->>D: Send decode request with transfer parameters
+    D-->>G: Completion response
+    G-->>C: 200 response
 ```
 
 !!! tip "The routing decision is visible in the response id"
     loxilb stamps the chosen pair into the completion `id`:
     `cmpl-___prefill_addr_<prefill-2-ip>:5600___decode_addr_<decode-1-ip>:5600_…`. You can read the
     routing decision per request straight off the response — no instrumentation needed.
+
+!!! warning "Response IDs can reveal backend topology"
+    The stamped prefill and decode addresses are operationally useful but may expose internal
+    topology to an untrusted client or downstream log system. Keep backend networks private,
+    review whether response IDs may cross a public trust boundary, and avoid publishing raw
+    production responses in tickets or examples.
 
 ---
 
@@ -431,14 +466,16 @@ curl -s http://localhost:11111/netlox/v1/metrics | grep -E 'loxilb_(pd_kv|kv_|pd
 ```
 # --- routing decisions ---
 loxilb_pd_kv_tier15_hits_total{ep_idx="N"}        COUNTER  KV-exact HITS, per prefill EP index (1-based)
-loxilb_pd_kv_t15_fallthrough_total                COUNTER  requests that skipped KV-exact → round-robin
-loxilb_pd_kv_t15_miss_reason_total{reason="..."}  COUNTER  misses by guard reason:
+loxilb_pd_kv_tier15_spills_total{ep_idx="N"}      COUNTER  load-aware moves off the overlap winner
+loxilb_pd_kv_tier15_cold_seeds_total{ep_idx="N"}  COUNTER  bounded requests diverted to cold endpoints
+loxilb_pd_kv_tier15_fallthrough_total                COUNTER  requests that skipped KV-exact → P/D min-load
+loxilb_pd_kv_tier15_miss_reason_total{reason="..."}  COUNTER  misses by guard reason:
                                                            mode_off, warmup, text_empty, model_empty,
-                                                           tokenize, hashes, no_worker, excluded
+                                                           tokenize, hashes, no_worker, excluded, shallow
 loxilb_pd_fallback_to_normal_total                COUNTER  P/D selection failed → fell back to normal LB
 loxilb_pd_cb_flips_total                          COUNTER  per-EP circuit-breaker state flips
 # --- inventory / subscriber health ---
-loxilb_pd_kv_blocks_total{endpoint="<svc>:<ep_idx>"}   GAUGE  blocks held per prefill EP (the inventory)
+loxilb_pd_kv_blocks{service="<svc>",ep_idx="<ep_idx>"} GAUGE blocks held per prefill EP
 loxilb_kv_subscriber_connected{service,ep}             GAUGE  1 = loxilb's ZMQ SUB is connected to that prefill EP
 loxilb_kv_agent_up                                     GAUGE  KV agent liveness
 # --- P/D serving + capacity ---
@@ -448,18 +485,23 @@ loxilb_ai_pd_prefill_duration_seconds             HISTO    prefill-leg latency
 loxilb_ai_pd_decode_ttft_seconds                  HISTO    decode TTFT
 loxilb_pd_sessions_active / loxilb_pd_trie_nodes  GAUGE    session-affinity + prefix-trie size
 proxy_pd_kv_params_overflow_total                 COUNTER  kv_params buffer overflow (should stay 0)
+loxilb_proxy_cache_bytes                          GAUGE    relay payload cached across proxy connections
+loxilb_proxy_cache_bytes_max_conn                 GAUGE    largest relay cache on one connection
+loxilb_proxy_cache_conns_queued                   GAUGE    connections currently holding relay payload
 ```
 
-The `blocks_total` endpoint label `<svc>:<ep_idx>` is 1-based per service (`1:1`/`1:2`/`1:3` =
-1st/2nd/3rd prefill EP in registration order); `tier15_hits_total` uses `ep_idx="N"` for the same
-index.
+The `loxilb_proxy_cache_*` gauges describe fullproxy relay memory, not GPU KV-cache
+inventory. Rising relay memory usually points to slow peers or large in-flight bodies.
+
+The inventory gauge identifies the service and endpoint with separate `service` and `ep_idx`
+labels; `tier15_hits_total` uses `ep_idx="N"` for the same endpoint index.
 
 ### 8.2 "Is KV-exact routing engaged?" — the three checks
 
 1. `loxilb_kv_subscriber_connected{...} == 1` for **every** prefill EP (ZMQ plane healthy), AND
-2. `loxilb_pd_kv_blocks_total > 0` on prefill EPs (inventory ingested ⇒ ZMQ **and** parity OK), AND
+2. `loxilb_pd_kv_blocks > 0` on prefill EPs (inventory ingested ⇒ ZMQ **and** parity OK), AND
 3. under same-prefix load, `loxilb_pd_kv_tier15_hits_total` **advances** while
-   `t15_fallthrough_total` stays flat (the only expected miss is the first request to a *cold*
+   `tier15_fallthrough_total` stays flat (the only expected miss is the first request to a *cold*
    prefix).
 
 When correct, hits pin to a single `ep_idx` under a shared prefix — that is the affinity signature.
@@ -470,7 +512,7 @@ Three fast signals that the KV plane came up on a newly provisioned fleet (full 
 [KV-Cache-Aware Routing](kv-cache-aware-routing.md)):
 
 1. **`loxilb_pd_kv_tier15_hits_total` advances** after the first warm same-prefix request. A flat
-   delta means broken parity — you are silently on round-robin, so abort and fix §6.
+   delta means broken parity — you are silently on P/D minimum-load selection, so abort and fix §6.
 2. **`loxilb_kv_subscriber_connected` climbs by N** — one per prefill EP — after posting an
    N-prefill rule.
 3. **Publishers are actually listening** — on each prefill host, `ss -tln | grep 5557` shows at
@@ -483,13 +525,13 @@ Three fast signals that the KV plane came up on a newly provisioned fleet (full 
 | Symptom | Likely cause | Diagnosis / fix |
 |---------|-------------|-----------------|
 | `curl VIP:9003` → connection refused | loxilb running **natively**, not as a container | `pgrep -a loxilb`; if native, kill it and run the container (§5.1). |
-| Requests succeed but **always round-robin** (`t15_fallthrough_total` climbs 1:1 with traffic) | **parity triad broken** or tokenizer missing | Confirm all 3 legs (§6) on both sides; confirm `/etc/loxilb/tokenizers/<slug>/tokenizer.json` is staged and mounted. Enable `LLB_KV_HASH_DEBUG=1` and compare `[KV_HASH]` output against a published block. |
-| `blocks_total` stays **0** for all prefill EPs | ZMQ inventory not flowing | Check `loxilb_kv_subscriber_connected{ep=...}`: **0** ⇒ loxilb's SUB can't reach that prefill's `:5557` (firewall / netns / wrong IP). **1** but blocks still 0 ⇒ either (a) prefill `--kv-events-config endpoint` is `127.0.0.1` not `tcp://*:5557` (connect-mode publishes nothing), or (b) all test prompts are shorter than `block_size` (16) so no full block is ever cached/published — use a ≥16-token prefix. |
+| Requests succeed but **KV-exact always falls through** (`tier15_fallthrough_total` climbs 1:1 with traffic) | **parity triad broken** or tokenizer missing | Confirm all 3 legs (§6) on both sides; confirm `/etc/loxilb/tokenizers/<slug>/tokenizer.json` is staged and mounted. Mode 1 then uses P/D minimum load. Enable `LLB_KV_HASH_DEBUG=1` and compare `[KV_HASH]` output against a published block. |
+| `loxilb_pd_kv_blocks` stays **0** for all prefill EPs | ZMQ inventory not flowing | Check `loxilb_kv_subscriber_connected{ep=...}`: **0** ⇒ loxilb's SUB can't reach that prefill's `:5557` (firewall / netns / wrong IP). **1** but blocks still 0 ⇒ either (a) prefill `--kv-events-config endpoint` is `127.0.0.1` not `tcp://*:5557` (connect-mode publishes nothing), or (b) all test prompts are shorter than `block_size` (16) so no full block is ever cached/published — use a ≥16-token prefix. |
 | `tier15_hits_total` **absent** from `/metrics` on a fresh deploy | Prometheus lazy-emission (zero observations) | Not a fault — drive a few same-prefix requests, then re-scrape (§8). |
 | vLLM container **exits immediately** at startup | NIXL/UCX crash | `docker logs vllm`; ensure `kv_buffer_device:"cpu"` + `UCX_TLS=tcp` (§4.3). |
 | `503 {"error":"pd_pool_unavailable"}` | no healthy prefill **or** decode | Check every EP `/health`; a P/D rule needs ≥1 healthy of **each** role. |
 | Decode hangs / request times out after prefill | NIXL side-channel unreachable | `VLLM_NIXL_SIDE_CHANNEL_HOST` must be the node IP (not `0.0.0.0`); `:5600` open between prefill ↔ decode. |
-| `kv inventory` REST query → `invalid service_id` | the inventory endpoint needs a `service_id` param | Cosmetic; use the Prometheus `blocks_total` gauge instead. |
+| `kv inventory` REST query → `invalid service_id` | the inventory endpoint needs a `service_id` param | Cosmetic; use the Prometheus `loxilb_pd_kv_blocks` gauge instead. |
 
 ---
 
@@ -501,14 +543,14 @@ requests pin to the cached prefill endpoint and inventory grew.
 1. **Warm** a shared prefix of ≥16 tokens (at least one full block) with a single request to the
    VIP `:9003`. Read the `prefill_addr_...` stamped in the response `id` — that is the endpoint the
    warm request landed on.
-2. **Confirm inventory grew** for that endpoint: `loxilb_pd_kv_blocks_total{endpoint="1:<N>"}`
+2. **Confirm inventory grew** for that endpoint: `loxilb_pd_kv_blocks{service="1",ep_idx="<N>"}`
    should jump `0 → N`.
 3. **Replay** 8 follow-up requests with the same prefix. Read each response `id`.
 
 Expected signature:
 
 ```
-WARM routed to a prefill EP     →  blocks_total{1:2}: 0 → 5
+WARM routed to a prefill EP     →  loxilb_pd_kv_blocks{service="1",ep_idx="2"}: 0 → 5
 SAME-PREFIX routes              =  same prefill EP on all 8 follow-ups (8/8 pinned)
 fallthrough_delta = 1   miss_delta = 1   (the cold warm request only)
 ```

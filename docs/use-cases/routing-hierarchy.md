@@ -1,6 +1,6 @@
 # Routing Hierarchy
 
-How LoxiLB decides which vLLM worker serves each request: a strict, fail-open
+How LoxiLB decides which worker serves each request: a strict, fail-through
 priority ladder that prefers the strongest cache-affinity signal available, then bounds
 it by load, capacity, health, and admission.
 
@@ -20,8 +20,8 @@ Two naive strategies both fail:
 The routing problem is therefore **hierarchical**: prefer the strongest affinity signal
 for the request, but bound it by load and capacity, and fall through gracefully when any
 signal is missing. LoxiLB evaluates this as a strict priority ladder per request inside the
-fullproxy (`mode:4`) data plane. **Every layer is fail-open** — a miss at any layer falls
-through to the next. The ladder can make a request smarter, never undeliverable.
+fullproxy (`mode:4`) data plane. Selection tiers fail through to the next tier, but admission
+and terminal availability gates can return `429` or `503`; the ladder does not guarantee delivery.
 
 !!! tip "See also"
     The Tier 1.5 block-hash contract, ZMQ inventory plane, and per-model onboarding live in
@@ -49,15 +49,13 @@ The hierarchy behaves differently depending on whether the service is **P/D-disa
 | Shape | Rule shape | Selection hierarchy |
 |---|---|---|
 | **P/D disaggregation** | `mode:4` + `pd_disagg_mode:true`, endpoints tagged `ep_role:1` (prefill) / `ep_role:2` (decode), at least one of each | The full P/D tier ladder: admission → Tier 0 → Tier 1 → Tier 1.5 → Tier 2, then decode selection |
-| **Single pool** (non-disaggregated) | `mode:4`, one endpoint pool (no `pd_disagg_mode`) | The **selector-algorithm** path: prefix-hash CHWBL (`sel:8`) or weighted CHWBL (`sel:10`), else sticky / WRR / RR |
+| **Single pool** (non-disaggregated) | `mode:4`, one role-less endpoint pool (no `pd_disagg_mode`) | With `kvExactMode:3`, KV-exact scores all endpoints and a miss falls to the rule selector. Without mode 3, use the selector directly: CHWBL (`sel:8`), weighted CHWBL (`sel:10`), selector-9 modulo affinity, persist, WRR, or RR. |
 
-!!! warning "Tier 1.5 is P/D-only"
-    KV-exact block-hash routing (Tier 1.5) is reachable **only inside the P/D ladder**. Setting
-    `kvExactMode` on a non-P/D rule starts the ZMQ inventory subscribers, but **no selection
-    path consumes that inventory** on a single-pool rule. For single-pool deployments,
-    cache-aware routing is delivered by the **prefix-hash CHWBL family** (`sel:8`/`sel:10`),
-    which approximates cache locality without mirroring vLLM's cache. Choose single-pool CHWBL
-    when you cannot run P/D; choose the P/D ladder with Tier 1.5 when you can.
+!!! warning "Mode 1 and mode 3 are different selection graphs"
+    `kvExactMode:1` is valid only inside a P/D ladder and scores eligible prefill endpoints.
+    `kvExactMode:3` is valid only on a role-less non-P/D rule and scores every endpoint before
+    falling back to that rule's selector. CHWBL (`sel:8`/`10`) remains an inventory-free
+    approximation of cache locality and can be used without either KV-exact mode.
 
 ## The P/D tier ladder — one request, top to bottom
 
@@ -80,6 +78,9 @@ then a decode endpoint is chosen separately.
     Below Tier 2 is only the any-healthy rescue. What operators call "layer 3" is the control
     loop that *biases* the ladder (via the adaptive law and the optional controller), not a
     selection tier.
+
+`LLB_KV_MIN_MATCH_TOKENS` adds a Tier-1.5 guard: default `16`, accepted range `0–4096`,
+and `0` disables the minimum-token check.
 
 ### Tier 0 — session stickiness
 
@@ -122,8 +123,9 @@ documented in [KV-Cache Routing](../ai-gateway/kv-caching.md).
 Despite the historical name, Tier 2 is a **min-load scorer**:
 
 - **Default arm:** `score = active_conns + queued_requests`, lower wins.
-- **Capacity-blend arm:** engaged **only** when the rule's selector is GPU-aware (`sel:9`),
-  weighing active connections, queue depth, and swap normalized by per-endpoint capacity.
+- **Capacity-blend arm:** the scorer exists for GPU-aware (`sel:9`) rules, but its current
+  activation gate checks a mutable endpoint cursor instead of the configured selector. Treat it as
+  release-blocked; normal Tier 2 uses the default arm.
 
 The round-robin counter advances **only on a genuine tie**, so it is a tie-breaker, not the
 algorithm.
@@ -215,6 +217,38 @@ A valid `LOXILB_KV_LB_MODE` (`off | hard | soft | adaptive | adaptive-soft`) win
 garbage warns and falls back to `hard`. The **out-of-box default is `hard` with ε = 0.75**;
 `off` restores pure overlap-argmax.
 
+### Full-fleet pressure relief and cold-start seeding
+
+The primary selector considers positive-overlap candidates. Two safeguards handle endpoints
+outside that set:
+
+1. **Pressure relief.** `LOXILB_KV_SPILL_RELIEF` lets an over-cap affinity winner spill to the
+   least-loaded under-cap endpoint across the full healthy fleet, including zero-overlap
+   endpoints. Unset means on for single-pool mode 3 and off for P/D mode 1. Explicit on/off
+   values override every service in the process.
+2. **Cold-start seeding.** While an eligible endpoint has fewer than
+   `LOXILB_KV_COLDSTART_MIN_BLOCKS` blocks (default `16`), every
+   `LOXILB_KV_COLDSTART_SEED_N`th Tier-1.5 hit (default `16`) is diverted to the lowest-index
+   cold endpoint. The endpoint warms from that request, then leaves the cold set. Set the
+   seed interval to `0` to disable this recovery path.
+
+```mermaid
+flowchart LR
+    AFF[Affinity winner] --> CAP{Over fleet-wide cap?}
+    CAP -->|Yes and relief enabled| RELIEF[Least-loaded under-cap endpoint]
+    CAP -->|No| TICK{Cold endpoint and Nth hit?}
+    RELIEF --> TICK
+    TICK -->|Yes| SEED[Seed cold endpoint]
+    TICK -->|No| FINAL[Keep current selection]
+
+    style RELIEF fill:#fff3e0,stroke:#f57c00
+    style SEED fill:#e1f5fe,stroke:#0288d1
+    style FINAL fill:#e8f5e9,stroke:#43a047
+```
+
+Use `loxilb_pd_kv_tier15_spills_total` and
+`loxilb_pd_kv_tier15_cold_seeds_total` to observe these deliberate cache-locality tradeoffs.
+
 ## Resilience semantics
 
 - **Health / CB pre-filter:** the excluded_mask guarantees an excluded Tier-1.5 winner falls to
@@ -222,10 +256,16 @@ garbage warns and falls back to `hard`. The **out-of-box default is `hard` with 
 - **Circuit breaker:** per-endpoint `CLOSED → OPEN → HALF_OPEN`. For P/D services this
   auto-enables with a threshold of 3 consecutive failures and a 30 s open window. CB state is
   local-only, never HA-synced.
-- **Exclusion is reactive:** REST health-probe state does not reach the data plane; real
-  exclusion comes from connect-failure retry, admin-down, or an open circuit breaker.
-- **Inventory staleness degrades, never mis-routes:** a subscriber reconnect clears that
-  endpoint's inventory; an empty inventory scores 0 → Tier-1.5 miss → Tier 2 (fail-open).
+- **Origin errors:** when the breaker is enabled, three consecutive origin 5xx responses also
+  open it by default. `LLB_PD_ORIGIN_ERR_THRESHOLD=0` disables this demotion; a 4xx neither
+  advances nor resets the origin-error streak. The current request still receives the origin
+  response—demotion affects later selection and is not an automatic retry.
+- **Probe state is synchronized:** a probe-down transition is pushed immediately into the
+  fullproxy endpoint state and seeds the exclusion mask. Connect-failure retry and the circuit
+  breaker cover failures that occur before the probe transition.
+- **Inventory continuity has a tradeoff:** a near reconnect and a small gap preserve inventory;
+  a gap beyond the 64-event window clears it. The live loop does not replay missed events, so a
+  missed remove can create temporary stale affinity before later reconciliation.
 - **Controller staleness glides to neutral:** if the optional external controller goes stale,
   per-endpoint weights decay toward neutral — capacity scaling relaxes back to unweighted;
   endpoints are never zero-filled or dropped by staleness alone.
@@ -238,21 +278,20 @@ For a plain fullproxy pool (no `pd_disagg_mode`), the request path selects via t
 | REST `sel` | Selector | Mechanism |
 |---|---|---|
 | `8` | chwbl | Consistent Hash with Bounded Loads over a hash ring, keyed by **prefix_hash** |
-| `9` | gpuaware | `prefix_hash % n_eps` placement on the single-pool path (the capacity-weighted scoring is a P/D Tier-2 feature, not applied here) |
+| `9` | gpuaware | `prefix_hash % n_eps` placement on the single-pool path; the separate P/D capacity scorer is currently release-blocked |
 | `10` | wrr-hash | CHWBL with endpoint **weights** folded into the ring (capacity-weighted bounded load) |
 
 The routing-key priority is identical for all three:
 
-1. **`prefix_hash`** — a hash over the request's extracted LLM prefix: prompt prefix + model,
-   plus (per `chwbl_prefix_hash_level` and presence flags) LoRA adapter, image/audio hashes,
-   `cache_salt`, and tool-schema hash. Level 1 = global prefix fields only; levels 2/3 fold in
-   progressively more context.
+1. **`prefix_hash`** — a hash over the request-derived LLM prefix and available model/context
+   fields. Although the API stores CHWBL level and flag fields, the current proxy receives fixed
+   flags `0` and derives the prefix scope from request content.
 2. **`conv_id`** — fallback session stickiness (hash of the conversation ID).
 3. **RR** — last resort.
 
 Same-prefix requests hash to the same ring point and land on the same endpoint *while it is
-under its bounded-load cap* (`chwbl_mean_load_factor`, effective 175 ⇒ 1.75× mean — matching
-the Tier-1.5 ε = 0.75), spilling CHWBL-style when hot.
+under its bounded-load cap*. The current proxy uses a fixed factor of 175 (1.75× mean) and 256
+virtual nodes; submitted CHWBL factor and replication fields do not currently change those values.
 
 !!! note "What single-pool does not give you"
     `prefix_hash` is one hash of one extracted prefix — it cannot measure *partial* overlap,
@@ -262,6 +301,11 @@ the Tier-1.5 ε = 0.75), spilling CHWBL-style when hot.
 ## Configuration
 
 Both shapes are created with `POST /netlox/v1/config/loadbalancer` on port `11111`.
+
+!!! warning "Protect the management API"
+    The `curl` examples use plain HTTP for an isolated lab. In production, use an authenticated,
+    TLS-protected management endpoint and read its authorization header from a
+    permission-restricted file.
 
 === "curl"
     P/D-disaggregated rule with Tier 1.5 KV-exact:
@@ -285,8 +329,8 @@ Both shapes are created with `POST /netlox/v1/config/loadbalancer` on port `1111
         "kvBlockSize": 16
       },
       "endpoints": [
-        { "endpointIP": "31.31.31.1", "targetPort": 8100, "weight": 1, "ep_role": 1, "nixl_port": 5600 },
-        { "endpointIP": "32.32.32.1", "targetPort": 8200, "weight": 1, "ep_role": 2, "nixl_port": 5600 }
+        { "endpointIP": "192.0.2.1", "targetPort": 8100, "weight": 1, "ep_role": 1, "nixl_port": 5600 },
+        { "endpointIP": "198.51.100.1", "targetPort": 8200, "weight": 1, "ep_role": 2, "nixl_port": 5600 }
       ]
     }'
     ```
@@ -303,12 +347,11 @@ Both shapes are created with `POST /netlox/v1/config/loadbalancer` on port `1111
         "protocol": "tcp",
         "sel": 8,
         "mode": 4,
-        "host": "10.10.10.254",
-        "chwbl_prefix_hash_level": 1
+        "host": "10.10.10.254"
       },
       "endpoints": [
-        { "endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 1 },
-        { "endpointIP": "32.32.32.1", "targetPort": 8000, "weight": 1 }
+        { "endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1 },
+        { "endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 1 }
       ]
     }'
     ```
@@ -319,13 +362,13 @@ Both shapes are created with `POST /netlox/v1/config/loadbalancer` on port `1111
     ```bash
     # NOTE: loxicmd applies one --tcp target port to every endpoint; the decode EP's
     # targetPort 8200 (curl) cannot be set per-endpoint — post it via REST if it differs.
-    loxicmd create lb 10.10.10.254 --tcp=2020:8100 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=rr --host=10.10.10.254 --pd-disagg --pd-cache-aware --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --ep-role=prefill,decode --nixl-port=5600,5600
+    loxicmd create lb 10.10.10.254 --tcp=2020:8100 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=rr --host=10.10.10.254 --pd-disagg --pd-cache-aware --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --ep-role=prefill,decode --nixl-port=5600,5600
     ```
 
     Single-pool CHWBL rule (`sel:8`) — cache affinity without P/D:
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2021:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=chwbl --host=10.10.10.254 --chwbl-hash-level=1
+    loxicmd create lb 10.10.10.254 --tcp=2021:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --host=10.10.10.254
     ```
 
 ## Verify
@@ -334,7 +377,8 @@ Confirm the rule and watch the ladder engage on the metrics endpoint
 (`GET http://10.10.10.254:11111/netlox/v1/metrics`):
 
 - `loxilb_ai_pd_requests_total` advances for a P/D rule.
-- `loxilb_pd_kv_tier15_hits_total{ep_idx}` advances once Tier 1.5 is warm.
+- `loxilb_pd_kv_tier15_hits_total{ep_idx}` advances after inventory is nonzero and repeated
+  prefixes produce overlap. `kvWarmupSec` does not gate readiness because its timer is inert.
 - For single-pool CHWBL, repeated same-prefix requests land on one backend; spread resumes past
   the load cap.
 

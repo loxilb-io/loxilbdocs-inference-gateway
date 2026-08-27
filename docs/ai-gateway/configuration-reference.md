@@ -1,9 +1,10 @@
 # Configuration Reference
 
-The authoritative, exhaustive reference for the `serviceArguments` object (and its
+The public contract reference for the `serviceArguments` object (and its
 `endpoints[]` and `mtls_*` sub-objects) used to create an AI Gateway load-balancer rule via
-`POST /netlox/v1/config/loadbalancer`. Every field, type, default, and enum below is verbatim
-from the load-balancer schema — where a running gateway ever disagrees, the schema wins.
+`POST /netlox/v1/config/loadbalancer`. The tables follow the current API schema together with the
+server's engine-coherence and topology validation. Invalid combinations fail before a rule is
+created; a client must not assume that every individually valid field can be combined.
 
 A load-balancer create body has three top-level keys:
 
@@ -16,8 +17,7 @@ carries the backend pool. This page documents both.
 
 !!! note "Prerequisite for AI routing"
     All AI routing behaviour (model-name pools, CHWBL, KV-cache routing, P/D disaggregation,
-    SSE) requires **`mode: 4` (fullproxy)**. `mode: 6` (aigw) exists in the enum but is
-    unexercised — do not rely on it. Set `mode: 4` on every AI rule.
+    SSE) requires **`mode: 4` (fullproxy)**. Set `mode: 4` on every AI rule.
 
 !!! tip "How to read the tables"
     `Type` uses the schema's own format (e.g. `int32`, `int64`, `uint32`). A **Default** of
@@ -39,8 +39,8 @@ apply to every rule, AI or not.
 | `portMax` | integer | — | ≥ `port` | Max port of a range. Omit for a single port. |
 | `protocol` | string | — | `tcp`, `udp`, `sctp`, `icmp` | L4 protocol. AI/L7 rules use `tcp`. |
 | `sel` | integer | `0` | `0`–`10` (see §2) | Load-balance algorithm. `8`=CHWBL, `9`=gpuaware, `10`=wrr-hash. |
-| `mode` | int32 | `0` | `0`–`6` (see §2) | NAT/proxy mode. **`4`=fullproxy is the AI prerequisite.** |
-| `security` | int32 | `0` | `0`–`3` (see §8) | TLS mode: `0`-plain, `1`-https, `2`-tls, `3`-e2ehttps. |
+| `mode` | int32 | `0` | `0`–`5` (see §2) | NAT/proxy mode. **`4`=fullproxy is the AI prerequisite.** |
+| `security` | int32 | `0` | `0`–`2` (see §8) | TLS mode: `0`=plain HTTP, `1`=frontend TLS termination with an HTTP backend, `2`=frontend TLS termination plus TLS re-encryption to the backend. |
 | `host` | string | — | hostname / FQDN | L7 Ingress host to match (SNI / `Host` header). |
 | `path_prefix` | string | — | URL path (e.g. `/v1/chat`) | L7 path prefix. Empty = hostname-only matching. |
 | `path_match_mode` | string | `disabled` | `disabled`, `prefix`, `exact` | `disabled`=host-only (compat), `prefix`=longest-prefix, `exact`=exact path. |
@@ -57,6 +57,8 @@ apply to every rule, AI or not.
 | `adminStateUp` | boolean | `true` | `true`/`false` | Lifecycle flag; `false` pauses the rule. |
 | `projectId` | string | — | opaque | Tenant/project id. **Not a tenant-isolation boundary.** |
 | `connectionLimit` | uint32 | `0` (unlimited) | ≥0 | Per-rule concurrent-connection ceiling (eBPF-CT enforced). |
+| `cb_enable` | boolean | `false` | `true`/`false` | Enable the fullproxy per-endpoint circuit breaker. The default connect-failure threshold is five with a 30-second open period. Origin-5xx demotion uses a separate threshold; P/D rules can enable breaker behavior automatically. |
+| `vip_qos_policy_id` | string | empty | existing `/config/policy` identifier | Associate a pre-created policy with the LB rule. Empty is a no-op; an unknown identifier makes creation fail. The policy must be created first. |
 | `annotations` | object (string→string) | — | opaque map | Round-trips arbitrary Octavia fields verbatim; never interpreted. |
 
 ---
@@ -76,8 +78,8 @@ apply to every rule, AI or not.
 | `6` | n3 | Reserved selection variant. |
 | `7` | reserved | Reserved (do not use). |
 | `8` | chwbl | Consistent-hash-with-bounded-load — the AI prefix-cache router (see §5). |
-| `9` | gpuaware | GPU-load-aware routing (requires GPU metrics). |
-| `10` | wrr-hash | Weighted CHWBL hashing (shares all `chwbl_*` knobs, §5). |
+| `9` | gpuaware | Plain fullproxy uses prefix/conversation affinity and healthy-endpoint fallback. A P/D capacity scorer exists, but its activation is release-blocked because the current gate checks a mutable endpoint cursor instead of the configured selector. |
+| `10` | wrr-hash | Weighted CHWBL hashing; endpoint weights apply, while stored `chwbl_*` tuning values are not currently propagated (§5). |
 
 ### `mode` — NAT / proxy mode (default `0`)
 
@@ -89,7 +91,6 @@ apply to every rule, AI or not.
 | `3` | dsr | Direct server return. |
 | `4` | fullproxy | **L7 full proxy — required for all AI routing.** |
 | `5` | hostonearm | Host one-arm. |
-| `6` | aigw | AI-gateway mode — present in enum but unexercised; do not rely on it. |
 
 ---
 
@@ -106,10 +107,12 @@ apply to every rule, AI or not.
 | `max_stream_duration_sec` | int32 | `0` | ≥0 | Absolute wall-clock cap (seconds) for an SSE stream. `0` = system hard cap of `86400` (24h). Set e.g. `300` to bound runaway streams. |
 | `backend_keepalive_interval_sec` | int32 | `0` | ≥0 | Sets `SO_KEEPALIVE`+`TCP_KEEPIDLE` on the backend socket (seconds). `0` = disabled. **Recommended `60`** to survive cloud NAT during long SSE streams. |
 
-!!! note "SSE lifecycle and token accounting are wired"
-    SSE stream lifecycle handling and token bookkeeping are enforced in the data path. (API-key
-    auth and per-tenant rate-limiting remain control-plane CRUD only — see
-    [API Key Management](api-key-management.md).)
+!!! note "SSE lifecycle and admission controls are enforced"
+    SSE lifecycle handling is part of the fullproxy stream path. API-key model authorization,
+    request-rate limits, and token quotas use the independent PostgreSQL key store configured by
+    `--aikey-db-*`. Without `--aikey-db-host`, the current data path admits requests without key
+    validation. Prove a missing-key request receives `401` before using these controls as an
+    access boundary.
 
 ---
 
@@ -121,13 +124,28 @@ overlap silently drops to zero. See [KV-Cache Routing](kv-caching.md).
 
 | Field | Type | Default | Allowed / Enum | Notes |
 |---|---|---|---|---|
-| `kvExactMode` | int64 | `0` | `0`–`3` | `0`=off, `1`=zmq (P/D role-partitioned), `2`=nats (reserved), **`3`=zmq single-role** (all EPs subscribed, no P/D split — used by SGLang). |
-| `kvBlockSize` | int64 | `16` | ≥1 | Token block size for hash computation. **Must match** vLLM `--block-size` / SGLang `--page-size`. (CPU vLLM defaults to 128 — override to 16.) |
-| `kvHashAlgo` | string | `sha256_cbor` | `sha256_cbor`, `xxhash_cbor` | Block-hash algorithm; must match the engine's configured algorithm. **For SGLang, OMIT this field** (engine identity implies the SGLang algorithm; an explicit value scores 0). |
-| `kvZmqPort` | int64 | `5557` | `1`–`65535` | ZMQ PUB port on the (prefill) endpoints publishing KV-cache events. |
+| `kvExactMode` | int64 | `0` | `0`–`3` | `0`=off; `1`=P/D-coupled KV-exact routing and requires `pd_disagg_mode: true`; `2`=reserved and not implemented; `3`=single-role KV-exact routing and requires `mode: 4` with P/D disabled. The transport is selected by `kvEngineType`, not by this number. |
+| `kvBlockSize` | int64 | `16` | ≥1 | Token block size for hash computation. Must match vLLM `--block-size`, SGLang `--page-size`, or TensorRT-LLM `tokens_per_block`. TensorRT-LLM commonly uses 32 while this field defaults to 16, so verify it explicitly. |
+| `kvHashAlgo` | string | derived | `sha256_cbor`, `xxhash_cbor`, `sha256_sglang`, `blockhash_trtllm` | Prefer omission: the gateway derives the coherent engine default (`vllm`→`sha256_cbor`, `sglang`→`sha256_sglang`, `trtllm`→`blockhash_trtllm`). Explicit engine/algo mismatches and every explicit value for llama.cpp are rejected. |
+| `kvZmqPort` | int64 | `5557` | `1`–`65535` | Base ZMQ publisher port for vLLM/SGLang. Mode 1 subscribes prefill endpoints; mode 3 subscribes all endpoints. A meaningful non-default value is rejected for TensorRT-LLM and llama.cpp. |
 | `kvWarmupSec` | int64 | `30` | ≥0 | **Accepted but currently inert on all paths.** Intended as a Tier 1.5 warmup delay after subscriber connect, but the timer is never armed in the shipped data path — Tier 1.5 activates without waiting. Do not design procedures around it. |
-| `kvEngineType` | string | `vllm` | `vllm`, `sglang` | KV-event engine for this VIP. **Immutable after create** (delete + recreate to change). One framework per VIP. |
-| `kvDpRankCount` | int32 | `1` | `1`–`8` | SGLang data-parallel rank count. Rank N publishes at `kvZmqPort+N`; all ranks union into one per-EP inventory. |
+| `kvEngineType` | string | `vllm` | `vllm`, `sglang`, `trtllm`, `llamacpp` | Typed serving engine. Immutable after create; delete and recreate the rule to change it. Engine selection enables validation but does not imply feature parity. |
+| `kvDpRankCount` | int32 | `1` | `1`–`8` | SGLang data-parallel rank count. Rank N publishes at `kvZmqPort+N`; all ranks union into one per-endpoint inventory. Values above 1 are rejected for TensorRT-LLM and llama.cpp. |
+| `pdBootstrapPort` | int32 | `0` | `0`–`65535` | SGLang P/D bootstrap port on each prefill endpoint. `0` uses SGLang's default `8998`. A nonzero value requires `pd_disagg_mode: true` and `kvEngineType: sglang`; all other shapes are rejected. |
+
+### Engine and field coherence
+
+| Engine | Supported routing shapes | Event transport | Required coherence / rejected fields |
+|---|---|---|---|
+| `vllm` | Plain L7 LB; single-role mode 3; sequential P/D with optional mode 1 | ZMQ | Use a vLLM hash algorithm and match block size and hash seed. `pdBootstrapPort` is rejected. |
+| `sglang` | Plain L7 LB; single-role mode 3; concurrent P/D; optional P/D-coupled mode 1 | ZMQ, including per-rank ports | Omit `kvHashAlgo` or use only `sha256_sglang`. `pdBootstrapPort` is valid only for SGLang P/D. |
+| `trtllm` | Plain L7 LB; single-role mode 3; sequential P/D with mode 1 | HTTP polling on each endpoint's serving port | The gateway must be the sole consumer of `/kv_cache_events`. Meaningful ZMQ and rank settings are rejected; match `kvBlockSize` to `tokens_per_block`. |
+| `llamacpp` | Plain L7 LB with CHWBL or session affinity | None | KV-exact and P/D are unsupported. Explicit hash settings and meaningful KV transport, rank, or block-size overrides are rejected. |
+
+!!! warning "Fail closed on incoherent engine settings"
+    Treat a create-time rejection as a configuration defect; do not work around it by changing the
+    engine name or disabling certificate verification. The validation prevents accepted-but-unused
+    fields and silent hash mismatches.
 
 !!! warning "vLLM hash-contract triad"
     All three legs must match the vLLM launch flags or hash overlap is 0%: NONE_HASH seed
@@ -140,32 +158,38 @@ overlap silently drops to zero. See [KV-Cache Routing](kv-caching.md).
 
 ## 5. CHWBL / WRR-HASH tuning knobs
 
-These knobs apply **only when `sel: 8` (CHWBL) or `sel: 10` (wrr-hash)**. They are ignored for
-every other `sel` value. See [LLM Routing](llm-routing.md).
+The REST model accepts and returns these fields for `sel: 8` (CHWBL) and
+`sel: 10` (wrr-hash), but the current FullProxy programming path does not
+propagate them to the data plane. Runtime selection instead uses a mean-load
+factor of `175`, replication `256`, prefix flags `0`, and cache-salt enforcement
+off. Treat API read-back as stored configuration, not proof of enforcement. See
+[LLM Routing](llm-routing.md).
 
 | Field | Type | Default | Allowed / Enum | Notes |
 |---|---|---|---|---|
-| `chwbl_prefix_hash_level` | integer | `1` | `1`, `2`, `3` | Prefix-hash depth: `1`=system prompt+model, `2`=+session context, `3`=+RAG. |
-| `chwbl_prefix_hash_flags` | integer | `0` | `0`–`255` (bitflags) | Optional-field inclusion. Bit0=LoRA, 1=image, 2=audio, 3=cache_salt, 4=tools, 5=session, 6=RAG template, 7=RAG docs. `0`=auto-detect. |
-| `chwbl_mean_load_factor` | integer | `125` (schema) ⚠️ | `100`–`300` | Max load factor %: `max_load = avg_load × factor / 100`. `125` allows 25% overload. **⚠️ The schema `default: 125` is only applied when you set the field; an omitted field falls to the runtime default of `175` (1.75×). Set it explicitly for a predictable ceiling.** |
-| `chwbl_replication` | integer | `100` | `1`–`1024` | Virtual nodes per endpoint. Higher = better distribution, more memory. For WRR-HASH this is the total vnode count distributed by weight. |
-| `chwbl_enable_cache_salt` | boolean | `false` | `true`/`false` | Require a `cache_salt` field in requests for strict multi-tenant isolation. `false` = `cache_salt` optional. |
+| `chwbl_prefix_hash_level` | integer | `1` | `1`, `2`, `3` | Stored/read back; current runtime infers prefix scope from request content. |
+| `chwbl_prefix_hash_flags` | integer | `0` | `0`–`255` (bitflags) | Stored/read back; current runtime programs flags `0`. |
+| `chwbl_mean_load_factor` | integer | `125` (schema) | `100`–`300` | Stored/read back; current runtime uses `175` (1.75×) regardless of this value. |
+| `chwbl_replication` | integer | `100` | `1`–`1024` | Stored/read back; current runtime uses `256` virtual nodes. |
+| `chwbl_enable_cache_salt` | boolean | `false` | `true`/`false` | Stored/read back; current runtime does not enforce cache salt. Do not use this field as a tenant-isolation boundary. |
 
 ---
 
 ## 6. Prefill / Decode (P/D) disaggregation
 
-Two-phase vLLM flow: prefill request to a prefill endpoint, then decode to a decode endpoint
-using KV-transfer parameters from the prefill response. Requires `mode: 4`. Endpoint roles are
-set per-endpoint via `ep_role` (§9). See [P/D Disaggregation](pd-disaggregation.md).
+P/D requires `mode: 4` plus at least one prefill endpoint (`ep_role: 1`) and one decode endpoint
+(`ep_role: 2`). vLLM and TensorRT-LLM use sequential engine-specific flows. SGLang uses concurrent
+dual dispatch and may use `pdBootstrapPort`; base SGLang P/D does not require `kvExactMode`.
+Use `kvExactMode: 1` only when adding the P/D-coupled KV-exact tier. Mode 3 is single-role and is
+rejected when P/D is enabled. See [P/D Disaggregation](pd-disaggregation.md).
 
 | Field | Type | Default | Allowed / Enum | Notes |
 |---|---|---|---|---|
 | `pd_disagg_mode` | boolean | `false` | `true`/`false` | Enable prefill/decode disaggregation (the two-phase flow). |
 | `pd_cache_aware_mode` | boolean | `false` | `true`/`false` | Cache-aware endpoint selection (session stickiness + radix-trie prefix match + min-load). **Requires `pd_disagg_mode: true`.** |
-| `pd_session_ttl_sec` | int32 | `0` | ≥0 | Session-stickiness TTL (seconds). **`0` = no automatic expiry.** Only used when `pd_cache_aware_mode: true`. |
-| `pd_cache_threshold` | int32 | `20` | `0`–`100` | Cache-match threshold. Lower = more aggressive cache routing. |
-| `pd_balance_abs_threshold` | int32 | `3` | ≥0 | Load-imbalance threshold. If (max−min) active connections exceeds this, bypass cache affinity. |
+| `pd_session_ttl_sec` | int32 | `0` | ≥0 | Tier-0 P/D session-stickiness TTL (seconds). Runtime `0` selects the 300-second default; it does not disable expiry. This applies to P/D session lookup independently of `pd_cache_aware_mode`; that field controls the optional radix-trie tier. |
+| `pd_cache_threshold` | int32 | `20` | `0`–`100` | Cache-match threshold. Runtime `0` selects `20`; lower nonzero values are more aggressive. |
+| `pd_balance_abs_threshold` | int32 | `3` | `0`–`255` effective | Load-imbalance threshold. Runtime `0` selects `3`; the value is passed through an 8-bit field. If (max−min) active connections exceeds it, cache affinity is bypassed. |
 
 ---
 
@@ -199,10 +223,15 @@ client-cert verification and backend re-encryption. Additional TLS-tuning fields
 
 | Value | Name | Meaning |
 |---|---|---|
-| `0` | plain | No TLS (**default**). |
-| `1` | https | TLS terminated at the VIP (frontend HTTPS). |
-| `2` | tls | TLS passthrough / re-encrypt. **Not "e2ehttps"** — that is `3`. |
-| `3` | e2ehttps | End-to-end HTTPS (terminate at VIP, re-encrypt to backend). |
+| `0` | plain | Plain HTTP on both legs (**default**). |
+| `1` | https | TLS terminates at the gateway; the backend leg is plain HTTP. |
+| `2` | e2ehttps | TLS terminates at the gateway and the gateway establishes a separate TLS connection to the backend. |
+
+!!! danger "Mode 2 is not TLS passthrough"
+    The gateway terminates and re-encrypts TLS, so it can inspect HTTP traffic. Values outside
+    `0`, `1`, and `2` fail request validation and the rule is not created. For production backend TLS, set
+    `mtls_backend.verify_server_cert: true` and provide a trusted CA rather than accepting any
+    backend certificate.
 
 ### `mtls_frontend` (object)
 
@@ -211,11 +240,11 @@ Client-certificate verification. Only valid with `security: 1` or `security: 2` 
 | Field | Type | Default | Allowed / Enum | Notes |
 |---|---|---|---|---|
 | `client_cert_mode` | string | `disabled` | `disabled`, `optional`, `required` | `disabled`=no verification, `optional`=accept with/without cert, `required`=reject without a valid cert. |
-| `client_ca_path` | string | — | filesystem path (PEM) | Client CA bundle path (e.g. `/opt/loxilb/cert/client_ca_bundle.crt`). |
+| `client_ca_path` | string | — | filesystem path (PEM) | Absolute path to a mounted client CA bundle. Prefer a read-only secret mount. |
 | `client_ca_cert_data` | string | — | base64 PEM | Inline CA data — alternative to `client_ca_path` (e.g. for Kubernetes secrets). |
 | `require_client_cn` | boolean | `false` | `true`/`false` | Require a specific CN pattern in the client cert. |
-| `client_cn_pattern` | string | — | e.g. `*.corp.example.com` | Required CN pattern (wildcards supported). Only used if `require_client_cn: true`. |
-| `client_crl_path` | string | — | filesystem path (PEM) | Static CRL file; a revoked client leaf cert is rejected. Empty preserves default behaviour. |
+| `client_cn_pattern` | string | — | e.g. `client.example.test` | Required CN pattern (wildcards supported). Only used if `require_client_cn: true`. |
+| `client_crl_path` | string | — | filesystem path (PEM) | Absolute path to a mounted static CRL; a revoked client leaf certificate is rejected. Keep it current. |
 
 ### `mtls_backend` (object)
 
@@ -227,7 +256,7 @@ Backend server verification and loxilb client-cert presentation. Only valid with
 | `verify_server_cert` | boolean | `false` | `true`/`false` | `true`=`SSL_VERIFY_PEER`; `false`=`SSL_VERIFY_NONE` (no backend verification, compat default). **Set `true` in production** — the default accepts any backend certificate. |
 | `backend_ca_path` | string | — | filesystem path (PEM) | Backend CA bundle. Empty uses the system CA store (`/etc/ssl/certs/`). |
 | `client_cert_path` | string | — | filesystem path (PEM) | loxilb's client cert for backend mTLS. |
-| `client_key_path` | string | — | filesystem path (PEM) | loxilb's private key for backend mTLS. |
+| `client_key_path` | string | — | filesystem path (PEM) | Gateway private key for backend mTLS. Mount read-only with access limited to the gateway process. |
 | `client_cert_data` | string | — | base64 PEM | Inline client cert — alternative to `client_cert_path`. |
 | `client_key_data` | string | — | base64 PEM | Inline client key — alternative to `client_key_path`. |
 
@@ -322,21 +351,23 @@ scenario.
         "kvEngineType": "vllm"
       },
       "endpoints": [
-        { "endpointIP": "31.31.31.1", "targetPort": 80, "weight": 1, "ep_role": 1 },
-        { "endpointIP": "32.32.32.1", "targetPort": 80, "weight": 1, "ep_role": 2 },
-        { "endpointIP": "33.33.33.1", "targetPort": 80, "weight": 1, "ep_role": 1 },
-        { "endpointIP": "34.34.34.1", "targetPort": 80, "weight": 1, "ep_role": 2 },
-        { "endpointIP": "35.35.35.1", "targetPort": 80, "weight": 1, "ep_role": 1 },
-        { "endpointIP": "36.36.36.1", "targetPort": 80, "weight": 1, "ep_role": 2 }
+        { "endpointIP": "198.51.100.11", "targetPort": 80, "weight": 1, "ep_role": 1 },
+        { "endpointIP": "198.51.100.12", "targetPort": 80, "weight": 1, "ep_role": 2 },
+        { "endpointIP": "198.51.100.13", "targetPort": 80, "weight": 1, "ep_role": 1 },
+        { "endpointIP": "198.51.100.14", "targetPort": 80, "weight": 1, "ep_role": 2 },
+        { "endpointIP": "198.51.100.15", "targetPort": 80, "weight": 1, "ep_role": 1 },
+        { "endpointIP": "198.51.100.16", "targetPort": 80, "weight": 1, "ep_role": 2 }
       ]
     }'
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:80 --endpoints=31.31.31.1:1,32.32.32.1:1,33.33.33.1:1,34.34.34.1:1,35.35.35.1:1,36.36.36.1:1 --mode=fullproxy --host=10.10.10.254 --pd-disagg --proberetries=1 --kv-exact-mode=1 --kv-block-size=16 --kv-hash-algo=sha256_cbor --kv-zmq-port=5557 --kv-warmup=30 --kv-engine-type=vllm --ep-role=prefill,decode,prefill,decode,prefill,decode
+    loxicmd create lb 192.0.2.10 --tcp=8080:80 --endpoints=198.51.100.11:1,198.51.100.12:1,198.51.100.13:1,198.51.100.14:1,198.51.100.15:1,198.51.100.16:1 --mode=fullproxy --host=192.0.2.10 --pd-disagg --proberetries=1 --kv-exact-mode=1 --kv-block-size=16 --kv-hash-algo=sha256_cbor --kv-zmq-port=5557 --kv-warmup=30 --kv-engine-type=vllm --ep-role=prefill,decode,prefill,decode,prefill,decode
     ```
 
-A CHWBL prefix-cache variant (no P/D) swaps `serviceArguments` for:
+A CHWBL prefix-cache variant (no P/D) swaps `serviceArguments` for the
+following minimal shape. The current runtime uses the fixed CHWBL values
+described in section 5; adding stored `chwbl_*` fields does not change them.
 
 ```json
 {
@@ -346,12 +377,7 @@ A CHWBL prefix-cache variant (no P/D) swaps `serviceArguments` for:
   "model_name": "llama-70b",
   "backend_protocol": "http1",
   "sse_mode": true,
-  "backend_keepalive_interval_sec": 60,
-  "chwbl_prefix_hash_level": 2,
-  "chwbl_prefix_hash_flags": 0,
-  "chwbl_mean_load_factor": 125,
-  "chwbl_replication": 100,
-  "chwbl_enable_cache_salt": false
+  "backend_keepalive_interval_sec": 60
 }
 ```
 

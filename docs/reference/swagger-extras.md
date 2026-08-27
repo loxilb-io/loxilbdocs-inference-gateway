@@ -1,167 +1,226 @@
-# swagger-extras (Raw Middleware)
+# swagger-extras: Raw Handler API
 
-Reference for the in-scope endpoints served directly by the API-server's global middleware, outside
-the generated OpenAPI pipeline.
+`api/swagger-extras.yml` is the companion contract for five endpoint groups
+dispatched directly by the API server's global middleware. They do not use the
+normal generated handler pipeline, even when the same path is also mentioned
+in the primary Swagger document.
 
-!!! warning "Not in the generated clients — drive with raw curl"
-    The endpoints on this page are handled by the API-server's global middleware, so they **bypass
-    go-swagger code generation** and are **absent from `swagger.yml` and from any generated client
-    or SDK**. There is no typed method for them — call them with raw `curl` (or an equivalent raw
-    HTTP request). They are maintained by hand in `api/swagger-extras.yml` in the code repository.
+!!! warning "Development-source behavior"
+    Authentication parity for these raw handlers is implemented in the current development source
+    but has not completed release qualification. Confirm the behavior against the exact image you
+    deploy.
 
-All requests use the same base URL and auth as the rest of the API:
+## Contract and authentication
 
-- **Base URL:** `http://<host>:11111/netlox/v1`
-- **Authentication:** `Authorization: Bearer <token>`
+- Base path: `/netlox/v1`
+- Media type: `application/json`
+- Contract source: `api/swagger-extras.yml`
+- Client behavior: use a raw HTTP client unless your SDK explicitly adds the
+  companion contract.
 
----
+The development implementation calls the same management authenticator and
+role authorizer before every raw handler. A viewer can call read-only `GET`
+operations; mutations require an administrator. A missing or invalid
+management credential returns `401`, an authenticated viewer mutation returns
+`403`, and a recognized management credential-store unavailable condition
+returns `503`. Some live driver failures can still fall through to the generic
+fail-closed `401` path, so correlate authentication failures with store health.
 
-## GET `/config/ai/kv/inventory`
+!!! danger "No management authentication mode means unrestricted access"
+    `RequireManagementAuth` follows the configured authenticator. If no user, OAuth, or
+    manual-token mode is enabled, it receives an unrestricted principal and permits the raw route.
+    Protect port `11111`, enable a management authentication mode, and verify a missing-credential
+    mutation returns `401`.
 
-Read-only admin endpoint that dumps the per-block 64-bit hash inventory tracked for **one endpoint**
-of an AI service. Use it to verify that KV-cache-aware routing is populating block hashes and to
-compare loxilb's inventory against a backend's block hashes when debugging a hash-contract mismatch.
-
-**Query parameters**
-
-| Name | In | Type | Required | Purpose |
-|---|---|---|---|---|
-| `service_id` | query | integer (uint32) | yes | Numeric service identifier. |
-| `ep_idx` | query | integer | yes | Endpoint index within the service. |
-
-**Response `200` fields**
-
-| Field | Type | Description |
-|---|---|---|
-| `service_id` | integer | Echoed service identifier. |
-| `ep_idx` | integer | Echoed endpoint index. |
-| `hash_algo` | string | Hash algorithm used for the block keys. |
-| `blocks` | array | Per-block entries. |
-| `blocks[].block_idx` | integer | Synthetic sequence index (map iteration order — **not** a semantic block position). |
-| `blocks[].hash_uint64` | integer (uint64) | 64-bit block hash key. |
-| `total` | integer | Number of blocks in the inventory. |
-
-Other responses: `400` (invalid `service_id`/`ep_idx`), `404` (service or endpoint not found),
-`405` (method not allowed — GET only), `503` (KV inventory provider not registered). Errors use a
-minimal `{ "error": "..." }` envelope.
+Prepare a protected header file once:
 
 ```bash
-curl -s "http://<host>:11111/netlox/v1/config/ai/kv/inventory?service_id=1&ep_idx=0" \
-  -H "Authorization: Bearer $TOKEN"
+export CONTROL_API="https://gateway.example.com/netlox/v1"
+install -m 600 /dev/null ./control-plane.headers
+printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
 ```
 
-See [KV-Cache Routing](../ai-gateway/kv-caching.md) for how the inventory relates to the block-hash
-contract.
+## Endpoint groups
 
----
-
-## PATCH `/config/ai/apikey/{key_id}`
-
-Updates the allowed-model list and/or the enabled flag of an existing API key. This is the **only**
-method on this path served by middleware — the other API-key operations (POST/GET/DELETE) are part
-of the generated spec and are covered on the [API Reference](api.md#ai-api-keys-tenants) page.
-
-**Path parameters**
-
-| Name | In | Type | Required | Purpose |
-|---|---|---|---|---|
-| `key_id` | path | string | yes | API key identifier. |
-
-**Request body fields**
-
-| Field | Type | Description |
+| Group | Methods and path | Purpose |
 |---|---|---|
-| `allowed_models` | array of string | Replacement list of models the key may access. |
-| `enabled` | boolean | Enable or disable the key. |
+| AI KV inventory | `GET /config/ai/kv/inventory` | Inspect per-endpoint KV block hashes |
+| DPU debug | `GET`, `POST /config/dpu/debug` | Inspect DPU state or trigger a guarded debug action |
+| DPU hardware counters | `GET /config/dpu/hwcounters` | Read per-flow hardware packet and byte counters |
+| OPA watcher | `GET`, `POST`, `DELETE /config/opa/watcher` | Inspect, configure, or remove the OPA L4 watcher |
+| AI key update | `PATCH /config/ai/apikey/{key_id}` | Replace a key allow-list and/or change its enabled state |
 
-**Responses**
+## AI KV inventory
 
-| Status | Meaning |
+`GET /config/ai/kv/inventory` reads the block-hash inventory for one endpoint
+of one AI service.
+
+| Query | Required | Meaning |
+|---|---:|---|
+| `service_id` | Yes | Numeric service identifier (`uint32`) |
+| `ep_idx` | Yes | Endpoint index inside the service |
+
+The `200` body includes `service_id`, `ep_idx`, `hash_algo`, `blocks[]`, and
+`total`. Each block has `block_idx` and `hash_uint64`. `block_idx` is only a
+synthetic sequence from map iteration; it is not a semantic position in the
+backend cache.
+
+```bash
+curl --fail-with-body --silent --show-error \
+  --header @control-plane.headers \
+  "$CONTROL_API/config/ai/kv/inventory?service_id=1&ep_idx=0" \
+  | jq '{service_id, ep_idx, hash_algo, total}'
+```
+
+Expected failures are `400` for invalid parameters, `404` for an unknown
+service or endpoint, `405` for another method, and `503` when no inventory
+provider is registered.
+
+## DPU debug
+
+### Read state and counters
+
+`GET /config/dpu/debug` returns aggregate offload counters, per-pipe counters,
+loaded plugins, circuit-breaker state, and optional per-entry detail.
+
+| Query | Meaning |
 |---|---|
-| `204` | Key updated (no body). |
-| `400` | Missing `key_id` or invalid request body. |
-| `404` | Key not found. |
-| `500` | Update failed. |
+| `flows=1` | Include expensive flow, FDB, route, and ACL counter arrays |
+| `pipe=<name>` | Restrict filtered detail to one supported hardware pipe |
+| `svc=<name>` | Filter detail by service name |
+| `ep=<address:port>` | Filter detail by endpoint |
+| `limit=<n>` | Limit detail rows; default `200`, clamped to `2000` |
 
-Error responses use the `{ "error": "..." }` envelope.
+Supplying `pipe`, `svc`, `ep`, or `limit` selects the filtered-detail path and
+populates `doca_entry_details`. Treat hashed entry handles and flow tuples as
+sensitive operational metadata.
+
+Supported `pipe` values are `rss`, `to_kernel`, `egress_dispatch`,
+`ct_fwd_5tuple`, `ct_rev_5tuple`, `root_l3l4_dispatch`, `fdb_l2`, `deny`, and
+`allow`.
 
 ```bash
-curl -s -X PATCH http://<host>:11111/netlox/v1/config/ai/apikey/key-abc123 \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "allowed_models": ["meta-llama/Llama-3.1-8B-Instruct"],
-    "enabled": true
-  }'
+curl --fail-with-body --silent --show-error \
+  --get "$CONTROL_API/config/dpu/debug" \
+  --header @control-plane.headers \
+  --data-urlencode 'pipe=ct_fwd_5tuple' \
+  --data-urlencode 'limit=50' \
+  | jq '{enabled, offload_active, circuit_breaker_open, entries: (.doca_entry_details | length)}'
 ```
 
-!!! warning "Data-plane enforcement: roadmap"
-    API-key authentication (401/403) and per-tenant rate limiting (429) are **control-plane CRUD
-    only** today — the gateway stores and manages keys/limits but does not yet reject requests in
-    the data path. SSE stream lifecycle and token accounting **are** wired.
+### Trigger a debug action
 
----
+`POST /config/dpu/debug` accepts two actions:
 
-## `/config/opa/watcher` — OPA L4 policy watcher
+| Body | Effect |
+|---|---|
+| `{"action":"unregister","plugin":"<name>"}` | Unload the named DPU plugin |
+| `{"action":"cb_force","mode":"open"}` | Force the offload circuit breaker open for testing |
+| `{"action":"cb_force","mode":"close"}` | Force it closed |
 
-Configure, inspect, and remove the OPA L4 policy watcher. The watcher polls a third-party OPA server
-for L4 policy and applies it. `POST` is **SSRF-guarded**: URLs resolving to private or reserved IP
-ranges are rejected, so the OPA server must be reachable at a routable address.
+These operations can alter forwarding behavior. Run them only in an approved
+maintenance or test window, verify the selected node, and capture sanitized
+before-and-after state. Invalid input returns `400`, another method returns
+`405`, and an unavailable DPU manager returns `503`.
+
+## DPU hardware counters
+
+`GET /config/dpu/hwcounters` returns `flows[]` and `total_flows`. Each flow may
+include the raw flow identifier, protocol, source and destination addresses,
+packet count, and byte count. An unregistered provider returns an empty list;
+that is different from an HTTP failure.
+
+```bash
+curl --fail-with-body --silent --show-error \
+  --header @control-plane.headers \
+  "$CONTROL_API/config/dpu/hwcounters" \
+  | jq '{total_flows, sample: (.flows[0] // null)}'
+```
+
+Do not publish raw flow identifiers or addresses in public diagnostics. Only
+`GET` is supported; another method returns `405`.
+
+## OPA L4 policy watcher
 
 | Method | Purpose |
 |---|---|
-| GET | Return the watcher configuration and runtime status. |
-| POST | Configure (or replace) and start the watcher. |
-| DELETE | Stop and remove the watcher (succeeds even when none is configured). |
+| `GET` | Return configuration and runtime status |
+| `POST` | Configure or replace the watcher and begin polling |
+| `DELETE` | Stop and remove the watcher; succeeds when none exists |
 
-**POST request body (`OPAWatcherConfig`)**
+`POST` accepts:
 
-| Field | Type | Required | Default | Description |
-|---|---|---|---|---|
-| `opa_url` | string | yes | — | Base URL of the OPA server (e.g. `http://opa:8181`). |
-| `policy_path` | string | no | `loxilb/l4` | OPA policy path to poll. |
-| `poll_interval_sec` | integer | no | `30` | Poll interval in seconds. |
-| `fail_open` | boolean | no | `false` | Allow traffic when OPA is unreachable (`false` = fail-closed). |
+| Field | Required | Default | Meaning |
+|---|---:|---:|---|
+| `opa_url` | Yes | none | OPA base URL |
+| `policy_path` | No | `loxilb/l4` | Policy path queried by the watcher |
+| `poll_interval_sec` | No | `30` | Poll interval in seconds |
+| `fail_open` | No | `false` | Stored and reported compatibility field; it does not currently change outage behavior. Fetch failures preserve the rules already applied for either value. |
 
-**GET response** returns the configured fields above plus runtime status:
-
-| Field | Type | Description |
-|---|---|---|
-| `status` | string | `not_configured`, `running`, or `stopped`. |
-| `last_sync_at` | string | RFC 3339 timestamp of the last successful sync. |
-| `rules_count` | integer | Number of rules currently loaded. |
-| `circuit_breaker_state` | integer | Circuit-breaker state for the OPA connection. |
-| `last_error` | string | Last error message, if any. |
-
-`POST` returns `200` with `{ "result": "..." }`; `400` on invalid JSON, missing `opa_url`, or an
-SSRF-blocked URL; `405` on method mismatch. `DELETE` returns `200` with `{ "result": "..." }`.
+The handler applies URL validation and rejects addresses blocked by its SSRF
+policy. Validate the address form used by your deployment before rollout; do
+not weaken the guard merely to reach an internal service.
 
 ```bash
-# Configure and start the watcher
-curl -s -X POST http://<host>:11111/netlox/v1/config/opa/watcher \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "opa_url": "http://opa:8181",
+curl --fail-with-body --silent --show-error \
+  --request POST "$CONTROL_API/config/opa/watcher" \
+  --header @control-plane.headers \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "opa_url": "https://opa.example.com",
     "policy_path": "loxilb/l4",
     "poll_interval_sec": 30,
     "fail_open": false
   }'
 
-# Inspect status
-curl -s http://<host>:11111/netlox/v1/config/opa/watcher \
-  -H "Authorization: Bearer $TOKEN"
+curl --fail-with-body --silent --show-error \
+  --header @control-plane.headers \
+  "$CONTROL_API/config/opa/watcher" \
+  | jq '{status, last_sync_at, rules_count, circuit_breaker_state, last_error}'
 ```
 
-!!! note "No automated CI scenario ships for the OPA L4 watcher."
-    Configure and validate it manually against your own OPA server. The
-    [OPA L4 Policy](../security/opa-l4.md) page walks through standing up a third-party OPA server,
-    writing the rego policy, and wiring it to the watcher.
+The path is also declared in the primary Swagger file, but the global
+middleware intercepts it first when the raw handler is registered. Use the
+runtime behavior and companion contract for response details.
 
----
+## Update an AI API key
 
-## See also
+`PATCH /config/ai/apikey/{key_id}` updates only the fields present in the body:
 
-- [OPA L4 Policy](../security/opa-l4.md) — end-to-end OPA server setup and policy wiring.
-- [KV-Cache Routing](../ai-gateway/kv-caching.md) — how the block-hash inventory drives routing.
-- [API Reference](api.md) — the generated-spec endpoints.
+- `allowed_models`: replacement array; an empty array removes the model
+  restriction;
+- `enabled`: `false` soft-disables the key and `true` re-enables it.
+
+```bash
+curl --fail-with-body --silent --show-error \
+  --request PATCH \
+  --header @control-plane.headers \
+  --header 'Content-Type: application/json' \
+  --data '{"allowed_models":["example-chat-model"],"enabled":false}' \
+  "$CONTROL_API/config/ai/apikey/$KEY_ID"
+```
+
+Expected success is `204 No Content`. Invalid JSON or an empty key ID returns
+`400`; an unknown key returns `404`. In the development implementation, an
+unconfigured or unavailable key store returns `503` even though the current
+companion specification still lists only a generic `500` for update failure.
+
+The update evicts local key caches and sends best-effort peer invalidation.
+Peer delivery is not an instantaneous cluster-wide revocation guarantee; see
+[AI Key Store Operations](../operations/ai-key-store.md).
+
+## Cleanup
+
+```bash
+rm -f ./control-plane.headers
+unset CONTROL_PLANE_TOKEN KEY_ID
+```
+
+## Related pages
+
+- [Management API Authentication](../security/management-api-authentication.md)
+- [AI Key Store Operations](../operations/ai-key-store.md)
+- [API Key Management](../ai-gateway/api-key-management.md)
+- [KV-Cache Routing](../ai-gateway/kv-caching.md)
+- [OPA L4 Policy](../security/opa-l4.md)
+- [API Reference](api.md)

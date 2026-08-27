@@ -6,7 +6,7 @@ This is the **Tier 1.5** stage of the routing cascade.
 
 ## Concept
 
-During inference an engine (vLLM or SGLang) stores per-token key/value attention
+During inference an engine stores per-token key/value attention
 tensors in GPU memory — the **KV cache**. If a follow-up request lands on a
 backend that already cached the shared prefix (a system prompt, a running
 conversation, a repeated document), that backend can skip prefill for those
@@ -17,12 +17,13 @@ together.
 loxilb does this with **block-hash prefix routing**, and the key property is
 that it moves *hashes, not tensors*:
 
-- Each backend engine publishes **KV-cache block events** on a ZMQ PUB socket.
-  loxilb opens one ZMQ SUB socket per KV endpoint and builds a per-endpoint
-  **block inventory** — the set of prompt blocks each backend currently holds.
-- The wire payload is a stream of **~8-byte (64-bit) block-hash keys**, plus
-  add/evict deltas. The multi-gigabyte KV tensors never leave the GPU; only the
-  compact hashes are synced. Inventory updates track evictions within one
+- vLLM and SGLang publish **KV-cache block events** on ZMQ. TensorRT-LLM exposes
+  a destructive HTTP event drain on each serving port. loxilb consumes the
+  selected engine's event contract and builds a per-endpoint **block inventory**.
+  llama.cpp has no supported Gateway KV-event contract.
+- vLLM and SGLang ultimately contribute 8-byte block keys. TensorRT-LLM sends
+  event envelopes with token sequences; the Gateway rehashes those tokens into
+  its internal keys. The multi-gigabyte KV tensors never leave the GPU. Inventory updates track evictions within one
   message cycle, so routing reflects current GPU memory state.
 - On each request loxilb tokenizes the prompt with a **staged tokenizer**,
   groups token IDs into fixed-size blocks, hashes each block with the configured
@@ -30,10 +31,10 @@ that it moves *hashes, not tensors*:
   blocks. No explicit conversation ID is required — the prompt content *is* the
   key.
 
-Tier 1.5 runs **after** trie/session prefix affinity and **before** load-based
-(min-load / queue-depth) selection: it only fires when a backend genuinely holds
-matching blocks, otherwise routing falls through to the next tier. See
-[LLM Routing](llm-routing.md) for the full tier ladder.
+On a P/D rule (`kvExactMode: 1`), Tier 1.5 runs after session/trie affinity and
+before the P/D load fallback. On a role-less single pool (`kvExactMode: 3`),
+there is no P/D session, trie, or admission ladder: a KV miss falls back to the
+rule's own `sel` algorithm. See [Routing Hierarchy](../use-cases/routing-hierarchy.md).
 
 !!! note "Prerequisite: fullproxy"
     KV-cache-aware routing requires `mode: 4` (fullproxy). loxilb must terminate
@@ -47,17 +48,18 @@ the API schema — defaults and ranges are authoritative).
 
 | Field | Type | Default | Range / enum | Purpose |
 |---|---|---|---|---|
-| `kvExactMode` | int | `0` | `0`–`3` | `0`=off · `1`=zmq, P/D role-partitioned (vLLM) · `2`=nats (reserved) · `3`=zmq single-role (all EPs subscribed, no P/D split — SGLang) |
+| `kvExactMode` | int | `0` | `0`–`3` | `0`=off; `1`=P/D role-partitioned pool; `2`=reserved and not implemented; `3`=role-less single pool. Engine transport comes from `kvEngineType`. |
 | `kvBlockSize` | int | `16` | `≥ 1` | Tokens per hashed block. **Must match** the engine's block/page size. |
-| `kvHashAlgo` | string | `sha256_cbor` | `sha256_cbor`, `xxhash_cbor` | Block hash algorithm. Must match the engine. **Omit for SGLang** (see below). |
-| `kvZmqPort` | int | `5557` | `1`–`65535` | ZMQ PUB port on each KV endpoint that loxilb subscribes to. |
+| `kvHashAlgo` | string | engine-derived when omitted | `sha256_cbor`, `xxhash_cbor`, `sha256_sglang`, `blockhash_trtllm` | Prefer omission so the engine selects a coherent default. Explicit engine/algorithm mismatches are rejected. |
+| `kvZmqPort` | int | `5557` | `1`–`65535` | Base ZMQ port for vLLM/SGLang. Do not set a non-default value for TensorRT-LLM; it uses HTTP on the serving port. |
 | `kvWarmupSec` | int | `30` | `≥ 0` | **Accepted but currently inert** — intended as a Tier 1.5 warmup delay after subscriber connect, but the timer is never armed; Tier 1.5 activates without waiting. Do not design procedures around it. |
-| `kvEngineType` | string | `vllm` | `vllm`, `sglang` | KV-event engine behind this rule. One framework per VIP; **immutable after create** (delete + recreate to change). Drives the hash-algo default. |
-| `kvDpRankCount` | int | `1` | `1`–`8` | SGLang data-parallel rank count (`= --dp-size`). Rank *N* publishes at `kvZmqPort + N`; all ranks union into one per-endpoint inventory. |
+| `kvEngineType` | string | `vllm` | `vllm`, `sglang`, `trtllm`, `llamacpp` | Engine contract for the rule; **immutable after create**. llama.cpp accepts plain load balancing only and rejects KV-exact/P/D controls. |
+| `kvDpRankCount` | int | `1` | `1`–`8` | SGLang data-parallel rank count. Rank *N* publishes at `kvZmqPort + N`; all ranks union into one endpoint inventory. Keep `1` for other engines. |
+| `LLB_KV_MIN_MATCH_TOKENS` | environment | `16` | `0`–`4096` | Skip KV-exact scoring for shorter prompts. `0` disables this guard. |
 
 !!! warning "One engine per VIP"
     `kvEngineType` is fixed at rule-create time. A single loxilb gateway can
-    carry many KV rules — a vLLM VIP and an SGLang VIP side by side — but each
+    carry many engine rules side by side, but each
     VIP:port rule speaks exactly one engine's contract. To switch a VIP's engine,
     delete the rule and recreate it.
 
@@ -79,7 +81,9 @@ your vLLM launch and the loxilb rule:
 2. **Hash algorithm** — vLLM `--prefix-caching-hash-algo=sha256_cbor` must equal
    the rule's `kvHashAlgo`. vLLM's *default* is a pickle-based `sha256` that is
    not portable across processes — you must select the `*_cbor` variant on both
-   sides. Pairing: `sha256_cbor ↔ sha256_cbor`, `xxhash_cbor ↔ xxhash128`.
+   sides. Pairing: `sha256_cbor ↔ sha256_cbor`, `xxhash_cbor ↔ xxhash_cbor`.
+   The Gateway's internal implementation uses XXH3-128 before truncation; operators configure
+   the public `xxhash_cbor` contract, not an `xxhash128` value.
 3. **Block size** — vLLM `--block-size` must equal `kvBlockSize` (both `16` in
    the reference topology). CPU vLLM defaults to `128`, so this is easy to miss.
 
@@ -99,11 +103,10 @@ KV candidates, no prefill/decode split), align these three legs instead:
 2. **Tokenizer** — the served model must match the staged `tokenizer.json` for
    that model slug on the loxilb host (see below). Token IDs must be identical on
    both sides or no block can ever match.
-3. **Engine identity** — set `kvEngineType: "sglang"` and **omit `kvHashAlgo`
-   entirely**. Omission lets the engine default drive the internal
-   `sha256_sglang` algorithm. The `kvHashAlgo` enum has no `sglang` value, so
-   **omission is the only correct REST spelling** — sending any explicit
-   `kvHashAlgo` scores 0% forever.
+3. **Engine identity** — set `kvEngineType: "sglang"` and preferably omit
+   `kvHashAlgo`. Omission derives `sha256_sglang`. An explicit
+   `sha256_sglang` is accepted, while an incoherent engine/algorithm pair is
+   rejected at rule creation.
 
 The SGLang contract differs from vLLM on the wire: the u64 key is the **first**
 8 digest bytes big-endian (the inverse of vLLM), there is no CBOR envelope, and
@@ -115,6 +118,44 @@ ranks union into that endpoint's single inventory.
     For the full architecture, launch flags, and side-by-side hash walkthroughs
     see [KV-Cache-Aware Routing (use-case)](../use-cases/kv-cache-aware-routing.md)
     and [SGLang Routing](../use-cases/sglang-routing.md).
+
+## Load safety and cold-endpoint recovery
+
+KV affinity is bounded so one hot prefix does not permanently monopolize one
+worker, and a restarted worker can re-enter a warm fleet.
+
+```mermaid
+flowchart TD
+    HIT{Positive block overlap?}
+    HIT -->|No| FALLBACK[Use topology fallback]
+    HIT -->|Yes| BLEND[Apply configured overlap/load blend]
+    BLEND --> RELIEF{Selected worker over<br/>fleet-wide cap?}
+    RELIEF -->|Yes, relief enabled| SPILL[Choose least-loaded under-cap worker]
+    RELIEF -->|No| SEED{Nth hit and a cold<br/>eligible worker exists?}
+    SPILL --> SEED
+    SEED -->|Yes| COLD[Divert one request to cold worker]
+    SEED -->|No| WARM[Use selected warm worker]
+
+    style SPILL fill:#fff3e0,stroke:#f57c00
+    style COLD fill:#e1f5fe,stroke:#0288d1
+    style WARM fill:#e8f5e9,stroke:#43a047
+```
+
+- `LOXILB_KV_SPILL_RELIEF` is tri-state. When unset, relief is on for
+  single-pool mode 3 and off for P/D mode 1. An explicit on/off value overrides
+  that behavior process-wide.
+- `LOXILB_KV_COLDSTART_SEED_N` defaults to `16`: while an eligible worker is
+  cold, every sixteenth Tier-1.5 hit is diverted to the lowest-index cold
+  worker. `0` disables seeding.
+- `LOXILB_KV_COLDSTART_MIN_BLOCKS` defaults to `16`; an inventory below that
+  floor is cold. `0` means strictly empty-only.
+- Watch `loxilb_pd_kv_tier15_spills_total` and
+  `loxilb_pd_kv_tier15_cold_seeds_total` to distinguish normal affinity from
+  load relief and recovery traffic.
+
+These knobs are process-wide. Change them only with a staged workload test,
+because a spill or seed deliberately trades one cache-local request for fleet
+health.
 
 ## Tokenizer staging
 
@@ -147,7 +188,12 @@ wget -O /etc/loxilb/tokenizers/Qwen__Qwen3-0.6B/tokenizer.json \
 
 Configure a rule with `POST /netlox/v1/config/loadbalancer` on port `11111`.
 Both examples below mirror the reference topologies (VIP `10.10.10.254`, prefill
-endpoints `31.31.31.1 / 33.33.33.1 / 35.35.35.1`).
+endpoints `192.0.2.1 / 203.0.113.1 / 198.51.100.101`).
+
+!!! warning "Protect the management API"
+    The `curl` examples use plain HTTP for an isolated lab. In production, use an authenticated,
+    TLS-protected management endpoint and load its authorization header from a
+    permission-restricted file.
 
 ### vLLM KV-exact rule (`kvExactMode: 1`)
 
@@ -174,18 +220,18 @@ are never Tier-1.5 targets.
           "kvBlockSize": 16
         },
         "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8080, "weight": 1, "ep_role": 1},
-          {"endpointIP": "32.32.32.1", "targetPort": 8080, "weight": 1, "ep_role": 2},
-          {"endpointIP": "33.33.33.1", "targetPort": 8080, "weight": 1, "ep_role": 1},
-          {"endpointIP": "34.34.34.1", "targetPort": 8080, "weight": 1, "ep_role": 2},
-          {"endpointIP": "35.35.35.1", "targetPort": 8080, "weight": 1, "ep_role": 1},
-          {"endpointIP": "36.36.36.1", "targetPort": 8080, "weight": 1, "ep_role": 2}
+          {"endpointIP": "192.0.2.1", "targetPort": 8080, "weight": 1, "ep_role": 1},
+          {"endpointIP": "198.51.100.1", "targetPort": 8080, "weight": 1, "ep_role": 2},
+          {"endpointIP": "203.0.113.1", "targetPort": 8080, "weight": 1, "ep_role": 1},
+          {"endpointIP": "192.0.2.101", "targetPort": 8080, "weight": 1, "ep_role": 2},
+          {"endpointIP": "198.51.100.101", "targetPort": 8080, "weight": 1, "ep_role": 1},
+          {"endpointIP": "203.0.113.101", "targetPort": 8080, "weight": 1, "ep_role": 2}
         ]
       }'
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8080 --endpoints=31.31.31.1:1,32.32.32.1:1,33.33.33.1:1,34.34.34.1:1,35.35.35.1:1,36.36.36.1:1 --mode=fullproxy --pd-disagg --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-warmup=30 --kv-block-size=16 --ep-role=prefill,decode,prefill,decode,prefill,decode
+    loxicmd create lb 10.10.10.254 --tcp=8080:8080 --endpoints=192.0.2.1:1,198.51.100.1:1,203.0.113.1:1,192.0.2.101:1,198.51.100.101:1,203.0.113.101:1 --mode=fullproxy --pd-disagg --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-warmup=30 --kv-block-size=16 --ep-role=prefill,decode,prefill,decode,prefill,decode
     ```
 
 ### SGLang KV-exact rule (`kvExactMode: 3`)
@@ -213,15 +259,15 @@ and `kvDpRankCount` equal to the SGLang `--dp-size`.
           "kvBlockSize": 16
         },
         "endpoints": [
-          {"endpointIP": "35.35.35.1", "targetPort": 8080, "weight": 1},
-          {"endpointIP": "36.36.36.1", "targetPort": 8080, "weight": 1},
-          {"endpointIP": "37.37.37.1", "targetPort": 8080, "weight": 1}
+          {"endpointIP": "198.51.100.101", "targetPort": 8080, "weight": 1},
+          {"endpointIP": "203.0.113.101", "targetPort": 8080, "weight": 1},
+          {"endpointIP": "192.0.2.102", "targetPort": 8080, "weight": 1}
         ]
       }'
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=9090:8080 --endpoints=35.35.35.1:1,36.36.36.1:1,37.37.37.1:1 --mode=fullproxy --kv-exact-mode=3 --kv-engine-type=sglang --kv-dp-ranks=3 --kv-zmq-port=5561 --kv-warmup=30 --kv-block-size=16
+    loxicmd create lb 10.10.10.254 --tcp=9090:8080 --endpoints=198.51.100.101:1,203.0.113.101:1,192.0.2.102:1 --mode=fullproxy --kv-exact-mode=3 --kv-engine-type=sglang --kv-dp-ranks=3 --kv-zmq-port=5561 --kv-warmup=30 --kv-block-size=16
     ```
 
 With `kvDpRankCount: 3` and `kvZmqPort: 5561`, loxilb subscribes to ranks at
@@ -288,8 +334,8 @@ silently falls through. Walk the triad for your engine:
   vLLM `--prefix-caching-hash-algo` == rule `kvHashAlgo` (both a `*_cbor` value,
   not vLLM's default `sha256`); vLLM `--block-size` == `kvBlockSize`.
 - **SGLang** — confirm: `--page-size` == `kvBlockSize`; served model == staged
-  tokenizer slug; `kvEngineType: "sglang"` with `kvHashAlgo` **omitted**. An
-  explicit `kvHashAlgo` on an SGLang rule scores 0% permanently.
+  tokenizer slug; `kvEngineType: "sglang"` with `kvHashAlgo` omitted or explicitly set only to
+  `sha256_sglang`. Any other explicit algorithm is rejected as incoherent.
 
 ### Inventory stays empty
 
@@ -331,8 +377,9 @@ silently falls through. Walk the triad for your engine:
    `kvHashAlgo` and `kvBlockSize`.
 3. **Workload fit** — cache-aware routing helps most with shared prefixes
    (system prompts, multi-turn conversations, repeated documents). For unique
-   one-shot queries, consider [GPU-aware selection](vllm-integration.md)
-   (`sel: 9`) instead.
+   one-shot queries in a plain pool, start with round-robin. Do not assume
+   plain-pool selector 9 consumes live GPU metrics; see the
+   [vLLM selector boundary](vllm-integration.md).
 
 ## Tiered caching with LMCache (advanced)
 
@@ -406,9 +453,9 @@ rate gauge:
   compatibility table. Pin all three (via the engine image tag) and validate the exact
   combination you will run.
 - **Nested NIXL layout.** Because NIXL appears both as the P/D connector and under
-  LMCache, the nested NIXL **must force the HND cache layout** (per vLLM
-  [PR #21789](https://github.com/vllm-project/vllm/pull/21789)). Without it, P/D KV
-  transfer can **silently corrupt** — no error, wrong tokens.
+  LMCache, configure the **HND cache layout** required by the current engine integration.
+  A layout mismatch can produce invalid output without a clear transport error, so verify the
+  exact pinned engine image with known prompts before admitting production traffic.
 - **Prefix caching hides retrievals.** With vLLM prefix caching **ON**, an immediate
   re-issue of the same prompt is served straight from the **GPU** cache, so LMCache
   never retrieves and its counters stay flat — making it look broken. To exercise
@@ -430,6 +477,8 @@ rate gauge:
 
 - [KV-Cache-Aware Routing (use-case)](../use-cases/kv-cache-aware-routing.md) — flagship deep dive: architecture and the vLLM hash contract in full.
 - [SGLang Routing](../use-cases/sglang-routing.md) — SGLang architecture, launch flags, and the single-role contract.
+- [TensorRT-LLM Integration](tensorrt-llm-integration.md) — destructive HTTP event ownership and context/generation P/D.
+- [llama.cpp Integration](llamacpp-integration.md) — the plain-pool alternative for an engine without a supported KV event plane.
 - [LLM Routing](llm-routing.md) — the full routing-tier cascade.
 - [P/D Disaggregation](pd-disaggregation.md) — combine KV routing with prefill/decode separation.
 - [Configuration Reference](configuration-reference.md) — every `serviceArguments` field.

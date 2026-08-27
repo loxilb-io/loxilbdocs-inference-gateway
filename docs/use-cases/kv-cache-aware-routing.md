@@ -8,19 +8,24 @@ For the control-plane concepts and field reference, see [KV-Cache Routing](../ai
 
 ## 1. What it is and where it sits
 
-vLLM keeps a **prefix cache**: the KV blocks it already computed for token prefixes it has seen. If a new request's prompt shares a prefix with blocks a particular worker still holds, sending the request to *that* worker skips the recompute — lower time-to-first-token (TTFT), higher throughput, and freed prefill capacity.
+vLLM keeps a **prefix cache**: the KV blocks it already computed for token prefixes it has seen. If a new request's prompt shares a prefix with blocks a particular worker still holds, sending the request to *that* worker can skip recomputation and improve time-to-first-token or throughput. Measure the effect with the deployed model and workload.
 
 LoxiLB exploits this **without touching vLLM internals**. vLLM publishes **KV-cache events** (`BlockStored`, `BlockRemoved`, `AllBlocksCleared`) on a ZeroMQ PUB socket. LoxiLB subscribes to every prefill worker, mirrors each worker's block-hash inventory, and on each incoming request **recomputes the same block hashes vLLM would compute** for the prompt — then routes to the prefill endpoint with the highest block overlap.
 
-In the routing ladder, this is the cache-affinity tier — it sits between exact conversation stickiness and the round-robin fallback:
+In the routing ladder, this is the cache-affinity tier — it sits between exact conversation
+stickiness and the topology-specific fallback:
 
-```
-Tier 1     conversation stickiness (exact session mapping)
-Tier 1.5   KV-cache overlap argmax   ← this document
-Tier 2     round-robin over prefill endpoints (fallthrough)
+```mermaid
+flowchart LR
+    T1["Tier 1<br/>conversation or trie affinity"] --> T15["Tier 1.5<br/>KV block overlap"]
+    T15 --> T2["Tier 2<br/>P/D load fallback"]
+
+    style T15 fill:#e8f5e9,stroke:#43a047
 ```
 
-Everything is **fail-open**: any guard failure falls through to round-robin. KV-cache-aware routing can never make a request undeliverable — it can only make delivery smarter.
+KV-selection guard failures **fail through to the topology fallback**. That keeps a missing
+tokenizer or empty inventory from blocking dispatch, but it does not hide later backend,
+transfer, timeout, or P/D failures.
 
 !!! note "Prerequisite: fullproxy"
     KV-cache-aware routing runs in the sockproxy (fullproxy) path only. The load-balancer rule must
@@ -41,8 +46,10 @@ The mechanism is a layered design across two planes with one call seam between t
 Key design properties:
 
 - **The inventory lives in Go; the decision runs in C.** The data plane calls back into the control plane twice per request — once to tokenize, once to pick the best-overlap worker. Keeping the authoritative inventory in one plane and the hot decision in the other keeps each subscriber isolated and the request path lock-scoped.
-- **Per-endpoint isolation.** Each prefill endpoint has its own subscription and its own inventory. A publisher restart on one endpoint clears only that endpoint's inventory.
-- **Hash parity is the whole game.** LoxiLB's C hash core must produce *bit-identical* 64-bit block hashes to vLLM's Python hash core, or the intersection is empty and routing silently degrades to round-robin. The contract is frozen against a pinned vLLM release (see §5) and defended by golden vectors.
+- **Per-endpoint isolation.** Each prefill endpoint has its own subscription and inventory. A near
+  reconnect may preserve that inventory; a publisher clear event, an event-gap beyond the 64-event
+  window, or rule teardown clears the affected state.
+- **Hash parity is the whole game.** LoxiLB's C hash core must produce *bit-identical* 64-bit block hashes to vLLM's Python hash core, or the intersection is empty and routing takes the topology-specific fallback: P/D min-load in mode 1, or the configured rule selector in mode 3. The contract is frozen against a pinned vLLM release (see §5) and defended by golden vectors.
 
 ---
 
@@ -57,7 +64,9 @@ The hash **is** the compressed representation of the block's KV state. There is 
 | Actual KV tensors inside the worker | ≈ 2 (K,V) × layers × KV-heads × head-dim × 16 tokens × 2 B ≈ **~1.8 MB** |
 | What crosses the bus / sits in LoxiLB's inventory | **8 bytes** (one 64-bit hash) |
 
-That is a **~200,000× reduction**, and it is what makes mirroring whole fleets practical: a million cached blocks cost LoxiLB roughly 8 MB of inventory while representing terabytes of worker-side KV state.
+That is a **~200,000× reduction** on the wire. One million raw hashes are about 8 MB, but
+LoxiLB's Go set, index, and ordering list add substantial memory overhead. Size the process from
+measured resident memory under representative inventory, not from the raw-hash figure alone.
 
 ### Consistency model
 
@@ -66,8 +75,11 @@ The sync is push-based, event-driven, and eventually consistent:
 - **Staleness window** = ZeroMQ propagation latency (sub-millisecond on a LAN). No polling.
 - **Stale entries are harmless by construction.** If LoxiLB routes to a worker whose block was just evicted, vLLM simply recomputes that prefix — the response is always correct, only the optimization is lost. This is precisely why eventual consistency is acceptable here.
 - **Reconciliation events** — `BlockRemoved` (worker evicted blocks) and `AllBlocksCleared` (worker reset its cache) keep the mirror honest in the shrinking direction.
-- **Gap recovery** — a per-message sequence number makes loss detectable; a gap triggers a replay request against vLLM's replay buffer.
-- **Restart recovery** — a reconnect clears the whole per-endpoint inventory (the publisher may have restarted with an empty cache), trading a brief no-overlap window for never routing on a phantom inventory.
+- **Gap handling** — the retained event window is 64. A small detectable gap keeps inventory;
+  a gap beyond the window clears it. The live receive loop has no replay callback, so replay is
+  available only during fresh/bootstrap synchronization, not as an automatic repair for every gap.
+- **Reconnect handling** — a near reconnect preserves inventory. This reduces cold misses but
+  means a missed remove event can leave stale affinity until a later clear or large-gap reset.
 
 ---
 
@@ -75,16 +87,16 @@ The sync is push-based, event-driven, and eventually consistent:
 
 **Control path (rule creation).** An operator POSTs a load-balancer rule with `kvExactMode: 1` and endpoints tagged prefill / decode. For every prefill endpoint, LoxiLB starts a subscriber that dials the worker's ZeroMQ port. Initial dial failure does not kill the subscriber — it retries on an interval, so the rule can be created before vLLM is up. (A warmup window — Guard B — is defined in the guard ladder but is currently inert; see §7.)
 
-**Ingest path (event → inventory).** vLLM publishes a multi-frame message `[topic | sequence | payload]`. The subscriber parses the sequence; a gap triggers a replay. `BlockStored` adds hashes, `BlockRemoved` removes them, `AllBlocksCleared` empties the set. On any receive error the socket is rebuilt, and on reconnect the inventory is cleared.
+**Ingest path (event → inventory).** vLLM publishes a multi-frame message `[topic | sequence | payload]`. `BlockStored` adds hashes, `BlockRemoved` removes them, and `AllBlocksCleared` empties the set. Sequence handling uses a 64-event window: small gaps keep state, while large gaps clear it. Rebuilding a live socket does not itself clear inventory or replay missed events.
 
 **Request path (request → worker).** For each proxied request on a `kvExactMode=1` rule, the data plane runs the guard ladder (§7):
 
-1. **Extract** prompt text and model from the request. The body must be OpenAI JSON (`{"model": ..., "prompt"/"messages": ...}`); a `text/plain` body leaves the model empty and every request silently falls through to round-robin.
+1. **Extract** prompt text and model from the request. The body must be OpenAI JSON (`{"model": ..., "prompt"/"messages": ...}`); a `text/plain` body leaves the model empty and takes the topology-specific fallback.
 2. **Tokenize** the prompt via the control-plane tokenizer pool, loading the model's staged `tokenizer.json`.
 3. **Hash** each block: for every `kvBlockSize`-token block, CBOR-encode `[parent_hash, [token_ids...], extra]`, hash it, truncate to a 64-bit value, and chain the full digest as the next block's parent (§5).
 4. **Select** by argmax of block-overlap count across the prefill endpoints not in the excluded mask. Ties resolve by endpoint order.
 5. **Post-filter** the winner: it must not be excluded, administratively down, or behind an open circuit breaker. On a connect failure the caller retries with the winner excluded, so the *second-best* overlap endpoint wins — never a decode endpoint, never plain round-robin.
-6. On any guard miss the request falls through to round-robin over prefill endpoints and the miss counters increment. On success the hit counter for the chosen endpoint increments.
+6. On a mode-1 guard miss, selection falls to P/D minimum load with round-robin only as a tie-break. In mode 3 it falls to the configured rule selector. On success the hit counter for the chosen endpoint increments.
 
 ### Worked example — two prompts, end to end
 
@@ -95,18 +107,23 @@ Topology: two prefill endpoints (EP0, EP2) and one decode endpoint (EP1); `kvBlo
 
 Because block hashing is a deterministic chain over `(parent, token_ids)`, identical token prefixes produce identical `h1, h2` on every party that implements the contract — vLLM and LoxiLB compute the same values independently, without ever exchanging them.
 
-1. **Cold request.** Prompt A tokenizes to 40 tokens; LoxiLB computes `h1, h2, h3`. Both inventories are empty, so the guard for "any overlap" fires: `no_worker` → round-robin, which happens to pick EP0. (LoxiLB also hashes the partial block `B3`; vLLM only *stores* full blocks, so `h3` simply never matches anything — harmless, since scoring is an overlap *count*.)
+1. **Cold request.** Prompt A tokenizes to 40 tokens; LoxiLB computes `h1, h2, h3`. Both inventories are empty, so `no_worker` sends this mode-1 request to P/D minimum load (round-robin breaks a tie), which happens to pick EP0. (LoxiLB also hashes the partial block `B3`; vLLM only *stores* full blocks, so `h3` simply never matches anything — harmless, since scoring is an overlap *count*.)
 2. **First inference.** EP0's prefill computes KV for all 40 tokens and caches blocks `B1, B2`. In a prefill/decode topology the KV then moves prefill→decode over vLLM's own connector — LoxiLB routes requests, it never participates in that transfer. Decode generates the reply, which streams back to Client A through the proxy.
 3. **The sync.** Storing `B1, B2` makes EP0 emit one `BlockStored` event (~60 wire bytes). LoxiLB's mirror of EP0 now reads `{h1, h2}` — 16 bytes representing several megabytes of worker-side KV.
 4. **Warm request.** Prompt B shares the 32-token preamble, so LoxiLB derives the *same* `h1, h2` purely by local computation. Scoring gives EP0 = 2, EP2 = 0 → argmax routes to EP0 and the hit counter increments. EP0's prefix cache hits on `B1, B2`, so prefill runs only over the short question-B suffix instead of the full 38 tokens — markedly lower TTFT. Had the request gone to EP2, EP2 would have recomputed everything: correct but slow.
 
-**Failure-mode coda.** If EP0's vLLM restarts between the sync and the warm request, the subscriber's reconnect clears `{h1, h2}`, Prompt B takes the honest `no_worker` → round-robin path, and the inventory repopulates. If instead EP0 is up but refuses the connection, all guards pass, the connect fails, and the retry re-enters the tier with EP0 excluded — landing on the next-best overlap prefill endpoint, never a decode endpoint.
+**Failure-mode coda.** A near reconnect can preserve `{h1, h2}`; a large sequence gap clears it.
+Because the live loop does not replay missed events, preserved state can be briefly stale. A
+subsequent mode-1 `no_worker` uses P/D minimum load. If EP0 instead refuses the connection, retry
+re-enters the tier with EP0 excluded and selects the next-best eligible prefill endpoint.
 
 ---
 
 ## 5. The vLLM block-hash parity contract
 
-Parity is **all-or-nothing**: any one mismatched leg yields 0% hash overlap and a silent fall-through to round-robin. The contract has three legs that must match between LoxiLB and every vLLM prefill worker:
+Parity is **all-or-nothing**: any one mismatched leg yields 0% hash overlap and a silent
+topology-specific fallback. The contract has three legs that must match between LoxiLB and every
+vLLM prefill worker:
 
 1. **Block size.** vLLM's `--block-size` must equal the rule's `kvBlockSize` (both `16` in the reference). CPU vLLM defaults to `128` and emits **zero** `BlockStored` events for prompts shorter than 128 tokens — run CPU vLLM with `--block-size 16`.
 2. **Hash algorithm.** vLLM's `--prefix-caching-hash-algo` must equal the rule's `kvHashAlgo`, one of `sha256_cbor` or `xxhash_cbor`. vLLM's *own* default is a non-portable pickle-based `sha256` — you must explicitly select a `*_cbor` variant so both sides agree.
@@ -119,9 +136,14 @@ Two more mechanical requirements complete the contract:
 
 By default vLLM binds its KV-event PUB socket on **port 5557**, which matches the rule's `kvZmqPort` default.
 
+The Gateway also applies `LLB_KV_MIN_MATCH_TOKENS` before scoring: default `16`, valid range
+`0–4096`, and `0` disables this minimum-token guard. Prompts below the configured threshold
+record the `shallow` miss reason and follow the topology-specific fallback.
+
 !!! warning "Silent failure on any contract mismatch"
     Get block size, hash algorithm, seed, or tokenizer wrong and there is **no error** — hashes
-    simply never match, inventory overlap stays 0, and routing quietly falls back to round-robin.
+    simply never match, inventory overlap stays 0, and routing quietly takes the mode-specific
+    fallback (P/D min-load for mode 1; configured selector for mode 3).
     Always verify engagement with the metrics in §9 rather than assuming it worked.
 
 ---
@@ -132,7 +154,7 @@ The parity contract in §5 is only worth anything if the *running* engine and th
 
 ### 6.1 The parity triad as an operational checklist
 
-All three legs, or you are silently measuring round-robin:
+All three legs must agree, or you are measuring the fallback selector instead of KV-exact:
 
 | # | Leg | Engine side | loxilb side | Rule field |
 |---|---|---|---|---|
@@ -161,19 +183,14 @@ docker inspect <loxilb-container> \
   | grep -E 'LLB_KV_NONE_HASH_SEED|LOXILB_KV_LB_MODE|LLB_PD_PREFILL_TIMEOUT_SEC'
 ```
 
-If `PYTHONHASHSEED` and `LLB_KV_NONE_HASH_SEED` differ — or either is set while the other is unset — every seeded block hash is corrupt and overlap will read zero. Fix that before doing anything else. The loxilb container image is `ghcr.io/loxilb-io/loxilb-inference-gateway:latest-u24`.
+If `PYTHONHASHSEED` and `LLB_KV_NONE_HASH_SEED` differ — or either is set while the other is unset — every seeded block hash is corrupt and overlap will read zero. Fix that before doing anything else. Select a reviewed, immutable tag or digest from the `ghcr.io/loxilb-io/loxilb-inference-gateway` image repository; do not derive production behavior from a moving tag.
 
-### 6.3 Version / platform matrix
+### 6.3 Tested-artifact rule
 
-The eBPF data plane and the KV wire contract are both platform-sensitive. Pin these:
-
-| Component | Pin to | Avoid |
-|---|---|---|
-| OS | Ubuntu 24.04 | — |
-| NVIDIA driver | 570.x | — |
-| **Kernel** | **6.8** | **6.12.53+, 6.14, 6.17.5+** — a BPF-verifier regression breaks the eBPF data plane |
-| Engine image tag | a pinned release (e.g. a fixed `vllm/vllm-openai` tag) | `:latest` — pinning freezes the KV wire contract |
-| `--max-model-len` | identical fleet-wide | mixed values across the mesh |
+Do not infer support from an OS, kernel, driver, or engine version table in a guide. Record the
+exact immutable Gateway and engine image identities plus the host/kernel/GPU-driver tuple used
+by your own acceptance test. Promote only that tested combination; retest after changing any
+member. Keep `--max-model-len` consistent across a pool.
 
 ### 6.4 vLLM metric families the collector needs
 
@@ -198,31 +215,36 @@ loxilb's telemetry collector consumes a fixed set of vLLM Prometheus families. A
 | Variable | Default | Set to | Why |
 |---|---|---|---|
 | `LLB_PD_PREFILL_TIMEOUT_SEC` | `30` | `180` for long context | At ~32k-token prompts the default trips a `504 pd_prefill_timeout` before prefill completes. |
-| `LOXILB_KV_LB_MODE` | mode-dependent | `off` \| `hard` \| `soft` \| `adaptive` | Sets the load-blend policy (see §12); set it explicitly for reproducible runs rather than leaning on the built-in default. |
+| `LOXILB_KV_LB_MODE` | unset → `hard` | `off` \| `hard` \| `soft` \| `adaptive` \| `adaptive-soft` | Sets the load-blend policy (see §12); set it explicitly for reproducible runs rather than leaning on the built-in default. |
 | `LLB_KV_HASH_DEBUG` | unset | `1` | Surfaces per-block hash decisions for byte-level parity forensics; zero cost when unset. |
 
 ---
 
 ## 7. Guard ladder & miss reasons
 
-Every request runs a fixed ladder. Each miss increments exactly one reason counter and the request falls through to round-robin:
+Every KV-exact attempt runs a fixed ladder. Each miss increments one reason counter, then follows
+the topology's fallback: P/D mode 1 continues to Tier-2 prefill selection, while role-less mode 3
+continues to the rule's configured selector.
 
-| Guard | Fires when… | `reason` label |
+| Check | Fires when… | `reason` label |
 |---|---|---|
-| A | `kvExactMode == 0` (feature off for this rule) | `mode_off` |
-| B | *(currently inert)* Defined as the `kvWarmupSec` warmup window after subscriber start, but the timer is never armed in the shipped data path — this guard never fires, and `reason="warmup"` always reads 0. | `warmup` |
-| C | no prompt text in the request | `text_empty` |
-| D | no model resolvable (model field and `X-Model` header both empty — e.g. a non-JSON body) | `model_empty` |
-| E | tokenizer missing or failed for the model slug | `tokenize` |
-| F | block hashes could not be computed (e.g. invalid algorithm) | `hashes` |
-| G1 | best endpoint has no inventory overlap anywhere (score ≤ 0) | `no_worker` |
-| G2–G4 | winner is in the excluded mask, administratively down, or behind an open circuit breaker | `excluded` |
+| Feature enabled | `kvExactMode == 0` (feature off for this rule) | `mode_off` |
+| Warmup timer | *(currently inert)* The field defines a delay, but the production path never arms its start timestamp; this check does not currently fire. | `warmup` |
+| Prompt text | No prompt text in the request | `text_empty` |
+| Model identity | No model resolvable from the body or `X-Model` header | `model_empty` |
+| Tokenizer | Tokenizer missing or failed for the model slug | `tokenize` |
+| Block hashing | Block hashes could not be computed, for example because the algorithm contract is invalid | `hashes` |
+| Inventory overlap | No endpoint has positive inventory overlap | `no_worker` |
+| Endpoint eligibility | The candidate is excluded, administratively down, or behind an open circuit breaker | `excluded` |
 
-!!! note "Probe-down is not the same as excluded"
-    REST health-probe state does **not** propagate into the data-plane endpoint state the tier scores
-    against. An unhealthy-but-still-accepting endpoint keeps winning argmax on its warm inventory
-    until a real connect actually fails and the retry excludes it. This reactive, connect-failure-driven
-    exclusion is intended behavior — the fail-open posture is the safety net.
+!!! note "Probe state and connect failures close different timing gaps"
+    When an active probe changes an endpoint between healthy and unhealthy, the control plane
+    immediately synchronizes that state to fullproxy. The P/D selector seeds its exclusion mask
+    from both the synchronized inactive flag and the circuit-breaker state, so a probe-down
+    endpoint cannot keep winning the KV overlap calculation. A connection can still fail before
+    the next probe detects it; the same request then excludes that candidate and retries another
+    healthy endpoint. Use both mechanisms: probes provide proactive state, while connect-failure
+    retry covers the detection window.
 
 ---
 
@@ -231,6 +253,11 @@ Every request runs a fixed ladder. Each miss increments exactly one reason count
 ### 8.1 REST — the load-balancer rule
 
 Create one fullproxy (`mode=4`) rule per model. Tag prefill endpoints `ep_role: 1` and decode endpoints `ep_role: 2`; only prefill endpoints are subscribed for KV events.
+
+!!! warning "Protect the management API"
+    The `curl` examples use plain HTTP for an isolated lab. In production, use an authenticated,
+    TLS-protected management endpoint and read its authorization header from a
+    permission-restricted file.
 
 === "curl"
     ```bash
@@ -249,27 +276,27 @@ Create one fullproxy (`mode=4`) rule per model. Tag prefill endpoints `ep_role: 
         "kvWarmupSec": 30
       },
       "endpoints": [
-        { "endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 1, "ep_role": 1 },
-        { "endpointIP": "31.31.31.2", "targetPort": 8000, "weight": 1, "ep_role": 2 }
+        { "endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1, "ep_role": 1 },
+        { "endpointIP": "192.0.2.2", "targetPort": 8000, "weight": 1, "ep_role": 2 }
       ]
     }'
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=31.31.31.1:1,31.31.31.2:1 --mode=fullproxy --select=persist --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --kv-warmup=30 --ep-role=prefill,decode
+    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=192.0.2.1:1,192.0.2.2:1 --mode=fullproxy --select=persist --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --kv-warmup=30 --ep-role=prefill,decode
     ```
 
 KV fields (all match the swagger `serviceArguments` defaults):
 
 | Field | Default | Range / values | Meaning |
 |---|---|---|---|
-| `kvExactMode` | `0` | `0–3` | `0`=off, `1`=ZeroMQ subscribe. `3` selects the SGLang single-role variant. |
+| `kvExactMode` | `0` | `0–3` | `0`=off; `1`=P/D role-partitioned; `2`=reserved; `3`=role-less single pool. This vLLM guide uses mode 1. |
 | `kvBlockSize` | `16` | ≥1 | Must equal vLLM `--block-size`. |
-| `kvHashAlgo` | `sha256_cbor` | `sha256_cbor`, `xxhash_cbor` | Must match vLLM's `--prefix-caching-hash-algo`. |
+| `kvHashAlgo` | engine-derived when omitted | `sha256_cbor`, `xxhash_cbor`, `sha256_sglang`, `blockhash_trtllm` | For this vLLM guide, use a coherent `*_cbor` value matching `--prefix-caching-hash-algo`. |
 | `kvZmqPort` | `5557` | `1–65535` | The worker's KV-event PUB port. |
 | `kvWarmupSec` | `30` | ≥0 | Guard-B window — accepted but currently inert (Guard B never fires; see §7). |
-| `kvEngineType` | `vllm` | `vllm`, `sglang` | Engine identity; VIP-immutable. |
-| `kvDpRankCount` | `1` | `1–8` | SGLang data-parallel rank count. |
+| `kvEngineType` | `vllm` | `vllm`, `sglang`, `trtllm`, `llamacpp` | Engine identity; immutable after rule creation. llama.cpp rejects KV-exact fields. |
+| `kvDpRankCount` | `1` | `1–8` | SGLang data-parallel rank count; keep `1` for this vLLM guide. |
 
 ### 8.2 Environment variables (LoxiLB process)
 
@@ -280,7 +307,7 @@ KV fields (all match the swagger `serviceArguments` defaults):
 
 ### 8.3 Tokenizer staging
 
-Stage the model's HuggingFace `tokenizer.json` at `/etc/loxilb/tokenizers/<model-slug>/tokenizer.json`, where the slug replaces `/` with `__` (e.g. `Qwen/Qwen3-0.6B` → `Qwen__Qwen3-0.6B`). No network fetch happens at runtime; a missing tokenizer fires Guard E for that model (fail-open to round-robin).
+Stage the model's HuggingFace `tokenizer.json` at `/etc/loxilb/tokenizers/<model-slug>/tokenizer.json`, where the slug replaces `/` with `__` (e.g. `Qwen/Qwen3-0.6B` → `Qwen__Qwen3-0.6B`). No network fetch happens at runtime; a missing tokenizer fires Guard E and uses the topology fallback.
 
 ### 8.4 vLLM side (must match the rule)
 
@@ -302,18 +329,21 @@ Per-model prerequisites:
 
 | # | Requirement | Failure mode if wrong |
 |---|---|---|
-| 1 | Model ships a fast HF `tokenizer.json` | Sentencepiece-only models won't load → Guard E → round-robin. Convert first. |
-| 2 | Tokenizer staged at the exact slug path (dir name = client model string with `/`→`__`) | Mismatch → "tokenizer not available" → Guard E → silent round-robin. |
-| 3 | `kvBlockSize` equals this deployment's vLLM `--block-size` | Mismatch → 0 overlap → silent round-robin. |
-| 4 | `kvHashAlgo` + vLLM version match the pinned contract | Different hash scheme → hashes never match → silent round-robin. |
+| 1 | Model ships a fast HF `tokenizer.json` | Sentencepiece-only models won't load → Guard E → topology-specific fallback. Convert first. |
+| 2 | Tokenizer staged at the exact slug path (dir name = client model string with `/`→`__`) | Mismatch → "tokenizer not available" → Guard E → fallback selector. |
+| 3 | `kvBlockSize` equals this deployment's vLLM `--block-size` | Mismatch → 0 overlap → fallback selector. |
+| 4 | `kvHashAlgo` + vLLM version match the pinned contract | Different hash scheme → hashes never match → fallback selector. |
 | 5 | `LLB_KV_NONE_HASH_SEED` == vLLM `PYTHONHASHSEED` | Seed mismatch corrupts seeded blocks → partial silent miss. |
-| 6 | Prefill endpoint tagged `ep_role: 1` | Only prefill endpoints are subscribed → empty inventory → round-robin. |
+| 6 | Prefill endpoint tagged `ep_role: 1` | Only prefill endpoints are subscribed → empty inventory → fallback selector. |
 
 ---
 
 ## 9. Verify it actually fired — the mandatory post-config check
 
-**Run this every time you create or change a KV rule.** Because every parity failure degrades *silently* to round-robin, a config that "looks fine" and a config that is quietly load-balancing blind are indistinguishable without this check. Treat the four steps below as a go/no-go gate: until all four pass, any TTFT or throughput number you record reflects round-robin, **not** KV-aware routing.
+**Run this every time you create or change a KV rule.** Because every parity failure degrades
+*silently* to a topology-specific fallback, a config that "looks fine" and a config that is quietly
+KV-blind are indistinguishable without this check. Treat the four steps below as a go/no-go gate:
+until all four pass, any TTFT or throughput number reflects the fallback, **not** KV-aware routing.
 
 ### 9.1 Step 1 — the engagement assertion on `GET /netlox/v1/metrics`
 
@@ -330,11 +360,11 @@ Assert, in order:
 
 | Assertion | Meaning | If it fails |
 |---|---|---|
-| `loxilb_pd_kv_blocks_total > 0` | inventory ingested from at least one prefill endpoint | events not arriving — check `kvZmqPort` vs the publisher and the `ep_role: 1` tag |
-| `loxilb_pd_kv_tier15_hits_total` **advances after the first cold request** | the tier is making real decisions | **flat delta = broken parity; you are silently measuring round-robin → ABORT** and walk the §5 / §6 checklist before benchmarking |
-| `loxilb_pd_kv_t15_fallthrough_total` stays roughly flat under warm traffic | requests aren't spilling to round-robin | rising fallthrough = overlap not scoring — usually a parity mismatch |
+| `loxilb_pd_kv_blocks{service,ep_idx} > 0` | inventory ingested from at least one prefill endpoint | events not arriving — check `kvZmqPort` vs the publisher and the `ep_role: 1` tag |
+| `loxilb_pd_kv_tier15_hits_total` **advances after the first cold request** | the tier is making real decisions | **flat delta = broken parity; you are measuring the fallback → ABORT** and walk the §5 / §6 checklist before benchmarking |
+| `loxilb_pd_kv_tier15_fallthrough_total` stays roughly flat under warm traffic | requests aren't leaving tier 1.5 | rising fallthrough = overlap not scoring; mode 1 then uses P/D min-load, while mode 3 uses its selector |
 
-The middle assertion is the whole test. Fire one **cold** request to populate the inventory, then a **warm** request that shares its prefix; `loxilb_pd_kv_tier15_hits_total` **must** increment. A flat counter means overlap is zero and the tier is inert — abort and fix parity, do not benchmark a silently round-robining rule.
+The middle assertion is the whole test. Fire one **cold** request to populate the inventory, then a **warm** request that shares its prefix; `loxilb_pd_kv_tier15_hits_total` **must** increment. A flat counter means overlap is zero and the tier is inert — abort and fix parity, rather than benchmarking the fallback selector.
 
 ### 9.2 Step 2 — inventory check
 
@@ -387,28 +417,28 @@ Shortly after startup under cache-friendly traffic (allow the subscriber a few s
 | Metric | Labels | Meaning |
 |---|---|---|
 | `loxilb_pd_kv_tier15_hits_total` | `ep_idx` | The tier selected this endpoint (the **decision** proof). |
-| `loxilb_pd_kv_t15_miss_reason_total` | `reason` | One increment per guard miss (`mode_off`, `warmup`, `text_empty`, `model_empty`, `tokenize`, `hashes`, `no_worker`, `excluded`). |
-| `loxilb_pd_kv_t15_fallthrough_total` | — | Requests that fell through to round-robin. |
-| `loxilb_pd_kv_blocks_total` | `endpoint` | Inventory size per endpoint. |
+| `loxilb_pd_kv_tier15_miss_reason_total` | `reason` | One increment per guard miss (`mode_off`, `warmup`, `text_empty`, `model_empty`, `tokenize`, `hashes`, `no_worker`, `excluded`, `shallow`). |
+| `loxilb_pd_kv_tier15_fallthrough_total` | — | Requests that left KV-exact; mode 1 uses P/D min-load and mode 3 uses its configured selector. |
+| `loxilb_pd_kv_blocks` | `service`, `ep_idx` | Inventory size per endpoint. |
 | `loxilb_kv_subscriber_connected` | `service`, `ep` | ZeroMQ socket up (1) / down (0). |
-| `loxilb_kv_subscriber_reconnect_total` | `service`, `ep` | Successful socket rebuilds (inventory cleared each time). |
+| `loxilb_kv_subscriber_reconnect_total` | `service`, `ep` | Successful socket rebuilds; near reconnects can preserve inventory. |
 | `loxilb_kv_subscriber_recv_error_total` | `service`, `ep` | Receive errors (precede rebuilds). |
 
 **Dual proof.** Trust neither signal alone. A metrics-only check cannot catch a proxy that *decides* correctly but *delivers* elsewhere. Confirm both: the response identifies the expected backend (delivery) **and** `tier15_hits{ep_idx}` incremented for that endpoint (decision).
 
 ### 10.3 Healthy warm-route signature
 
-Under cache-friendly traffic you expect `tier15_hits{ep_idx}` climbing while the `miss_reason` counters stay flat, and each prefill endpoint's `pd_kv_blocks_total` non-zero. For byte-level parity forensics, set `LLB_KV_HASH_DEBUG=1` and compare a computed block hash against the model's vLLM-published hash for the same prompt.
+Under cache-friendly traffic you expect `tier15_hits{ep_idx}` climbing while the `miss_reason` counters stay flat, and each prefill endpoint's `pd_kv_blocks` non-zero. For byte-level parity forensics, set `LLB_KV_HASH_DEBUG=1` and compare a computed block hash against the model's vLLM-published hash for the same prompt.
 
 ---
 
 ## 11. Troubleshoot
 
-Silent-failure decoder for "tokenizer loaded but still routing round-robin":
+Silent-failure decoder for "tokenizer loaded but KV-exact is still falling through":
 
 | Symptom | Likely cause |
 |---|---|
-| `t15_miss_reason{reason="model_empty"}` climbs request-for-request | Client is not sending OpenAI JSON, or the model field / `X-Model` header is missing. |
+| `tier15_miss_reason{reason="model_empty"}` climbs request-for-request | Client is not sending OpenAI JSON, or the model field / `X-Model` header is missing. |
 | Tokenizer loaded, inventory empty | Prefill endpoint not tagged `ep_role: 1`, wrong `kvZmqPort`, or vLLM KV-events not enabled. |
 | Tokenizer loaded, inventory non-empty, overlap still 0 | `kvBlockSize`, `kvHashAlgo`/vLLM-version, or seed mismatch — walk the §5 contract, then re-run the §6 preflight. |
 | Everything looks right but the tier stays cold just after start | Inventory is still filling from KV events — not `kvWarmupSec` (Guard B is currently inert). Wait for the first events to ingest, then re-check the block gauge. |
@@ -418,18 +448,37 @@ Silent-failure decoder for "tokenizer loaded but still routing round-robin":
 
 ## 12. Known limits
 
-1. **Parity is all-or-nothing.** Any mismatch in seed, block size, hash algorithm, or tokenizer yields zero overlap and a silent fall-back to round-robin. Watch `t15_miss_reason{reason="no_worker"}` against a non-empty `pd_kv_blocks_total`.
-2. **OpenAI JSON bodies required.** A non-JSON body fires Guard D (`model_empty`) → silent round-robin.
-3. **Reconnect clears inventory.** Every subscriber rebuild empties that endpoint's inventory by design (the publisher may have restarted). Expect a brief no-overlap window until events repopulate.
+1. **Parity is all-or-nothing.** Any mismatch in seed, block size, hash algorithm, or tokenizer yields zero overlap and a silent topology-specific fallback. Watch `tier15_miss_reason{reason="no_worker"}` against a non-empty `pd_kv_blocks`.
+2. **OpenAI JSON bodies required.** A non-JSON body fires Guard D (`model_empty`) and takes the fallback selector.
+3. **Reconnect can preserve stale inventory.** A near reconnect keeps state; small gaps also keep
+   state, while a gap beyond the 64-event window clears it. The live loop does not replay missed
+   events, so a missed remove can temporarily preserve stale affinity.
 4. **Inventory has no LoxiLB-side eviction.** Sizing is governed by vLLM's own cache limits plus `BlockRemoved` / `AllBlocksCleared`.
-5. **Probe-down is not exclusion.** Health-probe state does not reach the data plane; exclusion requires a connect-failure retry, admin down, or an open circuit breaker.
+5. **Probe and retry timing differ.** Probe-down transitions are synchronized into fullproxy and
+   seed the exclusion mask. Connect-failure retry covers the interval before the prober observes
+   the failure; admin-down and an open circuit breaker are also excluded.
 6. **CPU vLLM defaults to `--block-size 128`** — no events for short prompts; always set `16`.
-7. **`kvWarmupSec` is currently inert.** The field is accepted, validated, and stored, but the warmup timer is never armed in the shipped data path — the tier is **not** suppressed after subscriber start and activates as soon as routing conditions are met. Do not design procedures around the warmup window.
-8. **The tier is reachable only in the prefill/decode selection flow.** A plain single-pool vLLM service does not use this tier — partition endpoints by role to enable it.
+7. **`kvWarmupSec` is currently inert.** The field is accepted, validated, and stored, but the warmup timer is never armed in the current data path — the tier is **not** suppressed after subscriber start and activates as soon as routing conditions are met. Do not design procedures around the warmup window.
+8. **This guide exercises P/D mode 1.** A role-less single-pool vLLM service can instead use
+   `kvExactMode: 3`, which scores every endpoint and falls back to the rule selector on a miss.
+   Do not mix mode 3 with P/D endpoint roles.
 
 ### Load-blind argmax → capacity-weighted blend
 
-Raw argmax scores by overlap *count* and nothing else, so it is **load-blind**: if many clients share one hot preamble, they all route to the same prefill endpoint while its siblings idle — cache affinity actively fighting load balancing. To resolve this, LoxiLB can blend the cache-affinity winner with a CHWBL-style capacity-weighted bounded-load selector: the overlap winner keeps the route while it stays under its capacity-weighted cap, and *spills* to the next endpoint once it is over, so a hot prefix can no longer herd every request onto one worker. This blended mode is the shipped default and can be tuned or disabled through the process environment (`LOXILB_KV_LB_MODE`, §6.5); the pure overlap-argmax selector remains available for workloads where affinity should always win.
+Raw argmax scores by overlap *count* and nothing else, so it is **load-blind**: if many clients share one hot preamble, they all route to the same prefill endpoint while its siblings idle — cache affinity actively fighting load balancing. To resolve this, LoxiLB can blend the cache-affinity winner with a CHWBL-style capacity-weighted bounded-load selector: the overlap winner keeps the route while it stays under its capacity-weighted cap, and *spills* to the next endpoint once it is over, so a hot prefix can no longer herd every request onto one worker. This blended mode is the current default and can be tuned or disabled through the process environment (`LOXILB_KV_LB_MODE`, §6.5); the pure overlap-argmax selector remains available for workloads where affinity should always win.
+
+Two current safeguards operate around that blend:
+
+- `LOXILB_KV_SPILL_RELIEF` defaults to auto: on for single-pool mode 3 and off for
+  P/D mode 1. When enabled, an over-cap affinity owner may spill to the least-loaded
+  under-cap endpoint across the full healthy fleet, even if that endpoint has zero overlap.
+- `LOXILB_KV_COLDSTART_SEED_N` defaults to `16`. While an eligible endpoint has fewer than
+  `LOXILB_KV_COLDSTART_MIN_BLOCKS` blocks (default `16`), every sixteenth Tier-1.5 hit seeds
+  the lowest-index cold endpoint. Seeding stops as its inventory warms; set the interval to
+  `0` to disable it.
+
+Observe these paths with `loxilb_pd_kv_tier15_spills_total` and
+`loxilb_pd_kv_tier15_cold_seeds_total` instead of inferring them from request distribution.
 
 ---
 
@@ -438,8 +487,8 @@ Raw argmax scores by overlap *count* and nothing else, so it is **load-blind**: 
 !!! warning "Experimental — no CI coverage, default OFF"
     The AI controller is an optional, experimental component. **No automated CI scenario ships for
     it**, and it is disabled by default. Most deployments never enable it; the tiers documented above
-    are the shipped, supported path. Enable it only if you have a specific heterogeneous-fleet need
-    and are prepared to operate an unproven component.
+    are the default operational path. Enable the optional controller only for a specific
+    heterogeneous-fleet need and after deployment-specific failure and rollback validation.
 
 **What it is.** `loxilb-ai-controller` is a *separate* container that consumes fleet telemetry and emits per-endpoint routing-weight advice back to loxilb — capacity- and throughput-weighted prefill selection layered on top of cache affinity. It runs as a plain container (**no host networking, no XDP**), binds to a private address, and exposes gRPC on `:18856` and a Prometheus `/metrics` endpoint on `:18857`.
 

@@ -1,6 +1,8 @@
 # LoxiLB UI
 
-A modern React web dashboard for operating LoxiLB and the Inference Gateway — every AI-gateway feature, classic L4/L7 load balancing, networking, and security is configurable from the browser, with role-based access control and live monitoring charts.
+A React web dashboard for supported LoxiLB and Inference Gateway management
+surfaces. Capability depends on the selected UI, OAM, and Gateway releases;
+verify each required workflow before production use.
 
 !!! note "Audience"
     Operators who want a graphical control surface instead of (or alongside) `loxicmd` and raw REST.
@@ -20,17 +22,28 @@ Repository: [loxilb-io/loxilb-ui](https://github.com/loxilb-io/loxilb-ui) · Lic
 | **Operations** | IPsec VPN, HA cluster state, instance configuration snapshots (backup/restore wizard), real-time Prometheus-backed charts |
 | **Access control** | JWT login with server-side session revocation; `admin` / `operator` / `viewer` roles with route guards; English, Korean, and Japanese localization |
 
-The UI is a pure frontend: it talks to the [OAM management API](loxilb-oam.md) (default port 8080, base path `/oam`), which authenticates every request and proxies configuration to your gateway instances. A reachable OAM deployment is a prerequisite for every install mode below.
+The UI is a pure frontend: it talks to the [OAM management API](loxilb-oam.md)
+(default port 8080, base path `/oam`). OAM authenticates the UI request and
+applies OAM RBAC before proxying. Gateway management authentication remains a
+separate boundary; OAM does not automatically translate its JWT into a Gateway
+credential. A reachable, correctly integrated OAM deployment is a prerequisite
+for every install mode below.
 
 ---
 
 ## Deployment options
 
-!!! tip "Recommended: the management-plane bundle"
-    The easiest production path is the [management-plane bundle](management-plane.md) — UI + OAM + MySQL behind one TLS edge, from a single `.env`. The standalone modes below are for teams that deploy the UI tier separately.
+!!! tip "Evaluate with the management-plane bundle"
+    The [management-plane bundle](management-plane.md) is the shortest setup
+    path: UI + OAM + PostgreSQL behind one TLS edge. Production promotion requires
+    pinned releases, backup recovery, and verified OAM-to-Gateway credentials.
 
 !!! note "Official container image"
-    Tagged releases publish `ghcr.io/loxilb-io/loxilb-ui` (first release: `v0.9.0`) — Cosign-signed, with SLSA provenance and SBOM attestations. Verify it is pullable from your host with `docker manifest inspect ghcr.io/loxilb-io/loxilb-ui:v0.9.0`; if the registry denies the pull, the package is not (yet) public and you can build from source instead — the standalone Compose files below always build from the repository (`up --build`).
+    Tagged releases publish `ghcr.io/loxilb-io/loxilb-ui`. Select a release
+    approved for your environment and replace `<UI_RELEASE_TAG>` below; do not
+    copy a mutable tag into production. Verify pullability with
+    `docker manifest inspect ghcr.io/loxilb-io/loxilb-ui:<UI_RELEASE_TAG>`.
+    If the registry denies the pull, build from reviewed source instead.
 
 ### Option A — Docker Compose (standalone)
 
@@ -67,13 +80,18 @@ Point the container at your OAM backend by overriding the environment in the com
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| `BACKEND_URL` | `https://oam.example.com` | OAM backend that nginx proxies `/api/oam/*` to (`<BACKEND_URL>/oam/`) |
-| `BACKEND_HOST` | `oam.example.com` | `Host` header sent to the backend |
+| `BACKEND_URL` | Unset; operator supplied | OAM backend that nginx proxies `/api/oam/*` to (`<BACKEND_URL>/oam/`) |
+| `BACKEND_HOST` | Unset; derived from `BACKEND_URL` | Optional override for the `Host` header sent to the backend |
 | `FRONTEND_URL` | `http://localhost:3000` | Origin/Referer the proxy presents |
 | `PUBLIC_PATH` | `/netlox` | URL prefix the SPA is served under |
 | `SSL_MODE` | varies by compose file | `enabled` (self-signed HTTPS), `disabled` (HTTP), `commercial` (your certs) |
 
 A helper script wraps the three modes: `./deploy.sh [http|https|commercial] [up|down|restart|logs|status]`.
+
+The standalone container templates do not provide a usable OAM destination by
+default. Set `BACKEND_URL` for the deployed OAM endpoint; override
+`BACKEND_HOST` only when the derived host is unsuitable. Verify the rendered
+nginx configuration before exposing the UI.
 
 !!! warning "Port 3000 collides with Grafana"
     The gateway's [reference monitoring stack](../operations/monitoring.md) runs Grafana on host port 3000. If both run on the same host, remap the UI's published port in the compose file.
@@ -84,7 +102,7 @@ Plain manifests with Kustomize support ship in [`k8s/`](https://github.com/loxil
 
 ```bash
 # 1. Pin the released image (k8s/kustomization.yaml already targets
-#    ghcr.io/loxilb-io/loxilb-ui — set newTag to the release, e.g. v0.9.0).
+#    ghcr.io/loxilb-io/loxilb-ui — set newTag to <UI_RELEASE_TAG>).
 #    Alternatively build and push to your own registry and reference that
 #    image instead.
 
@@ -158,5 +176,6 @@ Then log in with an OAM account. A `viewer` sees dashboards read-only; `operator
 
 ## See also
 
-- [Deploy the Management Plane](management-plane.md) — UI + OAM + MySQL in one bundle (recommended).
+- [Deploy the Management Plane](management-plane.md) — UI + OAM + PostgreSQL in one bundle (recommended).
 - [LoxiLB OAM API](loxilb-oam.md) — the backend the UI requires.
+- [Management API Authentication](../security/management-api-authentication.md) — the independent Gateway-side auth boundary.

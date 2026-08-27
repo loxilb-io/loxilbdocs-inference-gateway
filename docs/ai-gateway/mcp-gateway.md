@@ -34,22 +34,27 @@ The `security` field selects the TLS posture. Use the exact value meanings:
 
 | Value | Name | Meaning |
 |---|---|---|
-| `0` | plain | No TLS |
-| `1` | https | TLS terminated at the frontend (VIP) |
-| `2` | tls | TLS on the connection |
-| `3` | e2ehttps | End-to-end HTTPS (frontend and backend legs both TLS) |
+| `0` | plain | Plaintext frontend and backend |
+| `1` | https | Terminate frontend TLS at the VIP and forward plaintext HTTP to the backend |
+| `2` | e2ehttps | Terminate frontend TLS, then establish a separate TLS connection to the backend |
 
-!!! warning "Do not conflate `2` and `3`"
-    `security: 2` is **tls**, not "e2e". End-to-end HTTPS is `security: 3`
-    (**e2ehttps**). Choose `3` only when the backend MCP servers themselves speak
-    TLS.
+!!! warning "TLS is terminated, not passed through"
+    Both TLS modes require fullproxy. `security: 2` re-encrypts traffic to a TLS backend;
+    it does not pass the client's original TLS session through the Gateway. Values outside
+    `0`–`2` are rejected.
 
 ## Configuration
 
 The examples target a lab VIP `10.10.10.254:2020` on the LoxiLB REST port
-`11111`, fronting three MCP servers at `31.31.31.1`, `32.32.32.1`, and
-`33.33.33.1` (all `:8080/mcp`). The frontend terminates HTTPS (`security: 1`)
-and reads the `mcp-session-id` header. Adjust addresses for your environment.
+`11111`, fronting two MCP servers at `192.0.2.1` and `198.51.100.1`
+(both `:8080/mcp`). The frontend terminates HTTPS (`security: 1`). Only the persist example
+reads the `mcp-session-id` header. Adjust addresses for your environment.
+
+!!! warning "Protect the management API"
+    Frontend TLS does not secure the management request on port `11111`. The `curl` examples use
+    plain management HTTP only for an isolated lab. In production, use an authenticated,
+    TLS-protected management endpoint and read its authorization header from a
+    permission-restricted file.
 
 ### TLS certificates
 
@@ -73,19 +78,18 @@ certificate directory (`/opt/loxilb/cert/`: `server.crt`, `server.key`,
           "sel":                  0,
           "mode":                 4,
           "security":             1,
-          "session_header_name": "mcp-session-id",
           "host":                "10.10.10.254",
           "trace_type":          "mcp"
         },
         "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8080, "weight": 1},
-          {"endpointIP": "32.32.32.1", "targetPort": 8080, "weight": 1}
+          {"endpointIP": "192.0.2.1", "targetPort": 8080, "weight": 1},
+          {"endpointIP": "198.51.100.1", "targetPort": 8080, "weight": 1}
         ]
       }'
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=rr --security=https --session-header-name=mcp-session-id --host=10.10.10.254 --trace-type=mcp
+    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=rr --security=https --host=10.10.10.254 --trace-type=mcp
     ```
 
 ### Persist service (`sel=3`, session affinity)
@@ -112,26 +116,27 @@ session.
           "trace_type":          "mcp"
         },
         "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8080, "weight": 1},
-          {"endpointIP": "32.32.32.1", "targetPort": 8080, "weight": 1}
+          {"endpointIP": "192.0.2.1", "targetPort": 8080, "weight": 1},
+          {"endpointIP": "198.51.100.1", "targetPort": 8080, "weight": 1}
         ]
       }'
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2021:8080 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=persist --security=https --session-header-name=mcp-session-id --host=10.10.10.254 --trace-type=mcp
+    loxicmd create lb 10.10.10.254 --tcp=2021:8080 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=persist --security=https --session-header-name=mcp-session-id --host=10.10.10.254 --trace-type=mcp
     ```
 
 !!! note "End-to-end TLS variant"
-    To terminate TLS on both legs — frontend and backend — set `security: 3`
+    To terminate TLS on both legs — frontend and backend — set `security: 2`
     (e2ehttps) and ensure the backend MCP servers serve HTTPS. Leave it at `1`
     (https) when backends speak plain HTTP behind the VIP.
 
 ## Verify
 
 **1. Confirm the services exist.** List load balancer rules and check that the
-`2020` (round-robin) and `2021` (persist) services carry `mode: 4`,
-`security: 1`, and `session_header_name: "mcp-session-id"`:
+`2020` (round-robin) and `2021` (persist) services carry `mode: 4` and
+`security: 1`. Confirm `session_header_name: "mcp-session-id"` on the `2021` persist service;
+the round-robin service does not need a session key:
 
 === "curl"
     ```bash
@@ -146,12 +151,12 @@ session.
 HTTPS VIP endpoint, trusting the CA you staged:
 
 ```bash
-# -k skips CA verification in the lab (self-signed cert); verify the CA in production
-curl -sk https://10.10.10.254:2020/mcp
+curl --fail-with-body --cacert /path/to/trusted-ca.crt \
+  https://10.10.10.254:2020/mcp
 ```
 
 Repeat the round-robin probe several times and confirm responses come from
-different backend servers (server1 / server2 / server3).
+both configured backend servers over repeated stateless requests.
 
 **3. Confirm session affinity.** Against the persist service (`:2021`), send
 several requests carrying the same `mcp-session-id`; every one should be served
@@ -163,9 +168,9 @@ requests in that session stay on `server2`.
 | Symptom | Likely cause | Action |
 |---|---|---|
 | TLS handshake fails at the VIP | Certificate/key not staged, or SAN does not match the VIP | Stage `server.crt`/`server.key` with an IP SAN for the VIP; trust the CA on the client. |
-| Client labels the connection "not e2e" but you set `security: 2` | `2` is **tls**, not end-to-end | Use `security: 3` (e2ehttps) for end-to-end TLS with HTTPS backends. |
+| Backend TLS handshake fails with `security: 2` | Backend certificate, trust, name, or protocol mismatch | Verify the backend TLS identity and configure backend trust; do not disable verification in production. |
 | Session bounces between backends | Persist not enabled, or header name mismatch | Use `sel: 3` and set `session_header_name: "mcp-session-id"`. |
-| Round-robin always hits one backend | Requests share a session header, so affinity pins them | Use the `sel: 0` service (no persist) for stateless probes. |
+| Round-robin always hits one backend | A small sample can legitimately repeat one backend, or the wrong VIP/selector is under test | Confirm the rule is `sel: 0`, omit session assumptions, and test enough requests to observe distribution. |
 | MCP `/mcp` returns connection refused | Backend MCP server not listening on the target port | Confirm each backend serves `/mcp` on `:8080`. |
 | Requests reach the VIP but never a backend | Missing routes between the gateway and backend subnets | Verify routing/reachability from the gateway to each backend IP. |
 
