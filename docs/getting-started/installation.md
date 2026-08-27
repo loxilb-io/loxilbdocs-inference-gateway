@@ -1,7 +1,7 @@
 # Installation
 
 How to get the LoxiLB Inference Gateway running and reach its REST API, so you
-can drive every AI-routing feature over `curl`. The gateway is API-first: you
+can drive supported AI-routing features over `curl`. The gateway is API-first: you
 run one container, then configure load balancers by POSTing to the REST
 endpoint on port **11111**.
 
@@ -24,34 +24,49 @@ endpoint on port **11111**.
 
 ## Run the gateway container
 
-Start the `loxilb` container image. `--privileged`, `--cap-add SYS_ADMIN`, and
+Start a version-pinned `loxilb` container image. `--privileged`, `--cap-add SYS_ADMIN`, and
 the `/dev/log` mount are required by the eBPF data path; the REST API comes up
 on port **11111** inside the container.
 
 ```bash
+export LOXILB_IMAGE="ghcr.io/loxilb-io/loxilb-inference-gateway:<RELEASE_TAG>"
+
 docker run -u root --cap-add SYS_ADMIN --restart unless-stopped --privileged \
   -dit \
+  --network host \
   -v /dev/log:/dev/log \
   -v /opt/loxilb/config:/etc/loxilb \
   --name loxilb \
-  ghcr.io/loxilb-io/loxilb-inference-gateway:latest
+  "$LOXILB_IMAGE"
 ```
+
+Replace `<RELEASE_TAG>` with a release that your team has tested and approved.
+Record the resolved image digest with the deployment evidence. Use `:latest`
+only for disposable evaluation; a mutable tag makes rollback and peer-version
+checks ambiguous.
 
 !!! note "If the image pull is denied"
     If `docker pull` is denied, the GHCR package is not yet public. Build the image from
     source instead — see [System Requirements](../reference/system-requirements.md) for the
     build-from-source steps.
 
-The container runs with host networking privileges, so the REST API is reachable
-on the host at port `11111`. If you instead run with an explicit port mapping,
-publish `11111` (for example `-p 11111:11111`) so the API is reachable from your
-client.
+The command uses host networking, so the REST API is reachable on the host at
+port `11111`. A bridge-network deployment must publish every management and
+data-plane port it uses and be validated separately; publishing only `11111`
+does not expose load-balanced service ports.
 
 !!! tip "Expose the REST API on a known address"
     All configuration in these docs targets `http://<host>:11111/netlox/v1/...`.
     Replace `<host>` with the address where the gateway's API is reachable — the
     host IP, or the load-balancer VIP once you bind one to the gateway node. The
-    quickstart uses the lab VIP `10.10.10.254`.
+    examples may use RFC 5737 documentation VIPs such as `192.0.2.10`.
+
+!!! danger "Secure the management listener before remote use"
+    Starting the container without a management authentication mode leaves the
+    management API unrestricted in the current implementation. Keep the first
+    setup on an isolated network, then configure and test one supported mode as
+    described in [Management API Authentication](../security/management-api-authentication.md).
+    Use the TLS listener or a verified TLS proxy outside an isolated lab.
 
 ### Persist configuration
 
@@ -66,6 +81,11 @@ example an image upgrade:
 
 Without the mount, configuration survives a container *restart* but is **lost
 when the container is recreated**.
+
+For a controlled backup, dry-run, restore, and rollback procedure, see
+[Configuration Backup and Restore](../operations/backup-restore.md). The
+snapshot can contain sensitive network and security configuration, so restrict
+host-directory permissions and backup access.
 
 ## Verify the REST API
 
@@ -96,3 +116,7 @@ done
   `mode: 4` (fullproxy).
 - [AI Gateway Overview](../ai-gateway/overview.md) — the full set of
   inference-aware routing features.
+- [Configuration Backup and Restore](../operations/backup-restore.md) — safely
+  persist, validate, restore, and monitor Gateway configuration.
+- [Management API Authentication](../security/management-api-authentication.md)
+  — protect the operator control plane before remote access.

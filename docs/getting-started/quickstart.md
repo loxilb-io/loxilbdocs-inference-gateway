@@ -11,6 +11,18 @@ header or in the JSON request body. This walkthrough is built from the runnable
     see [Installation](installation.md). This page uses the scenario's lab
     addresses; substitute your own VIP and backend IPs as needed.
 
+!!! warning "Use an isolated lab"
+    The commands below mirror an unauthenticated test scenario. Do not expose port `11111` to an
+    untrusted network. The current gateway allows management requests when no user, OAuth, or
+    manual-token mode is enabled. A production deployment must enable management authentication
+    and prove an unauthenticated mutation returns `401`.
+
+!!! note "This is a keyless routing lab"
+    These are plain `mode: 4` rules. They do not enter the current API-key/quota gate, even when an
+    independent AI-key store is configured, and adding `X-Api-Key` does not turn that gate on.
+    Protected inference requires a fullproxy rule with `sse_mode: true` or `pd_disagg_mode: true`.
+    Complete [API Key Management](../ai-gateway/api-key-management.md) before exposing such a VIP.
+
 ## What you will build
 
 A single VIP (`10.10.10.254`) fronting three model pools. Each pool is a
@@ -18,21 +30,25 @@ separate L7 rule on its own port, distinguished by `model_name`:
 
 | Port | `model_name`   | Backend pool           | Routes when the request asks for… |
 |------|----------------|------------------------|-----------------------------------|
-| 2020 | `llama-70b`    | `31.31.31.1:8080`      | model `llama-70b`                 |
-| 2021 | `mistral-7b`   | `32.32.32.1:8080`      | model `mistral-7b`                |
-| 2022 | `""` (wildcard)| `33.33.33.1:8080`      | any model, or no model at all     |
+| 2020 | `llama-70b`    | `198.51.100.11:8080`   | model `llama-70b`                 |
+| 2021 | `mistral-7b`   | `198.51.100.12:8080`   | model `mistral-7b`                |
+| 2022 | `""` (wildcard)| `198.51.100.13:8080`   | any model, or no model at all     |
 
-The gateway reads the model from the `X-Model` header **or** the `"model"` field
-of an OpenAI-compatible JSON body. When both are present, the header wins. A
+For **routing**, the gateway reads the model from the `X-Model` header or the
+`"model"` field of an OpenAI-compatible JSON body; when both are present, the
+header wins. On an API-key-gated SSE or P/D rule, model authorization has a
+different precedence: it uses the JSON body model first, then falls back to
+the path prefix or header. Keep these inputs consistent so routing and
+authorization cannot select different model names. A
 request that matches no rule and has no wildcard to fall back to gets an HTTP
 **503** with a `model_unavailable` body.
 
 ```mermaid
 flowchart LR
     C[Client] --> V["loxilb gateway<br/>VIP 10.10.10.254 (mode 4 fullproxy)"]
-    V -->|"model = llama-70b :2020"| A["llama-70b pool<br/>31.31.31.1:8080"]
-    V -->|"model = mistral-7b :2021"| B["mistral-7b pool<br/>32.32.32.1:8080"]
-    V -->|"wildcard / no model :2022"| W["wildcard pool<br/>33.33.33.1:8080"]
+    V -->|"model = llama-70b :2020"| A["llama-70b pool<br/>198.51.100.11:8080"]
+    V -->|"model = mistral-7b :2021"| B["mistral-7b pool<br/>198.51.100.12:8080"]
+    V -->|"wildcard / no model :2022"| W["wildcard pool<br/>198.51.100.13:8080"]
 ```
 
 ## Step 1 — Start the gateway and three backends
@@ -44,15 +60,26 @@ lab these are minimal mock servers that echo a distinct body
 answered.
 
 - Gateway VIP: `10.10.10.254`, REST API on `:11111`
-- Backend 1: `31.31.31.1:8080` — answers `server-llama`
-- Backend 2: `32.32.32.1:8080` — answers `server-mistral`
-- Backend 3: `33.33.33.1:8080` — answers `server-wild`
+- Backend 1: `198.51.100.11:8080` — answers `server-llama`
+- Backend 2: `198.51.100.12:8080` — answers `server-mistral`
+- Backend 3: `198.51.100.13:8080` — answers `server-wild`
 
 Confirm the REST API is up before configuring:
 
 ```bash
 curl -sf http://10.10.10.254:11111/netlox/v1/version && echo "  API ready"
 ```
+
+For a protected management API, keep the bearer token out of repeated command
+arguments:
+
+```bash
+install -m 600 /dev/null ./control-plane.headers
+printf 'Authorization: Bearer %s\n' "$GATEWAY_TOKEN" > ./control-plane.headers
+```
+
+The `curl` examples below use this header file. The `loxicmd` tab assumes the
+installed client is already configured with equivalent gateway credentials.
 
 ## Step 2 — Create the three routing rules
 
@@ -68,6 +95,7 @@ empty `model_name` (`""`) makes the rule a **wildcard** catch-all.
     ```bash
     # Rule 1 — port 2020 → llama-70b pool
     curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+      -H @control-plane.headers \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
@@ -83,12 +111,13 @@ empty `model_name` (`""`) makes the rule a **wildcard** catch-all.
           "inactiveTimeOut": 30
         },
         "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8080, "weight": 1}
+          {"endpointIP": "198.51.100.11", "targetPort": 8080, "weight": 1}
         ]
       }'
 
     # Rule 2 — port 2021 → mistral-7b pool
     curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+      -H @control-plane.headers \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
@@ -104,12 +133,13 @@ empty `model_name` (`""`) makes the rule a **wildcard** catch-all.
           "inactiveTimeOut": 30
         },
         "endpoints": [
-          {"endpointIP": "32.32.32.1", "targetPort": 8080, "weight": 1}
+          {"endpointIP": "198.51.100.12", "targetPort": 8080, "weight": 1}
         ]
       }'
 
     # Rule 3 — port 2022 → wildcard pool (model_name "")
     curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+      -H @control-plane.headers \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
@@ -125,7 +155,7 @@ empty `model_name` (`""`) makes the rule a **wildcard** catch-all.
           "inactiveTimeOut": 30
         },
         "endpoints": [
-          {"endpointIP": "33.33.33.1", "targetPort": 8080, "weight": 1}
+          {"endpointIP": "198.51.100.13", "targetPort": 8080, "weight": 1}
         ]
       }'
     ```
@@ -134,13 +164,13 @@ empty `model_name` (`""`) makes the rule a **wildcard** catch-all.
 
     ```bash
     # Rule 1 — port 2020 → llama-70b pool
-    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=31.31.31.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b --inatimeout=30
+    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=198.51.100.11:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b --inatimeout=30
 
     # Rule 2 — port 2021 → mistral-7b pool
-    loxicmd create lb 10.10.10.254 --tcp=2021:8080 --endpoints=32.32.32.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=mistral-7b --inatimeout=30
+    loxicmd create lb 10.10.10.254 --tcp=2021:8080 --endpoints=198.51.100.12:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=mistral-7b --inatimeout=30
 
     # Rule 3 — port 2022 → wildcard pool (model_name "")
-    loxicmd create lb 10.10.10.254 --tcp=2022:8080 --endpoints=33.33.33.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --inatimeout=30
+    loxicmd create lb 10.10.10.254 --tcp=2022:8080 --endpoints=198.51.100.13:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --inatimeout=30
     ```
 
 !!! tip "Field casing matters"
@@ -171,10 +201,11 @@ curl -s -X POST http://10.10.10.254:2021/ \
 # → server-mistral
 ```
 
-!!! note "Header overrides body"
-    If both `X-Model` and a JSON `"model"` are present, the header wins. Sending
+!!! note "Header overrides body for routing"
+    If both `X-Model` and a JSON `"model"` are present, the header wins routing. Sending
     `X-Model: llama-70b` with a body of `"model":"mistral-7b"` to port 2020
-    routes to the **llama** pool.
+    routes to the **llama** pool. On a protected SSE or P/D rule, authorization checks the body
+    model first; avoid conflicting values.
 
 ### Wildcard fallback
 
@@ -217,7 +248,8 @@ should see all three services, each with its `model_name` and single endpoint:
 === "curl"
 
     ```bash
-    curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
+    curl -s -H @control-plane.headers \
+      http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
     ```
 
 === "loxicmd"
@@ -229,8 +261,63 @@ should see all three services, each with its `model_name` and single endpoint:
 Pipe it through `jq` to confirm the model-to-port mapping at a glance:
 
 ```bash
-curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all \
+curl -s -H @control-plane.headers \
+  http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all \
   | jq '.lbAttr[].serviceArguments | {port, model_name, mode}'
+```
+
+## Step 5 — Clean up safely
+
+Each model name is part of its rule key. Delete a model-specific rule with the same host, path, path
+mode, and model used at creation. A delete without `model_name` matches only the wildcard rule.
+
+=== "curl"
+
+    ```bash
+    # Delete the llama-70b rule.
+    curl --fail-with-body -sS -X DELETE \
+      -H @control-plane.headers \
+      'http://10.10.10.254:11111/netlox/v1/config/loadbalancer/hosturl/10.10.10.254/externalipaddress/10.10.10.254/port/2020/protocol/tcp?path_prefix=%2F&path_match_mode=prefix&model_name=llama-70b'
+
+    # Delete the mistral-7b rule.
+    curl --fail-with-body -sS -X DELETE \
+      -H @control-plane.headers \
+      'http://10.10.10.254:11111/netlox/v1/config/loadbalancer/hosturl/10.10.10.254/externalipaddress/10.10.10.254/port/2021/protocol/tcp?path_prefix=%2F&path_match_mode=prefix&model_name=mistral-7b'
+
+    # Delete the wildcard rule; it has no model_name query value.
+    curl --fail-with-body -sS -X DELETE \
+      -H @control-plane.headers \
+      'http://10.10.10.254:11111/netlox/v1/config/loadbalancer/hosturl/10.10.10.254/externalipaddress/10.10.10.254/port/2022/protocol/tcp?path_prefix=%2F&path_match_mode=prefix'
+    ```
+
+=== "loxicmd"
+
+    ```bash
+    loxicmd delete lb 10.10.10.254 --tcp=2020 --host=10.10.10.254 \
+      --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b
+    loxicmd delete lb 10.10.10.254 --tcp=2021 --host=10.10.10.254 \
+      --path-prefix=/ --path-match-mode=prefix --model-name=mistral-7b
+    loxicmd delete lb 10.10.10.254 --tcp=2022 --host=10.10.10.254 \
+      --path-prefix=/ --path-match-mode=prefix
+    ```
+
+Confirm the lab rules are gone:
+
+```bash
+curl --fail-with-body -sS \
+  -H @control-plane.headers \
+  http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all \
+  | jq '.lbAttr[] | select(.serviceArguments.port == 2020 or .serviceArguments.port == 2021 or .serviceArguments.port == 2022)'
+```
+
+The command should print no matching rules. Avoid `DELETE /config/loadbalancer/all` on a shared
+gateway because it removes unrelated services.
+
+Remove the temporary management header when finished:
+
+```bash
+rm -f ./control-plane.headers
+unset GATEWAY_TOKEN
 ```
 
 ## Troubleshoot
@@ -241,6 +328,7 @@ curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all \
 | Every request lands on the wrong pool | `mode` not `4`, or a mis-cased field silently dropped | Recreate the rule with `mode: 4` and exact field names |
 | Expected 200 but got 503 `model_unavailable` | Requested model matches no rule and no wildcard covers that port | Add a rule for that model, or route through the wildcard port |
 | Rule missing from `/config/loadbalancer/all` | POST rejected (bad JSON / duplicate key) | Re-run the POST and check its response body |
+| Cleanup returns 404 | A key component was omitted or changed | Repeat the exact host, path, path mode, and model used at creation |
 
 ## Next steps
 
@@ -250,3 +338,5 @@ curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all \
   GPU-aware selection.
 - [Configuration Reference](../ai-gateway/configuration-reference.md) — every
   `serviceArguments` field, default, and enum.
+- [Management API Authentication](../security/management-api-authentication.md) — secure port
+  `11111` before moving beyond the lab.

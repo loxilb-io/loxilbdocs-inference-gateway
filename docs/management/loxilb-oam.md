@@ -1,34 +1,42 @@
 # LoxiLB OAM API
 
-The Operations, Administration & Management (OAM) service is a Go REST API that centrally manages a fleet of LoxiLB / Inference Gateway instances: one authenticated endpoint for user management, per-request RBAC, an audited proxy to every gateway, encrypted configuration snapshots, and remote firmware lifecycle.
+The Operations, Administration & Management (OAM) service is a Go REST API for
+centralized users, RBAC, registered Gateway instances, proxy operations,
+configuration snapshots, logs, alerts, and lifecycle functions. It uses
+PostgreSQL and has an independent release and identity boundary from the
+Gateway.
 
-!!! note "Audience"
-    Platform teams running more than one gateway, or anyone deploying the [LoxiLB UI](loxilb-ui.md) — the UI requires OAM as its backend.
+Repository: [loxilb-io/loxilb-oam](https://github.com/loxilb-io/loxilb-oam) ·
+License: Apache-2.0 · API base `/oam` on port `8080`.
 
-Repository: [loxilb-io/loxilb-oam](https://github.com/loxilb-io/loxilb-oam) · License: Apache-2.0 · Stack: Go (Gin) + MySQL · API base path `/oam` on port 8080.
+## Architecture
 
-!!! note "Official container image"
-    Tagged releases publish `ghcr.io/loxilb-io/loxilb-oam` (first release: `v0.1.0-rc.1`) — Cosign-signed, with SLSA provenance and SBOM attestations, gated by a Trivy scan. Release-candidate tags do **not** move `:latest`, so pin the version explicitly. Verify pullability with `docker manifest inspect ghcr.io/loxilb-io/loxilb-oam:v0.1.0-rc.1`; if the registry denies the pull, the package is not (yet) public — the Compose and source options below build locally and work regardless.
+```mermaid
+flowchart LR
+    C["UI or API client"] -->|"OAM JWT"| O["loxilb-oam"]
+    O --> P["PostgreSQL<br/>users, instances, snapshots"]
+    O -->|"proxied /netlox/v1 request"| G["Inference Gateway"]
 
----
+    style O fill:#e1f5fe,stroke:#0288d1
+    style P fill:#e8f5e9,stroke:#43a047
+    style G fill:#fff9c4,stroke:#f9a825
+```
 
-## Why put OAM in front of your gateways
+OAM supports `admin`, `operator`, and `viewer` roles and resolves proxy
+capability through its own database. Gateway management authorization is an
+additional decision; see [OAM-to-Gateway authentication](#oam-to-gateway-authentication).
 
-- **One pane of glass** — register N gateway instances and drive all of them (configuration, status, lifecycle) through a single authenticated API, without exposing each gateway's REST port to operators.
-- **Per-request RBAC** — `admin` / `operator` / `viewer` roles resolved from the database on every request. Reads through the proxy are open to all roles; mutations require write capability.
-- **Secure by default** — the server *refuses to start* without its secrets (no built-in default credentials), enforces exponential login lockout, per-IP rate limiting (login and proxy), server-side JWT revocation, a CORS allowlist, and TLS-verified connections to managed instances with private-CA support.
-- **Encrypted snapshots** — capture, schedule, and restore per-instance configuration with AES-256-GCM at-rest encryption and integrity checksums. Snapshots include sensitive material (IPsec PSKs, certificate private keys), so encryption matters.
-- **Remote lifecycle** — start/stop/upgrade the LoxiLB container on managed hosts via the Docker Engine API (TLS-capable).
-- **Supply-chain assurance** — the release pipeline publishes Cosign-signed images with SLSA provenance and SBOM attestations, gated by a Trivy scan.
+## Prerequisites
 
----
+- Go `>= 1.25.0` for source builds;
+- PostgreSQL `>= 18` for the current OAM source (Compose pins its own database
+  image; validate the selected release's exact requirement);
+- Docker Engine with Compose v2 for the documented container deployment;
+- an immutable OAM image matched to the Gateway release you have qualified.
 
-## Deployment
+## Deploy OAM with PostgreSQL
 
-!!! tip "Deploying the UI as well?"
-    Use the [management-plane bundle](management-plane.md) instead — it runs OAM, the UI, and MySQL behind one TLS edge from a single `.env`. The modes below deploy OAM on its own.
-
-### Option A — Docker Compose (OAM + MySQL)
+For OAM without the UI:
 
 ```bash
 git clone https://github.com/loxilb-io/loxilb-oam.git
@@ -36,138 +44,150 @@ cd loxilb-oam
 cp .env.example .env
 ```
 
-Set the secrets in `.env`. The Compose stack requires:
+Set the required values in `.env`:
 
 | Variable | Required | Purpose |
-|----------|----------|---------|
-| `MYSQL_ROOT_PASSWORD` | yes | MySQL root password |
-| `MYSQL_PASSWORD` | yes | Password MySQL creates for the `oamuser` account |
-| `DB_PASSWORD` | yes | Password OAM uses to connect — **set to the same value as `MYSQL_PASSWORD`** |
-| `OAM_JWT_SECRET` | yes | JWT signing key (`openssl rand -base64 48`) |
-| `OAM_DEFAULT_ADMIN_PASSWORD` | yes | Bootstrap `admin` password; change after first login |
-| `SNAPSHOT_ENC_KEY` | strongly recommended | Base64 32-byte AES-256 key (`openssl rand -base64 32`) for snapshot encryption |
-| `OAM_ALLOWED_ORIGINS` | recommended | Comma-separated CORS allowlist; unset means wildcard (development only) |
+|---|---:|---|
+| `OAM_JWT_SECRET` | yes | JWT signing secret |
+| `OAM_DEFAULT_ADMIN_PASSWORD` | yes | Initial admin password; change after first login |
+| `DB_PASSWORD` | yes | Password for the bundled PostgreSQL `oamuser` |
+| `SNAPSHOT_ENC_KEY` | production | Base64-encoded 32-byte AES-256 snapshot-encryption key |
+| `OAM_ALLOWED_ORIGINS` | production | Exact browser origin allowlist |
+| `OAM_TRUSTED_PROXIES` | behind a proxy | Only proxy IPs/CIDRs whose `X-Forwarded-For` may affect rate limiting and lockout |
 
-!!! note "`MYSQL_PASSWORD` vs `DB_PASSWORD`"
-    The bundled MySQL provisions the `oamuser` account with `MYSQL_PASSWORD`, while the OAM service connects using `DB_PASSWORD` — the Compose file reads them as two separate variables. Define **both** in `.env` with the **same value**, or the app cannot reach the database.
+Generate independent JWT, database, and snapshot-key values without committing
+them:
+
+```bash
+openssl rand -base64 48
+openssl rand -base64 48
+openssl rand -base64 32
+```
+
+Create the bootstrap administrator password with your password manager. The
+fresh-database policy requires at least nine characters, including upper case,
+lower case, a digit, and a special character, and rejects any character
+repeated three times in a row.
+
+Then start and verify:
 
 ```bash
 docker compose up -d
+docker compose ps
+curl --fail-with-body --silent --show-error \
+  http://127.0.0.1:8080/oam/health | jq .
 ```
 
-- API: `http://<host>:8080`, health at `/oam/health`
-- Swagger UI: `http://<host>:8080/oam/swagger/index.html`
+The root Compose stack publishes OAM and PostgreSQL for API-only evaluation.
+For a production-style UI/OAM bundle with only the TLS edge exposed, use
+[Deploy the Management Plane](management-plane.md).
 
-**HTTPS variant** — serve the API itself over TLS on 443 (certificates at `./ssl/server_certs/server.crt` and `server.key`):
+!!! danger "Snapshots require an encryption and recovery plan"
+    OAM instance snapshots can contain IPsec pre-shared keys and certificate
+    private keys. Without `SNAPSHOT_ENC_KEY`, OAM stores them unencrypted. Keep
+    the key in a secret manager, back it up separately from PostgreSQL, and
+    test that a database restore plus the correct key can decrypt a snapshot.
 
-```bash
-docker compose -f docker-compose.yml -f docker-compose.https.yml up -d
-```
-
-### Option B — Kubernetes (Kustomize)
-
-Manifests ship in [`k8s/`](https://github.com/loxilb-io/loxilb-oam/tree/main/k8s): MySQL + OAM in namespace `oam-loxilb`, with HTTP (`base-http`) and HTTPS (`base`) bases and `development` / `production` overlays (the production overlay wires `SNAPSHOT_ENC_KEY` through a Secret).
-
-```bash
-# 1. Make the image available to the cluster — either point the manifests at
-#    the released image (ghcr.io/loxilb-io/loxilb-oam:v0.1.0-rc.1), or build
-#    it yourself:
-docker build -t oam-loxilb:latest .
-minikube image load oam-loxilb:latest    # or: kind load docker-image oam-loxilb:latest
-#    (for real clusters, push to your registry and update the image reference)
-
-# 2. Fill in the Secret manifests (they ship with CHANGE_ME placeholders)
-
-# 3. Deploy an overlay
-kubectl apply -k k8s/overlays/development     # or k8s/overlays/production
-
-# 4. Reach the API
-kubectl port-forward svc/oam-loxilb-service 8080:8080 -n oam-loxilb
-```
-
-!!! warning "Production gaps to close in your overlay"
-    As shipped, the Deployment's liveness/readiness probes are commented out, the image is expected to be locally loaded (`imagePullPolicy: IfNotPresent`), and it runs a single replica. For production, enable the probes (`/oam/health`), point the image at your registry, and size replicas/resources for your fleet. There is **no Helm chart** — Kustomize only.
-
-### Option C — Binary from source
+## Run from source
 
 ```bash
 make build
-export OAM_JWT_SECRET=... OAM_DEFAULT_ADMIN_PASSWORD=... OAM_DB_PASSWORD=...
-./loxilb-oam -db-host=127.0.0.1 -db-port=3306 -db-name=loxioam -port=8080
+export OAM_JWT_SECRET="<SECRET_FROM_SECRET_MANAGER>"
+export OAM_DEFAULT_ADMIN_PASSWORD="<BOOTSTRAP_SECRET>"
+export DB_PASSWORD="<DATABASE_SECRET>"
+./loxilb-oam \
+  -db-user=oamuser \
+  -db-host=127.0.0.1 \
+  -db-port=5432 \
+  -db-name=loxioam \
+  -port=8080
 ```
 
-Requires Go 1.23+ and a reachable MySQL 8.x with the schema from `database/init/`. A companion `reset_admin` binary handles admin-password recovery.
+Do not put real secrets in shell history in production; the variables above
+show required names only. Use your deployment secret-injection mechanism.
 
----
+Current database defaults are `oamuser`, `127.0.0.1`, port `5432`, database
+`loxioam`. `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`, and `DB_NAME` supply
+the same values through the environment; explicit flags take precedence.
 
 ## Configuration reference
 
-Secrets are environment-only and the server fails fast when a required one is missing.
-
 | Variable | Default | Purpose |
-|----------|---------|---------|
-| `OAM_JWT_SECRET` | — (required) | JWT signing key |
-| `OAM_DEFAULT_ADMIN_PASSWORD` | — (required) | Bootstrap admin password |
-| `OAM_DB_PASSWORD` / `DB_PASSWORD` | — (required) | Database password (`-db-password` flag also accepted) |
-| `SNAPSHOT_ENC_KEY` | unset | Base64 32-byte AES-256 key; unset stores snapshots unencrypted (startup warning), invalid aborts boot |
-| `OAM_ALLOWED_ORIGINS` | unset (wildcard) | CORS allowlist, comma-separated |
-| `OAM_TOKEN_TTL_MINUTES` | `480` | JWT lifetime (8 h); `-token-expiration` flag overrides |
-| `OAM_INSTANCE_CA_BUNDLE` | unset | PEM bundle to trust a private CA for OAM→gateway TLS |
-| `OAM_INSTANCE_TLS_INSECURE` | `false` | `true` skips gateway certificate verification (development only, logs a warning) |
-| `OAM_DOCKER_TLS` / `OAM_DOCKER_PORT` / `OAM_DOCKER_CERT_PATH` | `false` / `2375` | Docker Engine API access for firmware lifecycle; enable TLS with client certs in production |
-| `OAM_OAUTH_ENABLED` | `false` | OAuth login routes (experimental; disabled by default) |
+|---|---|---|
+| `OAM_JWT_SECRET` | required | JWT signing secret |
+| `OAM_DEFAULT_ADMIN_PASSWORD` | required | Fresh-database admin bootstrap secret |
+| `DB_PASSWORD` | required | PostgreSQL password; `OAM_DB_PASSWORD` is a legacy alias |
+| `SNAPSHOT_ENC_KEY` | unset | Snapshot AES-256-GCM key; unset means unencrypted storage |
+| `OAM_ALLOWED_ORIGINS` | wildcard | Comma-separated CORS allowlist; wildcard is development-only |
+| `OAM_TRUSTED_PROXIES` | none | Trusted proxy peers for client-IP derivation |
+| `OAM_TOKEN_TTL_MINUTES` | `480` | JWT/API-token lifetime for the bare binary |
+| `TOKEN_EXPIRATION` | `480` | Compose entrypoint token lifetime setting |
+| `OAM_INSTANCE_CA_BUNDLE` | unset | CA bundle for managed-Gateway TLS |
+| `OAM_INSTANCE_TLS_INSECURE` | `false` | Skip Gateway certificate verification; development-only |
+| `OAM_DOCKER_TLS` | `false` | Use TLS for Docker Engine lifecycle access |
+| `OAM_DOCKER_PORT` | `2375` | Docker Engine API port |
+| `OAM_DOCKER_CERT_PATH` | unset | Docker Engine client certificate directory |
 
-Database flags and defaults: `-db-user oamuser`, `-db-host 127.0.0.1`, `-db-port 3306`, `-db-name loxioam`, `-port 8080`; HTTPS via `-enable-https` with `-ssl-cert-file` / `-ssl-key-file`.
+OAuth login has been removed from the current source. Do not carry old
+`OAM_OAUTH_*` variables into a new deployment.
 
----
+## OAM-to-Gateway authentication
 
-## How OAM talks to your gateways
+Register a TLS Gateway endpoint as:
 
-Each registered instance is stored with host, port, protocol, and API version; OAM derives the endpoint as `{protocol}://{host}:{port}/netlox/{version}` — in production, register gateways as:
-
-```
+```text
 https://<gateway-host>:8091/netlox/v1
 ```
 
-with the gateway started with `--tls` and a certificate OAM's `OAM_INSTANCE_CA_BUNDLE` can verify (the [management-plane guide](management-plane.md#step-6-secure-the-link-to-your-gateways) walks through certificate generation).
+Set `OAM_INSTANCE_CA_BUNDLE` to the CA that issued the Gateway certificate and
+keep `OAM_INSTANCE_TLS_INSECURE=false`.
 
-Every gateway API operation is then available through the authenticated proxy path:
+!!! danger "OAM JWTs are not Gateway credentials"
+    OAM authenticates and authorizes the caller, then forwards the request's
+    `Authorization` header. It does not translate an OAM JWT into a Gateway
+    user-service, OAuth, or manual token. An authenticated Gateway can reject
+    the proxy request with `401`. An unauthenticated Gateway accepts requests
+    from any reachable client, allowing OAM bypass. Validate an approved
+    credential integration and restrict the Gateway listener before production.
 
-```bash
-# Example: list load balancers on instance 1, through OAM
-curl -s -H "Authorization: Bearer <token>" \
-  http://<oam-host>:8080/oam/loxilbs/1/netlox/v1/config/loadbalancer/all
-```
+Under OAM's role policy, reads are available to its configured roles and
+mutations require its write capability. Gateway authorization may be stricter.
+TLS protects the connection; it does not authorize the operation.
 
-Reads (GET/HEAD/OPTIONS) are allowed for all roles; mutations require `admin` or `operator`. Proxy requests carry a 10-second timeout and per-IP rate limiting. The complete endpoint catalog — users, instances, snapshots, logs, alerts — is browsable in the Swagger UI at `/oam/swagger/index.html`.
+## Kubernetes boundary
 
----
+The current OAM repository marks its Kubernetes manifests pre-release and not
+supported for the current release because mandatory secrets are not fully
+wired. Use the documented Compose deployment until a supported Kubernetes
+release is published and validated. Do not promote the existing manifests by
+only filling placeholders.
 
-## Verify
+## Verify after deployment
 
-```bash
-# Service healthy
-curl -s http://<host>:8080/oam/health
-
-# Log in as the bootstrap admin (returns a JWT)
-curl -s -X POST http://<host>:8080/oam/login \
-  -H 'Content-Type: application/json' \
-  -d '{"username":"admin","password":"<OAM_DEFAULT_ADMIN_PASSWORD>"}'
-```
+1. Confirm `/oam/health` and the OAM version from the pinned image.
+2. Log in with the bootstrap admin and change its password immediately.
+3. Confirm the exact UI origin is allowed and the edge proxy is the only trusted
+   `X-Forwarded-For` source.
+4. Register a non-production Gateway over verified TLS.
+5. Test a read as viewer and a reversible change as operator/admin.
+6. Confirm the Gateway independently accepted the credential path.
+7. Capture and restore a synthetic configuration snapshot, then test database
+   recovery with the encryption key.
 
 ## Troubleshooting
 
-| Symptom | Likely cause | What to check |
-|---------|--------------|---------------|
-| Container exits at startup | Required secret unset | `docker compose logs oam-loxilb` — the log names the missing variable |
-| `Access denied` database errors | `DB_PASSWORD` ≠ `MYSQL_PASSWORD` | Set both to the same value; on a fresh install also wipe the MySQL volume so the user is re-provisioned |
-| Repeated login failures then lockout | Exponential login lockout engaged (5 attempts) | Wait out the backoff (1 min growing to 15 min) or reset via `reset_admin` |
-| Proxy calls return TLS errors | Gateway cert not trusted | Verify `OAM_INSTANCE_CA_BUNDLE`, cert SAN matches the registered host, gateway runs `--tls` |
-| Browser calls fail with CORS errors | Origin not in allowlist | Add the UI origin to `OAM_ALLOWED_ORIGINS` |
-| Snapshots warn about encryption | `SNAPSHOT_ENC_KEY` unset | Generate with `openssl rand -base64 32` and restart |
+| Symptom | Check | Corrective action |
+|---|---|---|
+| OAM exits at startup | Required secret or database connection | Read sanitized startup logs; set the missing value through secret management |
+| PostgreSQL authentication fails after changing `.env` | Existing volume retains the original database password | Use the database's controlled password-rotation procedure; do not delete a production volume |
+| All users appear to share one rate-limit identity | Trusted proxy list is empty/incorrect behind an edge | Set `OAM_TRUSTED_PROXIES` to only the actual proxy peers |
+| Snapshot encryption warning | `SNAPSHOT_ENC_KEY` unset | Set and escrow a valid base64 32-byte key before capturing sensitive snapshots |
+| Gateway proxy TLS error | CA/SAN mismatch | Correct the Gateway certificate and `OAM_INSTANCE_CA_BUNDLE`; never use insecure verification in production |
+| Gateway proxy returns `401` | OAM JWT is not accepted by Gateway | Validate the independent Gateway management credential path |
 
 ## See also
 
-- [Deploy the Management Plane](management-plane.md) — OAM + UI + MySQL in one bundle.
-- [LoxiLB UI](loxilb-ui.md) — the dashboard that runs on top of OAM.
-- Repository docs for depth: [database schema](https://github.com/loxilb-io/loxilb-oam/blob/main/docs/oam-db.md), [proxy functionality](https://github.com/loxilb-io/loxilb-oam/blob/main/docs/proxy-functionality.md), [admin reset guide](https://github.com/loxilb-io/loxilb-oam/blob/main/docs/ADMIN_RESET_QUICK_GUIDE.md), [DEPLOYMENT.md](https://github.com/loxilb-io/loxilb-oam/blob/main/DEPLOYMENT.md).
+- [Deploy the Management Plane](management-plane.md)
+- [LoxiLB UI](loxilb-ui.md)
+- [Management API Authentication](../security/management-api-authentication.md)
+- [Configuration Backup and Restore](../operations/backup-restore.md)

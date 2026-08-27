@@ -15,16 +15,10 @@ enum, and why **`mode: 4` (fullproxy)** is the prerequisite for every AI-inferen
 | `3` | dsr | L4 (eBPF) | — |
 | **`4`** | **fullproxy** | **L7 userspace HTTP proxy** | **Required for all AI features** |
 | `5` | hostonearm | L4 (eBPF) | — |
-| `6` | aigw | — | Exists in the enum but unexercised; not covered here |
 
 Modes `0–3` and `5` are L4 NAT modes handled on the eBPF fast path — they forward on the
 packet 5-tuple and never parse HTTP. They are the right choice for classic TCP/UDP/SCTP
 service load balancing (all inherited unchanged from upstream loxilb).
-
-!!! note "`mode: 6` (aigw)"
-    The enum also contains `6-aigw`. It is present in the schema but is **not the exercised
-    path** for the inference features documented here — no scenario in this documentation uses
-    it. Use `mode: 4` for AI routing. `mode: 6` is not featured.
 
 ## Why AI features require `mode: 4`
 
@@ -37,6 +31,10 @@ connection, reads the full HTTP request, and can inspect and act on:
 - the **prompt body** — for KV-cache-aware prefix matching and P/D request splitting;
 - the **response stream** — to relay SSE with idle-timeout suppression.
 
+The proxy's request buffer is 1 MiB, while AI inspection stops at 768 KiB. Oversized ordinary
+requests skip normal inspection; SGLang P/D rejects its oversized inspected request with `503`.
+Fullproxy therefore enables inspection but does not promise unlimited body inspection.
+
 None of this is possible on the L4 modes, which make their forwarding decision from the
 5-tuple before any HTTP request body exists. Every inference-aware capability —
 [KV-cache routing](../ai-gateway/kv-caching.md),
@@ -45,6 +43,11 @@ None of this is possible on the L4 modes, which make their forwarding decision f
 [SSE and quotas](../ai-gateway/sse-quota-management.md), and the
 [MCP gateway](../ai-gateway/mcp-gateway.md) — therefore requires `mode: 4`. See
 [Architecture](architecture.md) for how the fullproxy sits in the data plane.
+
+!!! warning "Protect the management API"
+    The `curl` example uses plain HTTP for an isolated lab. In production, use an authenticated,
+    TLS-protected management endpoint and load its authorization header from a
+    permission-restricted file.
 
 A minimal fullproxy rule (CHWBL prefix affinity over two vLLM replicas):
 
@@ -57,14 +60,14 @@ A minimal fullproxy rule (CHWBL prefix affinity over two vLLM replicas):
         "externalIP": "10.10.10.254", "port": 8080, "protocol": "tcp",
         "sel": 8, "mode": 4, "host": "10.10.10.254" },
       "endpoints": [
-        { "endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 1 },
-        { "endpointIP": "32.32.32.1", "targetPort": 8000, "weight": 1 } ]}'
+        { "endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1 },
+        { "endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 1 } ]}'
     ```
 
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=chwbl --host=10.10.10.254
+    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --host=10.10.10.254
     ```
 
 ## Frontend TLS: the `security` enum
@@ -76,12 +79,17 @@ gateway re-encrypts to the backend. It is set in `serviceArguments`:
 |---|---|---|---|
 | `0` | plain | Plain HTTP (default) | Plain HTTP |
 | `1` | https | TLS terminated at the gateway | Plain HTTP to backends |
-| `2` | tls | TLS | TLS |
-| `3` | e2ehttps | TLS terminated, then re-encrypted | TLS to backends (end-to-end HTTPS) |
+| `2` | e2ehttps | TLS terminated at the gateway | TLS re-encrypted to backends |
 
-`security: 1` terminates TLS at the gateway and proxies plain HTTP to backends; `security: 3`
-(e2ehttps) re-encrypts so the backend connection is also TLS. Omit the field (or `0`) for plain
-HTTP. Add TLS to any AI rule by setting `security` alongside `mode: 4`.
+`security: 1` terminates TLS at the gateway and proxies plain HTTP to backends. `security: 2`
+terminates the client connection and creates a separate TLS connection to the backend. It is
+**not TLS passthrough**. Omit the field (or use `0`) only when plain HTTP is appropriate.
+
+!!! warning "Verify backend certificates"
+    Re-encryption without backend certificate verification does not authenticate the backend.
+    For production, enable `mtls_backend.verify_server_cert` and configure a trusted CA as
+    described in [mTLS for AI Backends](../security/mtls.md). Values outside `0`, `1`, and `2`
+    are rejected.
 
 ## Backend protocol and ALPN
 
@@ -96,7 +104,13 @@ ALPN negotiation on a fullproxy rule:
 
 The default `http1` is the safe choice for OpenAI-compatible vLLM and SGLang endpoints. Use
 `http2` or `both` for HTTP/2 or gRPC backends (for example, some MCP transports). ALPN
-negotiation only applies when the backend leg is TLS (`security: 2` or `3`).
+negotiation only applies when the backend leg is TLS (`security: 2`).
+
+!!! warning "HTTP/2 AI-routing boundary"
+    The current HTTP/2 data path does not carry model identity into pool lookup, makes selector 9
+    round-robin, and does not integrate selector 10, P/D, or KV-exact routing. `http2` and `both`
+    describe transport negotiation, not feature parity. Keep inference-aware rules on `http1`
+    until the released artifact passes those feature tests.
 
 ## Next
 

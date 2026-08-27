@@ -1,6 +1,6 @@
 # AI Gateway Overview
 
-The AI Gateway is loxilb's Layer-7 inference front door: an OpenAI-aware proxy that reads each request body, routes it to the right model pool and the right backend, and streams the response back. This page walks the request lifecycle through the fullproxy data path and maps every feature to its own guide.
+The AI Gateway is loxilb's Layer-7 inference front door: an OpenAI-aware HTTP/1.1 proxy that inspects eligible requests, routes them to a model pool and backend, and streams the response back. Inspection and HTTP/2 limits are described below.
 
 !!! info "Foundation concepts"
     Every AI Gateway feature requires the load-balancer service to run in **FullProxy mode**
@@ -18,6 +18,13 @@ A standard load balancer routes each connection to the least-busy server without
 
 The AI Gateway addresses all three by terminating the client connection in fullproxy mode, parsing the HTTP request, and making a model- and load-aware routing decision before opening a backend connection.
 
+!!! warning "Request inspection is bounded"
+    Fullproxy can buffer up to 1 MiB of request data, but AI body inspection is capped at
+    768 KiB. An oversized ordinary request skips normal AI inspection and therefore cannot rely
+    on body-derived model, quota, or KV decisions. The SGLang P/D path instead terminates an
+    oversized inspected request with `503`. Enforce a client/body limit below 768 KiB when these
+    decisions are required.
+
 ---
 
 ## Request lifecycle through the fullproxy
@@ -29,12 +36,14 @@ flowchart TD
     CLIENT([Client request<br/>POST /v1/chat/completions]) --> TLS
 
     subgraph ingress ["Ingress (fullproxy, mode 4)"]
-        TLS{"TLS termination<br/>(security: 1 / 2 / 3)"}
+        TLS{"Transport policy<br/>(security: 0 / 1 / 2)"}
         TLS --> PARSE["HTTP body parsing<br/>extract: model, prompt,<br/>session identifiers"]
     end
 
     subgraph routing ["Routing decision"]
-        PARSE --> STAGE1{"Stage 1: model pool<br/>selection (model_name)"}
+        PARSE --> ADMIT{"API key, model policy,<br/>RPS, and token quota"}
+        ADMIT -->|deny| R4XX([401 / 403 / 429])
+        ADMIT -->|allow| STAGE1{"Stage 1: model pool<br/>selection (model_name)"}
         STAGE1 -->|"no match"| R503([503 model_unavailable])
         STAGE1 -->|"matched / wildcard"| STAGE2{"Stage 2: endpoint<br/>selection (sel algorithm)"}
     end
@@ -55,20 +64,47 @@ flowchart TD
 
 | Stage | What happens |
 |-------|--------------|
-| **TLS termination** | When `security` is `1` (https), `2` (tls), or `3` (e2ehttps), loxilb terminates TLS so the plaintext HTTP body is available for inspection. `security: 0` (plain) skips this. |
+| **Transport policy** | `security: 0` uses plaintext on the frontend and backend, `1` terminates frontend TLS and forwards HTTP, and `2` terminates frontend TLS then establishes backend TLS. No `security: 3` mode exists. See [mTLS for AI Backends](../security/mtls.md). |
 | **HTTP body parsing** | In fullproxy mode loxilb parses the full HTTP request and extracts the `model` field, prompt content, and any session identifiers from the JSON body. |
+| **Admission and authorization** | When the separate AI data-plane key store is configured, the inference path validates `X-Api-Key`, the key's model allow-list, request-rate buckets, and tenant/model token quotas before dispatch. Management users and inference keys use separate stores. See [AI Traffic Governance](ai-traffic-governance.md). |
 | **Stage 1 — model pool selection** | The extracted model name is matched against the `model_name` on each LB rule for that VIP:port. The most specific match wins; an empty `model_name` acts as the wildcard pool. No match at all returns **503 `model_unavailable`**. See [Model Load Balancing](model-load-balancing.md). |
 | **Stage 2 — endpoint selection** | Within the chosen pool, the `sel` algorithm picks a backend (round-robin, CHWBL consistent hash, GPU-aware, and so on). See [LLM Routing](llm-routing.md). |
 | **Backend forwarding** | loxilb opens (or reuses from a pool) a connection to the selected endpoint and forwards the request using the negotiated `backend_protocol`. |
 | **SSE streaming** | For streaming endpoints (`sse_mode: true`), loxilb passes each `data:` chunk through in real time and suppresses the idle timeout while the stream is active. See [SSE & Quota](sse-quota-management.md). |
 | **Token accounting** | On the response path, tokens are counted from SSE chunks and recorded against the tenant. |
 
-!!! warning "Data-plane enforcement: roadmap"
-    API-key authentication (401/403) and per-tenant rate limiting (429) are **control-plane CRUD
-    only** today — the gateway stores and manages keys/limits but does not yet reject requests in
-    the data path. SSE stream lifecycle and token accounting **are** wired. Treat the
-    [API Key Management](api-key-management.md) and tenant rate-limit endpoints as management APIs,
-    not as live enforcement gates in the request path.
+!!! warning "Protect both control and inference credentials"
+    Management bearer tokens authorize configuration operations. Inference API keys authorize
+    model requests. Do not reuse them, expose them over plaintext networks, or place either value
+    in URLs, logs, metric labels, screenshots, or committed examples.
+
+!!! danger "A missing AI key store is currently fail-open"
+    If `--aikey-db-host` is unset, the current data path admits inference requests without
+    validating a key and emits a one-time critical log. A deployment that requires inference
+    authentication must configure the dedicated PostgreSQL key store, require verified TLS to
+    it, and run a negative request test before exposing the inference VIP. Enabling the
+    management user service does not configure this data-plane store.
+
+!!! danger "Canonical-model and HTTP/2 release boundaries"
+    HTTP/1.1 routing prefers `X-Model`, but authorization currently prefers the JSON body model;
+    reject conflicting values before the Gateway. The HTTP/2 backend path supplies an empty model
+    to lookup, reduces selector 9 to round-robin, and does not integrate selector 10, P/D, or
+    KV-exact routing. Use `backend_protocol: http1` for these inference features.
+
+### Do not confuse relay cache with model KV cache
+
+The fullproxy may temporarily cache request or response bytes while a peer drains slowly. This
+relay buffer is process memory, not an inference engine's GPU KV cache. Monitor both layers:
+
+| Metric | Meaning |
+|---|---|
+| `loxilb_proxy_cache_bytes` | Relay payload bytes cached across all proxy connections. |
+| `loxilb_proxy_cache_bytes_max_conn` | Largest relay cache held by one connection. |
+| `loxilb_proxy_cache_conns_queued` | Connections currently holding cached relay payload. |
+| `loxilb_proxy_cache_high_water_events_total` | Per-connection backpressure activations. |
+
+A growing aggregate with many queued connections points to slow backends or clients. KV-exact
+hit metrics answer a different question: whether prompt blocks matched an engine inventory.
 
 ---
 
@@ -82,10 +118,6 @@ All AI Gateway features require `mode: 4` (FullProxy). This is fundamentally dif
 | `4` (**FullProxy**) | L7 | Yes — full HTTP parsing | All features available |
 
 In fullproxy mode loxilb terminates the client TCP connection, parses the HTTP request completely, makes the two-stage routing decision above, then forwards to the backend. This is what enables model-aware routing and body inspection.
-
-!!! note "mode 6 (aigw)"
-    The `mode` enum also lists `6-aigw`, but it is experimental and carries no validated scenario
-    today. Use `mode: 4` for all AI routing. See [Running Modes](../concepts/running-modes.md).
 
 ---
 
@@ -103,11 +135,15 @@ flowchart TD
         KV["KV-Cache Routing<br/>block-hash matching"]
         PD["P/D Disaggregation<br/>prefill / decode split"]
         VLLM["vLLM Integration<br/>backend protocol & metrics"]
+        SGLANG["SGLang P/D<br/>concurrent dual dispatch"]
+        TRT["TensorRT-LLM<br/>context / generation"]
+        LLAMA["llama.cpp<br/>CHWBL / session affinity"]
     end
 
     subgraph streaming ["Streaming & access"]
         SSE["SSE & Quota<br/>stream lifecycle, token accounting"]
-        API["API Key Management<br/>keys & tenant limits (CRUD)"]
+        API["API Key Management<br/>credential lifecycle"]
+        GOV["AI Traffic Governance<br/>authorization, RPS, TPM"]
         MCP["MCP Gateway<br/>session-affinity L7"]
     end
 
@@ -119,8 +155,12 @@ flowchart TD
     LLM --> KV
     LLM --> PD
     LLM --> VLLM
+    LLM --> SGLANG
+    LLM --> TRT
+    LLM --> LLAMA
     OV --> SSE
     OV --> API
+    OV --> GOV
     OV --> MCP
     OV --> CFG
 
@@ -135,9 +175,13 @@ flowchart TD
 | LLM Routing | Stage-2 endpoint selection within a pool: CHWBL consistent hash, GPU-aware, session affinity | [llm-routing.md](llm-routing.md) |
 | KV-Cache Routing | Route to the endpoint that already holds the relevant KV blocks (`kvExactMode`) | [kv-caching.md](kv-caching.md) |
 | P/D Disaggregation | Split prefill and decode phases across separate endpoint pools | [pd-disaggregation.md](pd-disaggregation.md) |
-| vLLM Integration | Backend protocol / ALPN negotiation and metrics for GPU-aware routing | [vllm-integration.md](vllm-integration.md) |
+| vLLM Integration | Backend protocol / ALPN, KV-event parity, and the selector-9 metrics boundary | [vllm-integration.md](vllm-integration.md) |
+| SGLang P/D Integration | Concurrent prefill/decode dispatch and bootstrap coordination | [sglang-pd-disaggregation.md](sglang-pd-disaggregation.md) |
+| TensorRT-LLM Integration | Single-pool KV-exact and context/generation P/D contracts | [tensorrt-llm-integration.md](tensorrt-llm-integration.md) |
+| llama.cpp Integration | CHWBL/session-affinity routing and origin-error behavior without KV events or P/D | [llamacpp-integration.md](llamacpp-integration.md) |
 | SSE & Quota | Streaming lifecycle, stream duration caps, token accounting | [sse-quota-management.md](sse-quota-management.md) |
-| API Key Management | Create/list/revoke tenant API keys and rate limits (control-plane CRUD) | [api-key-management.md](api-key-management.md) |
+| API Key Management | Create, inspect, disable, rotate, and revoke inference credentials | [api-key-management.md](api-key-management.md) |
+| AI Traffic Governance | Enforce model authorization, RPS, and aggregate/per-model TPM limits | [ai-traffic-governance.md](ai-traffic-governance.md) |
 | MCP Gateway | Session-affinity L7 routing for Model Context Protocol backends | [mcp-gateway.md](mcp-gateway.md) |
 | Configuration Reference | Every `serviceArguments` field, default, and enum | [configuration-reference.md](configuration-reference.md) |
 
@@ -145,12 +189,12 @@ flowchart TD
 
 ## Choosing a routing strategy
 
-| Strategy | Best for | Requires backend metrics |
-|----------|----------|:---:|
-| **Model-based routing** — dispatch by model name to different pools | Serving multiple models behind one VIP | No |
-| **CHWBL consistent hash** (`sel: 8`) — cache-locality-preserving hash ring | Chatbots and multi-turn assistants that share context | No |
-| **GPU-aware routing** (`sel: 9`) — route to the least-loaded backend by live metrics | Batch and high-throughput single-turn workloads | Yes |
-| **KV-cache-aware routing** — send a request to the endpoint holding its KV blocks | Long-context and multi-turn workloads on vLLM/SGLang | Yes |
+| Strategy | Best for | Additional backend signal |
+|----------|----------|---|
+| **Model-based routing** — dispatch by model name to different pools | Serving multiple models behind one VIP | None |
+| **CHWBL consistent hash** (`sel: 8`) — cache-locality-preserving hash ring | Chatbots and multi-turn assistants that share context | None |
+| **Selector 9** (`gpuaware`) — plain-pool affinity modulo; P/D capacity scorer is release-blocked | Explicitly validated plain-pool affinity only | Pushed worker metrics are not consumed by the plain fullproxy selector |
+| **KV-cache-aware routing** — send a request to the endpoint holding its KV blocks | Long-context and multi-turn workloads on vLLM, SGLang, or TensorRT-LLM | Engine-specific KV event feed plus a staged tokenizer |
 
 Strategies compose: use model-based routing to separate model pools, then apply CHWBL or KV-cache routing **within** each pool. See [LLM Routing](llm-routing.md).
 
@@ -165,7 +209,7 @@ Strategies compose: use model-based routing to separate model pools, then apply 
 
 - **loxilb** running with the REST API reachable on port `11111` (`/netlox/v1/...`).
 - **HTTP backends** reachable from loxilb; set `backend_protocol` to `http1`, `http2`, or `both` to match your inference servers (default `http1`).
-- **vLLM (or SGLang) endpoints** for GPU-aware and KV-cache features — these depend on backend metrics/events.
+- **A supported engine rule shape.** vLLM, SGLang, TensorRT-LLM, and llama.cpp have different cache-event and P/D capabilities. Check the [Engine Capability Matrix](../concepts/engine-capability-matrix.md) before adding engine-specific fields.
 
 ---
 
@@ -222,6 +266,11 @@ Each rule in the response should show `mode: 4` and the `model_name` you configu
 | Choose an endpoint-selection algorithm | [LLM Routing](llm-routing.md) |
 | Enable KV-cache-aware routing | [KV-Cache Routing](kv-caching.md) |
 | Split prefill and decode pools | [P/D Disaggregation](pd-disaggregation.md) |
+| Compare engine capabilities | [Engine Capability Matrix](../concepts/engine-capability-matrix.md) |
+| Configure SGLang P/D | [SGLang P/D Disaggregation](sglang-pd-disaggregation.md) |
+| Integrate TensorRT-LLM | [TensorRT-LLM Integration](tensorrt-llm-integration.md) |
+| Integrate llama.cpp | [llama.cpp Integration](llamacpp-integration.md) |
+| Enforce keys, RPS, and TPM | [AI Traffic Governance](ai-traffic-governance.md) |
 | Manage streaming and token accounting | [SSE & Quota](sse-quota-management.md) |
 | Manage tenant keys and limits | [API Key Management](api-key-management.md) |
 | See every config field | [Configuration Reference](configuration-reference.md) |

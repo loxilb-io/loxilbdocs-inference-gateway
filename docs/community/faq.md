@@ -17,15 +17,19 @@ inference-aware routing built in.
 
 ## Which serving engines are supported?
 
-**vLLM** and **SGLang** for KV-cache-aware routing. Both integrate through their native KV-event
-contracts — see [KV-Cache Routing](../ai-gateway/kv-caching.md) and the
-[use-case guides](../use-cases/kv-cache-aware-routing.md).
+The Gateway accepts **vLLM**, **SGLang**, **TensorRT-LLM**, and **llama.cpp** rule types, but
+their advanced capabilities differ. vLLM, SGLang, and TensorRT-LLM support KV-exact routing
+and engine-specific P/D paths. llama.cpp supports fullproxy load balancing, CHWBL, and session
+affinity, but not the Gateway's KV-event or P/D controls. Start with
+[Choose an Inference Engine](../getting-started/choose-your-engine.md) and verify the exact
+combination in the [Engine Capability Matrix](../concepts/engine-capability-matrix.md).
 
 ## Do I need a GPU to run the gateway?
 
 No — the gateway itself runs on a CPU host. GPUs are needed only for the serving engines
-(vLLM/SGLang) behind it. KV-cache-aware and GPU-aware routing require GPU-backed engines, but the
-load balancer's control and data planes do not.
+(such as vLLM, SGLang, or TensorRT-LLM) behind it. A llama.cpp fleet may use CPU or GPU
+acceleration according to its own deployment. The load balancer's control and data planes do
+not require a GPU.
 
 ## Which load-balancer mode do AI features need?
 
@@ -34,16 +38,32 @@ userspace HTTP proxy path. See [Running Modes](../concepts/running-modes.md).
 
 ## Is there a `loxicmd` CLI for AI features?
 
-Not yet. The current management surface is the **REST API** (`http://<host>:11111/netlox/v1/...`)
-and **`loxilb-mcp`** (a Model Context Protocol server with a large tool catalog). First-class
-`loxicmd` AI subcommands are on the [roadmap](roadmap.md). See the [CLI reference](../reference/cli.md).
+Yes. `loxicmd` includes AI-aware load-balancer controls and subcommands for API keys, tenant
+limits, metrics, GPU state, OPA, SNI, and KV inventory. The **REST API** remains the complete
+contract, and **`loxilb-mcp`** provides role-scoped tools for MCP clients. See the
+[CLI reference](../reference/cli.md) and confirm a command is present in the installed client
+before scripting it.
 
 ## Are API-key authentication and rate limiting enforced at the gateway?
 
-Today they are **control-plane CRUD only** — the gateway manages keys and tenant limits, but does
-not yet reject requests (401/403/429) in the data path. Data-plane enforcement is on the
-[roadmap](roadmap.md). SSE stream lifecycle and token accounting **are** wired. See
-[API Key Management](../ai-gateway/api-key-management.md).
+Yes, but only on a `mode: 4` rule that also enables `sse_mode` or
+`pd_disagg_mode`, and only when the independent AI-key store is configured. A
+plain `mode: 4` rule is keyless even with a healthy store. The gated path
+enforces API-key validity (`401`), allowed-model policy (`403`), request-rate
+limits, and tenant/model token quotas (`429`); the per-key `tokens_per_min`
+field is persisted but is not currently enforced. With no `--aikey-db-host`,
+the gated path also admits keyless requests, so a missing-key `401` probe is a
+required deployment gate. These controls do not depend on the management user
+service and remain independent from network byte-rate QoS. Follow
+[AI Traffic Governance](../ai-gateway/ai-traffic-governance.md) to configure each control and
+verify the corresponding denial safely.
+
+## Does basic SGLang P/D require KV-exact routing?
+
+No. A SGLang P/D rule requires fullproxy, P/D mode, and prefill/decode endpoint roles. Adding
+`kvExactMode: 1` is optional and enables a cache-event-informed prefill selection layer. Do not
+use `kvExactMode: 3` with P/D; mode 3 is for a single role-less pool. See
+[SGLang P/D Disaggregation](../ai-gateway/sglang-pd-disaggregation.md).
 
 ## My KV-cache routing isn't improving hit rates. Why?
 

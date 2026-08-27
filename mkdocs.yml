@@ -1,12 +1,17 @@
 site_name: LoxiLB Inference Gateway
 site_description: >-
   Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7
-  load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware
-  routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.
+  load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets,
+  with engine-aware routing, traffic governance, and secure operations guidance.
 site_url: https://loxilb-io.github.io/loxilbdocs-inference-gateway/
 repo_url: https://github.com/loxilb-io/loxilb-inference-gateway
 repo_name: loxilb-io/loxilb-inference-gateway
 edit_uri: ""
+
+# Never publish local-only planning or instruction files, even at unlisted URLs.
+exclude_docs: |
+  internal/
+  **/CLAUDE.md
 
 theme:
   name: material
@@ -73,11 +78,13 @@ nav:
   - Getting Started:
       - Installation: getting-started/installation.md
       - Quickstart: getting-started/quickstart.md
+      - Choose an Inference Engine: getting-started/choose-your-engine.md
   - Concepts:
       - Architecture: concepts/architecture.md
       - Running Modes: concepts/running-modes.md
       - LB Algorithms: concepts/lb-algorithms.md
       - AI Routing Model: concepts/ai-routing-model.md
+      - Engine Capability Matrix: concepts/engine-capability-matrix.md
   - AI Gateway:
       - Overview: ai-gateway/overview.md
       - Model Load Balancing: ai-gateway/model-load-balancing.md
@@ -85,6 +92,10 @@ nav:
       - KV-Cache Routing: ai-gateway/kv-caching.md
       - P/D Disaggregation: ai-gateway/pd-disaggregation.md
       - vLLM Integration: ai-gateway/vllm-integration.md
+      - SGLang P/D Integration: ai-gateway/sglang-pd-disaggregation.md
+      - TensorRT-LLM Integration: ai-gateway/tensorrt-llm-integration.md
+      - llama.cpp Integration: ai-gateway/llamacpp-integration.md
+      - AI Traffic Governance: ai-gateway/ai-traffic-governance.md
       - SSE & Quota: ai-gateway/sse-quota-management.md
       - API Key Management: ai-gateway/api-key-management.md
       - MCP Gateway: ai-gateway/mcp-gateway.md
@@ -99,16 +110,25 @@ nav:
       - Deploy P/D Disaggregation: use-cases/deploy-pd-disaggregation.md
       - Performance Methodology: use-cases/performance-methodology.md
   - Security:
+      - Management API Authentication: security/management-api-authentication.md
+      - AI Safety Scanning: security/ai-safety.md
       - OPA L4 Policy: security/opa-l4.md
-      - mTLS for AI Backends: security/mtls.md
+      - Frontend mTLS: security/mtls.md
   - Management & UI:
       - Overview: management/overview.md
       - Management Plane (UI + OAM): management/management-plane.md
       - LoxiLB UI: management/loxilb-ui.md
       - LoxiLB OAM API: management/loxilb-oam.md
   - Operations:
+      - AI Key Store: operations/ai-key-store.md
+      - Backup & Restore: operations/backup-restore.md
+      - Application & L4 Tracing: operations/tracing.md
+      - DPU Offload Observability: operations/dpu-offload.md
       - Monitoring & Metrics: operations/monitoring.md
       - Grafana Dashboards: operations/observability-metrics-grafana.md
+      - AI Quotas & QoS: operations/ai-qos.md
+      - Log API Operations: operations/log-api.md
+      - HA & Upgrade Limitations: operations/ha-limitations.md
       - Troubleshooting: operations/troubleshooting.md
       - Logging & Audit: operations/audit-log.md
   - Reference:

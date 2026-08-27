@@ -64,6 +64,11 @@ prometheus_url: http://127.0.0.1:9090    # enables promql_query / promql_range
 alertmanager_url: ""                     # enables alerts_active when set
 ```
 
+!!! warning "Use plaintext management URLs only on an isolated trusted path"
+    The example uses a private lab address. For a shared or production deployment, use an
+    `https://` target, configure `tls_ca`, verify the server identity, and keep credentials in
+    environment-backed secret storage. Do not set `insecure_skip_verify` in production.
+
 !!! note "Targets are names, not URLs"
     Tool calls accept only the configured target **name** (e.g. `gateway-1`) in their
     `target` argument. Raw URLs are rejected as an anti-SSRF measure.
@@ -71,10 +76,17 @@ alertmanager_url: ""                     # enables alerts_active when set
 ### Authenticating to the gateway
 
 `loxilb-mcp` reaches the gateway REST API on `:11111`. When the target LoxiLB runs
-with `--userservice` (required to expose the API-key and rate-limit endpoints),
-supply target credentials in the config (`username`/`password_env` or `token_env`).
-On a target without `--userservice`, the AI-gateway CRUD tools return the target's
-HTTP `501` verbatim.
+with management authentication, supply target credentials in the config
+(`username`/`password_env` or `token_env`). The current gateway supports user-service,
+OAuth, and manual-token management modes; confirm which modes the installed MCP bridge can
+acquire credentials for. AI-key and rate-limit routes are registered independently and use the
+PostgreSQL store configured by `--aikey-db-*`. If that store is absent or unavailable, the
+gateway returns `503`, not `501`.
+
+!!! danger "Do not expose an unauthenticated management target"
+    If no user, OAuth, or manual-token mode is enabled, the current gateway authorizer permits
+    management operations without a credential. Configure and probe management authentication
+    before pointing a shared MCP server or any remote client at port `11111`.
 
 ### Roles and authority
 
@@ -112,11 +124,13 @@ to the server's `secrets_dir` as a `0600` file and only the path is returned; pa
 `config_export` masks secret-shaped fields. Every mutating call — success or
 failure — is written to a JSONL audit log with secret-shaped arguments redacted.
 
-## Tool catalog
+## Selected tool catalog
 
-Tools are grouped by domain below. Names are exact. Read tools are available to
-`viewer` and above; mutations require `operator`; destructive tools require
-`admin` plus the confirm-token flow.
+The commonly used tools below are grouped by domain, and the names shown are exact. This is not an
+exhaustive registry: available tools can vary with configured services and build capabilities. Use
+the MCP `tools/list` method against the running server for the authoritative catalog. Read tools are
+available to `viewer` and above; mutations require `operator`; destructive tools require `admin`
+plus the confirm-token flow.
 
 ### Load balancer
 
@@ -124,7 +138,7 @@ Tools are grouped by domain below. Names are exact. Read tools are available to
 |---|---|
 | `lb_list` | List load-balancer rules — service VIP:port/protocol, mode, and endpoint count. |
 | `lb_create` | Create a load-balancer rule (`POST /config/loadbalancer`): external IP, port, protocol, endpoints, and mode. |
-| `lb_delete` | Delete a rule by name, or by external IP + port + protocol (destructive; confirm-token gated). |
+| `lb_delete` | Delete a rule by name, or by external IP + port + protocol (destructive; confirm-token gated). Prefer a unique rule name for model-keyed L7 rules. |
 | `endpoint_list` | List endpoint health-probe entries: host, probe type/port, retries, delays, and current state. |
 | `endpoint_host_state_set` | Set an endpoint host's administrative probe state — e.g. drain or undrain a backend. |
 
@@ -135,26 +149,28 @@ Tools are grouped by domain below. Names are exact. Read tools are available to
 
 ### AI gateway
 
-!!! warning "Data-plane enforcement: roadmap"
-    API-key authentication (401/403) and per-tenant rate limiting (429) are
-    **control-plane CRUD only** today — the gateway stores and manages keys and
-    limits but does not yet reject requests in the data path. SSE stream lifecycle
-    and token accounting **are** wired.
+!!! note "Data-plane enforcement"
+    Enforcement requires the independent PostgreSQL key store **and** a `mode: 4` rule with
+    `sse_mode: true` or `pd_disagg_mode: true`. Plain `mode: 4` remains keyless. On a gated rule,
+    the path enforces API-key authentication and model authorization (`401`/`403`) plus request-rate
+    and tenant/model token quotas (`429`). Per-key `tokens_per_min` is stored but not enforced.
+    Without `--aikey-db-host`, the gated path admits requests without API-key checks. Prove the
+    expected `401` behavior on the exact VIP before exposure.
 
 | Tool | Purpose |
 |---|---|
 | `ai_apikey_list` | List AI-gateway API keys, optionally filtered by tenant. Returns key metadata only, never key material. |
 | `ai_apikey_get` | Get one API-key summary by `key_id`. Metadata only. |
-| `ai_apikey_create` | Create a tenant API key: allowed models plus rps / burst / tokens-per-minute quotas. Key material is written to a secrets file by default. |
+| `ai_apikey_create` | Create a tenant API key: allowed models, enforced per-key RPS/burst values, and stored `tokens_per_min` metadata (not currently enforced per key). Key material is written to a secrets file by default. |
 | `ai_apikey_update` | Update an API key's allowed-model list and/or enabled flag. Disabling is reversible; deleting is not. |
 | `ai_apikey_delete` | Permanently delete an API key by `key_id` (destructive; confirm-token gated). |
 | `ai_ratelimit_set` | Create or update a tenant's AI rate limit: requests/s and LLM tokens/min. Set quotas to 0 to lift (there is no delete endpoint). |
 | `ai_ratelimit_get` | Get a tenant's rate-limit configuration. |
 | `ai_kv_inventory_get` | Dump the KV-cache block-hash inventory tracked for one endpoint of an AI service. |
-| `ai_traffic_report` | Composite traffic report built from the `loxilb_ai_*` metric families: per-model/tenant request volume, active streams, latency, and rate-limit hits. |
+| `ai_traffic_report` | Composite traffic report: completed SSE-stream volume and duration by model/tenant, active streams, proxy TTFB, and rate-limit hits. Non-streaming successes are not counted by `loxilb_ai_requests_total`. |
 
 !!! note "Request-duration data"
-    There is no `ai_request_duration` tool. Per-request duration, TTFB, and TTFT
+    There is no `ai_request_duration` tool. Completed SSE-stream duration, proxy TTFB, and P/D TTFT
     are reported by `ai_traffic_report` and correlated by `diagnose_ai_latency`.
 
 ### GPU
@@ -185,15 +201,17 @@ Tools are grouped by domain below. Names are exact. Read tools are available to
     composes them, `metrics_snapshot` returns them raw (glob `loxilb_ai_*`), and
     `promql_query` / `promql_range` query them. The principal families are:
     `loxilb_ai_requests_total`, `loxilb_ai_active_streams`,
-    `loxilb_ai_request_duration_seconds`, `loxilb_ai_ttfb_seconds`,
+    `loxilb_ai_request_duration_seconds`, `loxilb_proxy_http_ttfb_seconds`,
     `loxilb_ai_pd_prefill_duration_seconds`, `loxilb_ai_pd_decode_ttft_seconds`,
     `loxilb_ai_pd_session_hits_total`, `loxilb_ai_normal_session_hits_total`,
     `loxilb_ai_pd_kv_params_found_total`, `loxilb_ai_pd_kv_params_missing_total`,
     `loxilb_ai_rate_limit_hits_total`, and `loxilb_ai_model_not_allowed_total`.
 
-!!! warning "SSE-terminated counting"
-    `loxilb_ai_requests_total` counts only SSE-terminated streams;
-    `ai_traffic_report` restates this caveat in every result.
+!!! note "Completed-request counting"
+    `loxilb_ai_requests_total` increments only when an SSE stream completes at `data: [DONE]`;
+    non-streaming successes are not included. The corresponding duration starts when SSE handling
+    activates and ends at stream completion. Admission denials that stop before backend dispatch
+    are represented by dedicated authorization and rate-limit metric families instead.
 
 ### Diagnostics
 
@@ -250,7 +268,7 @@ as an MCP tool call and the equivalent REST call the bridge makes on your behalf
           "protocol": "tcp",
           "mode": 4,
           "endpoints": [
-            { "endpoint_ip": "31.31.31.1", "target_port": 8000, "weight": 1 }
+            { "endpoint_ip": "198.51.100.11", "target_port": 8000, "weight": 1 }
           ]
         }
       }
@@ -260,17 +278,18 @@ as an MCP tool call and the equivalent REST call the bridge makes on your behalf
 === "curl (REST)"
     ```bash
     curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+      -H "Authorization: Bearer $GATEWAY_TOKEN" \
       -H 'Content-Type: application/json' \
       -d '{
         "serviceArguments": { "externalIP": "10.10.10.254", "port": 8080,
                               "protocol": "tcp", "sel": 0, "mode": 4 },
-        "endpoints": [ { "endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 1 } ]
+        "endpoints": [ { "endpointIP": "198.51.100.11", "targetPort": 8000, "weight": 1 } ]
       }'
     ```
 
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=31.31.31.1:1 --mode=fullproxy
+    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=198.51.100.11:1 --mode=fullproxy
     ```
 
 !!! note "`mode: 4` is required for AI routing"
@@ -314,6 +333,34 @@ The AI-aware `loxicmd` is available now. It provides AI verbs for the gateway:
 Its examples sit beside the MCP and REST forms in the tabbed blocks on this page
 and throughout the docs, so the same operation reads across all three surfaces:
 
+### Load-balancer contract flags
+
+The current CLI maps these flags to the Gateway API contract:
+
+| Operation | CLI flag | Contract behavior |
+|---|---|---|
+| Frontend TLS termination | `--security=https` | Sends `security: 1`; backend traffic is HTTP. |
+| Frontend and backend TLS | `--security=e2ehttps` | Sends `security: 2`; the gateway terminates and re-encrypts TLS. This is not passthrough. |
+| Typed engine | `--kv-engine-type=<engine>` | Sends `kvEngineType`; the server accepts `vllm`, `sglang`, `trtllm`, or `llamacpp` and applies engine-specific guards. |
+| Hash contract | `--kv-hash-algo=<algorithm>` | Sends an explicit hash algorithm. Prefer omission so the server derives the coherent engine default. |
+| Model-keyed create/delete | `--model-name=<model>` | Repeats the model component of the L7 rule key. |
+
+`pdBootstrapPort` does not currently have a `loxicmd create lb` flag. Configure that SGLang P/D
+field through the REST API. Do not substitute `--kv-zmq-port`; it configures a different transport.
+
+### Delete a model-keyed rule
+
+Repeat the complete L7 key used at creation. Omitting `--model-name` matches only a rule with an
+empty model name.
+
+```bash
+loxicmd delete lb 10.10.10.254 --tcp=8080 --host=10.10.10.254 \
+  --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b
+```
+
+For automated cleanup, create each rule with a unique `--name`, list and verify the selected rule,
+then delete by name. This avoids deleting a similarly keyed service.
+
 === "loxicmd"
     ```bash
     loxicmd create apikey --tenant-id=acme --allowed-models=gpt-oss --rps=50
@@ -332,7 +379,9 @@ and throughout the docs, so the same operation reads across all three surfaces:
 ## See also
 
 - [REST API reference](api.md) — the endpoints these tools call.
-- [API Key Management](../ai-gateway/api-key-management.md) — key lifecycle and the data-plane enforcement roadmap.
+- [API Key Management](../ai-gateway/api-key-management.md) — scoped key lifecycle and enforcement behavior.
+- [Management API Authentication](../security/management-api-authentication.md) — gateway auth modes and RBAC.
+- [AI Key Store Operations](../operations/ai-key-store.md) — independent data-plane credential storage.
 - [KV-Cache Routing](../ai-gateway/kv-caching.md) — what `ai_kv_inventory_get` inspects.
 - [Monitoring & Metrics](../operations/monitoring.md) — the metric families read by the observability tools.
 - [Troubleshooting](../operations/troubleshooting.md) — companion to the `diagnose_*` tools.

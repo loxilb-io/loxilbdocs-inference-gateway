@@ -1,5 +1,10 @@
 # LLM Routing
 
+!!! warning "HTTP/1.1 is required for the routing laws on this page"
+    Current HTTP/2 forwarding reduces selector 9 to round-robin and does not integrate selector
+    10, P/D, KV-exact, or model-aware pool lookup. `backend_protocol: http2` is not a feature-
+    equivalent replacement for the HTTP/1.1 path.
+
 How to configure the load-balancing algorithm (`sel`) and its tuning knobs so the AI Gateway
 picks the right backend for each inference request. This is the **how-to** page; for the
 conceptual definition of every algorithm, see
@@ -31,7 +36,7 @@ use it**, the **curl config** that creates it, and **how to verify** the rule is
 | `0` | Round-robin (baseline) | Backends are stateless or you want an even spread with no affinity |
 | `8` | CHWBL (consistent hash, bounded load) | Multi-turn chat / shared system prompts — maximize KV-cache locality with equal-capacity backends |
 | `10` | Weighted CHWBL (WRR-hash) | Same as CHWBL but backends have **different capacity** (weights) |
-| `9` | GPU-aware scoring | Throughput-heavy, largely independent requests — route to the least-loaded GPU |
+| `9` | GPU-aware name, topology-dependent law | Plain-pool prefix/session modulo placement; P/D capacity scoring is release-blocked |
 | `3` | Session persistence | A specific header/cookie/query/user must always land on the same backend |
 
 The `sel` enum and the semantics of each value are defined once in
@@ -39,9 +44,14 @@ The `sel` enum and the semantics of each value are defined once in
 
 !!! note "Lab addresses"
     Examples use the reference-lab topology: VIP `10.10.10.254`, two vLLM backends at
-    `31.31.31.1:8000` and `32.32.32.1:8000`, and the gateway REST API on `<loxilb-host>:11111`.
+    `192.0.2.1:8000` and `198.51.100.1:8000`, and the gateway REST API on `<loxilb-host>:11111`.
     Substitute your own addresses. `security: 1` selects an HTTPS frontend (certificates staged on
     the gateway); use `security: 0` for a plain-HTTP frontend.
+
+!!! warning "Protect the management API"
+    The frontend `security` field does not secure port `11111`. The `curl` examples use plain
+    management HTTP only for an isolated lab. In production, use an authenticated,
+    TLS-protected management endpoint and keep authorization values out of shell history.
 
 ---
 
@@ -69,8 +79,8 @@ affinity — a good starting point and a control against which to measure cache-
           "probereq": "/v1/models"
         },
         "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 1},
-          {"endpointIP": "32.32.32.1", "targetPort": 8000, "weight": 1}
+          {"endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1},
+          {"endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 1}
         ]
       }'
     ```
@@ -78,7 +88,7 @@ affinity — a good starting point and a control against which to measure cache-
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=rr --security=https --monitor --probetype=http --probeport=8000 --probereq=/v1/models
+    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=rr --security=https --monitor --probetype=http --probeport=8000 --probereq=/v1/models
     ```
 
 The `monitor` + `probe*` fields add an HTTP health check on `/v1/models`; they are optional but
@@ -93,13 +103,13 @@ recommended so unhealthy backends are pulled from rotation.
 ring, so requests carrying the same prefix consistently land on the same backend — reusing its KV
 cache — while the bounded-load cap prevents any one backend from being overloaded.
 
-`chwbl_prefix_hash_level` controls **how much of the request** feeds the hash. Higher levels bind
-more precisely (better cache reuse for that context) at the cost of a coarser spread:
+The current runtime derives the prefix key from request content. The API accepts and reads back
+the `chwbl_*` fields, but the rule-to-proxy path does not yet apply their submitted values. Create
+the rule with `sel: 8`, then verify affinity and spill behavior with controlled traffic:
 
 === "curl"
 
     ```bash
-    # Level 1 — hash on model + system prompt only (broadest sharing)
     curl -s -X POST http://<loxilb-host>:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
@@ -109,54 +119,11 @@ more precisely (better cache reuse for that context) at the cost of a coarser sp
           "protocol": "tcp",
           "sel": 8,
           "mode": 4,
-          "security": 1,
-          "chwbl_prefix_hash_level": 1
+          "security": 1
         },
         "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 1},
-          {"endpointIP": "32.32.32.1", "targetPort": 8000, "weight": 1}
-        ]
-      }'
-
-    # Level 2 — add session/conversation context to the hash
-    curl -s -X POST http://<loxilb-host>:11111/netlox/v1/config/loadbalancer \
-      -H "Content-Type: application/json" \
-      -d '{
-        "serviceArguments": {
-          "externalIP": "10.10.10.254",
-          "port": 2022,
-          "protocol": "tcp",
-          "sel": 8,
-          "mode": 4,
-          "security": 1,
-          "chwbl_prefix_hash_level": 2,
-          "chwbl_mean_load_factor": 125,
-          "chwbl_replication": 100
-        },
-        "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 1},
-          {"endpointIP": "32.32.32.1", "targetPort": 8000, "weight": 1}
-        ]
-      }'
-
-    # Level 3 — full prompt / RAG documents in the hash (tightest binding)
-    curl -s -X POST http://<loxilb-host>:11111/netlox/v1/config/loadbalancer \
-      -H "Content-Type: application/json" \
-      -d '{
-        "serviceArguments": {
-          "externalIP": "10.10.10.254",
-          "port": 2023,
-          "protocol": "tcp",
-          "sel": 8,
-          "mode": 4,
-          "security": 1,
-          "chwbl_prefix_hash_level": 3,
-          "chwbl_mean_load_factor": 250,
-          "chwbl_replication": 200
-        },
-        "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 1},
-          {"endpointIP": "32.32.32.1", "targetPort": 8000, "weight": 1}
+          {"endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1},
+          {"endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 1}
         ]
       }'
     ```
@@ -164,34 +131,26 @@ more precisely (better cache reuse for that context) at the cost of a coarser sp
 === "loxicmd"
 
     ```bash
-    # Level 1 — hash on model + system prompt only (broadest sharing)
-    loxicmd create lb 10.10.10.254 --tcp=2021:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=chwbl --security=https --chwbl-hash-level=1
-
-    # Level 2 — add session/conversation context to the hash
-    loxicmd create lb 10.10.10.254 --tcp=2022:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=chwbl --security=https --chwbl-hash-level=2 --chwbl-load-factor=125 --chwbl-replication=100
-
-    # Level 3 — full prompt / RAG documents in the hash (tightest binding)
-    loxicmd create lb 10.10.10.254 --tcp=2023:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=chwbl --security=https --chwbl-hash-level=3 --chwbl-load-factor=250 --chwbl-replication=200
+    loxicmd create lb 10.10.10.254 --tcp=2021:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --security=https
     ```
-
-!!! tip "Start at Level 1"
-    Level 1 gives the broadest cache sharing and the most even spread. Move to Level 2/3 only when
-    you need finer per-session or per-RAG-context locality — and consider raising
-    `chwbl_mean_load_factor` (as the Level 3 example does) so a hot prefix can spill past a single
-    backend's bounded-load cap.
 
 ### CHWBL tuning knobs
 
-These fields apply only when `sel` is `8` or `10`. Values and ranges are from the gateway API
-schema:
+These fields are accepted for `sel` 8 or 10, but the current control path does not propagate
+them. The live proxy uses mean factor 175, replication 256, flags 0, and salt enforcement off.
 
 | Field | Type | Default | Range | What it does |
 |---|---|---|---|---|
-| `chwbl_prefix_hash_level` | int | `1` | `1`, `2`, `3` | Hash scope: 1 = model + system prompt, 2 = + session context, 3 = + full prompt / RAG docs |
-| `chwbl_prefix_hash_flags` | int | `0` | `0`–`255` | Bitflags to force-include fields (bit0 LoRA, bit1 image, bit2 audio, bit3 cache_salt, bit4 tools, bit5 session, bit6 RAG template, bit7 RAG docs). `0` = auto-detect |
-| `chwbl_mean_load_factor` | int | `125` | `100`–`300` | Bounded-load cap: `max_load = avg_load × factor / 100`. `125` allows 25% overload before spilling to the next backend |
-| `chwbl_replication` | int | `100` | `1`–`1024` | Virtual nodes per backend on the ring. Higher = smoother distribution, more memory. For weighted mode this total is split proportionally by weight |
-| `chwbl_enable_cache_salt` | bool | `false` | — | Require a `cache_salt` field in requests for strict multi-tenant hash isolation |
+| `chwbl_prefix_hash_level` | int | `1` | `1`, `2`, `3` | Stored/read back; current runtime infers prefix scope from request content. |
+| `chwbl_prefix_hash_flags` | int | `0` | `0`–`255` | Stored/read back; current runtime programs flags `0`. |
+| `chwbl_mean_load_factor` | int | schema `125`; runtime `175` | `100`–`300` | Intended bounded-load cap; currently not propagated. |
+| `chwbl_replication` | int | schema `100`; runtime `256` | `1`–`1024` | Intended vnode count; currently not propagated. |
+| `chwbl_enable_cache_salt` | bool | `false` | — | Intended salt guard; currently not propagated and therefore not a tenant-isolation control |
+
+!!! danger "Current runtime boundary"
+    Do not use the API examples below to claim that the displayed CHWBL values took effect.
+    Confirm the released artifact with a controlled distribution test. Isolate untrusted tenants
+    through authorization and separate pools; request-derived prefix hashing is not access control.
 
 ---
 
@@ -214,12 +173,11 @@ still preserving prefix locality.
           "protocol": "tcp",
           "sel": 10,
           "mode": 4,
-          "security": 1,
-          "chwbl_prefix_hash_level": 1
+          "security": 1
         },
         "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 8},
-          {"endpointIP": "32.32.32.1", "targetPort": 8000, "weight": 2}
+          {"endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 8},
+          {"endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 2}
         ]
       }'
     ```
@@ -227,20 +185,28 @@ still preserving prefix locality.
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=31.31.31.1:8,32.32.32.1:2 --mode=fullproxy --select=chwbl-wrr --security=https --chwbl-hash-level=1
+    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=192.0.2.1:8,198.51.100.1:2 --mode=fullproxy --select=chwbl-wrr --security=https
     ```
 
-Here `31.31.31.1` receives roughly 4× the traffic of `32.32.32.1` (weights `8` vs `2`). All CHWBL
+Here `192.0.2.1` receives roughly 4× the traffic of `198.51.100.1` (weights `8` vs `2`). All CHWBL
 tuning knobs above apply unchanged.
 
 ---
 
 ## GPU-aware routing — `sel: 9`
 
-**When to use:** throughput-heavy workloads of largely independent requests, where balancing live
-GPU load matters more than cache locality. The gateway scores each backend from metrics scraped
-from its vLLM `/metrics` endpoint (queue depth, KV-cache utilization) and routes to the
-least-loaded GPU.
+**Current behavior:** the `gpuaware` name covers two different paths. In a plain single pool,
+the gateway uses `prefix_hash % endpoint_count`, then conversation-hash modulo placement, then a
+healthy fallback. It does not read the pushed worker-metrics map. A P/D capacity-aware scorer
+exists, but its activation gate checks a mutable endpoint cursor instead of the configured
+selector; configuring `sel: 9` does not reliably enable it. Normal P/D Tier 2 uses active
+connections plus queued requests.
+
+!!! warning "Do not treat plain-pool selector 9 as least-loaded routing"
+    The example below is valid configuration, but its plain-pool placement law is affinity modulo,
+    not live GPU scoring. Use CHWBL for a stable bounded-load hash ring or round-robin for
+    independent requests. Treat P/D capacity scoring as unavailable until the activation gate is
+    corrected and validated end to end.
 
 === "curl"
 
@@ -257,8 +223,8 @@ least-loaded GPU.
           "security": 1
         },
         "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 1},
-          {"endpointIP": "32.32.32.1", "targetPort": 8000, "weight": 1}
+          {"endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1},
+          {"endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 1}
         ]
       }'
     ```
@@ -266,16 +232,11 @@ least-loaded GPU.
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=gpuaware --security=https
+    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=gpuaware --security=https
     ```
 
-Metrics scraping must be configured for scoring to have data — see
-[vLLM Integration](vllm-integration.md).
-
-!!! warning "Advanced / no automated CI scenario"
-    GPU-aware routing (`sel: 9`) has no runnable end-to-end test scenario in the shipped CI suite —
-    only a scoring-parity check. Treat it as advanced and validate it against your own backends
-    before relying on it in production.
+The GPU status and worker-metrics APIs do not change this plain-pool selection law. See
+[vLLM Integration](vllm-integration.md) for the code-path distinction and verification limits.
 
 ---
 
@@ -311,8 +272,8 @@ stickiness (see [MCP Gateway](mcp-gateway.md)).
           "session_header_name": "X-Session-ID"
         },
         "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 1},
-          {"endpointIP": "32.32.32.1", "targetPort": 8000, "weight": 1}
+          {"endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1},
+          {"endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 1}
         ]
       }'
     ```
@@ -320,7 +281,7 @@ stickiness (see [MCP Gateway](mcp-gateway.md)).
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --select=persist --security=https --session-header-name=X-Session-ID
+    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=persist --security=https --session-header-name=X-Session-ID
     ```
 
 To key on a cookie, query parameter, or Basic-Auth user instead, set `session_header_name` to
@@ -346,8 +307,9 @@ curl -sk https://10.10.10.254:2020/v1/models | jq .
 
 For CHWBL / weighted modes, send several requests carrying the same prefix (e.g. an identical
 system prompt) and confirm they consistently reach the same backend — inspect the backend
-`X-Request-Id` / access logs, or watch per-endpoint request counts. For GPU-aware mode, confirm the
-scraper is collecting metrics per [vLLM Integration](vllm-integration.md).
+`X-Request-Id` / access logs, or watch per-endpoint request counts. For selector 9, validate
+plain-pool modulo affinity only; P/D capacity-aware activation is currently release-blocked. See
+[vLLM Integration](vllm-integration.md).
 
 ---
 
@@ -356,14 +318,14 @@ scraper is collecting metrics per [vLLM Integration](vllm-integration.md).
 **Requests spread evenly when you expected cache affinity**
 
 - Confirm `sel` is `8` (or `10`), not `0`, in `GET /config/loadbalancer/all`.
-- The prefix hash needs shared content: at Level 1 requests must share the model + system prompt.
-  If every request has a unique prompt, raise `chwbl_prefix_hash_level` or expect a broad spread.
+- The prefix hash needs shared request content. If every request has a unique prompt, expect a
+  broad spread; the stored hash-level field does not currently alter runtime prefix scope.
 
 **One backend takes almost all traffic (CHWBL)**
 
-- The bounded-load cap may be too high — a very large `chwbl_mean_load_factor` lets a hot prefix
-  monopolize one backend. Lower it toward `125` for firmer spill-over.
-- Increase `chwbl_replication` for smoother ring distribution across backends.
+- The bounded-load cap reacts to concurrent load; a one-request-at-a-time test may remain on the
+  same ring owner. The current proxy fixes factor 175 and replication 256, so stored REST values
+  are not a working tuning mechanism yet.
 
 **Weighted mode ignores my weights**
 
@@ -390,5 +352,5 @@ scraper is collecting metrics per [vLLM Integration](vllm-integration.md).
 - [Running Modes](../concepts/running-modes.md) — why FullProxy (`mode: 4`) is required
 - [Model Load Balancing](model-load-balancing.md) — per-model backend pools (runs before algorithm selection)
 - [KV-Cache Routing](kv-caching.md) — exact block-hash routing on top of CHWBL
-- [vLLM Integration](vllm-integration.md) — metrics scraping for GPU-aware mode
+- [vLLM Integration](vllm-integration.md) — vLLM parity and the selector-9 metrics boundary
 - [Configuration Reference](configuration-reference.md) — every `serviceArguments` field

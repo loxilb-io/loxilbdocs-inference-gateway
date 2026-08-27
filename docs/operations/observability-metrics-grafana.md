@@ -1,223 +1,390 @@
-# Grafana Dashboards & Observability
+# Grafana Dashboards and Observability
 
-LoxiLB exports the KV-cache-aware AI routing pipeline as Prometheus metrics and ships a Grafana dashboard so operators can diagnose Tier-1.5 routing in under a minute instead of grepping `/metrics` by hand. This page documents the observability surface — the key metrics, the PromQL that drives each dashboard panel, and the alert set that ships with it.
-
-!!! note "Audience"
-    Infrastructure operators, DevOps engineers, and platform SREs running AI inference clusters behind LoxiLB.
-
-For the routing behaviour these metrics describe, see [KV-Cache Routing](../ai-gateway/kv-caching.md).
-
----
+The bundled LoxiLB AI dashboard combines request health, P/D routing,
+KV-cache behavior, token quotas, and fullproxy shaping. This page explains how
+to read the panels without mixing scopes or units.
 
 ## Prerequisites
 
-- KV-cache-aware routing is enabled on the service: fullproxy `mode=4` with `pd_disagg_mode: true` (see [KV-Cache Routing](../ai-gateway/kv-caching.md)).
-- Prometheus is scraping the LoxiLB `/metrics` endpoint. A **10-second** scrape interval is recommended — it matches LoxiLB's internal metric snapshot cadence, so a faster interval only re-reads the same values.
-- Grafana has the Prometheus instance configured as a data source.
+- Enable Gateway metrics and confirm the raw endpoint returns Prometheus text.
+- Scrape at about 10 seconds, matching the Gateway's periodic snapshot cycle.
+- Provision the public dashboard from
+  `deploy/monitoring/grafana/dashboards/loxilb-ai.json`.
+- Restrict Grafana and Prometheus to authorized operators and use TLS across
+  untrusted networks.
 
-The metric snapshot the data plane publishes is refreshed every 10 seconds. Gauges reflect the point-in-time value at the last snapshot; counters are monotonic; histograms are reconstructed from cumulative bucket counts (see below).
+See [Monitoring and Metrics](monitoring.md) for endpoint and network-security
+setup.
 
----
+## Dashboard reading order
 
-## Observability surface
+```mermaid
+flowchart LR
+    UP{"Scrape and<br/>endpoints healthy?"} -->|no| INFRA["Fix metrics or<br/>endpoint health"]
+    UP -->|yes| HTTP{"401 / 403 / 429<br/>or 5xx rising?"}
+    HTTP -->|admission| GOV["Inspect key, RPS,<br/>and TPM rows"]
+    HTTP -->|backend| ENG["Inspect engine and<br/>P/D/KV rows"]
+    HTTP -->|no| PERF{"Latency or<br/>throughput issue?"}
+    PERF --> CPU["Compare scoped<br/>and host CPU"]
+    PERF --> QOS["Inspect shaper rate,<br/>delay, and parks"]
 
-The routing pipeline exposes roughly 50 Prometheus series spanning the AI gateway, the sockproxy P/D path, the KV subscriber, and the AI controller. The three signals below are the ones operators reach for first when answering "is the system saturated?" and "why is KV routing slow?".
+    style INFRA fill:#ffcdd2,stroke:#e53935
+    style GOV fill:#fff9c4,stroke:#f9a825
+    style ENG fill:#e8f5e9,stroke:#43a047
+    style CPU fill:#e1f5fe,stroke:#0288d1
+    style QOS fill:#e1f5fe,stroke:#0288d1
+```
 
-### Global P/D in-flight footprint (gauge)
+Start with availability and status classes. A latency panel alone cannot tell
+whether a request was denied before dispatch, failed at a backend, or was
+deliberately paced.
 
-- **Metric:** `loxilb_pd_admission_inflight`
-- **Type:** Gauge — rises and falls.
-- **Meaning:** P/D requests currently held in-flight across all connections and endpoints. This is the real-time load LoxiLB is carrying for P/D workloads, aggregated globally rather than per-endpoint.
-- **Use it for:** capacity planning and tuning the global admission cap. Compare against your configured `LLB_PD_MAX_TOTAL_INFLIGHT`; sustained readings near the cap mean you are about to shed load.
+## Dashboard variables
 
-### Global admission-blocked counter (counter)
+The AI dashboard filters by Prometheus data source, Gateway instance, model,
+and tenant. Apply the narrowest useful filter before investigating a tenant or
+model.
 
-- **Metric:** `loxilb_pd_admission_total_blocked_total`
-- **Type:** Counter — monotonic.
-- **Meaning:** Total `accept()`s blocked by the global P/D total-inflight cap. When the cap is hit the SYN is left in the listen backlog and never accepted into LoxiLB — the request never enters the proxy at all.
-- **Distinct from per-endpoint shed:** per-EP admission shedding happens *after* accept, before dispatch. This counter is the earliest possible back-pressure signal — a rising rate is your first warning of over-subscription and tells you to raise `LLB_PD_MAX_TOTAL_INFLIGHT` or add capacity.
+Do not place credentials, prompts, personal information, or customer secrets
+in model and tenant identifiers. These values become metric labels and can be
+stored by Prometheus for the retention period.
 
-### Per-stage Tier-1.5 latency histogram (histogram)
+## Token quota row
 
-- **Metric:** `loxilb_pd_kv_stage_duration_seconds`
-- **Type:** Histogram (labelled).
-- **Labels:**
-    - `stage` — `tokenize` (tokenizer step), `hash` (CBOR + chained block hash), `cgo` (best-worker selection crossing), `scan` (inventory scan).
-    - `outcome` — `hit` (Tier-1.5 selected an endpoint) or `miss` (fell through to the next tier).
-- **Bucket bounds (seconds):** `0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0`. These mirror the time-to-first-byte histogram so the two are directly comparable.
-- **Meaning:** This is *the* diagnostic for "why is KV routing slow?". Without a per-stage split you can see a slow request but not whether tokenization, hashing, the best-worker selection, or the inventory scan is the bottleneck. The `hit`/`miss` split reveals whether the routing cost is being repaid in time-to-first-token savings.
+The dashboard includes a token-quota row with:
 
-!!! tip "Reading the histogram in PromQL"
-    Use `histogram_quantile()` over the `_bucket` series, and narrow with the labels — for example the p95 of the hashing stage on cache hits:
-    ```promql
-    histogram_quantile(0.95,
-      rate(loxilb_pd_kv_stage_duration_seconds_bucket{stage="hash", outcome="hit"}[5m]))
-    ```
+- consumption rate by `kind` and model;
+- aggregate and model utilization;
+- quota denials;
+- estimated tokens and responses missing usage;
+- remaining aggregate headroom;
+- cold-open events after node startup.
 
-### Histogram reconstruction and the microsecond→second note
+### Correct PromQL patterns
 
-The stage histogram (and the TTFB histogram) is published as **cumulative per-bucket counts** taken from the data plane, then reconstructed into Prometheus observations at snapshot time. The reconstruction takes the current and previous cumulative bucket arrays, the current and previous sample counts, the bucket-bound array, and an overflow bound, and replays the per-range deltas as observations.
+```promql
+# Charged tokens by kind
+sum by (kind) (
+  rate(loxilb_ai_tokens_consumed_total{
+    model=~"$model", tenant=~"$tenant", instance=~"$instance"
+  }[$__rate_interval])
+)
 
-!!! warning "Unit conversion — microseconds to seconds"
-    The data-plane atomics accumulate stage latency in **microseconds**, but Prometheus histograms in this dashboard are expressed in **seconds** (bucket bounds `0.001`, `0.005`, …). Any tooling that reads the raw sum series directly must divide by 1,000,000 to get seconds. The exported `loxilb_pd_kv_stage_duration_seconds` series is already converted — this note matters only if you build derived queries against the underlying counters.
+# Aggregate tenant utilization: fraction, not percent
+loxilb_ai_token_quota_utilization{
+  tenant=~"$tenant", instance=~"$instance"
+}
 
-### Operator caveat: metric-name inconsistency (`tier15_` vs `t15_`)
+# Model utilization must keep the model label
+loxilb_ai_token_quota_model_utilization{
+  tenant=~"$tenant", model=~"$model", instance=~"$instance"
+}
 
-!!! warning "Inconsistent naming in the KV-tier series"
-    The KV-tier series are **not consistently named** — some use the `tier15_` prefix and others abbreviate to `t15_`. In particular the hit counter is `loxilb_pd_kv_tier15_hits_total` while the fall-through counter is `loxilb_pd_kv_t15_fallthrough_total`. When writing your own PromQL, copy the exact series name from `/metrics` rather than assuming a uniform prefix — a query that guesses `tier15_` for a `t15_` series (or vice-versa) silently returns no data. Where a series name is not confirmed against a live `/metrics` scrape, treat the names below as descriptive and verify before alerting on them.
+# Remaining aggregate tokens
+loxilb_ai_token_quota_limit_tokens{
+  tenant=~"$tenant", instance=~"$instance"
+}
+* (1 - loxilb_ai_token_quota_utilization{
+  tenant=~"$tenant", instance=~"$instance"
+})
+```
 
----
+Do not sum aggregate and model utilization. Each is a separate gate over the
+same request. A value of `1` means 100 percent utilized; utilization can exceed
+`1` during post-response debt.
 
-## Grafana dashboard
+An increase in `loxilb_ai_tokens_estimated_total` or
+`loxilb_ai_tokens_missing_total` means the estimate path is accounting for
+responses without readable usage. Enforcement remains active, but operators
+should check engine response compatibility.
 
-**Title:** LoxiLB AI Gateway — KV-Cache Routing · **UID:** `loxilb-ai-kv-routing` · **Refresh:** 10s (matches the scrape interval) · **Data source:** Prometheus (`$datasource`, defaults to `Prometheus`).
+## L7 byte-shaper row
 
-The dashboard is deliberately small: **12 panels across 3 rows**. Operators open it during a page and get about a minute, not twenty panels. Every panel answers either "is something wrong?" or "where is the problem?" — nothing is there for curiosity alone. Deeper diagnostic panels are documented under [Deferred panels](#deferred-panels) and added only when a real question demands them.
+The dashboard includes per-VIP, port, and direction panels for:
 
-### Template variables
+- payload throughput;
+- configured committed information rate (CIR);
+- delayed-byte ratio;
+- park rate and mean park duration;
+- currently parked connections;
+- bucket tokens and committed burst size (CBS).
 
-| Variable | Type | Source | Purpose |
-|----------|------|--------|---------|
-| `datasource` | datasource | Prometheus | Override the Prometheus server |
-| `model` | query | model label from `loxilb_ai_requests_total` | Filter by served model |
-| `service` | query | service label from the P/D endpoint-info series | Filter per service |
-| `endpoint` | query | endpoint label from the KV subscriber series | Drill into a specific endpoint |
+### Unit-safe PromQL
 
-### Row 1 — Fleet health (6 panels)
+```promql
+# Payload throughput, bytes per second
+sum by (vip, port, direction) (
+  rate(loxilb_proxy_qos_bytes_passed_total{
+    instance=~"$instance"
+  }[$__rate_interval])
+)
 
-*Is the system alive and under capacity?*
+# Configured CIR, already bytes per second
+max by (vip, port, direction) (
+  loxilb_proxy_qos_cir_bytes_per_second{instance=~"$instance"}
+)
 
-| Panel | Type | PromQL | Alert |
-|-------|------|--------|-------|
-| RPS | Stat | `sum(rate(loxilb_ai_requests_total[1m]))` | — |
-| In-Flight | Stat | `loxilb_pd_admission_inflight` | Warning at `cap × 0.8` (panel threshold) |
-| Active Streams | Stat | `sum(loxilb_ai_active_streams)` | — |
-| KV Hit Rate | Stat | `rate(loxilb_pd_kv_tier15_hits_total[5m]) / (rate(loxilb_pd_kv_tier15_hits_total[5m]) + rate(loxilb_pd_kv_t15_fallthrough_total[5m])) * 100` | — |
-| KV Sub Uptime | Stat | `avg(loxilb_kv_subscriber_connected) * 100` | Critical below 100% |
-| HTTP 5xx % | Stat | `rate(loxilb_http_status_5xx_total[1m]) / rate(loxilb_http_responses_total[1m]) * 100` | Critical above 1% |
+# Delayed payload fraction
+sum by (vip, port, direction) (
+  rate(loxilb_proxy_qos_bytes_delayed_total{
+    instance=~"$instance"
+  }[$__rate_interval])
+)
+/
+clamp_min(
+  sum by (vip, port, direction) (
+    rate(loxilb_proxy_qos_bytes_passed_total{
+      instance=~"$instance"
+    }[$__rate_interval])
+  ), 1
+)
 
-!!! note
-    The KV Hit Rate query is the canonical example of the naming caveat above: it mixes the `tier15_` hit series with the `t15_` fall-through series in a single ratio. Copy it verbatim.
+# Mean resumed park duration in seconds
+sum by (vip, port, direction) (
+  rate(loxilb_proxy_qos_park_seconds_total{
+    instance=~"$instance"
+  }[$__rate_interval])
+)
+/
+clamp_min(
+  sum by (vip, port, direction) (
+    rate(loxilb_proxy_qos_parks_total{
+      instance=~"$instance"
+    }[$__rate_interval])
+  ), 0.001
+)
+```
 
-### Row 2 — Latency (3 panels)
+The policy API uses Mbps. The shaper dashboard uses bytes/s. If a panel
+converts to bits/s, multiply by eight and label it explicitly. Plaintext
+fullproxy payload metrics are not equivalent to Tier-0 L3 wire-byte counters.
 
-*Where is latency coming from?*
+Series disappear after a fullproxy policy is detached. A no-data result can
+therefore mean “no shaped service,” not a scrape failure; check `up` and other
+Gateway metrics before alerting.
 
-| Panel | Type | PromQL |
-|-------|------|--------|
-| Prefill p95 | Time series (p50/p95/p99 lines) | `histogram_quantile(0.95, rate(loxilb_ai_pd_prefill_duration_seconds_bucket[5m]))` |
-| Decode TTFT p95 | Time series (p50/p95/p99 lines) | `histogram_quantile(0.95, rate(loxilb_ai_pd_decode_ttft_seconds_bucket[5m]))` |
-| Per-EP Prefill | Time series (per endpoint) | `histogram_quantile(0.95, rate(loxilb_ai_pd_prefill_duration_per_ep_seconds_bucket[5m]))` |
+## Relay cache and backpressure row
 
-### Row 3 — Rejection and pressure (3 panels)
+Add three panels: aggregate cached bytes, maximum bytes on one connection, and
+queued connections. Overlay the backpressure ratio and high-water activation
+rate on a separate panel.
 
-*Is the system rejecting requests?*
+```promql
+# Aggregate and worst-connection relay cache
+loxilb_proxy_cache_bytes{instance=~"$instance"}
+loxilb_proxy_cache_bytes_max_conn{instance=~"$instance"}
 
-| Panel | Type | PromQL |
-|-------|------|--------|
-| Blocked (Global) | Stat | `rate(loxilb_pd_admission_total_blocked_total[5m])` |
-| CB Flips | Stat | `rate(loxilb_pd_cb_flips_total[5m])` |
-| Subscriber State | Table | `loxilb_kv_subscriber_connected` per endpoint — 1 = green, 0 = red |
+# Mean cached bytes per queued connection
+loxilb_proxy_cache_bytes{instance=~"$instance"}
+/
+clamp_min(
+  loxilb_proxy_cache_conns_queued{instance=~"$instance"}, 1
+)
 
----
+# New per-connection high-water activations
+rate(loxilb_proxy_cache_high_water_events_total{
+  instance=~"$instance"
+}[$__rate_interval])
+```
 
-## Alerts
+Use byte units, not a generic “memory percent.” The normal per-connection
+watermark is 12 MiB and the chunked watermark is 768 KiB. Aggregate bytes are
+not capped at one watermark, so alerting solely on `cache_bytes` without
+traffic/concurrency context creates false conclusions.
 
-These ship with the dashboard. Tune the thresholds to your fleet — the admission thresholds in particular derive from your configured `LLB_PD_MAX_TOTAL_INFLIGHT`.
+## Backup and restore row
 
-| Alert | Condition | Severity | Cooldown |
-|-------|-----------|----------|----------|
-| KV Sub Disconnect | `loxilb_kv_subscriber_connected == 0` for > 2m | Critical | 5m |
-| Admission Saturated | `loxilb_pd_admission_inflight > (LLB_PD_MAX_TOTAL_INFLIGHT × 0.8)` for > 1m | Warning | 5m |
-| Global Valve Blocking | `rate(loxilb_pd_admission_total_blocked_total[1m]) > 10` | Critical | 10m |
-| CB Flapping | `rate(loxilb_pd_cb_flips_total[5m]) > 2` | Warning | 10m |
+Show restore outcomes by `mode` and `result`, restore duration, last successful
+restore time, and boot conflicts:
 
-Additional alerts to add as your workload matures:
+```promql
+sum by (mode, result) (
+  rate(loxilb_restore_total{instance=~"$instance"}[$__rate_interval])
+)
 
-| Alert | Condition | Severity | Cooldown |
-|-------|-----------|----------|----------|
-| KV Inventory Eviction | `rate(loxilb_kv_inv_cap_evictions_total[5m]) > 0` | Warning | 15m |
-| Tier-1.5 Hit Rate Low | hit rate < 10% for > 10m while `kvExactMode=1` | Warning | 15m |
-| Controller Stale | `loxilb_pd_ctrl_mode == 1` for > 5m | Warning | 10m |
+histogram_quantile(0.95,
+  sum by (le) (
+    rate(loxilb_restore_duration_seconds_bucket{
+      instance=~"$instance"
+    }[$__rate_interval])
+  )
+)
 
----
+time() - loxilb_last_restore_timestamp_seconds{instance=~"$instance"}
 
-## Deferred panels
+increase(loxilb_boot_config_conflict_total{
+  instance=~"$instance"
+}[1h])
+```
 
-The panels below are fully specified but kept off the default dashboard. Add them as collapsible rows when an operator asks a question they answer — that is faster than shipping 25 panels nobody reads.
+The age panel can be absent before the first successful commit/boot restore;
+represent that as “no successful restore recorded,” not zero seconds. A new
+`result="ROLLBACK-FAILED"` requires immediate node isolation and recovery.
 
-### KV cache inventory
+## CPU panels
 
-*Which endpoint holds the most cache? Is eviction happening?*
+Display both CPU gauges on the same time range:
 
-| Panel | Type | PromQL |
-|-------|------|--------|
-| Blocks per EP | Bars | `loxilb_pd_kv_blocks_total` grouped by endpoint |
-| Eviction Rate | Stat | `sum(rate(loxilb_kv_inv_cap_evictions_total[5m]))` |
-| Trie Nodes | Stat | `loxilb_pd_trie_nodes` |
+```promql
+loxilb_system_cpu_utilization_percent{instance=~"$instance"}
+loxilb_host_cpu_utilization_percent{instance=~"$instance"}
+```
 
-### Tier-1.5 diagnostics
+The system gauge is cgroup/container usage relative to its CPU allowance when
+readable. It includes all processes in that cgroup. The host gauge is always
+the whole machine. On bare metal—or when container cgroup accounting cannot be
+read—the values are equal.
 
-*Why is our hit rate low? What are we missing on?*
+Label the first panel “Gateway cgroup/container CPU (host on fallback),” not
+“LoxiLB process CPU.”
 
-| Panel | Type | PromQL |
-|-------|------|--------|
-| Miss Reasons | Pie (top 5) | `sum by (reason) (rate(loxilb_pd_kv_t15_miss_reason_total[1m]))` |
-| Hits vs Fallback | Time series (stacked) | `sum(rate(loxilb_pd_kv_tier15_hits_total[1m]))` vs `rate(loxilb_pd_kv_t15_fallthrough_total[1m])` |
-| Spills | Time series | `rate(loxilb_pd_kv_tier15_spills_total[1m])` |
+## Engine diagnostics
 
-### KV stage latency
+Use engine identity and dialect counters as drill-down signals:
 
-*KV routing seems slow — which stage is the bottleneck?* Drives off the per-stage histogram above.
+`loxilb_ai_engine_info` is currently emitted only by the llama.cpp admission
+probe. vLLM, SGLang, and TensorRT-LLM rules produce no series, so absence is
+not an engine-health verdict.
 
-| Panel | Type | PromQL |
-|-------|------|--------|
-| Stage Latency p50/p95/p99 | Time series (3 lines) | `histogram_quantile(0.95, rate(loxilb_pd_kv_stage_duration_seconds_bucket{stage=~"$stage", outcome=~"$outcome"}[1m]))` (repeat for 0.5 / 0.99) |
-| Stage Throughput | Stacked bar | `sum by (stage) (rate(loxilb_pd_kv_stage_duration_seconds_count[1m]))` |
-| Hit vs Miss p50 | Time series | `histogram_quantile(0.5, rate(loxilb_pd_kv_stage_duration_seconds_bucket{outcome="hit"}[1m]))` and the same with `outcome="miss"` |
+```promql
+loxilb_ai_engine_info{instance=~"$instance"}
 
-### Admission detail and controller state
+sum by (kind) (
+  rate(loxilb_ai_llamacpp_probe_warnings_total{
+    instance=~"$instance"
+  }[5m])
+)
 
-| Panel | Type | PromQL |
-|-------|------|--------|
-| Per-EP Shed vs Parked | Time series (stacked) | `rate(loxilb_pd_admission_shed_total[1m])` vs `rate(loxilb_pd_admission_queued_total[1m])` |
-| Reconnect Rate | Time series | `rate(loxilb_kv_subscriber_reconnect_total[5m])` |
-| Alpha Decay | Time series | `loxilb_pd_ctrl_alpha` (1.0 = Smart, 0.0 = Autonomous) |
-| Ctrl Mode | Stat | `loxilb_pd_ctrl_mode` → 0 = Autonomous, 1 = Stale, 2 = Smart |
+rate(loxilb_pd_sg_prefill_abort_decode_total{instance=~"$instance"}[5m])
+rate(loxilb_pd_sg_room_retry_total{instance=~"$instance"}[5m])
+rate(loxilb_pd_sg_oversize_reject_total{instance=~"$instance"}[5m])
+rate(loxilb_pd_trt_ctx_early_exit_total{instance=~"$instance"}[5m])
+rate(loxilb_pd_cb_flips_total{instance=~"$instance"}[5m])
+rate(loxilb_pd_cb_proactive_heal_total{instance=~"$instance"}[5m])
+rate(loxilb_pd_connect_failover_total{instance=~"$instance"}[5m])
+```
 
----
+- llama.cpp warning `kind` identifies model/build/slot inconsistency, sleeping
+  endpoints, or unanswered probes.
+- SGLang abort/retry counters describe concurrent dual-dispatch recovery.
+- SGLang oversize rejects are fail-closed before engine contact.
+- TensorRT-LLM context early exit is a successful one-stage completion, not an
+  error.
+- Circuit-breaker flips include every direction; compare them with proactive
+  heal, endpoint-death, status-code, and connect-failover rates before deciding
+  whether recovery succeeded.
+- Connect failover counts a successful retry after a prefill TCP-connect
+  failure. It does not by itself prove origin HTTP `5xx` demotion or end-to-end
+  request success.
 
-## Metric inventory
+Always compare a counter rate with request volume. A large cumulative counter
+can represent an old incident, while a current `rate()` of zero shows no new
+events.
 
-The routing pipeline groups its exported series roughly as follows:
+## KV Tier-1.5 panels
 
-| Category | Approx. count |
-|----------|---------------|
-| AI gateway | 14 |
-| Sockproxy P/D | 22 |
-| KV subscriber | 4 |
-| KV agent | 1 |
-| AI controller | 8 |
+Use the exact current `tier15` metric names and verify them against a live
+scrape before creating an alert:
 
-The three signals featured on this page — the admission in-flight gauge, the global admission-blocked counter, and the per-stage Tier-1.5 latency histogram — are the highest-value additions to that surface for day-to-day operations.
+```promql
+sum(rate(loxilb_pd_kv_tier15_hits_total[5m]))
+sum(rate(loxilb_pd_kv_tier15_fallthrough_total[5m]))
+sum by (reason) (rate(loxilb_pd_kv_tier15_miss_reason_total[5m]))
+sum(rate(loxilb_pd_kv_tier15_spills_total[5m]))
+```
 
-Some locality signals are not yet available as metrics and are called out here so you do not build panels around series that do not exist:
+A no-data panel is not evidence of a zero rate. Confirm the exact metric exists
+and that traffic has exercised the configured KV path.
 
-- LMCache hit/match locality rates — no data-plane counter is exported today; requires upstream LMCache integration.
-- Per-endpoint KV block-utilization percentage — requires per-EP block capacity to be tracked, which is not yet exported as a gauge.
+## Peer synchronization row
 
----
+For an HA deployment, add loss, rejection, and peer-latency panels. These are
+more useful than a binary “HA healthy” panel because xSync is a bounded,
+best-effort peer path:
+
+```promql
+# Events or batches lost at a bounded queue
+sum by (kind) (
+  rate(loxilb_sockproxy_sync_overflow_total{
+    instance=~"$instance"
+  }[$__rate_interval])
+)
+
+# Retry-exhausted batch loss
+sum by (reason) (
+  rate(loxilb_sockproxy_sync_drop_total{
+    instance=~"$instance"
+  }[$__rate_interval])
+)
+
+# 95th percentile peer RPC latency
+histogram_quantile(0.95,
+  sum by (le, peer, rpc) (
+    rate(loxilb_sockproxy_sync_push_latency_seconds_bucket{
+      instance=~"$instance"
+    }[$__rate_interval])
+  )
+)
+```
+
+Also display `loxilb_sockproxy_sync_apply_errors_total`,
+`loxilb_sockproxy_sync_health_reject_total{reason}`, and
+`loxilb_sockproxy_sync_inflight_rpc{peer}`. A no-data or zero result is not
+proof that a peer is connected. Confirm the peer path with a controlled state
+change, and review the reconciliation and transport limits in
+[HA and Upgrade Limitations](ha-limitations.md).
+
+## Alert design
+
+Use a traffic guard for ratios so idle `0/0` periods do not page operators.
+Separate alerts by action:
+
+| Signal | Suggested action class |
+|---|---|
+| `up == 0` or `/metrics` `503` | Restore scrape or enable metrics |
+| No healthy endpoints with LB rules present | Restore backend availability |
+| `401`/`403` increase | Investigate credentials or model authorization |
+| `429` increase | Identify key RPS, tenant RPS, aggregate TPM, or model TPM gate |
+| Estimated/missing token accounting | Check engine usage compatibility |
+| Quota cold-open increase | Restrict traffic and investigate peer-state warmup |
+| Shaper delayed ratio/parks increase | Confirm intended CIR and capacity |
+| Relay cache bytes and queued connections rise | Investigate slow backends, concurrency, socket flow control, and process memory |
+| Restore rollback failure | Isolate the node and use the reviewed backup/restore procedure |
+| xSync overflow/drop/apply error | Restrict promotion and verify peer state before serving |
+| Boot conflict increase | Remove stale legacy configuration after validating the selected source |
+| Scoped CPU high, host CPU lower | Review container limit and Gateway load |
+| Host CPU high, scoped CPU lower | Review unrelated host workload |
+
+Reference thresholds must be tuned with a measured baseline. The dashboard and
+green CI do not establish production performance or HA readiness.
+
+## Validate a dashboard change
+
+1. Confirm the metric and label set in a raw scrape.
+2. Run the PromQL in Prometheus before adding it to Grafana.
+3. Generate one known request or policy event.
+4. Check the panel's unit, legend, aggregation, and no-data behavior.
+5. Verify filters do not merge aggregate and per-model quota scope.
+6. Test light and dark themes and a narrow viewport.
+7. Redact screenshots before sharing them.
 
 ## Troubleshooting
 
-| Symptom | Likely cause | What to check |
-|---------|--------------|---------------|
-| KV Hit Rate panel shows "No data" | Series-name mismatch — a `t15_`/`tier15_` prefix guessed wrong | Copy the exact series names from a live `/metrics` scrape; verify both the hit and fall-through series exist |
-| In-Flight climbs and Blocked (Global) starts rising | Global admission cap reached; SYNs held in listen backlog | Raise `LLB_PD_MAX_TOTAL_INFLIGHT` or add backend capacity; confirm the Admission Saturated alert fired |
-| Stage histogram panels empty | Stage timing not being recorded, or KV-exact routing not enabled | Confirm `mode=4` + `pd_disagg_mode: true` and that traffic is actually hitting the Tier-1.5 path |
-| KV Sub Uptime below 100% | A KV subscriber lost its connection to a backend | Use the Subscriber State table to find the red endpoint; check reconnect rate |
-| Latency panels flat/empty | Prometheus not scraping, or scrape interval mismatched | Confirm the target is up and scraping `/metrics` at ~10s |
+| Symptom | Likely cause | Correction |
+|---|---|---|
+| Token row is empty | No tenant quota state or no exercised traffic | Confirm limits, send one safe request, and inspect raw metrics |
+| Remaining headroom is negative | Utilization exceeds one in debt | Expected temporarily; inspect denial and refill behavior |
+| Shaper row is empty | No active fullproxy shaper or policy detached | Verify policy and raw `loxilb_proxy_qos_*` series |
+| Shaper panel is off by 8 | Bits and bytes mixed | Use metric bytes/s or convert and relabel |
+| Engine counter looks alarming | Cumulative value shown without rate | Use `rate()` or `increase()` over the incident window |
+| CPU panels match in a container | Cgroup read fallback | Verify CPU accounting source and mounts |
+| A filter hides model quota | Model label was dropped during aggregation | Keep `tenant,model` in model-quota grouping |
 
-## See also
+## Related pages
 
-- [KV-Cache Routing](../ai-gateway/kv-caching.md) — the routing behaviour these metrics describe.
+- [Monitoring and Metrics](monitoring.md)
+- [Configuration Backup and Restore](backup-restore.md)
+- [DPU Offload Observability](dpu-offload.md)
+- [AI Traffic Governance](../ai-gateway/ai-traffic-governance.md)
+- [AI Quotas and QoS](ai-qos.md)
+- [HA and Upgrade Limitations](ha-limitations.md)

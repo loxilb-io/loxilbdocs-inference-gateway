@@ -1,10 +1,14 @@
 # vLLM Integration
 
-Run vLLM behind the loxilb AI Gateway: the launch flags that must line up with the gateway, how to health-probe vLLM backends, backend protocol / ALPN, and GPU-aware routing.
+!!! warning "Keep AI-aware vLLM rules on HTTP/1.1"
+    Current HTTP/2 forwarding lacks model-aware pool lookup, selector 10, P/D, and KV-exact
+    integration; selector 9 becomes round-robin. Treat HTTP/2 parity as a release gate.
+
+Run vLLM behind the loxilb AI Gateway: the launch flags that must line up with the gateway, how to health-probe vLLM backends, backend protocol / ALPN, and the exact selector-9 metrics boundary.
 
 ## Concept
 
-vLLM is the inference engine that actually runs the model on the GPU. loxilb fronts one or more vLLM instances as an L7 fullproxy (`mode: 4`), spreads requests across them, and — depending on the selection algorithm — routes for KV-cache locality or GPU load. Nothing special is required of vLLM to sit behind the gateway, but several launch flags must **match** the gateway's configuration for KV-aware features to work.
+vLLM is the inference engine that actually runs the model on the GPU. loxilb fronts one or more vLLM instances as an L7 fullproxy (`mode: 4`) and spreads requests according to the selected routing law. Nothing special is required of vLLM to sit behind the gateway, but several launch flags must **match** the gateway's configuration for KV-aware features to work.
 
 ```mermaid
 flowchart LR
@@ -27,7 +31,7 @@ Most vLLM launch flags are independent of loxilb. These few must be consistent w
 | `--prefix-caching-hash-algo sha256_cbor` | `kvHashAlgo` (default `sha256_cbor`) | The block-hash algorithm must be identical end to end. vLLM's own default is not CBOR-based, so set this explicitly. |
 | KV-events publisher `tcp://*:5557` | `kvZmqPort` (default `5557`) | vLLM publishes KV-cache events on a ZMQ PUB socket; loxilb subscribes on `kvZmqPort`. The ports must line up. |
 | `VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES=1` | — | Emits integer block hashes in the KV-event stream, the form loxilb consumes for its per-block inventory. |
-| `--enable-request-id-headers` | — | Lets loxilb correlate requests with backend responses. |
+| `--enable-request-id-headers` | — | Optional: exposes request IDs in vLLM response headers for client-side diagnostics. Gateway-internal request correlation does not require this flag. |
 
 ```bash
 docker run -d --gpus all --network host \
@@ -41,15 +45,24 @@ docker run -d --gpus all --network host \
     --kv-events-config '{"enable_kv_cache_events":true,"publisher":"zmq","endpoint":"tcp://*:5557"}'
 ```
 
+The tag above is a reproducible example, not a floating compatibility promise. For production,
+pin the exact vLLM image you tested and validate its block-hash and KV-event output against the
+gateway before promotion.
+
 !!! note "KV-cache routing has its own page"
     The block-size, hash-algo, and KV-events flags above only matter when you enable block-hash
     KV-exact routing (`kvExactMode`). The full end-to-end parity contract — including hash-seed
-    alignment — is covered in [KV-Cache Routing](kv-caching.md). For plain GPU-aware or
-    round-robin load balancing, none of these flags are required.
+    alignment — is covered in [KV-Cache Routing](kv-caching.md). For plain CHWBL,
+    selector-9 affinity, or round-robin load balancing, none of these flags are required.
 
 ---
 
 ## Health Probing
+
+!!! warning "Protect the management API"
+    The `curl` examples use plain HTTP for an isolated lab. In production, use an authenticated,
+    TLS-protected management endpoint and read its authorization header from a
+    permission-restricted file.
 
 loxilb can actively health-check each vLLM backend and take failing endpoints out of rotation. vLLM exposes an OpenAI-style `/health` endpoint, which pairs naturally with an HTTP probe.
 
@@ -84,15 +97,15 @@ loxilb can actively health-check each vLLM backend and take failing endpoints ou
           "probeRetries": 2
         },
         "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 1},
-          {"endpointIP": "32.32.32.1", "targetPort": 8000, "weight": 1}
+          {"endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1},
+          {"endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 1}
         ]
       }'
     ```
 
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=31.31.31.1:1,32.32.32.1:1 --mode=fullproxy --backend-protocol=http1 --monitor --probetype=http --probeport=8000 --probereq=/health --probetimeout=5 --proberetries=2
+    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --backend-protocol=http1 --monitor --probetype=http --probeport=8000 --probereq=/health --probetimeout=5 --proberetries=2
     ```
 
 A backend that fails its probe is reported with `"inActiveEP": true` in `GET /config/loadbalancer/all` and is skipped by endpoint selection until it recovers.
@@ -113,115 +126,57 @@ A backend that fails its probe is reported with `"inActiveEP": true` in `GET /co
 
 | Value | Mode |
 |---|---|
-| `0` | plain (no TLS) |
-| `1` | https |
-| `2` | tls |
-| `3` | e2ehttps |
+| `0` | Plaintext frontend and backend |
+| `1` | Frontend TLS termination with a plaintext HTTP backend |
+| `2` | Frontend TLS termination plus TLS re-encryption to the backend |
 
 For a typical vLLM deployment, `backend_protocol: http1` with `security: 0` (plain) or `security: 1` (TLS termination on the VIP) is the right starting point.
 
 ---
 
-## GPU-Aware Routing (sel: 9)
+## `sel: 9`: Current Topology-Dependent Behavior
 
-`sel: 9` (gpuaware) routes each request to the least-loaded GPU using live vLLM metrics instead of a static hash. It is best for independent, single-shot queries (batch inference, RAG) where instantaneous load balance matters more than cache locality. For multi-turn chat, prefer CHWBL (`sel: 8`) with KV-cache routing — see [LLM Routing](llm-routing.md).
+The API and CLI call selector 9 `gpuaware`, but its current fullproxy behavior depends on the
+service topology. Do not assume that the name means every rule reads the worker-metrics API.
 
-!!! warning "Advanced feature — no automated CI scenario"
-    GPU-aware routing (`sel: 9`) ships without a runnable end-to-end CI test scenario today; it is
-    validated only by a hash-parity check. Treat it as advanced and validate against your own
-    fleet before relying on it in production.
+```mermaid
+flowchart TD
+    REQ([Request on a sel 9 rule]) --> PD{P/D enabled?}
+    PD -->|Yes| BLOCKED["Capacity-aware scorer exists<br/>activation is release-blocked"]
+    PD -->|No| PREFIX{Prefix hash available?}
+    PREFIX -->|Yes| MOD["prefix_hash modulo endpoint count"]
+    PREFIX -->|No| CONV{Conversation ID available?}
+    CONV -->|Yes| CMOD["conversation hash modulo endpoint count"]
+    CONV -->|No| RR[Health-aware fallback selection]
 
-### How Metrics Reach loxilb
-
-A metrics agent scrapes each vLLM instance's Prometheus `/metrics` endpoint and pushes per-worker load into loxilb via `POST /config/worker/metrics`. loxilb then scores endpoints from the pushed values. The metrics that feed the score:
-
-| vLLM metric | Meaning | Carried as |
-|---|---|---|
-| `vllm:num_requests_running` + `vllm:num_requests_waiting` | Total queue depth on the worker | `queued_requests` |
-| `vllm:gpu_cache_usage_perc` | GPU KV-cache fill percentage (0–100) | `kv_cache_usage_perc` |
-| `vllm:num_preemptions_total` (delta) | Requests swapped out under pressure | `swapped_requests` |
-| `vllm:cache_config_info{num_gpu_blocks}` | Static block capacity | `num_gpu_blocks` |
-
-The `WorkerMetricsEntry` body pushed per worker:
-
-```bash
-curl -s -X POST http://<loxilb>:11111/netlox/v1/config/worker/metrics \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "endpoint_ip": "31.31.31.1:8000",
-    "queued_requests": 4,
-    "kv_cache_usage_perc": 62,
-    "swapped_requests": 0
-  }'
+    style BLOCKED fill:#ffebee,stroke:#e53935
+    style MOD fill:#fff9c4,stroke:#f9a825
+    style CMOD fill:#fff9c4,stroke:#f9a825
 ```
 
-!!! note "vLLM metrics are on by default"
-    vLLM exposes the Prometheus `/metrics` endpoint by default; there is no separate enable flag.
-    If you have disabled stats logging (for example with `--disable-log-stats`), re-enable it so
-    the metrics agent has data to scrape.
+- **Plain single pool:** selector 9 uses request affinity, not live GPU load. Adding or removing
+  endpoints can remap modulo placements. Use CHWBL (`sel: 8`) when you need a stable hash ring and
+  bounded-load protection, or round-robin (`sel: 0`) for independent requests.
+- **P/D pool:** a capacity-aware Tier-2 scorer exists, but the current activation gate compares a
+  mutable endpoint cursor instead of the configured selector. Configuring `sel: 9` therefore does
+  not reliably enable it. Normal Tier 2 uses active connections plus queued requests. See
+  [Routing Hierarchy](../use-cases/routing-hierarchy.md).
+- **Worker-metrics control surface:** the GPU enable/status and worker-metrics APIs populate and
+  report a separate metrics/eBPF surface. The current plain fullproxy selector does not read that
+  surface. A successful metrics POST or `routing_mode: gpu_aware` status is therefore not proof of
+  least-loaded selection for a plain pool.
 
-### Enable and Configure
-
-Enable GPU-aware routing on loxilb, then set `sel: 9` on the service.
-
-=== "curl"
-    ```bash
-    # 1. Enable GPU-aware routing
-    curl -s -X POST http://<loxilb>:11111/netlox/v1/config/gpu/enable
-
-    # 2. Create the service with sel: 9
-    curl -s -X POST http://<loxilb>:11111/netlox/v1/config/loadbalancer \
-      -H 'Content-Type: application/json' \
-      -d '{
-        "serviceArguments": {
-          "externalIP": "10.10.10.254",
-          "port": 8080,
-          "protocol": "tcp",
-          "sel": 9,
-          "mode": 4,
-          "security": 0,
-          "backend_protocol": "http1",
-          "monitor": true,
-          "probetype": "http",
-          "probeport": 8000,
-          "probereq": "/health",
-          "probeTimeout": 5,
-          "probeRetries": 2
-        },
-        "endpoints": [
-          {"endpointIP": "31.31.31.1", "targetPort": 8000, "weight": 1},
-          {"endpointIP": "32.32.32.1", "targetPort": 8000, "weight": 1},
-          {"endpointIP": "33.33.33.1", "targetPort": 8000, "weight": 1}
-        ]
-      }'
-    ```
-
-=== "loxicmd"
-    ```bash
-    # 1. Enable GPU-aware routing
-    loxicmd set gpu --enable
-
-    # 2. Create the service with sel: 9
-    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=31.31.31.1:1,32.32.32.1:1,33.33.33.1:1 --mode=fullproxy --select=gpuaware --backend-protocol=http1 --monitor --probetype=http --probeport=8000 --probereq=/health --probetimeout=5 --proberetries=2
-    ```
-
-**vLLM launch** (each instance):
-
-```bash
-docker run -d --gpus all --network host \
-  vllm/vllm-openai:v0.17.0 \
-    --model Qwen/Qwen3-0.6B \
-    --port 8000 \
-    --enable-request-id-headers
-```
-
-When metrics are not yet flowing, `sel: 9` cannot differentiate endpoints and falls through to a stable consistent-hash distribution, so routing stays sane during startup.
+!!! warning "Do not deploy from the historical least-loaded claim"
+    For a plain fullproxy vLLM pool, do not use `sel: 9` as a production least-loaded-GPU policy.
+    Treat P/D capacity scoring as unavailable until the activation field is corrected and the exact
+    release artifact passes an end-to-end test. Use the selectors above when their documented
+    behavior matches the workload.
 
 ---
 
 ## Verify
 
-**GPU monitoring status** — `GET /config/gpu/status` returns a `GPUMonitoringStatus`:
+**GPU monitoring status** — `GET /config/gpu/status` reports the worker-metrics control surface:
 
 ```bash
 curl -s http://<loxilb>:11111/netlox/v1/config/gpu/status
@@ -234,9 +189,12 @@ curl -s http://<loxilb>:11111/netlox/v1/config/gpu/status
 # }
 ```
 
-`routing_mode` is `gpu_aware` when active or `standard_chwbl` when disabled.
+`routing_mode` is `gpu_aware` when that surface is active or `standard_chwbl` when disabled.
+This is a control-plane status, not proof that a plain fullproxy service is choosing the
+least-loaded endpoint.
 
-**Per-worker metrics** — `GET /config/worker/metrics` returns the current `WorkerMetricsEntry` list loxilb is scoring against:
+**Per-worker metrics** — `GET /config/worker/metrics` returns the current `WorkerMetricsEntry`
+list stored on that separate surface:
 
 ```bash
 curl -s http://<loxilb>:11111/netlox/v1/config/worker/metrics
@@ -253,17 +211,18 @@ curl -s http://<loxilb>:11111/netlox/v1/config/loadbalancer/all \
 
 ## Troubleshooting
 
-### sel: 9 behaves like round-robin
+### `sel: 9` does not move traffic toward a less-loaded worker
 
-No metrics are reaching loxilb, so endpoints score identically.
+For a plain single pool, this is expected: the current fullproxy path uses prefix/session modulo
+placement and a healthy fallback, not the pushed worker metrics. Switch to CHWBL for bounded
+prefix affinity, or round-robin for independent requests. For P/D, use the normal routing
+hierarchy; do not depend on selector-9 capacity scoring in the current release.
 
-- `GET /config/gpu/status` — confirm `enabled: true` and a recent `last_metrics_update`.
-- `GET /config/worker/metrics` — confirm workers appear with non-zero `queued_requests` under load.
-- Verify the metrics agent can reach each vLLM `/metrics` endpoint and is POSTing to `/config/worker/metrics`.
+### `/metrics` returns nothing
 
-### /metrics returns nothing
-
-vLLM's Prometheus endpoint is on by default. If it is empty, confirm stats logging was not disabled (`--disable-log-stats`) and that the serving port is reachable from the metrics agent.
+Treat this as an observability or metrics-agent problem, not the explanation for plain-pool
+selector 9 placement. Confirm stats logging was not disabled and that the serving port is
+reachable from the metrics collector.
 
 ### All endpoints show high queue depth
 
@@ -285,7 +244,7 @@ Almost always a launch-flag mismatch. Recheck `--block-size` vs `kvBlockSize`, `
 
 ## Next Steps
 
-- [LLM Routing](llm-routing.md) — CHWBL, GPU-aware, and weighted-hash selection
+- [LLM Routing](llm-routing.md) — CHWBL, selector-9 topology behavior, and weighted-hash selection
 - [KV-Cache Routing](kv-caching.md) — block-hash KV-exact routing and the vLLM/SGLang parity contract
 - [P/D Disaggregation](pd-disaggregation.md) — separate prefill and decode pools
 - [Configuration Reference](configuration-reference.md) — all AI Gateway `serviceArguments`

@@ -1,4 +1,4 @@
-# Logging & Audit
+# Logging and Audit
 
 The Inference Gateway writes structured operational logs from the LoxiLB process and a separate action audit trail from the `loxilb-mcp` management surface. This page covers how to configure both, where the files land, and how they are rotated.
 
@@ -111,10 +111,19 @@ The audit log is an append-only JSON-lines file named `audit.jsonl`. It is writt
 Each line is one event. Recorded event kinds include tool calls, authentication rejections, request-origin rejections, rate-limit hits, and autopilot executions. A typical record carries the timestamp, event kind, client and target names, the tool and its arguments, the outcome (`ok`), any error, latency, and the remote address:
 
 ```json
-{"ts":"2026-07-27T09:14:02.481Z","kind":"tool_call","client":"oncall","target":"gateway-1","tool":"lb_create","args":{"externalIP":"10.10.10.254"},"ok":true,"latency_ms":12,"remote":"127.0.0.1"}
+{"ts":"2026-07-27T09:14:02.481Z","kind":"tool_call","client":"operator","target":"gateway","tool":"lb_create","args":{"externalIP":"192.0.2.10"},"ok":true,"latency_ms":12,"remote":"192.0.2.20"}
 ```
 
-Secret-shaped argument values (tokens, passwords, API keys, and similar) are masked as `[REDACTED]` before the event is written, so credentials never land in the audit file.
+Known top-level secret-shaped argument fields (tokens, passwords, API keys, and similar) are
+masked as `[REDACTED]` before the event is written. This is a best-effort safeguard, not a
+guarantee for arbitrary nested or unexpectedly named values. Treat every audit record as
+sensitive.
+
+!!! warning "Redaction is defense in depth"
+    Do not rely on automatic masking as the only control. Avoid putting
+    credentials or prompt content in tool arguments, names, and free-form
+    fields. Restrict audit-file and archive access, and review a sanitized
+    sample before exporting logs to another system.
 
 The audit log is rotated by the same built-in mechanism as the structured logs, with a longer forensic window: it rotates above **20 MB**, keeps **8** gzipped backups, and retains them for **90 days**.
 
@@ -122,8 +131,65 @@ For the full `loxilb-mcp` command surface, transports, and role model, see the [
 
 ---
 
+## Read logs through the API
+
+Operators can page current and rotated logs without receiving shell access to
+the Gateway. The API returns newest entries first and follows an opaque cursor
+backward:
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/logs` | Read current or archived log lines |
+| `GET` | `/log-archives` | List archive names, compressed size, and modification time |
+| `GET` | `/log-archives/{filename}` | Download one archive |
+
+Important response semantics:
+
+- REST log handlers resolve files under `/var/log` and do not honor
+  `--log-dir` or `LOXILB_LOG_DIR`; those settings affect writers only, so use
+  the filesystem/aggregator when logs are written elsewhere;
+
+- `log_count` is the number of lines in this page, not total file matches;
+- `total_size` is the whole uncompressed file size;
+- `scanned_bytes` is how much content the server examined for this page;
+- filtered searches stop after reaching the 32 MiB threshold and completing the current read
+  batch, so `scanned_bytes` may be slightly higher;
+- `.log.gz` archives are decompressed transparently for paging, with a 64 MiB
+  decompressed-size ceiling;
+- a filtered page may contain no lines while `has_more` remains true, so clients
+  must continue until `has_more: false`.
+
+Use TLS and a least-privileged management identity. Treat every returned line
+as potentially sensitive, even when known secret-shaped fields are masked. The
+complete paging, archive, rotation, and cleanup procedure is in
+[Log API Operations](log-api.md).
+
+## Audit review checklist
+
+1. Confirm system clocks are synchronized so events can be correlated.
+2. Record the immutable Gateway version and product flavor without including
+   credentials or private topology.
+3. Query the smallest time, file, level, and keyword scope needed.
+4. Walk every cursor to `has_more: false` before concluding that no older match
+   exists.
+5. Correlate management changes with policy read-back and relevant metrics.
+6. Redact credentials, API keys, prompts, personal information, tenant names,
+   client addresses, and internal hostnames before sharing evidence.
+7. Store exported evidence under the organization's access and retention
+   policy, then securely remove temporary copies.
+
 ## What is not covered
 
 This page documents the logging and audit capabilities that ship in the open-source Inference Gateway. Advanced structured audit-logging features — a runtime API for changing per-category log levels without a restart, compliance-oriented export formats, and long-term audit warehousing — are outside the scope of this gateway and are intentionally not documented here. Configure log severity through the `--loglevel` startup option, and ship the JSON files to your own aggregator for retention and search.
 
-For the metrics side of observability, see [Grafana Dashboards & Observability](observability-metrics-grafana.md).
+For the metrics side of observability, see
+[Grafana Dashboards and Observability](observability-metrics-grafana.md).
+
+Recovery and high-risk diagnostics need additional evidence beyond logs:
+
+- [Configuration Backup and Restore](backup-restore.md) — checksums, dry-run,
+  commit, rollback, and restore metrics;
+- [Application and L4 Tracing](tracing.md) — trace data handling and OTLP
+  verification;
+- [DPU Offload Observability](dpu-offload.md) — sensitive and disruptive debug
+  boundaries.

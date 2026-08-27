@@ -5,26 +5,34 @@ data plane divide the work of inference-aware routing.
 
 ## The serving path
 
-Clients speak OpenAI-compatible HTTP (and SSE for streaming) to a single VIP on the gateway.
-The gateway terminates the connection at its L7 fullproxy (`mode: 4`), inspects the request —
-requested model, headers, body, prompt prefix — selects an endpoint, and proxies to the vLLM
-or SGLang backend pool. Streaming responses are relayed back to the client as SSE.
+Clients speak OpenAI-compatible HTTP (and SSE for streaming) to a VIP on the gateway.
+The L7 fullproxy (`mode: 4`) terminates the connection, inspects the request, selects a
+model pool and endpoint, and proxies to vLLM, SGLang, TensorRT-LLM, or llama.cpp. The
+engine determines the optional cache-event and P/D contract; the four engines are not
+interchangeable.
 
-```text
-                        LoxiLB Inference Gateway
-                   ┌───────────────────────────────────┐
-   OpenAI-         │  Control plane (Go)               │
-   compatible      │    REST API  :11111 /netlox/v1    │
-   HTTP / SSE      │    KV-cache selector · P/D coord  │
-   clients ───────▶│    routing tables / rules         │        vLLM / SGLang
-                   │            │ programs             │        backend pools
-                   │            ▼                      │      ┌──────────────┐
-                   │  Data plane                       │─────▶│ prefill pool │
-                   │    eBPF (L4)  +  sockproxy (L7)   │─────▶│ decode pool  │
-                   │    fullproxy userspace HTTP proxy │─────▶│ SGLang pool  │
-                   └───────────────────────────────────┘      └──────┬───────┘
-                            ▲                                        │
-                            └──── KV-cache events (ZMQ) ─────────────┘
+```mermaid
+flowchart LR
+    CLIENT([OpenAI-compatible<br/>HTTP or SSE client]) --> FP
+
+    subgraph GW [LoxiLB Inference Gateway]
+        API["Management API<br/>/netlox/v1"] --> RULES["Validated rules<br/>and endpoint state"]
+        RULES --> EBPF["eBPF L4 data path"]
+        RULES --> FP["Fullproxy L7 data path<br/>HTTP parsing and routing"]
+        EVENTS["KV inventory services<br/>tokenizer and engine adapters"] --> FP
+    end
+
+    FP --> V["vLLM<br/>ZMQ events; sequential P/D"]
+    FP --> S["SGLang<br/>ZMQ per DP rank; concurrent P/D"]
+    FP --> T["TensorRT-LLM<br/>HTTP event drain; sequential P/D"]
+    FP --> L["llama.cpp<br/>plain pool; no KV-exact or P/D"]
+    V -. block hashes .-> EVENTS
+    S -. block hashes .-> EVENTS
+    T -. destructive event drain .-> EVENTS
+
+    style GW fill:#e1f5fe,stroke:#0288d1
+    style EVENTS fill:#e8f5e9,stroke:#43a047
+    style L fill:#fff3e0,stroke:#f57c00
 ```
 
 The gateway is a single Go/eBPF binary. There is no Envoy, no ext-proc sidecar chain, and no
@@ -39,18 +47,20 @@ The gateway splits cleanly into a control plane and a data plane.
 - The **REST API** listens on port **11111** at `/netlox/v1/...`. Load balancers are created
   and listed at `/config/loadbalancer` and `/config/loadbalancer/all`. This is where every
   rule, endpoint, API key, and policy is programmed.
-- The **KV-cache selector**, **P/D coordinator**, and endpoint health tracking run here. The
-  selector consumes the serving engines' KV-cache event streams (over ZMQ) to know which
-  endpoint holds which prompt prefixes, and programs selection decisions accordingly.
+- The Go **KV inventory services** consume vLLM/SGLang ZMQ events or TensorRT-LLM's
+  HTTP event drain and maintain per-rule, per-endpoint block-hash inventories. llama.cpp
+  has no supported KV-event plane.
+- The control plane validates engine/topology combinations and programs the rule into the
+  packet and fullproxy data paths.
 
 **Data plane** — where packets and bytes actually move:
 
 - **eBPF** handles the L4 fast path (NAT modes, connection tracking) for classic load
   balancing, inherited unchanged from upstream loxilb.
-- The **sockproxy / fullproxy** is a userspace HTTP proxy. When a rule runs in `mode: 4`
-  (fullproxy), the gateway terminates the client TCP/TLS connection, reads the full HTTP
-  request, and can inspect and act on the model name, headers, and body before opening a
-  backend connection.
+- The **sockproxy / fullproxy** is a userspace HTTP proxy. When a rule runs in `mode: 4`,
+  it terminates the client TCP/TLS connection, parses the request within its configured
+  inspection limits, runs admission and endpoint selection, and manages the backend
+  connection. Engine-specific P/D orchestration also runs in this serving path.
 
 !!! note "Why AI routing needs the userspace proxy"
     L4 eBPF forwarding never sees HTTP — it makes its decision from the packet's 5-tuple before
@@ -72,23 +82,25 @@ AI-enabled rule, the gateway proceeds roughly as follows:
    For LLM fleets this is typically CHWBL prefix affinity (`sel: 8`/`10`) or, when a KV-cache
    event stream is wired, engine-exact KV routing that places the request on the endpoint
    already holding the longest matching prompt prefix.
-4. **P/D orchestration (optional).** With `pd_disagg_mode` enabled, the proxy runs a two-phase
-   flow — a prefill leg to a prefill endpoint, then a decode leg to a decode endpoint — using
-   NIXL KV-transfer coordination between them.
+4. **P/D orchestration (optional).** With `pd_disagg_mode` enabled, the proxy applies the
+   selected engine dialect: sequential vLLM prefill/decode, concurrent SGLang
+   prefill/decode, or sequential TensorRT-LLM context/generation. llama.cpp P/D is
+   rejected at rule creation.
 5. **Stream relay.** With `sse_mode` enabled, the response is relayed as SSE with idle-timeout
    suppression while the stream is active, a wall-clock cap, and optional backend keepalive.
 
-The KV-cache selector runs continuously alongside this path: as backends emit KV-cache events,
-the control plane updates its view of which endpoint caches which prefixes, so step 3 reflects
-current cache locality rather than a static hash.
+The KV inventory services run alongside this path. As supported backends publish events, the
+gateway updates its per-endpoint hash inventory so KV-exact selection can reflect observed
+cache locality. Hash inventories contain compact hashes, not KV tensors.
 
 ## Coexistence with classic load balancing
 
 Because AI fields are opt-in per rule, an inference-gateway node can host AI rules and classic
 L4 rules side by side. A vLLM VIP (`mode: 4`, KV-aware) and a plain TCP service-type load
-balancer can live on the same gateway; the classic rule uses the eBPF fast path untouched. This
-is the same binary as upstream loxilb, so all upstream deployment modes — Kubernetes
-service-type LB, kube-proxy replacement, HA clustering — apply unchanged.
+balancer can live on the same gateway; the classic rule uses the eBPF fast path. AI runtime
+state such as KV inventories and circuit-breaker state has separate failover limitations; do
+not infer stateful AI high availability from L4 cluster support alone. See
+[HA Limitations](../operations/ha-limitations.md).
 
 ## Next
 

@@ -5,15 +5,27 @@
 [![Slack](https://img.shields.io/badge/community-join%20slack-blue)](https://www.loxilb.io/members)
 
 Source for the documentation site of the **[LoxiLB Inference Gateway](https://github.com/loxilb-io/loxilb-inference-gateway)** —
-an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang), forked from
+an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, forked from
 [loxilb](https://github.com/loxilb-io/loxilb). It adds model-aware routing, KV-cache-aware
-routing, prefill/decode disaggregation, OpenAI-compatible SSE streaming, and an MCP gateway on
-top of loxilb's GoLang/eBPF data path.
+route selection, engine-specific prefill/decode disaggregation, development-stage API-key and
+quota enforcement on eligible SSE or P/D fullproxy rules,
+OpenAI-compatible SSE streaming, and an MCP gateway on top of loxilb's GoLang/eBPF data path.
 
 The rendered site is built with [MkDocs](https://www.mkdocs.org/) +
 [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) and published to GitHub Pages.
 
 > 📖 **Read the docs:** https://loxilb-io.github.io/loxilbdocs-inference-gateway/
+
+Good starting points:
+
+- [Choose an inference engine](docs/getting-started/choose-your-engine.md)
+- [Compare engine capabilities](docs/concepts/engine-capability-matrix.md)
+- [Run the quickstart](docs/getting-started/quickstart.md)
+- [Configure traffic governance](docs/ai-gateway/ai-traffic-governance.md)
+- [Secure the management API](docs/security/management-api-authentication.md)
+- [Operate the AI key store](docs/operations/ai-key-store.md)
+- [Plan backup and restore](docs/operations/backup-restore.md)
+- [Review HA and upgrade limitations](docs/operations/ha-limitations.md)
 
 ## What's here
 
@@ -41,6 +53,10 @@ pip install -r requirements.txt
 mkdocs serve          # live preview at http://127.0.0.1:8000
 mkdocs build --strict # production build; fails on warnings/broken links
 ```
+
+The documentation uses Mermaid for architecture and decision flows. Keep diagrams small,
+use the existing semantic color palette, and pair each diagram with text or a table so the
+content remains usable with assistive technology and in plain Markdown reviews.
 
 ## Contributing
 
