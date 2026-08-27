@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.">
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
       
       
       
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#swagger-extras-raw-middleware" class="md-skip">
+        <a href="#swagger-extras-raw-handler-api" class="md-skip">
           Skip to content
         </a>
       
@@ -396,6 +396,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose an Inference Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -554,6 +582,34 @@
     
   
     AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
   
 
     
@@ -781,6 +837,118 @@
     
   
     vLLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
   
 
     
@@ -1255,6 +1423,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Safety Scanning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/opa-l4/" class="md-nav__link">
         
   
@@ -1290,7 +1514,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1541,6 +1765,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/monitoring/" class="md-nav__link">
         
   
@@ -1577,6 +1913,90 @@
     
   
     Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
   
 
     
@@ -1802,10 +2222,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#get-configaikvinventory" class="md-nav__link">
+  <a href="#contract-and-authentication" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GET /config/ai/kv/inventory
+        Contract and authentication
       
     </span>
   </a>
@@ -1813,10 +2233,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#patch-configaiapikeykey_id" class="md-nav__link">
+  <a href="#endpoint-groups" class="md-nav__link">
     <span class="md-ellipsis">
       
-        PATCH /config/ai/apikey/{key_id}
+        Endpoint groups
       
     </span>
   </a>
@@ -1824,10 +2244,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configopawatcher-opa-l4-policy-watcher" class="md-nav__link">
+  <a href="#ai-kv-inventory" class="md-nav__link">
     <span class="md-ellipsis">
       
-        /config/opa/watcher — OPA L4 policy watcher
+        AI KV inventory
       
     </span>
   </a>
@@ -1835,10 +2255,93 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#see-also" class="md-nav__link">
+  <a href="#dpu-debug" class="md-nav__link">
     <span class="md-ellipsis">
       
-        See also
+        DPU debug
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DPU debug">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#read-state-and-counters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read state and counters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trigger-a-debug-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trigger a debug action
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dpu-hardware-counters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DPU hardware counters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opa-l4-policy-watcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OPA L4 policy watcher
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-an-ai-api-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update an AI API key
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cleanup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
       
     </span>
   </a>
@@ -2115,10 +2618,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#get-configaikvinventory" class="md-nav__link">
+  <a href="#contract-and-authentication" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GET /config/ai/kv/inventory
+        Contract and authentication
       
     </span>
   </a>
@@ -2126,10 +2629,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#patch-configaiapikeykey_id" class="md-nav__link">
+  <a href="#endpoint-groups" class="md-nav__link">
     <span class="md-ellipsis">
       
-        PATCH /config/ai/apikey/{key_id}
+        Endpoint groups
       
     </span>
   </a>
@@ -2137,10 +2640,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configopawatcher-opa-l4-policy-watcher" class="md-nav__link">
+  <a href="#ai-kv-inventory" class="md-nav__link">
     <span class="md-ellipsis">
       
-        /config/opa/watcher — OPA L4 policy watcher
+        AI KV inventory
       
     </span>
   </a>
@@ -2148,10 +2651,93 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#see-also" class="md-nav__link">
+  <a href="#dpu-debug" class="md-nav__link">
     <span class="md-ellipsis">
       
-        See also
+        DPU debug
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DPU debug">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#read-state-and-counters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read state and counters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trigger-a-debug-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trigger a debug action
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dpu-hardware-counters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DPU hardware counters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opa-l4-policy-watcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OPA L4 policy watcher
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#update-an-ai-api-key" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Update an AI API key
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cleanup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
       
     </span>
   </a>
@@ -2175,204 +2761,205 @@
 
 
 
-<h1 id="swagger-extras-raw-middleware">swagger-extras (Raw Middleware)<a class="headerlink" href="#swagger-extras-raw-middleware" title="Permanent link">&para;</a></h1>
-<p>Reference for the in-scope endpoints served directly by the API-server's global middleware, outside
-the generated OpenAPI pipeline.</p>
+<h1 id="swagger-extras-raw-handler-api">swagger-extras: Raw Handler API<a class="headerlink" href="#swagger-extras-raw-handler-api" title="Permanent link">&para;</a></h1>
+<p><code>api/swagger-extras.yml</code> is the companion contract for five endpoint groups
+dispatched directly by the API server's global middleware. They do not use the
+normal generated handler pipeline, even when the same path is also mentioned
+in the primary Swagger document.</p>
 <div class="admonition warning">
-<p class="admonition-title">Not in the generated clients — drive with raw curl</p>
-<p>The endpoints on this page are handled by the API-server's global middleware, so they <strong>bypass
-go-swagger code generation</strong> and are <strong>absent from <code>swagger.yml</code> and from any generated client
-or SDK</strong>. There is no typed method for them — call them with raw <code>curl</code> (or an equivalent raw
-HTTP request). They are maintained by hand in <code>api/swagger-extras.yml</code> in the code repository.</p>
+<p class="admonition-title">Development-source behavior</p>
+<p>Authentication parity for these raw handlers is implemented in the current development source
+but has not completed release qualification. Confirm the behavior against the exact image you
+deploy.</p>
 </div>
-<p>All requests use the same base URL and auth as the rest of the API:</p>
+<h2 id="contract-and-authentication">Contract and authentication<a class="headerlink" href="#contract-and-authentication" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Base URL:</strong> <code>http://&lt;host&gt;:11111/netlox/v1</code></li>
-<li><strong>Authentication:</strong> <code>Authorization: Bearer &lt;token&gt;</code></li>
+<li>Base path: <code>/netlox/v1</code></li>
+<li>Media type: <code>application/json</code></li>
+<li>Contract source: <code>api/swagger-extras.yml</code></li>
+<li>Client behavior: use a raw HTTP client unless your SDK explicitly adds the
+  companion contract.</li>
 </ul>
-<hr />
-<h2 id="get-configaikvinventory">GET <code>/config/ai/kv/inventory</code><a class="headerlink" href="#get-configaikvinventory" title="Permanent link">&para;</a></h2>
-<p>Read-only admin endpoint that dumps the per-block 64-bit hash inventory tracked for <strong>one endpoint</strong>
-of an AI service. Use it to verify that KV-cache-aware routing is populating block hashes and to
-compare loxilb's inventory against a backend's block hashes when debugging a hash-contract mismatch.</p>
-<p><strong>Query parameters</strong></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>In</th>
-<th>Type</th>
-<th>Required</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>service_id</code></td>
-<td>query</td>
-<td>integer (uint32)</td>
-<td>yes</td>
-<td>Numeric service identifier.</td>
-</tr>
-<tr>
-<td><code>ep_idx</code></td>
-<td>query</td>
-<td>integer</td>
-<td>yes</td>
-<td>Endpoint index within the service.</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Response <code>200</code> fields</strong></p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>service_id</code></td>
-<td>integer</td>
-<td>Echoed service identifier.</td>
-</tr>
-<tr>
-<td><code>ep_idx</code></td>
-<td>integer</td>
-<td>Echoed endpoint index.</td>
-</tr>
-<tr>
-<td><code>hash_algo</code></td>
-<td>string</td>
-<td>Hash algorithm used for the block keys.</td>
-</tr>
-<tr>
-<td><code>blocks</code></td>
-<td>array</td>
-<td>Per-block entries.</td>
-</tr>
-<tr>
-<td><code>blocks[].block_idx</code></td>
-<td>integer</td>
-<td>Synthetic sequence index (map iteration order — <strong>not</strong> a semantic block position).</td>
-</tr>
-<tr>
-<td><code>blocks[].hash_uint64</code></td>
-<td>integer (uint64)</td>
-<td>64-bit block hash key.</td>
-</tr>
-<tr>
-<td><code>total</code></td>
-<td>integer</td>
-<td>Number of blocks in the inventory.</td>
-</tr>
-</tbody>
-</table>
-<p>Other responses: <code>400</code> (invalid <code>service_id</code>/<code>ep_idx</code>), <code>404</code> (service or endpoint not found),
-<code>405</code> (method not allowed — GET only), <code>503</code> (KV inventory provider not registered). Errors use a
-minimal <code>{ "error": "..." }</code> envelope.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">&quot;http://&lt;host&gt;:11111/netlox/v1/config/ai/kv/inventory?service_id=1&amp;ep_idx=0&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span>
+<p>The development implementation calls the same management authenticator and
+role authorizer before every raw handler. A viewer can call read-only <code>GET</code>
+operations; mutations require an administrator. A missing or invalid
+management credential returns <code>401</code>, an authenticated viewer mutation returns
+<code>403</code>, and a recognized management credential-store unavailable condition
+returns <code>503</code>. Some live driver failures can still fall through to the generic
+fail-closed <code>401</code> path, so correlate authentication failures with store health.</p>
+<div class="admonition danger">
+<p class="admonition-title">No management authentication mode means unrestricted access</p>
+<p><code>RequireManagementAuth</code> follows the configured authenticator. If no user, OAuth, or
+manual-token mode is enabled, it receives an unrestricted principal and permits the raw route.
+Protect port <code>11111</code>, enable a management authentication mode, and verify a missing-credential
+mutation returns <code>401</code>.</p>
+</div>
+<p>Prepare a protected header file once:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
 </code></pre></div>
-<p>See <a href="../../ai-gateway/kv-caching/">KV-Cache Routing</a> for how the inventory relates to the block-hash
-contract.</p>
-<hr />
-<h2 id="patch-configaiapikeykey_id">PATCH <code>/config/ai/apikey/{key_id}</code><a class="headerlink" href="#patch-configaiapikeykey_id" title="Permanent link">&para;</a></h2>
-<p>Updates the allowed-model list and/or the enabled flag of an existing API key. This is the <strong>only</strong>
-method on this path served by middleware — the other API-key operations (POST/GET/DELETE) are part
-of the generated spec and are covered on the <a href="../api/#ai-api-keys-tenants">API Reference</a> page.</p>
-<p><strong>Path parameters</strong></p>
+<h2 id="endpoint-groups">Endpoint groups<a class="headerlink" href="#endpoint-groups" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Name</th>
-<th>In</th>
-<th>Type</th>
-<th>Required</th>
+<th>Group</th>
+<th>Methods and path</th>
 <th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>key_id</code></td>
-<td>path</td>
-<td>string</td>
-<td>yes</td>
-<td>API key identifier.</td>
+<td>AI KV inventory</td>
+<td><code>GET /config/ai/kv/inventory</code></td>
+<td>Inspect per-endpoint KV block hashes</td>
+</tr>
+<tr>
+<td>DPU debug</td>
+<td><code>GET</code>, <code>POST /config/dpu/debug</code></td>
+<td>Inspect DPU state or trigger a guarded debug action</td>
+</tr>
+<tr>
+<td>DPU hardware counters</td>
+<td><code>GET /config/dpu/hwcounters</code></td>
+<td>Read per-flow hardware packet and byte counters</td>
+</tr>
+<tr>
+<td>OPA watcher</td>
+<td><code>GET</code>, <code>POST</code>, <code>DELETE /config/opa/watcher</code></td>
+<td>Inspect, configure, or remove the OPA L4 watcher</td>
+</tr>
+<tr>
+<td>AI key update</td>
+<td><code>PATCH /config/ai/apikey/{key_id}</code></td>
+<td>Replace a key allow-list and/or change its enabled state</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Request body fields</strong></p>
+<h2 id="ai-kv-inventory">AI KV inventory<a class="headerlink" href="#ai-kv-inventory" title="Permanent link">&para;</a></h2>
+<p><code>GET /config/ai/kv/inventory</code> reads the block-hash inventory for one endpoint
+of one AI service.</p>
 <table>
 <thead>
 <tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>allowed_models</code></td>
-<td>array of string</td>
-<td>Replacement list of models the key may access.</td>
-</tr>
-<tr>
-<td><code>enabled</code></td>
-<td>boolean</td>
-<td>Enable or disable the key.</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Responses</strong></p>
-<table>
-<thead>
-<tr>
-<th>Status</th>
+<th>Query</th>
+<th style="text-align: right;">Required</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>204</code></td>
-<td>Key updated (no body).</td>
+<td><code>service_id</code></td>
+<td style="text-align: right;">Yes</td>
+<td>Numeric service identifier (<code>uint32</code>)</td>
 </tr>
 <tr>
-<td><code>400</code></td>
-<td>Missing <code>key_id</code> or invalid request body.</td>
-</tr>
-<tr>
-<td><code>404</code></td>
-<td>Key not found.</td>
-</tr>
-<tr>
-<td><code>500</code></td>
-<td>Update failed.</td>
+<td><code>ep_idx</code></td>
+<td style="text-align: right;">Yes</td>
+<td>Endpoint index inside the service</td>
 </tr>
 </tbody>
 </table>
-<p>Error responses use the <code>{ "error": "..." }</code> envelope.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>PATCH<span class="w"> </span>http://&lt;host&gt;:11111/netlox/v1/config/ai/apikey/key-abc123<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s1">    &quot;allowed_models&quot;: [&quot;meta-llama/Llama-3.1-8B-Instruct&quot;],</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">    &quot;enabled&quot;: true</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">  }&#39;</span>
+<p>The <code>200</code> body includes <code>service_id</code>, <code>ep_idx</code>, <code>hash_algo</code>, <code>blocks[]</code>, and
+<code>total</code>. Each block has <code>block_idx</code> and <code>hash_uint64</code>. <code>block_idx</code> is only a
+synthetic sequence from map iteration; it is not a semantic position in the
+backend cache.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/kv/inventory?service_id=1&amp;ep_idx=0"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{service_id, ep_idx, hash_algo, total}'</span>
 </code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Data-plane enforcement: roadmap</p>
-<p>API-key authentication (401/403) and per-tenant rate limiting (429) are <strong>control-plane CRUD
-only</strong> today — the gateway stores and manages keys/limits but does not yet reject requests in
-the data path. SSE stream lifecycle and token accounting <strong>are</strong> wired.</p>
-</div>
-<hr />
-<h2 id="configopawatcher-opa-l4-policy-watcher"><code>/config/opa/watcher</code> — OPA L4 policy watcher<a class="headerlink" href="#configopawatcher-opa-l4-policy-watcher" title="Permanent link">&para;</a></h2>
-<p>Configure, inspect, and remove the OPA L4 policy watcher. The watcher polls a third-party OPA server
-for L4 policy and applies it. <code>POST</code> is <strong>SSRF-guarded</strong>: URLs resolving to private or reserved IP
-ranges are rejected, so the OPA server must be reachable at a routable address.</p>
+<p>Expected failures are <code>400</code> for invalid parameters, <code>404</code> for an unknown
+service or endpoint, <code>405</code> for another method, and <code>503</code> when no inventory
+provider is registered.</p>
+<h2 id="dpu-debug">DPU debug<a class="headerlink" href="#dpu-debug" title="Permanent link">&para;</a></h2>
+<h3 id="read-state-and-counters">Read state and counters<a class="headerlink" href="#read-state-and-counters" title="Permanent link">&para;</a></h3>
+<p><code>GET /config/dpu/debug</code> returns aggregate offload counters, per-pipe counters,
+loaded plugins, circuit-breaker state, and optional per-entry detail.</p>
+<table>
+<thead>
+<tr>
+<th>Query</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flows=1</code></td>
+<td>Include expensive flow, FDB, route, and ACL counter arrays</td>
+</tr>
+<tr>
+<td><code>pipe=&lt;name&gt;</code></td>
+<td>Restrict filtered detail to one supported hardware pipe</td>
+</tr>
+<tr>
+<td><code>svc=&lt;name&gt;</code></td>
+<td>Filter detail by service name</td>
+</tr>
+<tr>
+<td><code>ep=&lt;address:port&gt;</code></td>
+<td>Filter detail by endpoint</td>
+</tr>
+<tr>
+<td><code>limit=&lt;n&gt;</code></td>
+<td>Limit detail rows; default <code>200</code>, clamped to <code>2000</code></td>
+</tr>
+</tbody>
+</table>
+<p>Supplying <code>pipe</code>, <code>svc</code>, <code>ep</code>, or <code>limit</code> selects the filtered-detail path and
+populates <code>doca_entry_details</code>. Treat hashed entry handles and flow tuples as
+sensitive operational metadata.</p>
+<p>Supported <code>pipe</code> values are <code>rss</code>, <code>to_kernel</code>, <code>egress_dispatch</code>,
+<code>ct_fwd_5tuple</code>, <code>ct_rev_5tuple</code>, <code>root_l3l4_dispatch</code>, <code>fdb_l2</code>, <code>deny</code>, and
+<code>allow</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--get<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/dpu/debug"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--data-urlencode<span class="w"> </span><span class="s1">'pipe=ct_fwd_5tuple'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--data-urlencode<span class="w"> </span><span class="s1">'limit=50'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{enabled, offload_active, circuit_breaker_open, entries: (.doca_entry_details | length)}'</span>
+</code></pre></div>
+<h3 id="trigger-a-debug-action">Trigger a debug action<a class="headerlink" href="#trigger-a-debug-action" title="Permanent link">&para;</a></h3>
+<p><code>POST /config/dpu/debug</code> accepts two actions:</p>
+<table>
+<thead>
+<tr>
+<th>Body</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{"action":"unregister","plugin":"&lt;name&gt;"}</code></td>
+<td>Unload the named DPU plugin</td>
+</tr>
+<tr>
+<td><code>{"action":"cb_force","mode":"open"}</code></td>
+<td>Force the offload circuit breaker open for testing</td>
+</tr>
+<tr>
+<td><code>{"action":"cb_force","mode":"close"}</code></td>
+<td>Force it closed</td>
+</tr>
+</tbody>
+</table>
+<p>These operations can alter forwarding behavior. Run them only in an approved
+maintenance or test window, verify the selected node, and capture sanitized
+before-and-after state. Invalid input returns <code>400</code>, another method returns
+<code>405</code>, and an unavailable DPU manager returns <code>503</code>.</p>
+<h2 id="dpu-hardware-counters">DPU hardware counters<a class="headerlink" href="#dpu-hardware-counters" title="Permanent link">&para;</a></h2>
+<p><code>GET /config/dpu/hwcounters</code> returns <code>flows[]</code> and <code>total_flows</code>. Each flow may
+include the raw flow identifier, protocol, source and destination addresses,
+packet count, and byte count. An unregistered provider returns an empty list;
+that is different from an HTTP failure.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/dpu/hwcounters"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{total_flows, sample: (.flows[0] // null)}'</span>
+</code></pre></div>
+<p>Do not publish raw flow identifiers or addresses in public diagnostics. Only
+<code>GET</code> is supported; another method returns <code>405</code>.</p>
+<h2 id="opa-l4-policy-watcher">OPA L4 policy watcher<a class="headerlink" href="#opa-l4-policy-watcher" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2382,127 +2969,111 @@ ranges are rejected, so the OPA server must be reachable at a routable address.<
 </thead>
 <tbody>
 <tr>
-<td>GET</td>
-<td>Return the watcher configuration and runtime status.</td>
+<td><code>GET</code></td>
+<td>Return configuration and runtime status</td>
 </tr>
 <tr>
-<td>POST</td>
-<td>Configure (or replace) and start the watcher.</td>
+<td><code>POST</code></td>
+<td>Configure or replace the watcher and begin polling</td>
 </tr>
 <tr>
-<td>DELETE</td>
-<td>Stop and remove the watcher (succeeds even when none is configured).</td>
+<td><code>DELETE</code></td>
+<td>Stop and remove the watcher; succeeds when none exists</td>
 </tr>
 </tbody>
 </table>
-<p><strong>POST request body (<code>OPAWatcherConfig</code>)</strong></p>
+<p><code>POST</code> accepts:</p>
 <table>
 <thead>
 <tr>
 <th>Field</th>
-<th>Type</th>
-<th>Required</th>
-<th>Default</th>
-<th>Description</th>
+<th style="text-align: right;">Required</th>
+<th style="text-align: right;">Default</th>
+<th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>opa_url</code></td>
-<td>string</td>
-<td>yes</td>
-<td>—</td>
-<td>Base URL of the OPA server (e.g. <code>http://opa:8181</code>).</td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">none</td>
+<td>OPA base URL</td>
 </tr>
 <tr>
 <td><code>policy_path</code></td>
-<td>string</td>
-<td>no</td>
-<td><code>loxilb/l4</code></td>
-<td>OPA policy path to poll.</td>
+<td style="text-align: right;">No</td>
+<td style="text-align: right;"><code>loxilb/l4</code></td>
+<td>Policy path queried by the watcher</td>
 </tr>
 <tr>
 <td><code>poll_interval_sec</code></td>
-<td>integer</td>
-<td>no</td>
-<td><code>30</code></td>
-<td>Poll interval in seconds.</td>
+<td style="text-align: right;">No</td>
+<td style="text-align: right;"><code>30</code></td>
+<td>Poll interval in seconds</td>
 </tr>
 <tr>
 <td><code>fail_open</code></td>
-<td>boolean</td>
-<td>no</td>
-<td><code>false</code></td>
-<td>Allow traffic when OPA is unreachable (<code>false</code> = fail-closed).</td>
+<td style="text-align: right;">No</td>
+<td style="text-align: right;"><code>false</code></td>
+<td>Stored and reported compatibility field; it does not currently change outage behavior. Fetch failures preserve the rules already applied for either value.</td>
 </tr>
 </tbody>
 </table>
-<p><strong>GET response</strong> returns the configured fields above plus runtime status:</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>status</code></td>
-<td>string</td>
-<td><code>not_configured</code>, <code>running</code>, or <code>stopped</code>.</td>
-</tr>
-<tr>
-<td><code>last_sync_at</code></td>
-<td>string</td>
-<td>RFC 3339 timestamp of the last successful sync.</td>
-</tr>
-<tr>
-<td><code>rules_count</code></td>
-<td>integer</td>
-<td>Number of rules currently loaded.</td>
-</tr>
-<tr>
-<td><code>circuit_breaker_state</code></td>
-<td>integer</td>
-<td>Circuit-breaker state for the OPA connection.</td>
-</tr>
-<tr>
-<td><code>last_error</code></td>
-<td>string</td>
-<td>Last error message, if any.</td>
-</tr>
-</tbody>
-</table>
-<p><code>POST</code> returns <code>200</code> with <code>{ "result": "..." }</code>; <code>400</code> on invalid JSON, missing <code>opa_url</code>, or an
-SSRF-blocked URL; <code>405</code> on method mismatch. <code>DELETE</code> returns <code>200</code> with <code>{ "result": "..." }</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Configure and start the watcher</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;host&gt;:11111/netlox/v1/config/opa/watcher<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">    &quot;opa_url&quot;: &quot;http://opa:8181&quot;,</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">    &quot;policy_path&quot;: &quot;loxilb/l4&quot;,</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">    &quot;poll_interval_sec&quot;: 30,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">    &quot;fail_open&quot;: false</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">  }&#39;</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># Inspect status</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;host&gt;:11111/netlox/v1/config/opa/watcher<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span>
+<p>The handler applies URL validation and rejects addresses blocked by its SSRF
+policy. Validate the address form used by your deployment before rollout; do
+not weaken the guard merely to reach an internal service.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/opa/watcher"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s1">    "opa_url": "https://opa.example.com",</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s1">    "policy_path": "loxilb/l4",</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s1">    "poll_interval_sec": 30,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s1">    "fail_open": false</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">  }'</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/opa/watcher"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{status, last_sync_at, rules_count, circuit_breaker_state, last_error}'</span>
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">No automated CI scenario ships for the OPA L4 watcher.</p>
-<p>Configure and validate it manually against your own OPA server. The
-<a href="../../security/opa-l4/">OPA L4 Policy</a> page walks through standing up a third-party OPA server,
-writing the rego policy, and wiring it to the watcher.</p>
-</div>
-<hr />
-<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<p>The path is also declared in the primary Swagger file, but the global
+middleware intercepts it first when the raw handler is registered. Use the
+runtime behavior and companion contract for response details.</p>
+<h2 id="update-an-ai-api-key">Update an AI API key<a class="headerlink" href="#update-an-ai-api-key" title="Permanent link">&para;</a></h2>
+<p><code>PATCH /config/ai/apikey/{key_id}</code> updates only the fields present in the body:</p>
 <ul>
-<li><a href="../../security/opa-l4/">OPA L4 Policy</a> — end-to-end OPA server setup and policy wiring.</li>
-<li><a href="../../ai-gateway/kv-caching/">KV-Cache Routing</a> — how the block-hash inventory drives routing.</li>
-<li><a href="../api/">API Reference</a> — the generated-spec endpoints.</li>
+<li><code>allowed_models</code>: replacement array; an empty array removes the model
+  restriction;</li>
+<li><code>enabled</code>: <code>false</code> soft-disables the key and <code>true</code> re-enables it.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--request<span class="w"> </span>PATCH<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{"allowed_models":["example-chat-model"],"enabled":false}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/apikey/</span><span class="nv">$KEY_ID</span><span class="s2">"</span>
+</code></pre></div>
+<p>Expected success is <code>204 No Content</code>. Invalid JSON or an empty key ID returns
+<code>400</code>; an unknown key returns <code>404</code>. In the development implementation, an
+unconfigured or unavailable key store returns <code>503</code> even though the current
+companion specification still lists only a generic <code>500</code> for update failure.</p>
+<p>The update evicts local key caches and sends best-effort peer invalidation.
+Peer delivery is not an instantaneous cluster-wide revocation guarantee; see
+<a href="../../operations/ai-key-store/">AI Key Store Operations</a>.</p>
+<h2 id="cleanup">Cleanup<a class="headerlink" href="#cleanup" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN<span class="w"> </span>KEY_ID
+</code></pre></div>
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../../security/management-api-authentication/">Management API Authentication</a></li>
+<li><a href="../../operations/ai-key-store/">AI Key Store Operations</a></li>
+<li><a href="../../ai-gateway/api-key-management/">API Key Management</a></li>
+<li><a href="../../ai-gateway/kv-caching/">KV-Cache Routing</a></li>
+<li><a href="../../security/opa-l4/">OPA L4 Policy</a></li>
+<li><a href="../api/">API Reference</a></li>
 </ul>
 
 

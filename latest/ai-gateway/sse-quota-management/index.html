@@ -6,14 +6,14 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.">
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
       
       
       
         <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/sse-quota-management/">
       
       
-        <link rel="prev" href="../vllm-integration/">
+        <link rel="prev" href="../ai-traffic-governance/">
       
       
         <link rel="next" href="../api-key-management/">
@@ -396,6 +396,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose an Inference Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -554,6 +582,34 @@
     
   
     AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
   
 
     
@@ -800,6 +856,118 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -863,38 +1031,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#concept" class="md-nav__link">
+  <a href="#stream-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Concept
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Concept">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Fields
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configuration
+        Stream lifecycle
       
     </span>
   </a>
@@ -902,10 +1042,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
+  <a href="#configuration-fields" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify
+        Configuration fields
       
     </span>
   </a>
@@ -913,10 +1053,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshoot" class="md-nav__link">
+  <a href="#configure-a-streaming-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshoot
+        Configure a streaming rule
       
     </span>
   </a>
@@ -924,10 +1064,65 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
+  <a href="#verify-streaming-and-quota-accounting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Related
+        Verify streaming and quota accounting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quota-behavior-for-streams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quota behavior for streams
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shaping-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shaping interaction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-and-cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security and cleanup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
       
     </span>
   </a>
@@ -1376,6 +1571,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Safety Scanning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/opa-l4/" class="md-nav__link">
         
   
@@ -1411,7 +1662,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1662,6 +1913,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/monitoring/" class="md-nav__link">
         
   
@@ -1698,6 +2061,90 @@
     
   
     Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
   
 
     
@@ -2143,38 +2590,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#concept" class="md-nav__link">
+  <a href="#stream-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Concept
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Concept">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Fields
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configuration
+        Stream lifecycle
       
     </span>
   </a>
@@ -2182,10 +2601,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
+  <a href="#configuration-fields" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify
+        Configuration fields
       
     </span>
   </a>
@@ -2193,10 +2612,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshoot" class="md-nav__link">
+  <a href="#configure-a-streaming-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshoot
+        Configure a streaming rule
       
     </span>
   </a>
@@ -2204,10 +2623,65 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
+  <a href="#verify-streaming-and-quota-accounting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Related
+        Verify streaming and quota accounting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quota-behavior-for-streams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quota behavior for streams
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shaping-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shaping interaction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-and-cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security and cleanup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
       
     </span>
   </a>
@@ -2232,186 +2706,169 @@
 
 
 <h1 id="sse-and-quota-management">SSE and Quota Management<a class="headerlink" href="#sse-and-quota-management" title="Permanent link">&para;</a></h1>
-<p>Tune how the LoxiLB AI Gateway handles Server-Sent Events (SSE) streaming for
-OpenAI-compatible LLM endpoints, and understand how per-request token usage is
-recorded as streams complete.</p>
-<h2 id="concept">Concept<a class="headerlink" href="#concept" title="Permanent link">&para;</a></h2>
-<p>Streaming chat completions keep a single HTTP response open for the entire
-generation. The backend emits <code>Content-Type: text/event-stream</code> and drips
-<code>data:</code> chunks — often with long gaps between tokens — until it sends the
-<code>data: [DONE]</code> sentinel. A conventional idle timeout would tear such a
-connection down mid-generation, truncating the answer.</p>
-<p>When you run a service in fullproxy mode (<code>mode=4</code>) with <code>sse_mode=true</code>, the
-gateway recognizes the event-stream response and manages its lifecycle:</p>
-<ul>
-<li><strong>Idle-timeout suppression</strong> — while an SSE stream is active, the normal
-  <code>inactiveTimeOut</code> is suppressed, so a slow-drip response is never cut off for
-  lack of bytes.</li>
-<li><strong><code>[DONE]</code> detection</strong> — the gateway scans for the <code>data: [DONE]</code> terminator
-  and closes the connection cleanly, so keep-alive sockets do not hang.</li>
-<li><strong>Absolute duration cap</strong> — <code>max_stream_duration_sec</code> bounds a runaway stream
-  with a wall-clock ceiling.</li>
-<li><strong>Backend keepalive</strong> — <code>backend_keepalive_interval_sec</code> keeps the backend TCP
-  connection-tracking entry alive through cloud NAT during long streams.</li>
-<li><strong>Token bookkeeping</strong> — as each stream ends, the gateway reads the final
-  <code>usage</code> block and records the request's prompt/completion token counts against
-  the calling key and tenant.</li>
-</ul>
-<p>The SSE lifecycle and token accounting are wired in the data path. Quota
-<em>enforcement</em> — rejecting the next request once a limit is crossed — is not.
-See the admonition below.</p>
-<div class="admonition warning">
-<p class="admonition-title">Data-plane enforcement: roadmap</p>
-<p>API-key authentication (401/403) and per-tenant rate limiting (429) are <strong>control-plane CRUD
-only</strong> today — the gateway stores and manages keys/limits but does not yet reject requests in
-the data path. SSE stream lifecycle and token accounting <strong>are</strong> wired.</p>
+<p>Server-Sent Events (SSE) keep an HTTP response open while an inference engine
+streams tokens. LoxiLB protects this long-lived path from normal idle reaping,
+requests usage accounting, and settles token-quota reservations when the
+response completes.</p>
+<div class="admonition danger">
+<p class="admonition-title">Quota enforcement requires the independent key store</p>
+<p>SSE relay behavior is part of fullproxy, but API-key and token-quota admission uses the
+PostgreSQL store configured by <code>--aikey-db-*</code>, not the management user service. With no
+<code>--aikey-db-host</code>, the current data path admits requests without key checks. Verify a
+missing-key request returns <code>401</code> before relying on quota enforcement.</p>
 </div>
-<h3 id="fields">Fields<a class="headerlink" href="#fields" title="Permanent link">&para;</a></h3>
-<p>These are the <code>serviceArguments</code> that govern SSE behavior. Defaults and types
-follow the REST schema exactly.</p>
+<h2 id="stream-lifecycle">Stream lifecycle<a class="headerlink" href="#stream-lifecycle" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>sequenceDiagram
+    participant Client
+    participant Gateway as LoxiLB Gateway
+    participant Engine as Inference engine
+
+    Client-&gt;&gt;Gateway: POST with stream=true and X-Api-Key
+    Note over Gateway: Authenticate and reserve&lt;br/&gt;prompt estimate + completion ceiling
+    Gateway-&gt;&gt;Engine: Forward request with usage reporting enabled
+    Engine--&gt;&gt;Gateway: Content-Type: text/event-stream
+    loop Generated chunks
+        Engine--&gt;&gt;Gateway: data: {...}
+        Gateway--&gt;&gt;Client: Relay chunk
+    end
+    Engine--&gt;&gt;Gateway: usage and data: [DONE]
+    Note over Gateway: Release reservation&lt;br/&gt;charge actual or estimated tokens
+    Gateway--&gt;&gt;Client: Final chunks and close</code></pre>
+<p>With <code>mode: 4</code> and <code>sse_mode: true</code>, the Gateway:</p>
+<ul>
+<li>suppresses ordinary inactivity reaping while an SSE response is active;</li>
+<li>detects the OpenAI-compatible <code>data: [DONE]</code> terminator;</li>
+<li>applies an absolute stream-duration ceiling;</li>
+<li>can enable backend TCP keepalive for network idle periods;</li>
+<li>reserves tokens before dispatch and settles usage after completion;</li>
+<li>excludes time paused by the configured fullproxy byte shaper from idle and
+  stream-duration accounting.</li>
+</ul>
+<h2 id="configuration-fields">Configuration fields<a class="headerlink" href="#configuration-fields" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Field</th>
-<th>Type</th>
-<th>Default</th>
+<th style="text-align: right;">Default</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>sse_mode</code></td>
-<td>bool</td>
-<td><code>false</code></td>
-<td>Enable SSE streaming handling. When <code>true</code>, idle-timeout is suppressed while a <code>text/event-stream</code> response is active. Required for streaming chat-completion endpoints.</td>
+<td style="text-align: right;"><code>false</code></td>
+<td>Enables event-stream lifecycle and AI Gateway request handling</td>
 </tr>
 <tr>
 <td><code>max_stream_duration_sec</code></td>
-<td>int32</td>
-<td><code>0</code></td>
-<td>Absolute wall-clock cap for an SSE stream, in seconds. <code>0</code> uses the system hard cap of 86400s (24h). Set a lower value (e.g. <code>300</code>) to bound runaway streams.</td>
+<td style="text-align: right;"><code>0</code></td>
+<td>Absolute limit in seconds; <code>0</code> uses the system ceiling of 86,400 seconds</td>
 </tr>
 <tr>
 <td><code>backend_keepalive_interval_sec</code></td>
-<td>int32</td>
-<td><code>0</code></td>
-<td>Sets <code>SO_KEEPALIVE</code> + <code>TCP_KEEPIDLE</code> on the backend socket, in seconds. <code>0</code> disables it. Recommended value is <code>60</code> for most cloud environments where NAT idle-evicts long-lived flows.</td>
+<td style="text-align: right;"><code>0</code></td>
+<td>Backend TCP keepalive idle interval; <code>0</code> disables it</td>
+</tr>
+<tr>
+<td><code>inactiveTimeOut</code></td>
+<td style="text-align: right;">Rule default</td>
+<td>Normal inactivity timeout; suppressed while an SSE stream is active</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="admonition-title">Token accounting is per-completed-stream</p>
-<p>The gateway extracts token usage from the terminal <code>usage</code> object of the
-stream. Counts are attributed to the API key and tenant, recorded, and
-exposed for observability. They are <strong>counted and recorded, but not</strong> yet
-used to block subsequent requests — enforcement is on the roadmap.</p>
-</div>
-<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>Create a fullproxy service with SSE handling enabled. The example targets a lab
-VIP <code>10.10.10.254</code> on the LoxiLB REST port <code>11111</code>, routing to a streaming
-backend at <code>31.31.31.1:8080</code>. Adjust addresses for your environment.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">      &quot;externalIP&quot;:                    &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">      &quot;port&quot;:                           2020,</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">      &quot;protocol&quot;:                      &quot;tcp&quot;,</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s1">      &quot;sel&quot;:                            0,</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">      &quot;mode&quot;:                           4,</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="s1">      &quot;host&quot;:                          &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s1">      &quot;path_prefix&quot;:                   &quot;/&quot;,</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s1">      &quot;path_match_mode&quot;:               &quot;prefix&quot;,</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="s1">      &quot;model_name&quot;:                    &quot;sse-test&quot;,</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="s1">      &quot;sse_mode&quot;:                       true,</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="s1">      &quot;max_stream_duration_sec&quot;:        120,</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="s1">      &quot;backend_keepalive_interval_sec&quot;: 60,</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="s1">      &quot;inactiveTimeOut&quot;:                60</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="s1">    },</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="s1">    &quot;endpoints&quot;: [</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1}</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="s1">    ]</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="s1">  }&#39;</span>
+<p>Choose a finite stream duration that covers legitimate generations and still
+bounds stuck connections. Set keepalive from your network's measured idle
+behavior rather than copying a value blindly.</p>
+<h2 id="configure-a-streaming-rule">Configure a streaming rule<a class="headerlink" href="#configure-a-streaming-rule" title="Permanent link">&para;</a></h2>
+<p>Use TLS and a protected control-plane header outside an isolated lab:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
 </code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--path-prefix<span class="o">=</span>/<span class="w"> </span>--path-match-mode<span class="o">=</span>prefix<span class="w"> </span>--model-name<span class="o">=</span>sse-test<span class="w"> </span>--sse-mode<span class="w"> </span>--max-stream-duration<span class="o">=</span><span class="m">120</span><span class="w"> </span>--backend-keepalive-interval<span class="o">=</span><span class="m">60</span><span class="w"> </span>--inatimeout<span class="o">=</span><span class="m">60</span>
+<p>The example addresses use documentation-only ranges. Replace all addresses and
+the model with your environment:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">    "serviceArguments": {</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">      "externalIP": "192.0.2.20",</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">      "port": 2020,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">      "protocol": "tcp",</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s1">      "sel": 0,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s1">      "mode": 4,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="s1">      "host": "192.0.2.20",</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="s1">      "path_prefix": "/",</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="s1">      "path_match_mode": "prefix",</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="s1">      "model_name": "example-stream-model",</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="s1">      "sse_mode": true,</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="s1">      "max_stream_duration_sec": 300,</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="s1">      "backend_keepalive_interval_sec": 60,</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="s1">      "inactiveTimeOut": 60</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="s1">    },</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="s1">    "endpoints": [</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="s1">      {"endpointIP": "198.51.100.20", "targetPort": 8000, "weight": 1}</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="s1">    ]</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="s1">  }'</span>
 </code></pre></div>
-</div>
-</div>
-</div>
-<p>To bound a stream aggressively — for example a debugging service that should
-never hold a connection longer than 10 seconds — lower <code>max_stream_duration_sec</code>:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">      &quot;externalIP&quot;:                    &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">      &quot;port&quot;:                           2022,</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">      &quot;protocol&quot;:                      &quot;tcp&quot;,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">      &quot;sel&quot;:                            0,</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">      &quot;mode&quot;:                           4,</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">      &quot;host&quot;:                          &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">      &quot;path_prefix&quot;:                   &quot;/&quot;,</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s1">      &quot;path_match_mode&quot;:               &quot;prefix&quot;,</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s1">      &quot;model_name&quot;:                    &quot;cap-test&quot;,</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s1">      &quot;sse_mode&quot;:                       true,</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s1">      &quot;max_stream_duration_sec&quot;:        10,</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s1">      &quot;backend_keepalive_interval_sec&quot;: 60,</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s1">      &quot;inactiveTimeOut&quot;:                60</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s1">    },</span>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="s1">    &quot;endpoints&quot;: [</span>
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1}</span>
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="s1">    ]</span>
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="s1">  }&#39;</span>
+<p>Read the rule back and confirm <code>mode</code>, <code>sse_mode</code>, duration, keepalive, and
+model before sending traffic.</p>
+<h2 id="verify-streaming-and-quota-accounting">Verify streaming and quota accounting<a class="headerlink" href="#verify-streaming-and-quota-accounting" title="Permanent link">&para;</a></h2>
+<p>Store the inference key in a protected header file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./inference.headers
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'X-Api-Key: %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$INFERENCE_API_KEY</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./inference.headers
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>curl<span class="w"> </span>--no-buffer<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--header<span class="w"> </span>@inference.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">    "model": "example-stream-model",</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">    "stream": true,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">    "stream_options": {"include_usage": true},</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">    "messages": [{"role": "user", "content": "Reply briefly."}],</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">    "max_tokens": 32</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s1">  }'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="s2">"https://ai.example.com/v1/chat/completions"</span>
 </code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2022</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--path-prefix<span class="o">=</span>/<span class="w"> </span>--path-match-mode<span class="o">=</span>prefix<span class="w"> </span>--model-name<span class="o">=</span>cap-test<span class="w"> </span>--sse-mode<span class="w"> </span>--max-stream-duration<span class="o">=</span><span class="m">10</span><span class="w"> </span>--backend-keepalive-interval<span class="o">=</span><span class="m">60</span><span class="w"> </span>--inatimeout<span class="o">=</span><span class="m">60</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
-<p><strong>1. Confirm the service exists with SSE enabled.</strong> List load balancer rules and
-check the <code>sse_mode</code>, <code>max_stream_duration_sec</code>, and
-<code>backend_keepalive_interval_sec</code> fields:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">curl</label><label for="__tabbed_3_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>lb
-</code></pre></div>
-</div>
-</div>
-</div>
-<p><strong>2. Drive a slow-drip stream.</strong> Send a streaming chat-completion whose gaps
-between chunks exceed the idle timeout. With <code>sse_mode=true</code> the stream survives
-to completion and ends with <code>data: [DONE]</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-N<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="s2">&quot;http://10.10.10.254:2020/v1/chat/completions&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;model&quot;:&quot;mock-model&quot;,&quot;stream&quot;:true,</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="s1">       &quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;tell me a long story&quot;}]}&#39;</span>
-</code></pre></div>
-<p>You should see incremental <code>data:</code> chunks arrive over time, a final chunk
-carrying a <code>usage</code> object (for example <code>"total_tokens": 100</code>), and a closing
-<code>data: [DONE]</code>. The connection then closes cleanly rather than hanging.</p>
-<p><strong>3. Confirm the duration cap.</strong> Against the <code>2022</code> service above (cap = 10s),
-a stream that would run longer is terminated at the ceiling — proof that
-<code>max_stream_duration_sec</code> is honored.</p>
-<h2 id="troubleshoot">Troubleshoot<a class="headerlink" href="#troubleshoot" title="Permanent link">&para;</a></h2>
+<p>A healthy stream produces incremental <code>data:</code> records, a terminal usage
+object, and <code>[DONE]</code>. The active-stream gauge rises during the request and
+returns after completion. Token counters increase for the tenant and model.</p>
+<p>The Gateway can request usage reporting and reserve prompt/completion tokens
+only after buffering a complete, contiguous, positive-<code>Content-Length</code> JSON
+body. Chunked, partial, and oversized bodies skip parsing and
+<code>include_usage</code> injection. If usage is absent or unreadable, the fallback
+estimate can undercount the actual prompt; the estimated-token and
+missing-usage series are signals to verify framing and engine compatibility.</p>
+<h2 id="quota-behavior-for-streams">Quota behavior for streams<a class="headerlink" href="#quota-behavior-for-streams" title="Permanent link">&para;</a></h2>
+<p>For a complete, contiguous, positive-<code>Content-Length</code> JSON body, admission
+reserves the prompt estimate plus the declared completion ceiling. Both
+aggregate tenant TPM and tenant-and-model TPM must have enough capacity. After
+completion, the reservation is credited back and replaced with the actual
+extracted charge or the estimate. Chunked, partial, and oversized bodies skip
+pre-admission reservation and settle afterward from readable usage or the
+fallback estimate, which may undercount prompt use.</p>
+<p>If a final charge creates debt, the already-served stream is not interrupted;
+later requests receive <code>429</code> until continuous refill restores headroom. An
+eligible buffered request that cannot fit before dispatch receives <code>429</code>
+without consuming GPU work. This pre-dispatch guarantee does not apply to the
+skipped body shapes above.</p>
+<p>While peer quota state is warming, the gateway returns
+<code>429 token_quota_warming</code> with <code>Retry-After: 1</code>. The default warm-up deadline is
+three seconds. If no peer state arrives before that deadline, the current
+compatibility path fails open; alert on this event and verify synchronization
+instead of treating the timeout as healthy quota state.</p>
+<p>See <a href="../ai-traffic-governance/">AI Traffic Governance</a> for <code>burst_pct</code>, model
+limits, and status-code diagnosis.</p>
+<h2 id="shaping-interaction">Shaping interaction<a class="headerlink" href="#shaping-interaction" title="Permanent link">&para;</a></h2>
+<p>A policer attached to a fullproxy rule becomes a bidirectional L7 payload
+shaper. A shaped stream may take longer than the configured duration in wall
+time because periods deliberately paused by the shaper are excluded. An
+unshaped slow stream is still bounded by <code>max_stream_duration_sec</code>.</p>
+<p>This exclusion prevents the Gateway's own pacing policy from being mistaken
+for an idle or runaway stream. It does not disable duration protection for
+backend-generated slowness.</p>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2422,50 +2879,63 @@ a stream that would run longer is terminated at the ceiling — proof that
 </thead>
 <tbody>
 <tr>
-<td>Stream is cut off after a few seconds of silence</td>
-<td><code>sse_mode</code> is <code>false</code>, so <code>inactiveTimeOut</code> fired</td>
-<td>Set <code>sse_mode: true</code> on the service and re-create the rule.</td>
+<td>Stream ends during a quiet gap</td>
+<td>SSE handling is off or response is not recognized as event-stream</td>
+<td>Confirm <code>mode: 4</code>, <code>sse_mode: true</code>, and backend content type</td>
 </tr>
 <tr>
-<td>Connection hangs open after the response finishes</td>
-<td>Backend did not emit <code>data: [DONE]</code>; the gateway had nothing to detect</td>
-<td>Confirm the backend sends the OpenAI <code>[DONE]</code> sentinel. As a backstop, set a finite <code>max_stream_duration_sec</code>.</td>
+<td>Connection remains open</td>
+<td>Backend omitted <code>[DONE]</code> or failed to close</td>
+<td>Inspect sanitized backend output and keep a finite duration cap</td>
 </tr>
 <tr>
-<td>Long streams drop midway in a cloud environment</td>
-<td>Cloud NAT evicted the idle backend flow</td>
-<td>Set <code>backend_keepalive_interval_sec: 60</code> so keepalives refresh the NAT/conntrack entry.</td>
+<td>Long streams fail across a network idle period</td>
+<td>Intermediary removed the backend flow</td>
+<td>Configure and validate backend keepalive; also check external proxy timeouts</td>
 </tr>
 <tr>
-<td>A stream never ends and holds a socket indefinitely</td>
-<td>No absolute ceiling configured (<code>max_stream_duration_sec: 0</code> ⇒ 24h)</td>
-<td>Lower <code>max_stream_duration_sec</code> to a sane bound (e.g. <code>300</code>).</td>
+<td>Stream ends at a fixed duration</td>
+<td>Absolute cap reached</td>
+<td>Increase only after confirming legitimate generation time</td>
 </tr>
 <tr>
-<td>Token counts do not appear per key/tenant</td>
-<td>Backend omitted the terminal <code>usage</code> block</td>
-<td>Ensure the backend includes <code>usage</code> in its final streamed chunk; the gateway reads counts from there.</td>
+<td>Estimated/missing metrics rise</td>
+<td>Usage object absent, split, or incompatible</td>
+<td>Verify engine usage format and streaming configuration</td>
 </tr>
 <tr>
-<td>A key over its token budget is still served</td>
-<td>Quota is counted and recorded, but enforcement (429) is not wired in the data path</td>
-<td>Expected today — usage is recorded, not enforced. Track the roadmap item above.</td>
+<td>Request receives <code>429</code> before backend traffic</td>
+<td>Reservation exceeds current aggregate or model headroom</td>
+<td>Check declared completion ceiling, <code>burst_pct</code>, and utilization</td>
+</tr>
+<tr>
+<td>Stream completes but next request gets <code>429</code></td>
+<td>Final usage produced quota debt</td>
+<td>Wait for refill or correct an undersized limit; do not retry in a tight loop</td>
+</tr>
+<tr>
+<td>Shaped stream survives beyond wall-clock cap</td>
+<td>Time was paused by the shaper</td>
+<td>Expected; confirm QoS park metrics and effective policy</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition tip">
-<p class="admonition-title">Non-SSE services are unaffected</p>
-<p>Leaving <code>sse_mode</code> at its default <code>false</code> preserves the normal idle-timeout
-behavior for plain request/response HTTP backends. Only enable it on
-services that serve <code>text/event-stream</code> responses.</p>
-</div>
-<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
+<h2 id="security-and-cleanup">Security and cleanup<a class="headerlink" href="#security-and-cleanup" title="Permanent link">&para;</a></h2>
+<p>Streaming bodies can contain sensitive prompts and model output. Do not capture
+complete streams in routine logs. Redact <code>X-Api-Key</code>, authorization headers,
+prompt content, and usage correlated with customer identities.</p>
+<p>Delete the example rule using its complete key, including <code>model_name</code> when the
+delete route requires the keyed model value. Then remove local secret files:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers<span class="w"> </span>./inference.headers
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN<span class="w"> </span>INFERENCE_API_KEY
+</code></pre></div>
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../api-key-management/">API Key Management</a> — where keys, tenants, and the
-  token limits referenced above are created and managed.</li>
-<li><a href="../configuration-reference/">Configuration Reference</a> — the full
-  <code>serviceArguments</code> field table.</li>
-<li><a href="../overview/">Overview</a> — the opt-in AI routing model and request lifecycle.</li>
+<li><a href="../ai-traffic-governance/">AI Traffic Governance</a></li>
+<li><a href="../api-key-management/">API Key Management</a></li>
+<li><a href="../../operations/ai-qos/">AI Quotas and QoS</a></li>
+<li><a href="../../operations/ai-key-store/">AI Key Store Operations</a></li>
+<li><a href="../../operations/monitoring/">Monitoring and Metrics</a></li>
 </ul>
 
 

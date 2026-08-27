@@ -6,14 +6,14 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.">
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
       
       
       
         <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/security/opa-l4/">
       
       
-        <link rel="prev" href="../../use-cases/performance-methodology/">
+        <link rel="prev" href="../ai-safety/">
       
       
         <link rel="next" href="../mtls/">
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opa-l4-policy" class="md-skip">
+        <a href="#opa-l4-policy-watcher" class="md-skip">
           Skip to content
         </a>
       
@@ -396,6 +396,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose an Inference Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -554,6 +582,34 @@
     
   
     AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
   
 
     
@@ -781,6 +837,118 @@
     
   
     vLLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
   
 
     
@@ -1254,6 +1422,62 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Safety Scanning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1317,10 +1541,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#concept" class="md-nav__link">
+  <a href="#current-production-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Concept
+        Current production boundary
       
     </span>
   </a>
@@ -1328,10 +1552,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-config-contract" class="md-nav__link">
+  <a href="#how-synchronization-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The config contract
+        How synchronization works
       
     </span>
   </a>
@@ -1339,196 +1563,79 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-by-step-stand-up-a-third-party-opa-server-and-wire-loxilb-to-it" class="md-nav__link">
+  <a href="#required-opa-response" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step-by-step: stand up a third-party OPA server and wire LoxiLB to it
+        Required OPA response
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Step-by-step: stand up a third-party OPA server and wire LoxiLB to it">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-run-an-opa-server" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Run an OPA server
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-author-a-rego-policy-at-package-loxilbl4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Author a Rego policy at package loxilb.l4
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-load-the-policy-into-opa" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Load the policy into OPA
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-verify-opa-returns-the-decision-you-expect" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Verify OPA returns the decision you expect
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-wire-loxilb-to-the-opa-server" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Wire LoxiLB to the OPA server
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-check-watcher-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Check watcher status
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#7-remove-the-watcher" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Remove the watcher
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#operations" class="md-nav__link">
+  <a href="#validate-an-opa-document-separately" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Operations
+        Validate an OPA document separately
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Operations">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#fail-open-vs-fail-closed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Fail-open vs fail-closed
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#poll-interval-tuning" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Poll interval tuning
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#circuit-breaker-behavior" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Circuit-breaker behavior
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshoot" class="md-nav__link">
+  <a href="#url-and-transport-restrictions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshoot
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Troubleshoot">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ssrf-rejection-of-private-reserved-ips" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        SSRF rejection of private / reserved IPs
+        URL and transport restrictions
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#unreachable-opa" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#configure-the-watcher-in-isolated-staging" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Unreachable OPA
+        Configure the watcher in isolated staging
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#other-status-codes" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#status-and-circuit-breaker" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Other status codes
+        Status and circuit breaker
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#stop-the-watcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop the watcher
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-gates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release gates
+      
+    </span>
+  </a>
   
 </li>
       
@@ -1566,7 +1673,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1817,6 +1924,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/monitoring/" class="md-nav__link">
         
   
@@ -1853,6 +2072,90 @@
     
   
     Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
   
 
     
@@ -2298,10 +2601,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#concept" class="md-nav__link">
+  <a href="#current-production-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Concept
+        Current production boundary
       
     </span>
   </a>
@@ -2309,10 +2612,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-config-contract" class="md-nav__link">
+  <a href="#how-synchronization-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The config contract
+        How synchronization works
       
     </span>
   </a>
@@ -2320,196 +2623,79 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-by-step-stand-up-a-third-party-opa-server-and-wire-loxilb-to-it" class="md-nav__link">
+  <a href="#required-opa-response" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step-by-step: stand up a third-party OPA server and wire LoxiLB to it
+        Required OPA response
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Step-by-step: stand up a third-party OPA server and wire LoxiLB to it">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-run-an-opa-server" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Run an OPA server
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-author-a-rego-policy-at-package-loxilbl4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Author a Rego policy at package loxilb.l4
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-load-the-policy-into-opa" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Load the policy into OPA
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-verify-opa-returns-the-decision-you-expect" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Verify OPA returns the decision you expect
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-wire-loxilb-to-the-opa-server" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Wire LoxiLB to the OPA server
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-check-watcher-status" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Check watcher status
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#7-remove-the-watcher" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Remove the watcher
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#operations" class="md-nav__link">
+  <a href="#validate-an-opa-document-separately" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Operations
+        Validate an OPA document separately
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Operations">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#fail-open-vs-fail-closed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Fail-open vs fail-closed
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#poll-interval-tuning" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Poll interval tuning
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#circuit-breaker-behavior" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Circuit-breaker behavior
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshoot" class="md-nav__link">
+  <a href="#url-and-transport-restrictions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshoot
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Troubleshoot">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#ssrf-rejection-of-private-reserved-ips" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        SSRF rejection of private / reserved IPs
+        URL and transport restrictions
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#unreachable-opa" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#configure-the-watcher-in-isolated-staging" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Unreachable OPA
+        Configure the watcher in isolated staging
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#other-status-codes" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#status-and-circuit-breaker" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Other status codes
+        Status and circuit breaker
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#stop-the-watcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stop the watcher
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-gates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release gates
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2541,360 +2727,270 @@
 
 
 
-<h1 id="opa-l4-policy">OPA L4 Policy<a class="headerlink" href="#opa-l4-policy" title="Permanent link">&para;</a></h1>
-<p>LoxiLB can poll a third-party <a href="https://www.openpolicyagent.org/">Open Policy Agent</a> (OPA) server for an L4 allow/deny decision and compile the result into data-plane firewall rules. This page explains the watcher's configuration contract and walks through standing up your own OPA server end to end.</p>
-<div class="admonition warning">
-<p class="admonition-title">Advanced / operator-driven — no automated CI scenario ships for this feature</p>
-<p>The OPA L4 watcher is an advanced, operator-driven integration. <strong>No automated CI scenario
-ships for it</strong>, so the steps below are validated by hand against the API contract rather than by
-a runnable testbed. Treat this as an experimental capability and test it in a staging
-environment before relying on it in production.</p>
-</div>
-<h2 id="concept">Concept<a class="headerlink" href="#concept" title="Permanent link">&para;</a></h2>
-<p>The watcher is a control-plane loop inside LoxiLB. Once configured, it periodically issues a
-<code>POST</code> to your OPA server's data API (<code>/v1/data/&lt;policy_path&gt;</code>), reads back the allow/deny
-decision, and reconciles the result into L4 firewall rules that the data plane enforces. LoxiLB
-is the <em>client</em>; the OPA server is a <strong>separate process you run and own</strong>. LoxiLB never ships
-an embedded policy engine — you author the policy in Rego and OPA evaluates it.</p>
-<p>Two properties matter for operators:</p>
-<ul>
-<li><strong>The OPA server must be routable.</strong> The <code>POST</code> that registers the watcher is SSRF-guarded:
-  URLs that resolve to private or reserved IP ranges are rejected. See
-  <a href="#ssrf-rejection-of-private-reserved-ips">SSRF rejection</a> below.</li>
-<li><strong>The failure mode is configurable.</strong> If OPA becomes unreachable, LoxiLB either keeps traffic
-  flowing (<code>fail_open: true</code>) or blocks it (<code>fail_open: false</code>, the default). Choose deliberately.</li>
-</ul>
-<h2 id="the-config-contract">The config contract<a class="headerlink" href="#the-config-contract" title="Permanent link">&para;</a></h2>
-<p>The watcher body maps 1:1 to the <code>OPAWatcherConfig</code> model. Only <code>opa_url</code> is required; the rest
-carry defaults.</p>
-<table>
-<thead>
-<tr>
-<th>Key</th>
-<th>Type</th>
-<th>Required</th>
-<th>Default</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>opa_url</code></td>
-<td>string</td>
-<td><strong>Yes</strong></td>
-<td>—</td>
-<td>Base URL of the OPA server, e.g. <code>http://opa.example.com:8181</code>. Must be a <strong>routable</strong> address — the registration <code>POST</code> rejects URLs resolving to private/reserved IP ranges (SSRF protection).</td>
-</tr>
-<tr>
-<td><code>policy_path</code></td>
-<td>string</td>
-<td>No</td>
-<td><code>loxilb/l4</code></td>
-<td>OPA policy/data path to poll. LoxiLB queries <code>POST &lt;opa_url&gt;/v1/data/&lt;policy_path&gt;</code>. A <code>policy_path</code> of <code>loxilb/l4</code> maps to the Rego package <code>loxilb.l4</code>.</td>
-</tr>
-<tr>
-<td><code>poll_interval_sec</code></td>
-<td>integer</td>
-<td>No</td>
-<td><code>30</code></td>
-<td>How often (seconds) LoxiLB re-polls OPA and reconciles rules.</td>
-</tr>
-<tr>
-<td><code>fail_open</code></td>
-<td>boolean</td>
-<td>No</td>
-<td><code>false</code></td>
-<td>Behavior when OPA is unreachable. <code>false</code> = <strong>fail-closed</strong> (deny/hold traffic — the safe default). <code>true</code> = <strong>fail-open</strong> (allow traffic to keep flowing).</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="admonition-title">Raw-middleware endpoint</p>
-<p><code>/config/opa/watcher</code> is served by LoxiLB's global API middleware and <strong>bypasses the generated
-swagger clients</strong> — it is absent from codegen'd SDKs. Drive it with raw <code>curl</code> (or any HTTP
-client) as shown below. See the <a href="../../reference/swagger-extras/">swagger-extras reference</a> for
-the full raw-middleware surface.</p>
-</div>
-<h2 id="step-by-step-stand-up-a-third-party-opa-server-and-wire-loxilb-to-it">Step-by-step: stand up a third-party OPA server and wire LoxiLB to it<a class="headerlink" href="#step-by-step-stand-up-a-third-party-opa-server-and-wire-loxilb-to-it" title="Permanent link">&para;</a></h2>
-<p>This is the core workflow. Steps 1-4 run entirely on the OPA side; steps 5-7 wire LoxiLB to the
-running OPA server.</p>
-<h3 id="1-run-an-opa-server">1. Run an OPA server<a class="headerlink" href="#1-run-an-opa-server" title="Permanent link">&para;</a></h3>
-<p>Run the upstream <code>openpolicyagent/opa</code> image in server mode. The server mode exposes OPA's REST
-data API on port <code>8181</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">docker</label><label for="__tabbed_1_2">binary</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>opa<span class="w"> </span>-p<span class="w"> </span><span class="m">8181</span>:8181<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>openpolicyagent/opa:latest<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>run<span class="w"> </span>--server<span class="w"> </span>--addr<span class="w"> </span><span class="m">0</span>.0.0.0:8181<span class="w"> </span>--log-level<span class="w"> </span>info
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Download the opa binary from the OPA releases, then:</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>opa<span class="w"> </span>run<span class="w"> </span>--server<span class="w"> </span>--addr<span class="w"> </span><span class="m">0</span>.0.0.0:8181<span class="w"> </span>--log-level<span class="w"> </span>info
-</code></pre></div>
-</div>
-</div>
-</div>
-<p>Confirm it is up:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;opa-host&gt;:8181/health
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># {} on success (HTTP 200)</span>
-</code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Reachability &amp; SSRF</p>
-<p>LoxiLB's watcher registration rejects <code>opa_url</code> values that resolve to <strong>private or reserved
-IP ranges</strong>. Bind OPA where LoxiLB can reach it at a <strong>routable</strong> address (a real hostname or
-public/routable IP), not a loopback or link-local address. In a lab, place OPA on the same
-routable network segment LoxiLB uses for its lab addresses.</p>
-</div>
+<h1 id="opa-l4-policy-watcher">OPA L4 Policy Watcher<a class="headerlink" href="#opa-l4-policy-watcher" title="Permanent link">&para;</a></h1>
+<p>The OPA L4 watcher polls an Open Policy Agent (OPA) data document, converts its
+desired rules into Gateway firewall rules, diffs them against a local cache,
+and applies additions and deletions through the Gateway REST API. It is a
+desired-state synchronizer, not a per-connection OPA authorization call.</p>
+<h2 id="current-production-boundary">Current production boundary<a class="headerlink" href="#current-production-boundary" title="Permanent link">&para;</a></h2>
 <div class="admonition danger">
-<p class="admonition-title">Protect the OPA server itself</p>
-<p>OPA's REST data API is <strong>unauthenticated by default</strong>, and because <code>opa_url</code> must be
-routable, a carelessly placed OPA server can be reachable by more than just LoxiLB —
-anyone who can reach it can read and <strong>rewrite your policies</strong>. Before production:
-firewall the OPA port (<code>8181</code>) so only the LoxiLB host(s) can reach it, run OPA with
-authentication and authorization enabled
-(<code>opa run --server --authentication=token --authorization=basic ...</code>), and prefer TLS
-(<code>--tls-cert-file</code>/<code>--tls-private-key-file</code>). See the
-<a href="https://www.openpolicyagent.org/docs/latest/security/">OPA security guide</a>.</p>
+<p class="admonition-title">Experimental integration — do not use as a production enforcement boundary</p>
+<p>The current watcher applies rules to the local HTTP management API without
+an authorization header. When Gateway management authentication is enabled,
+those internal apply requests are rejected. Disabling management
+authentication to make the watcher work would expose a larger control-plane
+risk. Until an authenticated internal apply path is implemented and tested,
+qualify this feature only in an isolated staging environment.</p>
 </div>
-<h3 id="2-author-a-rego-policy-at-package-loxilbl4">2. Author a Rego policy at package <code>loxilb.l4</code><a class="headerlink" href="#2-author-a-rego-policy-at-package-loxilbl4" title="Permanent link">&para;</a></h3>
-<p>LoxiLB queries <code>POST &lt;opa_url&gt;/v1/data/&lt;policy_path&gt;</code> with an <code>input</code> document describing the L4
-connection. The policy must live in the package that matches <code>policy_path</code> (default <code>loxilb/l4</code>
-⇒ package <code>loxilb.l4</code>) and expose a boolean decision LoxiLB can read.</p>
-<p>The <code>input</code> document LoxiLB sends carries the L4 5-tuple. Author your rules against these fields:</p>
-<table>
-<thead>
-<tr>
-<th><code>input</code> field</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>input.src_ip</code></td>
-<td>Source IP of the connection</td>
-</tr>
-<tr>
-<td><code>input.dst_ip</code></td>
-<td>Destination (VIP) IP</td>
-</tr>
-<tr>
-<td><code>input.port</code></td>
-<td>Destination L4 port</td>
-</tr>
-<tr>
-<td><code>input.protocol</code></td>
-<td><code>tcp</code> / <code>udp</code></td>
-</tr>
-</tbody>
-</table>
-<p>Create <code>l4.rego</code> with a <strong>default-deny</strong> posture and explicit allow rules:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">package</span><span class="w"> </span><span class="n">loxilb</span><span class="p">.</span><span class="n">l4</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Default-deny: nothing is allowed unless a rule below says so.</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">default</span><span class="w"> </span><span class="n">allow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1"># Allow inference traffic to the model VIP on the HTTPS port from a trusted subnet.</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">allow</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="nb">input</span><span class="p">.</span><span class="n">protocol</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;tcp&quot;</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="nb">input</span><span class="p">.</span><span class="n">dst_ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;10.10.10.254&quot;</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="nb">input</span><span class="p">.</span><span class="n">port</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">443</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="n">net</span><span class="p">.</span><span class="n">cidr_contains</span><span class="p">(</span><span class="s2">&quot;31.31.31.0/24&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">input</span><span class="p">.</span><span class="n">src_ip</span><span class="p">)</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="p">}</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="c1"># Allow plain-HTTP inference on port 8080 from the same subnet.</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">allow</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">    </span><span class="nb">input</span><span class="p">.</span><span class="n">protocol</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;tcp&quot;</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">    </span><span class="nb">input</span><span class="p">.</span><span class="n">dst_ip</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;10.10.10.254&quot;</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="nb">input</span><span class="p">.</span><span class="n">port</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">8080</span>
-<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">    </span><span class="n">net</span><span class="p">.</span><span class="n">cidr_contains</span><span class="p">(</span><span class="s2">&quot;31.31.31.0/24&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">input</span><span class="p">.</span><span class="n">src_ip</span><span class="p">)</span>
-<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="p">}</span>
+<p>Other current limitations are also security-relevant:</p>
+<ul>
+<li><code>fail_open</code> is stored and reported but does not change outage behavior;</li>
+<li>a fetch failure preserves the rules currently applied, for either
+  <code>fail_open</code> value;</li>
+<li>a well-formed OPA response with a missing/empty rule list is desired empty
+  state and can delete all OPA-managed rules;</li>
+<li>invalid individual rules are logged and skipped, not rejected as one atomic
+  policy document; a previously applied rule that is now skipped can be
+  treated as removed by the diff;</li>
+<li>stopping the watcher does not remove firewall rules it already applied;</li>
+<li>its cached rule-state file is written with mode <code>0644</code> under
+  <code>/var/lib/loxilb</code> by default;</li>
+<li>the OPA client sends no authentication header and offers no custom CA option.</li>
+</ul>
+<p>The OpenAPI route and unit tests prove code presence, not safe multi-process or
+production behavior.</p>
+<h2 id="how-synchronization-works">How synchronization works<a class="headerlink" href="#how-synchronization-works" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    O["OPA data API&lt;br/&gt;GET /v1/data/{policy_path}"] --&gt; F["Fetch and parse"]
+    F --&gt; N["Normalize valid rules&lt;br/&gt;skip invalid rules"]
+    N --&gt; D["Diff against local cache"]
+    D --&gt; A["DELETE removed rules&lt;br/&gt;POST added rules"]
+    A --&gt; G["Local Gateway firewall API"]
+    A --&gt; C["Persist successful operations&lt;br/&gt;in rule cache"]
+
+    F --&gt;|failure| K["Keep currently applied rules"]
+
+    style K fill:#fff9c4,stroke:#f9a825
+    style G fill:#e1f5fe,stroke:#0288d1</code></pre>
+<p>The default policy path is <code>loxilb/l4</code>, poll interval is 30 seconds, initial
+poll delay is 10 seconds, OPA request timeout is 5 seconds, and each local rule
+apply request has a 10-second timeout.</p>
+<h2 id="required-opa-response">Required OPA response<a class="headerlink" href="#required-opa-response" title="Permanent link">&para;</a></h2>
+<p>The watcher performs an HTTP <code>GET</code> with <code>Accept: application/json</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>{opa_url}/v1/data/{policy_path}
 </code></pre></div>
-<div class="admonition tip">
-<p class="admonition-title">Keep the decision shape stable</p>
-<p>LoxiLB reads the <code>allow</code> decision from OPA's response envelope
-(<code>{"result": {"allow": true|false, ...}}</code>). Keep <code>allow</code> as a top-level boolean in the
-<code>loxilb.l4</code> package. A <code>default allow = false</code> guarantees a well-defined answer even for inputs
-no rule matches.</p>
-</div>
-<h3 id="3-load-the-policy-into-opa">3. Load the policy into OPA<a class="headerlink" href="#3-load-the-policy-into-opa" title="Permanent link">&para;</a></h3>
-<p>Push the Rego module into the running server with the Policy API. The final path segment is the
-module's ID (any unique name):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://&lt;opa-host&gt;:8181/v1/policies/loxilb_l4<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--data-binary<span class="w"> </span>@l4.rego
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1"># {} on success (HTTP 200)</span>
+<p>For the default path, OPA must return this shape:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">"l4"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="nt">"firewall_access_rules"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="p">{</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">          </span><span class="nt">"sourceIP"</span><span class="p">:</span><span class="w"> </span><span class="s2">"198.51.100.0/24"</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">          </span><span class="nt">"destinationIP"</span><span class="p">:</span><span class="w"> </span><span class="s2">"203.0.113.10/32"</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">          </span><span class="nt">"protocol"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">          </span><span class="nt">"minSourcePort"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">          </span><span class="nt">"maxSourcePort"</span><span class="p">:</span><span class="w"> </span><span class="mi">65535</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">          </span><span class="nt">"minDestinationPort"</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">          </span><span class="nt">"maxDestinationPort"</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">          </span><span class="nt">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"allow"</span><span class="p">,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">          </span><span class="nt">"preference"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">      </span><span class="p">]</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="p">}</span>
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Bundles for production</p>
-<p>For production, prefer OPA's <a href="https://www.openpolicyagent.org/docs/latest/management-bundles/">bundle API</a>
-so OPA pulls versioned policy from an object store instead of an operator <code>PUT</code>-ing modules by
-hand. The watcher contract is identical either way — LoxiLB only reads the decision.</p>
-</div>
-<h3 id="4-verify-opa-returns-the-decision-you-expect">4. Verify OPA returns the decision you expect<a class="headerlink" href="#4-verify-opa-returns-the-decision-you-expect" title="Permanent link">&para;</a></h3>
-<p>Before involving LoxiLB, confirm OPA evaluates your policy correctly. Build an <code>input.json</code> that
-mirrors what LoxiLB will send:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>input.json<span class="w"> </span><span class="s">&lt;&lt;&#39;JSON&#39;</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="s">{ &quot;input&quot;: { &quot;src_ip&quot;: &quot;31.31.31.10&quot;, &quot;dst_ip&quot;: &quot;10.10.10.254&quot;, &quot;port&quot;: 443, &quot;protocol&quot;: &quot;tcp&quot; } }</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="s">JSON</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;opa-host&gt;:8181/v1/data/loxilb/l4<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span>-d<span class="w"> </span>@input.json
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="c1"># Expected: {&quot;result&quot;:{&quot;allow&quot;:true}}</span>
-</code></pre></div>
-<p>Flip a field (e.g. <code>"port": 22</code>) and confirm you get <code>{"result":{"allow":false}}</code>. Once OPA
-answers correctly, it is ready for LoxiLB to poll.</p>
-<h3 id="5-wire-loxilb-to-the-opa-server">5. Wire LoxiLB to the OPA server<a class="headerlink" href="#5-wire-loxilb-to-the-opa-server" title="Permanent link">&para;</a></h3>
-<p>Register the watcher against LoxiLB's API (port <code>11111</code>, <code>/netlox/v1</code> prefix). LoxiLB immediately
-starts polling and reconciling rules.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;loxilb-host&gt;:11111/netlox/v1/config/opa/watcher<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;api-token&gt;&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="s1">        &quot;opa_url&quot;: &quot;http://opa.example.com:8181&quot;,</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="s1">        &quot;policy_path&quot;: &quot;loxilb/l4&quot;,</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="s1">        &quot;poll_interval_sec&quot;: 30,</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="s1">        &quot;fail_open&quot;: false</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="s1">      }&#39;</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1"># {&quot;result&quot;:&quot;Success&quot;}</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>loxicmd<span class="w"> </span><span class="nb">set</span><span class="w"> </span>opa<span class="w"> </span>--opa-url<span class="w"> </span>http://opa.example.com:8181<span class="w"> </span>--policy-path<span class="w"> </span>loxilb/l4<span class="w"> </span>--poll-interval-sec<span class="w"> </span><span class="m">30</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<p>A <code>400</code> here means invalid JSON, a missing <code>opa_url</code>, or a URL blocked by the SSRF guard — see
-<a href="#troubleshoot">Troubleshoot</a>.</p>
-<h3 id="6-check-watcher-status">6. Check watcher status<a class="headerlink" href="#6-check-watcher-status" title="Permanent link">&para;</a></h3>
-<p>Poll the watcher's status to confirm it is running and syncing.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">curl</label><label for="__tabbed_3_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb-host&gt;:11111/netlox/v1/config/opa/watcher<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;api-token&gt;&#39;</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>opa
-</code></pre></div>
-</div>
-</div>
-</div>
-<p>The status object reports:</p>
 <table>
 <thead>
 <tr>
 <th>Field</th>
-<th>Meaning</th>
+<th>Accepted values</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>opa_url</code> / <code>policy_path</code> / <code>poll_interval_sec</code> / <code>fail_open</code></td>
-<td>Echo of the active configuration</td>
+<td><code>sourceIP</code>, <code>destinationIP</code></td>
+<td>IPv4 or IPv6 CIDR; empty is normalized to <code>0.0.0.0/0</code></td>
 </tr>
+<tr>
+<td><code>protocol</code></td>
+<td><code>0</code> any, <code>6</code> TCP, <code>17</code> UDP, <code>132</code> SCTP</td>
+</tr>
+<tr>
+<td>source/destination port range</td>
+<td>Minimum must not exceed maximum; <code>0</code>–<code>65535</code> is normalized to no port filter</td>
+</tr>
+<tr>
+<td><code>action</code></td>
+<td><code>allow</code> or <code>deny</code></td>
+</tr>
+<tr>
+<td><code>preference</code></td>
+<td>Integer used in the firewall rule key</td>
+</tr>
+</tbody>
+</table>
+<p>The document is not applied atomically. A failed add/delete is retried during a
+later diff, but successful changes from the same cycle remain applied. Review
+<code>last_error</code> for <code>partial apply failure</code> and compare actual firewall rules.</p>
+<h2 id="validate-an-opa-document-separately">Validate an OPA document separately<a class="headerlink" href="#validate-an-opa-document-separately" title="Permanent link">&para;</a></h2>
+<p>Select and pin an OPA release approved by your organization; do not use a
+mutable image tag:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">OPA_IMAGE</span><span class="o">=</span><span class="s2">"openpolicyagent/opa:&lt;PINNED_VERSION&gt;"</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>pull<span class="w"> </span><span class="s2">"</span><span class="nv">$OPA_IMAGE</span><span class="s2">"</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>docker<span class="w"> </span>image<span class="w"> </span>inspect<span class="w"> </span><span class="s2">"</span><span class="nv">$OPA_IMAGE</span><span class="s2">"</span><span class="w"> </span>--format<span class="w"> </span><span class="s1">'{{index .RepoDigests 0}}'</span>
+</code></pre></div>
+<p>Before connecting a Gateway, query the exact policy path directly and validate
+the response shape:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>https://opa.example.com/v1/data/loxilb/l4<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s1">      .result.l4.firewall_access_rules | type == "array" and</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s1">      all(.[];</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s1">        (.action == "allow" or .action == "deny") and</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s1">        (.protocol == 0 or .protocol == 6 or</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s1">         .protocol == 17 or .protocol == 132))</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s1">    '</span>
+</code></pre></div>
+<p>Use synthetic test ranges and validate empty, malformed, duplicate, and invalid
+rules. Specifically prove that an unintended empty document cannot reach the
+watcher.</p>
+<h2 id="url-and-transport-restrictions">URL and transport restrictions<a class="headerlink" href="#url-and-transport-restrictions" title="Permanent link">&para;</a></h2>
+<p><code>POST /config/opa/watcher</code> resolves the configured hostname and rejects these
+IPv4 ranges:</p>
+<ul>
+<li><code>127.0.0.0/8</code> loopback;</li>
+<li><code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, and <code>192.168.0.0/16</code> RFC 1918;</li>
+<li><code>169.254.0.0/16</code> link-local and common metadata range.</li>
+</ul>
+<p>This guard is not a complete reserved-address or IPv6 SSRF policy, and DNS can
+change after validation. The watcher also cannot attach OPA authentication
+headers. Treat the destination as administrator-controlled, enforce egress and
+DNS policy outside the process, use HTTPS with a publicly trusted certificate,
+and do not expose an unauthenticated OPA data API to an untrusted network.</p>
+<p>These constraints are another reason the current integration is not a
+recommended production enforcement path.</p>
+<h2 id="configure-the-watcher-in-isolated-staging">Configure the watcher in isolated staging<a class="headerlink" href="#configure-the-watcher-in-isolated-staging" title="Permanent link">&para;</a></h2>
+<p>The management route itself is protected when Gateway management auth is
+configured:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">    "opa_url": "https://opa.example.com",</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s1">    "policy_path": "loxilb/l4",</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s1">    "poll_interval_sec": 30,</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s1">    "fail_open": false</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s1">  }'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/opa/watcher"</span>
+</code></pre></div>
+<p>This starts/replaces the watcher, but under the current implementation its
+subsequent local firewall apply calls do not carry the management credential.
+Expect them to fail when management auth is active; do not work around the
+failure by exposing an unauthenticated production management listener.</p>
+<h2 id="status-and-circuit-breaker">Status and circuit breaker<a class="headerlink" href="#status-and-circuit-breaker" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/opa/watcher"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td><code>status</code></td>
 <td><code>not_configured</code>, <code>running</code>, or <code>stopped</code></td>
 </tr>
 <tr>
 <td><code>last_sync_at</code></td>
-<td>RFC 3339 timestamp of the last successful sync with OPA</td>
+<td>Time the latest fetch/normalize/apply cycle completed, including a partial apply; it is not proof that every rule succeeded</td>
 </tr>
 <tr>
 <td><code>rules_count</code></td>
-<td>Number of active firewall rules currently compiled from the policy</td>
-</tr>
-<tr>
-<td><code>circuit_breaker_state</code></td>
-<td><code>0</code> = closed (healthy), <code>1</code> = half-open (probing), <code>2</code> = open (OPA treated as down)</td>
+<td>Successfully applied rules tracked in the watcher cache</td>
 </tr>
 <tr>
 <td><code>last_error</code></td>
-<td>Last error message, if any</td>
+<td>Latest fetch, normalization, or partial-apply error</td>
+</tr>
+<tr>
+<td><code>circuit_breaker_state</code></td>
+<td><code>0</code> closed, <code>1</code> open, <code>2</code> half-open</td>
 </tr>
 </tbody>
 </table>
-<p>A healthy watcher shows <code>status: running</code>, a recent <code>last_sync_at</code>, and
-<code>circuit_breaker_state: 0</code>.</p>
-<h3 id="7-remove-the-watcher">7. Remove the watcher<a class="headerlink" href="#7-remove-the-watcher" title="Permanent link">&para;</a></h3>
-<p>Stop polling and tear down the watcher. This succeeds even if no watcher is configured.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">curl</label><label for="__tabbed_4_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://&lt;loxilb-host&gt;:11111/netlox/v1/config/opa/watcher<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;api-token&gt;&#39;</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># {&quot;result&quot;:&quot;Success&quot;}</span>
+<p>Five consecutive OPA fetch failures open the circuit for 60 seconds. After the
+timeout it enters half-open; two successful OPA fetches close it. A
+normalization error records a failure, but the next successful fetch resets the
+closed-state failure count before normalization, so repeated
+normalization-only errors do not reliably open the circuit. Apply errors do not
+open it. Alert on <code>last_error</code> and failed syncs rather than relying only on the
+circuit state. While the circuit is open, polling does not change existing
+rules.</p>
+<p>Prometheus metrics:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loxilb_opa_watcher_syncs_total{status}</code></td>
+<td>Sync cycles by <code>success</code> or <code>failure</code></td>
+</tr>
+<tr>
+<td><code>loxilb_opa_sync_duration_seconds</code></td>
+<td>Duration of all sync attempts</td>
+</tr>
+<tr>
+<td><code>loxilb_opa_firewall_rules</code></td>
+<td>Successfully applied rules tracked in cache</td>
+</tr>
+<tr>
+<td><code>loxilb_opa_circuit_breaker_state</code></td>
+<td><code>0</code> closed, <code>1</code> open, <code>2</code> half-open</td>
+</tr>
+</tbody>
+</table>
+<p>Alert on failed sync rate, open circuit, stale <code>last_sync_at</code>, partial apply,
+and unexpected rule-count changes. Always corroborate with the Gateway firewall
+read API.</p>
+<h2 id="stop-the-watcher">Stop the watcher<a class="headerlink" href="#stop-the-watcher" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/opa/watcher"</span>
 </code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>loxicmd<span class="w"> </span>delete<span class="w"> </span>opa
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="operations">Operations<a class="headerlink" href="#operations" title="Permanent link">&para;</a></h2>
-<h3 id="fail-open-vs-fail-closed">Fail-open vs fail-closed<a class="headerlink" href="#fail-open-vs-fail-closed" title="Permanent link">&para;</a></h3>
-<p><code>fail_open</code> decides what happens the moment LoxiLB cannot reach OPA:</p>
+<p>Deleting the watcher stops polling but leaves its applied firewall rules and
+state file. Inventory and remove rules through an approved firewall change
+procedure; do not assume <code>DELETE /config/opa/watcher</code> is a policy rollback.</p>
+<h2 id="release-gates">Release gates<a class="headerlink" href="#release-gates" title="Permanent link">&para;</a></h2>
+<p>Before this integration can be treated as production-ready, require at least:</p>
 <ul>
-<li><strong><code>fail_open: false</code> (default, fail-closed)</strong> — the safe posture. If OPA is unreachable, LoxiLB
-  does not admit traffic that depends on a fresh allow decision. Choose this when a policy outage
-  must not become a security hole.</li>
-<li><strong><code>fail_open: true</code> (fail-open)</strong> — availability-first. Traffic keeps flowing when OPA is down,
-  trading enforcement for uptime. Choose this only when a policy-server outage must never take the
-  data path offline, and you accept that policy is un-enforced during the outage.</li>
-</ul>
-<h3 id="poll-interval-tuning">Poll interval tuning<a class="headerlink" href="#poll-interval-tuning" title="Permanent link">&para;</a></h3>
-<p><code>poll_interval_sec</code> (default <code>30</code>) trades policy freshness against load on the OPA server. Shorter
-intervals propagate policy changes faster but poll OPA more aggressively; longer intervals reduce
-load at the cost of staleness. Keep it comfortably above OPA's typical evaluation latency.</p>
-<h3 id="circuit-breaker-behavior">Circuit-breaker behavior<a class="headerlink" href="#circuit-breaker-behavior" title="Permanent link">&para;</a></h3>
-<p>The watcher wraps its OPA calls in a circuit breaker exposed via <code>circuit_breaker_state</code>:</p>
-<ul>
-<li><code>0</code> <strong>closed</strong> — normal operation; every poll reaches OPA.</li>
-<li><code>1</code> <strong>half-open</strong> — after failures, the breaker lets a probe through to test recovery.</li>
-<li><code>2</code> <strong>open</strong> — repeated failures have tripped the breaker; LoxiLB stops hammering a dead OPA and
-  applies the <code>fail_open</code> policy until a probe succeeds.</li>
-</ul>
-<p>When the breaker is <code>open</code>, the effective admit/deny behavior is governed by <code>fail_open</code>. Watch
-<code>circuit_breaker_state</code> alongside <code>last_error</code> to distinguish a transient blip from a sustained
-outage.</p>
-<h2 id="troubleshoot">Troubleshoot<a class="headerlink" href="#troubleshoot" title="Permanent link">&para;</a></h2>
-<h3 id="ssrf-rejection-of-private-reserved-ips">SSRF rejection of private / reserved IPs<a class="headerlink" href="#ssrf-rejection-of-private-reserved-ips" title="Permanent link">&para;</a></h3>
-<p>If the registration <code>POST</code> returns <code>400</code> complaining the URL is blocked, the <code>opa_url</code> resolved to
-a <strong>private or reserved IP range</strong> and the SSRF guard rejected it. Fixes:</p>
-<ul>
-<li>Give OPA a <strong>routable</strong> address — a real hostname or a public/routable IP that LoxiLB can reach.</li>
-<li>Do not use loopback (<code>127.0.0.1</code>), link-local, or other reserved ranges in <code>opa_url</code>.</li>
-<li>In a lab, run OPA on the same routable segment LoxiLB uses and reference it by that address.</li>
-</ul>
-<h3 id="unreachable-opa">Unreachable OPA<a class="headerlink" href="#unreachable-opa" title="Permanent link">&para;</a></h3>
-<p>Symptoms: <code>status</code> stuck without a fresh <code>last_sync_at</code>, <code>circuit_breaker_state</code> climbing to <code>1</code>
-or <code>2</code>, and a populated <code>last_error</code>. Checklist:</p>
-<ol>
-<li>From the LoxiLB host, <code>curl http://&lt;opa-host&gt;:8181/health</code> — confirm network reachability and
-   that OPA is listening.</li>
-<li>Re-run the step-4 <code>POST /v1/data/loxilb/l4</code> probe — confirm the policy still evaluates.</li>
-<li>Confirm <code>policy_path</code> in the watcher matches the Rego package (<code>loxilb/l4</code> ⇒ <code>loxilb.l4</code>).</li>
-<li>Decide whether <code>fail_open</code> reflects the behavior you want during the outage, and adjust if
-   needed by re-<code>POST</code>ing the watcher config.</li>
-</ol>
-<h3 id="other-status-codes">Other status codes<a class="headerlink" href="#other-status-codes" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong><code>400</code> — Invalid JSON or missing <code>opa_url</code>.</strong> Validate the request body; <code>opa_url</code> is required.</li>
-<li><strong><code>405</code> — Method not allowed.</strong> Use <code>GET</code>/<code>POST</code>/<code>DELETE</code> only on <code>/config/opa/watcher</code>.</li>
+<li>an authenticated internal apply path compatible with management auth;</li>
+<li>authenticated OPA transport with configurable trust;</li>
+<li>fail-open/fail-closed behavior implemented and tested;</li>
+<li>document-level validation or atomic rejection of invalid/empty policy;</li>
+<li>restrictive cache-file permissions and lifecycle cleanup;</li>
+<li>IPv4/IPv6 SSRF and DNS-rebinding controls;</li>
+<li>restart, rollback, and two-node behavior tested on the release image.</li>
 </ul>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../../reference/swagger-extras/">swagger-extras reference</a> — the raw-middleware endpoint surface.</li>
-<li><a href="../../ai-gateway/configuration-reference/">Configuration reference</a> — full <code>serviceArguments</code>.</li>
-<li><a href="../mtls/">mTLS for AI Backends</a> — certificate-based backend/frontend trust.</li>
+<li><a href="../management-api-authentication/">Management API Authentication</a></li>
+<li><a href="../../operations/monitoring/">Monitoring and Metrics</a></li>
+<li><a href="../../operations/audit-log/">Audit Log</a></li>
 </ul>
 
 

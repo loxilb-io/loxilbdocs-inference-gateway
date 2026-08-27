@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.">
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
       
       
       
@@ -396,6 +396,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose an Inference Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -644,6 +672,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="sel: 8 — CHWBL (consistent hash with bounded loads)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-shared-support-agent-prompt-on-equal-gpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: shared support-agent prompt on equal GPUs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -655,6 +700,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="sel: 9 — GPU-aware">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-deterministic-placement-in-a-plain-gpu-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: deterministic placement in a plain GPU pool
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -665,6 +727,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="sel: 10 — WRR-hash (weighted consistent hash)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-weighted-cache-affinity-across-different-sized-gpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: weighted cache affinity across different-sized GPUs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -780,6 +859,34 @@
     
   
     AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
   
 
     
@@ -1007,6 +1114,118 @@
     
   
     vLLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
   
 
     
@@ -1481,6 +1700,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Safety Scanning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/opa-l4/" class="md-nav__link">
         
   
@@ -1516,7 +1791,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1767,6 +2042,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/monitoring/" class="md-nav__link">
         
   
@@ -1803,6 +2190,90 @@
     
   
     Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
   
 
     
@@ -2312,6 +2783,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="sel: 8 — CHWBL (consistent hash with bounded loads)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-shared-support-agent-prompt-on-equal-gpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: shared support-agent prompt on equal GPUs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -2323,6 +2811,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="sel: 9 — GPU-aware">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-deterministic-placement-in-a-plain-gpu-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: deterministic placement in a plain GPU pool
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -2333,6 +2838,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="sel: 10 — WRR-hash (weighted consistent hash)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-weighted-cache-affinity-across-different-sized-gpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: weighted cache affinity across different-sized GPUs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -2442,6 +2964,14 @@
 
 
 <h1 id="load-balancing-algorithms">Load-Balancing Algorithms<a class="headerlink" href="#load-balancing-algorithms" title="Permanent link">&para;</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">HTTP/2 selector boundary</p>
+<p>The selector descriptions below apply to the HTTP/1.1 fullproxy path. HTTP/2 implements
+selector-8 CHWBL with a different rule: it can apply the load cap even when a prefix hash is
+present. Current HTTP/2 forwarding makes selectors 9 and 10 round-robin and does not connect
+P/D, KV-exact, or model-aware lookup. Validate HTTP/2 parity in the released artifact before
+enabling it.</p>
+</div>
 <p>The <code>sel</code> field on an LB rule chooses how the gateway picks a backend endpoint. This page covers the full <code>sel</code> enum and drills into the algorithms that matter for LLM serving — CHWBL, GPU-aware, weighted-round-robin-with-hash, and persist-based session affinity.</p>
 <hr />
 <h2 id="the-sel-enum">The <code>sel</code> enum<a class="headerlink" href="#the-sel-enum" title="Permanent link">&para;</a></h2>
@@ -2488,15 +3018,15 @@
 </tr>
 <tr>
 <td><code>5</code></td>
-<td>n2</td>
+<td>N2</td>
 <td>—</td>
-<td>Reserved variant.</td>
+<td>Userspace selector for the SCTP N2 interface; requires fullproxy.</td>
 </tr>
 <tr>
 <td><code>6</code></td>
-<td>n3</td>
+<td>N3</td>
 <td>—</td>
-<td>Reserved variant.</td>
+<td>N3 interface selector; accepted only for UDP services.</td>
 </tr>
 <tr>
 <td><code>7</code></td>
@@ -2512,9 +3042,9 @@
 </tr>
 <tr>
 <td><code>9</code></td>
-<td>GPU-aware</td>
+<td>GPU-aware (topology-dependent)</td>
 <td>✅</td>
-<td>Routes to the least-loaded GPU using live backend metrics.</td>
+<td>Plain pool: prefix/session modulo placement. P/D capacity-aware activation is currently release-blocked.</td>
 </tr>
 <tr>
 <td><code>10</code></td>
@@ -2530,6 +3060,8 @@
 </div>
 <hr />
 <h2 id="algorithms-for-llm-serving">Algorithms for LLM serving<a class="headerlink" href="#algorithms-for-llm-serving" title="Permanent link">&para;</a></h2>
+<p>Each advanced selector below combines its behavior, recommended use, a concrete HTTP/1.1
+fullproxy scenario, and checks that an operator can run during validation.</p>
 <h3 id="sel-0-round-robin"><code>sel: 0</code> — Round-robin<a class="headerlink" href="#sel-0-round-robin" title="Permanent link">&para;</a></h3>
 <p>Rotates evenly across all healthy endpoints. It has no awareness of KV cache, GPU load, or session context, so every turn of a multi-turn conversation can land on a different GPU and pay a cold-cache recompute penalty.</p>
 <p><strong>When to use for LLM serving:</strong> stateless, single-shot completions where every backend is interchangeable and no prompt reuse is expected — for example a batch classification or embedding pool. As soon as conversations or shared system prompts enter the picture, prefer <code>sel: 8</code> or <code>sel: 3</code>.</p>
@@ -2540,21 +3072,134 @@
 <p>Pins a logical session to a single backend so every request in that session reaches the GPU that already holds its context. The session key is taken from <code>session_header_name</code> (see <a href="#session-affinity-sel-3">Session affinity</a> below). With no <code>session_header_name</code> set, persist falls back to source-IP stickiness.</p>
 <p><strong>When to use for LLM serving:</strong> conversational or agentic workloads that carry an explicit session identifier (a chat thread ID, an MCP session header, a cookie). It is the most direct way to keep a conversation's KV cache warm on one endpoint.</p>
 <h3 id="sel-8-chwbl-consistent-hash-with-bounded-loads"><code>sel: 8</code> — CHWBL (consistent hash with bounded loads)<a class="headerlink" href="#sel-8-chwbl-consistent-hash-with-bounded-loads" title="Permanent link">&para;</a></h3>
-<p>Hashes a stable feature of the request (model, system prompt prefix, and optionally more — see the flags below) onto a consistent-hash ring, then routes to the nearest endpoint while enforcing a bounded-load ceiling so no single backend is overwhelmed. Requests that share a prefix hash to the same endpoint, maximizing prompt-cache reuse; when backends are added or removed, only a small fraction of keys remap.</p>
-<p><strong>When to use for LLM serving:</strong> the general-purpose default for conversational and RAG workloads. It gives strong cache locality without requiring clients to send a session header, and its bounded-load ceiling keeps a hot prefix from saturating one GPU. Tuning knobs are covered in <a href="#chwbl-tuning-sel-8">CHWBL tuning</a> below.</p>
+<p>On HTTP/1.1, this selector hashes a stable feature of the request onto a consistent-hash ring.
+When a real prefix hash is available, it preserves strict prefix affinity and skips unhealthy ring
+owners; it does not apply the bounded-load spill check. When it instead uses a conversation or
+fallback-derived key, the bounded-load ceiling can move selection away from an overloaded ring
+owner. Adding or removing a backend remaps only part of the ring.</p>
+<p><strong>When to use for LLM serving:</strong> conversational and RAG workloads that benefit from strong prefix
+locality without requiring clients to send a session header. Monitor hot shared prefixes because
+strict prefix affinity can concentrate them on one endpoint. Tuning fields and their current
+runtime boundary are covered in <a href="#chwbl-tuning-sel-8">CHWBL tuning</a> below.</p>
+<h4 id="example-shared-support-agent-prompt-on-equal-gpus">Example: shared support-agent prompt on equal GPUs<a class="headerlink" href="#example-shared-support-agent-prompt-on-equal-gpus" title="Permanent link">&para;</a></h4>
+<p>Three clients use the same model and support-agent system prompt. GPU-A, GPU-B, and GPU-C have
+equal capacity, so reusing one GPU's warm KV cache matters more than evenly spreading these three
+requests.</p>
+<pre class="mermaid"><code>flowchart LR
+    C1["Client 1&lt;br/&gt;same model and system prompt"] --&gt; KEY["Same request-derived&lt;br/&gt;prefix hash"]
+    C2["Client 2&lt;br/&gt;same model and system prompt"] --&gt; KEY
+    C3["Client 3&lt;br/&gt;same model and system prompt"] --&gt; KEY
+    KEY --&gt; RING["CHWBL&lt;br/&gt;consistent-hash ring"]
+    RING --&gt;|Ring owner is healthy| A["GPU-A&lt;br/&gt;warm prefix cache"]
+    RING -.-&gt;|GPU-A unavailable| B["Next healthy&lt;br/&gt;ring owner"]
+    A --&gt; RESULT["More KV-cache reuse"]
+    B --&gt; RESULT
+
+    style KEY fill:#e1f5fe,stroke:#0288d1
+    style A fill:#e8f5e9,stroke:#43a047
+    style B fill:#fff9c4,stroke:#f9a825
+    style RESULT fill:#e8f5e9,stroke:#43a047</code></pre>
+<p><strong>Operator checks:</strong></p>
+<ul>
+<li>Replay the same prefix and use request or access logs to confirm that it reaches the same healthy
+  endpoint.</li>
+<li>Alert on a hot shared prefix that concentrates requests on one GPU.</li>
+<li>Simulate an endpoint failure and verify selection of the next healthy ring owner, or HTTP 503
+  when none is available.</li>
+</ul>
 <h3 id="sel-9-gpu-aware"><code>sel: 9</code> — GPU-aware<a class="headerlink" href="#sel-9-gpu-aware" title="Permanent link">&para;</a></h3>
-<p>Routes to the least-loaded GPU using live metrics scraped from each backend (queue depth and KV-cache pressure). It optimizes for immediate throughput rather than cache locality.</p>
-<p><strong>When to use for LLM serving:</strong> throughput-oriented pools of largely independent requests, where balancing GPU queues matters more than reusing a prior prompt's cache. GPU-aware routing depends on a working metrics feed from the backends — see <a href="../../ai-gateway/vllm-integration/">vLLM Integration</a>.</p>
-<div class="admonition warning">
-<p class="admonition-title">GPU-aware routing: advanced, no automated CI scenario</p>
-<p>No automated end-to-end CI scenario ships for <code>sel: 9</code> yet. Treat it as advanced and validate against your own fleet before relying on it in production.</p>
+<p>The current fullproxy implementation has two distinct laws behind this historical name:</p>
+<ul>
+<li>On a <strong>plain single pool</strong>, a request with a prefix hash uses
+  <code>prefix_hash % endpoint_count</code>; otherwise a conversation ID is hashed the same way, followed by
+  a health-aware fallback when neither value is available. Pushed worker metrics are not read by
+  this userspace selector.</li>
+<li>On a <strong>P/D pool</strong>, the intended capacity-aware branch exists, but its current activation gate
+  checks the mutable endpoint cursor rather than the configured selector. A configured <code>sel: 9</code>
+  therefore does not reliably activate it. Normal Tier 2 uses active connections plus queued
+  requests.</li>
+</ul>
+<p>The separate GPU status and worker-metrics APIs provide observability; they are not evidence of
+least-loaded selection on the plain path. See
+<a href="../../ai-gateway/vllm-integration/">vLLM Integration</a>.</p>
+<div class="admonition danger">
+<p class="admonition-title">P/D capacity-aware activation is currently release-blocked</p>
+<p>Configuring <code>sel: 9</code> does not reliably enable the capacity-aware scorer. Do not claim that
+behavior until the activation gate is corrected and the exact release artifact passes an
+integration test. On HTTP/2, selector 9 reduces to round-robin.</p>
 </div>
+<p><strong>When to use for LLM serving:</strong> use <code>sel: 9</code> only when you deliberately want plain-pool modulo
+placement and have tested how endpoint additions, removals, and failures remap traffic. Prefer
+CHWBL for a stable ring with bounded-load protection, round-robin for independent requests, and
+the normal routing hierarchy for a P/D pool.</p>
+<h4 id="example-deterministic-placement-in-a-plain-gpu-pool">Example: deterministic placement in a plain GPU pool<a class="headerlink" href="#example-deterministic-placement-in-a-plain-gpu-pool" title="Permanent link">&para;</a></h4>
+<p>A non-P/D pool has three equal GPUs. Two requests carry the same model and prompt prefix. The
+resulting prefix hash maps to endpoint index <code>1</code> when divided by the three endpoints.</p>
+<pre class="mermaid"><code>flowchart LR
+    REQ1["Request 1&lt;br/&gt;shared prefix"] --&gt; HASH["Prefix hash"]
+    REQ2["Request 2&lt;br/&gt;same prefix"] --&gt; HASH
+    HASH --&gt; MOD["hash modulo 3&lt;br/&gt;result: endpoint 1"]
+    MOD --&gt; B["GPU-B&lt;br/&gt;endpoint index 1"]
+    B --&gt;|Connect succeeds| RESP["Serve both requests"]
+    B -.-&gt;|Connect fails| FALLBACK["Walk healthy endpoints&lt;br/&gt;using generic failover"]
+    FALLBACK --&gt;|Another endpoint connects| RESP
+    FALLBACK --&gt;|No endpoint accepts connection| R502["HTTP 502&lt;br/&gt;backend_unreachable"]
+
+    style HASH fill:#e1f5fe,stroke:#0288d1
+    style MOD fill:#fff3e0,stroke:#f57c00
+    style B fill:#e8f5e9,stroke:#43a047
+    style FALLBACK fill:#fff9c4,stroke:#f9a825
+    style RESP fill:#e1f5fe,stroke:#0288d1
+    style R502 fill:#ffebee,stroke:#e53935</code></pre>
+<p><strong>Operator checks:</strong></p>
+<ul>
+<li>Replay the same prefix and confirm the same endpoint index while endpoint count and order remain
+  unchanged.</li>
+<li>Add or remove a test endpoint and measure the wider remapping caused by modulo placement.</li>
+<li>Force connection failure and distinguish connection-exhaustion
+  <code>502 backend_unreachable</code> from selection-time <code>503 no_healthy_backend</code>.</li>
+</ul>
 <h3 id="sel-10-wrr-hash-weighted-consistent-hash"><code>sel: 10</code> — WRR-hash (weighted consistent hash)<a class="headerlink" href="#sel-10-wrr-hash-weighted-consistent-hash" title="Permanent link">&para;</a></h3>
 <p>Uses the same prefix-hashing machinery as CHWBL, but distributes the virtual nodes on the ring proportionally to endpoint <code>weight</code>. You get CHWBL's prefix-cache locality <em>and</em> a deliberate, weight-driven traffic split across uneven backends.</p>
-<p><strong>When to use for LLM serving:</strong> mixed or transitional fleets where you want cache-aware routing but the endpoints are not equal — for example while draining an old GPU tier, or when blending large- and small-VRAM nodes under one VIP. All the <code>chwbl_*</code> knobs below apply to <code>sel: 10</code> as well.</p>
+<p>On HTTP/1.1, a real prefix hash remains strictly affine to its weighted ring owner, subject to
+health handling. The bounded-load check applies only when selection uses a conversation or
+fallback-derived key.</p>
+<p><strong>When to use for LLM serving:</strong> mixed or transitional fleets where you want cache-aware routing but the endpoints are not equal — for example while draining an old GPU tier, or when blending large- and small-VRAM nodes under one VIP. Selector 10 uses endpoint weights, but submitted <code>chwbl_*</code> tuning values are not currently propagated to the proxy.</p>
+<h4 id="example-weighted-cache-affinity-across-different-sized-gpus">Example: weighted cache affinity across different-sized GPUs<a class="headerlink" href="#example-weighted-cache-affinity-across-different-sized-gpus" title="Permanent link">&para;</a></h4>
+<p>GPU-A is the largest worker, GPU-B is medium, and GPU-C is smallest. Their endpoint weights are
+<code>4</code>, <code>2</code>, and <code>1</code>, and many different prompt prefixes arrive over time.</p>
+<pre class="mermaid"><code>flowchart LR
+    TRAFFIC["Many different&lt;br/&gt;prompt prefixes"] --&gt; HASH["Compute one hash&lt;br/&gt;per prefix"]
+    REPEAT["Repeated prefix"] --&gt; HASH
+    HASH --&gt; RING["Weighted&lt;br/&gt;consistent-hash ring"]
+    RING --&gt; A["GPU-A&lt;br/&gt;weight 4&lt;br/&gt;largest ring share"]
+    RING --&gt; B["GPU-B&lt;br/&gt;weight 2&lt;br/&gt;medium ring share"]
+    RING --&gt; C["GPU-C&lt;br/&gt;weight 1&lt;br/&gt;smallest ring share"]
+    A --&gt; RESULT["Repeated prefix returns to&lt;br/&gt;the same healthy ring owner"]
+    B --&gt; RESULT
+    C --&gt; RESULT
+
+    style HASH fill:#e1f5fe,stroke:#0288d1
+    style RING fill:#e8f5e9,stroke:#43a047
+    style A fill:#e8f5e9,stroke:#43a047
+    style B fill:#fff9c4,stroke:#f9a825
+    style C fill:#fff3e0,stroke:#f57c00
+    style RESULT fill:#e1f5fe,stroke:#0288d1</code></pre>
+<p><strong>Operator checks:</strong></p>
+<ul>
+<li>Test many distinct prefixes; do not expect a small sample to produce an exact <code>4:2:1</code> request
+  ratio.</li>
+<li>Replay one prefix and confirm that it returns to the same healthy ring owner.</li>
+<li>Read back the configured endpoint weights and verify the intended static ownership distribution;
+  weight is not a live GPU-load signal.</li>
+</ul>
 <hr />
 <h2 id="chwbl-tuning-sel-8">CHWBL tuning (<code>sel: 8</code>)<a class="headerlink" href="#chwbl-tuning-sel-8" title="Permanent link">&para;</a></h2>
-<p>The CHWBL knobs also apply to <code>sel: 10</code> (WRR-hash). They are ignored for every other <code>sel</code> value.</p>
+<p>The API accepts the CHWBL knobs for <code>sel: 8</code> and <code>sel: 10</code>, but the current rule-to-data-plane
+path does not propagate them. The live proxy uses mean-load factor <code>175</code>, replication <code>256</code>,
+prefix flags <code>0</code>, and cache-salt enforcement disabled. Treat the fields below as an intended
+configuration contract, not working production tuning, until runtime metrics or a distribution
+test proves propagation in the released artifact.</p>
 <table>
 <thead>
 <tr>
@@ -2571,47 +3216,47 @@
 <td>int</td>
 <td><code>1</code></td>
 <td><code>1</code>, <code>2</code>, <code>3</code></td>
-<td>Depth of the prefix folded into the hash. <code>1</code> = system prompt + model; <code>2</code> = adds session context; <code>3</code> = adds RAG context. Higher levels tighten cache affinity for richer prompts.</td>
+<td>Stored/read back; the runtime currently derives prefix scope from request content.</td>
 </tr>
 <tr>
 <td><code>chwbl_prefix_hash_flags</code></td>
 <td>int</td>
 <td><code>0</code></td>
 <td><code>0</code>–<code>255</code> bitflags</td>
-<td>Which optional request fields join the hash. <code>0</code> = auto-detect. Bits are listed below.</td>
+<td>Stored/read back; the runtime currently programs flags <code>0</code>.</td>
 </tr>
 <tr>
 <td><code>chwbl_mean_load_factor</code></td>
 <td>int</td>
-<td><code>125</code> ⚠️</td>
+<td>schema <code>125</code>; runtime <code>175</code></td>
 <td><code>100</code>–<code>300</code></td>
-<td>Bounded-load ceiling as a percentage: <code>max_load = avg_load × factor / 100</code>. <code>125</code> allows 25% overload before spilling to the next endpoint.</td>
+<td>Intended bounded-load ceiling; currently not propagated to the proxy.</td>
 </tr>
 <tr>
 <td><code>chwbl_replication</code></td>
 <td>int</td>
-<td><code>100</code></td>
+<td>schema <code>100</code>; runtime <code>256</code></td>
 <td><code>1</code>–<code>1024</code></td>
-<td>Virtual nodes per physical endpoint. Higher improves ring distribution at the cost of memory. For <code>sel: 10</code> this is the total vnode count, split proportionally by weight.</td>
+<td>Intended vnode count; currently not propagated to the proxy.</td>
 </tr>
 <tr>
 <td><code>chwbl_enable_cache_salt</code></td>
 <td>bool</td>
 <td><code>false</code></td>
 <td>—</td>
-<td>When <code>true</code>, requires a <code>cache_salt</code> field in each request and folds it into the hash, enforcing strict multi-tenant cache isolation. When <code>false</code>, <code>cache_salt</code> is optional.</td>
+<td>Intended salt requirement; currently not propagated, so it must not be used as a tenant-isolation control.</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition warning">
-<p class="admonition-title"><code>chwbl_mean_load_factor</code>: schema default 125 is not applied on omit</p>
-<p>The API schema annotates <code>default: 125</code>, but that value is <strong>not applied when the field is
-omitted</strong> — an omitted field falls to the runtime data-plane initialization of <strong>175</strong>
-(a 1.75× mean ceiling). In other words: set the field explicitly to get your value; leave it out
-and the effective out-of-box ceiling is 175. Set it explicitly if the exact ceiling matters.</p>
+<div class="admonition danger">
+<p class="admonition-title">Do not claim strict tenant isolation from CHWBL salt</p>
+<p>Prefix scope is inferred from request content and the runtime salt switch remains off.
+Separate untrusted tenants into independently authorized pools or listeners. A hash input is
+an affinity hint, not an authorization boundary.</p>
 </div>
 <h3 id="chwbl_prefix_hash_flags-bits"><code>chwbl_prefix_hash_flags</code> bits<a class="headerlink" href="#chwbl_prefix_hash_flags-bits" title="Permanent link">&para;</a></h3>
-<p>Set individual bits (sum their values) to fold additional request features into the prefix hash. <code>0</code> means auto-detect.</p>
+<p>These bits describe the API contract. The current proxy receives flags <code>0</code> and infers prefix
+scope from each request; setting a nonzero value does not currently change the live hash input.</p>
 <table>
 <thead>
 <tr>
@@ -2663,37 +3308,38 @@ and the effective out-of-box ceiling is 175. Set it explicitly if the exact ceil
 </tr>
 </tbody>
 </table>
-<p>For example, <code>chwbl_prefix_hash_flags: 192</code> folds both the RAG template (bit 6) and RAG documents (bit 7) into the hash so that requests sharing the same retrieved context route to the same endpoint.</p>
+<p>For example, the schema defines <code>192</code> as bits 6 and 7. This is descriptive API metadata only in
+the current build; setting it does not change the live hash input.</p>
 <h3 id="configure-chwbl">Configure CHWBL<a class="headerlink" href="#configure-chwbl" title="Permanent link">&para;</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Protect the management API</p>
+<p>The <code>curl</code> examples use plain HTTP for an isolated lab. In production, use an authenticated,
+TLS-protected management endpoint and keep authorization values out of command arguments.</p>
+</div>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">      &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">      &quot;port&quot;: 8080,</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">      &quot;protocol&quot;: &quot;tcp&quot;,</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">      &quot;mode&quot;: 4,</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s1">      &quot;sel&quot;: 8,</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">      &quot;backend_protocol&quot;: &quot;http1&quot;,</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="s1">      &quot;chwbl_prefix_hash_level&quot;: 2,</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s1">      &quot;chwbl_prefix_hash_flags&quot;: 0,</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s1">      &quot;chwbl_mean_load_factor&quot;: 125,</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="s1">      &quot;chwbl_replication&quot;: 100,</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="s1">      &quot;chwbl_enable_cache_salt&quot;: false</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="s1">    },</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="s1">    &quot;endpoints&quot;: [</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1},</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1},</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;33.33.33.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1}</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="s1">    ]</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="s1">  }&#39;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="s1">    "serviceArguments": {</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">      "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">      "port": 8080,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">      "protocol": "tcp",</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">      "mode": 4,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s1">      "sel": 8,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">      "backend_protocol": "http1"</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="s1">    },</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s1">    "endpoints": [</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s1">      {"endpointIP": "192.0.2.1", "targetPort": 8080, "weight": 1},</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="s1">      {"endpointIP": "198.51.100.1", "targetPort": 8080, "weight": 1},</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="s1">      {"endpointIP": "203.0.113.1", "targetPort": 8080, "weight": 1}</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="s1">    ]</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="s1">  }'</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,32.32.32.1:1,33.33.33.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>chwbl<span class="w"> </span>--backend-protocol<span class="o">=</span>http1<span class="w"> </span>--chwbl-hash-level<span class="o">=</span><span class="m">2</span><span class="w"> </span>--chwbl-hash-flags<span class="o">=</span><span class="m">0</span><span class="w"> </span>--chwbl-load-factor<span class="o">=</span><span class="m">125</span><span class="w"> </span>--chwbl-replication<span class="o">=</span><span class="m">100</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1,203.0.113.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>chwbl<span class="w"> </span>--backend-protocol<span class="o">=</span>http1
 </code></pre></div>
 </div>
 </div>
@@ -2737,27 +3383,27 @@ and the effective out-of-box ceiling is 175. Set it explicitly if the exact ceil
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">      &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">      &quot;port&quot;: 8080,</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">      &quot;protocol&quot;: &quot;tcp&quot;,</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">      &quot;mode&quot;: 4,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">      &quot;sel&quot;: 3,</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">      &quot;backend_protocol&quot;: &quot;http1&quot;,</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">      &quot;session_header_name&quot;: &quot;X-Session-ID&quot;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s1">    "serviceArguments": {</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">      "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">      "port": 8080,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">      "protocol": "tcp",</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">      "mode": 4,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">      "sel": 3,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">      "backend_protocol": "http1",</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">      "session_header_name": "X-Session-ID"</span>
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">    },</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s1">    &quot;endpoints&quot;: [</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1},</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1},</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;33.33.33.1&quot;, &quot;targetPort&quot;: 8080, &quot;weight&quot;: 1}</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s1">    "endpoints": [</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s1">      {"endpointIP": "192.0.2.1", "targetPort": 8080, "weight": 1},</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s1">      {"endpointIP": "198.51.100.1", "targetPort": 8080, "weight": 1},</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s1">      {"endpointIP": "203.0.113.1", "targetPort": 8080, "weight": 1}</span>
 <a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s1">    ]</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s1">  }&#39;</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s1">  }'</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,32.32.32.1:1,33.33.33.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>persist<span class="w"> </span>--backend-protocol<span class="o">=</span>http1<span class="w"> </span>--session-header-name<span class="o">=</span>X-Session-ID
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1,203.0.113.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>persist<span class="w"> </span>--backend-protocol<span class="o">=</span>http1<span class="w"> </span>--session-header-name<span class="o">=</span>X-Session-ID
 </code></pre></div>
 </div>
 </div>
@@ -2783,11 +3429,14 @@ and the effective out-of-box ceiling is 175. Set it explicitly if the exact ceil
 <ul>
 <li>Confirm the intended <code>sel</code> value on the rule via <code>GET /config/loadbalancer/all</code>.</li>
 <li>For <code>sel: 2</code> or <code>sel: 10</code>, check that endpoint <code>weight</code> values reflect the split you expect.</li>
-<li>For <code>sel: 8</code>, a hot shared prefix concentrating on one endpoint is expected; raise <code>chwbl_mean_load_factor</code> to permit more overload before spilling, or increase <code>chwbl_replication</code> for finer ring distribution.</li>
+<li>For HTTP/1.1 <code>sel: 8</code> or <code>sel: 10</code>, a hot shared prefix concentrating on one endpoint is expected
+  because real prefix hashes bypass bounded-load spill. For non-prefix keys, the current proxy uses
+  factor 175 and replication 256; changing the stored REST fields does not tune them.</li>
 </ul>
 <p><strong>CHWBL / WRR-hash knobs appear to have no effect</strong></p>
 <ul>
-<li>The <code>chwbl_*</code> fields are honored only when <code>sel</code> is <code>8</code> or <code>10</code>. Verify the <code>sel</code> value.</li>
+<li>Verify <code>sel</code> is <code>8</code> or <code>10</code>, then test the observed distribution. The <code>chwbl_*</code> fields are
+  stored but are not currently propagated to the proxy.</li>
 <li>Confirm the rule is in <code>mode: 4</code> (fullproxy); L4 modes cannot inspect the request body to compute prefix hashes.</li>
 </ul>
 <p><strong>Session not sticking under <code>sel: 3</code></strong></p>
@@ -2797,7 +3446,11 @@ and the effective out-of-box ceiling is 175. Set it explicitly if the exact ceil
 </ul>
 <p><strong>GPU-aware (<code>sel: 9</code>) sending everything to one GPU</strong></p>
 <ul>
-<li>Confirm the backend metrics feed is connected; with no metrics, scoring cannot differentiate endpoints. See <a href="../../ai-gateway/vllm-integration/">vLLM Integration</a>.</li>
+<li>On a plain pool, repeated prefixes are deliberately mapped by modulo and can concentrate
+  traffic. Pushed worker metrics do not change that law. Use CHWBL for bounded prefix affinity or
+  round-robin for independent requests. Do not diagnose P/D capacity scoring from selector 9 until
+  its activation gate is corrected; normal P/D Tier 2 uses active connections plus queued requests.
+  See <a href="../../ai-gateway/vllm-integration/">vLLM Integration</a>.</li>
 </ul>
 <hr />
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
@@ -2805,7 +3458,7 @@ and the effective out-of-box ceiling is 175. Set it explicitly if the exact ceil
 <li><a href="../ai-routing-model/">Opt-in AI Routing Model</a> — how per-rule AI routing is enabled</li>
 <li><a href="../running-modes/">Running Modes</a> — why <code>mode: 4</code> (fullproxy) is required</li>
 <li><a href="../../use-cases/routing-hierarchy/">Routing Hierarchy</a> — the layered prefix → KV → load selection ladder in depth</li>
-<li><a href="../../ai-gateway/llm-routing/">LLM Routing</a> — CHWBL and GPU-aware routing in the AI Gateway</li>
+<li><a href="../../ai-gateway/llm-routing/">LLM Routing</a> — CHWBL and selector-9 topology behavior in the AI Gateway</li>
 <li><a href="../../ai-gateway/configuration-reference/">Configuration Reference</a> — every <code>serviceArguments</code> field</li>
 </ul>
 

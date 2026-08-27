@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.">
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
       
       
       
@@ -396,6 +396,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose an Inference Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -554,6 +582,34 @@
     
   
     AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
   
 
     
@@ -803,6 +859,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../sse-quota-management/" class="md-nav__link">
         
   
@@ -1015,6 +1183,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="4. KV-cache exact routing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#engine-and-field-coherence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Engine and field coherence
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1525,6 +1710,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Safety Scanning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/opa-l4/" class="md-nav__link">
         
   
@@ -1560,7 +1801,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1811,6 +2052,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/monitoring/" class="md-nav__link">
         
   
@@ -1847,6 +2200,90 @@
     
   
     Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
   
 
     
@@ -2361,6 +2798,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="4. KV-cache exact routing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#engine-and-field-coherence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Engine and field coherence
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2530,20 +2984,20 @@
 
 
 <h1 id="configuration-reference">Configuration Reference<a class="headerlink" href="#configuration-reference" title="Permanent link">&para;</a></h1>
-<p>The authoritative, exhaustive reference for the <code>serviceArguments</code> object (and its
+<p>The public contract reference for the <code>serviceArguments</code> object (and its
 <code>endpoints[]</code> and <code>mtls_*</code> sub-objects) used to create an AI Gateway load-balancer rule via
-<code>POST /netlox/v1/config/loadbalancer</code>. Every field, type, default, and enum below is verbatim
-from the load-balancer schema — where a running gateway ever disagrees, the schema wins.</p>
+<code>POST /netlox/v1/config/loadbalancer</code>. The tables follow the current API schema together with the
+server's engine-coherence and topology validation. Invalid combinations fail before a rule is
+created; a client must not assume that every individually valid field can be combined.</p>
 <p>A load-balancer create body has three top-level keys:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">&quot;serviceArguments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">&quot;endpoints&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">],</span><span class="w"> </span><span class="nt">&quot;secondaryIPs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">"serviceArguments"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"endpoints"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">],</span><span class="w"> </span><span class="nt">"secondaryIPs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <p><code>serviceArguments</code> carries the VIP, the L4/L7 behaviour, and every AI-routing knob. <code>endpoints</code>
 carries the backend pool. This page documents both.</p>
 <div class="admonition note">
 <p class="admonition-title">Prerequisite for AI routing</p>
 <p>All AI routing behaviour (model-name pools, CHWBL, KV-cache routing, P/D disaggregation,
-SSE) requires <strong><code>mode: 4</code> (fullproxy)</strong>. <code>mode: 6</code> (aigw) exists in the enum but is
-unexercised — do not rely on it. Set <code>mode: 4</code> on every AI rule.</p>
+SSE) requires <strong><code>mode: 4</code> (fullproxy)</strong>. Set <code>mode: 4</code> on every AI rule.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">How to read the tables</p>
@@ -2612,15 +3066,15 @@ apply to every rule, AI or not.</p>
 <td><code>mode</code></td>
 <td>int32</td>
 <td><code>0</code></td>
-<td><code>0</code>–<code>6</code> (see §2)</td>
+<td><code>0</code>–<code>5</code> (see §2)</td>
 <td>NAT/proxy mode. <strong><code>4</code>=fullproxy is the AI prerequisite.</strong></td>
 </tr>
 <tr>
 <td><code>security</code></td>
 <td>int32</td>
 <td><code>0</code></td>
-<td><code>0</code>–<code>3</code> (see §8)</td>
-<td>TLS mode: <code>0</code>-plain, <code>1</code>-https, <code>2</code>-tls, <code>3</code>-e2ehttps.</td>
+<td><code>0</code>–<code>2</code> (see §8)</td>
+<td>TLS mode: <code>0</code>=plain HTTP, <code>1</code>=frontend TLS termination with an HTTP backend, <code>2</code>=frontend TLS termination plus TLS re-encryption to the backend.</td>
 </tr>
 <tr>
 <td><code>host</code></td>
@@ -2735,6 +3189,20 @@ apply to every rule, AI or not.</p>
 <td>Per-rule concurrent-connection ceiling (eBPF-CT enforced).</td>
 </tr>
 <tr>
+<td><code>cb_enable</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td><code>true</code>/<code>false</code></td>
+<td>Enable the fullproxy per-endpoint circuit breaker. The default connect-failure threshold is five with a 30-second open period. Origin-5xx demotion uses a separate threshold; P/D rules can enable breaker behavior automatically.</td>
+</tr>
+<tr>
+<td><code>vip_qos_policy_id</code></td>
+<td>string</td>
+<td>empty</td>
+<td>existing <code>/config/policy</code> identifier</td>
+<td>Associate a pre-created policy with the LB rule. Empty is a no-op; an unknown identifier makes creation fail. The policy must be created first.</td>
+</tr>
+<tr>
 <td><code>annotations</code></td>
 <td>object (string→string)</td>
 <td>—</td>
@@ -2803,12 +3271,12 @@ apply to every rule, AI or not.</p>
 <tr>
 <td><code>9</code></td>
 <td>gpuaware</td>
-<td>GPU-load-aware routing (requires GPU metrics).</td>
+<td>Plain fullproxy uses prefix/conversation affinity and healthy-endpoint fallback. A P/D capacity scorer exists, but its activation is release-blocked because the current gate checks a mutable endpoint cursor instead of the configured selector.</td>
 </tr>
 <tr>
 <td><code>10</code></td>
 <td>wrr-hash</td>
-<td>Weighted CHWBL hashing (shares all <code>chwbl_*</code> knobs, §5).</td>
+<td>Weighted CHWBL hashing; endpoint weights apply, while stored <code>chwbl_*</code> tuning values are not currently propagated (§5).</td>
 </tr>
 </tbody>
 </table>
@@ -2851,11 +3319,6 @@ apply to every rule, AI or not.</p>
 <td><code>5</code></td>
 <td>hostonearm</td>
 <td>Host one-arm.</td>
-</tr>
-<tr>
-<td><code>6</code></td>
-<td>aigw</td>
-<td>AI-gateway mode — present in enum but unexercised; do not rely on it.</td>
 </tr>
 </tbody>
 </table>
@@ -2918,10 +3381,12 @@ apply to every rule, AI or not.</p>
 </tbody>
 </table>
 <div class="admonition note">
-<p class="admonition-title">SSE lifecycle and token accounting are wired</p>
-<p>SSE stream lifecycle handling and token bookkeeping are enforced in the data path. (API-key
-auth and per-tenant rate-limiting remain control-plane CRUD only — see
-<a href="../api-key-management/">API Key Management</a>.)</p>
+<p class="admonition-title">SSE lifecycle and admission controls are enforced</p>
+<p>SSE lifecycle handling is part of the fullproxy stream path. API-key model authorization,
+request-rate limits, and token quotas use the independent PostgreSQL key store configured by
+<code>--aikey-db-*</code>. Without <code>--aikey-db-host</code>, the current data path admits requests without key
+validation. Prove a missing-key request receives <code>401</code> before using these controls as an
+access boundary.</p>
 </div>
 <hr />
 <h2 id="4-kv-cache-exact-routing">4. KV-cache exact routing<a class="headerlink" href="#4-kv-cache-exact-routing" title="Permanent link">&para;</a></h2>
@@ -2944,28 +3409,28 @@ overlap silently drops to zero. See <a href="../kv-caching/">KV-Cache Routing</a
 <td>int64</td>
 <td><code>0</code></td>
 <td><code>0</code>–<code>3</code></td>
-<td><code>0</code>=off, <code>1</code>=zmq (P/D role-partitioned), <code>2</code>=nats (reserved), <strong><code>3</code>=zmq single-role</strong> (all EPs subscribed, no P/D split — used by SGLang).</td>
+<td><code>0</code>=off; <code>1</code>=P/D-coupled KV-exact routing and requires <code>pd_disagg_mode: true</code>; <code>2</code>=reserved and not implemented; <code>3</code>=single-role KV-exact routing and requires <code>mode: 4</code> with P/D disabled. The transport is selected by <code>kvEngineType</code>, not by this number.</td>
 </tr>
 <tr>
 <td><code>kvBlockSize</code></td>
 <td>int64</td>
 <td><code>16</code></td>
 <td>≥1</td>
-<td>Token block size for hash computation. <strong>Must match</strong> vLLM <code>--block-size</code> / SGLang <code>--page-size</code>. (CPU vLLM defaults to 128 — override to 16.)</td>
+<td>Token block size for hash computation. Must match vLLM <code>--block-size</code>, SGLang <code>--page-size</code>, or TensorRT-LLM <code>tokens_per_block</code>. TensorRT-LLM commonly uses 32 while this field defaults to 16, so verify it explicitly.</td>
 </tr>
 <tr>
 <td><code>kvHashAlgo</code></td>
 <td>string</td>
-<td><code>sha256_cbor</code></td>
-<td><code>sha256_cbor</code>, <code>xxhash_cbor</code></td>
-<td>Block-hash algorithm; must match the engine's configured algorithm. <strong>For SGLang, OMIT this field</strong> (engine identity implies the SGLang algorithm; an explicit value scores 0).</td>
+<td>derived</td>
+<td><code>sha256_cbor</code>, <code>xxhash_cbor</code>, <code>sha256_sglang</code>, <code>blockhash_trtllm</code></td>
+<td>Prefer omission: the gateway derives the coherent engine default (<code>vllm</code>→<code>sha256_cbor</code>, <code>sglang</code>→<code>sha256_sglang</code>, <code>trtllm</code>→<code>blockhash_trtllm</code>). Explicit engine/algo mismatches and every explicit value for llama.cpp are rejected.</td>
 </tr>
 <tr>
 <td><code>kvZmqPort</code></td>
 <td>int64</td>
 <td><code>5557</code></td>
 <td><code>1</code>–<code>65535</code></td>
-<td>ZMQ PUB port on the (prefill) endpoints publishing KV-cache events.</td>
+<td>Base ZMQ publisher port for vLLM/SGLang. Mode 1 subscribes prefill endpoints; mode 3 subscribes all endpoints. A meaningful non-default value is rejected for TensorRT-LLM and llama.cpp.</td>
 </tr>
 <tr>
 <td><code>kvWarmupSec</code></td>
@@ -2978,18 +3443,68 @@ overlap silently drops to zero. See <a href="../kv-caching/">KV-Cache Routing</a
 <td><code>kvEngineType</code></td>
 <td>string</td>
 <td><code>vllm</code></td>
-<td><code>vllm</code>, <code>sglang</code></td>
-<td>KV-event engine for this VIP. <strong>Immutable after create</strong> (delete + recreate to change). One framework per VIP.</td>
+<td><code>vllm</code>, <code>sglang</code>, <code>trtllm</code>, <code>llamacpp</code></td>
+<td>Typed serving engine. Immutable after create; delete and recreate the rule to change it. Engine selection enables validation but does not imply feature parity.</td>
 </tr>
 <tr>
 <td><code>kvDpRankCount</code></td>
 <td>int32</td>
 <td><code>1</code></td>
 <td><code>1</code>–<code>8</code></td>
-<td>SGLang data-parallel rank count. Rank N publishes at <code>kvZmqPort+N</code>; all ranks union into one per-EP inventory.</td>
+<td>SGLang data-parallel rank count. Rank N publishes at <code>kvZmqPort+N</code>; all ranks union into one per-endpoint inventory. Values above 1 are rejected for TensorRT-LLM and llama.cpp.</td>
+</tr>
+<tr>
+<td><code>pdBootstrapPort</code></td>
+<td>int32</td>
+<td><code>0</code></td>
+<td><code>0</code>–<code>65535</code></td>
+<td>SGLang P/D bootstrap port on each prefill endpoint. <code>0</code> uses SGLang's default <code>8998</code>. A nonzero value requires <code>pd_disagg_mode: true</code> and <code>kvEngineType: sglang</code>; all other shapes are rejected.</td>
 </tr>
 </tbody>
 </table>
+<h3 id="engine-and-field-coherence">Engine and field coherence<a class="headerlink" href="#engine-and-field-coherence" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Engine</th>
+<th>Supported routing shapes</th>
+<th>Event transport</th>
+<th>Required coherence / rejected fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vllm</code></td>
+<td>Plain L7 LB; single-role mode 3; sequential P/D with optional mode 1</td>
+<td>ZMQ</td>
+<td>Use a vLLM hash algorithm and match block size and hash seed. <code>pdBootstrapPort</code> is rejected.</td>
+</tr>
+<tr>
+<td><code>sglang</code></td>
+<td>Plain L7 LB; single-role mode 3; concurrent P/D; optional P/D-coupled mode 1</td>
+<td>ZMQ, including per-rank ports</td>
+<td>Omit <code>kvHashAlgo</code> or use only <code>sha256_sglang</code>. <code>pdBootstrapPort</code> is valid only for SGLang P/D.</td>
+</tr>
+<tr>
+<td><code>trtllm</code></td>
+<td>Plain L7 LB; single-role mode 3; sequential P/D with mode 1</td>
+<td>HTTP polling on each endpoint's serving port</td>
+<td>The gateway must be the sole consumer of <code>/kv_cache_events</code>. Meaningful ZMQ and rank settings are rejected; match <code>kvBlockSize</code> to <code>tokens_per_block</code>.</td>
+</tr>
+<tr>
+<td><code>llamacpp</code></td>
+<td>Plain L7 LB with CHWBL or session affinity</td>
+<td>None</td>
+<td>KV-exact and P/D are unsupported. Explicit hash settings and meaningful KV transport, rank, or block-size overrides are rejected.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Fail closed on incoherent engine settings</p>
+<p>Treat a create-time rejection as a configuration defect; do not work around it by changing the
+engine name or disabling certificate verification. The validation prevents accepted-but-unused
+fields and silent hash mismatches.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">vLLM hash-contract triad</p>
 <p>All three legs must match the vLLM launch flags or hash overlap is 0%: NONE_HASH seed
@@ -3000,8 +3515,12 @@ size (<code>--block-size</code> == <code>kvBlockSize</code>). vLLM must also set
 </div>
 <hr />
 <h2 id="5-chwbl-wrr-hash-tuning-knobs">5. CHWBL / WRR-HASH tuning knobs<a class="headerlink" href="#5-chwbl-wrr-hash-tuning-knobs" title="Permanent link">&para;</a></h2>
-<p>These knobs apply <strong>only when <code>sel: 8</code> (CHWBL) or <code>sel: 10</code> (wrr-hash)</strong>. They are ignored for
-every other <code>sel</code> value. See <a href="../llm-routing/">LLM Routing</a>.</p>
+<p>The REST model accepts and returns these fields for <code>sel: 8</code> (CHWBL) and
+<code>sel: 10</code> (wrr-hash), but the current FullProxy programming path does not
+propagate them to the data plane. Runtime selection instead uses a mean-load
+factor of <code>175</code>, replication <code>256</code>, prefix flags <code>0</code>, and cache-salt enforcement
+off. Treat API read-back as stored configuration, not proof of enforcement. See
+<a href="../llm-routing/">LLM Routing</a>.</p>
 <table>
 <thead>
 <tr>
@@ -3018,43 +3537,45 @@ every other <code>sel</code> value. See <a href="../llm-routing/">LLM Routing</a
 <td>integer</td>
 <td><code>1</code></td>
 <td><code>1</code>, <code>2</code>, <code>3</code></td>
-<td>Prefix-hash depth: <code>1</code>=system prompt+model, <code>2</code>=+session context, <code>3</code>=+RAG.</td>
+<td>Stored/read back; current runtime infers prefix scope from request content.</td>
 </tr>
 <tr>
 <td><code>chwbl_prefix_hash_flags</code></td>
 <td>integer</td>
 <td><code>0</code></td>
 <td><code>0</code>–<code>255</code> (bitflags)</td>
-<td>Optional-field inclusion. Bit0=LoRA, 1=image, 2=audio, 3=cache_salt, 4=tools, 5=session, 6=RAG template, 7=RAG docs. <code>0</code>=auto-detect.</td>
+<td>Stored/read back; current runtime programs flags <code>0</code>.</td>
 </tr>
 <tr>
 <td><code>chwbl_mean_load_factor</code></td>
 <td>integer</td>
-<td><code>125</code> (schema) ⚠️</td>
+<td><code>125</code> (schema)</td>
 <td><code>100</code>–<code>300</code></td>
-<td>Max load factor %: <code>max_load = avg_load × factor / 100</code>. <code>125</code> allows 25% overload. <strong>⚠️ The schema <code>default: 125</code> is only applied when you set the field; an omitted field falls to the runtime default of <code>175</code> (1.75×). Set it explicitly for a predictable ceiling.</strong></td>
+<td>Stored/read back; current runtime uses <code>175</code> (1.75×) regardless of this value.</td>
 </tr>
 <tr>
 <td><code>chwbl_replication</code></td>
 <td>integer</td>
 <td><code>100</code></td>
 <td><code>1</code>–<code>1024</code></td>
-<td>Virtual nodes per endpoint. Higher = better distribution, more memory. For WRR-HASH this is the total vnode count distributed by weight.</td>
+<td>Stored/read back; current runtime uses <code>256</code> virtual nodes.</td>
 </tr>
 <tr>
 <td><code>chwbl_enable_cache_salt</code></td>
 <td>boolean</td>
 <td><code>false</code></td>
 <td><code>true</code>/<code>false</code></td>
-<td>Require a <code>cache_salt</code> field in requests for strict multi-tenant isolation. <code>false</code> = <code>cache_salt</code> optional.</td>
+<td>Stored/read back; current runtime does not enforce cache salt. Do not use this field as a tenant-isolation boundary.</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="6-prefill-decode-pd-disaggregation">6. Prefill / Decode (P/D) disaggregation<a class="headerlink" href="#6-prefill-decode-pd-disaggregation" title="Permanent link">&para;</a></h2>
-<p>Two-phase vLLM flow: prefill request to a prefill endpoint, then decode to a decode endpoint
-using KV-transfer parameters from the prefill response. Requires <code>mode: 4</code>. Endpoint roles are
-set per-endpoint via <code>ep_role</code> (§9). See <a href="../pd-disaggregation/">P/D Disaggregation</a>.</p>
+<p>P/D requires <code>mode: 4</code> plus at least one prefill endpoint (<code>ep_role: 1</code>) and one decode endpoint
+(<code>ep_role: 2</code>). vLLM and TensorRT-LLM use sequential engine-specific flows. SGLang uses concurrent
+dual dispatch and may use <code>pdBootstrapPort</code>; base SGLang P/D does not require <code>kvExactMode</code>.
+Use <code>kvExactMode: 1</code> only when adding the P/D-coupled KV-exact tier. Mode 3 is single-role and is
+rejected when P/D is enabled. See <a href="../pd-disaggregation/">P/D Disaggregation</a>.</p>
 <table>
 <thead>
 <tr>
@@ -3085,21 +3606,21 @@ set per-endpoint via <code>ep_role</code> (§9). See <a href="../pd-disaggregati
 <td>int32</td>
 <td><code>0</code></td>
 <td>≥0</td>
-<td>Session-stickiness TTL (seconds). <strong><code>0</code> = no automatic expiry.</strong> Only used when <code>pd_cache_aware_mode: true</code>.</td>
+<td>Tier-0 P/D session-stickiness TTL (seconds). Runtime <code>0</code> selects the 300-second default; it does not disable expiry. This applies to P/D session lookup independently of <code>pd_cache_aware_mode</code>; that field controls the optional radix-trie tier.</td>
 </tr>
 <tr>
 <td><code>pd_cache_threshold</code></td>
 <td>int32</td>
 <td><code>20</code></td>
 <td><code>0</code>–<code>100</code></td>
-<td>Cache-match threshold. Lower = more aggressive cache routing.</td>
+<td>Cache-match threshold. Runtime <code>0</code> selects <code>20</code>; lower nonzero values are more aggressive.</td>
 </tr>
 <tr>
 <td><code>pd_balance_abs_threshold</code></td>
 <td>int32</td>
 <td><code>3</code></td>
-<td>≥0</td>
-<td>Load-imbalance threshold. If (max−min) active connections exceeds this, bypass cache affinity.</td>
+<td><code>0</code>–<code>255</code> effective</td>
+<td>Load-imbalance threshold. Runtime <code>0</code> selects <code>3</code>; the value is passed through an 8-bit field. If (max−min) active connections exceeds it, cache affinity is bypassed.</td>
 </tr>
 </tbody>
 </table>
@@ -3175,25 +3696,27 @@ client-cert verification and backend re-encryption. Additional TLS-tuning fields
 <tr>
 <td><code>0</code></td>
 <td>plain</td>
-<td>No TLS (<strong>default</strong>).</td>
+<td>Plain HTTP on both legs (<strong>default</strong>).</td>
 </tr>
 <tr>
 <td><code>1</code></td>
 <td>https</td>
-<td>TLS terminated at the VIP (frontend HTTPS).</td>
+<td>TLS terminates at the gateway; the backend leg is plain HTTP.</td>
 </tr>
 <tr>
 <td><code>2</code></td>
-<td>tls</td>
-<td>TLS passthrough / re-encrypt. <strong>Not "e2ehttps"</strong> — that is <code>3</code>.</td>
-</tr>
-<tr>
-<td><code>3</code></td>
 <td>e2ehttps</td>
-<td>End-to-end HTTPS (terminate at VIP, re-encrypt to backend).</td>
+<td>TLS terminates at the gateway and the gateway establishes a separate TLS connection to the backend.</td>
 </tr>
 </tbody>
 </table>
+<div class="admonition danger">
+<p class="admonition-title">Mode 2 is not TLS passthrough</p>
+<p>The gateway terminates and re-encrypts TLS, so it can inspect HTTP traffic. Values outside
+<code>0</code>, <code>1</code>, and <code>2</code> fail request validation and the rule is not created. For production backend TLS, set
+<code>mtls_backend.verify_server_cert: true</code> and provide a trusted CA rather than accepting any
+backend certificate.</p>
+</div>
 <h3 id="mtls_frontend-object"><code>mtls_frontend</code> (object)<a class="headerlink" href="#mtls_frontend-object" title="Permanent link">&para;</a></h3>
 <p>Client-certificate verification. Only valid with <code>security: 1</code> or <code>security: 2</code> <strong>and</strong> <code>mode: 4</code>.</p>
 <table>
@@ -3219,7 +3742,7 @@ client-cert verification and backend re-encryption. Additional TLS-tuning fields
 <td>string</td>
 <td>—</td>
 <td>filesystem path (PEM)</td>
-<td>Client CA bundle path (e.g. <code>/opt/loxilb/cert/client_ca_bundle.crt</code>).</td>
+<td>Absolute path to a mounted client CA bundle. Prefer a read-only secret mount.</td>
 </tr>
 <tr>
 <td><code>client_ca_cert_data</code></td>
@@ -3239,7 +3762,7 @@ client-cert verification and backend re-encryption. Additional TLS-tuning fields
 <td><code>client_cn_pattern</code></td>
 <td>string</td>
 <td>—</td>
-<td>e.g. <code>*.corp.example.com</code></td>
+<td>e.g. <code>client.example.test</code></td>
 <td>Required CN pattern (wildcards supported). Only used if <code>require_client_cn: true</code>.</td>
 </tr>
 <tr>
@@ -3247,7 +3770,7 @@ client-cert verification and backend re-encryption. Additional TLS-tuning fields
 <td>string</td>
 <td>—</td>
 <td>filesystem path (PEM)</td>
-<td>Static CRL file; a revoked client leaf cert is rejected. Empty preserves default behaviour.</td>
+<td>Absolute path to a mounted static CRL; a revoked client leaf certificate is rejected. Keep it current.</td>
 </tr>
 </tbody>
 </table>
@@ -3291,7 +3814,7 @@ client-cert verification and backend re-encryption. Additional TLS-tuning fields
 <td>string</td>
 <td>—</td>
 <td>filesystem path (PEM)</td>
-<td>loxilb's private key for backend mTLS.</td>
+<td>Gateway private key for backend mTLS. Mount read-only with access limited to the gateway process.</td>
 </tr>
 <tr>
 <td><code>client_cert_data</code></td>
@@ -3601,56 +4124,53 @@ scenario.</p>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="s1">  &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="s1">    &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s1">    &quot;port&quot;: 8080,</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">    &quot;protocol&quot;: &quot;tcp&quot;,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">    &quot;sel&quot;: 0,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">    &quot;mode&quot;: 4,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">    &quot;security&quot;: 0,</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s1">    &quot;host&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s1">    &quot;pd_disagg_mode&quot;: true,</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="s1">    &quot;probeRetries&quot;: 1,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="s1">    &quot;kvExactMode&quot;: 1,</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="s1">    &quot;kvBlockSize&quot;: 16,</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="s1">    &quot;kvHashAlgo&quot;: &quot;sha256_cbor&quot;,</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="s1">    &quot;kvZmqPort&quot;: 5557,</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="s1">    &quot;kvWarmupSec&quot;: 30,</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="s1">    &quot;kvEngineType&quot;: &quot;vllm&quot;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="s1">  "serviceArguments": {</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="s1">    "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s1">    "port": 8080,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">    "protocol": "tcp",</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">    "sel": 0,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">    "mode": 4,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">    "security": 0,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s1">    "host": "10.10.10.254",</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s1">    "pd_disagg_mode": true,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="s1">    "probeRetries": 1,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="s1">    "kvExactMode": 1,</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="s1">    "kvBlockSize": 16,</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="s1">    "kvHashAlgo": "sha256_cbor",</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="s1">    "kvZmqPort": 5557,</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="s1">    "kvWarmupSec": 30,</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="s1">    "kvEngineType": "vllm"</span>
 <a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="s1">  },</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="s1">  &quot;endpoints&quot;: [</span>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="s1">    { &quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1 },</span>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="s1">    { &quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2 },</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="s1">    { &quot;endpointIP&quot;: &quot;33.33.33.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1 },</span>
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="s1">    { &quot;endpointIP&quot;: &quot;34.34.34.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2 },</span>
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="s1">    { &quot;endpointIP&quot;: &quot;35.35.35.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1 },</span>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="s1">    { &quot;endpointIP&quot;: &quot;36.36.36.1&quot;, &quot;targetPort&quot;: 80, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2 }</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="s1">  "endpoints": [</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="s1">    { "endpointIP": "198.51.100.11", "targetPort": 80, "weight": 1, "ep_role": 1 },</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="s1">    { "endpointIP": "198.51.100.12", "targetPort": 80, "weight": 1, "ep_role": 2 },</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="s1">    { "endpointIP": "198.51.100.13", "targetPort": 80, "weight": 1, "ep_role": 1 },</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="s1">    { "endpointIP": "198.51.100.14", "targetPort": 80, "weight": 1, "ep_role": 2 },</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="s1">    { "endpointIP": "198.51.100.15", "targetPort": 80, "weight": 1, "ep_role": 1 },</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="s1">    { "endpointIP": "198.51.100.16", "targetPort": 80, "weight": 1, "ep_role": 2 }</span>
 <a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="s1">  ]</span>
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="s1">}&#39;</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="s1">}'</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:80<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,32.32.32.1:1,33.33.33.1:1,34.34.34.1:1,35.35.35.1:1,36.36.36.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--pd-disagg<span class="w"> </span>--proberetries<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span><span class="w"> </span>--kv-hash-algo<span class="o">=</span>sha256_cbor<span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5557</span><span class="w"> </span>--kv-warmup<span class="o">=</span><span class="m">30</span><span class="w"> </span>--kv-engine-type<span class="o">=</span>vllm<span class="w"> </span>--ep-role<span class="o">=</span>prefill,decode,prefill,decode,prefill,decode
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:80<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">198</span>.51.100.11:1,198.51.100.12:1,198.51.100.13:1,198.51.100.14:1,198.51.100.15:1,198.51.100.16:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--host<span class="o">=</span><span class="m">192</span>.0.2.10<span class="w"> </span>--pd-disagg<span class="w"> </span>--proberetries<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span><span class="w"> </span>--kv-hash-algo<span class="o">=</span>sha256_cbor<span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5557</span><span class="w"> </span>--kv-warmup<span class="o">=</span><span class="m">30</span><span class="w"> </span>--kv-engine-type<span class="o">=</span>vllm<span class="w"> </span>--ep-role<span class="o">=</span>prefill,decode,prefill,decode,prefill,decode
 </code></pre></div>
 </div>
 </div>
 </div>
-<p>A CHWBL prefix-cache variant (no P/D) swaps <code>serviceArguments</code> for:</p>
+<p>A CHWBL prefix-cache variant (no P/D) swaps <code>serviceArguments</code> for the
+following minimal shape. The current runtime uses the fixed CHWBL values
+described in section 5; adding stored <code>chwbl_*</code> fields does not change them.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;externalIP&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10.10.10.254&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8080</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;protocol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tcp&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;security&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;host&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10.10.10.254&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">&quot;sel&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">&quot;model_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;llama-70b&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">&quot;backend_protocol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http1&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">&quot;sse_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="nt">&quot;backend_keepalive_interval_sec&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="nt">&quot;chwbl_prefix_hash_level&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="nt">&quot;chwbl_prefix_hash_flags&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span><span class="nt">&quot;chwbl_mean_load_factor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">125</span><span class="p">,</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">  </span><span class="nt">&quot;chwbl_replication&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span><span class="nt">&quot;chwbl_enable_cache_salt&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="p">}</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">"externalIP"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10.10.10.254"</span><span class="p">,</span><span class="w"> </span><span class="nt">"port"</span><span class="p">:</span><span class="w"> </span><span class="mi">8080</span><span class="p">,</span><span class="w"> </span><span class="nt">"protocol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tcp"</span><span class="p">,</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">"mode"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nt">"security"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"host"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10.10.10.254"</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="nt">"sel"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nt">"model_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"llama-70b"</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="nt">"backend_protocol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http1"</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">"sse_mode"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="nt">"backend_keepalive_interval_sec"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="p">}</span>
 </code></pre></div>
 <hr />
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
@@ -3662,7 +4182,7 @@ scenario.</p>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># KV-cache per-block hash inventory (kvExactMode rules)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=&lt;id&gt;&amp;ep_idx=0&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">'http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=&lt;id&gt;&amp;ep_idx=0'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
 </code></pre></div>
 </div>
 <div class="tabbed-block">

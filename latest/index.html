@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.">
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
       
       
       
@@ -348,6 +348,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#choose-a-starting-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose a starting path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#who-this-is-for" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -494,6 +505,34 @@
     
   
     Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="getting-started/choose-your-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose an Inference Engine
   
 
     
@@ -665,6 +704,34 @@
     
   
     AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="concepts/engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
   
 
     
@@ -892,6 +959,118 @@
     
   
     vLLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ai-gateway/sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ai-gateway/tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ai-gateway/llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ai-gateway/ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
   
 
     
@@ -1366,6 +1545,62 @@
   
   
     <li class="md-nav__item">
+      <a href="security/management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="security/ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Safety Scanning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="security/opa-l4/" class="md-nav__link">
         
   
@@ -1401,7 +1636,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1652,6 +1887,118 @@
   
   
     <li class="md-nav__item">
+      <a href="operations/ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="operations/tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="operations/dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="operations/monitoring/" class="md-nav__link">
         
   
@@ -1688,6 +2035,90 @@
     
   
     Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="operations/ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="operations/log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="operations/ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
   
 
     
@@ -2155,6 +2586,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#choose-a-starting-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose a starting path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#who-this-is-for" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2218,7 +2660,7 @@
 <h1 id="loxilb-inference-gateway">LoxiLB Inference Gateway<a class="headerlink" href="#loxilb-inference-gateway" title="Permanent link">&para;</a></h1>
 <p>An inference-aware L4/L7 load balancer for LLM serving fleets — the same GoLang/eBPF
 data path as <a href="https://github.com/loxilb-io/loxilb">loxilb</a>, extended with routing that
-understands how vLLM and SGLang actually serve tokens.</p>
+understands the distinct serving contracts of vLLM, SGLang, TensorRT-LLM, and llama.cpp.</p>
 <h2 id="what-it-is">What it is<a class="headerlink" href="#what-it-is" title="Permanent link">&para;</a></h2>
 <p>The LoxiLB Inference Gateway is a fork of loxilb that adds AI-inference routing on top of
 loxilb's proven cloud-native load-balancing data path. A single gateway serves both classic
@@ -2250,6 +2692,10 @@ path (<code>mode: 4</code>) — see <a href="concepts/running-modes/">Running Mo
 </thead>
 <tbody>
 <tr>
+<td><strong>Engine-aware integration</strong></td>
+<td>Validate and route vLLM, SGLang, TensorRT-LLM, and llama.cpp rule shapes without pretending that every engine supports the same cache-event or P/D features.</td>
+</tr>
+<tr>
 <td><strong>Model-name routing</strong></td>
 <td>Route by the requested model (<code>X-Model</code> header or body <code>model</code> field) to per-model endpoint pools; <code>""</code> is the catch-all pool.</td>
 </tr>
@@ -2266,6 +2712,10 @@ path (<code>mode: 4</code>) — see <a href="concepts/running-modes/">Running Mo
 <td>SSE-aware proxying that suppresses idle timeouts while a streaming response is active, with a wall-clock runaway cap and backend keepalive for long streams.</td>
 </tr>
 <tr>
+<td><strong>AI traffic governance</strong></td>
+<td>On eligible SSE or P/D fullproxy rules, validate API keys, authorize models, and enforce request/token quotas before dispatch; apply byte-rate QoS separately to rules or ports. The separated key-store/auth plane is development-stage and must be qualified against the deployed image.</td>
+</tr>
+<tr>
 <td><strong>CHWBL / GPU-aware algorithms</strong></td>
 <td>Consistent-hash-with-bounded-load selection (<code>sel: 8</code>), weighted CHWBL (<code>sel: 10</code>) for heterogeneous GPUs, and GPU-aware selection (<code>sel: 9</code>).</td>
 </tr>
@@ -2279,13 +2729,31 @@ path (<code>mode: 4</code>) — see <a href="concepts/running-modes/">Running Mo
 </tr>
 </tbody>
 </table>
-<p>Each of these is one REST call to the gateway on port <strong>11111</strong>
-(<code>/netlox/v1/config/loadbalancer</code>). See the <a href="ai-gateway/overview/">AI Gateway Overview</a> for
-the full feature set and the <a href="ai-gateway/configuration-reference/">Configuration Reference</a>
-for every field.</p>
+<p>Load-balancer rule features use the management API on port <strong>11111</strong> under
+<code>/netlox/v1/config/loadbalancer</code>; keys, quotas, QoS, logs, and authentication use their own
+<code>/netlox/v1</code> operations. See the <a href="ai-gateway/overview/">AI Gateway Overview</a>,
+<a href="reference/api/">API Reference</a>, and <a href="ai-gateway/configuration-reference/">Configuration Reference</a>
+before automating these operations.</p>
+<h2 id="choose-a-starting-path">Choose a starting path<a class="headerlink" href="#choose-a-starting-path" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    START([Start]) --&gt; ENGINE{"Need help choosing&lt;br/&gt;an inference engine?"}
+    ENGINE --&gt;|Yes| CHOOSE["Choose an Inference Engine"]
+    ENGINE --&gt;|No| FIRST{"First deployment?"}
+    CHOOSE --&gt; MATRIX["Engine Capability Matrix"]
+    MATRIX --&gt; QUICK["Quickstart"]
+    FIRST --&gt;|Yes| QUICK
+    FIRST --&gt;|No| GOAL{"Primary goal?"}
+    GOAL --&gt;|Routing and P/D| AIGW["AI Gateway guides"]
+    GOAL --&gt;|Keys, quotas, QoS| GOVERN["AI Traffic Governance"]
+    GOAL --&gt;|Monitoring and recovery| OPS["Operations guides"]
+
+    style QUICK fill:#e8f5e9,stroke:#43a047
+    style AIGW fill:#e1f5fe,stroke:#0288d1
+    style GOVERN fill:#fff3e0,stroke:#f57c00
+    style OPS fill:#f3e5f5,stroke:#8e24aa</code></pre>
 <h2 id="who-this-is-for">Who this is for<a class="headerlink" href="#who-this-is-for" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Teams operating an LLM serving fleet</strong> (vLLM or SGLang) that need cache-locality-aware
+<li><strong>Teams operating an LLM serving fleet</strong> (vLLM, SGLang, TensorRT-LLM, or llama.cpp) that need cache-locality-aware
   routing, prefill/decode disaggregation, or a single multi-tenant OpenAI-compatible endpoint.</li>
 <li><strong>Platform teams</strong> who want one gateway for both classic Kubernetes/telco load balancing and
   inference-aware routing, without an Envoy + ext-proc sidecar chain.</li>
@@ -2300,33 +2768,41 @@ load balancer with inference-aware routing built in.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="s1">  &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="s1">    &quot;externalIP&quot;: &quot;10.10.10.254&quot;, &quot;port&quot;: 8080, &quot;protocol&quot;: &quot;tcp&quot;,</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">    &quot;sel&quot;: 8, &quot;mode&quot;: 4, &quot;host&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">    &quot;chwbl_prefix_hash_level&quot;: 2, &quot;chwbl_replication&quot;: 100 },</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">  &quot;endpoints&quot;: [</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">    { &quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1 },</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s1">    { &quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1 } ]}&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">GATEWAY_API</span><span class="o">=</span><span class="s2">"http://192.0.2.10:11111"</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>-sS<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$GATEWAY_API</span><span class="s2">/netlox/v1/config/loadbalancer"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span>-d<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">  "serviceArguments": {</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">    "externalIP": "192.0.2.20", "port": 8080, "protocol": "tcp",</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">    "sel": 8, "mode": 4, "host": "192.0.2.20" },</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">  "endpoints": [</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s1">    { "endpointIP": "198.51.100.11", "targetPort": 8000, "weight": 1 },</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">    { "endpointIP": "198.51.100.12", "targetPort": 8000, "weight": 1 } ]}'</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,32.32.32.1:1<span class="w"> </span>--select<span class="o">=</span>chwbl<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--chwbl-hash-level<span class="o">=</span><span class="m">2</span><span class="w"> </span>--chwbl-replication<span class="o">=</span><span class="m">100</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.20<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">198</span>.51.100.11:1,198.51.100.12:1<span class="w"> </span>--select<span class="o">=</span>chwbl<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--host<span class="o">=</span><span class="m">192</span>.0.2.20
 </code></pre></div>
 </div>
 </div>
 </div>
+<p>The example uses documentation-only addresses. Replace them with your management endpoint, VIP,
+and backend addresses. If management authentication is enabled, add the deployment's bearer
+header without placing the token directly in shell history. The current proxy uses fixed CHWBL
+runtime constants; stored <code>chwbl_*</code> tuning fields do not change them yet.</p>
 <h2 id="where-to-go-next">Where to go next<a class="headerlink" href="#where-to-go-next" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong><a href="getting-started/installation/">Getting Started → Installation</a></strong> — run the gateway.</li>
 <li><strong><a href="getting-started/quickstart/">Getting Started → Quickstart</a></strong> — a working model-routing
   rule end to end.</li>
+<li><strong><a href="getting-started/choose-your-engine/">Getting Started → Choose an Inference Engine</a></strong> — select an engine and supported topology before adding advanced controls.</li>
+<li><strong><a href="concepts/engine-capability-matrix/">Concepts → Engine Capability Matrix</a></strong> — compare engine-specific KV-event and P/D support.</li>
 <li><strong><a href="concepts/architecture/">Concepts → Architecture</a></strong> — how the gateway sits in an LLM
   serving stack.</li>
 <li><strong><a href="concepts/running-modes/">Concepts → Running Modes</a></strong> — why <code>mode: 4</code> (fullproxy) is the
   prerequisite for every AI feature.</li>
 <li><strong><a href="ai-gateway/overview/">AI Gateway</a></strong> — model routing, KV-cache routing, P/D, SSE, MCP.</li>
+<li><strong><a href="ai-gateway/ai-traffic-governance/">AI Traffic Governance</a></strong> — configure and verify API keys, model authorization, RPS, and token quotas.</li>
 <li><strong><a href="use-cases/kv-cache-aware-routing/">LLM Integration Use-Cases</a></strong> — flagship, end-to-end
   routing walkthroughs for vLLM and SGLang.</li>
 <li><strong><a href="management/overview/">Management &amp; UI</a></strong> — the web dashboard (<a href="management/loxilb-ui/">LoxiLB UI</a>),
@@ -2334,6 +2810,10 @@ load balancer with inference-aware routing built in.</p>
   together as a <a href="management/management-plane/">management plane</a>.</li>
 <li><strong><a href="operations/monitoring/">Operations → Monitoring</a></strong> — the Prometheus + Grafana stack with
   provisioned dashboards and alerts.</li>
+<li><strong><a href="security/management-api-authentication/">Security → Management API Authentication</a></strong> — separate operator credentials from inference API keys and review current release blockers.</li>
+<li><strong><a href="operations/ai-key-store/">Operations → AI Key Store</a></strong> — provision, protect, back up, and diagnose the development PostgreSQL key store.</li>
+<li><strong><a href="operations/backup-restore/">Operations → Backup and Restore</a></strong> — define recovery scope and test restore gates before production use.</li>
+<li><strong><a href="operations/ha-limitations/">Operations → HA &amp; Upgrade Limitations</a></strong> — understand which state is synchronized, rebuilt, or lost during promotion.</li>
 </ul>
 <h2 id="where-it-fits-scope-and-non-goals">Where it fits (scope and non-goals)<a class="headerlink" href="#where-it-fits-scope-and-non-goals" title="Permanent link">&para;</a></h2>
 <p>The gateway is a self-contained inference gateway: one Go/eBPF binary covers L4 through

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.">
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
       
       
       
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#logging-audit" class="md-skip">
+        <a href="#logging-and-audit" class="md-skip">
           Skip to content
         </a>
       
@@ -396,6 +396,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose an Inference Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -554,6 +582,34 @@
     
   
     AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
   
 
     
@@ -781,6 +837,118 @@
     
   
     vLLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
   
 
     
@@ -1255,6 +1423,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Safety Scanning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/opa-l4/" class="md-nav__link">
         
   
@@ -1290,7 +1514,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1543,6 +1767,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../monitoring/" class="md-nav__link">
         
   
@@ -1579,6 +1915,90 @@
     
   
     Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
   
 
     
@@ -1758,6 +2178,28 @@
     <span class="md-ellipsis">
       
         loxilb-mcp audit trail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#read-logs-through-the-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read logs through the API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audit-review-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit review checklist
       
     </span>
   </a>
@@ -2238,6 +2680,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#read-logs-through-the-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read logs through the API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audit-review-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit review checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#what-is-not-covered" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2265,7 +2729,7 @@
 
 
 
-<h1 id="logging-audit">Logging &amp; Audit<a class="headerlink" href="#logging-audit" title="Permanent link">&para;</a></h1>
+<h1 id="logging-and-audit">Logging and Audit<a class="headerlink" href="#logging-and-audit" title="Permanent link">&para;</a></h1>
 <p>The Inference Gateway writes structured operational logs from the LoxiLB process and a separate action audit trail from the <code>loxilb-mcp</code> management surface. This page covers how to configure both, where the files land, and how they are rotated.</p>
 <div class="admonition note">
 <p class="admonition-title">Audience</p>
@@ -2430,15 +2894,102 @@
 <li>otherwise <code>~/.loxilb-mcp/</code> (created with <code>0700</code> permissions).</li>
 </ol>
 <p>Each line is one event. Recorded event kinds include tool calls, authentication rejections, request-origin rejections, rate-limit hits, and autopilot executions. A typical record carries the timestamp, event kind, client and target names, the tool and its arguments, the outcome (<code>ok</code>), any error, latency, and the remote address:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="nt">&quot;ts&quot;</span><span class="p">:</span><span class="s2">&quot;2026-07-27T09:14:02.481Z&quot;</span><span class="p">,</span><span class="nt">&quot;kind&quot;</span><span class="p">:</span><span class="s2">&quot;tool_call&quot;</span><span class="p">,</span><span class="nt">&quot;client&quot;</span><span class="p">:</span><span class="s2">&quot;oncall&quot;</span><span class="p">,</span><span class="nt">&quot;target&quot;</span><span class="p">:</span><span class="s2">&quot;gateway-1&quot;</span><span class="p">,</span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="s2">&quot;lb_create&quot;</span><span class="p">,</span><span class="nt">&quot;args&quot;</span><span class="p">:{</span><span class="nt">&quot;externalIP&quot;</span><span class="p">:</span><span class="s2">&quot;10.10.10.254&quot;</span><span class="p">},</span><span class="nt">&quot;ok&quot;</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nt">&quot;latency_ms&quot;</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="nt">&quot;remote&quot;</span><span class="p">:</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="nt">"ts"</span><span class="p">:</span><span class="s2">"2026-07-27T09:14:02.481Z"</span><span class="p">,</span><span class="nt">"kind"</span><span class="p">:</span><span class="s2">"tool_call"</span><span class="p">,</span><span class="nt">"client"</span><span class="p">:</span><span class="s2">"operator"</span><span class="p">,</span><span class="nt">"target"</span><span class="p">:</span><span class="s2">"gateway"</span><span class="p">,</span><span class="nt">"tool"</span><span class="p">:</span><span class="s2">"lb_create"</span><span class="p">,</span><span class="nt">"args"</span><span class="p">:{</span><span class="nt">"externalIP"</span><span class="p">:</span><span class="s2">"192.0.2.10"</span><span class="p">},</span><span class="nt">"ok"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nt">"latency_ms"</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="nt">"remote"</span><span class="p">:</span><span class="s2">"192.0.2.20"</span><span class="p">}</span>
 </code></pre></div>
-<p>Secret-shaped argument values (tokens, passwords, API keys, and similar) are masked as <code>[REDACTED]</code> before the event is written, so credentials never land in the audit file.</p>
+<p>Known top-level secret-shaped argument fields (tokens, passwords, API keys, and similar) are
+masked as <code>[REDACTED]</code> before the event is written. This is a best-effort safeguard, not a
+guarantee for arbitrary nested or unexpectedly named values. Treat every audit record as
+sensitive.</p>
+<div class="admonition warning">
+<p class="admonition-title">Redaction is defense in depth</p>
+<p>Do not rely on automatic masking as the only control. Avoid putting
+credentials or prompt content in tool arguments, names, and free-form
+fields. Restrict audit-file and archive access, and review a sanitized
+sample before exporting logs to another system.</p>
+</div>
 <p>The audit log is rotated by the same built-in mechanism as the structured logs, with a longer forensic window: it rotates above <strong>20 MB</strong>, keeps <strong>8</strong> gzipped backups, and retains them for <strong>90 days</strong>.</p>
 <p>For the full <code>loxilb-mcp</code> command surface, transports, and role model, see the <a href="../../reference/cli/">CLI Reference</a>.</p>
 <hr />
+<h2 id="read-logs-through-the-api">Read logs through the API<a class="headerlink" href="#read-logs-through-the-api" title="Permanent link">&para;</a></h2>
+<p>Operators can page current and rotated logs without receiving shell access to
+the Gateway. The API returns newest entries first and follows an opaque cursor
+backward:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/logs</code></td>
+<td>Read current or archived log lines</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/log-archives</code></td>
+<td>List archive names, compressed size, and modification time</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/log-archives/{filename}</code></td>
+<td>Download one archive</td>
+</tr>
+</tbody>
+</table>
+<p>Important response semantics:</p>
+<ul>
+<li>
+<p>REST log handlers resolve files under <code>/var/log</code> and do not honor
+  <code>--log-dir</code> or <code>LOXILB_LOG_DIR</code>; those settings affect writers only, so use
+  the filesystem/aggregator when logs are written elsewhere;</p>
+</li>
+<li>
+<p><code>log_count</code> is the number of lines in this page, not total file matches;</p>
+</li>
+<li><code>total_size</code> is the whole uncompressed file size;</li>
+<li><code>scanned_bytes</code> is how much content the server examined for this page;</li>
+<li>filtered searches stop after reaching the 32 MiB threshold and completing the current read
+  batch, so <code>scanned_bytes</code> may be slightly higher;</li>
+<li><code>.log.gz</code> archives are decompressed transparently for paging, with a 64 MiB
+  decompressed-size ceiling;</li>
+<li>a filtered page may contain no lines while <code>has_more</code> remains true, so clients
+  must continue until <code>has_more: false</code>.</li>
+</ul>
+<p>Use TLS and a least-privileged management identity. Treat every returned line
+as potentially sensitive, even when known secret-shaped fields are masked. The
+complete paging, archive, rotation, and cleanup procedure is in
+<a href="../log-api/">Log API Operations</a>.</p>
+<h2 id="audit-review-checklist">Audit review checklist<a class="headerlink" href="#audit-review-checklist" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Confirm system clocks are synchronized so events can be correlated.</li>
+<li>Record the immutable Gateway version and product flavor without including
+   credentials or private topology.</li>
+<li>Query the smallest time, file, level, and keyword scope needed.</li>
+<li>Walk every cursor to <code>has_more: false</code> before concluding that no older match
+   exists.</li>
+<li>Correlate management changes with policy read-back and relevant metrics.</li>
+<li>Redact credentials, API keys, prompts, personal information, tenant names,
+   client addresses, and internal hostnames before sharing evidence.</li>
+<li>Store exported evidence under the organization's access and retention
+   policy, then securely remove temporary copies.</li>
+</ol>
 <h2 id="what-is-not-covered">What is not covered<a class="headerlink" href="#what-is-not-covered" title="Permanent link">&para;</a></h2>
 <p>This page documents the logging and audit capabilities that ship in the open-source Inference Gateway. Advanced structured audit-logging features — a runtime API for changing per-category log levels without a restart, compliance-oriented export formats, and long-term audit warehousing — are outside the scope of this gateway and are intentionally not documented here. Configure log severity through the <code>--loglevel</code> startup option, and ship the JSON files to your own aggregator for retention and search.</p>
-<p>For the metrics side of observability, see <a href="../observability-metrics-grafana/">Grafana Dashboards &amp; Observability</a>.</p>
+<p>For the metrics side of observability, see
+<a href="../observability-metrics-grafana/">Grafana Dashboards and Observability</a>.</p>
+<p>Recovery and high-risk diagnostics need additional evidence beyond logs:</p>
+<ul>
+<li><a href="../backup-restore/">Configuration Backup and Restore</a> — checksums, dry-run,
+  commit, rollback, and restore metrics;</li>
+<li><a href="../tracing/">Application and L4 Tracing</a> — trace data handling and OTLP
+  verification;</li>
+<li><a href="../dpu-offload/">DPU Offload Observability</a> — sensitive and disruptive debug
+  boundaries.</li>
+</ul>
 
 
 

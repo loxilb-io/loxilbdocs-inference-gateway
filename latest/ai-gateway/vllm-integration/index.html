@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.">
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
       
       
       
@@ -16,7 +16,7 @@
         <link rel="prev" href="../pd-disaggregation/">
       
       
-        <link rel="next" href="../sse-quota-management/">
+        <link rel="next" href="../sglang-pd-disaggregation/">
       
       
         
@@ -396,6 +396,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose an Inference Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -554,6 +582,34 @@
     
   
     AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
   
 
     
@@ -879,41 +935,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#gpu-aware-routing-sel-9" class="md-nav__link">
+  <a href="#sel-9-current-topology-dependent-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GPU-Aware Routing (sel: 9)
+        sel: 9: Current Topology-Dependent Behavior
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="GPU-Aware Routing (sel: 9)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#how-metrics-reach-loxilb" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How Metrics Reach loxilb
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#enable-and-configure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Enable and Configure
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -941,10 +969,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sel-9-behaves-like-round-robin" class="md-nav__link">
+  <a href="#sel-9-does-not-move-traffic-toward-a-less-loaded-worker" class="md-nav__link">
     <span class="md-ellipsis">
       
-        sel: 9 behaves like round-robin
+        sel: 9 does not move traffic toward a less-loaded worker
       
     </span>
   </a>
@@ -1015,6 +1043,118 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1481,6 +1621,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Safety Scanning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/opa-l4/" class="md-nav__link">
         
   
@@ -1516,7 +1712,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1767,6 +1963,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/monitoring/" class="md-nav__link">
         
   
@@ -1803,6 +2111,90 @@
     
   
     Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
   
 
     
@@ -2292,41 +2684,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#gpu-aware-routing-sel-9" class="md-nav__link">
+  <a href="#sel-9-current-topology-dependent-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GPU-Aware Routing (sel: 9)
+        sel: 9: Current Topology-Dependent Behavior
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="GPU-Aware Routing (sel: 9)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#how-metrics-reach-loxilb" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How Metrics Reach loxilb
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#enable-and-configure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Enable and Configure
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2354,10 +2718,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sel-9-behaves-like-round-robin" class="md-nav__link">
+  <a href="#sel-9-does-not-move-traffic-toward-a-less-loaded-worker" class="md-nav__link">
     <span class="md-ellipsis">
       
-        sel: 9 behaves like round-robin
+        sel: 9 does not move traffic toward a less-loaded worker
       
     </span>
   </a>
@@ -2442,9 +2806,14 @@
 
 
 <h1 id="vllm-integration">vLLM Integration<a class="headerlink" href="#vllm-integration" title="Permanent link">&para;</a></h1>
-<p>Run vLLM behind the loxilb AI Gateway: the launch flags that must line up with the gateway, how to health-probe vLLM backends, backend protocol / ALPN, and GPU-aware routing.</p>
+<div class="admonition warning">
+<p class="admonition-title">Keep AI-aware vLLM rules on HTTP/1.1</p>
+<p>Current HTTP/2 forwarding lacks model-aware pool lookup, selector 10, P/D, and KV-exact
+integration; selector 9 becomes round-robin. Treat HTTP/2 parity as a release gate.</p>
+</div>
+<p>Run vLLM behind the loxilb AI Gateway: the launch flags that must line up with the gateway, how to health-probe vLLM backends, backend protocol / ALPN, and the exact selector-9 metrics boundary.</p>
 <h2 id="concept">Concept<a class="headerlink" href="#concept" title="Permanent link">&para;</a></h2>
-<p>vLLM is the inference engine that actually runs the model on the GPU. loxilb fronts one or more vLLM instances as an L7 fullproxy (<code>mode: 4</code>), spreads requests across them, and — depending on the selection algorithm — routes for KV-cache locality or GPU load. Nothing special is required of vLLM to sit behind the gateway, but several launch flags must <strong>match</strong> the gateway's configuration for KV-aware features to work.</p>
+<p>vLLM is the inference engine that actually runs the model on the GPU. loxilb fronts one or more vLLM instances as an L7 fullproxy (<code>mode: 4</code>) and spreads requests according to the selected routing law. Nothing special is required of vLLM to sit behind the gateway, but several launch flags must <strong>match</strong> the gateway's configuration for KV-aware features to work.</p>
 <pre class="mermaid"><code>flowchart LR
     C([Clients]) --&gt; LB["loxilb AI Gateway&lt;br/&gt;mode 4"]
     LB --&gt; V1["vLLM :8000"]
@@ -2486,7 +2855,7 @@
 <tr>
 <td><code>--enable-request-id-headers</code></td>
 <td>—</td>
-<td>Lets loxilb correlate requests with backend responses.</td>
+<td>Optional: exposes request IDs in vLLM response headers for client-side diagnostics. Gateway-internal request correlation does not require this flag.</td>
 </tr>
 </tbody>
 </table>
@@ -2498,17 +2867,26 @@
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span>--block-size<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span>--prefix-caching-hash-algo<span class="w"> </span>sha256_cbor<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span>--enable-request-id-headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span>--kv-events-config<span class="w"> </span><span class="s1">&#39;{&quot;enable_kv_cache_events&quot;:true,&quot;publisher&quot;:&quot;zmq&quot;,&quot;endpoint&quot;:&quot;tcp://*:5557&quot;}&#39;</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span>--kv-events-config<span class="w"> </span><span class="s1">'{"enable_kv_cache_events":true,"publisher":"zmq","endpoint":"tcp://*:5557"}'</span>
 </code></pre></div>
+<p>The tag above is a reproducible example, not a floating compatibility promise. For production,
+pin the exact vLLM image you tested and validate its block-hash and KV-event output against the
+gateway before promotion.</p>
 <div class="admonition note">
 <p class="admonition-title">KV-cache routing has its own page</p>
 <p>The block-size, hash-algo, and KV-events flags above only matter when you enable block-hash
 KV-exact routing (<code>kvExactMode</code>). The full end-to-end parity contract — including hash-seed
-alignment — is covered in <a href="../kv-caching/">KV-Cache Routing</a>. For plain GPU-aware or
-round-robin load balancing, none of these flags are required.</p>
+alignment — is covered in <a href="../kv-caching/">KV-Cache Routing</a>. For plain CHWBL,
+selector-9 affinity, or round-robin load balancing, none of these flags are required.</p>
 </div>
 <hr />
 <h2 id="health-probing">Health Probing<a class="headerlink" href="#health-probing" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Protect the management API</p>
+<p>The <code>curl</code> examples use plain HTTP for an isolated lab. In production, use an authenticated,
+TLS-protected management endpoint and read its authorization header from a
+permission-restricted file.</p>
+</div>
 <p>loxilb can actively health-check each vLLM backend and take failing endpoints out of rotation. vLLM exposes an OpenAI-style <code>/health</code> endpoint, which pairs naturally with an HTTP probe.</p>
 <table>
 <thead>
@@ -2560,32 +2938,32 @@ round-robin load balancing, none of these flags are required.</p>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s1">      &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">      &quot;port&quot;: 8080,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">      &quot;protocol&quot;: &quot;tcp&quot;,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">      &quot;sel&quot;: 0,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">      &quot;mode&quot;: 4,</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s1">      &quot;security&quot;: 0,</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s1">      &quot;backend_protocol&quot;: &quot;http1&quot;,</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="s1">      &quot;monitor&quot;: true,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="s1">      &quot;probetype&quot;: &quot;http&quot;,</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="s1">      &quot;probeport&quot;: 8000,</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="s1">      &quot;probereq&quot;: &quot;/health&quot;,</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="s1">      &quot;probeTimeout&quot;: 5,</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="s1">      &quot;probeRetries&quot;: 2</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="s1">    "serviceArguments": {</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s1">      "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">      "port": 8080,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">      "protocol": "tcp",</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">      "sel": 0,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">      "mode": 4,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s1">      "security": 0,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s1">      "backend_protocol": "http1",</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="s1">      "monitor": true,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="s1">      "probetype": "http",</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="s1">      "probeport": 8000,</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="s1">      "probereq": "/health",</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="s1">      "probeTimeout": 5,</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="s1">      "probeRetries": 2</span>
 <a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="s1">    },</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="s1">    &quot;endpoints&quot;: [</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1},</span>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1}</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="s1">    "endpoints": [</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="s1">      {"endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1},</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="s1">      {"endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 1}</span>
 <a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="s1">    ]</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="s1">  }&#39;</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="s1">  }'</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,32.32.32.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--backend-protocol<span class="o">=</span>http1<span class="w"> </span>--monitor<span class="w"> </span>--probetype<span class="o">=</span>http<span class="w"> </span>--probeport<span class="o">=</span><span class="m">8000</span><span class="w"> </span>--probereq<span class="o">=</span>/health<span class="w"> </span>--probetimeout<span class="o">=</span><span class="m">5</span><span class="w"> </span>--proberetries<span class="o">=</span><span class="m">2</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--backend-protocol<span class="o">=</span>http1<span class="w"> </span>--monitor<span class="w"> </span>--probetype<span class="o">=</span>http<span class="w"> </span>--probeport<span class="o">=</span><span class="m">8000</span><span class="w"> </span>--probereq<span class="o">=</span>/health<span class="w"> </span>--probetimeout<span class="o">=</span><span class="m">5</span><span class="w"> </span>--proberetries<span class="o">=</span><span class="m">2</span>
 </code></pre></div>
 </div>
 </div>
@@ -2627,165 +3005,89 @@ round-robin load balancing, none of these flags are required.</p>
 <tbody>
 <tr>
 <td><code>0</code></td>
-<td>plain (no TLS)</td>
+<td>Plaintext frontend and backend</td>
 </tr>
 <tr>
 <td><code>1</code></td>
-<td>https</td>
+<td>Frontend TLS termination with a plaintext HTTP backend</td>
 </tr>
 <tr>
 <td><code>2</code></td>
-<td>tls</td>
-</tr>
-<tr>
-<td><code>3</code></td>
-<td>e2ehttps</td>
+<td>Frontend TLS termination plus TLS re-encryption to the backend</td>
 </tr>
 </tbody>
 </table>
 <p>For a typical vLLM deployment, <code>backend_protocol: http1</code> with <code>security: 0</code> (plain) or <code>security: 1</code> (TLS termination on the VIP) is the right starting point.</p>
 <hr />
-<h2 id="gpu-aware-routing-sel-9">GPU-Aware Routing (sel: 9)<a class="headerlink" href="#gpu-aware-routing-sel-9" title="Permanent link">&para;</a></h2>
-<p><code>sel: 9</code> (gpuaware) routes each request to the least-loaded GPU using live vLLM metrics instead of a static hash. It is best for independent, single-shot queries (batch inference, RAG) where instantaneous load balance matters more than cache locality. For multi-turn chat, prefer CHWBL (<code>sel: 8</code>) with KV-cache routing — see <a href="../llm-routing/">LLM Routing</a>.</p>
+<h2 id="sel-9-current-topology-dependent-behavior"><code>sel: 9</code>: Current Topology-Dependent Behavior<a class="headerlink" href="#sel-9-current-topology-dependent-behavior" title="Permanent link">&para;</a></h2>
+<p>The API and CLI call selector 9 <code>gpuaware</code>, but its current fullproxy behavior depends on the
+service topology. Do not assume that the name means every rule reads the worker-metrics API.</p>
+<pre class="mermaid"><code>flowchart TD
+    REQ([Request on a sel 9 rule]) --&gt; PD{P/D enabled?}
+    PD --&gt;|Yes| BLOCKED["Capacity-aware scorer exists&lt;br/&gt;activation is release-blocked"]
+    PD --&gt;|No| PREFIX{Prefix hash available?}
+    PREFIX --&gt;|Yes| MOD["prefix_hash modulo endpoint count"]
+    PREFIX --&gt;|No| CONV{Conversation ID available?}
+    CONV --&gt;|Yes| CMOD["conversation hash modulo endpoint count"]
+    CONV --&gt;|No| RR[Health-aware fallback selection]
+
+    style BLOCKED fill:#ffebee,stroke:#e53935
+    style MOD fill:#fff9c4,stroke:#f9a825
+    style CMOD fill:#fff9c4,stroke:#f9a825</code></pre>
+<ul>
+<li><strong>Plain single pool:</strong> selector 9 uses request affinity, not live GPU load. Adding or removing
+  endpoints can remap modulo placements. Use CHWBL (<code>sel: 8</code>) when you need a stable hash ring and
+  bounded-load protection, or round-robin (<code>sel: 0</code>) for independent requests.</li>
+<li><strong>P/D pool:</strong> a capacity-aware Tier-2 scorer exists, but the current activation gate compares a
+  mutable endpoint cursor instead of the configured selector. Configuring <code>sel: 9</code> therefore does
+  not reliably enable it. Normal Tier 2 uses active connections plus queued requests. See
+  <a href="../../use-cases/routing-hierarchy/">Routing Hierarchy</a>.</li>
+<li><strong>Worker-metrics control surface:</strong> the GPU enable/status and worker-metrics APIs populate and
+  report a separate metrics/eBPF surface. The current plain fullproxy selector does not read that
+  surface. A successful metrics POST or <code>routing_mode: gpu_aware</code> status is therefore not proof of
+  least-loaded selection for a plain pool.</li>
+</ul>
 <div class="admonition warning">
-<p class="admonition-title">Advanced feature — no automated CI scenario</p>
-<p>GPU-aware routing (<code>sel: 9</code>) ships without a runnable end-to-end CI test scenario today; it is
-validated only by a hash-parity check. Treat it as advanced and validate against your own
-fleet before relying on it in production.</p>
+<p class="admonition-title">Do not deploy from the historical least-loaded claim</p>
+<p>For a plain fullproxy vLLM pool, do not use <code>sel: 9</code> as a production least-loaded-GPU policy.
+Treat P/D capacity scoring as unavailable until the activation field is corrected and the exact
+release artifact passes an end-to-end test. Use the selectors above when their documented
+behavior matches the workload.</p>
 </div>
-<h3 id="how-metrics-reach-loxilb">How Metrics Reach loxilb<a class="headerlink" href="#how-metrics-reach-loxilb" title="Permanent link">&para;</a></h3>
-<p>A metrics agent scrapes each vLLM instance's Prometheus <code>/metrics</code> endpoint and pushes per-worker load into loxilb via <code>POST /config/worker/metrics</code>. loxilb then scores endpoints from the pushed values. The metrics that feed the score:</p>
-<table>
-<thead>
-<tr>
-<th>vLLM metric</th>
-<th>Meaning</th>
-<th>Carried as</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>vllm:num_requests_running</code> + <code>vllm:num_requests_waiting</code></td>
-<td>Total queue depth on the worker</td>
-<td><code>queued_requests</code></td>
-</tr>
-<tr>
-<td><code>vllm:gpu_cache_usage_perc</code></td>
-<td>GPU KV-cache fill percentage (0–100)</td>
-<td><code>kv_cache_usage_perc</code></td>
-</tr>
-<tr>
-<td><code>vllm:num_preemptions_total</code> (delta)</td>
-<td>Requests swapped out under pressure</td>
-<td><code>swapped_requests</code></td>
-</tr>
-<tr>
-<td><code>vllm:cache_config_info{num_gpu_blocks}</code></td>
-<td>Static block capacity</td>
-<td><code>num_gpu_blocks</code></td>
-</tr>
-</tbody>
-</table>
-<p>The <code>WorkerMetricsEntry</code> body pushed per worker:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/worker/metrics<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s1">    &quot;endpoint_ip&quot;: &quot;31.31.31.1:8000&quot;,</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s1">    &quot;queued_requests&quot;: 4,</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s1">    &quot;kv_cache_usage_perc&quot;: 62,</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s1">    &quot;swapped_requests&quot;: 0</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s1">  }&#39;</span>
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">vLLM metrics are on by default</p>
-<p>vLLM exposes the Prometheus <code>/metrics</code> endpoint by default; there is no separate enable flag.
-If you have disabled stats logging (for example with <code>--disable-log-stats</code>), re-enable it so
-the metrics agent has data to scrape.</p>
-</div>
-<h3 id="enable-and-configure">Enable and Configure<a class="headerlink" href="#enable-and-configure" title="Permanent link">&para;</a></h3>
-<p>Enable GPU-aware routing on loxilb, then set <code>sel: 9</code> on the service.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># 1. Enable GPU-aware routing</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/gpu/enable
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># 2. Create the service with sel: 9</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s1">      &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">      &quot;port&quot;: 8080,</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s1">      &quot;protocol&quot;: &quot;tcp&quot;,</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s1">      &quot;sel&quot;: 9,</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s1">      &quot;mode&quot;: 4,</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s1">      &quot;security&quot;: 0,</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s1">      &quot;backend_protocol&quot;: &quot;http1&quot;,</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s1">      &quot;monitor&quot;: true,</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="s1">      &quot;probetype&quot;: &quot;http&quot;,</span>
-<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="s1">      &quot;probeport&quot;: 8000,</span>
-<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="s1">      &quot;probereq&quot;: &quot;/health&quot;,</span>
-<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="s1">      &quot;probeTimeout&quot;: 5,</span>
-<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="s1">      &quot;probeRetries&quot;: 2</span>
-<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="s1">    },</span>
-<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="s1">    &quot;endpoints&quot;: [</span>
-<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1},</span>
-<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1},</span>
-<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;33.33.33.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1}</span>
-<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="s1">    ]</span>
-<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="s1">  }&#39;</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># 1. Enable GPU-aware routing</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>loxicmd<span class="w"> </span><span class="nb">set</span><span class="w"> </span>gpu<span class="w"> </span>--enable
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># 2. Create the service with sel: 9</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,32.32.32.1:1,33.33.33.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>gpuaware<span class="w"> </span>--backend-protocol<span class="o">=</span>http1<span class="w"> </span>--monitor<span class="w"> </span>--probetype<span class="o">=</span>http<span class="w"> </span>--probeport<span class="o">=</span><span class="m">8000</span><span class="w"> </span>--probereq<span class="o">=</span>/health<span class="w"> </span>--probetimeout<span class="o">=</span><span class="m">5</span><span class="w"> </span>--proberetries<span class="o">=</span><span class="m">2</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<p><strong>vLLM launch</strong> (each instance):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>vllm/vllm-openai:v0.17.0<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span>--model<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span>--enable-request-id-headers
-</code></pre></div>
-<p>When metrics are not yet flowing, <code>sel: 9</code> cannot differentiate endpoints and falls through to a stable consistent-hash distribution, so routing stays sane during startup.</p>
 <hr />
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
-<p><strong>GPU monitoring status</strong> — <code>GET /config/gpu/status</code> returns a <code>GPUMonitoringStatus</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/gpu/status
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># {</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1">#   &quot;enabled&quot;: true,</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1">#   &quot;routing_mode&quot;: &quot;gpu_aware&quot;,</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1">#   &quot;worker_count&quot;: 3,</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1">#   &quot;last_metrics_update&quot;: &quot;...&quot;,</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1">#   &quot;ebpf_map_loaded&quot;: true</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1"># }</span>
+<p><strong>GPU monitoring status</strong> — <code>GET /config/gpu/status</code> reports the worker-metrics control surface:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/gpu/status
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># {</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1">#   "enabled": true,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1">#   "routing_mode": "gpu_aware",</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1">#   "worker_count": 3,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1">#   "last_metrics_update": "...",</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1">#   "ebpf_map_loaded": true</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1"># }</span>
 </code></pre></div>
-<p><code>routing_mode</code> is <code>gpu_aware</code> when active or <code>standard_chwbl</code> when disabled.</p>
-<p><strong>Per-worker metrics</strong> — <code>GET /config/worker/metrics</code> returns the current <code>WorkerMetricsEntry</code> list loxilb is scoring against:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/worker/metrics
+<p><code>routing_mode</code> is <code>gpu_aware</code> when that surface is active or <code>standard_chwbl</code> when disabled.
+This is a control-plane status, not proof that a plain fullproxy service is choosing the
+least-loaded endpoint.</p>
+<p><strong>Per-worker metrics</strong> — <code>GET /config/worker/metrics</code> returns the current <code>WorkerMetricsEntry</code>
+list stored on that separate surface:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/worker/metrics
 </code></pre></div>
 <p><strong>Selection algorithm</strong> — confirm the service shows <code>sel: 9</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.lbAttr[].serviceArguments | {externalIP, port, sel}&#39;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | {externalIP, port, sel}'</span>
 </code></pre></div>
 <hr />
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
-<h3 id="sel-9-behaves-like-round-robin">sel: 9 behaves like round-robin<a class="headerlink" href="#sel-9-behaves-like-round-robin" title="Permanent link">&para;</a></h3>
-<p>No metrics are reaching loxilb, so endpoints score identically.</p>
-<ul>
-<li><code>GET /config/gpu/status</code> — confirm <code>enabled: true</code> and a recent <code>last_metrics_update</code>.</li>
-<li><code>GET /config/worker/metrics</code> — confirm workers appear with non-zero <code>queued_requests</code> under load.</li>
-<li>Verify the metrics agent can reach each vLLM <code>/metrics</code> endpoint and is POSTing to <code>/config/worker/metrics</code>.</li>
-</ul>
-<h3 id="metrics-returns-nothing">/metrics returns nothing<a class="headerlink" href="#metrics-returns-nothing" title="Permanent link">&para;</a></h3>
-<p>vLLM's Prometheus endpoint is on by default. If it is empty, confirm stats logging was not disabled (<code>--disable-log-stats</code>) and that the serving port is reachable from the metrics agent.</p>
+<h3 id="sel-9-does-not-move-traffic-toward-a-less-loaded-worker"><code>sel: 9</code> does not move traffic toward a less-loaded worker<a class="headerlink" href="#sel-9-does-not-move-traffic-toward-a-less-loaded-worker" title="Permanent link">&para;</a></h3>
+<p>For a plain single pool, this is expected: the current fullproxy path uses prefix/session modulo
+placement and a healthy fallback, not the pushed worker metrics. Switch to CHWBL for bounded
+prefix affinity, or round-robin for independent requests. For P/D, use the normal routing
+hierarchy; do not depend on selector-9 capacity scoring in the current release.</p>
+<h3 id="metrics-returns-nothing"><code>/metrics</code> returns nothing<a class="headerlink" href="#metrics-returns-nothing" title="Permanent link">&para;</a></h3>
+<p>Treat this as an observability or metrics-agent problem, not the explanation for plain-pool
+selector 9 placement. Confirm stats logging was not disabled and that the serving port is
+reachable from the metrics collector.</p>
 <h3 id="all-endpoints-show-high-queue-depth">All endpoints show high queue depth<a class="headerlink" href="#all-endpoints-show-high-queue-depth" title="Permanent link">&para;</a></h3>
 <ul>
 <li>The fleet is genuinely saturated — add vLLM instances.</li>
@@ -2803,7 +3105,7 @@ the metrics agent has data to scrape.</p>
 <hr />
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../llm-routing/">LLM Routing</a> — CHWBL, GPU-aware, and weighted-hash selection</li>
+<li><a href="../llm-routing/">LLM Routing</a> — CHWBL, selector-9 topology behavior, and weighted-hash selection</li>
 <li><a href="../kv-caching/">KV-Cache Routing</a> — block-hash KV-exact routing and the vLLM/SGLang parity contract</li>
 <li><a href="../pd-disaggregation/">P/D Disaggregation</a> — separate prefill and decode pools</li>
 <li><a href="../configuration-reference/">Configuration Reference</a> — all AI Gateway <code>serviceArguments</code></li>

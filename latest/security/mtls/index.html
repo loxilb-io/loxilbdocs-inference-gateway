@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.">
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
       
       
       
@@ -27,7 +27,7 @@
     
     
       
-        <title>mTLS for AI Backends - LoxiLB Inference Gateway</title>
+        <title>Frontend mTLS - LoxiLB Inference Gateway</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#mtls-for-ai-backends" class="md-skip">
+        <a href="#frontend-mtls-for-ai-services" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              mTLS for AI Backends
+              Frontend mTLS
             
           </span>
         </div>
@@ -396,6 +396,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose an Inference Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -554,6 +582,34 @@
     
   
     AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
   
 
     
@@ -781,6 +837,118 @@
     
   
     vLLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
   
 
     
@@ -1257,6 +1425,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Safety Scanning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../opa-l4/" class="md-nav__link">
         
   
@@ -1301,7 +1525,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1319,7 +1543,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1345,10 +1569,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#concept" class="md-nav__link">
+  <a href="#request-flow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Concept
+        Request flow
       
     </span>
   </a>
@@ -1356,10 +1580,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#frontend-mtls-mtls_frontend" class="md-nav__link">
+  <a href="#active-frontend-fields" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Frontend mTLS — mtls_frontend
+        Active frontend fields
       
     </span>
   </a>
@@ -1367,10 +1591,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#backend-mtls-mtls_backend" class="md-nav__link">
+  <a href="#configure-a-staging-service" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Backend mTLS — mtls_backend
+        Configure a staging service
       
     </span>
   </a>
@@ -1378,10 +1602,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#worked-example" class="md-nav__link">
+  <a href="#verify-enforcement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Worked example
+        Verify enforcement
       
     </span>
   </a>
@@ -1389,10 +1613,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
+  <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify
+        Troubleshooting
       
     </span>
   </a>
@@ -1400,10 +1624,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshoot" class="md-nav__link">
+  <a href="#release-qualification-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshoot
+        Release qualification boundary
       
     </span>
   </a>
@@ -1667,6 +1891,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/monitoring/" class="md-nav__link">
         
   
@@ -1703,6 +2039,90 @@
     
   
     Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
   
 
     
@@ -2148,10 +2568,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#concept" class="md-nav__link">
+  <a href="#request-flow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Concept
+        Request flow
       
     </span>
   </a>
@@ -2159,10 +2579,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#frontend-mtls-mtls_frontend" class="md-nav__link">
+  <a href="#active-frontend-fields" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Frontend mTLS — mtls_frontend
+        Active frontend fields
       
     </span>
   </a>
@@ -2170,10 +2590,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#backend-mtls-mtls_backend" class="md-nav__link">
+  <a href="#configure-a-staging-service" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Backend mTLS — mtls_backend
+        Configure a staging service
       
     </span>
   </a>
@@ -2181,10 +2601,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#worked-example" class="md-nav__link">
+  <a href="#verify-enforcement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Worked example
+        Verify enforcement
       
     </span>
   </a>
@@ -2192,10 +2612,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
+  <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify
+        Troubleshooting
       
     </span>
   </a>
@@ -2203,10 +2623,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshoot" class="md-nav__link">
+  <a href="#release-qualification-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshoot
+        Release qualification boundary
       
     </span>
   </a>
@@ -2241,227 +2661,170 @@
 
 
 
-<h1 id="mtls-for-ai-backends">mTLS for AI Backends<a class="headerlink" href="#mtls-for-ai-backends" title="Permanent link">&para;</a></h1>
-<p>LoxiLB terminates and re-originates TLS in FullProxy mode, so it can verify client certificates on
-the front side and present its own client certificate to AI backends on the back side. Both are
-configured inline on the load-balancer rule via the <code>mtls_frontend</code> and <code>mtls_backend</code>
-sub-objects of <code>serviceArguments</code>.</p>
+<h1 id="frontend-mtls-for-ai-services">Frontend mTLS for AI Services<a class="headerlink" href="#frontend-mtls-for-ai-services" title="Permanent link">&para;</a></h1>
+<p>The current active mTLS path can verify client certificates on the frontend of
+a FullProxy service. Configure it through the <code>mtls_frontend</code> object nested in
+<code>serviceArguments</code>; there is no standalone <code>/config/mtls</code> endpoint.</p>
 <div class="admonition warning">
-<p class="admonition-title">No AI-specific CI scenario ships for this feature</p>
-<p>There is <strong>no automated CI scenario</strong> exercising mTLS against an AI backend. Generic mTLS
-testbeds exist for base LoxiLB, but the AI-backend path below is documented from the API
-contract, not from a runnable AI testbed. Validate in staging before production use.</p>
+<p class="admonition-title">Current implementation boundary</p>
+<p>The OpenAPI model also declares backend-mTLS and inline certificate-data
+fields. The current data-plane wiring applies only the frontend file-path
+fields documented below. Do not depend on <code>mtls_backend</code>,
+<code>client_ca_cert_data</code>, <code>client_cert_data</code>, or <code>client_key_data</code> for
+enforcement. API acceptance or read-back does not prove those fields are
+active.</p>
 </div>
-<h2 id="concept">Concept<a class="headerlink" href="#concept" title="Permanent link">&para;</a></h2>
-<p>There is <strong>no standalone <code>/config/mtls</code> path</strong>. mTLS is expressed as two optional objects nested
-inside the <code>serviceArguments</code> you already send to <code>POST /config/loadbalancer</code>:</p>
-<ul>
-<li><strong><code>mtls_frontend</code></strong> — LoxiLB verifies the certificate presented by the <em>client</em> connecting to the
-  VIP. Valid only with <code>security=1</code> (HTTPS) or <code>security=2</code> (TLS) <strong>and</strong> <code>mode=4</code> (FullProxy).</li>
-<li><strong><code>mtls_backend</code></strong> — LoxiLB verifies the <em>backend server's</em> certificate and optionally presents
-  its own client certificate to the backend. Valid only with <code>security=2</code> (TLS) <strong>and</strong> <code>mode=4</code>
-  (FullProxy).</li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Prerequisites</p>
-<p>Both objects require <strong><code>mode=4</code> (FullProxy)</strong> — LoxiLB must terminate TLS to inspect or present
-certificates. The <code>security</code> enum values are <code>0-plain, 1-https, 2-tls, 3-e2ehttps</code>. Frontend
-mTLS needs TLS terminated at the VIP (<code>security=1</code> or <code>2</code>); backend mTLS needs LoxiLB to
-originate TLS to the backend (<code>security=2</code>).</p>
-</div>
-<h2 id="frontend-mtls-mtls_frontend">Frontend mTLS — <code>mtls_frontend</code><a class="headerlink" href="#frontend-mtls-mtls_frontend" title="Permanent link">&para;</a></h2>
-<p>Verifies the client certificate on connections arriving at the VIP.</p>
+<p>No runnable AI-specific CICD scenario currently qualifies this path. Validate
+the exact immutable build with a real TLS client and backend before production.</p>
+<h2 id="request-flow">Request flow<a class="headerlink" href="#request-flow" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    C["Client certificate"] --&gt;|"TLS handshake"| G["Gateway FullProxy&lt;br/&gt;frontend verification"]
+    G --&gt;|"security 1: HTTP"| H["HTTP backend"]
+    G --&gt;|"security 2: separate TLS connection"| T["TLS backend"]
+
+    style G fill:#e8f5e9,stroke:#43a047
+    style H fill:#fff3e0,stroke:#f57c00
+    style T fill:#fff3e0,stroke:#f57c00</code></pre>
+<p>Frontend mTLS requires <code>mode: 4</code> and <code>security: 1</code> or <code>security: 2</code>. Security
+mode <code>1</code> terminates frontend TLS and uses HTTP to the backend; mode <code>2</code>
+re-originates a separate backend TLS connection. The frontend certificate
+check does not prove backend-server identity under mode <code>2</code>, because the
+declared backend verification configuration is not currently wired.</p>
+<h2 id="active-frontend-fields">Active frontend fields<a class="headerlink" href="#active-frontend-fields" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Field</th>
-<th>Type</th>
 <th>Default</th>
-<th>Meaning</th>
+<th>Current behavior</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>client_cert_mode</code></td>
-<td>string enum</td>
 <td><code>disabled</code></td>
-<td><code>disabled</code> = no client-cert verification; <code>optional</code> = accept connections with or without a cert (verify if present); <code>required</code> = reject any client without a valid cert.</td>
+<td><code>optional</code> verifies a presented certificate; <code>required</code> rejects a client without a valid certificate</td>
 </tr>
 <tr>
 <td><code>client_ca_path</code></td>
-<td>string</td>
-<td>—</td>
-<td>Path to the client CA bundle (PEM) used to verify client certs, e.g. <code>/opt/loxilb/cert/client_ca_bundle.crt</code>.</td>
-</tr>
-<tr>
-<td><code>client_ca_cert_data</code></td>
-<td>string</td>
-<td>—</td>
-<td>Inline CA bundle (base64-encoded PEM). Alternative to <code>client_ca_path</code> — convenient for Kubernetes secrets.</td>
+<td>unset</td>
+<td>Absolute path to the PEM CA bundle used for client-certificate verification</td>
 </tr>
 <tr>
 <td><code>require_client_cn</code></td>
-<td>boolean</td>
 <td><code>false</code></td>
-<td>When <code>true</code>, additionally require the client cert's CN to match <code>client_cn_pattern</code>.</td>
+<td>Enables the additional common-name pattern check</td>
 </tr>
 <tr>
 <td><code>client_cn_pattern</code></td>
-<td>string</td>
-<td>—</td>
-<td>Required CN pattern, e.g. <code>*.corp.example.com</code>. Supports wildcard matching. Only consulted when <code>require_client_cn</code> is <code>true</code>.</td>
+<td>unset</td>
+<td>Pattern checked when <code>require_client_cn</code> is true</td>
 </tr>
 <tr>
 <td><code>client_crl_path</code></td>
-<td>string</td>
-<td>—</td>
-<td>Path to an operator-supplied static CRL file (PEM). A revoked client <strong>leaf</strong> cert is rejected; a valid one passes. Optional/additive — empty preserves default behavior.</td>
+<td>unset</td>
+<td>Path to an operator-supplied PEM CRL used for leaf-certificate revocation checks</td>
 </tr>
 </tbody>
 </table>
-<h2 id="backend-mtls-mtls_backend">Backend mTLS — <code>mtls_backend</code><a class="headerlink" href="#backend-mtls-mtls_backend" title="Permanent link">&para;</a></h2>
-<p>Verifies the backend server's certificate and, optionally, presents LoxiLB's client certificate to
-the backend.</p>
+<p>Mount certificate files read-only, grant access only to the Gateway process,
+and rotate them through the organization's secret-management procedure. Do not
+send PEM or private-key material in REST payloads.</p>
+<h2 id="configure-a-staging-service">Configure a staging service<a class="headerlink" href="#configure-a-staging-service" title="Permanent link">&para;</a></h2>
+<p>Set <code>GATEWAY_API</code> to the protected management origin and obtain
+<code>GATEWAY_TOKEN</code> through the approved identity workflow:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$GATEWAY_TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">    "serviceArguments": {</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">      "externalIP": "192.0.2.10",</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">      "port": 443,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s1">      "protocol": "tcp",</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">      "mode": 4,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="s1">      "security": 1,</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s1">      "mtls_frontend": {</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s1">        "client_cert_mode": "required",</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="s1">        "client_ca_path": "/run/secrets/loxilb/client-ca.crt",</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="s1">        "require_client_cn": true,</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="s1">        "client_cn_pattern": "client.example.test",</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="s1">        "client_crl_path": "/run/secrets/loxilb/client.crl"</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="s1">      }</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="s1">    },</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="s1">    "endpoints": [</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="s1">      {"endpointIP": "198.51.100.20", "targetPort": 8080, "weight": 1}</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="s1">    ]</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="s1">  }'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$GATEWAY_API</span><span class="s2">/netlox/v1/config/loadbalancer"</span>
+</code></pre></div>
+<p>The addresses are RFC 5737 documentation ranges; replace them with staging
+addresses. Use <code>security: 1</code> here so the recipe tests only the currently wired
+frontend control and does not imply backend certificate verification.</p>
+<h2 id="verify-enforcement">Verify enforcement<a class="headerlink" href="#verify-enforcement" title="Permanent link">&para;</a></h2>
+<p>Read-back confirms the control-plane object, not the TLS behavior:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--header<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$GATEWAY_TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$GATEWAY_API</span><span class="s2">/netlox/v1/config/loadbalancer/all"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</code></pre></div>
+<p>Then perform both handshake tests against the staging VIP:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Expected to succeed with a valid, non-revoked certificate and matching CN.</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--cert<span class="w"> </span>/run/secrets/client/client.crt<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--key<span class="w"> </span>/run/secrets/client/client.key<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--cacert<span class="w"> </span>/run/secrets/client/vip-ca.crt<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span>https://192.0.2.10/v1/models
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># Expected to fail during TLS negotiation because no client certificate is sent.</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span>--cacert<span class="w"> </span>/run/secrets/client/vip-ca.crt<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span>https://192.0.2.10/v1/models
+</code></pre></div>
+<p>Also test an untrusted issuer, expired certificate, mismatched CN, and revoked
+leaf certificate. Capture only sanitized outcomes; never record private keys or
+unredacted certificates in public evidence.</p>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Field</th>
-<th>Type</th>
-<th>Default</th>
-<th>Meaning</th>
+<th>Symptom</th>
+<th>Check</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>verify_server_cert</code></td>
-<td>boolean</td>
-<td><code>false</code></td>
-<td><code>true</code> enables backend server-cert verification (<code>SSL_VERIFY_PEER</code>). <code>false</code> skips verification (<code>SSL_VERIFY_NONE</code>) — the backward-compatible default. <strong>Set <code>true</code> in production</strong>: with the default, LoxiLB accepts any certificate the backend presents.</td>
+<td>Frontend settings appear in read-back but are not enforced</td>
+<td>Confirm the build includes mTLS, <code>mode</code> is <code>4</code>, <code>security</code> is <code>1</code> or <code>2</code>, and the mounted paths exist inside the container</td>
 </tr>
 <tr>
-<td><code>backend_ca_path</code></td>
-<td>string</td>
-<td>—</td>
-<td>Path to the backend CA bundle (PEM) used to verify the server cert. Empty falls back to the system CA store (<code>/etc/ssl/certs/</code>). Example: <code>/opt/loxilb/cert/backend_ca.crt</code>.</td>
+<td>Every client is rejected</td>
+<td>Verify the CA chain, client intermediates, file permissions, validity period, and clock</td>
 </tr>
 <tr>
-<td><code>client_cert_path</code></td>
-<td>string</td>
-<td>—</td>
-<td>Path to LoxiLB's client certificate presented to the backend for mTLS, e.g. <code>/opt/loxilb/cert/loxilb_client.crt</code>.</td>
+<td>CN check rejects a valid certificate</td>
+<td>Confirm <code>require_client_cn</code> and the exact certificate CN/pattern; SAN matching is not a substitute for this specific check</td>
 </tr>
 <tr>
-<td><code>client_key_path</code></td>
-<td>string</td>
-<td>—</td>
-<td>Path to LoxiLB's private key for backend mTLS, e.g. <code>/opt/loxilb/cert/loxilb_client.key</code>.</td>
+<td>Revoked client is admitted</td>
+<td>Confirm <code>client_crl_path</code> is readable and contains a current PEM CRL covering the leaf certificate</td>
 </tr>
 <tr>
-<td><code>client_cert_data</code></td>
-<td>string</td>
-<td>—</td>
-<td>Inline client certificate (base64-encoded PEM). Alternative to <code>client_cert_path</code>.</td>
-</tr>
-<tr>
-<td><code>client_key_data</code></td>
-<td>string</td>
-<td>—</td>
-<td>Inline client key (base64-encoded PEM). Alternative to <code>client_key_path</code>.</td>
+<td>Backend certificate is not verified</td>
+<td>Expected current limitation; <code>mtls_backend</code> is declared but not wired into the active data path</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition tip">
-<p class="admonition-title">Paths vs inline data</p>
-<p>Every certificate field has both a <code>*_path</code> and a <code>*_data</code> form. Use <code>*_path</code> when the PEM files
-live on the LoxiLB host; use <code>*_data</code> (base64-encoded PEM) when injecting material from a
-Kubernetes secret or an API caller that has no filesystem access. Do not set both for the same
-certificate.</p>
-</div>
-<h2 id="worked-example">Worked example<a class="headerlink" href="#worked-example" title="Permanent link">&para;</a></h2>
-<p>Create an AI VIP that requires a valid client certificate on the front side and presents LoxiLB's
-own certificate to a TLS backend. This uses <code>mode=4</code> (FullProxy) and <code>security=2</code> (TLS).</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;loxilb-host&gt;:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;api-token&gt;&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">        &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">          &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">          &quot;port&quot;: 443,</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">          &quot;protocol&quot;: &quot;tcp&quot;,</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s1">          &quot;mode&quot;: 4,</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">          &quot;security&quot;: 2,</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="s1">          &quot;mtls_frontend&quot;: {</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s1">            &quot;client_cert_mode&quot;: &quot;required&quot;,</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s1">            &quot;client_ca_path&quot;: &quot;/opt/loxilb/cert/client_ca_bundle.crt&quot;,</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="s1">            &quot;require_client_cn&quot;: true,</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="s1">            &quot;client_cn_pattern&quot;: &quot;*.corp.example.com&quot;,</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="s1">            &quot;client_crl_path&quot;: &quot;/opt/loxilb/cert/client_crl.pem&quot;</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="s1">          },</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="s1">          &quot;mtls_backend&quot;: {</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="s1">            &quot;verify_server_cert&quot;: true,</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="s1">            &quot;backend_ca_path&quot;: &quot;/opt/loxilb/cert/backend_ca.crt&quot;,</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="s1">            &quot;client_cert_path&quot;: &quot;/opt/loxilb/cert/loxilb_client.crt&quot;,</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="s1">            &quot;client_key_path&quot;: &quot;/opt/loxilb/cert/loxilb_client.key&quot;</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="s1">          }</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="s1">        },</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="s1">        &quot;endpoints&quot;: [</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="s1">          { &quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8443, &quot;weight&quot;: 1 }</span>
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="s1">        ]</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="s1">      }&#39;</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">443</span>:8443<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--security<span class="o">=</span>e2ehttps<span class="w"> </span>--mtls-client-cert-mode<span class="o">=</span>required<span class="w"> </span>--mtls-client-ca-path<span class="o">=</span>/opt/loxilb/cert/client_ca_bundle.crt<span class="w"> </span>--mtls-require-client-cn<span class="w"> </span>--mtls-client-cn-pattern<span class="o">=</span><span class="s1">&#39;*.corp.example.com&#39;</span><span class="w"> </span>--mtls-client-crl-path<span class="o">=</span>/opt/loxilb/cert/client_crl.pem<span class="w"> </span>--mtls-backend-verify-server<span class="w"> </span>--mtls-backend-ca-path<span class="o">=</span>/opt/loxilb/cert/backend_ca.crt<span class="w"> </span>--mtls-backend-cert-path<span class="o">=</span>/opt/loxilb/cert/loxilb_client.crt<span class="w"> </span>--mtls-backend-key-path<span class="o">=</span>/opt/loxilb/cert/loxilb_client.key
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
-<p>Confirm the rule was created with the mTLS objects intact:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb-host&gt;:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Authorization: Bearer &lt;api-token&gt;&#39;</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>lb
-</code></pre></div>
-</div>
-</div>
-</div>
-<p>Then exercise the front side. A client presenting a valid, non-revoked certificate whose CN
-matches the pattern should connect; one without a cert (under <code>client_cert_mode: required</code>) should
-be rejected at the TLS handshake:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Should succeed (valid client cert + matching CN):</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>curl<span class="w"> </span>-v<span class="w"> </span>https://10.10.10.254/v1/models<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--cert<span class="w"> </span>client.crt<span class="w"> </span>--key<span class="w"> </span>client.key<span class="w"> </span>--cacert<span class="w"> </span>vip_ca.crt
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1"># Should be rejected at handshake (no client cert, mode=required):</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>curl<span class="w"> </span>-v<span class="w"> </span>https://10.10.10.254/v1/models<span class="w"> </span>--cacert<span class="w"> </span>vip_ca.crt
-</code></pre></div>
-<h2 id="troubleshoot">Troubleshoot<a class="headerlink" href="#troubleshoot" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Objects ignored / no enforcement.</strong> mTLS is only honored with <code>mode=4</code> and the required
-  <code>security</code> value (<code>1</code> or <code>2</code> for frontend, <code>2</code> for backend). Re-check both on the rule.</li>
-<li><strong>All clients rejected under <code>required</code>.</strong> Verify <code>client_ca_path</code> (or <code>client_ca_cert_data</code>)
-  actually chains to the client certs, and that clients present the leaf plus any intermediates.</li>
-<li><strong>CN check rejects valid clients.</strong> <code>require_client_cn: true</code> makes <code>client_cn_pattern</code>
-  mandatory — confirm the pattern (wildcards supported) matches the client cert CN.</li>
-<li><strong>Backend handshake fails.</strong> With <code>verify_server_cert: true</code>, ensure <code>backend_ca_path</code> trusts the
-  backend's server cert (or that the system CA store does). If the backend also requires a client
-  cert, set <code>client_cert_path</code>/<code>client_key_path</code> (or the <code>*_data</code> forms).</li>
-<li><strong>Revoked client still admitted.</strong> Confirm <code>client_crl_path</code> points to a current PEM CRL; the
-  check is leaf-only.</li>
-</ul>
+<h2 id="release-qualification-boundary">Release qualification boundary<a class="headerlink" href="#release-qualification-boundary" title="Permanent link">&para;</a></h2>
+<p>Production qualification requires frontend positive/negative handshake tests,
+certificate rotation, CRL refresh, restart, resource-load, and rollback tests
+on the exact image. Backend mTLS and inline certificate data remain
+documentation/API-contract surfaces until implementation and end-to-end tests
+prove enforcement.</p>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../../ai-gateway/configuration-reference/">Configuration reference</a> — full <code>serviceArguments</code> table.</li>
-<li><a href="../opa-l4/">OPA L4 Policy</a> — policy-driven L4 allow/deny.</li>
+<li><a href="../../ai-gateway/configuration-reference/">Configuration reference</a></li>
+<li><a href="../management-api-authentication/">Management API Authentication</a></li>
+<li><a href="../opa-l4/">OPA L4 Policy</a></li>
 </ul>
 
 

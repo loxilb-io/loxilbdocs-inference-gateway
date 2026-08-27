@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.">
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
       
       
       
@@ -396,6 +396,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose an Inference Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -554,6 +582,34 @@
     
   
     AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
   
 
     
@@ -803,6 +859,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../sse-quota-management/" class="md-nav__link">
         
   
@@ -891,10 +1059,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#concept" class="md-nav__link">
+  <a href="#request-path" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Concept
+        Request path
       
     </span>
   </a>
@@ -902,10 +1070,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#authentication" class="md-nav__link">
+  <a href="#security-rules" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Authentication
+        Security rules
       
     </span>
   </a>
@@ -913,18 +1081,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#api-key-crud" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        API key CRUD
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="API key CRUD">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#endpoints" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -934,19 +1090,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#create-request-fields" class="md-nav__link">
-    <span class="md-ellipsis">
       
-        Create request fields
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
+        <li class="md-nav__item">
   <a href="#create-a-key" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -956,50 +1101,12 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#list-and-get-keys" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        List and get keys
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#revoke-a-key" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Revoke a key
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#update-a-key-raw-middleware" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Update a key (raw middleware)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
-  <a href="#tenant-rate-limits" class="md-nav__link">
+  <a href="#list-and-inspect-without-exposing-the-secret" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tenant rate limits
+        List and inspect without exposing the secret
       
     </span>
   </a>
@@ -1007,10 +1114,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
+  <a href="#disable-rotate-and-delete" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify
+        Disable, rotate, and delete
       
     </span>
   </a>
@@ -1018,10 +1125,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshoot" class="md-nav__link">
+  <a href="#verify-data-plane-enforcement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshoot
+        Verify data-plane enforcement
       
     </span>
   </a>
@@ -1029,10 +1136,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
+  <a href="#tenant-limits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Related
+        Tenant limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cleanup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
       
     </span>
   </a>
@@ -1453,6 +1593,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Safety Scanning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/opa-l4/" class="md-nav__link">
         
   
@@ -1488,7 +1684,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1739,6 +1935,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/monitoring/" class="md-nav__link">
         
   
@@ -1775,6 +2083,90 @@
     
   
     Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
   
 
     
@@ -2220,10 +2612,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#concept" class="md-nav__link">
+  <a href="#request-path" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Concept
+        Request path
       
     </span>
   </a>
@@ -2231,10 +2623,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#authentication" class="md-nav__link">
+  <a href="#security-rules" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Authentication
+        Security rules
       
     </span>
   </a>
@@ -2242,18 +2634,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#api-key-crud" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        API key CRUD
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="API key CRUD">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#endpoints" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2263,19 +2643,8 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#create-request-fields" class="md-nav__link">
-    <span class="md-ellipsis">
       
-        Create request fields
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
+        <li class="md-nav__item">
   <a href="#create-a-key" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2285,50 +2654,12 @@
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#list-and-get-keys" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        List and get keys
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#revoke-a-key" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Revoke a key
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#update-a-key-raw-middleware" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Update a key (raw middleware)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
-  <a href="#tenant-rate-limits" class="md-nav__link">
+  <a href="#list-and-inspect-without-exposing-the-secret" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tenant rate limits
+        List and inspect without exposing the secret
       
     </span>
   </a>
@@ -2336,10 +2667,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
+  <a href="#disable-rotate-and-delete" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify
+        Disable, rotate, and delete
       
     </span>
   </a>
@@ -2347,10 +2678,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshoot" class="md-nav__link">
+  <a href="#verify-data-plane-enforcement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshoot
+        Verify data-plane enforcement
       
     </span>
   </a>
@@ -2358,10 +2689,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
+  <a href="#tenant-limits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Related
+        Tenant limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cleanup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
       
     </span>
   </a>
@@ -2386,54 +2750,70 @@
 
 
 <h1 id="api-key-management">API Key Management<a class="headerlink" href="#api-key-management" title="Permanent link">&para;</a></h1>
-<p>Create, list, inspect, and revoke AI Gateway API keys and per-tenant rate-limit
-configuration through the LoxiLB control-plane REST API.</p>
+<p>Use the AI Gateway key API to create, inspect, rotate, and revoke
+workload credentials. On a <code>mode: 4</code> rule with <code>sse_mode: true</code> or
+<code>pd_disagg_mode: true</code>, the request path actively enforces key validity, model
+allow-lists, per-key request rate, and tenant request rate. Plain fullproxy
+rules do not enter this gate.</p>
+<h2 id="request-path">Request path<a class="headerlink" href="#request-path" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    C([Client]) --&gt; K{"X-Api-Key&lt;br/&gt;valid?"}
+    K --&gt;|no| R401([401 invalid_api_key])
+    K --&gt;|yes| M{"Requested model&lt;br/&gt;allowed?"}
+    M --&gt;|no| R403([403 model_not_allowed])
+    M --&gt;|yes| L{"Key and tenant&lt;br/&gt;rate buckets allow?"}
+    L --&gt;|no| R429([429 rate limit])
+    L --&gt;|yes| B["Inference backend"]
+
+    style B fill:#e8f5e9,stroke:#43a047
+    style R401 fill:#ffcdd2,stroke:#e53935
+    style R403 fill:#ffcdd2,stroke:#e53935
+    style R429 fill:#fff9c4,stroke:#f9a825</code></pre>
+<p>API-key configuration uses an independent PostgreSQL data-plane store. It does
+not depend on the management user service. Management operations use a
+control-plane bearer identity when management authentication is configured;
+inference requests use <code>X-Api-Key</code> and never use the management bearer token.</p>
 <div class="admonition warning">
-<p class="admonition-title">Data-plane enforcement: roadmap</p>
-<p>API-key authentication (401/403) and per-tenant rate limiting (429) are <strong>control-plane CRUD
-only</strong> today — the gateway stores and manages keys/limits but does not yet reject requests in
-the data path. SSE stream lifecycle and token accounting <strong>are</strong> wired.</p>
+<p class="admonition-title">Development-source behavior</p>
+<p>The independent key store and authentication-plane separation described on this page are
+implemented in the current development source but have not completed release qualification.
+Confirm the flags and API schema exposed by the exact image you deploy.</p>
 </div>
-<h2 id="concept">Concept<a class="headerlink" href="#concept" title="Permanent link">&para;</a></h2>
-<p>The AI Gateway maintains a registry of API keys, each owned by a tenant and
-carrying an allow-list of models plus request- and token-rate limits. This page
-covers the <strong>management</strong> of that registry — the create/read/delete lifecycle of
-keys and the create/read lifecycle of tenant rate limits.</p>
-<div class="admonition note">
-<p class="admonition-title">What this feature does — and does not — do today</p>
-<p><strong>Does:</strong> persist API keys and tenant limits, return the raw key exactly once
-at creation, list/get/delete keys, and set/get per-tenant rate limits — all
-over the authenticated REST control plane.</p>
-<p><strong>Does not (yet):</strong> validate a caller's key or enforce a limit in the data
-path. The gateway does <strong>not</strong> currently return <code>401</code>/<code>403</code> for an unknown or
-disabled key, nor <code>429</code> when a tenant exceeds its RPS or token budget. These
-checks are on the roadmap; until then, treat the stored keys and limits as a
-managed inventory, not as an active gate.</p>
+<div class="admonition danger">
+<p class="admonition-title">Key checks require both a store and an AI-processing rule</p>
+<p>The current data-plane key gate runs only for <code>mode: 4</code> rules that also set
+<code>sse_mode: true</code> or <code>pd_disagg_mode: true</code>. A plain <code>mode: 4</code> rule remains keyless even when
+<code>--aikey-db-host</code> is configured. If the store is unset, the gated paths also admit requests
+without validating <code>X-Api-Key</code>. Configure both prerequisites, then prove a missing-key request
+returns <code>401</code> on every protected VIP before exposure.</p>
 </div>
-<p>Keys and limits are stored in the gateway's backing database, so the control
-plane must be started with user-service and a database configured for these
-endpoints to be available.</p>
-<h2 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">&para;</a></h2>
-<p>All AI control-plane endpoints require a bearer token obtained from the LoxiLB
-auth service. Acquire a token by logging in, then pass it on every request:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Obtain a JWT (replace &lt;ADMIN_PASSWORD&gt; with your admin password)</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">TOKEN</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>http://10.10.10.254:11111/netlox/v1/auth/login<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;username&quot;:&quot;admin&quot;,&quot;password&quot;:&quot;&lt;ADMIN_PASSWORD&gt;&quot;}&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import sys,json; print(json.load(sys.stdin).get(&#39;token&#39;,&#39;&#39;))&quot;</span><span class="k">)</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># Every AI request carries the token</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1">#   -H &quot;Authorization: Bearer $TOKEN&quot;</span>
+<div class="admonition danger">
+<p class="admonition-title">A key store does not protect the management listener</p>
+<p>The key lifecycle routes are registered independently of <code>--userservice</code>. If none of the
+management authentication modes (<code>--userservice</code>, <code>--oauth2</code>, or <code>--manualtoken</code>) is enabled,
+the current authorizer grants management requests unrestricted access. Before exposing port
+<code>11111</code>, enable one management authentication mode and verify an unauthenticated key-creation
+request returns <code>401</code>.</p>
+</div>
+<h2 id="security-rules">Security rules<a class="headerlink" href="#security-rules" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Use TLS for both control-plane and inference traffic outside an isolated
+  lab.</li>
+<li>Create one key per workload and environment, with the smallest model list and
+  rate limits it needs.</li>
+<li>The create response is the only place that returns the raw key. List and get
+  return metadata only.</li>
+<li>Never put a raw key in a URL, log, metric label, Git repository, screenshot,
+  or support ticket.</li>
+<li>Prefer protected header files or a secret-aware client over credentials in
+  command arguments.</li>
+</ul>
+<p>Prepare a management header file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
 </code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Change the default admin password</p>
-<p>A fresh install ships with a stock admin password. Change it immediately after first
-login and never run a reachable deployment with default credentials.</p>
-</div>
-<p>The global authentication scheme is <code>Authorization: Bearer &lt;token&gt;</code>.</p>
-<h2 id="api-key-crud">API key CRUD<a class="headerlink" href="#api-key-crud" title="Permanent link">&para;</a></h2>
-<h3 id="endpoints">Endpoints<a class="headerlink" href="#endpoints" title="Permanent link">&para;</a></h3>
+<h2 id="endpoints">Endpoints<a class="headerlink" href="#endpoints" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2446,295 +2826,224 @@ login and never run a reachable deployment with default credentials.</p>
 <tr>
 <td><code>POST</code></td>
 <td><code>/config/ai/apikey</code></td>
-<td>Create a key; returns the raw key <strong>once</strong></td>
+<td>Create a key; raw value is returned once</td>
 </tr>
 <tr>
 <td><code>GET</code></td>
-<td><code>/config/ai/apikey?tenant_id=&lt;id&gt;</code></td>
-<td>List keys, optionally filtered by tenant</td>
+<td><code>/config/ai/apikey?tenant_id=...</code></td>
+<td>List key summaries, optionally by tenant</td>
 </tr>
 <tr>
 <td><code>GET</code></td>
 <td><code>/config/ai/apikey/{key_id}</code></td>
-<td>Get a single key summary (no raw key)</td>
+<td>Read one key summary</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/config/ai/apikey/{key_id}</code></td>
+<td>Replace <code>allowed_models</code> and/or change <code>enabled</code>; raw-middleware route</td>
 </tr>
 <tr>
 <td><code>DELETE</code></td>
 <td><code>/config/ai/apikey/{key_id}</code></td>
-<td>Permanently revoke a key</td>
+<td>Permanently delete a key</td>
 </tr>
-</tbody>
-</table>
-<h3 id="create-request-fields">Create request fields<a class="headerlink" href="#create-request-fields" title="Permanent link">&para;</a></h3>
-<p>The create body maps to the <code>ApiKeyCreateRequest</code> schema. Only <code>tenant_id</code> is
-required.</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Required</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>tenant_id</code></td>
-<td>string</td>
-<td>yes</td>
-<td>Tenant that owns the key</td>
-</tr>
-<tr>
-<td><code>name</code></td>
-<td>string</td>
-<td>no</td>
-<td>Human-readable label</td>
-</tr>
-<tr>
-<td><code>allowed_models</code></td>
-<td>string[]</td>
-<td>no</td>
-<td>Model identifiers this key may access (empty ⇒ no model restriction recorded)</td>
-</tr>
-<tr>
-<td><code>rate_limit_rps</code></td>
-<td>int64</td>
-<td>no</td>
-<td>Maximum requests per second recorded for this key</td>
-</tr>
-<tr>
-<td><code>burst_size</code></td>
-<td>int64</td>
-<td>no</td>
-<td>Burst capacity above the steady-state RPS</td>
-</tr>
-<tr>
-<td><code>tokens_per_min</code></td>
-<td>int64</td>
-<td>no</td>
-<td>Maximum LLM tokens per minute recorded for this key</td>
-</tr>
-<tr>
-<td><code>expires_at</code></td>
-<td>string (RFC3339)</td>
-<td>no</td>
-<td>Optional expiry timestamp</td>
-</tr>
-<tr>
-<td><code>enabled</code></td>
-<td>bool</td>
-<td>no</td>
-<td>Whether the key is active; absent ⇒ enabled</td>
-</tr>
-</tbody>
-</table>
-<h3 id="create-a-key">Create a key<a class="headerlink" href="#create-a-key" title="Permanent link">&para;</a></h3>
-<p>The response contains <code>raw_key</code> and <code>key_id</code>. The raw key (prefixed <code>lxb_</code>) is
-returned <strong>only</strong> in this creation response — store it securely; it cannot be
-retrieved again.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>http://10.10.10.254:11111/netlox/v1/config/ai/apikey<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">    &quot;tenant_id&quot;:       &quot;cicd-tenant&quot;,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">    &quot;name&quot;:            &quot;app-key-1&quot;,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">    &quot;allowed_models&quot;:  [&quot;Qwen/Qwen3-0.6B&quot;, &quot;llama-3&quot;],</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">    &quot;rate_limit_rps&quot;:  5,</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s1">    &quot;burst_size&quot;:      10,</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s1">    &quot;tokens_per_min&quot;:  1000,</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="s1">    &quot;enabled&quot;:         true</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="s1">  }&#39;</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>apikey<span class="w"> </span>--tenant-id<span class="o">=</span>cicd-tenant<span class="w"> </span>--name<span class="o">=</span>app-key-1<span class="w"> </span>--allowed-models<span class="o">=</span>Qwen/Qwen3-0.6B,llama-3<span class="w"> </span>--rps<span class="o">=</span><span class="m">5</span><span class="w"> </span>--burst<span class="o">=</span><span class="m">10</span><span class="w"> </span>--tokens-per-min<span class="o">=</span><span class="m">1000</span><span class="w"> </span>--enabled
-</code></pre></div>
-</div>
-</div>
-</div>
-<p>Response (<code>201 Created</code>):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;raw_key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lxb_XXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;</span><span class="p">,</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&quot;key_id&quot;</span><span class="p">:</span><span class="w">  </span><span class="s2">&quot;b1f0…&quot;</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">}</span>
-</code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">The raw key is shown once</p>
-<p>Only <code>raw_key</code> at creation contains the plaintext secret. Every subsequent
-<code>GET</code> returns an <code>ApiKeySummary</code> that omits it. If the value is lost, delete
-the key and create a new one.</p>
-</div>
-<h3 id="list-and-get-keys">List and get keys<a class="headerlink" href="#list-and-get-keys" title="Permanent link">&para;</a></h3>
-<p><code>GET</code> responses return <code>ApiKeySummary</code> objects — <code>key_id</code>, <code>tenant_id</code>, <code>name</code>,
-<code>allowed_models</code>, the recorded limits, <code>created_at</code>, <code>expires_at</code>, and <code>enabled</code>
-— never the raw key.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># List all keys for a tenant</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/apikey?tenant_id=cicd-tenant&quot;</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># Get one key by ID</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/apikey/&lt;key_id&gt;&quot;</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># List all keys for a tenant</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>apikey<span class="w"> </span>--tenant-id<span class="o">=</span>cicd-tenant
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Get one key by ID</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>apikey<span class="w"> </span>&lt;key_id&gt;
-</code></pre></div>
-</div>
-</div>
-</div>
-<h3 id="revoke-a-key">Revoke a key<a class="headerlink" href="#revoke-a-key" title="Permanent link">&para;</a></h3>
-<p><code>DELETE</code> returns <code>204 No Content</code>; a subsequent <code>GET</code> on the same <code>key_id</code>
-returns <code>404</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">curl</label><label for="__tabbed_3_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-w<span class="w"> </span><span class="s2">&quot;%{http_code}\n&quot;</span><span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/apikey/&lt;key_id&gt;&quot;</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>loxicmd<span class="w"> </span>delete<span class="w"> </span>apikey<span class="w"> </span>&lt;key_id&gt;
-</code></pre></div>
-</div>
-</div>
-</div>
-<h3 id="update-a-key-raw-middleware">Update a key (raw middleware)<a class="headerlink" href="#update-a-key-raw-middleware" title="Permanent link">&para;</a></h3>
-<p><code>allowed_models</code> and <code>enabled</code> can be updated in place with <code>PATCH</code>. This path is
-served by the API-server middleware and is <strong>absent from the generated clients</strong> —
-drive it with raw <code>curl</code>. The path parameter is <code>{key_id}</code>; a successful update
-returns <code>204 No Content</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">curl</label><label for="__tabbed_4_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-w<span class="w"> </span><span class="s2">&quot;%{http_code}\n&quot;</span><span class="w"> </span>-X<span class="w"> </span>PATCH<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>http://10.10.10.254:11111/netlox/v1/config/ai/apikey/&lt;key_id&gt;<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s1">    &quot;allowed_models&quot;: [&quot;llama-3&quot;],</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="s1">    &quot;enabled&quot;:        false</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="s1">  }&#39;</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>loxicmd<span class="w"> </span><span class="nb">set</span><span class="w"> </span>apikey<span class="w"> </span>&lt;key_id&gt;<span class="w"> </span>--allowed-models<span class="o">=</span>llama-3<span class="w"> </span>--enabled<span class="o">=</span><span class="nb">false</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="tenant-rate-limits">Tenant rate limits<a class="headerlink" href="#tenant-rate-limits" title="Permanent link">&para;</a></h2>
-<p>Per-tenant limits are managed independently of individual keys.</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Path</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
 <tr>
 <td><code>POST</code></td>
 <td><code>/config/ai/tenant/ratelimit</code></td>
-<td>Create or update a tenant's limit</td>
+<td>Set tenant RPS and token quotas</td>
 </tr>
 <tr>
 <td><code>GET</code></td>
 <td><code>/config/ai/tenant/ratelimit/{tenant_id}</code></td>
-<td>Read a tenant's current limit</td>
+<td>Read tenant limits</td>
 </tr>
 </tbody>
 </table>
-<p>The create/update body maps to <code>TenantRateLimitMod</code>; only <code>tenant_id</code> is
-required.</p>
+<h2 id="create-a-key">Create a key<a class="headerlink" href="#create-a-key" title="Permanent link">&para;</a></h2>
+<p>Only <code>tenant_id</code> is required, but a production key should be explicitly
+scoped:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/apikey"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">    "tenant_id": "team-a",</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">    "name": "chat-service",</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">    "allowed_models": ["example-chat-model"],</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">    "rate_limit_rps": 5,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s1">    "burst_size": 10,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s1">    "tokens_per_min": 0,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="s1">    "enabled": true</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="s1">  }'</span><span class="w"> </span>&gt;<span class="w"> </span>./new-key.json
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>jq<span class="w"> </span><span class="s1">'{key_id, raw_key_present: (.raw_key | type == "string")}'</span><span class="w"> </span>./new-key.json
+</code></pre></div>
+<p>Expected result: <code>201 Created</code>, with <code>key_id</code> and <code>raw_key</code>. Move the raw value
+directly into your secret manager, then securely remove the temporary file.</p>
 <table>
 <thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
-<th>Required</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>tenant_id</code></td>
-<td>string</td>
-<td>yes</td>
-<td>Tenant identifier</td>
+<td>String</td>
+<td>Owning tenant; required</td>
 </tr>
 <tr>
-<td><code>rps</code></td>
-<td>int64</td>
-<td>no</td>
-<td>Maximum requests per second for the tenant</td>
+<td><code>name</code></td>
+<td>String</td>
+<td>Non-secret operator label</td>
+</tr>
+<tr>
+<td><code>api_key</code></td>
+<td>String</td>
+<td>Optional caller-supplied key for a controlled credential import; write-only</td>
+</tr>
+<tr>
+<td><code>allowed_models</code></td>
+<td>String array</td>
+<td>Exact model identifiers this key may use</td>
+</tr>
+<tr>
+<td><code>rate_limit_rps</code></td>
+<td>Integer</td>
+<td>Per-key requests per second; <code>0</code> disables this limit</td>
+</tr>
+<tr>
+<td><code>burst_size</code></td>
+<td>Integer</td>
+<td>Per-key request bucket capacity</td>
 </tr>
 <tr>
 <td><code>tokens_per_min</code></td>
-<td>int64</td>
-<td>no</td>
-<td>Maximum LLM tokens per minute for the tenant</td>
+<td>Integer</td>
+<td>Persisted and returned by the key API, but <strong>not enforced</strong> by the current data path; use tenant/model TPM</td>
+</tr>
+<tr>
+<td><code>expires_at</code></td>
+<td>RFC 3339 timestamp</td>
+<td>Optional key expiry</td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>Boolean</td>
+<td>Defaults to enabled when omitted</td>
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">curl</label><label for="__tabbed_5_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Set / update</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-w<span class="w"> </span><span class="s2">&quot;%{http_code}\n&quot;</span><span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span>http://10.10.10.254:11111/netlox/v1/config/ai/tenant/ratelimit<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;tenant_id&quot;:&quot;cicd-tenant&quot;,&quot;rps&quot;:50,&quot;tokens_per_min&quot;:2000}&#39;</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="c1"># Read</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">  </span><span class="s2">&quot;http://10.10.10.254:11111/netlox/v1/config/ai/tenant/ratelimit/cicd-tenant&quot;</span>
+<p>An empty model list records no model restriction. Prefer an explicit list when
+the workload should use only known models.</p>
+<p>Per-key <code>tokens_per_min</code> is currently a round-trip schema field, not an
+enforcement control. Configure aggregate and per-model token budgets through
+the tenant rate-limit API and verify their <code>429</code> behavior independently.</p>
+<p>The normal path omits <code>api_key</code>, lets the Gateway generate the credential, and
+receives it once as <code>raw_key</code>. The development contract also accepts a
+caller-supplied key between 16 and 512 printable, non-space ASCII characters.
+That path stores only its SHA-256 hash and never echoes the supplied value.</p>
+<div class="admonition warning">
+<p class="admonition-title">Imported-key response boundary</p>
+<p>The current handler returns an empty <code>raw_key</code> value for an imported key, while the development
+Swagger description says the field is omitted and its response schema still marks <code>raw_key</code> as
+required. Do not automate against empty-versus-absent behavior until the release contract
+resolves this mismatch. Generated-key responses are unaffected.</p>
+</div>
+<h2 id="list-and-inspect-without-exposing-the-secret">List and inspect without exposing the secret<a class="headerlink" href="#list-and-inspect-without-exposing-the-secret" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--get<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/apikey"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--data-urlencode<span class="w"> </span><span class="s1">'tenant_id=team-a'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'map({key_id, name, allowed_models, enabled, expires_at})'</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/apikey/</span><span class="nv">$KEY_ID</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{key_id, tenant_id, name, allowed_models, enabled, expires_at}'</span>
 </code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Set / update</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>loxicmd<span class="w"> </span><span class="nb">set</span><span class="w"> </span>ratelimit<span class="w"> </span>--tenant-id<span class="o">=</span>cicd-tenant<span class="w"> </span>--rps<span class="o">=</span><span class="m">50</span><span class="w"> </span>--tokens-per-min<span class="o">=</span><span class="m">2000</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Read</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>ratelimit<span class="w"> </span>cicd-tenant
+<p>Verify that neither response contains <code>raw_key</code> nor <code>key_hash</code>. Avoid listing
+all tenants unless your role and operational need require it.</p>
+<h2 id="disable-rotate-and-delete">Disable, rotate, and delete<a class="headerlink" href="#disable-rotate-and-delete" title="Permanent link">&para;</a></h2>
+<p>Disable is reversible and is useful for a controlled cutover:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--request<span class="w"> </span>PATCH<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{"enabled":false}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/apikey/</span><span class="nv">$OLD_KEY_ID</span><span class="s2">"</span>
 </code></pre></div>
-</div>
-</div>
-</div>
-<p><code>POST</code> returns <code>204 No Content</code>. <code>GET</code> returns the current entry, including the
-<code>rps</code> and <code>tokens_per_min</code> you set.</p>
-<h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
+<p>Expected result: <code>204 No Content</code>. The route is described in the companion
+<code>swagger-extras.yml</code> contract because it is dispatched before the generated
+OpenAPI handler chain.</p>
 <ol>
-<li><strong>Create returns a raw key.</strong> A <code>POST /config/ai/apikey</code> returns <code>201</code> with a
-   <code>raw_key</code> beginning <code>lxb_</code> and a <code>key_id</code>.</li>
-<li><strong>Tenant isolation.</strong> <code>GET /config/ai/apikey?tenant_id=&lt;id&gt;</code> lists only that
-   tenant's keys.</li>
-<li><strong>Summary omits the secret.</strong> <code>GET /config/ai/apikey/{key_id}</code> returns the
-   key's <code>tenant_id</code> and <code>name</code> but no plaintext key.</li>
-<li><strong>Rate limit round-trips.</strong> After a <code>POST</code> to
-   <code>/config/ai/tenant/ratelimit</code>, the matching <code>GET</code> returns the same <code>rps</code> and
-   <code>tokens_per_min</code>.</li>
-<li><strong>Revocation is durable.</strong> <code>DELETE</code> returns <code>204</code>; a follow-up <code>GET</code> returns
-   <code>404</code>.</li>
+<li>Create a replacement with the same or narrower permissions.</li>
+<li>Store it in the workload's secret manager.</li>
+<li>Roll the workload to the replacement.</li>
+<li>Verify authorized requests succeed and old-key traffic has stopped.</li>
+<li>Permanently delete the old key:</li>
 </ol>
-<h2 id="troubleshoot">Troubleshoot<a class="headerlink" href="#troubleshoot" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/apikey/</span><span class="nv">$OLD_KEY_ID</span><span class="s2">"</span>
+</code></pre></div>
+<p>Expected result: <code>204 No Content</code>; subsequent get returns not found. On the
+current development data path, prove that inference use fails on the same
+<code>mode: 4</code> rule with <code>sse_mode: true</code> or <code>pd_disagg_mode: true</code>; a plain
+fullproxy rule does not enter the key gate. A delete is permanent—create a new
+key if access is needed again.</p>
+<p>Disable, allow-list changes, and delete evict the local authentication and
+key-summary caches before the operation returns. The development HA path also
+sends a best-effort invalidation to peers. An unreachable or older peer may
+continue using a cached entry until its five-minute cache TTL expires, so do
+not describe peer invalidation as an instantaneous cluster-wide revocation
+guarantee.</p>
+<h2 id="verify-data-plane-enforcement">Verify data-plane enforcement<a class="headerlink" href="#verify-data-plane-enforcement" title="Permanent link">&para;</a></h2>
+<p>Write the inference header without printing its value:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./inference.headers
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'X-Api-Key: %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$INFERENCE_API_KEY</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./inference.headers
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Expected response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Valid key and allowed model</td>
+<td>Backend response</td>
+</tr>
+<tr>
+<td>No key or unknown key</td>
+<td><code>401 invalid_api_key</code></td>
+</tr>
+<tr>
+<td>Disabled, expired, or revoked key</td>
+<td><code>401</code></td>
+</tr>
+<tr>
+<td>Valid key, disallowed model</td>
+<td><code>403 model_not_allowed</code></td>
+</tr>
+<tr>
+<td>Burst over key or tenant request bucket</td>
+<td><code>429</code></td>
+</tr>
+</tbody>
+</table>
+<p>Run destructive or throttling probes only with a dedicated non-production
+tenant. Never print the test key in the result.</p>
+<h2 id="tenant-limits">Tenant limits<a class="headerlink" href="#tenant-limits" title="Permanent link">&para;</a></h2>
+<p>Tenant RPS, aggregate TPM, per-model TPM, and token burst capacity use the
+tenant rate-limit API. These limits are shared by the tenant's keys and are
+explained step by step in <a href="../ai-traffic-governance/">AI Traffic Governance</a>.</p>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2745,49 +3054,69 @@ required.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>401 Unauthorized</code> on any AI endpoint</td>
-<td>Missing or expired bearer token</td>
-<td>Re-login at <code>/auth/login</code> and resend with <code>-H "Authorization: Bearer $TOKEN"</code>.</td>
-</tr>
-<tr>
 <td>Create returns <code>400</code></td>
-<td>Body missing required <code>tenant_id</code>, or malformed JSON</td>
-<td>Include <code>tenant_id</code>; validate the JSON body.</td>
+<td>Missing tenant or invalid body</td>
+<td>Validate JSON and provide a non-empty <code>tenant_id</code></td>
 </tr>
 <tr>
-<td>Endpoints return errors even with a valid token</td>
-<td>Control plane started without user-service / database</td>
-<td>Start LoxiLB with the user-service and a reachable database backing the key store.</td>
+<td>Management call returns <code>401</code></td>
+<td>Management credential missing or expired</td>
+<td>Refresh through the approved identity workflow</td>
 </tr>
 <tr>
-<td>Lost the raw key</td>
-<td>Raw key is returned only once, at creation</td>
-<td>Delete the key and create a new one.</td>
+<td>Management call returns <code>403</code></td>
+<td>Authenticated viewer or unknown role attempted a mutation</td>
+<td>Use an explicitly authorized administrator; do not widen the viewer role</td>
 </tr>
 <tr>
-<td><code>PATCH</code> request 404s from a generated client</td>
-<td>The <code>PATCH</code> route is middleware-only, not in generated clients</td>
-<td>Call it with raw <code>curl</code> against <code>/config/ai/apikey/{key_id}</code>.</td>
+<td>Key or quota call returns <code>503 ai_key_store_unconfigured</code></td>
+<td><code>--aikey-db-host</code> is unset</td>
+<td>Stop exposure, configure the independent key store, and re-run missing-key probes</td>
 </tr>
 <tr>
-<td>A request with an unknown/disabled key still succeeds</td>
-<td>Data-plane key validation is not wired yet</td>
-<td>Expected today — see the roadmap admonition; do not rely on keys as an access gate.</td>
+<td>Key or quota call returns <code>503 ai_key_store_unavailable</code></td>
+<td>A configured store did not initialize or is unreachable</td>
+<td>Restore the store and verify the reconnect; do not bypass the key check</td>
 </tr>
 <tr>
-<td>A tenant over its RPS/token limit is not throttled</td>
-<td>Data-plane rate limiting (429) is not wired yet</td>
-<td>Expected today — limits are recorded, not enforced.</td>
+<td>Inference call returns <code>401</code></td>
+<td>Key missing, unknown, disabled, expired, or revoked</td>
+<td>Inspect summary by <code>key_id</code>; do not log the raw key</td>
+</tr>
+<tr>
+<td>Inference call returns <code>403</code></td>
+<td>Effective model is not allowed</td>
+<td>Compare the exact model with <code>allowed_models</code></td>
+</tr>
+<tr>
+<td>Inference call returns <code>429</code></td>
+<td>Key/tenant RPS or token quota</td>
+<td>Inspect the error reason, <code>Retry-After</code>, and metrics</td>
+</tr>
+<tr>
+<td>Key cannot be recovered</td>
+<td>Raw value was not stored</td>
+<td>Revoke the record and rotate to a new key</td>
+</tr>
+<tr>
+<td>CRUD fails despite valid management auth</td>
+<td>Independent PostgreSQL key store unavailable</td>
+<td>Restore the data-plane store securely; management-user health does not prove key-store health</td>
 </tr>
 </tbody>
 </table>
-<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
+<h2 id="cleanup">Cleanup<a class="headerlink" href="#cleanup" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./new-key.json<span class="w"> </span>./control-plane.headers<span class="w"> </span>./inference.headers
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN<span class="w"> </span>INFERENCE_API_KEY<span class="w"> </span>KEY_ID<span class="w"> </span>OLD_KEY_ID
+</code></pre></div>
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../sse-quota-management/">SSE and Quota Management</a> — token accounting that
-  records usage against these keys and tenants.</li>
-<li><a href="../configuration-reference/">Configuration Reference</a> — full serviceArguments
-  and schema reference.</li>
-<li><a href="../overview/">Overview</a> — the AI routing model and request lifecycle.</li>
+<li><a href="../ai-traffic-governance/">AI Traffic Governance</a></li>
+<li><a href="../sse-quota-management/">SSE and Quota Management</a></li>
+<li><a href="../../operations/ai-qos/">AI Quotas and QoS</a></li>
+<li><a href="../../operations/ai-key-store/">AI Key Store Operations</a></li>
+<li><a href="../../security/management-api-authentication/">Management API Authentication</a></li>
+<li><a href="../../operations/monitoring/">Monitoring and Metrics</a></li>
 </ul>
 
 

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.">
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
       
       
       
@@ -396,6 +396,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose an Inference Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -554,6 +582,34 @@
     
   
     AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
   
 
     
@@ -807,10 +863,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-is-pd-disaggregation" class="md-nav__link">
+  <a href="#why-separate-prefill-and-decode" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is P/D Disaggregation?
+        Why separate prefill and decode?
       
     </span>
   </a>
@@ -818,10 +874,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#request-lifecycle" class="md-nav__link">
+  <a href="#shared-topology" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Request Lifecycle
+        Shared topology
       
     </span>
   </a>
@@ -829,10 +885,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#endpoint-selection" class="md-nav__link">
+  <a href="#the-request-flow-depends-on-the-engine" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Endpoint Selection
+        The request flow depends on the engine
       
     </span>
   </a>
@@ -840,10 +896,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration-fields" class="md-nav__link">
+  <a href="#optional-cache-aware-layers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Configuration Fields
+        Optional cache-aware layers
       
     </span>
   </a>
@@ -851,44 +907,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
+  <a href="#shared-configuration-fields" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Configuration
+        Shared configuration fields
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Configuration">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minimal-validation-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minimal validation workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failure-diagnosis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failure diagnosis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Failure diagnosis">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cache-aware-multi-endpoint" class="md-nav__link">
+  <a href="#circuit-breaker-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Cache-Aware, Multi-Endpoint
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#vllm-backend-requirement" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        vLLM Backend Requirement
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#vllm-engine-setup-essentials" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        vLLM engine setup essentials
+        Circuit-breaker behavior
       
     </span>
   </a>
@@ -901,10 +957,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
+  <a href="#security-considerations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify
+        Security considerations
       
     </span>
   </a>
@@ -912,74 +968,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
+  <a href="#evidence-limits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshooting
+        Evidence limits
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Troubleshooting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#decode-endpoint-counter-stays-at-00" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Decode endpoint counter stays at 0:0
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#prefill-endpoints-not-sticky" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prefill endpoints not sticky
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#decode-load-imbalanced" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Decode load imbalanced
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#routing-falls-back-to-normal-selection" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Routing falls back to normal selection
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#no-kv-transfer-benefit-full-latency-despite-pd" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        No KV-transfer benefit (full latency despite P/D)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -987,7 +982,7 @@
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Next Steps
+        Next steps
       
     </span>
   </a>
@@ -1018,6 +1013,118 @@
     
   
     vLLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
   
 
     
@@ -1492,6 +1599,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Safety Scanning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/opa-l4/" class="md-nav__link">
         
   
@@ -1527,7 +1690,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1778,6 +1941,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/monitoring/" class="md-nav__link">
         
   
@@ -1814,6 +2089,90 @@
     
   
     Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
   
 
     
@@ -2259,10 +2618,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-is-pd-disaggregation" class="md-nav__link">
+  <a href="#why-separate-prefill-and-decode" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is P/D Disaggregation?
+        Why separate prefill and decode?
       
     </span>
   </a>
@@ -2270,10 +2629,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#request-lifecycle" class="md-nav__link">
+  <a href="#shared-topology" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Request Lifecycle
+        Shared topology
       
     </span>
   </a>
@@ -2281,10 +2640,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#endpoint-selection" class="md-nav__link">
+  <a href="#the-request-flow-depends-on-the-engine" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Endpoint Selection
+        The request flow depends on the engine
       
     </span>
   </a>
@@ -2292,10 +2651,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration-fields" class="md-nav__link">
+  <a href="#optional-cache-aware-layers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Configuration Fields
+        Optional cache-aware layers
       
     </span>
   </a>
@@ -2303,44 +2662,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
+  <a href="#shared-configuration-fields" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Configuration
+        Shared configuration fields
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Configuration">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minimal-validation-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minimal validation workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failure-diagnosis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failure diagnosis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Failure diagnosis">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cache-aware-multi-endpoint" class="md-nav__link">
+  <a href="#circuit-breaker-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Cache-Aware, Multi-Endpoint
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#vllm-backend-requirement" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        vLLM Backend Requirement
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#vllm-engine-setup-essentials" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        vLLM engine setup essentials
+        Circuit-breaker behavior
       
     </span>
   </a>
@@ -2353,10 +2712,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
+  <a href="#security-considerations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify
+        Security considerations
       
     </span>
   </a>
@@ -2364,74 +2723,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
+  <a href="#evidence-limits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Troubleshooting
+        Evidence limits
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Troubleshooting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#decode-endpoint-counter-stays-at-00" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Decode endpoint counter stays at 0:0
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#prefill-endpoints-not-sticky" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prefill endpoints not sticky
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#decode-load-imbalanced" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Decode load imbalanced
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#routing-falls-back-to-normal-selection" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Routing falls back to normal selection
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#no-kv-transfer-benefit-full-latency-despite-pd" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        No KV-transfer benefit (full latency despite P/D)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2439,7 +2737,7 @@
   <a href="#next-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Next Steps
+        Next steps
       
     </span>
   </a>
@@ -2464,356 +2762,233 @@
 
 
 <h1 id="pd-disaggregation">P/D Disaggregation<a class="headerlink" href="#pd-disaggregation" title="Permanent link">&para;</a></h1>
-<p>Split the LLM inference pipeline across specialized prefill and decode GPU pools, with loxilb orchestrating the two-phase request flow and the endpoints exchanging KV cache directly over NIXL.</p>
-<h2 id="what-is-pd-disaggregation">What is P/D Disaggregation?<a class="headerlink" href="#what-is-pd-disaggregation" title="Permanent link">&para;</a></h2>
-<p>LLM inference has two phases with very different resource profiles:</p>
+<p>Prefill/decode (P/D) disaggregation separates prompt processing from token generation. LoxiLB Inference Gateway selects the two endpoint roles and runs the request sequence required by the configured serving engine.</p>
+<h2 id="why-separate-prefill-and-decode">Why separate prefill and decode?<a class="headerlink" href="#why-separate-prefill-and-decode" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Prefill (P)</strong> — processing the input prompt. This is <strong>compute-bound</strong>: the GPU runs a full forward pass over all input tokens in parallel to build the initial KV cache. Latency scales with prompt length.</li>
-<li><strong>Decode (D)</strong> — generating output tokens one at a time. This is <strong>memory-bandwidth-bound</strong>: each new token reads the entire KV cache from GPU memory. Throughput scales with memory bandwidth.</li>
+<li><strong>Prefill</strong> processes the input tokens and creates KV state. It is primarily compute intensive.</li>
+<li><strong>Decode</strong> produces tokens iteratively while reading KV state. It is primarily memory-bandwidth sensitive.</li>
 </ul>
-<p><strong>P/D disaggregation</strong> places these phases on separate endpoint pools so each can run on hardware tuned for its workload — high-FLOPS GPUs for prefill, high-bandwidth GPUs for decode. loxilb routes the prompt to a prefill endpoint, then routes the generation request to a decode endpoint that reuses the KV cache produced by prefill.</p>
+<p>P/D lets operators scale and tune those roles independently. It also adds network, engine-dialect, timeout, and failure-coupling requirements, so start with a converged pool unless the operational benefit is clear.</p>
+<h2 id="shared-topology">Shared topology<a class="headerlink" href="#shared-topology" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart LR
-    REQ([Client request]) --&gt; LB["loxilb AI Gateway&lt;br/&gt;(mode 4, pd_disagg_mode)"]
-    LB --&gt; P["Prefill EP&lt;br/&gt;(ep_role 1)"]
-    P -.-&gt;|NIXL KV transfer&lt;br/&gt;peer-to-peer| D["Decode EP&lt;br/&gt;(ep_role 2)"]
-    LB --&gt; D
-    D --&gt; RESP([Response / SSE stream])
+    CLIENT([Client]) --&gt; GW["LoxiLB Inference Gateway&lt;br/&gt;mode 4"]
+    GW --&gt; SELECT["Select prefill and decode"]
+    SELECT --&gt; P["Prefill or CONTEXT&lt;br/&gt;ep_role: 1"]
+    SELECT --&gt; D["Decode or GENERATION&lt;br/&gt;ep_role: 2"]
+    P -.-&gt;|Engine-specific KV transfer| D
+    D --&gt; GW
+    GW --&gt; CLIENT
 
     style P fill:#e8f5e9,stroke:#43a047
     style D fill:#e1f5fe,stroke:#0288d1</code></pre>
-<div class="admonition note">
-<p class="admonition-title">Prerequisite: fullproxy (mode 4)</p>
-<p>P/D disaggregation is an L7 feature and requires <code>mode: 4</code> (fullproxy). The API rejects
-<code>pd_disagg_mode: true</code> on any other mode. See <a href="../../concepts/running-modes/">Running Modes</a>.</p>
-</div>
-<hr />
-<h2 id="request-lifecycle">Request Lifecycle<a class="headerlink" href="#request-lifecycle" title="Permanent link">&para;</a></h2>
-<p>When P/D is enabled, loxilb runs a strictly sequential two-phase flow for every request:</p>
-<pre class="mermaid"><code>sequenceDiagram
-    participant Client
-    participant loxilb as loxilb AI Gateway
-    participant Prefill as Prefill EP (ep_role 1)
-    participant NIXL as NIXL sideband
-    participant Decode as Decode EP (ep_role 2)
-
-    Client-&gt;&gt;loxilb: POST /v1/completions
-    Note over loxilb: Parse HTTP, extract prompt&lt;br/&gt;Select prefill + decode pair&lt;br/&gt;Augment body with kv_transfer_params
-    loxilb-&gt;&gt;Prefill: Prefill request (max_tokens forced to 1)
-    Note over Prefill: Full forward pass, build KV cache
-    Prefill--&gt;&gt;NIXL: KV cache export
-    NIXL--&gt;&gt;Decode: KV cache delivered (peer-to-peer, bypasses loxilb)
-    Prefill-&gt;&gt;loxilb: 200 (kv_transfer_params in body)
-    Note over loxilb: Close prefill conn&lt;br/&gt;Build decode request with kv_transfer_params&lt;br/&gt;Open new conn to decode EP
-    loxilb-&gt;&gt;Decode: Decode request
-    Note over Decode: External KV cache hit, skip recompute&lt;br/&gt;Autoregressive generation
-    Decode-&gt;&gt;loxilb: 200 / SSE stream
-    loxilb-&gt;&gt;Client: 200 / SSE stream (byte-transparent proxy)</code></pre>
-<p>Key properties of the flow:</p>
+<p>Every P/D rule requires:</p>
 <ul>
-<li><strong>loxilb augments the prefill body</strong> — it forces <code>max_tokens</code>/<code>max_completion_tokens</code> to <code>1</code> and injects <code>kv_transfer_params</code> so the prefill endpoint produces the KV cache but no output tokens.</li>
-<li><strong>The decode request carries the prefill result</strong> — loxilb extracts <code>kv_transfer_params</code> (remote engine id, block ids, host, port) from the prefill response and injects it into the decode request.</li>
-<li><strong>The KV cache never traverses loxilb</strong> — tensor data moves prefill → decode directly over the NIXL sideband port; loxilb only orchestrates the two HTTP legs.</li>
-<li><strong>The legs are sequential</strong> — the decode connection opens only after prefill completes. On the decode → client leg loxilb is a byte-transparent stream proxy, so SSE tokens pass through unmodified.</li>
+<li><code>mode: 4</code> (fullproxy)</li>
+<li><code>pd_disagg_mode: true</code></li>
+<li>at least one <code>ep_role: 1</code> endpoint</li>
+<li>at least one <code>ep_role: 2</code> endpoint</li>
+<li>one coherent <code>kvEngineType</code> for the entire rule</li>
 </ul>
-<hr />
-<h2 id="endpoint-selection">Endpoint Selection<a class="headerlink" href="#endpoint-selection" title="Permanent link">&para;</a></h2>
-<p>With <code>pd_cache_aware_mode</code> enabled, loxilb selects the <strong>prefill</strong> endpoint through a three-tier policy:</p>
+<h2 id="the-request-flow-depends-on-the-engine">The request flow depends on the engine<a class="headerlink" href="#the-request-flow-depends-on-the-engine" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Engine</th>
+<th>Request order</th>
+<th>Transfer contract</th>
+<th>Engine-specific setting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vLLM</td>
+<td>Sequential prefill, then decode</td>
+<td>Gateway extracts <code>kv_transfer_params</code>; KV data moves through NIXL</td>
+<td>Endpoint <code>nixl_port</code></td>
+</tr>
+<tr>
+<td>SGLang</td>
+<td>Concurrent prefill and decode</td>
+<td>Gateway injects one bootstrap host/port/room triple into both requests</td>
+<td><code>pdBootstrapPort</code></td>
+</tr>
+<tr>
+<td>TensorRT-LLM</td>
+<td>Sequential CONTEXT, then GENERATION</td>
+<td>Gateway extracts and relays <code>disaggregated_params</code>; context may finish early</td>
+<td>Context and generation server roles</td>
+</tr>
+<tr>
+<td>llama.cpp</td>
+<td>Not supported</td>
+<td>None</td>
+<td>P/D configuration is rejected</td>
+</tr>
+</tbody>
+</table>
 <pre class="mermaid"><code>flowchart TD
-    REQ[Request] --&gt; T0{Tier 0&lt;br/&gt;Session sticky?}
-    T0 --&gt;|Hit, EP healthy| USE0[Reuse pinned P+D pair]
-    T0 --&gt;|Miss| T1{Tier 1&lt;br/&gt;Radix-trie cache affinity}
-    T1 --&gt;|match_rate &gt;= pd_cache_threshold&lt;br/&gt;and load balanced| USE1[Use trie-selected prefill EP]
-    T1 --&gt;|Below threshold, or load imbalance&lt;br/&gt;&gt; pd_balance_abs_threshold| T2
-    T2[Tier 2&lt;br/&gt;Min-load fallback] --&gt; USE2[Least-loaded prefill EP]
+    REQ([P/D request]) --&gt; ENGINE{kvEngineType}
+    ENGINE --&gt;|vllm| V1[Send prefill]
+    V1 --&gt; V2[Extract transfer parameters]
+    V2 --&gt; V3[Send decode]
+    ENGINE --&gt;|sglang| S1[Create bootstrap room]
+    S1 --&gt; S2[Dispatch both legs concurrently]
+    S2 --&gt; S3[Drain prefill and relay decode]
+    ENGINE --&gt;|trtllm| T1[Send context_only]
+    T1 --&gt; T2{Context finished?}
+    T2 --&gt;|Yes| T3[Relay context response]
+    T2 --&gt;|No| T4[Send generation_only]
 
-    style T0 fill:#e8f5e9,stroke:#43a047
-    style T1 fill:#e1f5fe,stroke:#0288d1
-    style T2 fill:#fff3e0,stroke:#f57c00</code></pre>
-<ul>
-<li><strong>Tier 0 — session stickiness.</strong> Multi-turn conversations pin to the same prefill+decode pair. The key is the <code>X-Conversation-Id</code> header (or the request body <code>user</code> field). The pin is kept while the session TTL is valid and both endpoints are healthy.</li>
-<li><strong>Tier 1 — radix-trie cache affinity.</strong> Requests with similar prompt prefixes route to the same prefill endpoint for KV reuse. A match is accepted when <code>match_rate &gt;= pd_cache_threshold</code>; if the active-connection spread between endpoints exceeds <code>pd_balance_abs_threshold</code>, loxilb skips to Tier 2 to avoid hotspots.</li>
-<li><strong>Tier 2 — min-load fallback.</strong> Always available. Picks the healthy prefill endpoint with the fewest active connections. Used for cold start, novel prompts, and when load imbalance overrides trie affinity.</li>
-</ul>
-<p>Decode endpoint selection is always <strong>session → min-load</strong> (no trie): the decode side receives the KV cache over NIXL, so prompt-prefix affinity provides no benefit there.</p>
-<div class="admonition note">
-<p class="admonition-title">Cache-aware routing is P/D-specific</p>
-<p>The radix-trie prefix routing above runs only when <strong>both</strong> <code>pd_disagg_mode</code> and
-<code>pd_cache_aware_mode</code> are set. It is distinct from block-hash KV-exact routing
-(<code>kvExactMode</code>, see <a href="../kv-caching/">KV-Cache Routing</a>) — where applicable, choose one model
-per service, not both.</p>
+    style S2 fill:#e1f5fe,stroke:#0288d1
+    style T3 fill:#e8f5e9,stroke:#43a047</code></pre>
+<div class="admonition warning">
+<p class="admonition-title">Do not copy fields across engines</p>
+<p><code>nixl_port</code>, <code>pdBootstrapPort</code>, ZMQ rank settings, and TensorRT-LLM's HTTP event drain solve different problems. A configuration that is valid for one engine can be rejected or meaningless for another.</p>
 </div>
-<hr />
-<h2 id="configuration-fields">Configuration Fields<a class="headerlink" href="#configuration-fields" title="Permanent link">&para;</a></h2>
-<p>Service-level fields (<code>serviceArguments</code>):</p>
+<h2 id="optional-cache-aware-layers">Optional cache-aware layers<a class="headerlink" href="#optional-cache-aware-layers" title="Permanent link">&para;</a></h2>
+<p>P/D itself does not require <code>kvExactMode</code>.</p>
+<ul>
+<li>P/D always applies session stickiness first and falls back to load-aware endpoint selection.</li>
+<li><code>pd_cache_aware_mode: true</code> adds the radix-trie prefix-affinity tier between those two stages.</li>
+<li><code>kvExactMode: 1</code> adds engine-exact cache inventory selection for eligible prefill or context endpoints.</li>
+<li><code>kvExactMode: 3</code> is not a P/D option; it is reserved for role-less single pools.</li>
+</ul>
+<p>For KV-exact mode, the tokenizer, model identity, block/page size, hash contract, and event transport must match the engine. A rule can continue serving through fallback routing even when this parity is broken, so verify metrics explicitly.</p>
+<h2 id="shared-configuration-fields">Shared configuration fields<a class="headerlink" href="#shared-configuration-fields" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Field</th>
-<th>Type</th>
-<th>Default</th>
-<th>Range / notes</th>
+<th style="text-align: right;">Default</th>
+<th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>pd_disagg_mode</code></td>
-<td>bool</td>
-<td><code>false</code></td>
-<td>Enable P/D orchestration. Requires <code>mode: 4</code>.</td>
+<td style="text-align: right;"><code>false</code></td>
+<td>Enable the engine-specific P/D orchestrator.</td>
 </tr>
 <tr>
 <td><code>pd_cache_aware_mode</code></td>
-<td>bool</td>
-<td><code>false</code></td>
-<td>Enable Tier 0/1/2 selection. Requires <code>pd_disagg_mode: true</code>.</td>
+<td style="text-align: right;"><code>false</code></td>
+<td>Add radix-trie prefix affinity to the P/D ladder. Session stickiness and load fallback do not depend on this flag. Requires P/D.</td>
 </tr>
 <tr>
 <td><code>pd_session_ttl_sec</code></td>
-<td>int32</td>
-<td><code>0</code></td>
-<td>Session stickiness TTL in seconds. <strong><code>0</code> = no automatic expiry.</strong> Used only when <code>pd_cache_aware_mode</code> is true.</td>
+<td style="text-align: right;"><code>0</code> in the API</td>
+<td>Session lifetime in seconds. The data path converts <code>0</code> to its 300-second runtime default.</td>
 </tr>
 <tr>
 <td><code>pd_cache_threshold</code></td>
-<td>int32</td>
-<td><code>20</code></td>
-<td><code>0</code>–<code>100</code>. Minimum trie match percentage to prefer a cache-affinity endpoint. Lower = more aggressive cache routing.</td>
+<td style="text-align: right;"><code>20</code></td>
+<td>Minimum prefix-trie match percentage.</td>
 </tr>
 <tr>
 <td><code>pd_balance_abs_threshold</code></td>
-<td>int32</td>
-<td><code>3</code></td>
-<td><code>&gt;= 0</code>. Max active-connection spread before cache affinity is bypassed for min-load.</td>
+<td style="text-align: right;"><code>3</code></td>
+<td>Active-connection spread that bypasses the optional radix-trie choice and uses load fallback.</td>
+</tr>
+<tr>
+<td><code>kvExactMode</code></td>
+<td style="text-align: right;"><code>0</code></td>
+<td><code>1</code> adds P/D KV-exact selection; <code>3</code> is invalid with P/D.</td>
+</tr>
+<tr>
+<td><code>ep_role</code></td>
+<td style="text-align: right;"><code>0</code></td>
+<td>Endpoint role: <code>1</code> prefill/CONTEXT, <code>2</code> decode/GENERATION.</td>
+</tr>
+<tr>
+<td><code>nixl_port</code></td>
+<td style="text-align: right;"><code>0</code></td>
+<td>vLLM transfer side channel; <code>0</code> uses the target port.</td>
+</tr>
+<tr>
+<td><code>pdBootstrapPort</code></td>
+<td style="text-align: right;"><code>0</code></td>
+<td>SGLang prefill bootstrap port; <code>0</code> means <code>8998</code>.</td>
 </tr>
 </tbody>
 </table>
-<p>Endpoint-level fields (per entry in <code>endpoints</code>):</p>
+<p>See the <a href="../configuration-reference/">Configuration Reference</a> before copying these fields into a rule.</p>
+<h2 id="minimal-validation-workflow">Minimal validation workflow<a class="headerlink" href="#minimal-validation-workflow" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Start every backend and wait for model readiness, not only process readiness.</li>
+<li>Prove ordinary fullproxy routing with health probes.</li>
+<li>Create one P/D rule with one endpoint of each role and without KV-exact mode.</li>
+<li>Test a non-streaming request and an SSE request.</li>
+<li>Confirm both roles handled the request using engine logs and Gateway metrics.</li>
+<li>Add more endpoints and exercise one endpoint failure at a time.</li>
+<li>Add cache-aware selection only after the base P/D flow is reliable.</li>
+</ol>
+<p>Useful Gateway metric families include:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>loxilb_ai_pd_requests_total
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>loxilb_pd_kv_tier15_hits_total
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>loxilb_pd_kv_blocks
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>loxilb_kv_subscriber_connected
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>loxilb_pd_sg_room_retry_total
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>loxilb_pd_trt_ctx_early_exit_total
+</code></pre></div>
+<p>Metric availability depends on the configured engine and optional routing layers.</p>
+<h2 id="failure-diagnosis">Failure diagnosis<a class="headerlink" href="#failure-diagnosis" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Field</th>
-<th>Type</th>
-<th>Default</th>
-<th>Range / notes</th>
+<th>Symptom</th>
+<th>Check first</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>ep_role</code></td>
-<td>int32</td>
-<td><code>0</code></td>
-<td><code>0</code>-normal, <code>1</code>-prefill, <code>2</code>-decode. Only used when <code>pd_disagg_mode</code> is true.</td>
+<td>Rule creation fails</td>
+<td>Fullproxy mode, both endpoint roles, and engine-specific field coherence</td>
 </tr>
 <tr>
-<td><code>nixl_port</code></td>
-<td>int32</td>
-<td><code>0</code></td>
-<td>NIXL side-channel port for KV transfer. <code>0</code> = use <code>targetPort</code>.</td>
+<td>Client request hangs</td>
+<td>Engine request order, role health, transfer reachability, and first-byte timeouts</td>
+</tr>
+<tr>
+<td>Decode recomputes the prompt</td>
+<td>Engine transfer configuration and side-channel/bootstrap connectivity</td>
+</tr>
+<tr>
+<td>Traffic succeeds but KV-exact hits remain zero</td>
+<td>Tokenizer, model, block size, hash algorithm, event feed, and inventory readiness; <code>kvWarmupSec</code> is currently inert</td>
+</tr>
+<tr>
+<td>One role becomes overloaded</td>
+<td>Endpoint health, session TTL, load threshold, and role counts</td>
+</tr>
+<tr>
+<td>Errors continue to select one endpoint</td>
+<td>Circuit-breaker enablement and origin/connect failure classification</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition warning">
-<p class="admonition-title">Set ep_role on every endpoint</p>
-<p>With <code>pd_disagg_mode: true</code>, endpoints left at <code>ep_role: 0</code> do not participate in P/D routing.
-A valid P/D service needs at least one <code>ep_role: 1</code> (prefill) and one <code>ep_role: 2</code> (decode)
-endpoint.</p>
-</div>
-<hr />
-<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>Configure a P/D service with <code>POST /netlox/v1/config/loadbalancer</code> on the loxilb API port (<code>11111</code>). The example below mirrors the <code>vllm-pd-disagg</code> CI scenario: one prefill endpoint (<code>ep_role: 1</code>) and one decode endpoint (<code>ep_role: 2</code>), with HTTP health probing against each backend's <code>/health</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">      &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">      &quot;port&quot;: 2020,</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">      &quot;protocol&quot;: &quot;tcp&quot;,</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">      &quot;sel&quot;: 0,</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s1">      &quot;mode&quot;: 4,</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">      &quot;security&quot;: 1,</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="s1">      &quot;pd_disagg_mode&quot;: true,</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s1">      &quot;sse_mode&quot;: true,</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s1">      &quot;host&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="s1">      &quot;monitor&quot;: true,</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="s1">      &quot;probetype&quot;: &quot;http&quot;,</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="s1">      &quot;probeport&quot;: 8000,</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="s1">      &quot;probereq&quot;: &quot;/health&quot;,</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="s1">      &quot;probeTimeout&quot;: 5,</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="s1">      &quot;probeRetries&quot;: 2</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="s1">    },</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="s1">    &quot;endpoints&quot;: [</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1, &quot;nixl_port&quot;: 9001},</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2, &quot;nixl_port&quot;: 9002}</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="s1">    ]</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="s1">  }&#39;</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,32.32.32.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--security<span class="o">=</span>https<span class="w"> </span>--pd-disagg<span class="w"> </span>--sse-mode<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--monitor<span class="w"> </span>--probetype<span class="o">=</span>http<span class="w"> </span>--probeport<span class="o">=</span><span class="m">8000</span><span class="w"> </span>--probereq<span class="o">=</span>/health<span class="w"> </span>--probetimeout<span class="o">=</span><span class="m">5</span><span class="w"> </span>--proberetries<span class="o">=</span><span class="m">2</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,decode<span class="w"> </span>--nixl-port<span class="o">=</span><span class="m">9001</span>,9002
-</code></pre></div>
-</div>
-</div>
-</div>
-<h3 id="cache-aware-multi-endpoint">Cache-Aware, Multi-Endpoint<a class="headerlink" href="#cache-aware-multi-endpoint" title="Permanent link">&para;</a></h3>
-<p>To scale to multiple prefill and decode endpoints with session stickiness and prefix affinity, add <code>pd_cache_aware_mode: true</code> and the tuning thresholds. This mirrors the 2-prefill / 2-decode cache-aware rule in the CI scenario.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s1">    &quot;serviceArguments&quot;: {</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">      &quot;externalIP&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">      &quot;port&quot;: 2023,</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">      &quot;protocol&quot;: &quot;tcp&quot;,</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">      &quot;sel&quot;: 0,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">      &quot;mode&quot;: 4,</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">      &quot;security&quot;: 1,</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">      &quot;pd_disagg_mode&quot;: true,</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">      &quot;pd_cache_aware_mode&quot;: true,</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s1">      &quot;pd_session_ttl_sec&quot;: 600,</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s1">      &quot;pd_cache_threshold&quot;: 20,</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s1">      &quot;pd_balance_abs_threshold&quot;: 3,</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s1">      &quot;sse_mode&quot;: true,</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s1">      &quot;host&quot;: &quot;10.10.10.254&quot;,</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s1">      &quot;monitor&quot;: true,</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s1">      &quot;probetype&quot;: &quot;http&quot;,</span>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="s1">      &quot;probeport&quot;: 8000,</span>
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="s1">      &quot;probereq&quot;: &quot;/health&quot;,</span>
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="s1">      &quot;probeTimeout&quot;: 5,</span>
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="s1">      &quot;probeRetries&quot;: 2</span>
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="s1">    },</span>
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="s1">    &quot;endpoints&quot;: [</span>
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;31.31.31.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1, &quot;nixl_port&quot;: 9001},</span>
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;33.33.33.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 1, &quot;nixl_port&quot;: 9003},</span>
-<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;32.32.32.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2, &quot;nixl_port&quot;: 9002},</span>
-<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="s1">      {&quot;endpointIP&quot;: &quot;34.34.34.1&quot;, &quot;targetPort&quot;: 8000, &quot;weight&quot;: 1, &quot;ep_role&quot;: 2, &quot;nixl_port&quot;: 9004}</span>
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="s1">    ]</span>
-<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="s1">  }&#39;</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2023</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">31</span>.31.31.1:1,33.33.33.1:1,32.32.32.1:1,34.34.34.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--security<span class="o">=</span>https<span class="w"> </span>--pd-disagg<span class="w"> </span>--pd-cache-aware<span class="w"> </span>--pd-session-ttl<span class="o">=</span><span class="m">600</span><span class="w"> </span>--pd-cache-threshold<span class="o">=</span><span class="m">20</span><span class="w"> </span>--pd-balance-abs-threshold<span class="o">=</span><span class="m">3</span><span class="w"> </span>--sse-mode<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--monitor<span class="w"> </span>--probetype<span class="o">=</span>http<span class="w"> </span>--probeport<span class="o">=</span><span class="m">8000</span><span class="w"> </span>--probereq<span class="o">=</span>/health<span class="w"> </span>--probetimeout<span class="o">=</span><span class="m">5</span><span class="w"> </span>--proberetries<span class="o">=</span><span class="m">2</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,prefill,decode,decode<span class="w"> </span>--nixl-port<span class="o">=</span><span class="m">9001</span>,9003,9002,9004
-</code></pre></div>
-</div>
-</div>
-</div>
-<p><strong>Tuning guidance:</strong></p>
+<h3 id="circuit-breaker-behavior">Circuit-breaker behavior<a class="headerlink" href="#circuit-breaker-behavior" title="Permanent link">&para;</a></h3>
+<p>P/D rule creation enables a per-endpoint breaker with a three-connect-failure threshold and a
+30-second open window in the current implementation. An enabled breaker also tracks
+consecutive origin 5xx responses; the default origin threshold is three and
+<code>LLB_PD_ORIGIN_ERR_THRESHOLD=0</code> disables that path. The current 5xx response is relayed to the
+client. Opening the breaker demotes the endpoint for later selection; it does not replay the
+failed request. A 4xx response neither advances nor resets the origin-5xx streak.</p>
+<h2 id="security-considerations">Security considerations<a class="headerlink" href="#security-considerations" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Lower <code>pd_cache_threshold</code> (e.g. <code>10</code>) accepts shorter prefix matches — more cache hits, better latency for chatbots with shared system prompts.</li>
-<li>Lower <code>pd_balance_abs_threshold</code> (e.g. <code>2</code>) rebalances sooner and prevents hotspots at the cost of some cache locality.</li>
-<li>Raise <code>pd_session_ttl_sec</code> for long multi-turn conversations; leave it at <code>0</code> for independent, single-shot batch queries (no stickiness benefit).</li>
+<li>Isolate management, client, event, and engine-transfer networks according to their trust levels.</li>
+<li>Permit SGLang bootstrap or vLLM transfer ports only between the endpoints that need them.</li>
+<li>Do not expose TensorRT-LLM's destructive event endpoint to monitoring or untrusted consumers.</li>
+<li>Avoid logging request bodies or engine transfer objects when they may contain sensitive prompts or opaque state.</li>
+<li>P/D routing is not a tenant boundary. Apply authentication, authorization, and quota policies independently.</li>
 </ul>
-<h3 id="vllm-backend-requirement">vLLM Backend Requirement<a class="headerlink" href="#vllm-backend-requirement" title="Permanent link">&para;</a></h3>
-<p>P/D disaggregation requires vLLM's <strong><code>NixlConnector</code></strong>. Prefill nodes run with <code>kv_role: kv_producer</code>, decode nodes with <code>kv_role: kv_consumer</code>, and <code>nixl_port</code> on the loxilb endpoint must match the vLLM NIXL side-channel port. Connectors that do not read <code>kv_transfer_params</code> from the response body will silently fall back to full recompute on the decode side.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Prefill node</label><label for="__tabbed_3_2">Decode node</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_HOST</span><span class="o">=</span><span class="m">31</span>.31.31.1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_PORT</span><span class="o">=</span><span class="m">9001</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">UCX_TLS</span><span class="o">=</span>tcp<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>vllm/vllm-openai:v0.17.0<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span>--model<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span>--enable-request-id-headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span>--kv-transfer-config<span class="w"> </span><span class="s1">&#39;{&quot;kv_connector&quot;:&quot;NixlConnector&quot;,&quot;kv_role&quot;:&quot;kv_producer&quot;,&quot;kv_buffer_device&quot;:&quot;cpu&quot;}&#39;</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--gpus<span class="w"> </span>all<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_HOST</span><span class="o">=</span><span class="m">32</span>.32.32.1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">VLLM_NIXL_SIDE_CHANNEL_PORT</span><span class="o">=</span><span class="m">9002</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">UCX_TLS</span><span class="o">=</span>tcp<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span>vllm/vllm-openai:v0.17.0<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span>--model<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span>--enable-request-id-headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span>--kv-transfer-config<span class="w"> </span><span class="s1">&#39;{&quot;kv_connector&quot;:&quot;NixlConnector&quot;,&quot;kv_role&quot;:&quot;kv_consumer&quot;,&quot;kv_buffer_device&quot;:&quot;cpu&quot;}&#39;</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">kv_buffer_device: cpu on TCP-only hosts</p>
-<p>The default <code>cuda</code> buffer device makes UCX attempt GPU-Direct transfers. On instances without
-GDRcopy/RDMA (for example AWS <code>g5.xlarge</code> with A10G), that fails during NIXL init. Setting
-<code>kv_buffer_device: cpu</code> routes KV tensors through host memory and works reliably on any
-TCP-only host. See <a href="../../use-cases/deploy-pd-disaggregation/">Deploy: P/D Disaggregation</a> for a
-full cloud walkthrough.</p>
-</div>
-<h3 id="vllm-engine-setup-essentials">vLLM engine setup essentials<a class="headerlink" href="#vllm-engine-setup-essentials" title="Permanent link">&para;</a></h3>
-<p>Three things distinguish a P/D-capable launch from a plain vLLM one. The full copy-paste reference
-lives in the deploy guide — the essentials:</p>
+<h2 id="evidence-limits">Evidence limits<a class="headerlink" href="#evidence-limits" title="Permanent link">&para;</a></h2>
+<p>Repository validation proves configuration guards and deterministic mock request paths. It does not establish production throughput, latency, cache benefit, engine-version compatibility, cross-node fault tolerance, or secure network policy for a particular deployment.</p>
+<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong><code>--kv-transfer-config</code> differs by role.</strong> Prefill runs <code>"kv_role":"kv_producer"</code>, decode runs
-  <code>"kv_role":"kv_consumer"</code> — both use the <code>NixlConnector</code> with <code>"kv_buffer_device":"cpu"</code> on
-  TCP-only hosts.</li>
-<li><strong><code>--kv-events-config</code> is prefill-only.</strong> Only prefill publishes KV inventory
-  (<code>{"enable_kv_cache_events":true,"publisher":"zmq","endpoint":"tcp://*:5557","topic":""}</code>); decode
-  omits it entirely.</li>
-<li><strong>The parity flags must match loxilb</strong> for KV-exact routing to engage: <code>PYTHONHASHSEED=0</code>,
-  <code>--prefix-caching-hash-algo sha256_cbor</code> (not the default <code>sha256</code>), and <code>--block-size 16</code> (equal
-  to the rule's <code>kvBlockSize</code>).</li>
-</ul>
-<p>See <a href="../../use-cases/deploy-pd-disaggregation/">Deploy: P/D Disaggregation</a> for the full prefill and
-decode launch commands, the decode NIXL block-count contract, and the full-mesh redeploy discipline.</p>
-<hr />
-<h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
-<p><strong>1. Confirm the service carries P/D config:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://&lt;loxilb&gt;:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.lbAttr[] | select(.serviceArguments.pd_disagg_mode==true)&#39;</span>
-</code></pre></div>
-<p><strong>2. Confirm endpoints are healthy</strong> — the health probe marks each endpoint active once <code>/health</code> responds. An endpoint that fails the probe reports <code>"inActiveEP": true</code> in the same listing.</p>
-<p><strong>3. Send a request and confirm two-phase routing</strong> — with a real vLLM backend, the response <code>id</code> embeds both worker addresses when P/D is active:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:2020/v1/completions<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;model&quot;:&quot;Qwen/Qwen3-0.6B&quot;,&quot;prompt&quot;:&quot;hello&quot;,&quot;max_tokens&quot;:8}&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.id&#39;</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># P/D active   -&gt; id embeds prefill and decode addresses</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># P/D inactive -&gt; plain completion id</span>
-</code></pre></div>
-<hr />
-<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
-<h3 id="decode-endpoint-counter-stays-at-00">Decode endpoint counter stays at 0:0<a class="headerlink" href="#decode-endpoint-counter-stays-at-00" title="Permanent link">&para;</a></h3>
-<p>Expected in <code>pd_disagg_mode</code>. The prefill leg carries the original client connection, so its counter increments. The decode leg is a new loxilb-originated connection (source IP = loxilb), which is not counted as a forwarded client connection. Verify real decode activity from vLLM's own metrics on the decode node, not from the LB counter.</p>
-<h3 id="prefill-endpoints-not-sticky">Prefill endpoints not sticky<a class="headerlink" href="#prefill-endpoints-not-sticky" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Confirm <code>pd_cache_aware_mode: true</code> is set on the service.</li>
-<li>Ensure the client sends <code>X-Conversation-Id</code> (or a body <code>user</code> field) so sessions can key.</li>
-<li>Check <code>pd_session_ttl_sec</code> — <code>0</code> means no expiry, but stickiness still requires a live session and healthy endpoints.</li>
-<li>Lower <code>pd_cache_threshold</code> so partial prefix matches still stick.</li>
-</ul>
-<h3 id="decode-load-imbalanced">Decode load imbalanced<a class="headerlink" href="#decode-load-imbalanced" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Lower <code>pd_balance_abs_threshold</code> to trigger rebalancing sooner.</li>
-<li>Verify all <code>ep_role: 2</code> endpoints are healthy and passing the probe.</li>
-</ul>
-<h3 id="routing-falls-back-to-normal-selection">Routing falls back to normal selection<a class="headerlink" href="#routing-falls-back-to-normal-selection" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Confirm every endpoint has an explicit <code>ep_role</code> (<code>1</code> or <code>2</code>).</li>
-<li>Confirm <code>pd_disagg_mode: true</code> is present in <code>serviceArguments</code>.</li>
-<li>A service with no healthy prefill <strong>or</strong> no healthy decode endpoint cannot run the two-phase flow.</li>
-</ul>
-<h3 id="no-kv-transfer-benefit-full-latency-despite-pd">No KV-transfer benefit (full latency despite P/D)<a class="headerlink" href="#no-kv-transfer-benefit-full-latency-despite-pd" title="Permanent link">&para;</a></h3>
-<p>Usually the wrong vLLM connector is deployed.</p>
-<ul>
-<li>Verify both nodes use <code>NixlConnector</code> (producer on prefill, consumer on decode).</li>
-<li>Confirm the prefill response contains a non-empty <code>kv_transfer_params</code> with block ids.</li>
-<li>Ensure <code>nixl_port</code> on each loxilb endpoint matches that node's <code>VLLM_NIXL_SIDE_CHANNEL_PORT</code>.</li>
-<li>Set <code>VLLM_NIXL_SIDE_CHANNEL_HOST</code> to the node's routable address (not <code>0.0.0.0</code>).</li>
-<li>On hosts without RDMA, set <code>kv_buffer_device: cpu</code> in <code>--kv-transfer-config</code>.</li>
-</ul>
-<hr />
-<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="../../use-cases/deploy-pd-disaggregation/">Deploy: P/D Disaggregation</a> — cloud deployment walkthrough and vLLM launch reference</li>
-<li><a href="../kv-caching/">KV-Cache Routing</a> — block-hash KV-exact routing for non-disaggregated deployments</li>
-<li><a href="../vllm-integration/">vLLM Integration</a> — health probing, ALPN, and GPU-aware routing</li>
-<li><a href="../configuration-reference/">Configuration Reference</a> — all AI Gateway <code>serviceArguments</code></li>
+<li><a href="../sglang-pd-disaggregation/">SGLang P/D Disaggregation</a></li>
+<li><a href="../tensorrt-llm-integration/">TensorRT-LLM Integration</a></li>
+<li><a href="../vllm-integration/">vLLM Integration</a></li>
+<li><a href="../../concepts/engine-capability-matrix/">Engine Capability Matrix</a></li>
 </ul>
 
 

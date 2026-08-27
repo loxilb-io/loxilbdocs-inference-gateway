@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for LLM serving fleets (vLLM, SGLang) with KV-cache-aware routing, prefill/decode disaggregation, and OpenAI-compatible SSE streaming.">
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
       
       
       
@@ -396,6 +396,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose an Inference Engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -554,6 +582,34 @@
     
   
     AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
   
 
     
@@ -781,6 +837,118 @@
     
   
     vLLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
   
 
     
@@ -1255,6 +1423,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Safety Scanning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/opa-l4/" class="md-nav__link">
         
   
@@ -1290,7 +1514,7 @@
   <span class="md-ellipsis">
     
   
-    mTLS for AI Backends
+    Frontend mTLS
   
 
     
@@ -1460,6 +1684,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#architecture-and-security-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture and security boundaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1471,10 +1706,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-1-get-the-sources" class="md-nav__link">
+  <a href="#1-get-the-deployment-files" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 1 — Get the sources
+        1. Get the deployment files
       
     </span>
   </a>
@@ -1482,10 +1717,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-create-the-configuration" class="md-nav__link">
+  <a href="#2-configure-secrets-and-release-pins" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2 — Create the configuration
+        2. Configure secrets and release pins
       
     </span>
   </a>
@@ -1493,10 +1728,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-3-choose-the-edge-tls-mode" class="md-nav__link">
+  <a href="#3-configure-the-edge-certificate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3 — Choose the edge TLS mode
+        3. Configure the edge certificate
       
     </span>
   </a>
@@ -1504,10 +1739,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-4-start-the-stack" class="md-nav__link">
+  <a href="#4-start-the-stack" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 4 — Start the stack
+        4. Start the stack
       
     </span>
   </a>
@@ -1515,10 +1750,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-5-verify" class="md-nav__link">
+  <a href="#5-verify-the-management-plane" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 5 — Verify
+        5. Verify the management plane
       
     </span>
   </a>
@@ -1526,10 +1761,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-6-secure-the-link-to-your-gateways" class="md-nav__link">
+  <a href="#6-protect-the-gateway-connection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 6 — Secure the link to your gateways
+        6. Protect the Gateway connection
       
     </span>
   </a>
@@ -1537,21 +1772,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-7-register-your-first-gateway" class="md-nav__link">
+  <a href="#backup-and-recovery" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 7 — Register your first gateway
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#day-2-operations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Day-2 operations
+        Backup and recovery
       
     </span>
   </a>
@@ -1711,6 +1935,118 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/monitoring/" class="md-nav__link">
         
   
@@ -1747,6 +2083,90 @@
     
   
     Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
   
 
     
@@ -2192,6 +2612,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#architecture-and-security-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture and security boundaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2203,10 +2634,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-1-get-the-sources" class="md-nav__link">
+  <a href="#1-get-the-deployment-files" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 1 — Get the sources
+        1. Get the deployment files
       
     </span>
   </a>
@@ -2214,10 +2645,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-create-the-configuration" class="md-nav__link">
+  <a href="#2-configure-secrets-and-release-pins" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2 — Create the configuration
+        2. Configure secrets and release pins
       
     </span>
   </a>
@@ -2225,10 +2656,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-3-choose-the-edge-tls-mode" class="md-nav__link">
+  <a href="#3-configure-the-edge-certificate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3 — Choose the edge TLS mode
+        3. Configure the edge certificate
       
     </span>
   </a>
@@ -2236,10 +2667,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-4-start-the-stack" class="md-nav__link">
+  <a href="#4-start-the-stack" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 4 — Start the stack
+        4. Start the stack
       
     </span>
   </a>
@@ -2247,10 +2678,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-5-verify" class="md-nav__link">
+  <a href="#5-verify-the-management-plane" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 5 — Verify
+        5. Verify the management plane
       
     </span>
   </a>
@@ -2258,10 +2689,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-6-secure-the-link-to-your-gateways" class="md-nav__link">
+  <a href="#6-protect-the-gateway-connection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 6 — Secure the link to your gateways
+        6. Protect the Gateway connection
       
     </span>
   </a>
@@ -2269,21 +2700,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-7-register-your-first-gateway" class="md-nav__link">
+  <a href="#backup-and-recovery" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 7 — Register your first gateway
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#day-2-operations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Day-2 operations
+        Backup and recovery
       
     </span>
   </a>
@@ -2330,278 +2750,320 @@
 
 
 <h1 id="deploy-the-management-plane-ui-oam">Deploy the Management Plane (UI + OAM)<a class="headerlink" href="#deploy-the-management-plane-ui-oam" title="Permanent link">&para;</a></h1>
-<p>One Docker Compose bundle brings up the complete management plane on a single host: the LoxiLB UI, the OAM management API, and MySQL, behind a TLS-terminating Caddy edge. This is the recommended way to run the UI in production.</p>
+<p>The management-plane bundle runs the LoxiLB UI, the OAM API, PostgreSQL, and a
+Caddy edge on one Docker Compose host. Use it first in a staging environment.
+Production use requires pinned releases, verified backups, restricted network
+access, and an approved OAM-to-Gateway authentication design.</p>
 <div class="admonition note">
 <p class="admonition-title">Audience</p>
-<p>Operators standing up a browser-based control point for one or more LoxiLB Inference Gateway instances.</p>
+<p>This guide is for AI-infrastructure and DevOps engineers deploying a
+browser-based control point for one or more Inference Gateway instances.</p>
 </div>
-<p>The bundle lives in the <code>loxilb-oam</code> repository at <a href="https://github.com/loxilb-io/loxilb-oam/tree/main/deploy/compose"><code>deploy/compose/</code></a>. It runs four services:</p>
+<p>The bundle is maintained in the
+<a href="https://github.com/loxilb-io/loxilb-oam/tree/main/deploy/compose"><code>loxilb-oam/deploy/compose</code></a>
+directory.</p>
+<h2 id="architecture-and-security-boundaries">Architecture and security boundaries<a class="headerlink" href="#architecture-and-security-boundaries" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    B["Operator browser"] --&gt;|"HTTPS + OAM JWT"| E["Caddy edge&lt;br/&gt;only published service"]
+    E --&gt; U["UI static assets"]
+    E --&gt; O["OAM API"]
+    O --&gt; P["PostgreSQL&lt;br/&gt;users, instances, snapshots"]
+    O --&gt;|"verified TLS + forwarded Authorization"| G["Inference Gateway"]
+
+    style E fill:#e1f5fe,stroke:#0288d1
+    style P fill:#e8f5e9,stroke:#43a047
+    style G fill:#fff9c4,stroke:#f9a825</code></pre>
 <table>
 <thead>
 <tr>
 <th>Service</th>
-<th>Role</th>
+<th>Purpose</th>
+<th>Production exposure</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>caddy</code></td>
-<td>Edge: serves the UI at <code>/netlox/</code>, proxies <code>/api/oam/*</code> to the OAM API, terminates TLS</td>
+<td>Serves the UI at <code>/netlox/</code>, proxies <code>/api/oam/*</code>, and terminates edge TLS</td>
+<td>Ports 80/443, adjusted with <code>HTTP_PORT</code> and <code>HTTPS_PORT</code></td>
 </tr>
 <tr>
 <td><code>oam-loxilb</code></td>
-<td>The OAM management API (port 8080, internal)</td>
+<td>OAM API and OAM RBAC</td>
+<td>Internal only in the production overlay</td>
 </tr>
 <tr>
-<td><code>mysql</code></td>
-<td>MySQL 8-family database (schema auto-initialized)</td>
+<td><code>postgres</code></td>
+<td>OAM users, instances, snapshots, and management state</td>
+<td>Isolated internal network in the production overlay</td>
 </tr>
 <tr>
 <td><code>ui-assets</code></td>
-<td>One-shot job that publishes the UI build into the volume Caddy serves</td>
+<td>One-shot job that copies the UI build into the volume served by Caddy</td>
+<td>None</td>
 </tr>
 </tbody>
 </table>
-<p>Only the edge is exposed; in the production overlay the database sits on an isolated internal network.</p>
-<hr />
+<p>OAM authenticates the browser and applies OAM RBAC. It then forwards the
+request's <code>Authorization</code> header to the Gateway; it does not exchange an OAM
+JWT for a Gateway user-service, OAuth, or manual token. TLS protects the
+connection but does not authorize the operation.</p>
+<div class="admonition danger">
+<p class="admonition-title">Validate Gateway authorization before production</p>
+<p>If Gateway management authentication is enabled, an OAM JWT can be rejected
+with <code>401</code> unless the releases share an approved credential integration. If
+Gateway authentication is disabled, any network client that can reach its
+management listener can bypass OAM. Restrict that listener and test both
+successful access and denied bypass access before promotion.</p>
+</div>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <ul>
-<li>A Linux host with Docker Engine and the Docker Compose v2 plugin (<code>docker compose version</code>).</li>
-<li>Git, and outbound network access to clone the repositories.</li>
-<li>At least one running LoxiLB Inference Gateway instance whose REST API is reachable from this host — see <a href="../../getting-started/installation/">Installation</a>. For production, run the gateway with <code>--tls</code> so OAM can verify it on port <code>8091</code> (step 6).</li>
-<li>Ports 80 and 443 free on the host (configurable via <code>HTTP_PORT</code> / <code>HTTPS_PORT</code>).</li>
+<li>A Linux host with Docker Engine and Docker Compose v2.</li>
+<li>Git and registry access for the selected OAM and UI images.</li>
+<li>Ports 80 and 443 free, or approved alternative edge ports.</li>
+<li>At least one staging Gateway reachable from OAM over verified TLS.</li>
+<li>Release tags for OAM and UI that are compatible with the qualified Gateway.</li>
+<li>A secret manager and a PostgreSQL backup destination.</li>
 </ul>
-<hr />
-<h2 id="step-1-get-the-sources">Step 1 — Get the sources<a class="headerlink" href="#step-1-get-the-sources" title="Permanent link">&para;</a></h2>
+<h2 id="1-get-the-deployment-files">1. Get the deployment files<a class="headerlink" href="#1-get-the-deployment-files" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/loxilb-io/loxilb-oam.git
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/loxilb-io/loxilb-ui.git<span class="w">   </span><span class="c1"># sibling checkout, used for source builds</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">cd</span><span class="w"> </span>loxilb-oam/deploy/compose
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>loxilb-oam/deploy/compose
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
 </code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Why clone the UI too?</p>
-<p>The bundle's development overlay builds the UI and OAM images from source and expects <code>loxilb-ui</code> checked out <strong>as a sibling</strong> of the <code>loxilb-oam</code> directory. If your layout differs, set <code>UI_SRC</code> / <code>OAM_SRC</code> in <code>.env</code>. If you use the pre-built images in step 4 instead, the sibling checkout is not needed.</p>
-</div>
-<h2 id="step-2-create-the-configuration">Step 2 — Create the configuration<a class="headerlink" href="#step-2-create-the-configuration" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+<p>The development overlay builds OAM from this checkout but still pulls the UI
+image. Point <code>UI_IMAGE</code> and <code>UI_TAG</code> at a reviewed image; a sibling UI source
+checkout is not required.</p>
+<h2 id="2-configure-secrets-and-release-pins">2. Configure secrets and release pins<a class="headerlink" href="#2-configure-secrets-and-release-pins" title="Permanent link">&para;</a></h2>
+<p>Generate independent JWT, database, and snapshot-key values and store them
+through your normal secret process:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">48</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">48</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">32</span>
 </code></pre></div>
-<p>Generate and fill in the required secrets — the stack refuses to start without them:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># JWT signing key</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">48</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Snapshot encryption key (base64 32-byte AES-256)</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>openssl<span class="w"> </span>rand<span class="w"> </span>-base64<span class="w"> </span><span class="m">32</span>
-</code></pre></div>
+<p>Assign the outputs to <code>OAM_JWT_SECRET</code>, <code>DB_PASSWORD</code>, and
+<code>SNAPSHOT_ENC_KEY</code>, respectively. Create <code>OAM_DEFAULT_ADMIN_PASSWORD</code> with a
+password manager: the fresh-database policy requires at least nine characters,
+including upper case, lower case, a digit, and a special character, and rejects
+any character repeated three times in a row. Never paste a production secret
+into documentation, a ticket, or a committed <code>.env</code> file.</p>
 <table>
 <thead>
 <tr>
-<th>Key</th>
-<th>Required</th>
+<th>Variable</th>
+<th style="text-align: right;">Requirement</th>
 <th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>MYSQL_ROOT_PASSWORD</code></td>
-<td>yes</td>
-<td>MySQL root password</td>
-</tr>
-<tr>
 <td><code>DB_PASSWORD</code></td>
-<td>yes</td>
-<td>Password for the OAM database user (<code>oamuser</code>)</td>
+<td style="text-align: right;">required</td>
+<td>Password for the bundled PostgreSQL <code>oamuser</code></td>
 </tr>
 <tr>
 <td><code>OAM_JWT_SECRET</code></td>
-<td>yes</td>
-<td>JWT signing key — long random value</td>
+<td style="text-align: right;">required</td>
+<td>OAM JWT signing secret</td>
 </tr>
 <tr>
 <td><code>OAM_DEFAULT_ADMIN_PASSWORD</code></td>
-<td>yes</td>
-<td>Bootstrap <code>admin</code> password; change it after first login</td>
+<td style="text-align: right;">required</td>
+<td>Bootstrap admin password; change it after first login</td>
 </tr>
 <tr>
 <td><code>SNAPSHOT_ENC_KEY</code></td>
-<td>strongly recommended</td>
-<td>AES-256 key for snapshot encryption at rest</td>
+<td style="text-align: right;">production</td>
+<td>Base64-encoded 32-byte AES-256 snapshot encryption key</td>
 </tr>
 <tr>
 <td><code>OAM_ALLOWED_ORIGINS</code></td>
-<td>recommended</td>
-<td>Comma-separated CORS allowlist, e.g. <code>https://oam.example.com</code></td>
+<td style="text-align: right;">production</td>
+<td>Exact browser-origin allowlist</td>
+</tr>
+<tr>
+<td><code>OAM_TRUSTED_PROXIES</code></td>
+<td style="text-align: right;">review</td>
+<td>Only proxy IPs/CIDRs whose forwarded client IP OAM may trust</td>
+</tr>
+<tr>
+<td><code>OAM_TAG</code></td>
+<td style="text-align: right;">production</td>
+<td>Pinned, verified OAM release tag</td>
+</tr>
+<tr>
+<td><code>UI_TAG</code></td>
+<td style="text-align: right;">production</td>
+<td>Pinned, verified UI release tag</td>
 </tr>
 </tbody>
 </table>
+<p>Set release placeholders to releases approved by your organization; do not
+copy the mutable defaults into production:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>OAM_TAG=&lt;OAM_RELEASE_TAG&gt;
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>UI_TAG=&lt;UI_RELEASE_TAG&gt;
+</code></pre></div>
+<p>Before deployment, verify that both exact image references are pullable and
+record their resolved digests:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>docker<span class="w"> </span>manifest<span class="w"> </span>inspect<span class="w"> </span>ghcr.io/loxilb-io/loxilb-oam:&lt;OAM_RELEASE_TAG&gt;
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>docker<span class="w"> </span>manifest<span class="w"> </span>inspect<span class="w"> </span>ghcr.io/loxilb-io/loxilb-ui:&lt;UI_RELEASE_TAG&gt;
+</code></pre></div>
 <div class="admonition warning">
-<p class="admonition-title">Set <code>SNAPSHOT_ENC_KEY</code> in production</p>
-<p>Instance snapshots contain sensitive material — IPsec pre-shared keys and certificate private keys. Without <code>SNAPSHOT_ENC_KEY</code> they are stored <strong>unencrypted</strong> in the database. A set-but-invalid key aborts startup, so generate it with exactly <code>openssl rand -base64 32</code>.</p>
+<p class="admonition-title">Protect the snapshot encryption key</p>
+<p>OAM snapshots can contain IPsec pre-shared keys and certificate private
+keys. Without <code>SNAPSHOT_ENC_KEY</code>, those values are stored unencrypted in
+PostgreSQL. Back up the encryption key separately from the database and
+test that the restored service can decrypt a synthetic snapshot.</p>
 </div>
-<h2 id="step-3-choose-the-edge-tls-mode">Step 3 — Choose the edge TLS mode<a class="headerlink" href="#step-3-choose-the-edge-tls-mode" title="Permanent link">&para;</a></h2>
-<p>Two knobs in <code>.env</code> — <code>SITE_ADDRESS</code> and <code>EDGE_TLS</code> — select how the Caddy edge serves the UI:</p>
-<table>
-<thead>
-<tr>
-<th>Mode</th>
-<th><code>SITE_ADDRESS</code></th>
-<th><code>EDGE_TLS</code></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>HTTP only (dev/internal)</td>
-<td><code>:80</code></td>
-<td><em>(empty)</em></td>
-</tr>
-<tr>
-<td><strong>Self-signed, your own key (default for most deployments)</strong></td>
-<td><code>https://your.host</code></td>
-<td><code>tls /certs/edge/cert.pem /certs/edge/key.pem</code></td>
-</tr>
-<tr>
-<td>Self-signed, zero-file (Caddy local CA)</td>
-<td><code>https://localhost</code></td>
-<td><code>tls internal</code></td>
-</tr>
-<tr>
-<td>Automatic HTTPS (host has public DNS)</td>
-<td><code>your.domain</code></td>
-<td><em>(empty)</em></td>
-</tr>
-<tr>
-<td>Commercial certificate</td>
-<td><code>https://your.domain</code></td>
-<td><code>tls /certs/edge/cert.pem /certs/edge/key.pem</code></td>
-</tr>
-</tbody>
-</table>
-<p>For the self-signed path, generate the edge certificate first:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>scripts/generate-edge-certs.sh<span class="w"> </span>oam.example.com
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># then set SITE_ADDRESS and EDGE_TLS exactly as the script prints,</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># and trust cert.pem on operator browsers</span>
+<h2 id="3-configure-the-edge-certificate">3. Configure the edge certificate<a class="headerlink" href="#3-configure-the-edge-certificate" title="Permanent link">&para;</a></h2>
+<p>For a private or operator-supplied certificate, generate a test certificate or
+place the reviewed certificate and key in <code>certs/edge/</code>, then configure:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>SITE_ADDRESS=https://management.example.com
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>EDGE_TLS=tls /certs/edge/cert.pem /certs/edge/key.pem
 </code></pre></div>
-<p>For a commercial certificate, drop <code>cert.pem</code> + <code>key.pem</code> into <code>certs/edge/</code> instead.</p>
-<h2 id="step-4-start-the-stack">Step 4 — Start the stack<a class="headerlink" href="#step-4-start-the-stack" title="Permanent link">&para;</a></h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Build from source (works today)</label><label for="__tabbed_1_2">Pre-built images (production overlay)</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.dev.yml<span class="w"> </span>up<span class="w"> </span>--build<span class="w"> </span>-d
+<p>The repository helper can generate a local test certificate with a DNS name or
+IP subject alternative name:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>scripts/generate-edge-certs.sh<span class="w"> </span>management.example.com
 </code></pre></div>
-<p>Builds the OAM and UI images from your local checkouts, then starts all four services.</p>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># pin the released versions in .env first:</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1">#   OAM_TAG=v0.1.0-rc.1</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1">#   UI_TAG=v0.9.0</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.prod.yml<span class="w"> </span>up<span class="w"> </span>-d
+<p>Trust the issuing CA on operator clients. Do not use <code>curl -k</code> as a production
+health check. Caddy automatic HTTPS is also possible for a publicly resolvable
+name, but DNS, firewall, and certificate issuance are deployment-specific and
+must be validated by the operator.</p>
+<h2 id="4-start-the-stack">4. Start the stack<a class="headerlink" href="#4-start-the-stack" title="Permanent link">&para;</a></h2>
+<p>For an initial, non-production evaluation, build OAM from the checkout and use
+the pinned UI image configured above:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>-f<span class="w"> </span>docker-compose.dev.yml<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>up<span class="w"> </span>--build<span class="w"> </span>-d
 </code></pre></div>
-<p>Pulls <code>ghcr.io/loxilb-io/loxilb-oam</code> and <code>ghcr.io/loxilb-io/loxilb-ui</code> at the pinned tags, isolates the database network, and exposes only the edge.</p>
-</div>
-</div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Pin release tags — and verify the images are pullable</p>
-<p>The first releases are <code>v0.9.0</code> for the UI and <code>v0.1.0-rc.1</code> for OAM. Release-candidate tags (<code>-rc.*</code>) publish as prereleases and do <strong>not</strong> move <code>:latest</code> — the compose default of <code>OAM_TAG=latest</code> will not resolve until the first final OAM release, so set <code>OAM_TAG=v0.1.0-rc.1</code> explicitly. Confirm availability from your host before relying on the production overlay:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>docker<span class="w"> </span>manifest<span class="w"> </span>inspect<span class="w"> </span>ghcr.io/loxilb-io/loxilb-ui:v0.9.0
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>docker<span class="w"> </span>manifest<span class="w"> </span>inspect<span class="w"> </span>ghcr.io/loxilb-io/loxilb-oam:v0.1.0-rc.1
+<p>The development overlay publishes PostgreSQL and OAM debug ports and defaults
+to insecure verification of managed-Gateway certificates. Do not promote this
+topology to production.</p>
+<p>For a production-style topology, use only pinned images and the production
+overlay:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span>-f<span class="w"> </span>docker-compose.prod.yml<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span>up<span class="w"> </span>-d
 </code></pre></div>
-<p>If the registry denies the pull, the package is not (yet) public — fall back to the source-build overlay, or build and push the images to your own registry and set <code>OAM_IMAGE</code> / <code>UI_IMAGE</code> in <code>.env</code>. Release images are Cosign-signed and carry SLSA provenance and SBOM attestations, so prefer pinned version tags over <code>latest</code> in production.</p>
-</div>
-<h2 id="step-5-verify">Step 5 — Verify<a class="headerlink" href="#step-5-verify" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># All services up (&quot;healthy&quot; for mysql and oam-loxilb)</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.dev.yml<span class="w"> </span>ps
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># -k skips CA verification for the self-signed edge cert; verify the CA in production</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># Edge liveness</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://oam.example.com/healthz
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1"># OAM API health through the edge</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://oam.example.com/api/oam/health
+<p>The production overlay requires both tags and isolates PostgreSQL. Only Caddy
+publishes host ports.</p>
+<h2 id="5-verify-the-management-plane">5. Verify the management plane<a class="headerlink" href="#5-verify-the-management-plane" title="Permanent link">&para;</a></h2>
+<p>Use the same overlay in every follow-up command. The example below uses the
+production overlay:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>-f<span class="w"> </span>docker-compose.prod.yml<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span>ps
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span>https://management.example.com/healthz
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">  </span>https://management.example.com/api/oam/health<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
 </code></pre></div>
-<p>Then open <strong><code>https://&lt;host&gt;/netlox/</code></strong> in a browser and log in as <code>admin</code> with <code>OAM_DEFAULT_ADMIN_PASSWORD</code>. Change the password immediately after first login.</p>
-<div class="admonition tip">
-<p class="admonition-title">The UI lives under <code>/netlox/</code></p>
-<p>The SPA is served at the <code>/netlox/</code> path prefix, not at the site root. Bookmark <code>https://&lt;host&gt;/netlox/</code>.</p>
-</div>
-<h2 id="step-6-secure-the-link-to-your-gateways">Step 6 — Secure the link to your gateways<a class="headerlink" href="#step-6-secure-the-link-to-your-gateways" title="Permanent link">&para;</a></h2>
-<p>In production, OAM should verify TLS when talking to each managed gateway:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># 1. Generate a per-instance server certificate signed by a bundle-local CA</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>scripts/generate-instance-certs.sh<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>lb2.example.com
+<p>Then browse to <code>https://management.example.com/netlox/</code>, sign in with the
+bootstrap administrator account, and change its password immediately.</p>
+<h2 id="6-protect-the-gateway-connection">6. Protect the Gateway connection<a class="headerlink" href="#6-protect-the-gateway-connection" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Issue each Gateway a server certificate whose SAN matches the hostname or
+   IP that OAM will register.</li>
+<li>Start the Gateway with TLS and restrict its management listener to the OAM
+   network path.</li>
+<li>Mount the issuing CA into OAM and set:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>OAM_INSTANCE_CA_BUNDLE=/etc/loxilb-oam/certs/instance-ca.pem
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>OAM_INSTANCE_TLS_INSECURE=false
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># 2. Install the certificate on each gateway host and restart with TLS</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1">#    (copy certs/instance-ca/&lt;host&gt;/server.crt and server.key</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1">#     to /opt/loxilb/cert/ on the instance, then start loxilb with --tls)</span>
+<ol>
+<li>Register the Gateway using its verified endpoint:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>https://&lt;gateway-host&gt;:8091/netlox/v1
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># 3. Point OAM at the CA in .env, then restart the stack</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nv">OAM_INSTANCE_CA_BUNDLE</span><span class="o">=</span>/etc/loxilb-oam/certs/instance-ca.pem
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nv">OAM_INSTANCE_TLS_INSECURE</span><span class="o">=</span><span class="nb">false</span>
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Development shortcut</p>
-<p><code>OAM_INSTANCE_TLS_INSECURE=true</code> disables certificate verification for the OAM→gateway connection. It logs a startup warning and is for development only.</p>
-</div>
-<h2 id="step-7-register-your-first-gateway">Step 7 — Register your first gateway<a class="headerlink" href="#step-7-register-your-first-gateway" title="Permanent link">&para;</a></h2>
-<p>In the UI, add a LoxiLB instance with its API endpoint:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>https://&lt;gateway-host&gt;:8091/netlox/v1     # TLS (production)
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>http://&lt;gateway-host&gt;:11111/netlox/v1     # plain HTTP (lab only)
-</code></pre></div>
-<p>Once registered, the instance's load balancers, endpoints, AI-gateway rules, and status become manageable from the dashboard. Reads are available to every role; configuration changes require the <code>admin</code> or <code>operator</code> role. The full API surface (including instance registration via REST) is browsable in the OAM Swagger UI — see <a href="../loxilb-oam/">LoxiLB OAM API</a>.</p>
-<hr />
-<h2 id="day-2-operations">Day-2 operations<a class="headerlink" href="#day-2-operations" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.dev.yml<span class="w"> </span>ps<span class="w">            </span><span class="c1"># status</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.dev.yml<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>caddy<span class="w"> </span><span class="c1"># edge logs</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.dev.yml<span class="w"> </span>down<span class="w">          </span><span class="c1"># stop, keep data</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>docker-compose.yml<span class="w"> </span>-f<span class="w"> </span>docker-compose.dev.yml<span class="w"> </span>down<span class="w"> </span>-v<span class="w">       </span><span class="c1"># stop and DESTROY the database</span>
-</code></pre></div>
+<ol>
+<li>Test an allowed read, a reversible authorized change, a denied request from
+   an insufficient OAM role, and a direct bypass attempt to the Gateway.</li>
+<li>Confirm in both OAM and Gateway audit logs which identity and operation were
+   recorded.</li>
+</ol>
+<p>Do not use plain HTTP on port 11111 or
+<code>OAM_INSTANCE_TLS_INSECURE=true</code> outside an isolated evaluation environment.</p>
+<h2 id="backup-and-recovery">Backup and recovery<a class="headerlink" href="#backup-and-recovery" title="Permanent link">&para;</a></h2>
+<p>The management plane and Gateway have separate recovery domains:</p>
+<pre class="mermaid"><code>flowchart TD
+    A["Recovery runbook"] --&gt; P["PostgreSQL backup&lt;br/&gt;OAM users and state"]
+    A --&gt; K["Secret-manager backup&lt;br/&gt;JWT and snapshot keys"]
+    A --&gt; S["Gateway configuration snapshot"]
+    A --&gt; D["External AI key and quota database"]</code></pre>
 <ul>
-<li><strong>Upgrades:</strong> pull/rebuild new images, then <code>up -d</code> again. The MySQL schema comes from the repo's <code>database/init</code> — review release notes before upgrading across versions.</li>
-<li><strong>Backups:</strong> back up the MySQL volume; gateway configuration itself can be captured per-instance with OAM's encrypted snapshots.</li>
+<li>Back up PostgreSQL with a database-consistent method and test restoring it.</li>
+<li>Escrow <code>OAM_JWT_SECRET</code>, <code>SNAPSHOT_ENC_KEY</code>, edge private keys, and Gateway
+  trust material using the organization's secret-recovery process.</li>
+<li>Capture and validate each Gateway's configuration separately; the Gateway
+  snapshot API does not back up OAM PostgreSQL or the external AI key store.</li>
+<li>Back up any external PostgreSQL deployment used for AI keys and tenant quotas
+  through its own procedure.</li>
+<li>Restore into an isolated environment and verify OAM snapshot decryption,
+  Gateway configuration, RBAC, and audit continuity before declaring recovery
+  successful.</li>
 </ul>
+<p><code>docker compose down</code> preserves named volumes. Adding <code>-v</code> deletes the bundled
+PostgreSQL and other named volumes; do not run it against a production project
+unless the data has been recovered elsewhere and destruction is intended.</p>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Symptom</th>
-<th>Likely cause</th>
-<th>What to check</th>
+<th>Check</th>
+<th>Corrective action</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Blank page at <code>https://&lt;host&gt;/</code></td>
-<td>The SPA is served under the <code>/netlox/</code> prefix</td>
-<td>Open <code>https://&lt;host&gt;/netlox/</code></td>
+<td>Stack rejects the configuration</td>
+<td>A required secret or production tag is empty</td>
+<td>Inspect the sanitized Compose error and set the missing value through secret management</td>
 </tr>
 <tr>
-<td>Stack exits immediately at startup</td>
-<td>A required secret is unset</td>
-<td><code>docker compose ... logs oam-loxilb</code> — the server fails fast and names the missing variable</td>
+<td>PostgreSQL authentication fails after changing <code>.env</code></td>
+<td>The existing volume retains its initialized credentials</td>
+<td>Rotate the database password using a controlled PostgreSQL procedure; do not delete the volume</td>
 </tr>
 <tr>
-<td>Login succeeds but API calls fail with CORS errors</td>
-<td><code>OAM_ALLOWED_ORIGINS</code> does not include the origin the browser is using</td>
-<td>Set it to the exact scheme+host you browse to, e.g. <code>https://oam.example.com</code></td>
+<td>UI loads but API calls fail</td>
+<td>Edge route, OAM health, or CORS allowlist</td>
+<td>Check <code>/api/oam/health</code>, Caddy logs, and the exact <code>OAM_ALLOWED_ORIGINS</code> value</td>
 </tr>
 <tr>
-<td>Registered instance shows unreachable</td>
-<td>OAM cannot verify the gateway's TLS certificate</td>
-<td>Confirm the instance cert was generated for that host/IP, <code>OAM_INSTANCE_CA_BUNDLE</code> points at the CA, and the gateway runs with <code>--tls</code>; check <code>docker compose ... logs oam-loxilb</code></td>
+<td>Every user appears under one rate-limit identity</td>
+<td>Incorrect trusted-proxy configuration</td>
+<td>Set <code>OAM_TRUSTED_PROXIES</code> to only the actual edge proxy addresses/CIDRs</td>
 </tr>
 <tr>
-<td><code>oam-loxilb</code> restarts until MySQL is healthy</td>
-<td>Normal on first boot — MySQL initializes the schema</td>
-<td>Wait for <code>mysql</code> to report healthy; persistent failures usually mean a wrong <code>DB_PASSWORD</code></td>
+<td>Registered Gateway is unreachable</td>
+<td>DNS, routing, certificate SAN, or CA mismatch</td>
+<td>Test from the OAM network and correct the certificate or <code>OAM_INSTANCE_CA_BUNDLE</code></td>
 </tr>
 <tr>
-<td>Browser distrusts the edge certificate</td>
-<td>Self-signed mode</td>
-<td>Trust <code>certs/edge/cert.pem</code> on operator machines, or switch to automatic/commercial TLS</td>
+<td>OAM proxy returns <code>401</code></td>
+<td>OAM JWT is not an accepted Gateway credential</td>
+<td>Validate the independent Gateway management authentication design; do not disable authorization as a workaround</td>
+</tr>
+<tr>
+<td>Browser rejects the edge certificate</td>
+<td>Untrusted issuer or hostname mismatch</td>
+<td>Install the approved CA chain or reissue a certificate with the correct SAN</td>
 </tr>
 </tbody>
 </table>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../loxilb-ui/">LoxiLB UI</a> — feature tour, standalone deployment, configuration reference.</li>
-<li><a href="../loxilb-oam/">LoxiLB OAM API</a> — security model, environment reference, Kubernetes deployment.</li>
-<li><a href="../../operations/monitoring/">Monitoring &amp; Metrics</a> — the Prometheus/Grafana stack for the gateway itself.</li>
+<li><a href="../overview/">Management &amp; UI Overview</a></li>
+<li><a href="../loxilb-oam/">LoxiLB OAM API</a></li>
+<li><a href="../loxilb-ui/">LoxiLB UI</a></li>
+<li><a href="../../security/management-api-authentication/">Management API Authentication</a></li>
+<li><a href="../../operations/backup-restore/">Configuration Backup and Restore</a></li>
 </ul>
 
 
