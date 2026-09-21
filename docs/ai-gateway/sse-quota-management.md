@@ -5,11 +5,12 @@ streams tokens. LoxiLB protects this long-lived path from normal idle reaping,
 requests usage accounting, and settles token-quota reservations when the
 response completes.
 
-!!! danger "Quota enforcement requires the independent key store"
-    SSE relay behavior is part of fullproxy, but API-key and token-quota admission uses the
-    PostgreSQL store configured by `--aikey-db-*`, not the management user service. With no
-    `--aikey-db-host`, the current data path admits requests without key checks. Verify a
-    missing-key request returns `401` before relying on quota enforcement.
+!!! danger "SSE does not activate authentication"
+    SSE relay behavior is part of fullproxy. `api_key_auth` separately decides whether the
+    request is keyless, API-key protected, JWT protected, or accepts either. A `required` rule
+    uses the PostgreSQL store configured by `--aikey-db-*` and fails closed with `503` when the
+    policy cannot be evaluated. Verify missing/unknown credential `401`, store failure `503`, and
+    backend receipt delta `0` before relying on quota enforcement.
 
 ## Stream lifecycle
 

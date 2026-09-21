@@ -66,7 +66,7 @@ flowchart TD
 |-------|--------------|
 | **Transport policy** | `security: 0` uses plaintext on the frontend and backend, `1` terminates frontend TLS and forwards HTTP, and `2` terminates frontend TLS then establishes backend TLS. No `security: 3` mode exists. See [mTLS for AI Backends](../security/mtls.md). |
 | **HTTP body parsing** | In fullproxy mode loxilb parses the full HTTP request and extracts the `model` field, prompt content, and any session identifiers from the JSON body. |
-| **Admission and authorization** | When the separate AI data-plane key store is configured, the inference path validates `X-Api-Key`, the key's model allow-list, request-rate buckets, and tenant/model token quotas before dispatch. Management users and inference keys use separate stores. See [AI Traffic Governance](ai-traffic-governance.md). |
+| **Admission and authorization** | A fullproxy service's independent `api_key_auth` declaration selects omitted, disabled, API-key, JWT, or API-key-or-JWT behavior. Attributed requests apply model authorization and the scoped quota ladder before dispatch. Management and data-plane authentication remain separate. See [AI Traffic Governance](ai-traffic-governance.md). |
 | **Stage 1 — model pool selection** | The extracted model name is matched against the `model_name` on each LB rule for that VIP:port. The most specific match wins; an empty `model_name` acts as the wildcard pool. No match at all returns **503 `model_unavailable`**. See [Model Load Balancing](model-load-balancing.md). |
 | **Stage 2 — endpoint selection** | Within the chosen pool, the `sel` algorithm picks a backend (round-robin, CHWBL consistent hash, GPU-aware, and so on). See [LLM Routing](llm-routing.md). |
 | **Backend forwarding** | loxilb opens (or reuses from a pool) a connection to the selected endpoint and forwards the request using the negotiated `backend_protocol`. |
@@ -78,18 +78,18 @@ flowchart TD
     model requests. Do not reuse them, expose them over plaintext networks, or place either value
     in URLs, logs, metric labels, screenshots, or committed examples.
 
-!!! danger "A missing AI key store is currently fail-open"
-    If `--aikey-db-host` is unset, the current data path admits inference requests without
-    validating a key and emits a one-time critical log. A deployment that requires inference
-    authentication must configure the dedicated PostgreSQL key store, require verified TLS to
-    it, and run a negative request test before exposing the inference VIP. Enabling the
-    management user service does not configure this data-plane store.
+!!! danger "Read the credential declaration back exactly"
+    A `required` service with no usable key store fails closed with `503`; it does not downgrade
+    to keyless. A service that omits `api_key_auth` intentionally preserves backend-owned
+    `X-Api-Key`, while explicit `disabled` strips the header. Management user service health does
+    not prove any data-plane credential dependency. Test `401`, `403`, and dependency `503` with
+    an independent backend receipt oracle before exposure.
 
 !!! danger "Canonical-model and HTTP/2 release boundaries"
     HTTP/1.1 routing prefers `X-Model`, but authorization currently prefers the JSON body model;
-    reject conflicting values before the Gateway. The HTTP/2 backend path supplies an empty model
-    to lookup, reduces selector 9 to round-robin, and does not integrate selector 10, P/D, or
-    KV-exact routing. Use `backend_protocol: http1` for these inference features.
+    reject conflicting values before the Gateway. API-key/JWT admission now has HTTP/1.1 and
+    HTTP/2 contract tests, but that does not qualify every routing, P/D, KV-exact, TLS/ALPN, SSE,
+    or HA combination. Use only combinations proven by the exact image's release evidence.
 
 ### Do not confuse relay cache with model KV cache
 

@@ -22,6 +22,12 @@ from jsonschema import Draft4Validator, FormatChecker
 
 MAIN_ONLY_MARKER = "CLI availability: main-only"
 EXPECTED_SCHEMA_FAILURE_MARKER = "docs-example: expect-schema-error"
+JWT_AUTH_MODES = {"jwt", "apikey-or-jwt"}
+JWT_ALGORITHMS = {
+    "RS256", "RS384", "RS512",
+    "ES256", "ES384", "ES512",
+    "PS256", "PS384", "PS512",
+}
 PLACEHOLDER_VALUES = {
     "id": "1",
     "ep-idx": "0",
@@ -153,9 +159,14 @@ def shell_tokens(command: str) -> list[str]:
 
 
 class ExampleValidator:
-    def __init__(self, root: Path, require_external_tools: bool = True) -> None:
+    def __init__(
+        self,
+        root: Path,
+        require_external_tools: bool = True,
+        contract_dir: Path | None = None,
+    ) -> None:
         self.root = root
-        contract_dir = root / "tests/contracts/docs_examples"
+        contract_dir = contract_dir or root / "tests/contracts/docs_examples"
         self.cli_contract = json.loads((contract_dir / "cli.json").read_text())
         self.gateway_contract = json.loads((contract_dir / "gateway-api.json").read_text())
         self.require_external_tools = require_external_tools
@@ -271,6 +282,141 @@ class ExampleValidator:
             for failure in sorted(validator.iter_errors(body), key=lambda item: list(item.path)):
                 pointer = "/" + "/".join(str(value) for value in failure.path)
                 errors.append(f"request body {pointer}: {failure.message}")
+        errors.extend(self.validate_contract_semantics(method, route, body))
+        return errors
+
+    def validate_contract_semantics(self, method: str, route: str, body: Any) -> list[str]:
+        """Validate implementation invariants that OpenAPI 2.0 does not encode."""
+        if not isinstance(body, dict):
+            return []
+
+        def is_positive_number(value: Any) -> bool:
+            return (
+                isinstance(value, (int, float))
+                and not isinstance(value, bool)
+                and value > 0
+            )
+
+        errors: list[str] = []
+        normalized_method = method.upper()
+        if normalized_method == "PATCH" and re.fullmatch(
+            r"/config/ai/apikey/[^/]+", route
+        ):
+            patchable = {
+                "allowed_models", "enabled", "rate_limit_rps",
+                "burst_size", "tokens_per_min",
+            }
+            if not any(field in body and body[field] is not None for field in patchable):
+                errors.append("API-key PATCH must name at least one non-null patchable field")
+            for field in ("rate_limit_rps", "burst_size", "tokens_per_min"):
+                value = body.get(field)
+                if (
+                    isinstance(value, (int, float))
+                    and not isinstance(value, bool)
+                    and value < 0
+                ):
+                    errors.append(f"{field} must not be negative")
+            return errors
+
+        if normalized_method != "POST":
+            return errors
+
+        if route == "/config/loadbalancer":
+            args = body.get("serviceArguments")
+            if not isinstance(args, dict):
+                return errors
+            policy = args.get("api_key_auth")
+            profile = args.get("jwt_auth_profile")
+            if policy in JWT_AUTH_MODES and not isinstance(profile, str):
+                errors.append(f"api_key_auth {policy!r} requires jwt_auth_profile")
+            elif policy in JWT_AUTH_MODES and not profile:
+                errors.append(f"api_key_auth {policy!r} requires a non-empty jwt_auth_profile")
+            elif policy not in JWT_AUTH_MODES and isinstance(profile, str) and profile:
+                errors.append("jwt_auth_profile is valid only with api_key_auth 'jwt' or 'apikey-or-jwt'")
+
+        elif route == "/config/ai/jwtauthprofile":
+            name = body.get("name")
+            if isinstance(name, str) and len(name.encode("utf-8")) > 63:
+                errors.append("JWT profile name exceeds the implementation's 63-byte limit")
+            for field in ("leeway_sec", "refresh_sec"):
+                value = body.get(field)
+                if isinstance(value, int) and value < 0:
+                    errors.append(f"{field} must not be negative")
+            algs = body.get("algs")
+            if isinstance(algs, list):
+                invalid = [value for value in algs if value not in JWT_ALGORITHMS]
+                if invalid:
+                    errors.append(f"unsupported JWT algorithms: {invalid}")
+
+        elif route == "/config/ai/user/ratelimit":
+            models = body.get("model_limits", [])
+            if isinstance(models, list):
+                for index, entry in enumerate(models):
+                    if not isinstance(entry, dict) or not entry.get("model"):
+                        errors.append(f"model_limits/{index} requires a non-empty model")
+            deciding = any(
+                is_positive_number(body.get(field))
+                for field in ("rps", "tokens_per_min")
+            )
+            if isinstance(models, list):
+                deciding = deciding or any(
+                    isinstance(entry, dict)
+                    and is_positive_number(entry.get("tokens_per_min"))
+                    for entry in models
+                )
+            if not deciding:
+                errors.append("user rate-limit row must contain at least one non-zero limit")
+
+        elif route == "/config/ai/tenant/ratelimit":
+            models = body.get("model_limits", [])
+            if isinstance(models, list):
+                for index, entry in enumerate(models):
+                    if not isinstance(entry, dict) or not entry.get("model"):
+                        errors.append(f"model_limits/{index} requires a non-empty model")
+
+        elif route == "/config/ai/ratelimit/defaults":
+            scope = body.get("scope")
+            rule_ident = body.get("rule_ident", "")
+            if scope == "global" and rule_ident:
+                errors.append("global defaults must not carry rule_ident")
+            elif scope == "rule" and not rule_ident:
+                errors.append("rule defaults require rule_ident")
+            limit_fields = (
+                "default_user_rps", "default_user_tpm",
+                "default_tenant_rps", "default_tenant_tpm",
+                "vip_shared_rps", "vip_shared_tpm",
+            )
+            if not any(is_positive_number(body.get(field)) for field in limit_fields):
+                errors.append("rate-limit defaults row must contain at least one non-zero limit")
+        return errors
+
+    @staticmethod
+    def validate_curl_credential_hygiene(command: str) -> list[str]:
+        """Reject secret-bearing HTTP headers placed directly in curl argv."""
+        try:
+            tokens = shell_tokens(command)
+        except ValueError as exc:
+            return [f"cannot parse curl command: {exc}"]
+        header_values: list[str] = []
+        index = 1
+        while index < len(tokens):
+            token = tokens[index]
+            if token in {"-H", "--header"} and index + 1 < len(tokens):
+                header_values.append(tokens[index + 1])
+                index += 2
+                continue
+            if token.startswith("--header="):
+                header_values.append(token.split("=", 1)[1])
+            elif token.startswith("-H") and len(token) > 2:
+                header_values.append(token[2:])
+            index += 1
+        errors: list[str] = []
+        for value in header_values:
+            lowered = value.strip().lower()
+            if lowered.startswith("authorization: bearer "):
+                errors.append("management or JWT bearer credential is exposed in curl argv; use a protected header file")
+            elif lowered.startswith("x-api-key:") and value.partition(":")[2].strip():
+                errors.append("API key is exposed in curl argv; use a protected header file")
         return errors
 
     @staticmethod
@@ -386,6 +532,8 @@ class ExampleValidator:
 
             for command in extract_shell_commands(block.text, "curl"):
                 report.count("curl_commands")
+                for error in self.validate_curl_credential_hygiene(command):
+                    report.error(block.location, error)
                 try:
                     method, url, body_text = self._curl_details(command)
                 except ValueError as exc:
@@ -463,12 +611,21 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument(
+        "--contract-dir",
+        type=Path,
+        help="contract directory to validate against instead of the tracked snapshot",
+    )
+    parser.add_argument(
         "--allow-missing-tools",
         action="store_true",
         help="skip external bash/jq/yq checks when a command is unavailable",
     )
     args = parser.parse_args()
-    validator = ExampleValidator(args.root.resolve(), not args.allow_missing_tools)
+    validator = ExampleValidator(
+        args.root.resolve(),
+        not args.allow_missing_tools,
+        args.contract_dir.resolve() if args.contract_dir else None,
+    )
     report = validator.validate_repository()
     print_report(report)
     return 1 if report.errors else 0

@@ -65,6 +65,124 @@ class DocumentationExampleTests(unittest.TestCase):
         )
         self.assertTrue(errors)
 
+    def test_five_state_credential_contract_is_frozen(self) -> None:
+        spec = self.validator.gateway_contract["specs"][0]
+        field = spec["definitions"]["LoadbalanceEntry"]["properties"][
+            "serviceArguments"
+        ]["properties"]["api_key_auth"]
+        self.assertEqual(
+            {"disabled", "required", "jwt", "apikey-or-jwt"},
+            set(field["enum"]),
+        )
+        self.assertNotIn("default", field)
+
+    def test_companion_apikey_patch_contract_has_all_runtime_fields(self) -> None:
+        matches = self.validator.matching_operations(
+            "PATCH", "/config/ai/apikey/example-key-id"
+        )
+        self.assertEqual(2, len(matches))
+        body_property_sets = []
+        for _, operation in matches:
+            for parameter in operation.get("parameters", []):
+                if parameter.get("in") == "body":
+                    body_property_sets.append(
+                        set(parameter.get("schema", {}).get("properties", {}))
+                    )
+        self.assertIn(
+            {
+                "allowed_models", "enabled", "rate_limit_rps",
+                "burst_size", "tokens_per_min",
+            },
+            body_property_sets,
+        )
+
+    def test_red_twin_empty_apikey_patch_is_killed(self) -> None:
+        errors = self.validator.validate_json_body(
+            "PATCH", "/config/ai/apikey/example-key-id", {}
+        )
+        self.assertTrue(errors)
+
+    def test_explicit_empty_allowlist_patch_is_not_a_noop(self) -> None:
+        errors = self.validator.validate_json_body(
+            "PATCH",
+            "/config/ai/apikey/example-key-id",
+            {"allowed_models": []},
+        )
+        self.assertEqual([], errors)
+
+    def test_red_twin_jwt_without_profile_is_killed(self) -> None:
+        body = {
+            "serviceArguments": {"api_key_auth": "jwt"},
+            "endpoints": [],
+        }
+        errors = self.validator.validate_contract_semantics(
+            "POST", "/config/loadbalancer", body
+        )
+        self.assertTrue(errors)
+
+    def test_red_twin_profile_on_required_rule_is_killed(self) -> None:
+        body = {
+            "serviceArguments": {
+                "api_key_auth": "required",
+                "jwt_auth_profile": "issuer-a",
+            },
+            "endpoints": [],
+        }
+        errors = self.validator.validate_contract_semantics(
+            "POST", "/config/loadbalancer", body
+        )
+        self.assertTrue(errors)
+
+    def test_red_twin_qos_rule_defaults_without_identity_is_killed(self) -> None:
+        errors = self.validator.validate_contract_semantics(
+            "POST",
+            "/config/ai/ratelimit/defaults",
+            {"scope": "rule", "default_user_rps": 1},
+        )
+        self.assertTrue(errors)
+
+    def test_red_twin_empty_user_model_is_killed(self) -> None:
+        errors = self.validator.validate_contract_semantics(
+            "POST",
+            "/config/ai/user/ratelimit",
+            {
+                "tenant_id": "team-a",
+                "user_id": "user-a",
+                "model_limits": [{"tokens_per_min": 100}],
+            },
+        )
+        self.assertTrue(errors)
+
+    def test_wrong_limit_type_reports_errors_instead_of_crashing(self) -> None:
+        errors = self.validator.validate_json_body(
+            "POST",
+            "/config/ai/user/ratelimit",
+            {
+                "tenant_id": "team-a",
+                "user_id": "user-a",
+                "rps": "not-a-number",
+            },
+        )
+        self.assertTrue(errors)
+
+    def test_red_twin_inline_management_bearer_is_killed(self) -> None:
+        errors = self.validator.validate_curl_credential_hygiene(
+            "curl -H 'Authorization: Bearer $TOKEN' https://gateway.example.com"
+        )
+        self.assertTrue(errors)
+
+    def test_red_twin_inline_api_key_is_killed(self) -> None:
+        errors = self.validator.validate_curl_credential_hygiene(
+            "curl -H 'X-Api-Key: $INFERENCE_API_KEY' https://ai.example.com"
+        )
+        self.assertTrue(errors)
+
+    def test_protected_header_file_passes_credential_hygiene(self) -> None:
+        errors = self.validator.validate_curl_credential_hygiene(
+            "curl --header @control-plane.headers https://gateway.example.com"
+        )
+        self.assertEqual([], errors)
+
 
 if __name__ == "__main__":
     unittest.main()

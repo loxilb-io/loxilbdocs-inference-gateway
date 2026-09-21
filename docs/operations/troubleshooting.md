@@ -40,6 +40,11 @@ tokens and inference API keys in protected header files, and redact secrets,
 prompts, tenant data, and private topology before sharing output. The current
 `/metrics` route itself is bearer-auth exempt; configuration endpoints are not.
 
+```bash
+install -m 600 /dev/null ./control-plane.headers
+printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
+```
+
 ---
 
 ## AI routing not happening at all
@@ -57,7 +62,7 @@ routing, P/D) engages.
 
 ```bash
 curl -s http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all \
-  -H "Authorization: Bearer $TOKEN" \
+  -H @control-plane.headers \
   | jq '.lbAttr[].serviceArguments | {port, mode, model_name, kvExactMode, pd_disagg_mode}'
 ```
 
@@ -84,7 +89,7 @@ loxilb resolves the target model in priority order: **(1)** the `X-Model` HTTP h
 ```bash
 # What model_name does each rule on this VIP carry?
 curl -s http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all \
-  -H "Authorization: Bearer $TOKEN" \
+  -H @control-plane.headers \
   | jq '.lbAttr[].serviceArguments | {port, model_name, mode}'
 
 # JSON body path
@@ -182,7 +187,7 @@ curl -s http://198.51.100.10:8100/metrics | grep 'vllm:cache_config_info'
 
 # Rule must carry pd_disagg_mode: true and endpoints with ep_role 1 (prefill) / 2 (decode)
 curl -s http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all \
-  -H "Authorization: Bearer $TOKEN" \
+  -H @control-plane.headers \
   | jq '.lbAttr[].serviceArguments | select(.pd_disagg_mode==true) | {port, pd_disagg_mode, kvExactMode}'
 ```
 
@@ -198,14 +203,20 @@ limits, and tenant/model token quotas are enforced in the request path.
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Missing or unknown key is accepted | Rule is not using the AI Gateway fullproxy path, or traffic bypasses the intended VIP | Confirm `mode: 4`, AI handling on the rule, and the actual destination |
+| Missing or unknown key is accepted | `api_key_auth` is omitted/disabled, traffic bypasses the rule, or the wrong VIP was tested | Read back the exact service; require `mode: 4` plus `api_key_auth: required` for API-key-only enforcement |
 | Valid key returns `401` | Key is disabled, expired, revoked, unknown to this node, or sent under the wrong header | Inspect the key summary by `key_id`; send it as `X-Api-Key`; never log its value |
-| Valid key returns `403` | Effective model is not in `allowed_models` | Compare `X-Model`/body model precedence and exact spelling |
-| Request returns `429` | Key RPS, tenant RPS, aggregate TPM, or model TPM denied admission | Read the error reason and `Retry-After`; inspect dedicated denial and utilization metrics |
+| Required key call returns `503 policy_store_unavailable` | No usable store or the credential/quota policy cannot be evaluated | Restore the policy store; require backend receipt delta `0`; do not rotate a valid key for an operator outage |
+| Valid JWT returns `401` | Signature, time, issuer/audience, tenant mapping, or token-size boundary failed | Compare the profile contract and JWT metrics without logging the token |
+| Valid JWT returns `503 policy_store_unavailable` | Profile has no usable JWKS snapshot | Inspect JWKS usable/keys/refresh metrics and issuer reachability |
+| Valid credential returns `403` | Effective model is not authorized by key allow-list or JWT claim mapping | Compare the effective model and exact authorized set |
+| Request returns `429` | Applicable key/user/tenant/model/shared-VIP RPS or TPM bucket denied admission | Read the error reason and `Retry-After`; inspect the matching scoped metric |
 | Large request always returns `429` despite low average TPM | Prompt estimate plus completion ceiling exceeds bucket capacity | Increase `burst_pct` only after sizing the largest legitimate request, or reduce the request ceiling |
 | Estimated/missing token metrics rise | Backend usage was absent or unreadable | Verify engine response and streaming usage compatibility |
 
-Use a dedicated non-production tenant to test denial behavior. See
+Use a dedicated non-production tenant to test denial behavior. Add a unique
+nonce and require backend receipt delta `0` for `401`, `403`, `429`, and `503`.
+After a scoped denial, an unrelated user/model probe must remain eligible; this
+is the no-bleed oracle. See
 [AI Traffic Governance](../ai-gateway/ai-traffic-governance.md) for reservation,
 settlement, and status-code details.
 
@@ -226,7 +237,7 @@ severed mid-flight.
 
 ```bash
 curl -s http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all \
-  -H "Authorization: Bearer $TOKEN" \
+  -H @control-plane.headers \
   | jq '.lbAttr[].serviceArguments | select(.sse_mode==true)
         | {port, sse_mode, max_stream_duration_sec, inactiveTimeOut}'
 ```
@@ -253,10 +264,10 @@ the series you expect.
 
     ```bash
     curl -s -X POST http://192.0.2.10:11111/netlox/v1/config/metrics \
-      -H "Authorization: Bearer $TOKEN"
+      -H @control-plane.headers
     # Confirm the current setting
     curl -s http://192.0.2.10:11111/netlox/v1/config/metrics \
-      -H "Authorization: Bearer $TOKEN" | jq .
+      -H @control-plane.headers | jq .
     ```
 
 === "loxicmd"

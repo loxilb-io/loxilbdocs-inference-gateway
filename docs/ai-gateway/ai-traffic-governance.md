@@ -5,9 +5,10 @@ call, how quickly they may submit requests, how many tokens they may consume,
 and how much network bandwidth a service may use. These controls solve
 different problems and should be configured independently.
 
-The request-admission flow below applies only to a `mode: 4` rule with
-`sse_mode: true` or `pd_disagg_mode: true`. Plain fullproxy rules bypass the
-current AI key and quota gate.
+The request-admission flow below applies to a `mode: 4` rule whose
+`api_key_auth` declaration attributes a credential. The declaration is
+independent of `sse_mode` and `pd_disagg_mode`. Omission preserves
+backend-owned `X-Api-Key`; explicit `disabled` strips it without validation.
 
 ## Choose the control that matches the problem
 
@@ -42,10 +43,14 @@ or tokens.
 |---|---|---|---|
 | API-key model allow-list | One API key | Model identifiers | Prevent a workload from calling unauthorized models |
 | API-key RPS | One API key | Requests per second | Protect against one noisy credential |
-| Per-key TPM field | One API key | Tokens per minute | Persisted and returned, but **not enforced** in the current data path |
+| Per-key TPM | One API key | Tokens per minute | Implemented as a post-response debt latch; primary Swagger text is stale, so published support remains pending convergence |
+| User RPS/TPM | One verified tenant/user pair | Requests or tokens | Bound an identity derived from JWT claims |
+| User-and-model TPM | One verified user and model | Tokens per minute | Isolate one user's expensive-model spend |
 | Tenant RPS | All keys for one tenant | Requests per second | Share an admission ceiling across a tenant |
 | Tenant TPM | All models for one tenant | Tokens per minute | Bound aggregate AI work |
 | Tenant-and-model TPM | One model within one tenant | Tokens per minute | Reserve a smaller budget for an expensive model |
+| Shared VIP RPS/TPM | One service | Requests or tokens | Optional bucket for keyless traffic; token spend also includes attributed traffic on that service |
+| Rule/global defaults | Identities without explicit rows | Requests or tokens | Rule fields override global fields; zero falls through |
 | QoS policy | LB rule or network port | Megabits per second at the API | Bound traffic rate or pace a fullproxy service |
 
 RPS means **requests per second**. TPM means **tokens per minute**. TPM is a
@@ -56,8 +61,8 @@ at the top of each minute.
 
 You need:
 
-- a fullproxy inference rule (`mode: 4`) with `sse_mode: true` or
-  `pd_disagg_mode: true`; plain `mode: 4` does not enter the current key/quota gate;
+- a fullproxy inference rule (`mode: 4`) declaring `api_key_auth: required`,
+  `jwt`, or `apikey-or-jwt`;
 - the Gateway started with the independent PostgreSQL AI-key store configured through
   `--aikey-db-*` options;
 - one management authentication mode enabled for port `11111`;
@@ -79,8 +84,8 @@ from your identity and secret-management workflow; do not paste it into shell
 history, source control, tickets, or logs.
 
 !!! danger "Prove both authentication planes before exposure"
-    A plain `mode: 4` rule is keyless even with a healthy key store. On an SSE- or P/D-enabled
-    rule, no `--aikey-db-host` also admits requests without API-key checks.
+    A `mode: 4` rule that omits `api_key_auth` is keyless even with a healthy key store. A
+    `required` rule with no usable store fails closed with `503`; it does not become keyless.
     With no user, OAuth, or manual-token management mode, key and quota CRUD is callable without
     credentials. Require `401` from both a missing-key inference probe and an unauthenticated
     management mutation before proceeding.
@@ -116,10 +121,12 @@ operations never return the raw key or its stored hash.
     Do not print `raw_key` in a terminal recording, CI log, dashboard, or issue.
     If it is exposed or lost, delete the key and create a replacement.
 
-Per-key `tokens_per_min` remains part of the key schema and round-trips through
-CRUD, but the current data path does not enforce it. Tenant and
-tenant-and-model token budgets are the enforced TPM controls and are configured
-through the tenant rate-limit API described next.
+Per-key `tokens_per_min` is enforced by the implementation: settlement charges
+the key bucket and debt denies the next request. The primary Swagger text still
+describes stored-only metadata, while the companion PATCH contract describes
+enforcement. Treat that as contract drift requiring an upstream Swagger update,
+not as proof the implementation is inactive. Published support remains pending
+convergence and release qualification.
 
 ## Step 2 — Set tenant and per-model token budgets
 
@@ -240,6 +247,7 @@ Verify one failure at a time in a non-production environment:
 | Request a model outside `allowed_models` | `403`, `model_not_allowed` | Model authorization is active |
 | Send a concurrent burst above key or tenant RPS | At least one `429` | Request admission is active |
 | Submit a request larger than available token headroom | `429` with retry guidance | Token reservation is active |
+| Stop or remove the store behind a `required` rule | `503`, `policy_store_unavailable` | Policy evaluation fails closed |
 
 Do not load-test a shared production tenant to prove a limiter. Use a dedicated
 tenant and a small test limit, then restore or remove the configuration.
@@ -274,7 +282,8 @@ together; they are two gates over the same request.
 | `403` | Requested model is outside the key allow-list | Effective model and exact allow-list spelling |
 | `429` | Key RPS, tenant RPS, aggregate TPM, or model TPM | Response error code, `Retry-After`, and rate-limit metrics |
 | `502` | Selected backend failed before a usable response | Endpoint health and backend/proxy logs |
-| `503` | No usable route/backend, maintenance, or a dialect-specific fail-closed condition | Rule read-back, endpoint health, and engine-specific metrics |
+| `503 policy_store_unavailable` | Required credential or identity-bearing quota policy cannot be evaluated | Key/JWKS store health and cached last-known-good state; backend delta must remain `0` |
+| Other `503` | No usable route/backend, maintenance, or an engine-specific fail-closed condition | Rule read-back, endpoint health, and engine-specific metrics |
 | `503` from key/quota CRUD | Key store not configured or unavailable | Check the independent PostgreSQL store and `--aikey-db-*` settings |
 
 A `502` or `503` is not evidence of quota exhaustion. A `429` is not evidence
@@ -334,4 +343,5 @@ in-flight requests. See [HA and Upgrade Limitations](../operations/ha-limitation
 - [AI Quotas and QoS](../operations/ai-qos.md)
 - [AI Key Store Operations](../operations/ai-key-store.md)
 - [Management API Authentication](../security/management-api-authentication.md)
+- [Data-Plane Authentication and JWT](../security/data-plane-jwt-auth.md)
 - [Monitoring and Metrics](../operations/monitoring.md)

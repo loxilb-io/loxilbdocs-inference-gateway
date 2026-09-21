@@ -35,7 +35,7 @@ them.
 | **KV-cache-aware routing** | Send each request to the endpoint whose KV-cache already holds the longest prefix of the prompt — either zero-engine-change prefix-hash affinity (CHWBL) or engine-exact routing fed by the engines' KV-cache event streams. |
 | **P/D disaggregation** | L7-aware splitting of each request across prefill and decode endpoint pools with NIXL KV-transfer coordination and session affinity. |
 | **SSE streaming** | SSE-aware proxying that suppresses idle timeouts while a streaming response is active, with a wall-clock runaway cap and backend keepalive for long streams. |
-| **AI traffic governance** | On eligible SSE or P/D fullproxy rules, validate API keys, authorize models, and enforce request/token quotas before dispatch; apply byte-rate QoS separately to rules or ports. The separated key-store/auth plane is development-stage and must be qualified against the deployed image. |
+| **AI traffic governance** | On fullproxy rules, an independent five-state credential policy selects keyless, API-key, JWT, or either credential; model authorization and scoped request/token quotas run before dispatch. Byte-rate QoS remains separate. The development contract must be qualified against the deployed image. |
 | **CHWBL / GPU-aware algorithms** | Consistent-hash-with-bounded-load selection (`sel: 8`), weighted CHWBL (`sel: 10`) for heterogeneous GPUs, and GPU-aware selection (`sel: 9`). |
 | **MCP gateway** | Session-sticky proxying of Model Context Protocol server pools, keyed on the `mcp-session-id` header. |
 | **OPA L4 policy** | Optional external Open Policy Agent watcher for L4 admission policy. |

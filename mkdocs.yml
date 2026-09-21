@@ -111,6 +111,7 @@ nav:
       - Performance Methodology: use-cases/performance-methodology.md
   - Security:
       - Management API Authentication: security/management-api-authentication.md
+      - Data-Plane Authentication and JWT: security/data-plane-jwt-auth.md
       - AI Safety Scanning: security/ai-safety.md
       - OPA L4 Policy: security/opa-l4.md
       - Frontend mTLS: security/mtls.md

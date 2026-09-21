@@ -15,7 +15,7 @@ not interchangeable.
 ```mermaid
 flowchart LR
     OP([Operator]) -->|Authorization: Bearer| MGMT["Management API<br/>:11111/netlox/v1"]
-    APP([Inference workload]) -->|X-Api-Key| VIP["Inference VIP<br/>fullproxy rule"]
+    APP([Inference workload]) -->|X-Api-Key or bearer JWT| VIP["Inference VIP<br/>fullproxy rule"]
     MGMT --> AUTH{"Management<br/>authenticator"}
     AUTH --> RBAC{"admin / viewer<br/>authorization"}
     RBAC --> CFG["Configuration and<br/>key lifecycle handlers"]
@@ -29,9 +29,13 @@ flowchart LR
 
 - `Authorization: Bearer ...` authenticates an operator to the management API.
 - `X-Api-Key: ...` authenticates a workload on an inference VIP.
+- `Authorization: Bearer ...` on a JWT-capable inference VIP is a data-plane
+  JWT selected by that service's profile, not the management token.
 - Presenting a data-plane key to the management API does not grant management
   authority and receives the same `401` response as an unknown credential.
 - A management token is not an inference API key.
+- Never reuse or forward a browser/operator bearer token as an inference JWT.
+  The two token issuers and authorization policies are independent.
 
 ## Choose one management authentication mode
 
@@ -68,6 +72,10 @@ The role set is closed and compared exactly:
 Use separate operator identities where possible. The manual-token mode has no
 per-user role or attribution, so reserve it for tightly controlled bootstrap,
 recovery, or single-operator deployments.
+
+See [Data-Plane Authentication and JWT](data-plane-jwt-auth.md) for omitted
+versus `disabled`, API-key/JWT precedence, profile lifecycle, and backend
+header handling.
 
 !!! danger "Current user and token handling blocks production release"
     A viewer can call `GET /auth/users`, and the current response exposes stored password material.

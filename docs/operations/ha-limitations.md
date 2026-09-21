@@ -27,7 +27,8 @@ flowchart TD
 | Category | Examples | Operator expectation |
 |---|---|---|
 | Snapshot configuration | Endpoints, LB/firewall/policy rules, sessions, BFD/BGP/IPsec | Keep both nodes consistent; dry-run the approved snapshot and verify read-back |
-| External durable store | AI API keys, tenant and per-model limits in the AI key PostgreSQL store; management identities in their configured store | Back up independently, restrict access, and verify every node reaches the same intended source of truth |
+| External durable store | AI API keys; tenant, user, model, and defaults rows in the AI key PostgreSQL store; management identities in their configured store | Back up independently, restrict access, and verify every node reaches the same intended source of truth |
+| JWT profile and key lifecycle | Profile desired configuration plus node-local fetched JWKS snapshot and refresh timers | Keep profiles identical; each node must fetch and prove its own usable keyset |
 | Replicated runtime | Token-quota state exchanged between compatible peers | Do not assume completeness after restart or mixed-version operation |
 | Node-local or rebuilt | In-flight reservations, policer/shaper token buckets, active TCP/TLS/SSE connections | State can reset; clients retry or reconnect |
 
@@ -92,7 +93,8 @@ that the peer link is complete, private, or loss-free.
 
 ## Token-quota mixed-version boundary
 
-Peers must run the same quota wire semantics. A rolling upgrade across the
+Peers must run the same quota wire semantics for key, user, user-model,
+tenant, tenant-model, and shared-VIP buckets. A rolling upgrade across the
 quota-state format change is unsupported while token quotas are enabled. A
 newer peer can send a drain-time timestamp that an older peer interprets as a
 very large consumed-token count, causing erroneous `429` denials until the
@@ -108,8 +110,11 @@ wire compatibility.
 Prefer upgrading both peers together inside an approved maintenance window. If
 nodes must be upgraded one at a time:
 
-1. Inventory every tenant and per-model `tokens_per_min` value on both peers.
-2. Set aggregate and model token quotas to `0` before upgrading the first node.
+1. Inventory every key, user, user-model, tenant, tenant-model, defaults, and
+   shared-VIP token limit on both peers. Per-key TPM is implemented but its
+   primary Swagger contract remains stale; record it without presenting it as
+   release-qualified support.
+2. Disable every active token-quota scope before upgrading the first node.
 3. Confirm both peers read back quotas as disabled.
 4. Wait for old in-memory quota entries to age out. The normal default idle
    horizon is about ten minutes, but deployments can extend it; use the
@@ -134,7 +139,9 @@ Before planned promotion:
 - compare snapshot-covered rules/endpoints/policies on both nodes and verify the
   approved configuration checksum;
 - verify the external AI key store is available and that each node reads the
-  same API-key and tenant-limit records without exporting credentials;
+  same key, user, tenant, model, and defaults records without exporting credentials;
+- verify every JWT profile reports a usable JWKS snapshot on each node; a
+  profile list alone is only desired configuration;
 - confirm certificate validity and trust configuration without printing key
   material;
 - verify the same Gateway version and immutable image identity;
@@ -163,6 +170,7 @@ evidence:
 - the Gateway snapshot contains or restores external API-key, tenant-quota, or
   management-user databases;
 - peer synchronization is authenticated or confidential by the Gateway;
+- a JWKS snapshot fetched on one node is replicated to another node;
 - quota, QoS, KV, and session state survive promotion without gaps;
 - mixed-version rolling upgrades are seamless with quotas enabled;
 - active connections migrate transparently;
