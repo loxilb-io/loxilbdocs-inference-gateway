@@ -9,7 +9,18 @@ created; a client must not assume that every individually valid field can be com
 A load-balancer create body has three top-level keys:
 
 ```json
-{ "serviceArguments": { ... }, "endpoints": [ ... ], "secondaryIPs": [ ... ] }
+{
+  "serviceArguments": {
+    "externalIP": "192.0.2.10",
+    "port": 8080,
+    "protocol": "tcp",
+    "mode": 4
+  },
+  "endpoints": [
+    { "endpointIP": "198.51.100.11", "targetPort": 8000, "weight": 1 }
+  ],
+  "secondaryIPs": []
+}
 ```
 
 `serviceArguments` carries the VIP, the L4/L7 behaviour, and every AI-routing knob. `endpoints`

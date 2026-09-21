@@ -24,12 +24,38 @@ Report a bug in the gateway itself in the **code** repository; report a document
    ```
 3. Make sure the strict build passes (this is what CI runs):
    ```bash
+   python tools/validate_examples.py
+   python -m unittest discover -s tests -p 'test_*.py' -v
    mkdocs build --strict
    ```
 4. Open a pull request and fill in the template.
 
 The full workflow and style conventions are in
 [CONTRIBUTING.md](https://github.com/loxilb-io/loxilbdocs-inference-gateway/blob/main/CONTRIBUTING.md).
+
+### Usage-example contracts
+
+The example validator extracts `loxicmd`, `curl`, JSON, and YAML from Markdown fenced blocks.
+It checks CLI paths, flags, and enums against frozen CLI contracts; REST methods and paths against
+the combined primary and supplemental Swagger contracts; inline JSON request bodies against the
+matching Swagger request schema; shell syntax with `bash -n`; JSON with `jq`; and YAML with `yq`.
+Referenced snapshot and bootstrap bodies use public, non-secret fixtures for schema validation.
+The unit suite also applies deliberately broken examples and requires the validator to reject route
+typos, removed flags, invalid enum values, incorrect JSON field casing, and missing required fields.
+
+The tracked snapshots under `tests/contracts/docs_examples/` make the CI check deterministic and
+network-independent. Maintainers can refresh them from exact local clones after reviewing an
+upstream contract change:
+
+```bash
+python tools/refresh_example_contracts.py \
+  --gateway-repo ../loxilb-inference-gateway \
+  --cli-repo ../loxicmd-inference-gateway
+```
+
+These checks establish static command, route, schema, and syntax consistency. They do not execute
+the Linux CLI binary, send requests to a running gateway, or qualify GPU, high-availability, or
+production behavior.
 
 ## Visual and security style
 

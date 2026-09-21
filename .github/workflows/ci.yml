@@ -67,6 +67,21 @@ jobs:
       - name: mkdocs build --strict
         run: mkdocs build --strict
 
+  examples:
+    name: Usage example contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Validate documented commands and payloads
+        run: python tools/validate_examples.py
+      - name: Run validator mutation tests
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+
   links:
     name: Link check
     runs-on: ubuntu-latest
