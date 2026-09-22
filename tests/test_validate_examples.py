@@ -57,6 +57,110 @@ class DocumentationExampleTests(unittest.TestCase):
             "duplicate examples must fail closed",
         )
 
+    def test_mutating_examples_have_enforced_contracts(self) -> None:
+        inventory = json.loads(
+            (ROOT / "tests/contracts/docs_examples/example-inventory.json").read_text()
+        )
+        mutations = [
+            entry for entry in inventory["entries"]
+            if entry.get("mutation_contract", {}).get("detected")
+        ]
+        self.assertGreater(len(mutations), 0)
+        for entry in mutations:
+            with self.subTest(example=entry["id"]):
+                contract = entry["mutation_contract"]
+                self.assertTrue(contract["independent_oracle"])
+                self.assertTrue(contract["negative_no_mutation"])
+                self.assertTrue(contract["active_path"])
+                self.assertTrue(contract["cleanup"])
+                self.assertTrue(contract["cleanup_verification"])
+                if contract["mode"] == "illustrative-fragment":
+                    self.assertEqual("illustrative-only", entry["status"])
+
+    def test_red_twin_missing_mutation_oracle_is_killed(self) -> None:
+        inventory = json.loads(
+            (ROOT / "tests/contracts/docs_examples/example-inventory.json").read_text()
+        )
+        mutation = next(
+            entry for entry in inventory["entries"]
+            if entry.get("mutation_contract", {}).get("detected")
+        )
+        mutation["mutation_contract"]["independent_oracle"] = False
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "example-inventory.json"
+            path.write_text(json.dumps(inventory))
+            report = MODULE.ValidationReport()
+            self.validator.validate_inventory(
+                MODULE.collect_public_blocks(ROOT), report, path
+            )
+        self.assertTrue(
+            any("lacks contract fields" in error for error in report.errors),
+            "missing independent oracle must fail closed",
+        )
+
+    def test_red_twin_mutation_fragment_cannot_be_promoted(self) -> None:
+        inventory = json.loads(
+            (ROOT / "tests/contracts/docs_examples/example-inventory.json").read_text()
+        )
+        fragment = next(
+            entry for entry in inventory["entries"]
+            if entry.get("mutation_contract", {}).get("mode") == "illustrative-fragment"
+        )
+        fragment["status"] = "verified"
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "example-inventory.json"
+            path.write_text(json.dumps(inventory))
+            report = MODULE.ValidationReport()
+            self.validator.validate_inventory(
+                MODULE.collect_public_blocks(ROOT), report, path
+            )
+        self.assertTrue(
+            any("fragment must be illustrative-only" in error for error in report.errors),
+            "a mutation fragment must not become a false-green verified workflow",
+        )
+
+    def test_red_twin_rfc1918_host_address_is_killed(self) -> None:
+        self.assertEqual(
+            ["10.23.45.67"],
+            self.validator.private_example_addresses(
+                "send traffic to 10.23.45.67 after configuration"
+            ),
+        )
+
+    def test_named_rfc1918_networks_remain_valid_policy_terms(self) -> None:
+        self.assertEqual(
+            [],
+            self.validator.private_example_addresses(
+                "deny 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16"
+            ),
+        )
+
+    def test_mutation_detector_covers_rest_and_cli(self) -> None:
+        rest = MODULE.Block(
+            Path("docs/example.md"), 1, "bash",
+            'curl --request PATCH "$CONTROL_API/config/ai/apikey/example"',
+        )
+        cli = MODULE.Block(
+            Path("docs/example.md"), 2, "bash",
+            "loxicmd delete lb 192.0.2.10 --tcp=8080",
+        )
+        self.assertEqual(
+            ["PATCH /config/ai/apikey/example"],
+            self.validator.mutation_operations(rest),
+        )
+        self.assertEqual(
+            ["loxicmd delete lb"],
+            self.validator.mutation_operations(cli),
+        )
+        appliance = MODULE.Block(
+            Path("docs/example.md"), 3, "bash",
+            "loxicmd appliance restore execute ./plan.json --challenge-file ./challenge",
+        )
+        self.assertEqual(
+            ["loxicmd appliance restore execute"],
+            self.validator.mutation_operations(appliance),
+        )
+
     def test_red_twin_route_typo_is_killed(self) -> None:
         errors = self.validator.validate_route("POST", "/config/workre/metrics")
         self.assertTrue(errors)

@@ -1,5 +1,7 @@
 # Load-Balancing Algorithms
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 !!! warning "HTTP/2 selector boundary"
     The selector descriptions below apply to the HTTP/1.1 fullproxy path. HTTP/2 implements
     selector-8 CHWBL with a different rule: it can apply the load cap even when a prefix hash is
@@ -254,11 +256,11 @@ the current build; setting it does not change the live hash input.
 === "curl"
 
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 8080,
           "protocol": "tcp",
           "mode": 4,
@@ -276,7 +278,7 @@ the current build; setting it does not change the live hash input.
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8080 --endpoints=192.0.2.1:1,198.51.100.1:1,203.0.113.1:1 --mode=fullproxy --select=chwbl --backend-protocol=http1
+    loxicmd create lb 192.0.2.254 --tcp=8080:8080 --endpoints=192.0.2.1:1,198.51.100.1:1,203.0.113.1:1 --mode=fullproxy --select=chwbl --backend-protocol=http1
     ```
 
 ---
@@ -297,11 +299,11 @@ If `session_header_name` is empty and `sel: 3` is set, persistence falls back to
 === "curl"
 
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 8080,
           "protocol": "tcp",
           "mode": 4,
@@ -320,7 +322,7 @@ If `session_header_name` is empty and `sel: 3` is set, persistence falls back to
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8080 --endpoints=192.0.2.1:1,198.51.100.1:1,203.0.113.1:1 --mode=fullproxy --select=persist --backend-protocol=http1 --session-header-name=X-Session-ID
+    loxicmd create lb 192.0.2.254 --tcp=8080:8080 --endpoints=192.0.2.1:1,198.51.100.1:1,203.0.113.1:1 --mode=fullproxy --select=persist --backend-protocol=http1 --session-header-name=X-Session-ID
     ```
 
 ---

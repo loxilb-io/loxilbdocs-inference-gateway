@@ -1,5 +1,7 @@
 # Frontend mTLS for AI Services
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 The current active mTLS path can verify client certificates on the frontend of
 a FullProxy service. Configure it through the `mtls_frontend` object nested in
 `serviceArguments`; there is no standalone `/config/mtls` endpoint.

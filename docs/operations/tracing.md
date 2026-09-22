@@ -1,5 +1,7 @@
 # Application and L4 Tracing
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 The Gateway can export HTTP/HTTPS protocol events and sampled TCP/SCTP
 connection events to an OpenTelemetry Protocol (OTLP) collector. Use tracing
 for bounded troubleshooting windows: it adds processing and storage load, and

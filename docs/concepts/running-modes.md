@@ -1,5 +1,7 @@
 # Running Modes
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 A load-balancer rule's `mode` field selects its data path. This page covers the full `mode`
 enum, and why **`mode: 4` (fullproxy)** is the prerequisite for every AI-inference feature.
 
@@ -54,11 +56,11 @@ A minimal fullproxy rule (CHWBL prefix affinity over two vLLM replicas):
 === "curl"
 
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H 'Content-Type: application/json' -d '{
       "serviceArguments": {
-        "externalIP": "10.10.10.254", "port": 8080, "protocol": "tcp",
-        "sel": 8, "mode": 4, "host": "10.10.10.254" },
+        "externalIP": "192.0.2.254", "port": 8080, "protocol": "tcp",
+        "sel": 8, "mode": 4, "host": "192.0.2.254" },
       "endpoints": [
         { "endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1 },
         { "endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 1 } ]}'
@@ -67,7 +69,7 @@ A minimal fullproxy rule (CHWBL prefix affinity over two vLLM replicas):
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --host=10.10.10.254
+    loxicmd create lb 192.0.2.254 --tcp=8080:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --host=192.0.2.254
     ```
 
 ## Frontend TLS: the `security` enum

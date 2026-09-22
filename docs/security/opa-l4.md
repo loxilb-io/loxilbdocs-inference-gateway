@@ -1,5 +1,7 @@
 # OPA L4 Policy Watcher
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 The OPA L4 watcher polls an Open Policy Agent (OPA) data document, converts its
 desired rules into Gateway firewall rules, diffs them against a local cache,
 and applies additions and deletions through the Gateway REST API. It is a

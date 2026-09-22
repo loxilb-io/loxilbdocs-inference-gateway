@@ -1,5 +1,7 @@
 # Monitoring and Metrics
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 LoxiLB exposes Prometheus metrics for load balancing, system pressure, AI
 admission, token quotas, engine-specific routing, and fullproxy QoS. Use the
 metrics to distinguish Gateway pressure from host pressure and policy denials

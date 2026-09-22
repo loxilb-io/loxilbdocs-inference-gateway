@@ -1,5 +1,7 @@
 # Sockmap Acceleration
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Sockmap acceleration replaces the steady-state userspace byte relay of an eligible FullProxy
 connection with an eBPF sockhash redirect. It is an experimental, opt-in transport optimization;
 it does not add AI routing, authentication, streaming, or P/D features.

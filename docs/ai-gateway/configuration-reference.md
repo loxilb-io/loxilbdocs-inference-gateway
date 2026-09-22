@@ -1,5 +1,7 @@
 # Configuration Reference
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 The public contract reference for the `serviceArguments` object (and its
 `endpoints[]` and `mtls_*` sub-objects) used to create an AI Gateway load-balancer rule via
 `POST /netlox/v1/config/loadbalancer`. The tables follow the current API schema together with the
@@ -348,22 +350,22 @@ Applies to the rule as a whole (endpoint-level HM fields are in §9).
 
 ## 11. Worked example — full KV-exact P/D rule
 
-A complete `POST` body: a fullproxy VIP at `10.10.10.254:8080` doing KV-exact routing
+A complete `POST` body: a fullproxy VIP at `192.0.2.254:8080` doing KV-exact routing
 (`kvExactMode: 1`) over a 3-prefill / 3-decode pool. This mirrors the `vllm-kvcache-routing-cpu`
 scenario.
 
 === "curl"
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H 'Content-Type: application/json' -d '{
       "serviceArguments": {
-        "externalIP": "10.10.10.254",
+        "externalIP": "192.0.2.254",
         "port": 8080,
         "protocol": "tcp",
         "sel": 0,
         "mode": 4,
         "security": 0,
-        "host": "10.10.10.254",
+        "host": "192.0.2.254",
         "pd_disagg_mode": true,
         "probeRetries": 1,
         "kvExactMode": 1,
@@ -394,8 +396,8 @@ described in section 5; adding stored `chwbl_*` fields does not change them.
 
 ```json
 {
-  "externalIP": "10.10.10.254", "port": 8080, "protocol": "tcp",
-  "mode": 4, "security": 0, "host": "10.10.10.254",
+  "externalIP": "192.0.2.254", "port": 8080, "protocol": "tcp",
+  "mode": 4, "security": 0, "host": "192.0.2.254",
   "sel": 8,
   "model_name": "llama-70b",
   "backend_protocol": "http1",
@@ -413,10 +415,10 @@ Confirm the rule landed and inspect its state:
 === "curl"
     ```bash
     # List all rules (VIP, mode, sel, endpoints)
-    curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all | jq .
+    curl -s http://192.0.2.254:11111/netlox/v1/config/loadbalancer/all | jq .
 
     # KV-cache per-block hash inventory (kvExactMode rules)
-    curl -s 'http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=<id>&ep_idx=0' | jq .
+    curl -s 'http://192.0.2.254:11111/netlox/v1/config/ai/kv/inventory?service_id=<id>&ep_idx=0' | jq .
     ```
 === "loxicmd"
     ```bash

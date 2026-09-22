@@ -1,5 +1,7 @@
 # API Key Management
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Use the AI Gateway key API to create, inspect, rotate, and revoke
 workload credentials. On a `mode: 4` rule with `api_key_auth: required`, the
 request path enforces key validity, model allow-lists, per-key request rate,

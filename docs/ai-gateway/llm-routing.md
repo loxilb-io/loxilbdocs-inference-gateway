@@ -1,5 +1,7 @@
 # LLM Routing
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 !!! warning "HTTP/1.1 is required for the routing laws on this page"
     Current HTTP/2 forwarding reduces selector 9 to round-robin and does not integrate selector
     10, P/D, KV-exact, or model-aware pool lookup. `backend_protocol: http2` is not a feature-
@@ -43,7 +45,7 @@ The `sel` enum and the semantics of each value are defined once in
 [LB Algorithms](../concepts/lb-algorithms.md) — this page does not repeat them.
 
 !!! note "Lab addresses"
-    Examples use the reference-lab topology: VIP `10.10.10.254`, two vLLM backends at
+    Examples use the reference-lab topology: VIP `192.0.2.254`, two vLLM backends at
     `192.0.2.1:8000` and `198.51.100.1:8000`, and the gateway REST API on `<loxilb-host>:11111`.
     Substitute your own addresses. `security: 1` selects an HTTPS frontend (certificates staged on
     the gateway); use `security: 0` for a plain-HTTP frontend.
@@ -67,7 +69,7 @@ affinity — a good starting point and a control against which to measure cache-
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 2020,
           "protocol": "tcp",
           "sel": 0,
@@ -88,7 +90,7 @@ affinity — a good starting point and a control against which to measure cache-
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=rr --security=https --monitor --probetype=http --probeport=8000 --probereq=/v1/models
+    loxicmd create lb 192.0.2.254 --tcp=2020:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=rr --security=https --monitor --probetype=http --probeport=8000 --probereq=/v1/models
     ```
 
 The `monitor` + `probe*` fields add an HTTP health check on `/v1/models`; they are optional but
@@ -114,7 +116,7 @@ the rule with `sel: 8`, then verify affinity and spill behavior with controlled 
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 2021,
           "protocol": "tcp",
           "sel": 8,
@@ -131,7 +133,7 @@ the rule with `sel: 8`, then verify affinity and spill behavior with controlled 
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2021:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --security=https
+    loxicmd create lb 192.0.2.254 --tcp=2021:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --security=https
     ```
 
 ### CHWBL tuning knobs
@@ -168,7 +170,7 @@ still preserving prefix locality.
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 2020,
           "protocol": "tcp",
           "sel": 10,
@@ -185,7 +187,7 @@ still preserving prefix locality.
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=192.0.2.1:8,198.51.100.1:2 --mode=fullproxy --select=chwbl-wrr --security=https
+    loxicmd create lb 192.0.2.254 --tcp=2020:8000 --endpoints=192.0.2.1:8,198.51.100.1:2 --mode=fullproxy --select=chwbl-wrr --security=https
     ```
 
 Here `192.0.2.1` receives roughly 4× the traffic of `198.51.100.1` (weights `8` vs `2`). All CHWBL
@@ -215,7 +217,7 @@ connections plus queued requests.
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 2020,
           "protocol": "tcp",
           "sel": 9,
@@ -232,7 +234,7 @@ connections plus queued requests.
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=gpuaware --security=https
+    loxicmd create lb 192.0.2.254 --tcp=2020:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=gpuaware --security=https
     ```
 
 The GPU status and worker-metrics APIs do not change this plain-pool selection law. See
@@ -263,7 +265,7 @@ stickiness (see [MCP Gateway](mcp-gateway.md)).
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 2020,
           "protocol": "tcp",
           "sel": 3,
@@ -281,7 +283,7 @@ stickiness (see [MCP Gateway](mcp-gateway.md)).
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=persist --security=https --session-header-name=X-Session-ID
+    loxicmd create lb 192.0.2.254 --tcp=2020:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=persist --security=https --session-header-name=X-Session-ID
     ```
 
 To key on a cookie, query parameter, or Basic-Auth user instead, set `session_header_name` to
@@ -302,7 +304,7 @@ Then send a client request through the VIP and confirm you get a valid response:
 
 ```bash
 # HTTPS frontend (security: 1) — -k skips CA verification in the lab
-curl -sk https://10.10.10.254:2020/v1/models | jq .
+curl -sk https://192.0.2.254:2020/v1/models | jq .
 ```
 
 For CHWBL / weighted modes, send several requests carrying the same prefix (e.g. an identical

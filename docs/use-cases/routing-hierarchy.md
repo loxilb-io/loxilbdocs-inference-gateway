@@ -1,5 +1,7 @@
 # Routing Hierarchy
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 How LoxiLB decides which worker serves each request: a strict, fail-through
 priority ladder that prefers the strongest cache-affinity signal available, then bounds
 it by load, capacity, health, and admission.
@@ -311,16 +313,16 @@ Both shapes are created with `POST /netlox/v1/config/loadbalancer` on port `1111
     P/D-disaggregated rule with Tier 1.5 KV-exact:
 
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
       "serviceArguments": {
-        "externalIP": "10.10.10.254",
+        "externalIP": "192.0.2.254",
         "port": 2020,
         "protocol": "tcp",
         "sel": 0,
         "mode": 4,
-        "host": "10.10.10.254",
+        "host": "192.0.2.254",
         "pd_disagg_mode": true,
         "pd_cache_aware_mode": true,
         "kvExactMode": 1,
@@ -338,16 +340,16 @@ Both shapes are created with `POST /netlox/v1/config/loadbalancer` on port `1111
     Single-pool CHWBL rule (`sel:8`) — cache affinity without P/D:
 
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
       "serviceArguments": {
-        "externalIP": "10.10.10.254",
+        "externalIP": "192.0.2.254",
         "port": 2021,
         "protocol": "tcp",
         "sel": 8,
         "mode": 4,
-        "host": "10.10.10.254"
+        "host": "192.0.2.254"
       },
       "endpoints": [
         { "endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1 },
@@ -362,19 +364,19 @@ Both shapes are created with `POST /netlox/v1/config/loadbalancer` on port `1111
     ```bash
     # NOTE: loxicmd applies one --tcp target port to every endpoint; the decode EP's
     # targetPort 8200 (curl) cannot be set per-endpoint — post it via REST if it differs.
-    loxicmd create lb 10.10.10.254 --tcp=2020:8100 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=rr --host=10.10.10.254 --pd-disagg --pd-cache-aware --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --ep-role=prefill,decode --nixl-port=5600,5600
+    loxicmd create lb 192.0.2.254 --tcp=2020:8100 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=rr --host=192.0.2.254 --pd-disagg --pd-cache-aware --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --ep-role=prefill,decode --nixl-port=5600,5600
     ```
 
     Single-pool CHWBL rule (`sel:8`) — cache affinity without P/D:
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2021:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --host=10.10.10.254
+    loxicmd create lb 192.0.2.254 --tcp=2021:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --host=192.0.2.254
     ```
 
 ## Verify
 
 Confirm the rule and watch the ladder engage on the metrics endpoint
-(`GET http://10.10.10.254:11111/netlox/v1/metrics`):
+(`GET http://192.0.2.254:11111/netlox/v1/metrics`):
 
 - `loxilb_ai_pd_requests_total` advances for a P/D rule.
 - `loxilb_pd_kv_tier15_hits_total{ep_idx}` advances after inventory is nonzero and repeated

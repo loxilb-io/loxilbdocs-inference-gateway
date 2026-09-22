@@ -1,5 +1,7 @@
 # Configuration & Tuning
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Every operator-facing knob for LoxiLB's AI routing hierarchy — REST rule fields, LoxiLB
 environment variables, the vLLM-side matching contract — plus a tuning playbook and the
 observability needed to verify each layer engaged.
@@ -30,7 +32,7 @@ The hierarchy is configured in a few distinct places; each ladder row maps to sp
 
 ## REST rule fields
 
-Endpoint: `POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer`.
+Endpoint: `POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer`.
 
 !!! warning "Field-casing trap (silent)"
     `pd_disagg_mode`, `pd_cache_aware_mode`, `pd_session_ttl_sec`, `pd_cache_threshold`,
@@ -93,16 +95,16 @@ confirm the stored shape, especially for fields that a particular CLI build does
 
 === "curl"
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
       "serviceArguments": {
-        "externalIP": "10.10.10.254",
+        "externalIP": "192.0.2.254",
         "port": 2022,
         "protocol": "tcp",
         "sel": 8,
         "mode": 4,
-        "host": "10.10.10.254"
+        "host": "192.0.2.254"
       },
       "endpoints": [
         { "endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1 },
@@ -113,7 +115,7 @@ confirm the stored shape, especially for fields that a particular CLI build does
 
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2022:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --host=10.10.10.254
+    loxicmd create lb 192.0.2.254 --tcp=2022:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --host=192.0.2.254
     ```
 
 ## LoxiLB process environment variables
@@ -296,7 +298,7 @@ release-blocked selector-9 arm is active.
 ## Per-layer enablement matrix
 
 What turns each layer on, and the *fastest* check that it engaged (metrics on
-`GET http://10.10.10.254:11111/netlox/v1/metrics` unless noted):
+`GET http://192.0.2.254:11111/netlox/v1/metrics` unless noted):
 
 | Layer | Enable | Verify |
 |---|---|---|
@@ -358,7 +360,7 @@ nonzero means an endpoint's publisher outran the cap and overlap scoring for it 
 
 ## Observability quick reference
 
-LoxiLB metrics: `GET http://10.10.10.254:11111/netlox/v1/metrics`. Inventory snapshot:
+LoxiLB metrics: `GET http://192.0.2.254:11111/netlox/v1/metrics`. Inventory snapshot:
 `GET /netlox/v1/config/ai/kv/inventory`.
 
 **Routing-decision set:** `loxilb_pd_kv_tier15_hits_total{ep_idx}` ·

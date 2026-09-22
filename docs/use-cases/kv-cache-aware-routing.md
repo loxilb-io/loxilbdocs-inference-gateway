@@ -1,5 +1,7 @@
 # KV-Cache-Aware Routing
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Route each inference request to the vLLM worker that already holds the most of its prompt's KV blocks, so the worker skips recomputation instead of rebuilding the prefix from scratch. This is LoxiLB's flagship prefix-aware routing tier, and it works without moving a single KV tensor through the load balancer.
 
 For the control-plane concepts and field reference, see [KV-Cache Routing](../ai-gateway/kv-caching.md). For where this tier sits in the full selection ladder, see [Routing Hierarchy](routing-hierarchy.md).
@@ -271,10 +273,10 @@ Create one fullproxy (`mode=4`) rule per model. Tag prefill endpoints `ep_role: 
 
 === "curl"
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H 'Content-Type: application/json' -d '{
       "serviceArguments": {
-        "externalIP": "10.10.10.254",
+        "externalIP": "192.0.2.254",
         "port": 8080,
         "protocol": "tcp",
         "sel": 3,
@@ -294,7 +296,7 @@ Create one fullproxy (`mode=4`) rule per model. Tag prefill endpoints `ep_role: 
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=192.0.2.1:1,192.0.2.2:1 --mode=fullproxy --select=persist --pd-disagg --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --kv-warmup=30 --ep-role=prefill,decode
+    loxicmd create lb 192.0.2.254 --tcp=8080:8000 --endpoints=192.0.2.1:1,192.0.2.2:1 --mode=fullproxy --select=persist --pd-disagg --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --kv-warmup=30 --ep-role=prefill,decode
     ```
 
 KV fields (all match the swagger `serviceArguments` defaults):
@@ -360,7 +362,7 @@ until all four pass, any TTFT or throughput number reflects the fallback, **not*
 
 === "curl"
     ```bash
-    curl -s http://10.10.10.254:11111/netlox/v1/metrics \
+    curl -s http://192.0.2.254:11111/netlox/v1/metrics \
       | grep -E 'loxilb_pd_kv|kv_subscriber_connected'
     ```
 === "loxicmd"
@@ -381,7 +383,7 @@ The middle assertion is the whole test. Fire one **cold** request to populate th
 
 === "curl"
     ```bash
-    curl -s "http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=<id>&ep_idx=0"
+    curl -s "http://192.0.2.254:11111/netlox/v1/config/ai/kv/inventory?service_id=<id>&ep_idx=0"
     ```
 === "loxicmd"
     ```bash
@@ -413,7 +415,7 @@ Section 9 is the go/no-go gate; this section is the deeper reference for the sam
 === "curl"
     ```bash
     # per-endpoint 64-bit hash inventory (raw-middleware endpoint)
-    curl -s "http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=<id>&ep_idx=0"
+    curl -s "http://192.0.2.254:11111/netlox/v1/config/ai/kv/inventory?service_id=<id>&ep_idx=0"
     ```
 === "loxicmd"
     ```bash
@@ -507,8 +509,8 @@ Observe these paths with `loxilb_pd_kv_tier15_spills_total` and
 
 ```yaml
 service:
-  key: "10.10.10.254:8080:tcp"   # <vip>:<port>:<proto>
-  vip: "10.10.10.254"
+  key: "192.0.2.254:8080:tcp"   # <vip>:<port>:<proto>
+  vip: "192.0.2.254"
   port: 8080
 epoch_period_sec: 10             # staleness deadline = 3x epoch
 hosts:

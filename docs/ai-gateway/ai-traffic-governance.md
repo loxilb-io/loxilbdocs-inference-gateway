@@ -1,5 +1,7 @@
 # AI Traffic Governance
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 LoxiLB can control who may use an inference service, which models they may
 call, how quickly they may submit requests, how many tokens they may consume,
 and how much network bandwidth a service may use. These controls solve

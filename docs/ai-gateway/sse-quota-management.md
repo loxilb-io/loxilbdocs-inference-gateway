@@ -1,5 +1,7 @@
 # SSE and Quota Management
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Server-Sent Events (SSE) keep an HTTP response open while an inference engine
 streams tokens. LoxiLB protects this long-lived path from normal idle reaping,
 requests usage accounting, and settles token-quota reservations when the

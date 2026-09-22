@@ -1,5 +1,7 @@
 # llama.cpp Integration
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Place a `llama-server` fleet behind fullproxy load balancing with content or session affinity. llama.cpp intentionally uses a shorter Gateway feature ladder because it exposes neither a supported KV-event plane nor prefill/decode disaggregation.
 
 ## Supported capabilities

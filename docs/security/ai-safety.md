@@ -1,5 +1,7 @@
 # AI Safety Scanning
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 The Gateway source tree contains two optional AI-safety integrations:
 Microsoft Presidio-based personally identifiable information (PII) scanning
 and Llama Firewall scanning. Their REST paths appear in OpenAPI regardless of

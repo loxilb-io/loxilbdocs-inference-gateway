@@ -1,5 +1,7 @@
 # Appliance Lifecycle CLI
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 `loxicmd appliance` is the host-lifecycle surface. It dispatches directly to
 the fixed appliance backend installed by the Product and does not depend on a
 running Gateway API. This is separate from Gateway configuration

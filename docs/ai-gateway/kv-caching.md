@@ -1,5 +1,7 @@
 # KV-Cache-Aware Routing
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Route each inference request to the backend that already holds the matching
 prompt prefix in its GPU KV cache, so tokens are reused instead of recomputed.
 This is the **Tier 1.5** stage of the routing cascade.
@@ -198,7 +200,7 @@ wget -O /etc/loxilb/tokenizers/Qwen__Qwen3-0.6B/tokenizer.json \
 ## Configuration
 
 Configure a rule with `POST /netlox/v1/config/loadbalancer` on port `11111`.
-Both examples below mirror the reference topologies (VIP `10.10.10.254`, prefill
+Both examples below mirror the reference topologies (VIP `192.0.2.254`, prefill
 endpoints `192.0.2.1 / 203.0.113.1 / 198.51.100.101`).
 
 !!! warning "Protect the management API"
@@ -214,11 +216,11 @@ are never Tier-1.5 targets.
 
 === "curl"
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 8080,
           "protocol": "tcp",
           "sel": 0,
@@ -242,7 +244,7 @@ are never Tier-1.5 targets.
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8080 --endpoints=192.0.2.1:1,198.51.100.1:1,203.0.113.1:1,192.0.2.101:1,198.51.100.101:1,203.0.113.101:1 --mode=fullproxy --pd-disagg --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-warmup=30 --kv-block-size=16 --ep-role=prefill,decode,prefill,decode,prefill,decode
+    loxicmd create lb 192.0.2.254 --tcp=8080:8080 --endpoints=192.0.2.1:1,198.51.100.1:1,203.0.113.1:1,192.0.2.101:1,198.51.100.101:1,203.0.113.101:1 --mode=fullproxy --pd-disagg --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-warmup=30 --kv-block-size=16 --ep-role=prefill,decode,prefill,decode,prefill,decode
     ```
 
 ### SGLang KV-exact rule (`kvExactMode: 3`)
@@ -253,11 +255,11 @@ and `kvDpRankCount` equal to the SGLang `--dp-size`.
 
 === "curl"
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 9090,
           "protocol": "tcp",
           "sel": 0,
@@ -278,7 +280,7 @@ and `kvDpRankCount` equal to the SGLang `--dp-size`.
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=9090:8080 --endpoints=198.51.100.101:1,203.0.113.101:1,192.0.2.102:1 --mode=fullproxy --kv-exact-mode=3 --kv-engine-type=sglang --kv-dp-ranks=3 --kv-zmq-port=5561 --kv-warmup=30 --kv-block-size=16
+    loxicmd create lb 192.0.2.254 --tcp=9090:8080 --endpoints=198.51.100.101:1,203.0.113.101:1,192.0.2.102:1 --mode=fullproxy --kv-exact-mode=3 --kv-engine-type=sglang --kv-dp-ranks=3 --kv-zmq-port=5561 --kv-warmup=30 --kv-block-size=16
     ```
 
 With `kvDpRankCount: 3` and `kvZmqPort: 5561`, loxilb subscribes to ranks at
@@ -303,7 +305,7 @@ Look for `kvExactMode`, `kvBlockSize`, `kvHashAlgo` (vLLM) or `kvEngineType` /
 Query the dedicated status read model for a strict rule:
 
 ```bash
-curl -s "http://10.10.10.254:11111/netlox/v1/config/loadbalancer/externalipaddress/10.10.10.254/port/8080/protocol/tcp/kvexactstatus" \
+curl -s "http://192.0.2.254:11111/netlox/v1/config/loadbalancer/externalipaddress/192.0.2.254/port/8080/protocol/tcp/kvexactstatus" \
   | jq '.kvExactStatusAttr[] | {
     modelName, modelProfileId, modelProfileGen, apiMode,
     bindingDigest, desiredState, enforcedState, reasonCodes,
@@ -319,7 +321,7 @@ Then inspect the live per-endpoint block inventory with the raw-middleware
 endpoint:
 
 ```bash
-curl -s "http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=0&ep_idx=0"
+curl -s "http://192.0.2.254:11111/netlox/v1/config/ai/kv/inventory?service_id=0&ep_idx=0"
 ```
 
 ```json

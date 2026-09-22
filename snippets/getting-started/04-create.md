@@ -1,4 +1,5 @@
 <!-- example-status-default: verified -->
+<!-- mutation-workflow: quickstart-model-route -->
 
 ### Prerequisites
 
@@ -6,6 +7,8 @@
 - `198.51.100.11:8080` is an HTTP backend that returns the marker
   `backend-llama`.
 - The management authentication negative and positive checks passed.
+- This is an isolated lab with no concurrent configuration writer or traffic
+  generator; exact state and metric deltas depend on that isolation.
 
 ### Exact command
 
@@ -74,6 +77,38 @@ jq -e '
 ' rules.json
 ```
 
+Also prove a rejected mutation leaves the complete readback unchanged:
+
+```bash
+# docs-example: expect-schema-error
+jq -S . rules.json > rules-before-invalid.json
+invalid_status=$(curl --silent --show-error \
+  --request POST \
+  --header @control-plane.headers \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "serviceArguments": {
+      "externalIP": "192.0.2.10",
+      "port": 2020,
+      "protocol": "not-a-protocol",
+      "sel": 0,
+      "mode": 4
+    },
+    "endpoints": [
+      {"endpointIP": "198.51.100.11", "targetPort": 8080, "weight": 1}
+    ]
+  }' \
+  --output invalid-create.json \
+  --write-out '%{http_code}' \
+  "$CONTROL_API/config/loadbalancer")
+test "$invalid_status" = 400
+curl --fail-with-body --silent --show-error \
+  --header @control-plane.headers \
+  "$CONTROL_API/config/loadbalancer/all" \
+  | jq -S . > rules-after-invalid.json
+cmp --silent rules-before-invalid.json rules-after-invalid.json
+```
+
 ### Cleanup
 
 If validation fails after creation, run the exact delete in step 7 before
@@ -83,6 +118,7 @@ changing any key field.
 
 | Symptom | Check |
 |---|---|
-| HTTP `400` | Validate JSON field casing and required endpoint fields. |
+| HTTP `400` on the valid create | Validate JSON field casing and required endpoint fields. |
 | HTTP `409` | An equivalent rule already exists; inspect before deleting it. |
 | Rule reads back without the model | Recheck exact `model_name` spelling and the complete L7 key. |
+| Invalid create changes readback | Stop and restore the pre-change snapshot; rejection was not atomic. |
