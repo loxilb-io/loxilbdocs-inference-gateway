@@ -126,6 +126,18 @@ To keep the project clean and professional, the following must **never** be comm
 
 CI enforces these rules automatically; a pull request that introduces them will fail.
 
+### Internal material location
+
+Before adding any file, confirm that it serves a public user, operator, contributor, release, or
+CI workflow. Private plans, review notes, evidence, one-off generators, and internal scripts of
+any language belong under the local `docs/internal/` directory. The directory is ignored as a
+whole and is distributed to the development team separately from GitHub.
+
+Do not create filename-specific ignore rules for private artifacts and do not force-add anything
+from `docs/internal/`. A tool should be committed outside that directory only when the public
+build or CI uses it, its purpose is documented, and contributors can run it without private
+infrastructure or credentials.
+
 ## Reporting security issues
 
 Please do **not** open a public issue for security vulnerabilities. See [SECURITY.md](SECURITY.md).

@@ -1,18 +1,12 @@
 # Gitleaks configuration for loxilbdocs-inference-gateway.
-# Extends the default gitleaks ruleset and allowlists documentation placeholders
-# and local-only paths that are never part of the published docs.
+# Extends the default gitleaks ruleset and allowlists documentation placeholders.
+# Ignored paths are intentionally not allowlisted: if an internal file is ever
+# force-added, the secret scan must still inspect it.
 [extend]
 useDefault = true
 
 [allowlist]
-description = "Paths and values that are not shipped or are documentation placeholders"
-paths = [
-  '''docs/internal/.*''',   # internal planning notes — gitignored, never published
-  '''site/.*''',            # local mkdocs build output — gitignored, never published
-  '''\.claude/.*''',        # local AI-tooling data — gitignored, never published
-  '''\.codegraph/.*''',     # local AI-tooling index — gitignored, never published
-  '''\.serena/.*''',        # local AI-tooling cache — gitignored, never published
-]
+description = "Documentation placeholder values"
 regexes = [
   '''<[A-Za-z0-9_-]+>''',   # angle-bracket placeholders like <ADMIN_PASSWORD>, <key_id>
   '''CHANGE_ME''',

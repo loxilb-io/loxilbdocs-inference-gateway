@@ -21,5 +21,8 @@ Fixes # (issue)
 - [ ] `mkdocs build --strict` passes locally.
 - [ ] Internal links resolve; no absolute developer paths, secrets, private hosts, or internal registries.
 - [ ] No internal planning/design docs or AI-assistant artifacts are included.
+- [ ] Every new file has a public audience or public CI/build purpose; internal-only files remain
+      under the ignored `docs/internal/` directory and were not force-added.
+- [ ] Public text contains no internal work-package, test-case, branch, approval, or tracking IDs.
 - [ ] Commits follow [Conventional Commits](https://www.conventionalcommits.org/).
 - [ ] Commits are signed off (DCO): `git commit -s`.
