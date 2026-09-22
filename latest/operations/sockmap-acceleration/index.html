@@ -2420,6 +2420,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/metrics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/verification-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/api/" class="md-nav__link">
         
   
@@ -2884,13 +2940,13 @@ compatible Gateway and a daemon started with <code>--sockmapsupport</code>.</p>
 <td>Plain HTTP/1.1; HTTP/2 and h2c are never accelerated</td>
 </tr>
 <tr>
-<td>Per-request rewriting</td>
-<td>No <code>sse_mode</code>, no <code>pd_disagg_mode</code>, no <code>api_key_auth</code> declaration, and no attached L7 policy</td>
+<td>Per-direction rewriting</td>
+<td><code>sse_mode</code>, <code>pd_disagg_mode</code>, and an attached L7 policy require <code>off</code>. An <code>api_key_auth</code> declaration rejects <code>request</code> and <code>both</code>, but permits response-only acceleration.</td>
 </tr>
 </tbody>
 </table>
-<p>The last row is a hard mutual-exclusion boundary. Once a direction is redirected in the kernel,
-userspace cannot inspect or rewrite later keep-alive requests or record their responses.</p>
+<p>The last row is enforced per direction. Once a direction is redirected in the
+kernel, userspace cannot inspect or rewrite bytes in that direction.</p>
 <table>
 <thead>
 <tr>
@@ -2909,11 +2965,11 @@ userspace cannot inspect or rewrite later keep-alive requests or record their re
 </tr>
 <tr>
 <td><code>api_key_auth: required</code>, <code>jwt</code>, or <code>apikey-or-jwt</code></td>
-<td>Credential admission and header stripping</td>
+<td>Owns the request direction for credential admission and header stripping; response-only acceleration remains eligible</td>
 </tr>
 <tr>
 <td>explicit <code>api_key_auth: disabled</code></td>
-<td><code>X-Api-Key</code> stripping; explicit disabled still claims the Gateway header namespace</td>
+<td>Still owns the request direction for <code>X-Api-Key</code> stripping; response-only acceleration remains eligible</td>
 </tr>
 <tr>
 <td>attached L7 policy</td>
@@ -2921,9 +2977,12 @@ userspace cannot inspect or rewrite later keep-alive requests or record their re
 </tr>
 </tbody>
 </table>
-<p>Only an <strong>omitted</strong> <code>api_key_auth</code> remains eligible. Omission leaves a backend-owned <code>X-Api-Key</code>
-untouched. Updating a protected service while omitting the field does not erase its retained
-declaration, so it still cannot enable sockmap.</p>
+<p>Only an <strong>omitted</strong> <code>api_key_auth</code> is eligible for request or bidirectional
+acceleration. Omission leaves a backend-owned <code>X-Api-Key</code> untouched. A service
+with any retained authentication declaration may select <code>response</code>, because
+credential admission and header stripping remain on the userspace request
+path. Accelerated responses are not recorded by the userspace response path;
+the Gateway logs this tradeoff when accepting the configuration.</p>
 <p>The pairing is rejected from either direction: enabling sockmap on a service with an attached L7
 policy fails, and attaching a policy to a service that declares sockmap also fails. The Gateway
 returns <code>400</code> before changing rule state. Snapshot recovery is different: it favors a safe
@@ -3077,9 +3136,12 @@ a non-<code>off</code> mode. That fallback is protocol behavior, not proof that 
 the HTTP/1.1 AI path. Current HTTP/2 admission tests cover specific authentication, quota,
 multiplexing, teardown, and TLS/ALPN cases; they do not qualify model-aware selection, P/D,
 KV-exact routing, SSE, or sockmap acceleration.</p>
-<p>Do not present sockmap as an accelerator for an AI rule that declares <code>sse_mode</code>, P/D,
-authentication, or an L7 policy. Those combinations are rejected precisely because their
-per-request behavior would be skipped after the first accelerated pairing.</p>
+<p>Do not present sockmap as an accelerator for an AI rule that declares
+<code>sse_mode</code>, P/D, or an L7 policy. A rule with <code>api_key_auth</code> may use only
+response acceleration: every request remains in userspace and is admitted
+independently, while response accounting is intentionally unavailable. Request
+or bidirectional acceleration is rejected because later keep-alive requests
+would otherwise skip admission and header stripping.</p>
 <h2 id="evidence-boundary">Evidence boundary<a class="headerlink" href="#evidence-boundary" title="Permanent link">&para;</a></h2>
 <p>The committed <code>cicd/sockmap-fullproxy</code> source contains configuration refusals, directionality,
 h2c fallback, equivalence, integrity, control, observability, and load probes. It is a manual

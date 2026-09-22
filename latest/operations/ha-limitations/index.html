@@ -2442,6 +2442,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/metrics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/verification-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/api/" class="md-nav__link">
         
   
@@ -3006,7 +3062,9 @@ approved procedure.</p>
 <li><code>loxilb_sockproxy_sync_push_latency_seconds{peer,rpc}</code> and
   <code>loxilb_sockproxy_sync_inflight_rpc{peer}</code> for a slow peer path;</li>
 <li><code>loxilb_sockproxy_sync_conflict_total{outcome}</code> for active-active conflict
-  resolution.</li>
+  resolution;</li>
+<li><code>loxilb_sockproxy_sync_peer_scope_version{peer}</code> for the quota-state wire
+  scope observed from each peer.</li>
 </ul>
 <p>Metric presence confirms that instrumentation is registered. It does not prove
 that the peer link is complete, private, or loss-free.</p>
@@ -3021,6 +3079,12 @@ entry expires.</p>
 share this specific incompatibility. The restriction applies to peers
 exchanging token-quota state. A standalone Gateway is not affected by peer
 wire compatibility.</p>
+<p>The peer-scope gauge makes the observed scope visible; it does not make mixed
+versions compatible. Require the expected value on every peer and an immutable
+same-version build identity before enabling quota exchange. The frozen public
+scenario contains same-scope and mismatch assertions, but it is not wired to a
+public GitHub workflow at the frozen commit and this docs change does not run a
+two-node HA test. See <a href="../../reference/verification-status/">Verification Status</a>.</p>
 <h2 id="safe-peer-upgrade-procedure">Safe peer upgrade procedure<a class="headerlink" href="#safe-peer-upgrade-procedure" title="Permanent link">&para;</a></h2>
 <p>Prefer upgrading both peers together inside an approved maintenance window. If
 nodes must be upgraded one at a time:</p>
@@ -3174,6 +3238,7 @@ and metric deltas. Do not record credentials or customer request content.</p>
 <li><a href="../ai-qos/">AI Quotas and QoS</a></li>
 <li><a href="../monitoring/">Monitoring and Metrics</a></li>
 <li><a href="../backup-restore/">Configuration Backup and Restore</a></li>
+<li><a href="../../reference/verification-status/">Verification Status</a></li>
 <li><a href="../troubleshooting/">Troubleshooting</a></li>
 </ul>
 

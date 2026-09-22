@@ -2168,6 +2168,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#jwt-and-jwks-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JWT and JWKS row
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#l7-byte-shaper-row" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2233,6 +2244,17 @@
     <span class="md-ellipsis">
       
         Engine diagnostics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#worker-scrape-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worker scrape row
       
     </span>
   </a>
@@ -2512,6 +2534,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/metrics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/verification-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2891,6 +2969,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#jwt-and-jwks-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JWT and JWKS row
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#l7-byte-shaper-row" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2956,6 +3045,17 @@
     <span class="md-ellipsis">
       
         Engine diagnostics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#worker-scrape-row" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worker scrape row
       
     </span>
   </a>
@@ -3128,6 +3228,31 @@ same request. A value of <code>1</code> means 100 percent utilized; utilization 
 <code>loxilb_ai_tokens_missing_total</code> means the estimate path is accounting for
 responses without readable usage. Enforcement remains active, but operators
 should check engine response compatibility.</p>
+<h2 id="jwt-and-jwks-row">JWT and JWKS row<a class="headerlink" href="#jwt-and-jwks-row" title="Permanent link">&para;</a></h2>
+<p>Keep policy verdicts separate from key-fetch health. An allowed JWT decision
+does not imply the next refresh will succeed, and a refresh failure does not
+immediately invalidate a still-fresh last-known-good keyset.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># JWT verdict rate by tenant and reason</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">tenant</span><span class="p">,</span><span class="w"> </span><span class="nv">reason</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_jwt_validation_total</span><span class="p">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="o">)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># JWKS refresh failures by profile</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">profile</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_jwks_refresh_total</span><span class="p">{</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="nl">outcome</span><span class="o">=</span><span class="p">"</span><span class="s">failure</span><span class="p">",</span><span class="w"> </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="o">)</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="c1"># Current keyset usability and key count</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="nv">loxilb_ai_jwks_usable</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="nv">loxilb_ai_jwks_keys</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
+</code></pre></div>
+<p>An absent last-success timestamp means no successful fetch was recorded; it is
+not a zero-age keyset. Correlate refresh failures, usability, key count, and
+policy-store refusal before paging.</p>
 <h2 id="l7-byte-shaper-row">L7 byte-shaper row<a class="headerlink" href="#l7-byte-shaper-row" title="Permanent link">&para;</a></h2>
 <p>The dashboard includes per-VIP, port, and direction panels for:</p>
 <ul>
@@ -3139,47 +3264,47 @@ should check engine response compatibility.</p>
 <li>bucket tokens and committed burst size (CBS).</li>
 </ul>
 <h3 id="unit-safe-promql">Unit-safe PromQL<a class="headerlink" href="#unit-safe-promql" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Payload throughput, bytes per second</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_bytes_passed_total</span><span class="p">{</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="o">)</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># Configured CIR, already bytes per second</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="k">max</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="nv">loxilb_proxy_qos_cir_bytes_per_second</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="o">)</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1"># Delayed payload fraction</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_bytes_delayed_total</span><span class="p">{</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="o">)</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="o">/</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="kr">clamp_min</span><span class="o">(</span>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_bytes_passed_total</span><span class="p">{</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">      </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">    </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">  </span><span class="o">)</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="o">)</span>
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="c1"># Mean resumed park duration in seconds</span>
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_park_seconds_total</span><span class="p">{</span>
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="o">)</span>
-<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="o">/</span>
-<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="kr">clamp_min</span><span class="o">(</span>
-<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_parks_total</span><span class="p">{</span>
-<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">      </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
-<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="w">    </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="w">  </span><span class="o">)</span><span class="p">,</span><span class="w"> </span><span class="mf">0.001</span>
-<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Payload throughput, bytes per second</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_bytes_passed_total</span><span class="p">{</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="o">)</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># Configured CIR, already bytes per second</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="k">max</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="nv">loxilb_proxy_qos_cir_bytes_per_second</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="o">)</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># Delayed payload fraction</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_bytes_delayed_total</span><span class="p">{</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="o">)</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="o">/</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="kr">clamp_min</span><span class="o">(</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_bytes_passed_total</span><span class="p">{</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">      </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">    </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">  </span><span class="o">)</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="o">)</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="c1"># Mean resumed park duration in seconds</span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_park_seconds_total</span><span class="p">{</span>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a><span class="o">)</span>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="o">/</span>
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="kr">clamp_min</span><span class="o">(</span>
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_parks_total</span><span class="p">{</span>
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a><span class="w">      </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a><span class="w">    </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a><span class="w">  </span><span class="o">)</span><span class="p">,</span><span class="w"> </span><span class="mf">0.001</span>
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a><span class="o">)</span>
 </code></pre></div>
 <p>The policy API uses Mbps. The shaper dashboard uses bytes/s. If a panel
 converts to bits/s, multiply by eight and label it explicitly. Plaintext
@@ -3191,21 +3316,21 @@ Gateway metrics before alerting.</p>
 <p>Add three panels: aggregate cached bytes, maximum bytes on one connection, and
 queued connections. Overlay the backpressure ratio and high-water activation
 rate on a separate panel.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Aggregate and worst-connection relay cache</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">loxilb_proxy_cache_bytes</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">loxilb_proxy_cache_bytes_max_conn</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Mean cached bytes per queued connection</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nv">loxilb_proxy_cache_bytes</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="o">/</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="kr">clamp_min</span><span class="o">(</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="nv">loxilb_proxy_cache_conns_queued</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"},</span><span class="w"> </span><span class="mi">1</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="o">)</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># New per-connection high-water activations</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_high_water_events_total</span><span class="p">{</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Aggregate and worst-connection relay cache</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nv">loxilb_proxy_cache_bytes</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nv">loxilb_proxy_cache_bytes_max_conn</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># Mean cached bytes per queued connection</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nv">loxilb_proxy_cache_bytes</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="o">/</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="kr">clamp_min</span><span class="o">(</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="nv">loxilb_proxy_cache_conns_queued</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"},</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="o">)</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="c1"># New per-connection high-water activations</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_high_water_events_total</span><span class="p">{</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">  </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
 </code></pre></div>
 <p>Use byte units, not a generic “memory percent.” The normal per-connection
 watermark is 12 MiB and the chunked watermark is 768 KiB. Aggregate bytes are
@@ -3214,31 +3339,31 @@ traffic/concurrency context creates false conclusions.</p>
 <h2 id="backup-and-restore-row">Backup and restore row<a class="headerlink" href="#backup-and-restore-row" title="Permanent link">&para;</a></h2>
 <p>Show restore outcomes by <code>mode</code> and <code>result</code>, restore duration, last successful
 restore time, and boot conflicts:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">mode</span><span class="p">,</span><span class="w"> </span><span class="nv">result</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_restore_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="o">)</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_restore_duration_seconds_bucket</span><span class="p">{</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">      </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span><span class="o">)</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="o">)</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="kr">time</span><span class="o">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">loxilb_last_restore_timestamp_seconds</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="kr">increase</span><span class="o">(</span><span class="nv">loxilb_boot_config_conflict_total</span><span class="p">{</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">  </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="p">}[</span><span class="s">1h</span><span class="p">]</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">mode</span><span class="p">,</span><span class="w"> </span><span class="nv">result</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_restore_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="o">)</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">le</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_restore_duration_seconds_bucket</span><span class="p">{</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="o">)</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="o">)</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="kr">time</span><span class="o">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">loxilb_last_restore_timestamp_seconds</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="kr">increase</span><span class="o">(</span><span class="nv">loxilb_boot_config_conflict_total</span><span class="p">{</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">  </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="p">}[</span><span class="s">1h</span><span class="p">]</span><span class="o">)</span>
 </code></pre></div>
 <p>The age panel can be absent before the first successful commit/boot restore;
 represent that as “no successful restore recorded,” not zero seconds. A new
 <code>result="ROLLBACK-FAILED"</code> requires immediate node isolation and recovery.</p>
 <h2 id="cpu-panels">CPU panels<a class="headerlink" href="#cpu-panels" title="Permanent link">&para;</a></h2>
 <p>Display both CPU gauges on the same time range:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">loxilb_system_cpu_utilization_percent</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nv">loxilb_host_cpu_utilization_percent</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nv">loxilb_system_cpu_utilization_percent</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nv">loxilb_host_cpu_utilization_percent</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
 </code></pre></div>
 <p>The system gauge is cgroup/container usage relative to its CPU allowance when
 readable. It includes all processes in that cgroup. The host gauge is always
@@ -3251,21 +3376,21 @@ read—the values are equal.</p>
 <p><code>loxilb_ai_engine_info</code> is currently emitted only by the llama.cpp admission
 probe. vLLM, SGLang, and TensorRT-LLM rules produce no series, so absence is
 not an engine-health verdict.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nv">loxilb_ai_engine_info</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">kind</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_llamacpp_probe_warnings_total</span><span class="p">{</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="p">}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="o">)</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_sg_prefill_abort_decode_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_sg_room_retry_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_sg_oversize_reject_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_trt_ctx_early_exit_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_cb_flips_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_cb_proactive_heal_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_connect_failover_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nv">loxilb_ai_engine_info</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">kind</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_llamacpp_probe_warnings_total</span><span class="p">{</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span><span class="p">}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="o">)</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_sg_prefill_abort_decode_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_sg_room_retry_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_sg_oversize_reject_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_trt_ctx_early_exit_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_cb_flips_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_cb_proactive_heal_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_connect_failover_total</span><span class="p">{</span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
 </code></pre></div>
 <ul>
 <li>llama.cpp warning <code>kind</code> identifies model/build/slot inconsistency, sleeping
@@ -3284,13 +3409,34 @@ not an engine-health verdict.</p>
 <p>Always compare a counter rate with request volume. A large cumulative counter
 can represent an old incident, while a current <code>rate()</code> of zero shows no new
 events.</p>
+<h2 id="worker-scrape-row">Worker scrape row<a class="headerlink" href="#worker-scrape-row" title="Permanent link">&para;</a></h2>
+<p>Split worker scrape outcomes by the closed <code>result</code> label. This distinguishes
+reachability, HTTP, response-body, parsing, and request failures.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">result</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_worker_scrape_total</span><span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="o">)</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_worker_scrape_total</span><span class="p">{</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">  </span><span class="nl">result</span><span class="o">!=</span><span class="p">"</span><span class="s">ok</span><span class="p">",</span><span class="w"> </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">))</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="o">/</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="kr">clamp_min</span><span class="o">(</span><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_worker_scrape_total</span><span class="p">{</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">  </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">))</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">)</span>
+</code></pre></div>
+<p>Allowed values are <code>ok</code>, <code>unreachable</code>, <code>http_error</code>, <code>body_error</code>,
+<code>unparseable</code>, <code>bad_request</code>, and <code>unknown</code>. A successful scrape is not an
+inference success signal; compare it with endpoint health, data freshness, and
+backend receipts.</p>
 <h2 id="kv-tier-15-panels">KV Tier-1.5 panels<a class="headerlink" href="#kv-tier-15-panels" title="Permanent link">&para;</a></h2>
 <p>Use the exact current <code>tier15</code> metric names and verify them against a live
 scrape before creating an alert:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_kv_tier15_hits_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_kv_tier15_fallthrough_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">reason</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_kv_tier15_miss_reason_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_kv_tier15_spills_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_kv_tier15_hits_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_kv_tier15_fallthrough_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">reason</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_kv_tier15_miss_reason_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_pd_kv_tier15_spills_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
 </code></pre></div>
 <p>A no-data panel is not evidence of a zero rate. Confirm the exact metric exists
 and that traffic has exercised the configured KV path.</p>
@@ -3298,32 +3444,34 @@ and that traffic has exercised the configured KV path.</p>
 <p>For an HA deployment, add loss, rejection, and peer-latency panels. These are
 more useful than a binary “HA healthy” panel because xSync is a bounded,
 best-effort peer path:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Events or batches lost at a bounded queue</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">kind</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_sockproxy_sync_overflow_total</span><span class="p">{</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="o">)</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1"># Retry-exhausted batch loss</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">reason</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_sockproxy_sync_drop_total</span><span class="p">{</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="o">)</span>
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="c1"># 95th percentile peer RPC latency</span>
-<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span>
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">le</span><span class="p">,</span><span class="w"> </span><span class="nv">peer</span><span class="p">,</span><span class="w"> </span><span class="nv">rpc</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_sockproxy_sync_push_latency_seconds_bucket</span><span class="p">{</span>
-<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">      </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
-<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">    </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">  </span><span class="o">)</span>
-<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Events or batches lost at a bounded queue</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">kind</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_sockproxy_sync_overflow_total</span><span class="p">{</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="o">)</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="c1"># Retry-exhausted batch loss</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">reason</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_sockproxy_sync_drop_total</span><span class="p">{</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">    </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">  </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="o">)</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="c1"># 95th percentile peer RPC latency</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="kr">histogram_quantile</span><span class="o">(</span><span class="mf">0.95</span><span class="p">,</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">le</span><span class="p">,</span><span class="w"> </span><span class="nv">peer</span><span class="p">,</span><span class="w"> </span><span class="nv">rpc</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_sockproxy_sync_push_latency_seconds_bucket</span><span class="p">{</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">      </span><span class="nl">instance</span><span class="o">=~</span><span class="p">"</span><span class="s">$instance</span><span class="p">"</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="w">    </span><span class="p">}[</span><span class="err">$__rate_interval</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">  </span><span class="o">)</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="o">)</span>
 </code></pre></div>
 <p>Also display <code>loxilb_sockproxy_sync_apply_errors_total</code>,
 <code>loxilb_sockproxy_sync_health_reject_total{reason}</code>, and
-<code>loxilb_sockproxy_sync_inflight_rpc{peer}</code>. A no-data or zero result is not
+<code>loxilb_sockproxy_sync_inflight_rpc{peer}</code>. Add
+<code>loxilb_sockproxy_sync_peer_scope_version{peer}</code> and require compatible values
+before treating quota synchronization as safe. A no-data or zero result is not
 proof that a peer is connected. Confirm the peer path with a controlled state
 change, and review the reconciliation and transport limits in
 <a href="../ha-limitations/">HA and Upgrade Limitations</a>.</p>
@@ -3459,6 +3607,8 @@ green CI do not establish production performance or HA readiness.</p>
 <li><a href="../../ai-gateway/ai-traffic-governance/">AI Traffic Governance</a></li>
 <li><a href="../ai-qos/">AI Quotas and QoS</a></li>
 <li><a href="../ha-limitations/">HA and Upgrade Limitations</a></li>
+<li><a href="../../reference/metrics/">Metrics Reference</a></li>
+<li><a href="../../reference/verification-status/">Verification Status</a></li>
 </ul>
 
 

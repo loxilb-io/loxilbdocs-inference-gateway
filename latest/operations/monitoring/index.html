@@ -2153,6 +2153,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Engine and P/D metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#worker-scrape-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worker scrape metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2182,6 +2199,17 @@
     <span class="md-ellipsis">
       
         Peer synchronization metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sockmap-observability-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sockmap observability boundary
       
     </span>
   </a>
@@ -2489,6 +2517,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/metrics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/verification-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2881,6 +2965,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Engine and P/D metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#worker-scrape-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worker scrape metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2910,6 +3011,17 @@
     <span class="md-ellipsis">
       
         Peer synchronization metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sockmap-observability-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sockmap observability boundary
       
     </span>
   </a>
@@ -3004,6 +3116,11 @@
 admission, token quotas, engine-specific routing, and fullproxy QoS. Use the
 metrics to distinguish Gateway pressure from host pressure and policy denials
 from backend failures.</p>
+<p>For the complete generated list of 197 release-scope families, exact labels,
+activation classes, and evidence status, see the
+<a href="../../reference/metrics/">Metrics Reference</a>. The catalog records source
+evidence; a raw scrape and controlled stimulus are still required for a
+deployment claim.</p>
 <h2 id="enable-and-scrape-metrics">Enable and scrape metrics<a class="headerlink" href="#enable-and-scrape-metrics" title="Permanent link">&para;</a></h2>
 <p>Metrics collection is disabled by default. Enable it at process startup with <code>-p</code> or
 <code>--prometheus</code>, or dynamically through the authenticated control plane. While disabled,
@@ -3104,8 +3221,8 @@ therefore expected to be equal.</p>
 <tr>
 <td><code>loxilb_ai_requests_total</code></td>
 <td>Counter</td>
-<td><code>model</code>, <code>tenant</code>, <code>status</code></td>
-<td>Completed SSE inference streams by HTTP status; non-SSE requests are not counted here</td>
+<td><code>model</code>, <code>tenant</code>, <code>status</code>, <code>outcome</code></td>
+<td>Completed SSE inference streams use <code>outcome="completed"</code>; admission denials use <code>outcome="denied"</code>. Non-SSE successes are not counted here.</td>
 </tr>
 <tr>
 <td><code>loxilb_ai_request_duration_seconds</code></td>
@@ -3189,6 +3306,19 @@ counters when alerting on <code>403</code> and <code>429</code>.</p>
 the last-known-good keyset still admits traffic. Alert before
 <code>loxilb_ai_jwks_usable</code> becomes <code>0</code>. Do not treat an absent last-success series
 as a zero timestamp; it means no fetch has succeeded.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># JWT decisions by tenant and closed reason code</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">tenant</span><span class="p">,</span><span class="w"> </span><span class="nv">reason</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_jwt_validation_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="o">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1"># JWKS refresh failures by profile</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">profile</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_jwks_refresh_total</span><span class="p">{</span><span class="nl">outcome</span><span class="o">=</span><span class="p">"</span><span class="s">failure</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="o">)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="c1"># Profiles whose currently cached keyset is unusable</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="nv">loxilb_ai_jwks_usable</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span>
+</code></pre></div>
 <h2 id="token-quota-metrics">Token quota metrics<a class="headerlink" href="#token-quota-metrics" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -3270,17 +3400,17 @@ as a zero timestamp; it means no fetch has succeeded.</p>
 debt. It decays as the smooth bucket refills. Aggregate and model gauges are
 separate admission gates and must not be added together.</p>
 <p>Useful queries:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Tokens charged per second, split by count source kind</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">kind</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_tokens_consumed_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Estimated-accounting share; clamp avoids division by zero</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_tokens_estimated_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="o">/</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="kr">clamp_min</span><span class="o">(</span><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_tokens_consumed_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">)</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1"># Remaining aggregate headroom in tokens</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="nv">loxilb_ai_token_quota_limit_tokens</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="o">*</span><span class="w"> </span><span class="o">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">loxilb_ai_token_quota_utilization</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Tokens charged per second, split by count source kind</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">kind</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_tokens_consumed_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Estimated-accounting share; clamp avoids division by zero</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_tokens_estimated_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="o">/</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="kr">clamp_min</span><span class="o">(</span><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_tokens_consumed_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">)</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1"># Remaining aggregate headroom in tokens</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="nv">loxilb_ai_token_quota_limit_tokens</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="o">*</span><span class="w"> </span><span class="o">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">loxilb_ai_token_quota_utilization</span><span class="o">)</span>
 </code></pre></div>
 <h2 id="fullproxy-qos-metrics">Fullproxy QoS metrics<a class="headerlink" href="#fullproxy-qos-metrics" title="Permanent link">&para;</a></h2>
 <p>The <code>loxilb_proxy_qos_*</code> family exists only for an actively shaped fullproxy
@@ -3341,21 +3471,21 @@ service. Every series uses <code>vip</code>, <code>port</code>, <code>proto</cod
 For example, 16 Mbps is 2,000,000 bytes/s. Do not multiply the metric by eight
 unless the panel is deliberately converting it to bits/s and labels the result
 accordingly.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Payload throughput in bytes/s</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_bytes_passed_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="o">)</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># Fraction of passed payload that encountered shaping</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_bytes_delayed_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="o">)</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="o">/</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="kr">clamp_min</span><span class="o">(</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_bytes_passed_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">  </span><span class="o">)</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Payload throughput in bytes/s</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_bytes_passed_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="o">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># Fraction of passed payload that encountered shaping</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_bytes_delayed_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="o">)</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="o">/</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="kr">clamp_min</span><span class="o">(</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">vip</span><span class="p">,</span><span class="w"> </span><span class="nv">port</span><span class="p">,</span><span class="w"> </span><span class="nv">direction</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_qos_bytes_passed_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">  </span><span class="o">)</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="o">)</span>
 </code></pre></div>
 <p>Detached services disappear from this metric family after the collection
 refresh. A frozen series after detach is not the expected representation.</p>
@@ -3472,6 +3602,26 @@ client-visible result.</p>
 HTTP-code guess. Reconcile <code>tier_selected</code> only against successfully selected P/D requests;
 parked and refused admission events belong to the three admission families and intentionally do
 not choose a routing tier.</p>
+<h3 id="worker-scrape-metrics">Worker scrape metrics<a class="headerlink" href="#worker-scrape-metrics" title="Permanent link">&para;</a></h3>
+<p><code>loxilb_ai_worker_scrape_total{result}</code> records the outcome of worker metric
+collection. The closed result set is <code>ok</code>, <code>unreachable</code>, <code>http_error</code>,
+<code>body_error</code>, <code>unparseable</code>, <code>bad_request</code>, and <code>unknown</code>. Treat each class as
+a distinct failure stage rather than collapsing every non-<code>ok</code> result into
+backend unavailability.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Worker scrape attempts by result</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">result</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_worker_scrape_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="o">)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1"># Fraction of worker scrapes that did not complete successfully</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_worker_scrape_total</span><span class="p">{</span><span class="nl">result</span><span class="o">!=</span><span class="p">"</span><span class="s">ok</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="o">/</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="kr">clamp_min</span><span class="o">(</span><span class="k">sum</span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_worker_scrape_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">)</span>
+</code></pre></div>
+<p>These counters prove the collection path classified an attempt; they do not
+prove that a worker's reported values were fresh or that inference traffic
+reached that worker. Correlate them with worker-series freshness, endpoint
+health, and an independent backend receipt.</p>
 <h2 id="relay-cache-and-backpressure-metrics">Relay cache and backpressure metrics<a class="headerlink" href="#relay-cache-and-backpressure-metrics" title="Permanent link">&para;</a></h2>
 <p>The fullproxy relay cache is bounded per connection but not by one aggregate
 process-wide cap. Slow backends and many concurrent request bodies can therefore
@@ -3518,13 +3668,13 @@ raise total cached bytes even when no single connection reaches its watermark.</
 768 KiB. <code>loxilb_proxy_cache_bytes_max_conn</code> approaching the applicable value
 means one connection is near backpressure; rising aggregate bytes with a low
 maximum points to concurrency rather than a single oversized body.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Mean cached payload per queued connection</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nv">loxilb_proxy_cache_bytes</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="o">/</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="kr">clamp_min</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_conns_queued</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">)</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># New high-water activations</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_high_water_events_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Mean cached payload per queued connection</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nv">loxilb_proxy_cache_bytes</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="o">/</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="kr">clamp_min</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_conns_queued</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># New high-water activations</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_high_water_events_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
 </code></pre></div>
 <h2 id="configuration-recovery-metrics">Configuration recovery metrics<a class="headerlink" href="#configuration-recovery-metrics" title="Permanent link">&para;</a></h2>
 <table>
@@ -3600,6 +3750,10 @@ sockproxy peer path:</p>
 <td><code>loxilb_sockproxy_sync_inflight_rpc{peer}</code></td>
 <td>Currently in-flight synchronization RPCs</td>
 </tr>
+<tr>
+<td><code>loxilb_sockproxy_sync_peer_scope_version{peer}</code></td>
+<td>Quota-state wire scope version reported for the peer; equality is required before treating quota synchronization as compatible</td>
+</tr>
 </tbody>
 </table>
 <p>Page on new overflow, retry-exhausted drops, or apply errors during normal
@@ -3607,6 +3761,20 @@ load. A quiet metric does not prove that a peer is connected: correlate with
 peer state, network evidence, and a controlled state change. Current xSync
 ports do not authenticate or encrypt peers themselves; see
 <a href="../ha-limitations/">HA and Upgrade Limitations</a>.</p>
+<h2 id="sockmap-observability-boundary">Sockmap observability boundary<a class="headerlink" href="#sockmap-observability-boundary" title="Permanent link">&para;</a></h2>
+<p>The release-scope manifest contains no dedicated sockmap Prometheus family, so
+there is no valid sockmap-specific PromQL to document. Verify acceleration with
+the <code>sockmap_stats</code> BPF map, active-map state, the reset operation, byte
+equivalence, and an <code>off</code> control as described in
+<a href="../sockmap-acceleration/">Sockmap Acceleration</a>. Do not substitute the
+<code>loxilb_sockproxy_sync_*</code> peer-synchronization family: it describes xSync, not
+sockmap accelerator engagement.</p>
+<p>Response-only sockmap acceleration may be combined with <code>api_key_auth</code> on
+current Gateway main because requests still traverse userspace admission.
+Those accelerated responses are not recorded by the userspace response path,
+so a flat AI response counter is not proof of failure. Request and
+bidirectional acceleration remain incompatible with any <code>api_key_auth</code>
+declaration.</p>
 <h2 id="opa-and-optional-dpu-metrics">OPA and optional DPU metrics<a class="headerlink" href="#opa-and-optional-dpu-metrics" title="Permanent link">&para;</a></h2>
 <p>OPA watcher signals are
 <code>loxilb_opa_watcher_syncs_total{status}</code>,
@@ -3660,11 +3828,11 @@ is expected. See <a href="../dpu-offload/">DPU Offload Observability</a>.</p>
 traffic path is used. Send one safe warm-up request before declaring a series
 missing.</p>
 <h2 id="verify-end-to-end">Verify end to end<a class="headerlink" href="#verify-end-to-end" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/metrics"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'^loxilb_(system_cpu|host_cpu|healthy_endpoints|lb_rules)'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/metrics"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'^loxilb_(system_cpu|host_cpu|healthy_endpoints|lb_rules)'</span>
 </code></pre></div>
 <p>Then verify Prometheus:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nv">up</span><span class="p">{</span><span class="nl">job</span><span class="o">=</span><span class="p">"</span><span class="s">loxilb-inference-gateway</span><span class="p">"}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nv">up</span><span class="p">{</span><span class="nl">job</span><span class="o">=</span><span class="p">"</span><span class="s">loxilb-inference-gateway</span><span class="p">"}</span>
 </code></pre></div>
 <p>The result should be <code>1</code>. Open the provisioned dashboards and compare one
 panel with the raw series before relying on its units or aggregation.</p>
@@ -3759,8 +3927,8 @@ panel with the raw series before relying on its units or aggregation.</p>
 <p>Use low-cardinality, non-secret labels. Restrict Prometheus and Grafana access,
 change default credentials, validate TLS, and apply retention appropriate for
 tenant activity metadata. Remove temporary header files after management calls:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN
 </code></pre></div>
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
@@ -3772,6 +3940,8 @@ tenant activity metadata. Remove temporary header files after management calls:<
 <li><a href="../tracing/">Application and L4 Tracing</a></li>
 <li><a href="../dpu-offload/">DPU Offload Observability</a></li>
 <li><a href="../troubleshooting/">Troubleshooting</a></li>
+<li><a href="../../reference/metrics/">Metrics Reference</a></li>
+<li><a href="../../reference/verification-status/">Verification Status</a></li>
 </ul>
 
 
