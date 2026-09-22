@@ -73,11 +73,7 @@ checkout is not required.
 Generate independent JWT, database, and snapshot-key values and store them
 through your normal secret process:
 
-```bash
-openssl rand -base64 48
-openssl rand -base64 48
-openssl rand -base64 32
-```
+--8<-- "snippets/common/oam-secret-generation.md"
 
 Assign the outputs to `OAM_JWT_SECRET`, `DB_PASSWORD`, and
 `SNAPSHOT_ENC_KEY`, respectively. Create `OAM_DEFAULT_ADMIN_PASSWORD` with a
@@ -206,9 +202,7 @@ bootstrap administrator account, and change its password immediately.
 
 4. Register the Gateway using its verified endpoint:
 
-   ```text
-   https://<gateway-host>:8091/netlox/v1
-   ```
+--8<-- "snippets/common/oam-gateway-url.md"
 
 5. Test an allowed read, a reversible authorized change, a denied request from
    an insufficient OAM role, and a direct bypass attempt to the Gateway.

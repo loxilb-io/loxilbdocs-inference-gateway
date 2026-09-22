@@ -1,5 +1,7 @@
 # Model Load Balancing
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Model load balancing is **Stage 1** of AI Gateway routing: loxilb reads the requested model name from each request and dispatches it to the backend pool that serves that model. This page covers how model-name matching works, how to configure per-model pools, and how to verify and troubleshoot them.
 
 !!! info "Where this fits"
@@ -79,7 +81,7 @@ The `X-Model` header takes precedence over the JSON body, so a client can overri
 
 ## Configuration
 
-The example creates three rules on the **same** listener, VIP `10.10.10.254:2020`: one per
+The example creates three rules on the **same** listener, VIP `192.0.2.254:2020`: one per
 named model plus a wildcard catch-all. The VIP, port, protocol, host, and path fields must
 match across the rules; `model_name` is the part of the L7 key that separates their backend
 pools. A wildcard on another port cannot catch an unmatched request sent to port `2020`.
@@ -103,16 +105,16 @@ Each rule uses `mode: 4` and `sel: 0` (round-robin, the default), and includes t
 === "curl"
 
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP":      "10.10.10.254",
+          "externalIP":      "192.0.2.254",
           "port":             2020,
           "protocol":        "tcp",
           "sel":              0,
           "mode":             4,
-          "host":            "10.10.10.254",
+          "host":            "192.0.2.254",
           "path_prefix":     "/",
           "path_match_mode": "prefix",
           "model_name":      "llama-70b",
@@ -127,7 +129,7 @@ Each rule uses `mode: 4` and `sel: 0` (round-robin, the default), and includes t
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=192.0.2.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b --inatimeout=30
+    loxicmd create lb 192.0.2.254 --tcp=2020:8080 --endpoints=192.0.2.1:1 --mode=fullproxy --host=192.0.2.254 --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b --inatimeout=30
     ```
 
 ### Rule 2 — `mistral-7b` pool
@@ -135,16 +137,16 @@ Each rule uses `mode: 4` and `sel: 0` (round-robin, the default), and includes t
 === "curl"
 
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP":      "10.10.10.254",
+          "externalIP":      "192.0.2.254",
           "port":             2020,
           "protocol":        "tcp",
           "sel":              0,
           "mode":             4,
-          "host":            "10.10.10.254",
+          "host":            "192.0.2.254",
           "path_prefix":     "/",
           "path_match_mode": "prefix",
           "model_name":      "mistral-7b",
@@ -159,7 +161,7 @@ Each rule uses `mode: 4` and `sel: 0` (round-robin, the default), and includes t
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=198.51.100.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=mistral-7b --inatimeout=30
+    loxicmd create lb 192.0.2.254 --tcp=2020:8080 --endpoints=198.51.100.1:1 --mode=fullproxy --host=192.0.2.254 --path-prefix=/ --path-match-mode=prefix --model-name=mistral-7b --inatimeout=30
     ```
 
 ### Rule 3 — wildcard fallback
@@ -169,16 +171,16 @@ An empty `model_name` (`""`) makes this rule the catch-all for any model that do
 === "curl"
 
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP":      "10.10.10.254",
+          "externalIP":      "192.0.2.254",
           "port":             2020,
           "protocol":        "tcp",
           "sel":              0,
           "mode":             4,
-          "host":            "10.10.10.254",
+          "host":            "192.0.2.254",
           "path_prefix":     "/",
           "path_match_mode": "prefix",
           "model_name":      "",
@@ -193,7 +195,7 @@ An empty `model_name` (`""`) makes this rule the catch-all for any model that do
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=203.0.113.1:1 --mode=fullproxy --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --inatimeout=30
+    loxicmd create lb 192.0.2.254 --tcp=2020:8080 --endpoints=203.0.113.1:1 --mode=fullproxy --host=192.0.2.254 --path-prefix=/ --path-match-mode=prefix --inatimeout=30
     ```
 
 !!! tip "Per-pool selection algorithm"
@@ -208,30 +210,28 @@ An empty `model_name` (`""`) makes this rule the catch-all for any model that do
 
 List every rule and confirm each shows the expected `model_name`, `mode: 4`, and `sel`:
 
-```bash
-curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
-```
+--8<-- "snippets/common/load-balancer-readback-rest.md"
 
 Then exercise each pool end-to-end:
 
 ```bash
 # JSON body model field -> mistral-7b pool
-curl -s http://10.10.10.254:2020/v1/chat/completions \
+curl -s http://192.0.2.254:2020/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{"model":"mistral-7b","messages":[{"role":"user","content":"hi"}]}'
 
 # Negative routing test: the header selects llama-70b even though the body says mistral-7b.
 # A real backend may reject the mismatched body model after routing.
-curl -s http://10.10.10.254:2020/v1/chat/completions \
+curl -s http://192.0.2.254:2020/v1/chat/completions \
   -H "X-Model: llama-70b" \
   -H "Content-Type: application/json" \
   -d '{"model":"mistral-7b","messages":[{"role":"user","content":"hi"}]}'
 
 # No model -> wildcard pool
-curl -s http://10.10.10.254:2020/
+curl -s http://192.0.2.254:2020/
 
 # With the wildcard rule installed, an unknown model reaches the wildcard pool
-curl -s -o /dev/null -w "%{http_code}\n" http://10.10.10.254:2020/ \
+curl -s -o /dev/null -w "%{http_code}\n" http://192.0.2.254:2020/ \
   -H "X-Model: unknown-xyz"
 ```
 
@@ -252,13 +252,13 @@ that key; leaving it out matches only a model-less rule and can leave the intend
 
     ```bash
     curl --fail-with-body -sS -X DELETE \
-      'http://10.10.10.254:11111/netlox/v1/config/loadbalancer/hosturl/10.10.10.254/externalipaddress/10.10.10.254/port/2020/protocol/tcp?path_prefix=%2F&path_match_mode=prefix&model_name=llama-70b'
+      'http://192.0.2.254:11111/netlox/v1/config/loadbalancer/hosturl/192.0.2.254/externalipaddress/192.0.2.254/port/2020/protocol/tcp?path_prefix=%2F&path_match_mode=prefix&model_name=llama-70b'
     ```
 
 === "loxicmd"
 
     ```bash
-    loxicmd delete lb 10.10.10.254 --tcp=2020 --host=10.10.10.254 \
+    loxicmd delete lb 192.0.2.254 --tcp=2020 --host=192.0.2.254 \
       --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b
     ```
 

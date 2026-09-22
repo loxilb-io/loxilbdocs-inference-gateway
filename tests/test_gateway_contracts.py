@@ -19,7 +19,11 @@ SPEC.loader.exec_module(MODULE)
 def contract(*, commit: str = "a", description_hash: str = "same") -> dict:
     return {
         "contract_version": 1,
-        "source": {"commit": commit},
+        "source": {"commit": commit, "ebpf_submodule_commit": "ebpf-main"},
+        "schema_relevance": {
+            "baseline_commit": "baseline",
+            "specs": [],
+        },
         "specs": [
             {
                 "source_path": "api/swagger.yml",
@@ -43,6 +47,30 @@ def contract(*, commit: str = "a", description_hash: str = "same") -> dict:
                 "definitions": {},
             },
         ],
+        "support_catalog": {
+            "source_path": "engine-contracts/support-catalog.yaml",
+            "sha256": "catalog",
+            "schemaVersion": "engine-support.loxilb.io/v1alpha1",
+            "entries": [],
+        },
+        "metric_manifest": {
+            "source_path": "deploy/monitoring/manifest/metric-manifest.json",
+            "sha256": "metrics",
+            "families": [],
+        },
+        "release_snapshot": {
+            "tag": "v1",
+            "tag_object": "tag-object",
+            "commit": "release-commit",
+            "ebpf_submodule_commit": "ebpf-release",
+            "metric_manifest_available": False,
+            "spec_sha256": {"api/swagger.yml": "release"},
+        },
+        "claim_evidence": {"claims": []},
+        "scenario_evidence": {
+            "workflow": {"path": "workflow", "object_id": "workflow-object"},
+            "trees": [],
+        },
     }
 
 
@@ -84,6 +112,62 @@ class GatewayContractComparisonTests(unittest.TestCase):
         self.assertTrue(
             any("swagger-extras.yml" in error for error in comparison.errors)
         )
+
+    def test_support_catalog_change_is_contract_drift(self) -> None:
+        candidate = contract()
+        candidate["support_catalog"]["sha256"] = "new-catalog"
+        comparison = MODULE.compare_contracts(contract(), candidate)
+        self.assertTrue(comparison.changed)
+        self.assertTrue(comparison.catalog_changed)
+
+    def test_engine_scenario_change_is_contract_drift(self) -> None:
+        candidate = contract()
+        candidate["scenario_evidence"]["trees"] = [
+            {"path": "cicd/example", "object_id": "tree"}
+        ]
+        comparison = MODULE.compare_contracts(contract(), candidate)
+        self.assertTrue(comparison.changed)
+        self.assertTrue(comparison.scenario_evidence_changed)
+
+    def test_metric_manifest_change_is_contract_drift(self) -> None:
+        candidate = contract()
+        candidate["metric_manifest"]["sha256"] = "new-metrics"
+        comparison = MODULE.compare_contracts(contract(), candidate)
+        self.assertTrue(comparison.changed)
+        self.assertTrue(comparison.metric_manifest_changed)
+
+    def test_claim_evidence_change_is_contract_drift(self) -> None:
+        candidate = contract()
+        candidate["claim_evidence"]["claims"] = [{"claim": "new"}]
+        comparison = MODULE.compare_contracts(contract(), candidate)
+        self.assertTrue(comparison.changed)
+        self.assertTrue(comparison.claim_evidence_changed)
+
+    def test_release_snapshot_change_is_contract_drift(self) -> None:
+        candidate = contract()
+        candidate["release_snapshot"]["metric_manifest_available"] = True
+        comparison = MODULE.compare_contracts(contract(), candidate)
+        self.assertTrue(comparison.changed)
+        self.assertTrue(comparison.release_snapshot_changed)
+
+    def test_ebpf_submodule_pin_change_is_contract_drift(self) -> None:
+        candidate = contract()
+        candidate["source"]["ebpf_submodule_commit"] = "new-ebpf-main"
+        comparison = MODULE.compare_contracts(contract(), candidate)
+        self.assertTrue(comparison.changed)
+        self.assertTrue(comparison.source_ebpf_changed)
+
+    def test_schema_relevance_change_is_contract_drift(self) -> None:
+        candidate = contract()
+        candidate["schema_relevance"]["specs"] = [
+            {
+                "source_path": "api/swagger.yml",
+                "added_definitions": ["NewPublicModel"],
+            }
+        ]
+        comparison = MODULE.compare_contracts(contract(), candidate)
+        self.assertTrue(comparison.changed)
+        self.assertTrue(comparison.schema_relevance_changed)
 
 
 if __name__ == "__main__":

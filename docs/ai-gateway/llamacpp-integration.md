@@ -1,5 +1,7 @@
 # llama.cpp Integration
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Place a `llama-server` fleet behind fullproxy load balancing with content or session affinity. llama.cpp intentionally uses a shorter Gateway feature ladder because it exposes neither a supported KV-event plane nor prefill/decode disaggregation.
 
 ## Supported capabilities
@@ -48,11 +50,7 @@ The example addresses are reserved for documentation. The plain HTTP listener is
 
 Prepare an HTTPS management base URL and protected authorization header:
 
-```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-```
+--8<-- "snippets/common/control-api-header.md"
 
 ```bash
 curl --fail-with-body --silent --show-error \

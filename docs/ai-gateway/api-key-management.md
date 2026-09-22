@@ -1,5 +1,7 @@
 # API Key Management
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Use the AI Gateway key API to create, inspect, rotate, and revoke
 workload credentials. On a `mode: 4` rule with `api_key_auth: required`, the
 request path enforces key validity, model allow-lists, per-key request rate,
@@ -63,11 +65,7 @@ inference requests use `X-Api-Key` and never use the management bearer token.
 
 Prepare a management header file:
 
-```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-```
+--8<-- "snippets/common/control-api-header.md"
 
 ## Endpoints
 
@@ -86,23 +84,7 @@ printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.hea
 Only `tenant_id` is required, but a production key should be explicitly
 scoped:
 
-```bash
-curl --fail-with-body --silent --show-error \
-  --request POST "$CONTROL_API/config/ai/apikey" \
-  --header @control-plane.headers \
-  --header 'Content-Type: application/json' \
-  --data '{
-    "tenant_id": "team-a",
-    "name": "chat-service",
-    "allowed_models": ["example-chat-model"],
-    "rate_limit_rps": 5,
-    "burst_size": 10,
-    "tokens_per_min": 0,
-    "enabled": true
-  }' > ./new-key.json
-
-jq '{key_id, raw_key_present: (.raw_key | type == "string")}' ./new-key.json
-```
+--8<-- "snippets/common/create-api-key.md"
 
 Expected result: `201 Created`, with `key_id` and `raw_key`. Move the raw value
 directly into your secret manager, then securely remove the temporary file.

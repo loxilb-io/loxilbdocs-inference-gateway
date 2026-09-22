@@ -1,5 +1,7 @@
 # API Reference
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 The LoxiLB Inference Gateway management API is served under
 `/netlox/v1` on port `11111`. This page catalogs every current endpoint family
 and highlights contracts that require special handling.
@@ -25,8 +27,19 @@ and highlights contracts that require special handling.
 4. Runnable `cicd/` scenarios are validation evidence for selected flows; they
    are not a complete API contract.
 
+The generated [current-main API schema model ledger](api-schema-models.md)
+classifies every definition added since the public documentation baseline,
+including direct operation models, nested components, shared envelopes, and
+companion-spec errors. It also records the exact required and optional fields
+from the frozen Swagger union.
+
 Do not infer that a declared path is operational. Operations marked
 `x-not-implemented: true` have no wired handler and return `501`.
+
+The [Quickstart](../getting-started/quickstart.md) is the canonical runnable
+workflow for readiness, authenticated create, independent traffic validation,
+metrics, and exact cleanup. This reference describes contracts and links to
+that workflow rather than maintaining a second copy of the commands.
 
 ### Development contract deltas
 
@@ -103,11 +116,7 @@ the development implementation. See
 
 Prepare a reusable protected header:
 
-```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-```
+--8<-- "snippets/common/control-api-header.md"
 
 ## Complete endpoint-family catalog
 
@@ -150,6 +159,8 @@ the Swagger document.
 | OAuth | Provider, callback, and token `GET` paths under `/oauth/{provider}` | Public OAuth flow endpoints when OAuth is enabled |
 | CORS | `GET/POST /config/cors...`, `DELETE /config/cors/{cors_url}` | CORS origin lifecycle |
 | AI keys, JWT, and quotas | API-key paths; `GET/POST /config/ai/jwtauthprofile`; `DELETE /config/ai/jwtauthprofile/{name}`; tenant, user, and defaults rate-limit paths | Data-plane credentials and the quota ladder; independent from management authentication |
+| Engine and KV discovery | `GET /config/ai/model-profiles[/{profile_id}]`; `GET .../kvexactstatus` | Read-only published profile discovery and dedicated desired/enforced KV binding status; current main, REST-only |
+| Sockmap control | `POST .../sockmapreset` | Close this service's currently accelerated connections without changing `sockMapMode`; current main, REST-only |
 | OPA watcher | `GET/POST/DELETE /config/opa/watcher` | Runtime is intercepted by the raw handler; use the companion contract |
 
 The twelve not-implemented legacy metric paths are `flowcount`, `hostcount`,
@@ -269,6 +280,8 @@ Every AI routing feature is expressed through a load-balancer rule.
 | `GET/DELETE` | `/config/loadbalancer/externalipaddress/{ip}/port/{port}/protocol/{proto}` | Read or delete by composite key |
 | `PATCH` | Same VIP key | RFC 7386 merge patch for supported L4 rules; fullproxy/L7 and immutable-field changes are rejected |
 | `GET` | Same VIP key plus `/status` or `/stats` | Read lifecycle state or service counters |
+| `GET` | Same VIP key plus `/kvexactstatus` | Read strict/legacy KV binding identity, desired/enforced state, reason codes, and fence position; it is not configuration replay data |
+| `POST` | Same VIP key plus `/sockmapreset` | Close currently accelerated connections only; configuration stays unchanged |
 | `DELETE` | Name, host-keyed, or port-range variants | Repeat every path, host, and model component used at creation |
 
 `model_name`, `path_prefix`, and `path_match_mode` can be part of the exact
@@ -297,6 +310,11 @@ curl --fail-with-body --silent --show-error \
 
 See [Configuration Reference](../ai-gateway/configuration-reference.md) for
 the full field contract.
+
+Current `kvModelProfile` and `kvExactApiMode` are REST-only load-balancer fields. Discover the
+profile with `GET /config/ai/model-profiles`, create or replace the rule, then verify the separate
+`kvexactstatus` response. See
+[Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md).
 
 ## Management users and status codes
 
@@ -392,10 +410,7 @@ fields before applying configuration, especially across mixed versions.
 
 ## Cleanup
 
-```bash
-rm -f ./control-plane.headers
-unset CONTROL_PLANE_TOKEN
-```
+--8<-- "snippets/common/control-api-cleanup.md"
 
 ## Related pages
 
@@ -404,3 +419,5 @@ unset CONTROL_PLANE_TOKEN
 - [Configuration Reference](../ai-gateway/configuration-reference.md)
 - [API Key Management](../ai-gateway/api-key-management.md)
 - [Log API Operations](../operations/log-api.md)
+- [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md)
+- [Sockmap Acceleration](../operations/sockmap-acceleration.md)

@@ -1,5 +1,7 @@
 # TensorRT-LLM Integration
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Configure TensorRT-LLM for plain fullproxy routing, single-pool KV-exact routing, or sequential context/generation disaggregation. The event plane uses a destructive HTTP drain, which makes consumer ownership a central operational requirement.
 
 ## Prerequisites
@@ -67,11 +69,7 @@ The example uses documentation-only addresses and the rule shape accepted by the
 
 Prepare an HTTPS management base URL and protected authorization header:
 
-```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-```
+--8<-- "snippets/common/control-api-header.md"
 
 ```bash
 curl --fail-with-body --silent --show-error \

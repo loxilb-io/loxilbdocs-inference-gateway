@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Refresh frozen public contracts used by the documentation example validator."""
+"""Refresh frozen Gateway API, metric, engine, and scenario contracts."""
 
 from __future__ import annotations
 
@@ -15,12 +15,102 @@ import yaml
 
 
 DEFAULT_GATEWAY_REF = "HEAD"
+GATEWAY_PUBLIC_SCHEMA_BASELINE_REF = "47803fb660ed54cd1f180b616db628461ad85d1a"
+GATEWAY_RELEASE_TAG = "v0.9.8.9-rc.1"
+GATEWAY_RELEASE_TAG_OBJECT = "db28353e50f7031157187fdd2250d1098c97963a"
+GATEWAY_RELEASE_REF = "f08b18beda587217265c9ba6419159119914795c"
 CLI_MAIN_REF = "27d6717438abf4dcdb605d7036cf5173e40c5e59"
 CLI_RELEASE_REF = "5dd978c25c967b8192c5fe9cd448783e1e74be7c"
 CLI_RELEASE_TAG = "v0.9.8.9-rc.2"
+CLI_RELEASE_TAG_OBJECT = "2dd7dbe215982859c2ee5cfc836fe34ac4e54a37"
 
 GATEWAY_FILES = ("api/swagger.yml", "api/swagger-extras.yml")
+SUPPORT_CATALOG_FILE = "engine-contracts/support-catalog.yaml"
+METRIC_MANIFEST_FILE = "deploy/monitoring/manifest/metric-manifest.json"
+EBPF_SUBMODULE_PATH = "loxilb-ebpf"
+ENGINE_SCENARIO_PATHS = (
+    "cicd/kv-mixed-version",
+    "cicd/kv-profile-admission",
+    "cicd/kv-sglang-attest",
+    "cicd/sockmap-fullproxy",
+    "cicd/vllm-kvcache-routing-cpu",
+    "cicd/vllm-pd-admission-cpu",
+)
+ENGINE_CONTRACT_WORKFLOW = ".github/workflows/engine-contracts-ci.yml"
 COMPLETION_GOLDEN = "cmd/goldens/testdata/completion-bash.golden"
+
+METRIC_LABEL_ENUMS = {
+    "loxilb_ai_requests_total": {
+        "outcome": ["completed", "denied"],
+    },
+    "loxilb_ai_tokens_consumed_total": {
+        "kind": ["prompt", "completion"],
+    },
+    "loxilb_ai_jwks_refresh_total": {
+        "outcome": ["success", "failure"],
+    },
+    "loxilb_ai_pd_requests_total": {
+        "phase": ["complete", "prefill", "decode", "unknown"],
+        "status": ["success", "timeout", "error", "rejected"],
+    },
+    "loxilb_ai_pd_tier_selected_total": {
+        "tier": ["tier0", "tier1", "tier15", "tier2"],
+    },
+    "loxilb_ai_worker_scrape_total": {
+        "result": [
+            "ok", "unreachable", "http_error", "body_error",
+            "unparseable", "bad_request", "unknown",
+        ],
+    },
+}
+
+# Public claim evidence is intentionally compact. Object IDs prove which public
+# source was reviewed; the raw upstream evidence prose is not copied because it
+# can contain local host names, internal work-package labels, and one-off run
+# details that do not belong in this repository.
+CLAIM_EVIDENCE = (
+    {
+        "claim": "jwt-policy-and-token-accounting",
+        "scenario_path": "cicd/ai-jwtauth",
+        "validation_path": "cicd/ai-jwtauth/validation.sh",
+        "workflow_path": ".github/workflows/ai-gateway-sanity.yml",
+        "case_ids": ["G2", "M4", "U1", "U2", "UH1", "UH2", "UE", "UE3"],
+    },
+    {
+        "claim": "qos-ha-and-scope-metrics",
+        "scenario_path": "cicd/ai-qos-ha-sync",
+        "validation_path": "cicd/ai-qos-ha-sync/validation.sh",
+        "workflow_path": None,
+        "case_ids": [
+            "SYNC-1", "SYNC-2", "QOS-METRIC-1", "QOS-METRIC-2",
+            "QOS-HA-013", "QOS-HA-014",
+        ],
+    },
+    {
+        "claim": "pd-and-worker-scrape-metrics",
+        "scenario_path": "cicd/vllm-pd-disagg",
+        "validation_path": "cicd/vllm-pd-disagg/validation.sh",
+        "workflow_path": ".github/workflows/ai-gateway-sanity.yml",
+        "case_ids": [
+            "TH1", "TH2", "TH3", "TH4", "TH5a", "TM1b", "TM2d",
+            "TN1", "TN2b", "TN3b", "TN4b", "TN5a", "TN6b",
+        ],
+    },
+    {
+        "claim": "sockmap-observability",
+        "scenario_path": "cicd/sockmap-fullproxy",
+        "validation_path": "cicd/sockmap-fullproxy/validation_observability.sh",
+        "workflow_path": None,
+        "case_ids": ["O-1", "O-2", "O-3", "O-5", "O-6"],
+    },
+    {
+        "claim": "monitoring-stack",
+        "scenario_path": "cicd/monitoring",
+        "validation_path": "cicd/monitoring/validation.sh",
+        "workflow_path": ".github/workflows/monitoring-e2e.yml",
+        "case_ids": [],
+    },
+)
 
 # Only command leaves used by the public Markdown are retained. The completion
 # golden remains the authority for command paths and flags.
@@ -137,6 +227,38 @@ def resolve_ref(repo: Path, ref: str) -> str:
     ).strip()
 
 
+def resolve_object(repo: Path, ref: str, path: str) -> str:
+    return subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", f"{ref}:{path}"],
+        text=True,
+        stderr=subprocess.PIPE,
+    ).strip()
+
+
+def object_exists(repo: Path, ref: str, path: str) -> bool:
+    return subprocess.run(
+        ["git", "-C", str(repo), "cat-file", "-e", f"{ref}:{path}"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    ).returncode == 0
+
+
+def workflow_sources(repo: Path, ref: str) -> dict[str, str]:
+    paths = subprocess.check_output(
+        [
+            "git", "-C", str(repo), "ls-tree", "-r", "--name-only",
+            ref, ".github/workflows",
+        ],
+        text=True,
+        stderr=subprocess.PIPE,
+    ).splitlines()
+    return {
+        path: git_show(repo, ref, path).decode(errors="replace")
+        for path in paths
+        if path.endswith((".yml", ".yaml"))
+    }
+
+
 def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
@@ -208,6 +330,110 @@ def compact_swagger(raw: bytes, source_path: str) -> dict[str, Any]:
     }
 
 
+def compact_support_catalog(raw: bytes) -> dict[str, Any]:
+    catalog = yaml.safe_load(raw)
+    return {
+        "source_path": SUPPORT_CATALOG_FILE,
+        "sha256": sha256(raw),
+        "schemaVersion": catalog.get("schemaVersion", ""),
+        "entries": catalog.get("entries", []),
+    }
+
+
+def compact_metric_manifest(raw: bytes) -> dict[str, Any]:
+    manifest = json.loads(raw)
+    families = []
+    for family in manifest.get("families", []):
+        if family.get("release_scope") != "release":
+            continue
+        writers = family.get("writer_sources", [])
+        evidence = family.get("verification_evidence", "")
+        families.append(
+            {
+                "name": family.get("name", ""),
+                "type": family.get("type", ""),
+                "labels": family.get("labels", []),
+                "activation": family.get("activation", ""),
+                "release_scope": family.get("release_scope", ""),
+                "runtime_scope": family.get("runtime_scope", ""),
+                "implementation_status": family.get("implementation_status", ""),
+                "writer_present": bool(writers),
+                "evidence_present": bool(evidence),
+            }
+        )
+    return {
+        "source_path": METRIC_MANIFEST_FILE,
+        "sha256": sha256(raw),
+        "schema_version": manifest.get("schema_version"),
+        "provenance": manifest.get("provenance", {}),
+        "coverage": manifest.get("coverage", {}),
+        "label_enums": METRIC_LABEL_ENUMS,
+        "families": families,
+    }
+
+
+def build_claim_evidence(repo: Path, ref: str) -> dict[str, Any]:
+    claims = []
+    workflows = workflow_sources(repo, ref)
+    for entry in CLAIM_EVIDENCE:
+        validation_path = str(entry["validation_path"])
+        validation = git_show(repo, ref, validation_path).decode(errors="replace")
+        missing = [
+            case
+            for case in entry["case_ids"]
+            if re.search(
+                rf"(?<![A-Za-z0-9]){re.escape(str(case))}(?![A-Za-z0-9])",
+                validation,
+            ) is None
+        ]
+        if missing:
+            raise ValueError(
+                f"{validation_path} is missing declared case IDs: {', '.join(missing)}"
+            )
+
+        workflow_path = entry["workflow_path"]
+        matching_workflows = sorted(
+            path
+            for path, source in workflows.items()
+            if str(entry["scenario_path"]) in source
+        )
+        membership = "wired" if matching_workflows else "not-wired"
+        workflow_object_id = None
+        if workflow_path:
+            if workflow_path not in matching_workflows:
+                raise ValueError(
+                    f"{workflow_path} does not invoke {entry['scenario_path']}"
+                )
+            workflow_object_id = resolve_object(repo, ref, str(workflow_path))
+        elif matching_workflows:
+            raise ValueError(
+                f"{entry['scenario_path']} is unexpectedly wired by: "
+                + ", ".join(matching_workflows)
+            )
+
+        claims.append(
+            {
+                "claim": entry["claim"],
+                "scenario_path": entry["scenario_path"],
+                "scenario_object_id": resolve_object(
+                    repo, ref, str(entry["scenario_path"])
+                ),
+                "validation_path": validation_path,
+                "validation_object_id": resolve_object(repo, ref, validation_path),
+                "workflow_path": workflow_path,
+                "workflow_object_id": workflow_object_id,
+                "workflow_membership": membership,
+                "matching_workflows": matching_workflows,
+                "matching_workflow_objects": {
+                    path: resolve_object(repo, ref, path)
+                    for path in matching_workflows
+                },
+                "case_ids": entry["case_ids"],
+            }
+        )
+    return {"claims": claims}
+
+
 def function_body(completion: str, function_name: str) -> str | None:
     match = re.search(
         rf"(?ms)^{re.escape(function_name)}\(\)\n\{{\n(?P<body>.*?)^\}}\n",
@@ -257,6 +483,7 @@ def build_cli_contract(cli_repo: Path) -> dict[str, Any]:
             "repository": "https://github.com/loxilb-io/loxicmd-inference-gateway",
             "main_commit": CLI_MAIN_REF,
             "release_tag": CLI_RELEASE_TAG,
+            "release_tag_object": CLI_RELEASE_TAG_OBJECT,
             "release_commit": CLI_RELEASE_REF,
             "golden_path": COMPLETION_GOLDEN,
             "main_golden_sha256": sha256(main_raw),
@@ -275,13 +502,86 @@ def build_gateway_contract(
     for source_path in GATEWAY_FILES:
         raw = git_show(gateway_repo, resolved_ref, source_path)
         specs.append(compact_swagger(raw, source_path))
+    schema_baseline_ref = resolve_ref(
+        gateway_repo, GATEWAY_PUBLIC_SCHEMA_BASELINE_REF
+    )
+    schema_baseline_specs = {
+        source_path: compact_swagger(
+            git_show(gateway_repo, schema_baseline_ref, source_path), source_path
+        )
+        for source_path in GATEWAY_FILES
+    }
+    schema_delta = []
+    for spec in specs:
+        source_path = spec["source_path"]
+        baseline_definitions = schema_baseline_specs[source_path]["definitions"]
+        candidate_definitions = spec["definitions"]
+        schema_delta.append(
+            {
+                "source_path": source_path,
+                "baseline_definition_count": len(baseline_definitions),
+                "candidate_definition_count": len(candidate_definitions),
+                "added_definitions": sorted(
+                    candidate_definitions.keys() - baseline_definitions.keys()
+                ),
+                "removed_definitions": sorted(
+                    baseline_definitions.keys() - candidate_definitions.keys()
+                ),
+            }
+        )
+    catalog_raw = git_show(gateway_repo, resolved_ref, SUPPORT_CATALOG_FILE)
+    metric_manifest_raw = git_show(gateway_repo, resolved_ref, METRIC_MANIFEST_FILE)
+    release_commit = resolve_ref(gateway_repo, GATEWAY_RELEASE_REF)
     return {
         "contract_version": 1,
         "source": {
             "repository": "https://github.com/loxilb-io/loxilb-inference-gateway",
             "commit": resolved_ref,
+            "ebpf_submodule_commit": resolve_object(
+                gateway_repo, resolved_ref, EBPF_SUBMODULE_PATH
+            ),
+            "release_tag": GATEWAY_RELEASE_TAG,
+            "release_tag_object": GATEWAY_RELEASE_TAG_OBJECT,
+            "release_commit": release_commit,
+        },
+        "schema_relevance": {
+            "baseline_commit": schema_baseline_ref,
+            "specs": schema_delta,
+        },
+        "release_snapshot": {
+            "tag": GATEWAY_RELEASE_TAG,
+            "tag_object": GATEWAY_RELEASE_TAG_OBJECT,
+            "commit": release_commit,
+            "ebpf_submodule_commit": resolve_object(
+                gateway_repo, release_commit, EBPF_SUBMODULE_PATH
+            ),
+            "spec_sha256": {
+                source_path: sha256(git_show(gateway_repo, release_commit, source_path))
+                for source_path in GATEWAY_FILES
+            },
+            "metric_manifest_available": object_exists(
+                gateway_repo, release_commit, METRIC_MANIFEST_FILE
+            ),
         },
         "specs": specs,
+        "support_catalog": compact_support_catalog(catalog_raw),
+        "metric_manifest": compact_metric_manifest(metric_manifest_raw),
+        "claim_evidence": build_claim_evidence(gateway_repo, resolved_ref),
+        "scenario_evidence": {
+            "workflow": {
+                "path": ENGINE_CONTRACT_WORKFLOW,
+                "object_id": resolve_object(
+                    gateway_repo, resolved_ref, ENGINE_CONTRACT_WORKFLOW
+                ),
+            },
+            "trees": [
+                {
+                    "path": path,
+                    "object_id": resolve_object(gateway_repo, resolved_ref, path),
+                }
+                for path in ENGINE_SCENARIO_PATHS
+            ],
+        },
     }
 
 

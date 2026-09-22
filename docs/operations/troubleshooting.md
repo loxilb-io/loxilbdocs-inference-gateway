@@ -1,5 +1,7 @@
 # Troubleshooting
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 A symptom → likely cause → fix guide for the real failure modes of the LoxiLB Inference
 Gateway: AI routing that never engages, model 503s, silently-broken KV-cache routing,
 prefill/decode handoff stalls, streaming cut-offs, and metrics gaps.
@@ -21,7 +23,9 @@ prefill/decode handoff stalls, streaming cut-offs, and metrics gaps.
 | AI behaviour absent entirely — body never inspected, `X-Model`/`model` ignored | [AI routing not happening at all](#ai-routing-not-happening-at-all) |
 | `HTTP 503 model_unavailable` | [Model routing returns 503](#model-routing-returns-503) |
 | KV-cache routing "on" but hit counter never advances | [KV-cache routing silently not firing](#kv-cache-routing-silently-not-firing) |
+| KV-exact rule exists but profile/attestation readiness is unknown or rejected | [Model-profile and KV-exact readiness](../ai-gateway/model-profiles-kv-readiness.md#verify-the-binding-and-enforcement) |
 | Prefill/decode handoff empty, `504 pd_prefill_timeout`, wedged mesh | [P/D handoff fails](#pd-handoff-fails) |
+| Sockmap is rejected, bypassed, or configured but not accelerating | [Sockmap Acceleration](sockmap-acceleration.md#verify-engagement) |
 | API-key request unexpectedly succeeds or fails with 401/403/429 | [API-key and quota enforcement](#api-key-and-quota-enforcement) |
 | SSE stream cut off early | [SSE stream cut off](#sse-stream-cut-off) |
 | `/metrics` returns `503`, is empty, or lacks a series | [Metrics endpoint disabled or incomplete](#metrics-endpoint-disabled-or-incomplete) |
@@ -126,6 +130,7 @@ no error to grep for; you must assert engagement from metrics.
 | Hits flat, block sizes and algo correct | **Hash-seed parity broken** — `PYTHONHASHSEED` unset on the engine, or `LLB_KV_NONE_HASH_SEED` unset on loxilb. Both must pin the seed. | Set `PYTHONHASHSEED=0` in every applicable engine container **and** `LLB_KV_NONE_HASH_SEED=0` in the loxilb container. All three (block size, hash algo, seed) must agree or you measure the topology fallback instead of KV-exact. |
 | Per-endpoint block gauges stay zero; `kv_subscriber_connected` does not climb | **Wrong `kvZmqPort`** — it does not match the engine's ZMQ publisher port. | Align `kvZmqPort` to the engine's `--kv-events-config` endpoint port (default `5557`; SGLang alt `5561`). |
 | KV-exact MISS on the tokenize step | **Missing tokenizer directory** for the model. | Populate `/etc/loxilb/tokenizers/<model-id>` (replace `/` with `__` in the model id) and restart loxilb so it loads at startup. |
+| Strict rule exists but `enforcedState` is pending, degraded, faulted, or migration-required | The profile/engine binding is not fully acknowledged, attestation is incomplete/stale, or the rule is fenced | Query `kvexactstatus`; compare `modelProfileId`/generation, `apiMode`, `bindingDigest`, `reasonCodes`, `enforcement.enforced`, and `enforcement.goFenced`. Do not infer readiness from rule read-back or inventory. |
 
 !!! danger "`kvEngineType` is immutable after create"
     `kvEngineType` (`vllm`, `sglang`, `trtllm`, or `llamacpp`) is fixed at rule creation — one
@@ -133,7 +138,14 @@ no error to grep for; you must assert engagement from metrics.
     rejects incoherent shapes where possible; a mismatched event/hash contract can otherwise fall
     through silently to the topology fallback.
 
-### Verify it fired (the essential recipe)
+### Verify profile binding, then verify engagement
+
+For a rule with `kvModelProfile`, query the composite-key `kvexactstatus` resource first. Require
+the expected profile/generation and API surface, then require `READY` for the normal trust
+contract. `READY_FUNCTIONAL_ONLY` is a distinct limited-trust state; unknown states are not ready.
+See [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md).
+
+After binding status is acceptable, verify that traffic engages the cache path:
 
 Do not trust KV-cache results until all four checks pass. Run against `GET /netlox/v1/metrics`:
 
@@ -458,3 +470,5 @@ Do not treat single-node validation or green CI as failover proof. See
 - [DPU Offload Observability](dpu-offload.md) — optional hardware diagnostics
 - [HA and Upgrade Limitations](ha-limitations.md) — promotion and rolling-upgrade boundaries
 - [Monitoring & Metrics](monitoring.md) — enabling export and the metric catalog
+- [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md) — strict binding and typed status diagnosis
+- [Sockmap Acceleration](sockmap-acceleration.md) — eligibility refusals, HTTP/2 fallback, reset, and kernel integrity boundary

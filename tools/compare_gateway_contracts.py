@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Report drift between two compact Gateway Swagger contract snapshots."""
+"""Report drift between two compact Gateway documentation contracts."""
 
 from __future__ import annotations
 
@@ -45,10 +45,31 @@ class ContractComparison:
     candidate_commit: str
     errors: list[str] = field(default_factory=list)
     specs: list[SpecDrift] = field(default_factory=list)
+    baseline_catalog_sha256: str = ""
+    candidate_catalog_sha256: str = ""
+    catalog_changed: bool = False
+    baseline_metric_sha256: str = ""
+    candidate_metric_sha256: str = ""
+    metric_manifest_changed: bool = False
+    claim_evidence_changed: bool = False
+    release_snapshot_changed: bool = False
+    source_ebpf_changed: bool = False
+    scenario_evidence_changed: bool = False
+    schema_relevance_changed: bool = False
 
     @property
     def changed(self) -> bool:
-        return bool(self.errors) or any(spec.changed for spec in self.specs)
+        return (
+            bool(self.errors)
+            or self.catalog_changed
+            or self.metric_manifest_changed
+            or self.claim_evidence_changed
+            or self.release_snapshot_changed
+            or self.source_ebpf_changed
+            or self.scenario_evidence_changed
+            or self.schema_relevance_changed
+            or any(spec.changed for spec in self.specs)
+        )
 
 
 def load_contract(path: Path) -> dict[str, Any]:
@@ -100,6 +121,40 @@ def compare_contracts(
             *(f"baseline: {error}" for error in baseline_errors),
             *(f"candidate: {error}" for error in candidate_errors),
         ],
+        baseline_catalog_sha256=str(
+            baseline.get("support_catalog", {}).get("sha256", "")
+        ),
+        candidate_catalog_sha256=str(
+            candidate.get("support_catalog", {}).get("sha256", "")
+        ),
+        catalog_changed=(
+            baseline.get("support_catalog") != candidate.get("support_catalog")
+        ),
+        baseline_metric_sha256=str(
+            baseline.get("metric_manifest", {}).get("sha256", "")
+        ),
+        candidate_metric_sha256=str(
+            candidate.get("metric_manifest", {}).get("sha256", "")
+        ),
+        metric_manifest_changed=(
+            baseline.get("metric_manifest") != candidate.get("metric_manifest")
+        ),
+        claim_evidence_changed=(
+            baseline.get("claim_evidence") != candidate.get("claim_evidence")
+        ),
+        release_snapshot_changed=(
+            baseline.get("release_snapshot") != candidate.get("release_snapshot")
+        ),
+        source_ebpf_changed=(
+            baseline.get("source", {}).get("ebpf_submodule_commit")
+            != candidate.get("source", {}).get("ebpf_submodule_commit")
+        ),
+        scenario_evidence_changed=(
+            baseline.get("scenario_evidence") != candidate.get("scenario_evidence")
+        ),
+        schema_relevance_changed=(
+            baseline.get("schema_relevance") != candidate.get("schema_relevance")
+        ),
     )
     for source_path in sorted(EXPECTED_SOURCES & baseline_specs.keys() & candidate_specs.keys()):
         left = baseline_specs[source_path]
@@ -134,7 +189,7 @@ def abbreviated(values: list[str], limit: int = 20) -> str:
 
 def markdown_report(comparison: ContractComparison) -> str:
     lines = [
-        "## Gateway Swagger contract drift",
+        "## Gateway documentation contract drift",
         "",
         f"- Tracked contract commit: `{comparison.baseline_commit}`",
         f"- Candidate Gateway commit: `{comparison.candidate_commit}`",
@@ -142,6 +197,32 @@ def markdown_report(comparison: ContractComparison) -> str:
     if comparison.errors:
         lines.extend(["", "### Contract errors", ""])
         lines.extend(f"- {error}" for error in comparison.errors)
+    lines.extend(
+        [
+            "",
+            "### `engine-contracts/support-catalog.yaml`: "
+            + ("CHANGED" if comparison.catalog_changed else "unchanged"),
+            "",
+            f"- Raw SHA-256: `{comparison.baseline_catalog_sha256}` -> "
+            f"`{comparison.candidate_catalog_sha256}`",
+            "- Frozen scenario evidence: "
+            + ("CHANGED" if comparison.scenario_evidence_changed else "unchanged"),
+            "- Public schema-relevance delta: "
+            + ("CHANGED" if comparison.schema_relevance_changed else "unchanged"),
+            "",
+            "### `deploy/monitoring/manifest/metric-manifest.json`: "
+            + ("CHANGED" if comparison.metric_manifest_changed else "unchanged"),
+            "",
+            f"- Raw SHA-256: `{comparison.baseline_metric_sha256}` -> "
+            f"`{comparison.candidate_metric_sha256}`",
+            "- Frozen public claim evidence: "
+            + ("CHANGED" if comparison.claim_evidence_changed else "unchanged"),
+            "- Frozen comparison release: "
+            + ("CHANGED" if comparison.release_snapshot_changed else "unchanged"),
+            "- Gateway eBPF submodule pin: "
+            + ("CHANGED" if comparison.source_ebpf_changed else "unchanged"),
+        ]
+    )
     for spec in comparison.specs:
         state = "CHANGED" if spec.changed else "unchanged"
         lines.extend(

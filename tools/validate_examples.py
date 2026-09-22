@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import shlex
@@ -22,6 +23,33 @@ from jsonschema import Draft4Validator, FormatChecker
 
 MAIN_ONLY_MARKER = "CLI availability: main-only"
 EXPECTED_SCHEMA_FAILURE_MARKER = "docs-example: expect-schema-error"
+EXAMPLE_STATUSES = {"verified", "blocked", "illustrative-only"}
+EXAMPLE_INVENTORY = Path("tests/contracts/docs_examples/example-inventory.json")
+MUTATION_POLICY_PATH = "/reference/example-quality-contract/"
+CANONICAL_MUTATION_WORKFLOW = "/getting-started/quickstart/"
+MUTATING_HTTP_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
+MUTATING_CLI_VERBS = {"create", "delete", "set", "apply"}
+MUTATING_CLI_COMMANDS = {
+    "appliance backup create",
+    "appliance backup key-create",
+    "appliance diagnostics create",
+    "appliance factory-reset execute",
+    "appliance restore execute",
+    "appliance rollback execute",
+    "appliance update execute",
+}
+RFC1918_ADDRESS = re.compile(
+    r"(?<![0-9.])(?:"
+    r"10(?:\.[0-9]{1,3}){3}|"
+    r"172\.(?:1[6-9]|2[0-9]|3[01])(?:\.[0-9]{1,3}){2}|"
+    r"192\.168(?:\.[0-9]{1,3}){2}"
+    r")(?![0-9.])"
+)
+RFC1918_REFERENCE_NETWORKS = {
+    "10.0.0.0/8",
+    "172.16.0.0/12",
+    "192.168.0.0/16",
+}
 JWT_AUTH_MODES = {"jwt", "apikey-or-jwt"}
 JWT_ALGORITHMS = {
     "RS256", "RS384", "RS512",
@@ -51,6 +79,15 @@ REFERENCED_BODY_FIXTURES = {
         "role": "admin",
     },
 }
+PROMETHEUS_TARGET_LABELS = {"instance", "job"}
+PROMQL_METRIC = re.compile(
+    r"\b(?P<name>(?:loxilb|doca)_[A-Za-z0-9_:]+)"
+    r"(?:\{(?P<selectors>[^{}]*)\})?"
+)
+PROMQL_SELECTOR = re.compile(
+    r'(?P<label>[A-Za-z_][A-Za-z0-9_]*)\s*'
+    r'(?P<operator>=~|!~|!=|=)\s*"(?P<value>(?:\\.|[^"\\])*)"'
+)
 
 
 @dataclass(frozen=True)
@@ -104,6 +141,38 @@ def markdown_blocks(path: Path) -> Iterable[Block]:
             index += 1
         yield Block(path, start_line, language, textwrap.dedent("\n".join(body)))
         index += 1
+
+
+def public_markdown_paths(root: Path) -> list[Path]:
+    paths = list((root / "docs").rglob("*.md"))
+    snippets = root / "snippets"
+    if snippets.exists():
+        paths.extend(snippets.rglob("*.md"))
+    return sorted(paths)
+
+
+def collect_public_blocks(root: Path) -> list[tuple[str, Block, str]]:
+    """Return stable inventory IDs, blocks, and content digests."""
+    collected: list[tuple[str, Block, str]] = []
+    occurrences: dict[tuple[str, str, str], int] = {}
+    for path in public_markdown_paths(root):
+        relative = path.relative_to(root)
+        for block in markdown_blocks(path):
+            digest = hashlib.sha256(block.text.encode()).hexdigest()
+            key = (relative.as_posix(), block.language, digest)
+            ordinal = occurrences.get(key, 0) + 1
+            occurrences[key] = ordinal
+            identity = hashlib.sha256(
+                f"{key[0]}\0{key[1]}\0{key[2]}\0{ordinal}".encode()
+            ).hexdigest()[:20]
+            collected.append(
+                (
+                    identity,
+                    Block(relative, block.line, block.language, block.text),
+                    digest,
+                )
+            )
+    return collected
 
 
 def extract_shell_commands(text: str, executable: str) -> list[str]:
@@ -169,7 +238,63 @@ class ExampleValidator:
         contract_dir = contract_dir or root / "tests/contracts/docs_examples"
         self.cli_contract = json.loads((contract_dir / "cli.json").read_text())
         self.gateway_contract = json.loads((contract_dir / "gateway-api.json").read_text())
+        self.metric_manifest = {
+            family["name"]: family
+            for family in self.gateway_contract.get("metric_manifest", {}).get(
+                "families", []
+            )
+            if family.get("release_scope") == "release"
+        }
+        self.metric_label_enums = self.gateway_contract.get(
+            "metric_manifest", {}
+        ).get("label_enums", {})
         self.require_external_tools = require_external_tools
+
+    def _metric_family(self, name: str) -> tuple[str, dict[str, Any] | None]:
+        family = self.metric_manifest.get(name)
+        if family is not None:
+            return name, family
+        for suffix in ("_bucket", "_sum", "_count", "_created"):
+            if not name.endswith(suffix):
+                continue
+            base = name[: -len(suffix)]
+            candidate = self.metric_manifest.get(base)
+            if candidate and candidate.get("type") == "histogram":
+                return base, candidate
+        return name, None
+
+    def validate_promql(self, expression: str) -> list[str]:
+        """Validate documented metric names, selector labels, and closed enums."""
+        errors: list[str] = []
+        for match in PROMQL_METRIC.finditer(expression):
+            rendered_name = match.group("name")
+            family_name, family = self._metric_family(rendered_name)
+            if family is None:
+                errors.append(
+                    f"metric is absent from the frozen release-scope manifest: {rendered_name}"
+                )
+                continue
+            selectors = match.group("selectors") or ""
+            allowed_labels = set(family.get("labels", [])) | PROMETHEUS_TARGET_LABELS
+            if rendered_name.endswith("_bucket"):
+                allowed_labels.add("le")
+            for selector in PROMQL_SELECTOR.finditer(selectors):
+                label = selector.group("label")
+                operator = selector.group("operator")
+                value = selector.group("value")
+                if label not in allowed_labels:
+                    errors.append(
+                        f"label {label!r} is absent from metric {family_name}; "
+                        f"expected one of {sorted(allowed_labels)}"
+                    )
+                    continue
+                allowed_values = self.metric_label_enums.get(family_name, {}).get(label)
+                if allowed_values and operator in {"=", "!="} and value not in allowed_values:
+                    errors.append(
+                        f"invalid {family_name} label {label}={value!r}; "
+                        f"expected one of {sorted(allowed_values)}"
+                    )
+        return errors
 
     def validate_cli_command(self, command: str, context: str = "") -> list[str]:
         errors: list[str] = []
@@ -334,6 +459,38 @@ class ExampleValidator:
             elif policy not in JWT_AUTH_MODES and isinstance(profile, str) and profile:
                 errors.append("jwt_auth_profile is valid only with api_key_auth 'jwt' or 'apikey-or-jwt'")
 
+            exact_mode = args.get("kvExactMode", 0)
+            pd_enabled = args.get("pd_disagg_mode") is True
+            if exact_mode not in {0, 1, 3}:
+                errors.append("kvExactMode must be one of 0, 1, or 3")
+            elif exact_mode == 1 and not pd_enabled:
+                errors.append("kvExactMode 1 requires pd_disagg_mode true")
+            elif exact_mode == 3 and pd_enabled:
+                errors.append("kvExactMode 3 is incompatible with pd_disagg_mode true")
+            if exact_mode in {1, 3} and args.get("mode") != 4:
+                errors.append("KV-exact routing requires fullproxy mode 4")
+            if "kvExactApiMode" in args and exact_mode not in {1, 3}:
+                errors.append("kvExactApiMode is meaningful only with KV-exact routing")
+            if "kvModelProfile" in args and exact_mode not in {1, 3}:
+                errors.append("kvModelProfile is meaningful only with KV-exact routing")
+            if args.get("kvEngineType") == "llamacpp" and (
+                exact_mode in {1, 3} or pd_enabled
+            ):
+                errors.append("llamacpp does not support KV-exact or P/D routing")
+
+            sockmap_mode = args.get("sockMapMode", "off")
+            if sockmap_mode != "off":
+                if args.get("mode") != 4 or args.get("protocol") != "tcp":
+                    errors.append("sockmap acceleration requires TCP fullproxy mode 4")
+                if args.get("sse_mode") is True:
+                    errors.append("sockmap acceleration is incompatible with sse_mode")
+                if pd_enabled:
+                    errors.append("sockmap acceleration is incompatible with pd_disagg_mode")
+                if "api_key_auth" in args and sockmap_mode in {"both", "request"}:
+                    errors.append(
+                        "api_key_auth is incompatible with sockmap request acceleration"
+                    )
+
         elif route == "/config/ai/jwtauthprofile":
             name = body.get("name")
             if isinstance(name, str) and len(name.encode("utf-8")) > 63:
@@ -474,6 +631,57 @@ class ExampleValidator:
             path = "/"
         return path.split("?", 1)[0]
 
+    def mutation_operations(self, block: Block) -> list[str]:
+        """Return management mutations represented by one fenced example."""
+        operations: list[str] = []
+        for command in extract_shell_commands(block.text, "curl"):
+            try:
+                method, url, _ = self._curl_details(command)
+            except ValueError:
+                continue
+            route = self._management_route(url)
+            if route is not None and method in MUTATING_HTTP_METHODS:
+                operations.append(f"{method} {route}")
+        for command in extract_shell_commands(block.text, "loxicmd"):
+            try:
+                tokens = shell_tokens(command)
+            except ValueError:
+                continue
+            args = tokens[1:]
+            command_name = next(
+                (
+                    name
+                    for name in sorted(
+                        self.cli_contract["commands"],
+                        key=lambda value: len(value.split()),
+                        reverse=True,
+                    )
+                    if args[: len(name.split())] == name.split()
+                ),
+                None,
+            )
+            if command_name and (
+                command_name.split()[0] in MUTATING_CLI_VERBS
+                or command_name in MUTATING_CLI_COMMANDS
+            ):
+                operations.append(f"loxicmd {command_name}")
+        return operations
+
+    @staticmethod
+    def private_example_addresses(text: str) -> list[str]:
+        """Reject RFC1918 host examples while allowing the three named CIDRs."""
+        found: list[str] = []
+        for match in RFC1918_ADDRESS.finditer(text):
+            tail = text[match.start() :]
+            if any(
+                tail.startswith(network)
+                and (len(tail) == len(network) or not tail[len(network)].isdigit())
+                for network in RFC1918_REFERENCE_NETWORKS
+            ):
+                continue
+            found.append(match.group(0))
+        return sorted(set(found))
+
     def _run_tool(self, report: ValidationReport, location: str, args: list[str], text: str) -> None:
         if shutil.which(args[0]) is None:
             if self.require_external_tools:
@@ -493,15 +701,156 @@ class ExampleValidator:
         command = ["yq", "eval", ".", "-"] if "mikefarah" in (version.stdout + version.stderr).lower() else ["yq", "."]
         self._run_tool(report, block.location, command, text)
 
+    def validate_inventory(
+        self,
+        collected: list[tuple[str, Block, str]],
+        report: ValidationReport,
+        inventory_path: Path | None = None,
+    ) -> None:
+        inventory_path = inventory_path or self.root / EXAMPLE_INVENTORY
+        if not inventory_path.exists():
+            report.error(inventory_path.as_posix(), "public example inventory is missing")
+            return
+        try:
+            document = json.loads(inventory_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError) as exc:
+            report.error(inventory_path.as_posix(), f"cannot read example inventory: {exc}")
+            return
+        if document.get("schema_version") != 2:
+            report.error(inventory_path.as_posix(), "inventory schema_version must be 2")
+        if document.get("mutation_policy") != MUTATION_POLICY_PATH:
+            report.error(inventory_path.as_posix(), "inventory mutation policy is missing or stale")
+        entries = document.get("entries")
+        if not isinstance(entries, list):
+            report.error(inventory_path.as_posix(), "inventory entries must be a list")
+            return
+        indexed: dict[str, dict[str, Any]] = {}
+        for entry in entries:
+            if not isinstance(entry, dict) or not isinstance(entry.get("id"), str):
+                report.error(inventory_path.as_posix(), "every inventory entry needs a string id")
+                continue
+            if entry["id"] in indexed:
+                report.error(inventory_path.as_posix(), f"duplicate inventory id: {entry['id']}")
+                continue
+            indexed[entry["id"]] = entry
+
+        actual_ids = {identity for identity, _, _ in collected}
+        by_digest: dict[str, list[Block]] = {}
+        for _, block, digest in collected:
+            by_digest.setdefault(digest, []).append(block)
+        for digest, duplicate_blocks in sorted(by_digest.items()):
+            if len(duplicate_blocks) < 2:
+                continue
+            locations = ", ".join(block.location for block in duplicate_blocks)
+            report.error(
+                inventory_path.as_posix(),
+                f"duplicate fenced example {digest[:12]} must use a canonical snippet: {locations}",
+            )
+        stale_ids = sorted(set(indexed) - actual_ids)
+        missing_ids = sorted(actual_ids - set(indexed))
+        for identity in stale_ids:
+            report.error(inventory_path.as_posix(), f"stale example inventory entry: {identity}")
+        for identity in missing_ids:
+            block = next(item[1] for item in collected if item[0] == identity)
+            report.error(block.location, f"example is not classified in inventory: {identity}")
+
+        for identity, block, digest in collected:
+            entry = indexed.get(identity)
+            if entry is None:
+                continue
+            expected = {
+                "path": block.path.as_posix(),
+                "line": block.line,
+                "language": block.language or "plain",
+                "sha256": digest,
+            }
+            for field, value in expected.items():
+                if entry.get(field) != value:
+                    report.error(
+                        block.location,
+                        f"inventory {field} is stale for {identity}: "
+                        f"expected {value!r}, got {entry.get(field)!r}",
+                    )
+            status = entry.get("status")
+            if status not in EXAMPLE_STATUSES:
+                report.error(
+                    block.location,
+                    f"inventory status must be one of {sorted(EXAMPLE_STATUSES)}",
+                )
+                continue
+            report.count(f"examples_{status.replace('-', '_')}")
+            if not isinstance(entry.get("evidence"), str) or not entry["evidence"].strip():
+                report.error(block.location, "inventory evidence classification is required")
+            quality = entry.get("quality_contract")
+            quality_fields = {
+                "prerequisites", "exact_command", "expected_result",
+                "validation", "cleanup", "diagnosis",
+            }
+            if not isinstance(quality, dict) or set(quality) != quality_fields:
+                report.error(block.location, "inventory quality contract is incomplete")
+            elif status == "verified" and not all(quality.values()):
+                missing = sorted(name for name, present in quality.items() if not present)
+                report.error(
+                    block.location,
+                    f"verified example lacks quality fields: {', '.join(missing)}",
+                )
+
+            operations = self.mutation_operations(block)
+            mutation = entry.get("mutation_contract")
+            if operations:
+                mutation_fields = {
+                    "detected", "mode", "operations", "workflow",
+                    "independent_oracle", "negative_no_mutation",
+                    "active_path", "cleanup", "cleanup_verification",
+                }
+                if not isinstance(mutation, dict) or set(mutation) != mutation_fields:
+                    report.error(block.location, "inventory mutation contract is incomplete")
+                    continue
+                if mutation.get("detected") is not True:
+                    report.error(block.location, "inventory mutation detection is stale")
+                if mutation.get("operations") != operations:
+                    report.error(block.location, "inventory mutation operation list is stale")
+                report.count("mutation_examples")
+                required = (
+                    "independent_oracle", "negative_no_mutation", "active_path",
+                    "cleanup", "cleanup_verification",
+                )
+                missing = [field for field in required if mutation.get(field) is not True]
+                if missing:
+                    report.error(
+                        block.location,
+                        "mutating example lacks contract fields: " + ", ".join(missing),
+                    )
+                if mutation.get("mode") == "standalone-workflow":
+                    if status != "verified":
+                        report.error(block.location, "standalone mutation workflow must be verified")
+                    if mutation.get("workflow") != CANONICAL_MUTATION_WORKFLOW:
+                        report.error(block.location, "standalone mutation workflow path is stale")
+                elif mutation.get("mode") == "illustrative-fragment":
+                    if status != "illustrative-only":
+                        report.error(block.location, "mutation fragment must be illustrative-only")
+                    if mutation.get("workflow") != CANONICAL_MUTATION_WORKFLOW:
+                        report.error(block.location, "mutation fragment lacks canonical workflow")
+                else:
+                    report.error(block.location, "mutating example has an invalid contract mode")
+            else:
+                if mutation is not None:
+                    report.error(block.location, "non-mutating example has a stale mutation contract")
+
     def validate_repository(self) -> ValidationReport:
         report = ValidationReport()
-        blocks: list[Block] = []
-        for path in sorted((self.root / "docs").rglob("*.md")):
-            for block in markdown_blocks(path):
-                blocks.append(
-                    Block(block.path.relative_to(self.root), block.line, block.language, block.text)
-                )
+        for path in public_markdown_paths(self.root):
+            relative = path.relative_to(self.root)
+            for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                for address in self.private_example_addresses(line):
+                    report.error(
+                        f"{relative.as_posix()}:{line_number}",
+                        f"RFC1918 host address is not allowed in public examples: {address}",
+                    )
+        collected = collect_public_blocks(self.root)
+        blocks = [block for _, block, _ in collected]
         report.count("fenced_blocks", len(blocks))
+        self.validate_inventory(collected, report)
 
         for block in blocks:
             safe_text = substitute_placeholders(block.text)
@@ -524,6 +873,10 @@ class ExampleValidator:
                     report.error(block.location, f"invalid YAML: {str(exc).splitlines()[0]}")
                 else:
                     self._validate_yaml_tool(report, block, safe_text)
+            elif block.language == "promql":
+                report.count("promql_blocks")
+                for error in self.validate_promql(block.text):
+                    report.error(block.location, error)
 
             for command in extract_shell_commands(block.text, "loxicmd"):
                 report.count("loxicmd_commands")
@@ -588,6 +941,7 @@ def print_report(report: ValidationReport) -> None:
         "bash_blocks",
         "json_blocks",
         "yaml_blocks",
+        "promql_blocks",
         "loxicmd_commands",
         "curl_commands",
         "management_routes",
@@ -595,6 +949,10 @@ def print_report(report: ValidationReport) -> None:
         "substituted_request_bodies",
         "expected_schema_rejections",
         "curl_external",
+        "examples_verified",
+        "examples_blocked",
+        "examples_illustrative_only",
+        "mutation_examples",
     )
     for name in order:
         print(f"{name}: {report.counts.get(name, 0)}")

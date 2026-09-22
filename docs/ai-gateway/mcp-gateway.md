@@ -1,5 +1,7 @@
 # MCP Gateway
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Front a pool of Model Context Protocol (MCP) servers behind a single LoxiLB
 virtual IP, using fullproxy (`mode=4`) load balancing with optional TLS and
 session affinity.
@@ -45,7 +47,7 @@ The `security` field selects the TLS posture. Use the exact value meanings:
 
 ## Configuration
 
-The examples target a lab VIP `10.10.10.254:2020` on the LoxiLB REST port
+The examples target a lab VIP `192.0.2.254:2020` on the LoxiLB REST port
 `11111`, fronting two MCP servers at `192.0.2.1` and `198.51.100.1`
 (both `:8080/mcp`). The frontend terminates HTTPS (`security: 1`). Only the persist example
 reads the `mcp-session-id` header. Adjust addresses for your environment.
@@ -68,17 +70,17 @@ certificate directory (`/opt/loxilb/cert/`: `server.crt`, `server.key`,
 === "curl"
     ```bash
     curl -s -X POST \
-      http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+      http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP":          "10.10.10.254",
+          "externalIP":          "192.0.2.254",
           "port":                 2020,
           "protocol":            "tcp",
           "sel":                  0,
           "mode":                 4,
           "security":             1,
-          "host":                "10.10.10.254",
+          "host":                "192.0.2.254",
           "trace_type":          "mcp"
         },
         "endpoints": [
@@ -89,7 +91,7 @@ certificate directory (`/opt/loxilb/cert/`: `server.crt`, `server.key`,
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=rr --security=https --host=10.10.10.254 --trace-type=mcp
+    loxicmd create lb 192.0.2.254 --tcp=2020:8080 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=rr --security=https --host=192.0.2.254 --trace-type=mcp
     ```
 
 ### Persist service (`sel=3`, session affinity)
@@ -101,18 +103,18 @@ session.
 === "curl"
     ```bash
     curl -s -X POST \
-      http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+      http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP":          "10.10.10.254",
+          "externalIP":          "192.0.2.254",
           "port":                 2021,
           "protocol":            "tcp",
           "sel":                  3,
           "mode":                 4,
           "security":             1,
           "session_header_name": "mcp-session-id",
-          "host":                "10.10.10.254",
+          "host":                "192.0.2.254",
           "trace_type":          "mcp"
         },
         "endpoints": [
@@ -123,7 +125,7 @@ session.
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2021:8080 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=persist --security=https --session-header-name=mcp-session-id --host=10.10.10.254 --trace-type=mcp
+    loxicmd create lb 192.0.2.254 --tcp=2021:8080 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=persist --security=https --session-header-name=mcp-session-id --host=192.0.2.254 --trace-type=mcp
     ```
 
 !!! note "End-to-end TLS variant"
@@ -139,20 +141,16 @@ session.
 the round-robin service does not need a session key:
 
 === "curl"
-    ```bash
-    curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
-    ```
+    --8<-- "snippets/common/load-balancer-readback-rest.md"
 === "loxicmd"
-    ```bash
-    loxicmd get lb
-    ```
+    --8<-- "snippets/common/load-balancer-readback-cli.md"
 
 **2. Probe MCP over the VIP.** Point an MCP client (or plain `curl`) at the
 HTTPS VIP endpoint, trusting the CA you staged:
 
 ```bash
 curl --fail-with-body --cacert /path/to/trusted-ca.crt \
-  https://10.10.10.254:2020/mcp
+  https://192.0.2.254:2020/mcp
 ```
 
 Repeat the round-robin probe several times and confirm responses come from

@@ -86,7 +86,9 @@ Watch these signals during every failover exercise:
 - `loxilb_sockproxy_sync_push_latency_seconds{peer,rpc}` and
   `loxilb_sockproxy_sync_inflight_rpc{peer}` for a slow peer path;
 - `loxilb_sockproxy_sync_conflict_total{outcome}` for active-active conflict
-  resolution.
+  resolution;
+- `loxilb_sockproxy_sync_peer_scope_version{peer}` for the quota-state wire
+  scope observed from each peer.
 
 Metric presence confirms that instrumentation is registered. It does not prove
 that the peer link is complete, private, or loss-free.
@@ -104,6 +106,13 @@ Request-rate limiting, API-key authentication, and model authorization do not
 share this specific incompatibility. The restriction applies to peers
 exchanging token-quota state. A standalone Gateway is not affected by peer
 wire compatibility.
+
+The peer-scope gauge makes the observed scope visible; it does not make mixed
+versions compatible. Require the expected value on every peer and an immutable
+same-version build identity before enabling quota exchange. The frozen public
+scenario contains same-scope and mismatch assertions, but it is not wired to a
+public GitHub workflow at the frozen commit and this docs change does not run a
+two-node HA test. See [Verification Status](../reference/verification-status.md).
 
 ## Safe peer upgrade procedure
 
@@ -228,4 +237,5 @@ and metric deltas. Do not record credentials or customer request content.
 - [AI Quotas and QoS](ai-qos.md)
 - [Monitoring and Metrics](monitoring.md)
 - [Configuration Backup and Restore](backup-restore.md)
+- [Verification Status](../reference/verification-status.md)
 - [Troubleshooting](troubleshooting.md)

@@ -1,5 +1,7 @@
 # Configuration Reference
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 The public contract reference for the `serviceArguments` object (and its
 `endpoints[]` and `mtls_*` sub-objects) used to create an AI Gateway load-balancer rule via
 `POST /netlox/v1/config/loadbalancer`. The tables follow the current API schema together with the
@@ -62,6 +64,7 @@ apply to every rule, AI or not.
 | `snat` | boolean | `false` | `true`/`false` | Mark as an SNAT rule. |
 | `egress` | boolean | `false` | `true`/`false` | Mark as an egress rule. |
 | `proxyprotocolv2` | boolean | `false` | `true`/`false` | Emit PROXY protocol v2 to backends. |
+| `sockMapMode` | string | `off` | `off`, `request`, `response`, `both` | Experimental directional sockmap relay acceleration. Non-`off` requires plaintext IPv4 TCP fullproxy, daemon `--sockmapsupport`, and no `sse_mode`, P/D, `api_key_auth` declaration, or attached L7 policy. HTTP/2/h2c is never accelerated. See [Sockmap Acceleration](../operations/sockmap-acceleration.md). |
 | `oper` | int32 | `0` | `0`-create, `1`-attachEP, `2`-detachEP | Endpoint-specific operation for incremental EP edits. |
 | `block` | uint32 | — | any | Block-number grouping for this LB entry. |
 | `id` | string | minted | UUIDv4 if absent | Stable opaque rule identifier (Octavia). |
@@ -142,7 +145,15 @@ overlap silently drops to zero. See [KV-Cache Routing](kv-caching.md).
 | `kvWarmupSec` | int64 | `30` | ≥0 | **Accepted but currently inert on all paths.** Intended as a Tier 1.5 warmup delay after subscriber connect, but the timer is never armed in the shipped data path — Tier 1.5 activates without waiting. Do not design procedures around it. |
 | `kvEngineType` | string | `vllm` | `vllm`, `sglang`, `trtllm`, `llamacpp` | Typed serving engine. Immutable after create; delete and recreate the rule to change it. Engine selection enables validation but does not imply feature parity. |
 | `kvDpRankCount` | int32 | `1` | `1`–`8` | SGLang data-parallel rank count. Rank N publishes at `kvZmqPort+N`; all ranks union into one per-endpoint inventory. Values above 1 are rejected for TensorRT-LLM and llama.cpp. |
+| `kvExactApiMode` | string | profile surfaces or legacy `both` when omitted | `completions`, `chat`, `both` | REST-only scalar declaration. Requires `kvExactMode: 1` or `3`; immutable after create. With a bound profile, an explicit value must be a subset of `supportedApis`. |
+| `kvModelProfile` | string | profile-less legacy mode when omitted | one published profile ID | REST-only scalar binding. Requires `kvExactMode: 1` or `3`; strict admission validates aliases and artifacts. Normally immutable; the sole exception is attaching a profile to a profile-less KV-exact rule. |
 | `pdBootstrapPort` | int32 | `0` | `0`–`65535` | SGLang P/D bootstrap port on each prefill endpoint. `0` uses SGLang's default `8998`. A nonzero value requires `pd_disagg_mode: true` and `kvEngineType: sglang`; all other shapes are rejected. |
+
+!!! info "Strict profile configuration is REST-only"
+    Current `loxicmd create lb` has no flags for `kvExactApiMode` or `kvModelProfile`. Discover
+    published profiles through REST, create the strict rule through REST, then verify the
+    dedicated `kvexactstatus` read model. See
+    [Model Profiles and KV-Exact Readiness](model-profiles-kv-readiness.md).
 
 ### Engine and field coherence
 
@@ -339,22 +350,22 @@ Applies to the rule as a whole (endpoint-level HM fields are in §9).
 
 ## 11. Worked example — full KV-exact P/D rule
 
-A complete `POST` body: a fullproxy VIP at `10.10.10.254:8080` doing KV-exact routing
+A complete `POST` body: a fullproxy VIP at `192.0.2.254:8080` doing KV-exact routing
 (`kvExactMode: 1`) over a 3-prefill / 3-decode pool. This mirrors the `vllm-kvcache-routing-cpu`
 scenario.
 
 === "curl"
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H 'Content-Type: application/json' -d '{
       "serviceArguments": {
-        "externalIP": "10.10.10.254",
+        "externalIP": "192.0.2.254",
         "port": 8080,
         "protocol": "tcp",
         "sel": 0,
         "mode": 4,
         "security": 0,
-        "host": "10.10.10.254",
+        "host": "192.0.2.254",
         "pd_disagg_mode": true,
         "probeRetries": 1,
         "kvExactMode": 1,
@@ -385,8 +396,8 @@ described in section 5; adding stored `chwbl_*` fields does not change them.
 
 ```json
 {
-  "externalIP": "10.10.10.254", "port": 8080, "protocol": "tcp",
-  "mode": 4, "security": 0, "host": "10.10.10.254",
+  "externalIP": "192.0.2.254", "port": 8080, "protocol": "tcp",
+  "mode": 4, "security": 0, "host": "192.0.2.254",
   "sel": 8,
   "model_name": "llama-70b",
   "backend_protocol": "http1",
@@ -404,10 +415,10 @@ Confirm the rule landed and inspect its state:
 === "curl"
     ```bash
     # List all rules (VIP, mode, sel, endpoints)
-    curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all | jq .
+    curl -s http://192.0.2.254:11111/netlox/v1/config/loadbalancer/all | jq .
 
     # KV-cache per-block hash inventory (kvExactMode rules)
-    curl -s 'http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=<id>&ep_idx=0' | jq .
+    curl -s 'http://192.0.2.254:11111/netlox/v1/config/ai/kv/inventory?service_id=<id>&ep_idx=0' | jq .
     ```
 === "loxicmd"
     ```bash

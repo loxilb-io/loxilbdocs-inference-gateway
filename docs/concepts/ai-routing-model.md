@@ -1,5 +1,7 @@
 # Opt-in AI Routing Model
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 AI routing is never implicit. It is enabled per LB rule, only when that rule runs in fullproxy mode, and only for the fields you set — every other rule keeps behaving as a plain L4 load balancer.
 
 ---
@@ -46,7 +48,7 @@ Model-name matching is **case-sensitive** and exact — `mistral-7b` and `MISTRA
 
 ### Worked example
 
-Three rules on the same listener, VIP `10.10.10.254:2020`, each a distinct
+Three rules on the same listener, VIP `192.0.2.254:2020`, each a distinct
 `model_name` pool. A wildcard belongs to that same listener; placing it on another port
 does not provide fallback for requests sent to port `2020`.
 
@@ -76,16 +78,16 @@ Each model pool is its own LB rule with a distinct `model_name`. Create one per 
 === "curl"
 
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 2020,
           "protocol": "tcp",
           "mode": 4,
           "backend_protocol": "http1",
-          "host": "10.10.10.254",
+          "host": "192.0.2.254",
           "path_prefix": "/",
           "path_match_mode": "prefix",
           "model_name": "llama-70b"
@@ -99,7 +101,7 @@ Each model pool is its own LB rule with a distinct `model_name`. Create one per 
 === "loxicmd"
 
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=2020:8080 --endpoints=192.0.2.1:1 --mode=fullproxy --backend-protocol=http1 --host=10.10.10.254 --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b
+    loxicmd create lb 192.0.2.254 --tcp=2020:8080 --endpoints=192.0.2.1:1 --mode=fullproxy --backend-protocol=http1 --host=192.0.2.254 --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b
     ```
 
 To add the wildcard catch-all, create another rule with the same VIP, port, protocol, host,
@@ -143,25 +145,21 @@ List the rules on the VIP and confirm each carries the expected `model_name` and
 
 === "curl"
 
-    ```bash
-    curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
-    ```
+    --8<-- "snippets/common/load-balancer-readback-rest.md"
 
 === "loxicmd"
 
-    ```bash
-    loxicmd get lb
-    ```
+    --8<-- "snippets/common/load-balancer-readback-cli.md"
 
 If you created only the named rule above and intentionally did not add a wildcard, send a known
 and an unknown model to confirm matching and the 503 fall-through:
 
 ```bash
 # Matches the llama pool
-curl -s -H "X-Model: llama-70b" http://10.10.10.254:2020/
+curl -s -H "X-Model: llama-70b" http://192.0.2.254:2020/
 
 # Unknown model, no wildcard → HTTP 503 model_unavailable
-curl -s -o /dev/null -w "%{http_code}\n" -H "X-Model: unknown-xyz" http://10.10.10.254:2020/
+curl -s -o /dev/null -w "%{http_code}\n" -H "X-Model: unknown-xyz" http://192.0.2.254:2020/
 ```
 
 ---

@@ -1,5 +1,7 @@
 # SSE and Quota Management
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Server-Sent Events (SSE) keep an HTTP response open while an inference engine
 streams tokens. LoxiLB protects this long-lived path from normal idle reaping,
 requests usage accounting, and settles token-quota reservations when the
@@ -60,11 +62,7 @@ behavior rather than copying a value blindly.
 
 Use TLS and a protected control-plane header outside an isolated lab:
 
-```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-```
+--8<-- "snippets/common/control-api-header.md"
 
 The example addresses use documentation-only ranges. Replace all addresses and
 the model with your environment:

@@ -1356,6 +1356,7 @@
     "release_commit": "5dd978c25c967b8192c5fe9cd448783e1e74be7c",
     "release_golden_sha256": "399a529b416839bd93341664155e9177cf1bd079227a7e81df204f2c03887593",
     "release_tag": "v0.9.8.9-rc.2",
+    "release_tag_object": "2dd7dbe215982859c2ee5cfc836fe34ac4e54a37",
     "repository": "https://github.com/loxilb-io/loxicmd-inference-gateway"
   }
 }

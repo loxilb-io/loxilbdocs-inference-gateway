@@ -9,6 +9,9 @@ exclude_all_private = true
 
 # Hosts that rate-limit or block automated checkers (not broken links)
 exclude = [
+  "^https?://192\\.0\\.2\\.",
+  "^https?://198\\.51\\.100\\.",
+  "^https?://203\\.0\\.113\\.",
   "https://www.loxilb.io",
   "https://join.slack.com",
   "https://www.linkedin.com",

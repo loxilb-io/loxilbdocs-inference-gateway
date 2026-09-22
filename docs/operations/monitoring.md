@@ -1,9 +1,17 @@
 # Monitoring and Metrics
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 LoxiLB exposes Prometheus metrics for load balancing, system pressure, AI
 admission, token quotas, engine-specific routing, and fullproxy QoS. Use the
 metrics to distinguish Gateway pressure from host pressure and policy denials
 from backend failures.
+
+For the complete generated list of 197 release-scope families, exact labels,
+activation classes, and evidence status, see the
+[Metrics Reference](../reference/metrics.md). The catalog records source
+evidence; a raw scrape and controlled stimulus are still required for a
+deployment claim.
 
 ## Enable and scrape metrics
 
@@ -94,7 +102,7 @@ loxilb_host_cpu_utilization_percent
 
 | Metric | Type | Labels | Meaning |
 |---|---|---|---|
-| `loxilb_ai_requests_total` | Counter | `model`, `tenant`, `status` | Completed SSE inference streams by HTTP status; non-SSE requests are not counted here |
+| `loxilb_ai_requests_total` | Counter | `model`, `tenant`, `status`, `outcome` | Completed SSE inference streams use `outcome="completed"`; admission denials use `outcome="denied"`. Non-SSE successes are not counted here. |
 | `loxilb_ai_request_duration_seconds` | Histogram | `model`, `tenant` | Duration recorded when an SSE inference stream completes; non-SSE requests are not observed |
 | `loxilb_ai_active_streams` | Gauge | `model` | Active SSE streams |
 | `loxilb_ai_rate_limit_hits_total` | Counter | `tenant`, `reason` | RPS and token-quota denials |
@@ -119,6 +127,21 @@ A rising JWKS failure counter with a flat success counter is a warning while
 the last-known-good keyset still admits traffic. Alert before
 `loxilb_ai_jwks_usable` becomes `0`. Do not treat an absent last-success series
 as a zero timestamp; it means no fetch has succeeded.
+
+```promql
+# JWT decisions by tenant and closed reason code
+sum by (tenant, reason) (
+  rate(loxilb_ai_jwt_validation_total[5m])
+)
+
+# JWKS refresh failures by profile
+sum by (profile) (
+  rate(loxilb_ai_jwks_refresh_total{outcome="failure"}[5m])
+)
+
+# Profiles whose currently cached keyset is unusable
+loxilb_ai_jwks_usable == 0
+```
 
 ## Token quota metrics
 
@@ -207,6 +230,16 @@ refresh. A frozen series after detach is not the expected representation.
 |---|---|
 | `loxilb_ai_engine_info{service,engine}` | Engine identity currently emitted only for llama.cpp rules |
 | `loxilb_ai_llamacpp_probe_warnings_total{service,kind}` | llama.cpp `/props` findings such as model/build/slot mismatch, sleeping, or unanswered |
+| `loxilb_ai_pd_requests_total{model,phase,status}` | One terminal P/D outcome: complete/success; prefill timeout/error/rejected; decode timeout/error; or defensive unknown/error |
+| `loxilb_ai_pd_prefill_duration_seconds{model}` | Observed prefill phase duration when known |
+| `loxilb_ai_pd_decode_ttft_seconds{model}` | Decode time to first token/byte when known |
+| `loxilb_ai_pd_kv_params_found_total{model}` | A completed prefill response carried `kv_transfer_params` |
+| `loxilb_ai_pd_kv_params_missing_total{model}` | A prefill response was actually inspected but lacked `kv_transfer_params`; prefill failures do not increment it |
+| `loxilb_ai_pd_session_hits_total{model}` | Tier-0 P/D session-stickiness selections |
+| `loxilb_ai_pd_tier_selected_total{tier,model}` | Successful terminal prefill selections by `tier0`, `tier1`, `tier15`, or `tier2`; pre-routing admission outcomes increment nothing |
+| `loxilb_pd_admission_shed_total` | Every eligible prefill endpoint was at its in-flight cap and queueing was disabled; request refused |
+| `loxilb_pd_admission_queued_total` | Request parked in a per-endpoint FIFO because the pool was capped and queueing was enabled |
+| `loxilb_pd_admission_overflow_shed_total` | Pool and eligible per-endpoint FIFOs were full; overflow request refused |
 | `loxilb_pd_sg_prefill_abort_decode_total` | SGLang prefill failure aborted the decode leg |
 | `loxilb_pd_sg_decode_close_drain_total` | SGLang decode failure closed the prefill drain leg |
 | `loxilb_pd_sg_room_retry_total` | SGLang pair retried with a new bootstrap room |
@@ -225,6 +258,36 @@ counter also does not prove that origin HTTP `5xx` responses were hidden:
 correlate circuit transitions and endpoint-death counters with
 `loxilb_proxy_http_responses_by_status_total`, endpoint health, logs, and the
 client-visible result.
+
+For `loxilb_ai_pd_requests_total`, alert on the typed `phase` and `status` pair rather than an
+HTTP-code guess. Reconcile `tier_selected` only against successfully selected P/D requests;
+parked and refused admission events belong to the three admission families and intentionally do
+not choose a routing tier.
+
+### Worker scrape metrics
+
+`loxilb_ai_worker_scrape_total{result}` records the outcome of worker metric
+collection. The closed result set is `ok`, `unreachable`, `http_error`,
+`body_error`, `unparseable`, `bad_request`, and `unknown`. Treat each class as
+a distinct failure stage rather than collapsing every non-`ok` result into
+backend unavailability.
+
+```promql
+# Worker scrape attempts by result
+sum by (result) (
+  rate(loxilb_ai_worker_scrape_total[5m])
+)
+
+# Fraction of worker scrapes that did not complete successfully
+sum(rate(loxilb_ai_worker_scrape_total{result!="ok"}[5m]))
+/
+clamp_min(sum(rate(loxilb_ai_worker_scrape_total[5m])), 1)
+```
+
+These counters prove the collection path classified an attempt; they do not
+prove that a worker's reported values were fresh or that inference traffic
+reached that worker. Correlate them with worker-series freshness, endpoint
+health, and an independent backend receipt.
 
 ## Relay cache and backpressure metrics
 
@@ -286,12 +349,30 @@ sockproxy peer path:
 | `loxilb_sockproxy_sync_conflict_total{outcome}` | Active-active conflict-resolution result |
 | `loxilb_sockproxy_sync_push_latency_seconds{peer,rpc}` | Sender-side RPC latency |
 | `loxilb_sockproxy_sync_inflight_rpc{peer}` | Currently in-flight synchronization RPCs |
+| `loxilb_sockproxy_sync_peer_scope_version{peer}` | Quota-state wire scope version reported for the peer; equality is required before treating quota synchronization as compatible |
 
 Page on new overflow, retry-exhausted drops, or apply errors during normal
 load. A quiet metric does not prove that a peer is connected: correlate with
 peer state, network evidence, and a controlled state change. Current xSync
 ports do not authenticate or encrypt peers themselves; see
 [HA and Upgrade Limitations](ha-limitations.md).
+
+## Sockmap observability boundary
+
+The release-scope manifest contains no dedicated sockmap Prometheus family, so
+there is no valid sockmap-specific PromQL to document. Verify acceleration with
+the `sockmap_stats` BPF map, active-map state, the reset operation, byte
+equivalence, and an `off` control as described in
+[Sockmap Acceleration](sockmap-acceleration.md). Do not substitute the
+`loxilb_sockproxy_sync_*` peer-synchronization family: it describes xSync, not
+sockmap accelerator engagement.
+
+Response-only sockmap acceleration may be combined with `api_key_auth` on
+current Gateway main because requests still traverse userspace admission.
+Those accelerated responses are not recorded by the userspace response path,
+so a flat AI response counter is not proof of failure. Request and
+bidirectional acceleration remain incompatible with any `api_key_auth`
+declaration.
 
 ## OPA and optional DPU metrics
 
@@ -364,10 +445,7 @@ Use low-cardinality, non-secret labels. Restrict Prometheus and Grafana access,
 change default credentials, validate TLS, and apply retention appropriate for
 tenant activity metadata. Remove temporary header files after management calls:
 
-```bash
-rm -f ./control-plane.headers
-unset CONTROL_PLANE_TOKEN
-```
+--8<-- "snippets/common/control-api-cleanup.md"
 
 ## Related pages
 
@@ -379,3 +457,5 @@ unset CONTROL_PLANE_TOKEN
 - [Application and L4 Tracing](tracing.md)
 - [DPU Offload Observability](dpu-offload.md)
 - [Troubleshooting](troubleshooting.md)
+- [Metrics Reference](../reference/metrics.md)
+- [Verification Status](../reference/verification-status.md)

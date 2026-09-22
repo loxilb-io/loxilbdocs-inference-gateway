@@ -25,6 +25,9 @@ Report a bug in the gateway itself in the **code** repository; report a document
 3. Make sure the strict build passes (this is what CI runs):
    ```bash
    python tools/validate_examples.py
+   python tools/refresh_example_inventory.py --check
+   python tools/render_metrics_reference.py --check
+   python tools/render_schema_reference.py --check
    python -m unittest discover -s tests -p 'test_*.py' -v
    mkdocs build --strict
    ```
@@ -35,13 +38,16 @@ The full workflow and style conventions are in
 
 ### Usage-example contracts
 
-The example validator extracts `loxicmd`, `curl`, JSON, and YAML from Markdown fenced blocks.
+The example validator extracts `loxicmd`, `curl`, JSON, YAML, and PromQL from Markdown fenced blocks.
 It checks CLI paths, flags, and enums against frozen CLI contracts; REST methods and paths against
 the combined primary and supplemental Swagger contracts; inline JSON request bodies against the
 matching Swagger request schema; shell syntax with `bash -n`; JSON with `jq`; and YAML with `yq`.
-Referenced snapshot and bootstrap bodies use public, non-secret fixtures for schema validation.
+PromQL metric names and selector labels are checked against the frozen
+release-scope manifest; documented closed label enums are checked for exact
+selectors. Referenced snapshot and bootstrap bodies use public, non-secret fixtures for schema validation.
 The unit suite also applies deliberately broken examples and requires the validator to reject route
-typos, removed flags, invalid enum values, incorrect JSON field casing, and missing required fields.
+typos, removed flags, invalid enum values, incorrect JSON field casing, missing required fields,
+non-existent metric families, wrong metric labels, and wrong metric enum values.
 
 The tracked snapshots under `tests/contracts/docs_examples/` make the CI check deterministic and
 network-independent. Maintainers can refresh them from exact local clones after reviewing an
@@ -51,18 +57,25 @@ upstream contract change:
 python tools/refresh_example_contracts.py \
   --gateway-repo ../loxilb-inference-gateway \
   --cli-repo ../loxicmd-inference-gateway
+python tools/refresh_example_inventory.py
+python tools/render_schema_reference.py --write
+python tools/refresh_example_inventory.py --check
 ```
 
 ### Validate a Gateway upgrade before refreshing the snapshot
 
 The `Gateway contract drift` workflow checks out a selected Gateway branch,
-tag, or commit and performs two independent gates:
+tag, or commit and performs four independent gates:
 
-1. regenerate the candidate contract from both `api/swagger.yml` and
-   `api/swagger-extras.yml`, then validate every documented route and inline
-   request body against their union;
-2. compare both raw Swagger hashes and compact operation/schema structure with
-   the tracked contract. Any content drift fails until it is reviewed.
+1. regenerate the candidate contract from both Swagger files, the engine
+   support catalog, the release-scope metric manifest, and selected public
+   scenario/workflow evidence;
+2. validate documented routes, request bodies, and PromQL against that
+   candidate contract;
+3. require every Swagger definition added since the public schema baseline to
+   have an explicit relevance classification and generated field reference;
+4. compare Swagger, catalog, metric-manifest, and scenario/claim evidence with
+   the tracked contract. Any drift fails until it is reviewed.
 
 Run the same gate locally with one command:
 
@@ -82,6 +95,9 @@ python tools/refresh_example_contracts.py \
   --gateway-ref <accepted-gateway-commit>
 
 python tools/validate_examples.py
+python tools/refresh_example_inventory.py --check
+python tools/render_metrics_reference.py --check
+python tools/render_schema_reference.py --check
 python -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
@@ -92,7 +108,7 @@ release workflow can send that event with `client_payload.gateway_ref` set to
 the immutable commit or tag. The dispatch token must stay in repository
 secrets and must never be placed in the event payload or logs.
 
-These checks establish static command, route, schema, and syntax consistency. They do not execute
+These checks establish static command, route, schema, metric, evidence-object, and syntax consistency. They do not execute
 the Linux CLI binary, send requests to a running gateway, or qualify GPU, high-availability, or
 production behavior.
 

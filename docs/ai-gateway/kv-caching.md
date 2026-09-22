@@ -1,5 +1,7 @@
 # KV-Cache-Aware Routing
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Route each inference request to the backend that already holds the matching
 prompt prefix in its GPU KV cache, so tokens are reused instead of recomputed.
 This is the **Tier 1.5** stage of the routing cascade.
@@ -55,6 +57,8 @@ the API schema — defaults and ranges are authoritative).
 | `kvWarmupSec` | int | `30` | `≥ 0` | **Accepted but currently inert** — intended as a Tier 1.5 warmup delay after subscriber connect, but the timer is never armed; Tier 1.5 activates without waiting. Do not design procedures around it. |
 | `kvEngineType` | string | `vllm` | `vllm`, `sglang`, `trtllm`, `llamacpp` | Engine contract for the rule; **immutable after create**. llama.cpp accepts plain load balancing only and rejects KV-exact/P/D controls. |
 | `kvDpRankCount` | int | `1` | `1`–`8` | SGLang data-parallel rank count. Rank *N* publishes at `kvZmqPort + N`; all ranks union into one endpoint inventory. Keep `1` for other engines. |
+| `kvExactApiMode` | string | profile surfaces or legacy `both` when omitted | `completions`, `chat`, `both` | REST-only strict API-surface declaration. Requires KV-exact and is immutable. |
+| `kvModelProfile` | string | profile-less legacy mode when omitted | published profile ID | REST-only strict tokenizer/template binding. Requires KV-exact; discover it before create and verify `kvexactstatus` afterward. |
 | `LLB_KV_MIN_MATCH_TOKENS` | environment | `16` | `0`–`4096` | Skip KV-exact scoring for shorter prompts. `0` disables this guard. |
 
 !!! warning "One engine per VIP"
@@ -196,7 +200,7 @@ wget -O /etc/loxilb/tokenizers/Qwen__Qwen3-0.6B/tokenizer.json \
 ## Configuration
 
 Configure a rule with `POST /netlox/v1/config/loadbalancer` on port `11111`.
-Both examples below mirror the reference topologies (VIP `10.10.10.254`, prefill
+Both examples below mirror the reference topologies (VIP `192.0.2.254`, prefill
 endpoints `192.0.2.1 / 203.0.113.1 / 198.51.100.101`).
 
 !!! warning "Protect the management API"
@@ -212,11 +216,11 @@ are never Tier-1.5 targets.
 
 === "curl"
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 8080,
           "protocol": "tcp",
           "sel": 0,
@@ -240,7 +244,7 @@ are never Tier-1.5 targets.
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8080 --endpoints=192.0.2.1:1,198.51.100.1:1,203.0.113.1:1,192.0.2.101:1,198.51.100.101:1,203.0.113.101:1 --mode=fullproxy --pd-disagg --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-warmup=30 --kv-block-size=16 --ep-role=prefill,decode,prefill,decode,prefill,decode
+    loxicmd create lb 192.0.2.254 --tcp=8080:8080 --endpoints=192.0.2.1:1,198.51.100.1:1,203.0.113.1:1,192.0.2.101:1,198.51.100.101:1,203.0.113.101:1 --mode=fullproxy --pd-disagg --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-warmup=30 --kv-block-size=16 --ep-role=prefill,decode,prefill,decode,prefill,decode
     ```
 
 ### SGLang KV-exact rule (`kvExactMode: 3`)
@@ -251,11 +255,11 @@ and `kvDpRankCount` equal to the SGLang `--dp-size`.
 
 === "curl"
     ```bash
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H "Content-Type: application/json" \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 9090,
           "protocol": "tcp",
           "sel": 0,
@@ -276,7 +280,7 @@ and `kvDpRankCount` equal to the SGLang `--dp-size`.
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=9090:8080 --endpoints=198.51.100.101:1,203.0.113.101:1,192.0.2.102:1 --mode=fullproxy --kv-exact-mode=3 --kv-engine-type=sglang --kv-dp-ranks=3 --kv-zmq-port=5561 --kv-warmup=30 --kv-block-size=16
+    loxicmd create lb 192.0.2.254 --tcp=9090:8080 --endpoints=198.51.100.101:1,203.0.113.101:1,192.0.2.102:1 --mode=fullproxy --kv-exact-mode=3 --kv-engine-type=sglang --kv-dp-ranks=3 --kv-zmq-port=5561 --kv-warmup=30 --kv-block-size=16
     ```
 
 With `kvDpRankCount: 3` and `kvZmqPort: 5561`, loxilb subscribes to ranks at
@@ -285,20 +289,39 @@ per endpoint.
 
 ## Verify
 
-First confirm the rule is live and carries the KV fields you set:
+For a strict rule, first discover the profile and retain its registry generation and artifact
+digests. After create, `GET .../kvexactstatus` is the mandatory readiness check; a successful
+`POST`, load-balancer read-back, or nonempty inventory does not prove that the composed binding is
+enforced. See [Model Profiles and KV-Exact Readiness](model-profiles-kv-readiness.md).
 
-```bash
-curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
-```
+Confirm the rule is live and carries the KV fields you set:
+
+--8<-- "snippets/common/load-balancer-readback-rest.md"
 
 Look for `kvExactMode`, `kvBlockSize`, `kvHashAlgo` (vLLM) or `kvEngineType` /
-`kvDpRankCount` (SGLang) on the rule.
+`kvDpRankCount` (SGLang) on the rule. On a strict rule, also require the intended
+`kvModelProfile` and `kvExactApiMode`.
+
+Query the dedicated status read model for a strict rule:
+
+```bash
+curl -s "http://192.0.2.254:11111/netlox/v1/config/loadbalancer/externalipaddress/192.0.2.254/port/8080/protocol/tcp/kvexactstatus" \
+  | jq '.kvExactStatusAttr[] | {
+    modelName, modelProfileId, modelProfileGen, apiMode,
+    bindingDigest, desiredState, enforcedState, reasonCodes,
+    enforcement
+  }'
+```
+
+Require `READY` for normal strict qualification. Keep `READY_FUNCTIONAL_ONLY` distinct, and treat
+unknown states as not ready/in transition. A legacy rule reports
+`LEGACY_ACTIVE_UNATTESTED`; it is active but not strict or attested.
 
 Then inspect the live per-endpoint block inventory with the raw-middleware
 endpoint:
 
 ```bash
-curl -s "http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=0&ep_idx=0"
+curl -s "http://192.0.2.254:11111/netlox/v1/config/ai/kv/inventory?service_id=0&ep_idx=0"
 ```
 
 ```json
@@ -487,6 +510,7 @@ rate gauge:
 - [KV-Cache-Aware Routing (use-case)](../use-cases/kv-cache-aware-routing.md) — flagship deep dive: architecture and the vLLM hash contract in full.
 - [SGLang Routing](../use-cases/sglang-routing.md) — SGLang architecture, launch flags, and the single-role contract.
 - [TensorRT-LLM Integration](tensorrt-llm-integration.md) — destructive HTTP event ownership and context/generation P/D.
+- [Model Profiles and KV-Exact Readiness](model-profiles-kv-readiness.md) — strict profile discovery and enforcement status.
 - [llama.cpp Integration](llamacpp-integration.md) — the plain-pool alternative for an engine without a supported KV event plane.
 - [LLM Routing](llm-routing.md) — the full routing-tier cascade.
 - [P/D Disaggregation](pd-disaggregation.md) — combine KV routing with prefill/decode separation.
