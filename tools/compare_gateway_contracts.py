@@ -55,6 +55,7 @@ class ContractComparison:
     release_snapshot_changed: bool = False
     source_ebpf_changed: bool = False
     scenario_evidence_changed: bool = False
+    schema_relevance_changed: bool = False
 
     @property
     def changed(self) -> bool:
@@ -66,6 +67,7 @@ class ContractComparison:
             or self.release_snapshot_changed
             or self.source_ebpf_changed
             or self.scenario_evidence_changed
+            or self.schema_relevance_changed
             or any(spec.changed for spec in self.specs)
         )
 
@@ -150,6 +152,9 @@ def compare_contracts(
         scenario_evidence_changed=(
             baseline.get("scenario_evidence") != candidate.get("scenario_evidence")
         ),
+        schema_relevance_changed=(
+            baseline.get("schema_relevance") != candidate.get("schema_relevance")
+        ),
     )
     for source_path in sorted(EXPECTED_SOURCES & baseline_specs.keys() & candidate_specs.keys()):
         left = baseline_specs[source_path]
@@ -202,6 +207,8 @@ def markdown_report(comparison: ContractComparison) -> str:
             f"`{comparison.candidate_catalog_sha256}`",
             "- Frozen scenario evidence: "
             + ("CHANGED" if comparison.scenario_evidence_changed else "unchanged"),
+            "- Public schema-relevance delta: "
+            + ("CHANGED" if comparison.schema_relevance_changed else "unchanged"),
             "",
             "### `deploy/monitoring/manifest/metric-manifest.json`: "
             + ("CHANGED" if comparison.metric_manifest_changed else "unchanged"),

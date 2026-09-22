@@ -2689,6 +2689,57 @@
       "path": ".github/workflows/engine-contracts-ci.yml"
     }
   },
+  "schema_relevance": {
+    "baseline_commit": "47803fb660ed54cd1f180b616db628461ad85d1a",
+    "specs": [
+      {
+        "added_definitions": [
+          "AiModelProfileEntry",
+          "AiModelProfileRegistry",
+          "AutoPersistStatus",
+          "BootStatus",
+          "CapabilityStatus",
+          "CapabilityStatusList",
+          "ConfigOpRecord",
+          "DependencyDiagnostic",
+          "DiagnosticsStatus",
+          "EbpfAttachmentStatus",
+          "ExternalDependencyStatus",
+          "FilesystemStatus",
+          "JWTAuthProfileEntry",
+          "KvExactEnforcement",
+          "KvExactStatusEntry",
+          "MaintenanceRequest",
+          "MaintenanceStatus",
+          "MapUtilization",
+          "OperationResult",
+          "ProcessStatus",
+          "RateLimitDefaultsEntry",
+          "RateLimitDefaultsMod",
+          "ReadyStatus",
+          "SockMapResetResult",
+          "UserModelRateLimit",
+          "UserRateLimitEntry",
+          "UserRateLimitMod",
+          "UserSummary"
+        ],
+        "baseline_definition_count": 147,
+        "candidate_definition_count": 175,
+        "removed_definitions": [],
+        "source_path": "api/swagger.yml"
+      },
+      {
+        "added_definitions": [
+          "ManagementError",
+          "RawError"
+        ],
+        "baseline_definition_count": 2,
+        "candidate_definition_count": 4,
+        "removed_definitions": [],
+        "source_path": "api/swagger-extras.yml"
+      }
+    ]
+  },
   "source": {
     "commit": "dbb2ff5bed48d21a108d6c53a62a3119cec9f780",
     "ebpf_submodule_commit": "462a1e5412f46ca53574b9c079005bb3da3cfa20",

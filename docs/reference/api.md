@@ -25,6 +25,12 @@ and highlights contracts that require special handling.
 4. Runnable `cicd/` scenarios are validation evidence for selected flows; they
    are not a complete API contract.
 
+The generated [current-main API schema model ledger](api-schema-models.md)
+classifies every definition added since the public documentation baseline,
+including direct operation models, nested components, shared envelopes, and
+companion-spec errors. It also records the exact required and optional fields
+from the frozen Swagger union.
+
 Do not infer that a declared path is operational. Operations marked
 `x-not-implemented: true` have no wired handler and return `501`.
 
