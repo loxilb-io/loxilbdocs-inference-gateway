@@ -174,6 +174,7 @@ flowchart TD
 | Model Load Balancing | Route by model name (`X-Model` header / JSON `model` field) to per-model backend pools; wildcard fallback | [model-load-balancing.md](model-load-balancing.md) |
 | LLM Routing | Stage-2 endpoint selection within a pool: CHWBL consistent hash, GPU-aware, session affinity | [llm-routing.md](llm-routing.md) |
 | KV-Cache Routing | Route to the endpoint that already holds the relevant KV blocks (`kvExactMode`) | [kv-caching.md](kv-caching.md) |
+| Model Profiles & KV Readiness | Discover a strict tokenizer/template profile and verify desired versus enforced binding state | [model-profiles-kv-readiness.md](model-profiles-kv-readiness.md) |
 | P/D Disaggregation | Split prefill and decode phases across separate endpoint pools | [pd-disaggregation.md](pd-disaggregation.md) |
 | vLLM Integration | Backend protocol / ALPN, KV-event parity, and the selector-9 metrics boundary | [vllm-integration.md](vllm-integration.md) |
 | SGLang P/D Integration | Concurrent prefill/decode dispatch and bootstrap coordination | [sglang-pd-disaggregation.md](sglang-pd-disaggregation.md) |
@@ -265,6 +266,7 @@ Each rule in the response should show `mode: 4` and the `model_name` you configu
 | Route by model name | [Model Load Balancing](model-load-balancing.md) |
 | Choose an endpoint-selection algorithm | [LLM Routing](llm-routing.md) |
 | Enable KV-cache-aware routing | [KV-Cache Routing](kv-caching.md) |
+| Bind and verify a strict KV profile | [Model Profiles and KV-Exact Readiness](model-profiles-kv-readiness.md) |
 | Split prefill and decode pools | [P/D Disaggregation](pd-disaggregation.md) |
 | Compare engine capabilities | [Engine Capability Matrix](../concepts/engine-capability-matrix.md) |
 | Configure SGLang P/D | [SGLang P/D Disaggregation](sglang-pd-disaggregation.md) |
@@ -274,3 +276,4 @@ Each rule in the response should show `mode: 4` and the `model_name` you configu
 | Manage streaming and token accounting | [SSE & Quota](sse-quota-management.md) |
 | Manage tenant keys and limits | [API Key Management](api-key-management.md) |
 | See every config field | [Configuration Reference](configuration-reference.md) |
+| Accelerate an eligible non-rewriting HTTP/1.1 relay | [Sockmap Acceleration](../operations/sockmap-acceleration.md) |

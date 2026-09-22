@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Refresh frozen public contracts used by the documentation example validator."""
+"""Refresh frozen Gateway API, engine-catalog, and scenario contracts for public docs."""
 
 from __future__ import annotations
 
@@ -20,6 +20,16 @@ CLI_RELEASE_REF = "5dd978c25c967b8192c5fe9cd448783e1e74be7c"
 CLI_RELEASE_TAG = "v0.9.8.9-rc.2"
 
 GATEWAY_FILES = ("api/swagger.yml", "api/swagger-extras.yml")
+SUPPORT_CATALOG_FILE = "engine-contracts/support-catalog.yaml"
+ENGINE_SCENARIO_PATHS = (
+    "cicd/kv-mixed-version",
+    "cicd/kv-profile-admission",
+    "cicd/kv-sglang-attest",
+    "cicd/sockmap-fullproxy",
+    "cicd/vllm-kvcache-routing-cpu",
+    "cicd/vllm-pd-admission-cpu",
+)
+ENGINE_CONTRACT_WORKFLOW = ".github/workflows/engine-contracts-ci.yml"
 COMPLETION_GOLDEN = "cmd/goldens/testdata/completion-bash.golden"
 
 # Only command leaves used by the public Markdown are retained. The completion
@@ -137,6 +147,14 @@ def resolve_ref(repo: Path, ref: str) -> str:
     ).strip()
 
 
+def resolve_object(repo: Path, ref: str, path: str) -> str:
+    return subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", f"{ref}:{path}"],
+        text=True,
+        stderr=subprocess.PIPE,
+    ).strip()
+
+
 def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
@@ -208,6 +226,16 @@ def compact_swagger(raw: bytes, source_path: str) -> dict[str, Any]:
     }
 
 
+def compact_support_catalog(raw: bytes) -> dict[str, Any]:
+    catalog = yaml.safe_load(raw)
+    return {
+        "source_path": SUPPORT_CATALOG_FILE,
+        "sha256": sha256(raw),
+        "schemaVersion": catalog.get("schemaVersion", ""),
+        "entries": catalog.get("entries", []),
+    }
+
+
 def function_body(completion: str, function_name: str) -> str | None:
     match = re.search(
         rf"(?ms)^{re.escape(function_name)}\(\)\n\{{\n(?P<body>.*?)^\}}\n",
@@ -275,6 +303,7 @@ def build_gateway_contract(
     for source_path in GATEWAY_FILES:
         raw = git_show(gateway_repo, resolved_ref, source_path)
         specs.append(compact_swagger(raw, source_path))
+    catalog_raw = git_show(gateway_repo, resolved_ref, SUPPORT_CATALOG_FILE)
     return {
         "contract_version": 1,
         "source": {
@@ -282,6 +311,22 @@ def build_gateway_contract(
             "commit": resolved_ref,
         },
         "specs": specs,
+        "support_catalog": compact_support_catalog(catalog_raw),
+        "scenario_evidence": {
+            "workflow": {
+                "path": ENGINE_CONTRACT_WORKFLOW,
+                "object_id": resolve_object(
+                    gateway_repo, resolved_ref, ENGINE_CONTRACT_WORKFLOW
+                ),
+            },
+            "trees": [
+                {
+                    "path": path,
+                    "object_id": resolve_object(gateway_repo, resolved_ref, path),
+                }
+                for path in ENGINE_SCENARIO_PATHS
+            ],
+        },
     }
 
 

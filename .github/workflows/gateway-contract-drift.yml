@@ -46,7 +46,7 @@ concurrency:
 
 jobs:
   validate:
-    name: Swagger union versus public docs
+    name: Gateway contracts versus public docs
     runs-on: ubuntu-latest
     steps:
       - name: Check out documentation
@@ -68,7 +68,7 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: Generate candidate contract from both Swagger files
+      - name: Generate candidate contract from Swagger, catalog, and scenarios
         id: candidate
         env:
           REQUESTED_GATEWAY_REF: ${{ github.event.client_payload.gateway_ref || github.event.inputs.gateway_ref || 'main' }}

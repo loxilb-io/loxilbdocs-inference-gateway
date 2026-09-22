@@ -150,6 +150,8 @@ the Swagger document.
 | OAuth | Provider, callback, and token `GET` paths under `/oauth/{provider}` | Public OAuth flow endpoints when OAuth is enabled |
 | CORS | `GET/POST /config/cors...`, `DELETE /config/cors/{cors_url}` | CORS origin lifecycle |
 | AI keys, JWT, and quotas | API-key paths; `GET/POST /config/ai/jwtauthprofile`; `DELETE /config/ai/jwtauthprofile/{name}`; tenant, user, and defaults rate-limit paths | Data-plane credentials and the quota ladder; independent from management authentication |
+| Engine and KV discovery | `GET /config/ai/model-profiles[/{profile_id}]`; `GET .../kvexactstatus` | Read-only published profile discovery and dedicated desired/enforced KV binding status; current main, REST-only |
+| Sockmap control | `POST .../sockmapreset` | Close this service's currently accelerated connections without changing `sockMapMode`; current main, REST-only |
 | OPA watcher | `GET/POST/DELETE /config/opa/watcher` | Runtime is intercepted by the raw handler; use the companion contract |
 
 The twelve not-implemented legacy metric paths are `flowcount`, `hostcount`,
@@ -269,6 +271,8 @@ Every AI routing feature is expressed through a load-balancer rule.
 | `GET/DELETE` | `/config/loadbalancer/externalipaddress/{ip}/port/{port}/protocol/{proto}` | Read or delete by composite key |
 | `PATCH` | Same VIP key | RFC 7386 merge patch for supported L4 rules; fullproxy/L7 and immutable-field changes are rejected |
 | `GET` | Same VIP key plus `/status` or `/stats` | Read lifecycle state or service counters |
+| `GET` | Same VIP key plus `/kvexactstatus` | Read strict/legacy KV binding identity, desired/enforced state, reason codes, and fence position; it is not configuration replay data |
+| `POST` | Same VIP key plus `/sockmapreset` | Close currently accelerated connections only; configuration stays unchanged |
 | `DELETE` | Name, host-keyed, or port-range variants | Repeat every path, host, and model component used at creation |
 
 `model_name`, `path_prefix`, and `path_match_mode` can be part of the exact
@@ -297,6 +301,11 @@ curl --fail-with-body --silent --show-error \
 
 See [Configuration Reference](../ai-gateway/configuration-reference.md) for
 the full field contract.
+
+Current `kvModelProfile` and `kvExactApiMode` are REST-only load-balancer fields. Discover the
+profile with `GET /config/ai/model-profiles`, create or replace the rule, then verify the separate
+`kvexactstatus` response. See
+[Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md).
 
 ## Management users and status codes
 
@@ -404,3 +413,5 @@ unset CONTROL_PLANE_TOKEN
 - [Configuration Reference](../ai-gateway/configuration-reference.md)
 - [API Key Management](../ai-gateway/api-key-management.md)
 - [Log API Operations](../operations/log-api.md)
+- [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md)
+- [Sockmap Acceleration](../operations/sockmap-acceleration.md)

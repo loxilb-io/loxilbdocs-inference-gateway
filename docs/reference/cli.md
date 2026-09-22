@@ -363,6 +363,7 @@ The current CLI maps these flags to the Gateway API contract:
 | Frontend and backend TLS | `--security=e2ehttps` | Sends `security: 2`; the gateway terminates and re-encrypts TLS. This is not passthrough. |
 | Typed engine | `--kv-engine-type=<engine>` | Sends `kvEngineType`; the server accepts `vllm`, `sglang`, `trtllm`, or `llamacpp` and applies engine-specific guards. |
 | Hash contract | `--kv-hash-algo=<algorithm>` | Sends an explicit hash algorithm. Prefer omission so the server derives the coherent engine default. |
+| Sockmap direction | `--sockmap-mode=off|request|response|both` | Sends `sockMapMode`; a non-`off` value still requires Gateway `--sockmapsupport`, an eligible plain HTTP/1.1 service, and a compatible Gateway main build. |
 | Model-keyed create/delete | `--model-name=<model>` | Repeats the model component of the L7 rule key. |
 | API-key policy | `--api-key-auth=disabled|required` | CLI supports exactly these two values. Omission and explicit `disabled` are different contracts. |
 
@@ -373,6 +374,11 @@ CLI option. User-limit and global/rule-default QoS CRUD are also REST-only.
 
 `pdBootstrapPort` does not currently have a `loxicmd create lb` flag. Configure that SGLang P/D
 field through the REST API. Do not substitute `--kv-zmq-port`; it configures a different transport.
+
+`kvModelProfile` and `kvExactApiMode` also have no current CLI flags, and there are no dedicated
+CLI commands for model-profile discovery or `kvexactstatus`. Use the REST workflow in
+[Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md). The
+`sockmapreset` action is REST-only even though rule creation supports `--sockmap-mode`.
 
 ### Delete a model-keyed rule
 
@@ -410,6 +416,8 @@ then delete by name. This avoids deleting a similarly keyed service.
 - [Data-Plane Authentication and JWT](../security/data-plane-jwt-auth.md) — five-state service policy and REST-only JWT profiles.
 - [AI Key Store Operations](../operations/ai-key-store.md) — independent data-plane credential storage.
 - [KV-Cache Routing](../ai-gateway/kv-caching.md) — what `ai_kv_inventory_get` inspects.
+- [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md) — REST-only strict fields and resolved status.
+- [Sockmap Acceleration](../operations/sockmap-acceleration.md) — daemon prerequisite, eligibility, and REST-only reset.
 - [Monitoring & Metrics](../operations/monitoring.md) — the metric families read by the observability tools.
 - [Persistence, Backup, and Restore](../operations/backup-restore.md) — dry-run, commit, write-through, restart, and quarantine semantics.
 - [Readiness, Capabilities, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md) — typed recovery state, optional-capability preflight, and the configuration-write gate.

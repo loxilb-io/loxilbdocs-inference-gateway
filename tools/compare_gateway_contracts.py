@@ -45,10 +45,19 @@ class ContractComparison:
     candidate_commit: str
     errors: list[str] = field(default_factory=list)
     specs: list[SpecDrift] = field(default_factory=list)
+    baseline_catalog_sha256: str = ""
+    candidate_catalog_sha256: str = ""
+    catalog_changed: bool = False
+    scenario_evidence_changed: bool = False
 
     @property
     def changed(self) -> bool:
-        return bool(self.errors) or any(spec.changed for spec in self.specs)
+        return (
+            bool(self.errors)
+            or self.catalog_changed
+            or self.scenario_evidence_changed
+            or any(spec.changed for spec in self.specs)
+        )
 
 
 def load_contract(path: Path) -> dict[str, Any]:
@@ -100,6 +109,18 @@ def compare_contracts(
             *(f"baseline: {error}" for error in baseline_errors),
             *(f"candidate: {error}" for error in candidate_errors),
         ],
+        baseline_catalog_sha256=str(
+            baseline.get("support_catalog", {}).get("sha256", "")
+        ),
+        candidate_catalog_sha256=str(
+            candidate.get("support_catalog", {}).get("sha256", "")
+        ),
+        catalog_changed=(
+            baseline.get("support_catalog") != candidate.get("support_catalog")
+        ),
+        scenario_evidence_changed=(
+            baseline.get("scenario_evidence") != candidate.get("scenario_evidence")
+        ),
     )
     for source_path in sorted(EXPECTED_SOURCES & baseline_specs.keys() & candidate_specs.keys()):
         left = baseline_specs[source_path]
@@ -142,6 +163,18 @@ def markdown_report(comparison: ContractComparison) -> str:
     if comparison.errors:
         lines.extend(["", "### Contract errors", ""])
         lines.extend(f"- {error}" for error in comparison.errors)
+    lines.extend(
+        [
+            "",
+            "### `engine-contracts/support-catalog.yaml`: "
+            + ("CHANGED" if comparison.catalog_changed else "unchanged"),
+            "",
+            f"- Raw SHA-256: `{comparison.baseline_catalog_sha256}` -> "
+            f"`{comparison.candidate_catalog_sha256}`",
+            "- Frozen scenario evidence: "
+            + ("CHANGED" if comparison.scenario_evidence_changed else "unchanged"),
+        ]
+    )
     for spec in comparison.specs:
         state = "CHANGED" if spec.changed else "unchanged"
         lines.extend(

@@ -62,6 +62,7 @@ apply to every rule, AI or not.
 | `snat` | boolean | `false` | `true`/`false` | Mark as an SNAT rule. |
 | `egress` | boolean | `false` | `true`/`false` | Mark as an egress rule. |
 | `proxyprotocolv2` | boolean | `false` | `true`/`false` | Emit PROXY protocol v2 to backends. |
+| `sockMapMode` | string | `off` | `off`, `request`, `response`, `both` | Experimental directional sockmap relay acceleration. Non-`off` requires plaintext IPv4 TCP fullproxy, daemon `--sockmapsupport`, and no `sse_mode`, P/D, `api_key_auth` declaration, or attached L7 policy. HTTP/2/h2c is never accelerated. See [Sockmap Acceleration](../operations/sockmap-acceleration.md). |
 | `oper` | int32 | `0` | `0`-create, `1`-attachEP, `2`-detachEP | Endpoint-specific operation for incremental EP edits. |
 | `block` | uint32 | — | any | Block-number grouping for this LB entry. |
 | `id` | string | minted | UUIDv4 if absent | Stable opaque rule identifier (Octavia). |
@@ -142,7 +143,15 @@ overlap silently drops to zero. See [KV-Cache Routing](kv-caching.md).
 | `kvWarmupSec` | int64 | `30` | ≥0 | **Accepted but currently inert on all paths.** Intended as a Tier 1.5 warmup delay after subscriber connect, but the timer is never armed in the shipped data path — Tier 1.5 activates without waiting. Do not design procedures around it. |
 | `kvEngineType` | string | `vllm` | `vllm`, `sglang`, `trtllm`, `llamacpp` | Typed serving engine. Immutable after create; delete and recreate the rule to change it. Engine selection enables validation but does not imply feature parity. |
 | `kvDpRankCount` | int32 | `1` | `1`–`8` | SGLang data-parallel rank count. Rank N publishes at `kvZmqPort+N`; all ranks union into one per-endpoint inventory. Values above 1 are rejected for TensorRT-LLM and llama.cpp. |
+| `kvExactApiMode` | string | profile surfaces or legacy `both` when omitted | `completions`, `chat`, `both` | REST-only scalar declaration. Requires `kvExactMode: 1` or `3`; immutable after create. With a bound profile, an explicit value must be a subset of `supportedApis`. |
+| `kvModelProfile` | string | profile-less legacy mode when omitted | one published profile ID | REST-only scalar binding. Requires `kvExactMode: 1` or `3`; strict admission validates aliases and artifacts. Normally immutable; the sole exception is attaching a profile to a profile-less KV-exact rule. |
 | `pdBootstrapPort` | int32 | `0` | `0`–`65535` | SGLang P/D bootstrap port on each prefill endpoint. `0` uses SGLang's default `8998`. A nonzero value requires `pd_disagg_mode: true` and `kvEngineType: sglang`; all other shapes are rejected. |
+
+!!! info "Strict profile configuration is REST-only"
+    Current `loxicmd create lb` has no flags for `kvExactApiMode` or `kvModelProfile`. Discover
+    published profiles through REST, create the strict rule through REST, then verify the
+    dedicated `kvexactstatus` read model. See
+    [Model Profiles and KV-Exact Readiness](model-profiles-kv-readiness.md).
 
 ### Engine and field coherence
 

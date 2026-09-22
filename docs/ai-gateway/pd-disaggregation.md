@@ -33,6 +33,12 @@ Every P/D rule requires:
 - at least one `ep_role: 2` endpoint
 - one coherent `kvEngineType` for the entire rule
 
+!!! warning "HTTP/1.1 engine path"
+    Current HTTP/2 tests qualify specific admission, authentication, accounting, multiplexing,
+    and connection-lifecycle legs. The HTTP/2 forwarding path does not integrate P/D,
+    model-aware pools, or KV-exact selection. Use the HTTP/1.1 fullproxy path for the P/D
+    contracts on this page; do not generalize a passing HTTP/2 auth test into engine parity.
+
 ## The request flow depends on the engine
 
 | Engine | Request order | Transfer contract | Engine-specific setting |
@@ -104,14 +110,48 @@ Useful Gateway metric families include:
 
 ```text
 loxilb_ai_pd_requests_total
+loxilb_ai_pd_prefill_duration_seconds
+loxilb_ai_pd_decode_ttft_seconds
+loxilb_ai_pd_kv_params_found_total
+loxilb_ai_pd_kv_params_missing_total
+loxilb_ai_pd_session_hits_total
+loxilb_ai_pd_tier_selected_total
 loxilb_pd_kv_tier15_hits_total
 loxilb_pd_kv_blocks
 loxilb_kv_subscriber_connected
+loxilb_pd_admission_shed_total
+loxilb_pd_admission_queued_total
+loxilb_pd_admission_overflow_shed_total
 loxilb_pd_sg_room_retry_total
 loxilb_pd_trt_ctx_early_exit_total
 ```
 
 Metric availability depends on the configured engine and optional routing layers.
+
+### Lifecycle outcome contract
+
+`loxilb_ai_pd_requests_total{model,phase,status}` records one terminal P/D lifecycle outcome. The
+current closed mappings are:
+
+| `phase` | `status` | Meaning |
+|---|---|---|
+| `complete` | `success` | Both required stages completed successfully. |
+| `prefill` | `timeout` | The prefill-side lifecycle ran out of time. |
+| `prefill` | `error` | The prefill endpoint or transport failed. |
+| `prefill` | `rejected` | The prefill origin rejected the request and that response was relayed. |
+| `decode` | `timeout` | Prefill completed, but decode produced no byte before its deadline. |
+| `decode` | `error` | Prefill completed, but the decode endpoint or transport failed. |
+| `unknown` | `error` | Defensive fallback for an unrecognized internal outcome; investigate as contract drift. |
+
+`loxilb_ai_pd_kv_params_missing_total` is not a generic failure counter. It advances only after
+the Gateway actually inspected a completed prefill response and found no `kv_transfer_params`.
+Prefill timeout, death, or rejection does not count as "missing" because nothing was inspected.
+
+`loxilb_ai_pd_tier_selected_total{tier,model}` increments once per successful prefill selection
+with `tier0`, `tier1`, `tier15`, or `tier2`. Requests refused or parked by bounded admission do not
+select a tier and therefore do not increment it. Diagnose admission with the separate
+`shed`, `queued`, and `overflow_shed` families; a `429 pd_overloaded` must also have backend
+receipt delta `0`.
 
 ## Failure diagnosis
 
@@ -123,6 +163,11 @@ Metric availability depends on the configured engine and optional routing layers
 | Traffic succeeds but KV-exact hits remain zero | Tokenizer, model, block size, hash algorithm, event feed, and inventory readiness; `kvWarmupSec` is currently inert |
 | One role becomes overloaded | Endpoint health, session TTL, load threshold, and role counts |
 | Errors continue to select one endpoint | Circuit-breaker enablement and origin/connect failure classification |
+
+Client-visible status and metric phase answer different questions. A `504` timeout should map to
+the leg that actually timed out; an endpoint death commonly returns `503`; a prefill-origin 4xx is
+relayed and recorded as `prefill/rejected`. Correlate the client receipt, backend delivery, the
+typed `phase/status` counter, and engine logs instead of classifying by HTTP status alone.
 
 ### Circuit-breaker behavior
 

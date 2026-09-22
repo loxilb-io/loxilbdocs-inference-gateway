@@ -90,6 +90,7 @@ nav:
       - Model Load Balancing: ai-gateway/model-load-balancing.md
       - LLM Routing: ai-gateway/llm-routing.md
       - KV-Cache Routing: ai-gateway/kv-caching.md
+      - Model Profiles & KV Readiness: ai-gateway/model-profiles-kv-readiness.md
       - P/D Disaggregation: ai-gateway/pd-disaggregation.md
       - vLLM Integration: ai-gateway/vllm-integration.md
       - SGLang P/D Integration: ai-gateway/sglang-pd-disaggregation.md
@@ -125,6 +126,7 @@ nav:
       - Persistence, Backup & Restore: operations/backup-restore.md
       - Readiness, Capabilities, Diagnostics & Maintenance: operations/readiness-diagnostics-maintenance.md
       - Appliance CLI: operations/appliance-cli.md
+      - Sockmap Acceleration: operations/sockmap-acceleration.md
       - Application & L4 Tracing: operations/tracing.md
       - DPU Offload Observability: operations/dpu-offload.md
       - Monitoring & Metrics: operations/monitoring.md

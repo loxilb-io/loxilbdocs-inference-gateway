@@ -43,6 +43,16 @@ def contract(*, commit: str = "a", description_hash: str = "same") -> dict:
                 "definitions": {},
             },
         ],
+        "support_catalog": {
+            "source_path": "engine-contracts/support-catalog.yaml",
+            "sha256": "catalog",
+            "schemaVersion": "engine-support.loxilb.io/v1alpha1",
+            "entries": [],
+        },
+        "scenario_evidence": {
+            "workflow": {"path": "workflow", "object_id": "workflow-object"},
+            "trees": [],
+        },
     }
 
 
@@ -84,6 +94,22 @@ class GatewayContractComparisonTests(unittest.TestCase):
         self.assertTrue(
             any("swagger-extras.yml" in error for error in comparison.errors)
         )
+
+    def test_support_catalog_change_is_contract_drift(self) -> None:
+        candidate = contract()
+        candidate["support_catalog"]["sha256"] = "new-catalog"
+        comparison = MODULE.compare_contracts(contract(), candidate)
+        self.assertTrue(comparison.changed)
+        self.assertTrue(comparison.catalog_changed)
+
+    def test_engine_scenario_change_is_contract_drift(self) -> None:
+        candidate = contract()
+        candidate["scenario_evidence"]["trees"] = [
+            {"path": "cicd/example", "object_id": "tree"}
+        ]
+        comparison = MODULE.compare_contracts(contract(), candidate)
+        self.assertTrue(comparison.changed)
+        self.assertTrue(comparison.scenario_evidence_changed)
 
 
 if __name__ == "__main__":
