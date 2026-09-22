@@ -1,5 +1,7 @@
 # SGLang P/D Disaggregation
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Run SGLang prefill/decode disaggregation through a concurrent two-leg Gateway flow. This guide separates base P/D from the optional KV-exact routing layer so the two configurations are not confused.
 
 ## Prerequisites

@@ -4,7 +4,7 @@
       "evidence": "visual-explanation",
       "id": "4d2a4545f3aa6f2a1241",
       "language": "mermaid",
-      "line": 16,
+      "line": 18,
       "path": "docs/ai-gateway/ai-traffic-governance.md",
       "quality_contract": {
         "cleanup": true,
@@ -18,10 +18,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "3a699dc88a53789849e4",
       "language": "bash",
-      "line": 117,
+      "line": 119,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/ai/tenant/ratelimit"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/ai-traffic-governance.md",
       "quality_contract": {
         "cleanup": true,
@@ -38,7 +51,7 @@
       "evidence": "swagger-union-static",
       "id": "e0cabe6e59aace59c0a0",
       "language": "bash",
-      "line": 135,
+      "line": 137,
       "path": "docs/ai-gateway/ai-traffic-governance.md",
       "quality_contract": {
         "cleanup": true,
@@ -55,7 +68,7 @@
       "evidence": "shell-syntax-only",
       "id": "deb0a5c9949eef0c189b",
       "language": "bash",
-      "line": 207,
+      "line": 209,
       "path": "docs/ai-gateway/ai-traffic-governance.md",
       "quality_contract": {
         "cleanup": true,
@@ -69,10 +82,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "b46cba73cd61da239a62",
       "language": "bash",
-      "line": 293,
+      "line": 295,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/ai/apikey/$KEY_ID"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/ai-traffic-governance.md",
       "quality_contract": {
         "cleanup": true,
@@ -89,7 +115,7 @@
       "evidence": "visual-explanation",
       "id": "cdcde231bcd88737a733",
       "language": "mermaid",
-      "line": 12,
+      "line": 14,
       "path": "docs/ai-gateway/api-key-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -106,7 +132,7 @@
       "evidence": "swagger-union-static",
       "id": "8d97eee43b0ff630f88d",
       "language": "bash",
-      "line": 126,
+      "line": 128,
       "path": "docs/ai-gateway/api-key-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -120,10 +146,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "a3b5a3e75abb94c4156e",
       "language": "bash",
-      "line": 146,
+      "line": 148,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "PATCH /config/ai/apikey/$OLD_KEY_ID"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/api-key-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -137,10 +176,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "0f719d81c4053749b91c",
       "language": "bash",
-      "line": 165,
+      "line": 167,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/ai/apikey/$OLD_KEY_ID"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/api-key-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -157,7 +209,7 @@
       "evidence": "shell-syntax-only",
       "id": "6994f5f1e6f2d4f47675",
       "language": "bash",
-      "line": 188,
+      "line": 190,
       "path": "docs/ai-gateway/api-key-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -174,7 +226,7 @@
       "evidence": "shell-syntax-only",
       "id": "b85689404c48a129dab4",
       "language": "bash",
-      "line": 231,
+      "line": 233,
       "path": "docs/ai-gateway/api-key-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -191,7 +243,7 @@
       "evidence": "syntax-only",
       "id": "a1ca50f39df1e0cd9eb7",
       "language": "json",
-      "line": 12,
+      "line": 14,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -205,10 +257,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "f670ef758fd87aec7c50",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "0f8ba8345a9fa4e3fcf4",
       "language": "bash",
-      "line": 357,
+      "line": 359,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -218,14 +283,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "80c614bd1bfbd00f3f48cd06e6f4c7630bc03669ef2bfc61a7e1f5af618aeddd",
+      "sha256": "dfcbd9af392320a5bc0846810f2440a75a4f360aecda150d4bc177989a4ee724",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "469ff84d884af3db8b8a",
       "language": "bash",
-      "line": 388,
+      "line": 390,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -240,9 +318,9 @@
     },
     {
       "evidence": "syntax-only",
-      "id": "08fe8c3f9b8a9d2e8cb7",
+      "id": "97719106288800271ea8",
       "language": "json",
-      "line": 396,
+      "line": 398,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -252,14 +330,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "23076cab384e7cfc2ccd83c3aad9db8fa04703dcea7eb519f8a32a3da8d4ddb8",
+      "sha256": "60ee31c55c88bcc7c2e8ecd75f010563b805fadba569985251287f22389f4038",
       "status": "illustrative-only"
     },
     {
       "evidence": "swagger-union-static",
-      "id": "f9950c202f9ee3b43f22",
+      "id": "0c9409d1f0ea6ac8f193",
       "language": "bash",
-      "line": 415,
+      "line": 417,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -269,14 +347,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "ec624ec6c62fcc2984ca2dfae3a9503108716ce1d8c106d989fe395e5e5c2692",
+      "sha256": "032acc0fe9fde6def13004772bd8fca451358a6ff625daf349b76f806504e389",
       "status": "illustrative-only"
     },
     {
       "evidence": "cli-contract-static",
       "id": "14b64cf9f36bfc739c2b",
       "language": "bash",
-      "line": 423,
+      "line": 425,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -293,7 +371,7 @@
       "evidence": "visual-explanation",
       "id": "a732c18733f66f1f4a94",
       "language": "mermaid",
-      "line": 139,
+      "line": 141,
       "path": "docs/ai-gateway/kv-caching.md",
       "quality_contract": {
         "cleanup": false,
@@ -310,7 +388,7 @@
       "evidence": "unexecuted-example",
       "id": "b6a70b2f7c456e735dc9",
       "language": "plain",
-      "line": 177,
+      "line": 179,
       "path": "docs/ai-gateway/kv-caching.md",
       "quality_contract": {
         "cleanup": false,
@@ -327,7 +405,7 @@
       "evidence": "shell-syntax-only",
       "id": "5b54e110aef9cc0ae494",
       "language": "bash",
-      "line": 188,
+      "line": 190,
       "path": "docs/ai-gateway/kv-caching.md",
       "quality_contract": {
         "cleanup": false,
@@ -341,10 +419,130 @@
       "status": "illustrative-only"
     },
     {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "3f29a179dc5776f1d40e",
+      "language": "bash",
+      "line": 219,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/ai-gateway/kv-caching.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "61f3735395b08ce5826b67a3a20792c2d7764f07a7592c7abf5f8b64fa2804b0",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "fd7c6a1e5c1e16cd1df7",
+      "language": "bash",
+      "line": 247,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/ai-gateway/kv-caching.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "3b88e3a4fd1274d07ecef4b68143584a0e3915ee6f8a2767577a2c4e1ca969ea",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "e3fd95d0d76f93b3b5cc",
+      "language": "bash",
+      "line": 258,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/ai-gateway/kv-caching.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "14e50fdd05526ff0061754471feeae747c27a3be26056720ae9fb16d9732989f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "a88be2a86665e33aae1c",
+      "language": "bash",
+      "line": 283,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/ai-gateway/kv-caching.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "0acef46406ad6db6edbb997ab206487487482e4c3bdaf79723341c1fbcc74fe2",
+      "status": "illustrative-only"
+    },
+    {
       "evidence": "swagger-union-static",
-      "id": "a7379ef27dae4c59c085",
+      "id": "3a4163d6759088da4d30",
       "language": "bash",
-      "line": 217,
+      "line": 308,
       "path": "docs/ai-gateway/kv-caching.md",
       "quality_contract": {
         "cleanup": false,
@@ -354,31 +552,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "85d4716f82dc7e5edea9009843868b9c178be326e24035a623eaedb1965051c9",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "cli-contract-static",
-      "id": "ecbecb754940800dcb76",
-      "language": "bash",
-      "line": 245,
-      "path": "docs/ai-gateway/kv-caching.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "44a3396b75613c07d9ef10bda780b133664b620782c2861540267a60f8a53c40",
+      "sha256": "4a4f4565bcf88a82744003bc824e1ef8a2469a4b0ae5ed99810e7aa1a761b3d8",
       "status": "illustrative-only"
     },
     {
       "evidence": "swagger-union-static",
-      "id": "47a41e19d33cc2b8df08",
+      "id": "079ef0c94aeac151e6a6",
       "language": "bash",
-      "line": 256,
+      "line": 324,
       "path": "docs/ai-gateway/kv-caching.md",
       "quality_contract": {
         "cleanup": false,
@@ -388,65 +569,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "b8286d406d5dcda1b8d92375b5860b29b4633a9d6c87e5ad884a2b799819eab7",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "cli-contract-static",
-      "id": "eaaf3b75b2c63fe0a1a8",
-      "language": "bash",
-      "line": 281,
-      "path": "docs/ai-gateway/kv-caching.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "73f0d0db1c1f6cb49293fccc92caf53d504fc48ae618d879eb2cf4ad4ac11263",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "swagger-union-static",
-      "id": "3883828f480b4604d23b",
-      "language": "bash",
-      "line": 306,
-      "path": "docs/ai-gateway/kv-caching.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "a947f15277cb138ad80a75ef8e7a1be3fa1dd10515b6a85611836034e9471b33",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "swagger-union-static",
-      "id": "af3fd6f8fc337e300d05",
-      "language": "bash",
-      "line": 322,
-      "path": "docs/ai-gateway/kv-caching.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "e0173b7da2745c296f901f77fd661dfe4cbaa5428e063a3c695ecb6a81c7e089",
+      "sha256": "066c25edf7bc39fe0459ccfd2ddb4398f28614b32b6792dae5e360c286c0d576",
       "status": "illustrative-only"
     },
     {
       "evidence": "syntax-only",
       "id": "68f66fcb52fb2e453c7a",
       "language": "json",
-      "line": 326,
+      "line": 328,
       "path": "docs/ai-gateway/kv-caching.md",
       "quality_contract": {
         "cleanup": false,
@@ -463,7 +593,7 @@
       "evidence": "visual-explanation",
       "id": "12ad64dd3e4bf6ad0c49",
       "language": "mermaid",
-      "line": 16,
+      "line": 18,
       "path": "docs/ai-gateway/llamacpp-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -477,10 +607,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "ebcfcdf509c994df17ad",
       "language": "bash",
-      "line": 54,
+      "line": 56,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/llamacpp-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -497,7 +640,7 @@
       "evidence": "syntax-only",
       "id": "3856d7bef4e294813081",
       "language": "json",
-      "line": 96,
+      "line": 98,
       "path": "docs/ai-gateway/llamacpp-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -514,7 +657,7 @@
       "evidence": "visual-explanation",
       "id": "810c080d5a570b116bfd",
       "language": "mermaid",
-      "line": 109,
+      "line": 111,
       "path": "docs/ai-gateway/llamacpp-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -531,7 +674,7 @@
       "evidence": "swagger-union-static",
       "id": "daf439311c833e805581",
       "language": "bash",
-      "line": 128,
+      "line": 130,
       "path": "docs/ai-gateway/llamacpp-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -548,7 +691,7 @@
       "evidence": "swagger-union-static",
       "id": "7e4109ffbaa9106a862c",
       "language": "bash",
-      "line": 141,
+      "line": 143,
       "path": "docs/ai-gateway/llamacpp-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -562,10 +705,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "a1c4905cd0ed0cc673d3",
       "language": "bash",
-      "line": 161,
+      "line": 163,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/2044/protocol/tcp"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/llamacpp-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -579,10 +735,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "4545b583ad078f9d3480",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "188498cfc10a70211f75",
       "language": "bash",
-      "line": 66,
+      "line": 68,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/llm-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -592,14 +761,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "175af9e526ad17e039a457e062fec8987fea1226a4ea400ec525ab39aba55407",
+      "sha256": "4fbf8beb9512b7527333ede507c5c318cac6ba1930e33bad8be195b585de305c",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "25e01cd0920a29829f6f",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "16f76e50e8aae63d5e7e",
       "language": "bash",
-      "line": 91,
+      "line": 93,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/llm-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -609,14 +791,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "6fa340cf1795a01dd710a2a461794bf9921322f2c9464dc234f66f8aa5e77d11",
+      "sha256": "80a124ce453ee3cbfca481b92ee5daffbd13660fb34755fa56b5e545e8d70002",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "840e626760fdfcc096a5",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "4c30f17578c7704968d4",
       "language": "bash",
-      "line": 113,
+      "line": 115,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/llm-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -626,14 +821,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "22c1a03859c7c35076ccbce7199c7db630bb3a19928dec8a89b7a03a2c916c3e",
+      "sha256": "18bab1a47a11d16f28610781e6e72b3dd8d037ec7f739a8df65703067ccbccc7",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "e0bb0ee43cd045f37e32",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "ab17618a1223995ca314",
       "language": "bash",
-      "line": 134,
+      "line": 136,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/llm-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -643,14 +851,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "af019d2585f6dd4d98cd443459afafeb23ce7f3b4a3fe0aa24cfe44991fd6c74",
+      "sha256": "736f50b10930fbaee879d11821b688a3ac2b8aee394ad77102f49328703042b3",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "46a4f19d155576926c80",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "cfcd30e93c99540293a2",
       "language": "bash",
-      "line": 167,
+      "line": 169,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/llm-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -660,14 +881,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "dd89b8cc63aa5d327ea8223138d10eeaae5af1cf7be099502ca9596427879770",
+      "sha256": "b93be82e255d7c69a4d95eeb7769d997c030332adf3e256c1a41f1e3b856b39b",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "92d614db5a447c898481",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "336c289e6f06e9b9605f",
       "language": "bash",
-      "line": 188,
+      "line": 190,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/llm-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -677,14 +911,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "e17dd4562fd35378ef7752143cddb7c436e71b746f9788b73fd39614f454774a",
+      "sha256": "ac3494e374e5e903553f56b62abbba26916e83004839593ab8d51dfd073c6224",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "2be462256278ced6c3e1",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "89892f6bd49443b854e6",
       "language": "bash",
-      "line": 214,
+      "line": 216,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/llm-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -694,14 +941,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "15cc42ab21320cd388e378bbb0aa59a8aba34fa31d57251f458ecb2af8d4c7ef",
+      "sha256": "7662ca85488f6bf5b229ecc15402ddab3705939e3ada2558f82a47afbeab05b4",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "212a6dfc44322075db9e",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "e07331e29cbdddbc76fa",
       "language": "bash",
-      "line": 235,
+      "line": 237,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/llm-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -711,14 +971,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "397ae5324a3fc768fd6f7bb13578975ba79a102559ce57195ae25614c9ea6946",
+      "sha256": "2c931b821d7b468d81817426a954ab40852d9ac0cd44e4247559748e5ef7f646",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "5a3825e16a0886414afd",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "331c11a36932ca77187d",
       "language": "bash",
-      "line": 262,
+      "line": 264,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/llm-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -728,14 +1001,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "329f1a1fbcd76eda2bae817981f1ab7487e718f1d9d768653cad5a1e919d9b91",
+      "sha256": "62916f73b3057812219835ae3f0f22475531646fa458fcd787dbde76a2f826d8",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "2dde51db30f3ac5a7db6",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "f8650f3151eba682887f",
       "language": "bash",
-      "line": 284,
+      "line": 286,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/llm-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -745,14 +1031,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "64ada1a0007380dbaab0d13b85331fbd26a1868555b50764864648b8f05d246e",
+      "sha256": "b7237fb9a2800ed9ff65233d98cc3235028b80aa4bd2e7b450fe61f92b063b23",
       "status": "illustrative-only"
     },
     {
       "evidence": "swagger-union-static",
       "id": "ec5eeba524407d306507",
       "language": "bash",
-      "line": 297,
+      "line": 299,
       "path": "docs/ai-gateway/llm-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -767,9 +1053,9 @@
     },
     {
       "evidence": "shell-syntax-only",
-      "id": "8bde6045daf0ecd9c776",
+      "id": "21cdf63d35ebf0ce1fb3",
       "language": "bash",
-      "line": 304,
+      "line": 306,
       "path": "docs/ai-gateway/llm-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -779,14 +1065,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "d7191dabe7efe3c68b29f5ce1adc4e28de9f846b1328f0d52288c2ee53ec200d",
+      "sha256": "7ae011a2157e633ec2be65e6e7ffc864a5a46b23ebfed8637bef8e8d49100923",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "2a62082e73471ec67ead",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "043fcaebb07ef75d9ab0",
       "language": "bash",
-      "line": 70,
+      "line": 72,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/mcp-gateway.md",
       "quality_contract": {
         "cleanup": false,
@@ -796,14 +1095,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "0d9bffbaf93e0f576505cdf55ae54f65e096f469bcdc45c3ae6b1d4769b517fd",
+      "sha256": "6a3d74565e345fc18d977c90d378bf01f9e4e70fb1d9d280a2a36542649fd126",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "9a016aec0802fca471ef",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "81a1335a807a73831e8c",
       "language": "bash",
-      "line": 92,
+      "line": 94,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/mcp-gateway.md",
       "quality_contract": {
         "cleanup": false,
@@ -813,14 +1125,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "d67a76c5bc093d648fce12e8dbf14d38d19431c178c07459ce258101cf8690ac",
+      "sha256": "0dd91b06effd0cda6e461335d6e29d075916b695a45929f7680d2fb8aebb6d29",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "f7f77e0dbcff90cb3ecb",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "dbe6abe2f7c31afae89b",
       "language": "bash",
-      "line": 103,
+      "line": 105,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/mcp-gateway.md",
       "quality_contract": {
         "cleanup": false,
@@ -830,14 +1155,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "1f99a4d21a9c9d5da3e5c4bdbf95bc5cc86639f9ba48b836b2590b06d93a239c",
+      "sha256": "d3775f379897eebec5f153053796208492eb1b82f03029221bff1f96cd143647",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "3982edade736c4452393",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "ddefbe0961f74a18d136",
       "language": "bash",
-      "line": 126,
+      "line": 128,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/mcp-gateway.md",
       "quality_contract": {
         "cleanup": false,
@@ -847,14 +1185,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "8cf25189f1634361db5578cfc3325a521e21ce843f3b41d2298a3678e96282d0",
+      "sha256": "a1d01163b47bb0724b143a48589cebfd2ecd0823b08a3d5d3fa14e10f9e37d26",
       "status": "illustrative-only"
     },
     {
       "evidence": "shell-syntax-only",
-      "id": "e1ec21a3cb36179c2411",
+      "id": "6bbf2dcad59f83ba4b51",
       "language": "bash",
-      "line": 150,
+      "line": 152,
       "path": "docs/ai-gateway/mcp-gateway.md",
       "quality_contract": {
         "cleanup": false,
@@ -864,14 +1202,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "387533358954d5fcc3308cc7f0c32f905cc3d74584722b9112ebd1466e881a03",
+      "sha256": "8b68991e500f7f92afd0ea6a215a30e88d36fe46cf92827921fba3e3aabae316",
       "status": "illustrative-only"
     },
     {
       "evidence": "visual-explanation",
       "id": "c76e14f27a833729b495",
       "language": "mermaid",
-      "line": 29,
+      "line": 31,
       "path": "docs/ai-gateway/model-load-balancing.md",
       "quality_contract": {
         "cleanup": true,
@@ -885,10 +1223,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "5a084bc5c3f49af75481",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "d930e8a79a6cffaa0b65",
       "language": "bash",
-      "line": 106,
+      "line": 108,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/model-load-balancing.md",
       "quality_contract": {
         "cleanup": true,
@@ -898,14 +1249,27 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "ee3ca352d8c8f0f114404015ec14fba1f8f58a230f36988758f8422edd7a20a7",
+      "sha256": "22569cf9952716950525ead6d4d29fee856a97482163f03c51f7b587905be62a",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "c863d9cbdbe1eaf73867",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "9bee48e2b04811f6b54a",
       "language": "bash",
-      "line": 130,
+      "line": 132,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/model-load-balancing.md",
       "quality_contract": {
         "cleanup": true,
@@ -915,14 +1279,27 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "db35bc1beb48cc5e7c63f9050b5810deb499c98407c590ef0246695aeaebfaf4",
+      "sha256": "fb7a4f3b99abba9cd62514047890451bf9dccad9a7238b6f5a9a14b59e816e44",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "06d3b3820ab0edbbb784",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "b54a1f35c7b37029b1d4",
       "language": "bash",
-      "line": 138,
+      "line": 140,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/model-load-balancing.md",
       "quality_contract": {
         "cleanup": true,
@@ -932,14 +1309,27 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "35a452cbe42e810bceef6428248cbd4ee1fdd29d3fe2953d5e7f0db6804d7340",
+      "sha256": "01b9384632827efb50a68add060e3b7b8cda7adc43020765193e4d330806a3ef",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "4b515cc3a08c78bd670d",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "55eb1a0bbcd17ed8f247",
       "language": "bash",
-      "line": 162,
+      "line": 164,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/model-load-balancing.md",
       "quality_contract": {
         "cleanup": true,
@@ -949,14 +1339,27 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "f5fea7a3ca01bf4629927aead12303ec311f8d95e828455b4b26235ee30864a3",
+      "sha256": "fe43f7696ea055ab2488c91995f030091d6ed46761fe244d71f338d55f1a2aa9",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "6bcabda272396d01de8a",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "3ec1d5224871a3f91c7c",
       "language": "bash",
-      "line": 172,
+      "line": 174,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/model-load-balancing.md",
       "quality_contract": {
         "cleanup": true,
@@ -966,14 +1369,27 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "ec9801545ff85f257c74d7065ce651eb3fa1e92fe87ceafdf58cec539ab1de5b",
+      "sha256": "e51bb931c7ef4689d7e769073255f9c8c14fa266b3a9338e2f0fe111d1b10574",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "169ab7fac01ef418f871",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "7406582cee12f05d48d8",
       "language": "bash",
-      "line": 196,
+      "line": 198,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/model-load-balancing.md",
       "quality_contract": {
         "cleanup": true,
@@ -983,14 +1399,14 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "ccdd4ef2d17d68c62306e30631b609a5446db0a18eb18df9e54f51b4ab1c5c03",
+      "sha256": "e414468c8141092cf8b626a0837a5279763c31970bd0e8acbe249b36b89c631f",
       "status": "illustrative-only"
     },
     {
       "evidence": "shell-syntax-only",
-      "id": "0349417f3a68130ff199",
+      "id": "35441a24f773977d17af",
       "language": "bash",
-      "line": 216,
+      "line": 218,
       "path": "docs/ai-gateway/model-load-balancing.md",
       "quality_contract": {
         "cleanup": true,
@@ -1000,14 +1416,27 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "f9456a3be949a50b221c59db9aa19cb8db7f1a403a8fea672471e9c7beb21442",
+      "sha256": "0d12ae0fde5996052e0b0190ed8fe94b9229e43ed4ca1a261c822cbd7ab609b9",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "d7aab82353c885afb8c2",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "2a867b0d0e2a7151d932",
       "language": "bash",
-      "line": 252,
+      "line": 254,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/loadbalancer/hosturl/192.0.2.254/externalipaddress/192.0.2.254/port/2020/protocol/tcp"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/model-load-balancing.md",
       "quality_contract": {
         "cleanup": true,
@@ -1017,14 +1446,27 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "1d44b62d6b173aca30130a3fbec330fc13b02d1b2bc00330c7e86a81576e3e14",
+      "sha256": "dae6ea1c479fde44d01849e717f7df89b230858e12b6fa1d660bd3d6f02f6f2b",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "aebf9d0bc1b81980da5e",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "2d895db0f910bea5c4d0",
       "language": "bash",
-      "line": 259,
+      "line": 261,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd delete lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/model-load-balancing.md",
       "quality_contract": {
         "cleanup": true,
@@ -1034,14 +1476,14 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "648acf4f297c9b52a3766969bbd0855f1bbb4cff64507a6f5a8caf3f4f25b4ab",
+      "sha256": "29ae14f76174b5edebe06bccbbb1ccb7cd1215187369b65ec4eadd036eba8980",
       "status": "illustrative-only"
     },
     {
       "evidence": "swagger-union-static",
       "id": "e0afd053006be3e01f63",
       "language": "bash",
-      "line": 36,
+      "line": 38,
       "path": "docs/ai-gateway/model-profiles-kv-readiness.md",
       "quality_contract": {
         "cleanup": true,
@@ -1058,7 +1500,7 @@
       "evidence": "swagger-union-static",
       "id": "865a7bc6a7160c54ed2d",
       "language": "bash",
-      "line": 52,
+      "line": 54,
       "path": "docs/ai-gateway/model-profiles-kv-readiness.md",
       "quality_contract": {
         "cleanup": true,
@@ -1072,10 +1514,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "7a49a9c606e4d84550f5",
       "language": "bash",
-      "line": 73,
+      "line": 75,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/model-profiles-kv-readiness.md",
       "quality_contract": {
         "cleanup": true,
@@ -1092,7 +1547,7 @@
       "evidence": "swagger-union-static",
       "id": "ca3f2cbb615276bb893c",
       "language": "bash",
-      "line": 109,
+      "line": 111,
       "path": "docs/ai-gateway/model-profiles-kv-readiness.md",
       "quality_contract": {
         "cleanup": true,
@@ -1106,10 +1561,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "29c6a39ffcc11c6344f8",
       "language": "bash",
-      "line": 176,
+      "line": 178,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/8080/protocol/tcp"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/model-profiles-kv-readiness.md",
       "quality_contract": {
         "cleanup": true,
@@ -1245,7 +1713,7 @@
       "evidence": "visual-explanation",
       "id": "eb40b646c9adedf815d2",
       "language": "mermaid",
-      "line": 26,
+      "line": 28,
       "path": "docs/ai-gateway/sglang-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": true,
@@ -1259,10 +1727,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "c6c2e9123b3c28819697",
       "language": "bash",
-      "line": 60,
+      "line": 62,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/sglang-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": true,
@@ -1279,7 +1760,7 @@
       "evidence": "syntax-only",
       "id": "93c74985246940373255",
       "language": "json",
-      "line": 104,
+      "line": 106,
       "path": "docs/ai-gateway/sglang-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": true,
@@ -1296,7 +1777,7 @@
       "evidence": "swagger-union-static",
       "id": "ca5c2d6bd66e18fe2f3d",
       "language": "bash",
-      "line": 127,
+      "line": 129,
       "path": "docs/ai-gateway/sglang-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": true,
@@ -1313,7 +1794,7 @@
       "evidence": "shell-syntax-only",
       "id": "c88b99a018f168d67ebb",
       "language": "bash",
-      "line": 135,
+      "line": 137,
       "path": "docs/ai-gateway/sglang-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": true,
@@ -1330,7 +1811,7 @@
       "evidence": "swagger-union-static",
       "id": "d2d5a260c8e3bbc1a9f4",
       "language": "bash",
-      "line": 146,
+      "line": 148,
       "path": "docs/ai-gateway/sglang-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": true,
@@ -1347,7 +1828,7 @@
       "evidence": "swagger-union-static",
       "id": "341cbd22a8f38521b003",
       "language": "bash",
-      "line": 153,
+      "line": 155,
       "path": "docs/ai-gateway/sglang-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": true,
@@ -1361,10 +1842,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "937cd960c55f8e785913",
       "language": "bash",
-      "line": 173,
+      "line": 175,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/2030/protocol/tcp"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/sglang-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": true,
@@ -1381,7 +1875,7 @@
       "evidence": "visual-explanation",
       "id": "e0bd8de62b2a688be327",
       "language": "mermaid",
-      "line": 18,
+      "line": 20,
       "path": "docs/ai-gateway/sse-quota-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -1395,10 +1889,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "c3db5551e52d66495ff7",
       "language": "bash",
-      "line": 69,
+      "line": 71,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/sse-quota-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -1415,7 +1922,7 @@
       "evidence": "shell-syntax-only",
       "id": "bd30168c808d06cef317",
       "language": "bash",
-      "line": 103,
+      "line": 105,
       "path": "docs/ai-gateway/sse-quota-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -1432,7 +1939,7 @@
       "evidence": "shell-syntax-only",
       "id": "e203bc8c16868dac3459",
       "language": "bash",
-      "line": 189,
+      "line": 191,
       "path": "docs/ai-gateway/sse-quota-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -1449,7 +1956,7 @@
       "evidence": "visual-explanation",
       "id": "f4599c8e004eb0d3d35c",
       "language": "mermaid",
-      "line": 22,
+      "line": 24,
       "path": "docs/ai-gateway/tensorrt-llm-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -1466,7 +1973,7 @@
       "evidence": "visual-explanation",
       "id": "94bb95e213ae8c695e89",
       "language": "mermaid",
-      "line": 40,
+      "line": 42,
       "path": "docs/ai-gateway/tensorrt-llm-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -1480,10 +1987,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "ef2447aaac2e4a8e84f8",
       "language": "bash",
-      "line": 73,
+      "line": 75,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/tensorrt-llm-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -1500,7 +2020,7 @@
       "evidence": "swagger-union-static",
       "id": "a3839355b869e9242ec8",
       "language": "bash",
-      "line": 127,
+      "line": 129,
       "path": "docs/ai-gateway/tensorrt-llm-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -1517,7 +2037,7 @@
       "evidence": "swagger-union-static",
       "id": "ff0e38853e3a650208bc",
       "language": "bash",
-      "line": 140,
+      "line": 142,
       "path": "docs/ai-gateway/tensorrt-llm-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -1531,10 +2051,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "557e3ec10021f3b4a9fc",
       "language": "bash",
-      "line": 160,
+      "line": 162,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/2040/protocol/tcp"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/tensorrt-llm-integration.md",
       "quality_contract": {
         "cleanup": true,
@@ -1551,7 +2084,7 @@
       "evidence": "visual-explanation",
       "id": "4b8e2e95728afabe33f0",
       "language": "mermaid",
-      "line": 14,
+      "line": 16,
       "path": "docs/ai-gateway/vllm-integration.md",
       "quality_contract": {
         "cleanup": false,
@@ -1568,7 +2101,7 @@
       "evidence": "shell-syntax-only",
       "id": "e4f446001b0d405b1257",
       "language": "bash",
-      "line": 37,
+      "line": 39,
       "path": "docs/ai-gateway/vllm-integration.md",
       "quality_contract": {
         "cleanup": false,
@@ -1582,10 +2115,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "6402239dc9d586129434",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "92c2a18d2463c78dde0c",
       "language": "bash",
-      "line": 81,
+      "line": 83,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/vllm-integration.md",
       "quality_contract": {
         "cleanup": false,
@@ -1595,14 +2141,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "143dc91afdcc989145764ce71c094a0dedea38eb3c6b0f9210b8fe94a385e711",
+      "sha256": "1bc619fddb03e9ce8c2a8dd209a3b73f4e0ca92a7335a72315e8414b2d81f7f6",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "a44602fa8ab9f8ed1222",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "fa0f0b04c72eef8cf080",
       "language": "bash",
-      "line": 108,
+      "line": 110,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/ai-gateway/vllm-integration.md",
       "quality_contract": {
         "cleanup": false,
@@ -1612,14 +2171,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "a38a123c7682009e4cf730e05b747fc29697e5247c6dc45b301bbb55397d8f2e",
+      "sha256": "ded26addb34363fa562fd104d5c3e94c3d14f74736c0d79c77537a271c6a518e",
       "status": "illustrative-only"
     },
     {
       "evidence": "visual-explanation",
       "id": "1f6b19e61d78c3ef8226",
       "language": "mermaid",
-      "line": 143,
+      "line": 145,
       "path": "docs/ai-gateway/vllm-integration.md",
       "quality_contract": {
         "cleanup": false,
@@ -1636,7 +2195,7 @@
       "evidence": "swagger-union-static",
       "id": "15ca03e7c1ca1e259393",
       "language": "bash",
-      "line": 182,
+      "line": 184,
       "path": "docs/ai-gateway/vllm-integration.md",
       "quality_contract": {
         "cleanup": false,
@@ -1653,7 +2212,7 @@
       "evidence": "swagger-union-static",
       "id": "561ea4d824249fb82766",
       "language": "bash",
-      "line": 200,
+      "line": 202,
       "path": "docs/ai-gateway/vllm-integration.md",
       "quality_contract": {
         "cleanup": false,
@@ -1670,7 +2229,7 @@
       "evidence": "swagger-union-static",
       "id": "6253c02e9b10eeb944dc",
       "language": "bash",
-      "line": 206,
+      "line": 208,
       "path": "docs/ai-gateway/vllm-integration.md",
       "quality_contract": {
         "cleanup": false,
@@ -1769,10 +2328,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "a37ccfcc237b9fb1dc3b",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "05626fae8d89b9c994fc",
       "language": "bash",
-      "line": 79,
+      "line": 81,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/concepts/ai-routing-model.md",
       "quality_contract": {
         "cleanup": false,
@@ -1782,14 +2354,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "0ae1a52bb120e544006ae91585975f195e077b0daad388ad4325a7d9f5d7829a",
+      "sha256": "9d50531d89daf9ae37c169a3e130ce757cfb77c7a2887b9236647537cfcfbc1d",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "60785e819fdd1f8e17a6",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "98a393c55f9da683ae04",
       "language": "bash",
-      "line": 102,
+      "line": 104,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/concepts/ai-routing-model.md",
       "quality_contract": {
         "cleanup": false,
@@ -1799,14 +2384,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "891d72aaa704bc6c8c8b5b47986618aeb7ae629b1b0d1590301e9204372b701e",
+      "sha256": "cb1e0b6a82ab281a18be02f3ef9fd30fb5d4719f604982924c7ee6a2d9ac62db",
       "status": "illustrative-only"
     },
     {
       "evidence": "visual-explanation",
       "id": "1ecd00d56a38e39bd207",
       "language": "mermaid",
-      "line": 116,
+      "line": 118,
       "path": "docs/concepts/ai-routing-model.md",
       "quality_contract": {
         "cleanup": false,
@@ -1821,9 +2406,9 @@
     },
     {
       "evidence": "shell-syntax-only",
-      "id": "6678bde5855bd61abb01",
+      "id": "7059946db6da49a64407",
       "language": "bash",
-      "line": 156,
+      "line": 158,
       "path": "docs/concepts/ai-routing-model.md",
       "quality_contract": {
         "cleanup": false,
@@ -1833,7 +2418,7 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "c52375e54b09d307dc723ca070094ea16bfb1aa60a9e7f680016c7f3ae7f1d27",
+      "sha256": "32ca680845fc0f4e57b7fa33d5e404f8b1124f8efc7908bdf53ea8f94f3a52b2",
       "status": "illustrative-only"
     },
     {
@@ -1874,7 +2459,7 @@
       "evidence": "visual-explanation",
       "id": "3b64a1f2877c09de29ec",
       "language": "mermaid",
-      "line": 80,
+      "line": 82,
       "path": "docs/concepts/lb-algorithms.md",
       "quality_contract": {
         "cleanup": false,
@@ -1891,7 +2476,7 @@
       "evidence": "visual-explanation",
       "id": "5e3c65bb0362e590d20f",
       "language": "mermaid",
-      "line": 137,
+      "line": 139,
       "path": "docs/concepts/lb-algorithms.md",
       "quality_contract": {
         "cleanup": false,
@@ -1908,7 +2493,7 @@
       "evidence": "visual-explanation",
       "id": "e016fc32545910fd273d",
       "language": "mermaid",
-      "line": 179,
+      "line": 181,
       "path": "docs/concepts/lb-algorithms.md",
       "quality_contract": {
         "cleanup": false,
@@ -1922,10 +2507,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "7921bb162c7a5d410ca7",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "80977754cc28c578fb66",
       "language": "bash",
-      "line": 257,
+      "line": 259,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/concepts/lb-algorithms.md",
       "quality_contract": {
         "cleanup": false,
@@ -1935,14 +2533,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "7492ca234135d60c11359cd8769335fca6f1487ab099707bda795f74c0b845cf",
+      "sha256": "4954478adcdf4b058efa01bc5ea84eee0a667be88a9934c07b20495c7e69748d",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "e553637099520f357a17",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "dcc4845b976af17aa320",
       "language": "bash",
-      "line": 279,
+      "line": 281,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/concepts/lb-algorithms.md",
       "quality_contract": {
         "cleanup": false,
@@ -1952,14 +2563,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "18a33477d8570eb2bca9402a7508a6a2f00cf5383e4fc0bcf6333c2ee66962b6",
+      "sha256": "823fde199f466717e62cb7873055ad80e29f7b79fd327e60b03600c00347d0ca",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "107c1473347e24f06bb9",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "4334fa07c2239dfab96f",
       "language": "bash",
-      "line": 300,
+      "line": 302,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/concepts/lb-algorithms.md",
       "quality_contract": {
         "cleanup": false,
@@ -1969,14 +2593,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "c0e96fea65c6cd4f5867b09d46ee21aa480192fcbd83432de25ed77135917df3",
+      "sha256": "bdc925b7ddfe90c23f308b48121996bbb35af6b04afc5e8f8c9fb28e91a05e6d",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "83bf834b50e4c1c1d97a",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "569a7c43e6a52b601592",
       "language": "bash",
-      "line": 323,
+      "line": 325,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/concepts/lb-algorithms.md",
       "quality_contract": {
         "cleanup": false,
@@ -1986,14 +2623,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "3afd9ed93beb85bfebcbe360a68b90be5cfdd01a510187c1564b3e148609c526",
+      "sha256": "62234db73045feb25bd29c54de9252bafe1bf049de875201b443638891b29073",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "d6e4da39e1f21c497bda",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "aec9ed5406182a06bdec",
       "language": "bash",
-      "line": 57,
+      "line": 59,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/concepts/running-modes.md",
       "quality_contract": {
         "cleanup": false,
@@ -2003,14 +2653,27 @@
         "prerequisites": false,
         "validation": false
       },
-      "sha256": "5c73198d578da4c0f1e7e950f5778800186c6056b2dada3aec31e8a7256947fe",
+      "sha256": "5741f90aee2e90c54927049e35cc587ce1fcea9e8faaab7ff9346e606af6e782",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "f7a9f2b6a1f6f1eadc22",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "7684b5c051a60451e0d6",
       "language": "bash",
-      "line": 70,
+      "line": 72,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/concepts/running-modes.md",
       "quality_contract": {
         "cleanup": false,
@@ -2020,7 +2683,7 @@
         "prerequisites": false,
         "validation": false
       },
-      "sha256": "d70120fb6bf8455003b7333bad093ed4145737511d99cc5591d8e1c706660184",
+      "sha256": "478ebe175eefca17e9801d100caafb26c639a1e54998af71df7f5ce05a389e33",
       "status": "illustrative-only"
     },
     {
@@ -2129,7 +2792,7 @@
       "evidence": "visual-explanation",
       "id": "7d58a51b3c491ac77923",
       "language": "mermaid",
-      "line": 52,
+      "line": 57,
       "path": "docs/index.md",
       "quality_contract": {
         "cleanup": false,
@@ -2143,10 +2806,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "1727cc0095bc2d8c1821",
       "language": "bash",
-      "line": 90,
+      "line": 95,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/index.md",
       "quality_contract": {
         "cleanup": false,
@@ -2160,10 +2836,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "bd8cdcbcbd06abb87224",
       "language": "bash",
-      "line": 105,
+      "line": 110,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/index.md",
       "quality_contract": {
         "cleanup": false,
@@ -2622,7 +3311,7 @@
       "evidence": "visual-explanation",
       "id": "ef1f5fb23f94d1ccc727",
       "language": "mermaid",
-      "line": 10,
+      "line": 12,
       "path": "docs/operations/ai-qos.md",
       "quality_contract": {
         "cleanup": true,
@@ -2636,10 +3325,24 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "89adbab01847dd8eb8eb",
       "language": "bash",
-      "line": 84,
+      "line": 86,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/ai/user/ratelimit",
+          "POST /config/ai/ratelimit/defaults"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/ai-qos.md",
       "quality_contract": {
         "cleanup": true,
@@ -2656,7 +3359,7 @@
       "evidence": "swagger-union-static",
       "id": "624f0c7d37700fa17854",
       "language": "bash",
-      "line": 119,
+      "line": 121,
       "path": "docs/operations/ai-qos.md",
       "quality_contract": {
         "cleanup": true,
@@ -2670,10 +3373,24 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "b25efcb93d393a93852d",
       "language": "bash",
-      "line": 148,
+      "line": 150,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/ai/user/ratelimit/team-a/user-123",
+          "DELETE /config/ai/ratelimit/defaults/rule"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/ai-qos.md",
       "quality_contract": {
         "cleanup": true,
@@ -2690,7 +3407,7 @@
       "evidence": "shell-syntax-only",
       "id": "f0997b20383fc386e8ac",
       "language": "bash",
-      "line": 204,
+      "line": 206,
       "path": "docs/operations/ai-qos.md",
       "quality_contract": {
         "cleanup": true,
@@ -2704,10 +3421,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "3ab5a52c4eb90c65e31f",
       "language": "bash",
-      "line": 217,
+      "line": 219,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/policy"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/ai-qos.md",
       "quality_contract": {
         "cleanup": true,
@@ -2721,10 +3451,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "e49f20314274d4735425",
       "language": "bash",
-      "line": 246,
+      "line": 248,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/policy/ident/example-rule-policy"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/ai-qos.md",
       "quality_contract": {
         "cleanup": true,
@@ -2738,10 +3481,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "04515330197635534c95",
       "language": "bash",
-      "line": 275,
+      "line": 277,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/policy"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/ai-qos.md",
       "quality_contract": {
         "cleanup": true,
@@ -2755,10 +3511,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "ec482d223b08f1417eea",
       "language": "bash",
-      "line": 305,
+      "line": 307,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/policy/ident/example-egress-policy"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/ai-qos.md",
       "quality_contract": {
         "cleanup": true,
@@ -2772,10 +3541,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "f089eb13e9e95df5bd08",
       "language": "bash",
-      "line": 329,
+      "line": 331,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/policy"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/ai-qos.md",
       "quality_contract": {
         "cleanup": true,
@@ -2792,7 +3574,7 @@
       "evidence": "swagger-union-static",
       "id": "afe32d2c798db0902c41",
       "language": "bash",
-      "line": 354,
+      "line": 356,
       "path": "docs/operations/ai-qos.md",
       "quality_contract": {
         "cleanup": true,
@@ -2806,10 +3588,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "e550d9ef017138a7df4b",
       "language": "bash",
-      "line": 386,
+      "line": 388,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/policy/ident/example-fullproxy-shaper"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/ai-qos.md",
       "quality_contract": {
         "cleanup": true,
@@ -2826,7 +3621,7 @@
       "evidence": "cli-contract-static",
       "id": "55beb0990beff3555457",
       "language": "bash",
-      "line": 42,
+      "line": 44,
       "path": "docs/operations/appliance-cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -2840,10 +3635,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "1c1eba023d041932ec99",
       "language": "bash",
-      "line": 63,
+      "line": 65,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd appliance backup key-create"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/appliance-cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -2857,10 +3665,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "5e02cd9f42e7d6a1aec8",
       "language": "bash",
-      "line": 72,
+      "line": 74,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd appliance backup create"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/appliance-cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -2874,10 +3695,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "3255e67f77e6a43df17e",
       "language": "bash",
-      "line": 92,
+      "line": 94,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd appliance diagnostics create"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/appliance-cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -2891,10 +3725,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "ecd9815aa998b0925c12",
       "language": "bash",
-      "line": 118,
+      "line": 120,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd appliance restore execute"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/appliance-cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -3013,7 +3860,7 @@
       "evidence": "visual-explanation",
       "id": "59bd6a0202cdcf80547f",
       "language": "mermaid",
-      "line": 50,
+      "line": 52,
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,
@@ -3030,7 +3877,7 @@
       "evidence": "shell-syntax-only",
       "id": "85acf637981d5f844b4a",
       "language": "bash",
-      "line": 91,
+      "line": 93,
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,
@@ -3047,7 +3894,7 @@
       "evidence": "swagger-union-static",
       "id": "493e66520da201aebdb0",
       "language": "bash",
-      "line": 101,
+      "line": 103,
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,
@@ -3064,7 +3911,7 @@
       "evidence": "cli-contract-static",
       "id": "65eeee8b4b51fcb884da",
       "language": "bash",
-      "line": 118,
+      "line": 120,
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,
@@ -3078,10 +3925,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "f32617a800c4f31a233c",
       "language": "bash",
-      "line": 144,
+      "line": 146,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create restore"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,
@@ -3095,10 +3955,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "600eec111e3e1d171301",
       "language": "bash",
-      "line": 179,
+      "line": 181,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create restore"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,
@@ -3112,10 +3985,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "d65d02d4e60e3bfc7679",
       "language": "bash",
-      "line": 211,
+      "line": 213,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create persist"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,
@@ -3132,7 +4018,7 @@
       "evidence": "cli-contract-static",
       "id": "ac03d17738e5fc4b60e7",
       "language": "bash",
-      "line": 237,
+      "line": 239,
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,
@@ -3384,10 +4270,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "7f9f9c1e9602bbcfb7a8",
       "language": "bash",
-      "line": 21,
+      "line": 23,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/metrics"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -3404,7 +4303,7 @@
       "evidence": "syntax-only",
       "id": "f3ab73cbf6e8ea7a29fd",
       "language": "yaml",
-      "line": 46,
+      "line": 48,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -3421,7 +4320,7 @@
       "evidence": "visual-explanation",
       "id": "e9dd365f96d343dfcf7f",
       "language": "mermaid",
-      "line": 62,
+      "line": 64,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -3438,7 +4337,7 @@
       "evidence": "metric-manifest-static",
       "id": "48f8a671b60519e50b50",
       "language": "promql",
-      "line": 90,
+      "line": 92,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -3455,7 +4354,7 @@
       "evidence": "metric-manifest-static",
       "id": "2b8d5fe28b772b34ad03",
       "language": "promql",
-      "line": 130,
+      "line": 132,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -3472,7 +4371,7 @@
       "evidence": "metric-manifest-static",
       "id": "23f73f722fda21c39dc3",
       "language": "promql",
-      "line": 169,
+      "line": 171,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -3489,7 +4388,7 @@
       "evidence": "metric-manifest-static",
       "id": "391dcb71eff01acf4482",
       "language": "promql",
-      "line": 205,
+      "line": 207,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -3506,7 +4405,7 @@
       "evidence": "metric-manifest-static",
       "id": "f0b696ffdf75f41d9ede",
       "language": "promql",
-      "line": 274,
+      "line": 276,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -3523,7 +4422,7 @@
       "evidence": "metric-manifest-static",
       "id": "d3f0294a9bc2c26e83a2",
       "language": "promql",
-      "line": 312,
+      "line": 314,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -3540,7 +4439,7 @@
       "evidence": "swagger-union-static",
       "id": "e739436aa71a69a27bb6",
       "language": "bash",
-      "line": 407,
+      "line": 409,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -3557,7 +4456,7 @@
       "evidence": "metric-manifest-static",
       "id": "c0741d2b82929bdedab9",
       "language": "promql",
-      "line": 414,
+      "line": 416,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -3761,7 +4660,7 @@
       "evidence": "cli-contract-static",
       "id": "dd3074ff2198b92ce093",
       "language": "bash",
-      "line": 47,
+      "line": 49,
       "path": "docs/operations/readiness-diagnostics-maintenance.md",
       "quality_contract": {
         "cleanup": false,
@@ -3778,7 +4677,7 @@
       "evidence": "swagger-union-static",
       "id": "26169521c71c88e20e49",
       "language": "bash",
-      "line": 71,
+      "line": 73,
       "path": "docs/operations/readiness-diagnostics-maintenance.md",
       "quality_contract": {
         "cleanup": false,
@@ -3795,7 +4694,7 @@
       "evidence": "cli-contract-static",
       "id": "c95f52b55ed07e4b3c9b",
       "language": "bash",
-      "line": 101,
+      "line": 103,
       "path": "docs/operations/readiness-diagnostics-maintenance.md",
       "quality_contract": {
         "cleanup": false,
@@ -3809,10 +4708,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "9424b3495cb87d39fb26",
       "language": "bash",
-      "line": 132,
+      "line": 134,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd set maintenance"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/readiness-diagnostics-maintenance.md",
       "quality_contract": {
         "cleanup": false,
@@ -3829,7 +4741,7 @@
       "evidence": "cli-contract-static",
       "id": "2219708c0a66e6136243",
       "language": "bash",
-      "line": 151,
+      "line": 153,
       "path": "docs/operations/readiness-diagnostics-maintenance.md",
       "quality_contract": {
         "cleanup": false,
@@ -3843,10 +4755,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "50b59231b6a070c9f771",
       "language": "bash",
-      "line": 176,
+      "line": 178,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd set maintenance"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/readiness-diagnostics-maintenance.md",
       "quality_contract": {
         "cleanup": false,
@@ -3860,10 +4785,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "6ef6dfb0d47f2084d385",
       "language": "bash",
-      "line": 196,
+      "line": 198,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "PUT /maintenance"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/readiness-diagnostics-maintenance.md",
       "quality_contract": {
         "cleanup": false,
@@ -3880,7 +4818,7 @@
       "evidence": "shell-syntax-only",
       "id": "c2d25e39e7f769eea8f8",
       "language": "bash",
-      "line": 76,
+      "line": 78,
       "path": "docs/operations/sockmap-acceleration.md",
       "quality_contract": {
         "cleanup": true,
@@ -3894,10 +4832,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "220fa8ba9e3a0483e100",
       "language": "bash",
-      "line": 82,
+      "line": 84,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/sockmap-acceleration.md",
       "quality_contract": {
         "cleanup": true,
@@ -3911,10 +4862,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "f6cac4892ffca3a56db9",
       "language": "bash",
-      "line": 108,
+      "line": 110,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/sockmap-acceleration.md",
       "quality_contract": {
         "cleanup": true,
@@ -3931,7 +4895,7 @@
       "evidence": "swagger-union-static",
       "id": "7490a84cfc9cee225b65",
       "language": "bash",
-      "line": 130,
+      "line": 132,
       "path": "docs/operations/sockmap-acceleration.md",
       "quality_contract": {
         "cleanup": true,
@@ -3948,7 +4912,7 @@
       "evidence": "shell-syntax-only",
       "id": "bafa2748f520d8604b1f",
       "language": "bash",
-      "line": 141,
+      "line": 143,
       "path": "docs/operations/sockmap-acceleration.md",
       "quality_contract": {
         "cleanup": true,
@@ -3962,10 +4926,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "309780ce31b8668d57cf",
       "language": "bash",
-      "line": 162,
+      "line": 164,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer/externalipaddress/192.0.2.10/port/8080/protocol/tcp/sockmapreset"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/sockmap-acceleration.md",
       "quality_contract": {
         "cleanup": true,
@@ -3979,10 +4956,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "66aa68cf0464b38287a5",
       "language": "bash",
-      "line": 197,
+      "line": 199,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/8080/protocol/tcp"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/sockmap-acceleration.md",
       "quality_contract": {
         "cleanup": true,
@@ -3999,7 +4989,7 @@
       "evidence": "visual-explanation",
       "id": "8e8f0eb3d1ede75b3fb9",
       "language": "mermaid",
-      "line": 11,
+      "line": 13,
       "path": "docs/operations/tracing.md",
       "quality_contract": {
         "cleanup": false,
@@ -4013,10 +5003,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "e6d40bd79931ea0d8403",
       "language": "bash",
-      "line": 58,
+      "line": 60,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/trace/otlp"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/tracing.md",
       "quality_contract": {
         "cleanup": false,
@@ -4030,10 +5033,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "7ee4eae343d6d7eda4d3",
       "language": "bash",
-      "line": 94,
+      "line": 96,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/trace/enable"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/tracing.md",
       "quality_contract": {
         "cleanup": false,
@@ -4047,10 +5063,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "321c1af08b4d13da0a1c",
       "language": "bash",
-      "line": 117,
+      "line": 119,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/l4trace/enable"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/tracing.md",
       "quality_contract": {
         "cleanup": false,
@@ -4064,10 +5093,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "7ce5c54203520c9afe59",
       "language": "bash",
-      "line": 133,
+      "line": 135,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "PUT /config/l4trace/sampling"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/tracing.md",
       "quality_contract": {
         "cleanup": false,
@@ -4081,10 +5123,24 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "cd8a1b01e1f39c56b216",
       "language": "bash",
-      "line": 161,
+      "line": 163,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/l4trace/disable",
+          "POST /config/trace/disable"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/tracing.md",
       "quality_contract": {
         "cleanup": false,
@@ -4098,10 +5154,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "72afd2d517149be5ab48",
       "language": "bash",
-      "line": 173,
+      "line": 175,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/l4trace/stats/reset"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/tracing.md",
       "quality_contract": {
         "cleanup": false,
@@ -4118,7 +5187,7 @@
       "evidence": "shell-syntax-only",
       "id": "f5be8718d9c5780f0b57",
       "language": "bash",
-      "line": 46,
+      "line": 48,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -4135,7 +5204,7 @@
       "evidence": "swagger-union-static",
       "id": "0e4c8d724dd43ab5e34f",
       "language": "bash",
-      "line": 66,
+      "line": 68,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -4152,7 +5221,7 @@
       "evidence": "swagger-union-static",
       "id": "bffd8415b750cbc1ed61",
       "language": "bash",
-      "line": 92,
+      "line": 94,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -4169,7 +5238,7 @@
       "evidence": "swagger-union-static",
       "id": "bc1fd6c2ae3911ff75b2",
       "language": "bash",
-      "line": 151,
+      "line": 153,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -4186,7 +5255,7 @@
       "evidence": "swagger-union-static",
       "id": "61af48e7a0c8693a6205",
       "language": "bash",
-      "line": 196,
+      "line": 198,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -4203,7 +5272,7 @@
       "evidence": "swagger-union-static",
       "id": "195abedb19edd82100ed",
       "language": "bash",
-      "line": 250,
+      "line": 252,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -4217,10 +5286,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "e75b06d27f87644a2976",
       "language": "bash",
-      "line": 277,
+      "line": 279,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/metrics"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -4234,10 +5316,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "5f5662a8dd7f7b31b8b6",
       "language": "bash",
-      "line": 287,
+      "line": 289,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd set metrics"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -4254,7 +5349,7 @@
       "evidence": "swagger-union-static",
       "id": "b1ac16407876c036e62f",
       "language": "bash",
-      "line": 295,
+      "line": 297,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -4271,7 +5366,7 @@
       "evidence": "swagger-union-static",
       "id": "bfc1f9e0926d3b27ec1e",
       "language": "bash",
-      "line": 318,
+      "line": 320,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -4288,7 +5383,7 @@
       "evidence": "metric-manifest-static",
       "id": "df576ccf745b93ac5fb7",
       "language": "promql",
-      "line": 373,
+      "line": 375,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -4305,7 +5400,7 @@
       "evidence": "swagger-union-static",
       "id": "7e10d6b8e04dcdfd9a5b",
       "language": "bash",
-      "line": 198,
+      "line": 200,
       "path": "docs/reference/api.md",
       "quality_contract": {
         "cleanup": true,
@@ -4319,10 +5414,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "662caaba986edbd5224a",
       "language": "bash",
-      "line": 231,
+      "line": 233,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/gpu/enable"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/reference/api.md",
       "quality_contract": {
         "cleanup": true,
@@ -4336,10 +5444,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "2ee68edc263ee470e05d",
       "language": "bash",
-      "line": 239,
+      "line": 241,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/worker/metrics"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/reference/api.md",
       "quality_contract": {
         "cleanup": true,
@@ -4353,10 +5474,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "adc043d2427d3edd11d6",
       "language": "bash",
-      "line": 290,
+      "line": 292,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/reference/api.md",
       "quality_contract": {
         "cleanup": true,
@@ -4373,7 +5507,7 @@
       "evidence": "swagger-union-static",
       "id": "37e9243f2d0518097a5c",
       "language": "bash",
-      "line": 402,
+      "line": 404,
       "path": "docs/reference/api.md",
       "quality_contract": {
         "cleanup": true,
@@ -4390,7 +5524,7 @@
       "evidence": "shell-syntax-only",
       "id": "7a9cd9c1cb18995e7953",
       "language": "bash",
-      "line": 33,
+      "line": 35,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4407,7 +5541,7 @@
       "evidence": "shell-syntax-only",
       "id": "eadf11f704843fe7309a",
       "language": "bash",
-      "line": 39,
+      "line": 41,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4424,7 +5558,7 @@
       "evidence": "shell-syntax-only",
       "id": "924296ece24e8484d5c6",
       "language": "bash",
-      "line": 44,
+      "line": 46,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4439,9 +5573,9 @@
     },
     {
       "evidence": "syntax-only",
-      "id": "81aaf9f6d20bcc41bcbe",
+      "id": "7f809362499ef7f58321",
       "language": "yaml",
-      "line": 52,
+      "line": 54,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4451,14 +5585,14 @@
         "prerequisites": false,
         "validation": false
       },
-      "sha256": "bd593375db2fd8ab588b7fa496139c9bc882be90e32cf9fb0238ab0ce7d4e2fd",
+      "sha256": "ccda9856f5a55545d9a30605b81afe94b8e2e41981ad37688006471d1c1a8cf5",
       "status": "illustrative-only"
     },
     {
       "evidence": "syntax-only",
-      "id": "b468e3ed424cf4c4ac28",
+      "id": "367450c2fa7c670e6b31",
       "language": "json",
-      "line": 257,
+      "line": 259,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4468,14 +5602,27 @@
         "prerequisites": false,
         "validation": false
       },
-      "sha256": "2701346ae042dda8057060a50ea0205fb533de0603489147865623bfd4d85a9c",
+      "sha256": "896096d2c3f479ee1b4e58555837f6e6bc82e62dc7f0c223e8fdd71377a8814f",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "3f449616321ee22c842d",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "83f9b3f1229f9b2911ea",
       "language": "bash",
-      "line": 279,
+      "line": 281,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4485,14 +5632,27 @@
         "prerequisites": false,
         "validation": false
       },
-      "sha256": "4b1da6b7f650af897999f0dd935f13c4f8a071c360bb8d4aeac3118c90183097",
+      "sha256": "860ce334b88055b6d8d2a89919a86b1e1deef12dc67801959d4a97c54e280dac",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "82051468068198c15fa3",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "e8b1fb0a3c8b4997ac95",
       "language": "bash",
-      "line": 294,
+      "line": 296,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4502,14 +5662,14 @@
         "prerequisites": false,
         "validation": false
       },
-      "sha256": "9c4cafe481d923e92b038b6ebd41fe38f3b3fc08b3fedc3577b7aee72863b592",
+      "sha256": "7d44c42b76b59cb68e655fc238129b91b08e429325e1976a44b55585ded72297",
       "status": "illustrative-only"
     },
     {
       "evidence": "syntax-only",
       "id": "3b7de19fe4c162c11684",
       "language": "json",
-      "line": 307,
+      "line": 309,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4526,7 +5686,7 @@
       "evidence": "shell-syntax-only",
       "id": "bd273dff6ff1a86b35d3",
       "language": "bash",
-      "line": 320,
+      "line": 322,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4540,10 +5700,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "4e968cd1252ea315e793",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "57bbcc926e64460ceedd",
       "language": "bash",
-      "line": 412,
+      "line": 414,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd delete lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4553,14 +5726,27 @@
         "prerequisites": false,
         "validation": false
       },
-      "sha256": "790d28569fcb521a0601445ea7137ca5a81afa9e43745bb0d3084ffa7ccaa048",
+      "sha256": "1ccec80a74c95b33f735220dd9f5785b9da0db3b9c15dc3a7c826c4b5cd74686",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "64bc3786b2aab9373b0f",
       "language": "bash",
-      "line": 421,
+      "line": 423,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create apikey"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4577,7 +5763,7 @@
       "evidence": "unexecuted-example",
       "id": "80592ae0930887826ccc",
       "language": "plain",
-      "line": 426,
+      "line": 428,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4594,7 +5780,7 @@
       "evidence": "unexecuted-example",
       "id": "f8d21b9b36397543d29b",
       "language": "plain",
-      "line": 431,
+      "line": 433,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -4628,7 +5814,7 @@
       "evidence": "swagger-union-static",
       "id": "0fe1d371eb8c3e9a237a",
       "language": "bash",
-      "line": 65,
+      "line": 67,
       "path": "docs/reference/swagger-extras.md",
       "quality_contract": {
         "cleanup": true,
@@ -4645,7 +5831,7 @@
       "evidence": "swagger-union-static",
       "id": "a8bef4aa34037f4331a8",
       "language": "bash",
-      "line": 99,
+      "line": 101,
       "path": "docs/reference/swagger-extras.md",
       "quality_contract": {
         "cleanup": true,
@@ -4662,7 +5848,7 @@
       "evidence": "swagger-union-static",
       "id": "95c75142c0dcf89512ed",
       "language": "bash",
-      "line": 130,
+      "line": 132,
       "path": "docs/reference/swagger-extras.md",
       "quality_contract": {
         "cleanup": true,
@@ -4676,10 +5862,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "8b887899cf27de0b7d18",
       "language": "bash",
-      "line": 161,
+      "line": 163,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/opa/watcher"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/reference/swagger-extras.md",
       "quality_contract": {
         "cleanup": true,
@@ -4693,10 +5892,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "ae3eea20839437028d13",
       "language": "bash",
-      "line": 202,
+      "line": 204,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "PATCH /config/ai/apikey/$KEY_ID"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/reference/swagger-extras.md",
       "quality_contract": {
         "cleanup": true,
@@ -4713,7 +5925,7 @@
       "evidence": "shell-syntax-only",
       "id": "c5738289f5d0780c6961",
       "language": "bash",
-      "line": 237,
+      "line": 239,
       "path": "docs/reference/swagger-extras.md",
       "quality_contract": {
         "cleanup": true,
@@ -4815,7 +6027,7 @@
       "evidence": "visual-explanation",
       "id": "d479f4063105a69f76da",
       "language": "mermaid",
-      "line": 17,
+      "line": 19,
       "path": "docs/security/ai-safety.md",
       "quality_contract": {
         "cleanup": false,
@@ -4832,7 +6044,7 @@
       "evidence": "swagger-union-static",
       "id": "4989d05b3efe0c1f741a",
       "language": "bash",
-      "line": 40,
+      "line": 42,
       "path": "docs/security/ai-safety.md",
       "quality_contract": {
         "cleanup": false,
@@ -4849,7 +6061,7 @@
       "evidence": "swagger-union-static",
       "id": "b901de6c74d8dab3c7b3",
       "language": "bash",
-      "line": 52,
+      "line": 54,
       "path": "docs/security/ai-safety.md",
       "quality_contract": {
         "cleanup": false,
@@ -4863,10 +6075,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "ea8e0173b5aaa80d1f09",
       "language": "bash",
-      "line": 64,
+      "line": 66,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/llamafirewall/health"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/security/ai-safety.md",
       "quality_contract": {
         "cleanup": false,
@@ -4880,10 +6105,24 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "5d9f28aa341d0184b4d3",
       "language": "bash",
-      "line": 135,
+      "line": 137,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/pii/configure",
+          "POST /config/pii/enable"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/security/ai-safety.md",
       "quality_contract": {
         "cleanup": false,
@@ -4900,7 +6139,7 @@
       "evidence": "visual-explanation",
       "id": "6f6a2f841cb94efb9193",
       "language": "mermaid",
-      "line": 17,
+      "line": 19,
       "path": "docs/security/data-plane-jwt-auth.md",
       "quality_contract": {
         "cleanup": true,
@@ -4914,10 +6153,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "66fd76dd6f61d8ebb46c",
       "language": "bash",
-      "line": 63,
+      "line": 65,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/ai/jwtauthprofile"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/security/data-plane-jwt-auth.md",
       "quality_contract": {
         "cleanup": true,
@@ -4934,7 +6186,7 @@
       "evidence": "swagger-union-static",
       "id": "8d76a3f90c1de5762a81",
       "language": "bash",
-      "line": 94,
+      "line": 96,
       "path": "docs/security/data-plane-jwt-auth.md",
       "quality_contract": {
         "cleanup": true,
@@ -4948,10 +6200,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "c41069c9a3fdf60751c8",
       "language": "bash",
-      "line": 111,
+      "line": 113,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/security/data-plane-jwt-auth.md",
       "quality_contract": {
         "cleanup": true,
@@ -4965,10 +6230,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "e5eab249393335c045aa",
       "language": "bash",
-      "line": 211,
+      "line": 213,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/ai/jwtauthprofile/example-issuer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/security/data-plane-jwt-auth.md",
       "quality_contract": {
         "cleanup": true,
@@ -4985,7 +6263,7 @@
       "evidence": "visual-explanation",
       "id": "5bb5dcf25a888a00e348",
       "language": "mermaid",
-      "line": 16,
+      "line": 18,
       "path": "docs/security/management-api-authentication.md",
       "quality_contract": {
         "cleanup": false,
@@ -5002,7 +6280,7 @@
       "evidence": "visual-explanation",
       "id": "e2706b4df8709a410973",
       "language": "mermaid",
-      "line": 98,
+      "line": 100,
       "path": "docs/security/management-api-authentication.md",
       "quality_contract": {
         "cleanup": false,
@@ -5016,10 +6294,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "a423d1161c087b9a940c",
       "language": "bash",
-      "line": 130,
+      "line": 132,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /auth/users"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/security/management-api-authentication.md",
       "quality_contract": {
         "cleanup": false,
@@ -5036,7 +6327,7 @@
       "evidence": "visual-explanation",
       "id": "056e758d74cfe5121602",
       "language": "mermaid",
-      "line": 21,
+      "line": 23,
       "path": "docs/security/mtls.md",
       "quality_contract": {
         "cleanup": false,
@@ -5050,10 +6341,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "54da8c66fbc924bb78ec",
       "language": "bash",
-      "line": 57,
+      "line": 59,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/security/mtls.md",
       "quality_contract": {
         "cleanup": false,
@@ -5070,7 +6374,7 @@
       "evidence": "swagger-union-static",
       "id": "204ce89aee33f522114f",
       "language": "bash",
-      "line": 95,
+      "line": 97,
       "path": "docs/security/mtls.md",
       "quality_contract": {
         "cleanup": false,
@@ -5087,7 +6391,7 @@
       "evidence": "shell-syntax-only",
       "id": "ca4f2ac49a0f37247d2e",
       "language": "bash",
-      "line": 103,
+      "line": 105,
       "path": "docs/security/mtls.md",
       "quality_contract": {
         "cleanup": false,
@@ -5104,7 +6408,7 @@
       "evidence": "visual-explanation",
       "id": "de403a8423e0cb6a80eb",
       "language": "mermaid",
-      "line": 39,
+      "line": 41,
       "path": "docs/security/opa-l4.md",
       "quality_contract": {
         "cleanup": false,
@@ -5121,7 +6425,7 @@
       "evidence": "unexecuted-example",
       "id": "03f398cf079b672e5b3a",
       "language": "text",
-      "line": 62,
+      "line": 64,
       "path": "docs/security/opa-l4.md",
       "quality_contract": {
         "cleanup": false,
@@ -5138,7 +6442,7 @@
       "evidence": "syntax-only",
       "id": "5048e3ac995d73f3bece",
       "language": "json",
-      "line": 68,
+      "line": 70,
       "path": "docs/security/opa-l4.md",
       "quality_contract": {
         "cleanup": false,
@@ -5155,7 +6459,7 @@
       "evidence": "shell-syntax-only",
       "id": "811b4d178857eaf39a80",
       "language": "bash",
-      "line": 107,
+      "line": 109,
       "path": "docs/security/opa-l4.md",
       "quality_contract": {
         "cleanup": false,
@@ -5172,7 +6476,7 @@
       "evidence": "shell-syntax-only",
       "id": "542ea37a5566e70aa9e5",
       "language": "bash",
-      "line": 116,
+      "line": 118,
       "path": "docs/security/opa-l4.md",
       "quality_contract": {
         "cleanup": false,
@@ -5186,10 +6490,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "4589a8a501754a491b5f",
       "language": "bash",
-      "line": 155,
+      "line": 157,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/opa/watcher"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/security/opa-l4.md",
       "quality_contract": {
         "cleanup": false,
@@ -5206,7 +6523,7 @@
       "evidence": "swagger-union-static",
       "id": "4dfd02536a56eeb0ab2c",
       "language": "bash",
-      "line": 180,
+      "line": 182,
       "path": "docs/security/opa-l4.md",
       "quality_contract": {
         "cleanup": false,
@@ -5220,10 +6537,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "d7b5d1cea7235114ddbd",
       "language": "bash",
-      "line": 218,
+      "line": 220,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/opa/watcher"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/security/opa-l4.md",
       "quality_contract": {
         "cleanup": false,
@@ -5237,10 +6567,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "ddaa1258e59722e1ca34",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "0a27b50ca660c6d5fdd6",
       "language": "bash",
-      "line": 96,
+      "line": 98,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/configuration-tuning.md",
       "quality_contract": {
         "cleanup": false,
@@ -5250,14 +6593,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "6f58efbdcd142664994aa767e003cc047873479f7fadd4df8dbab8ad2736699c",
+      "sha256": "eb075cf6763968dc4d2fd626c45e0f8dee51f5658a125bf1da91afaf2838fd11",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "ace82352d555f99b39a4",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "c8e22afccf873e844e2e",
       "language": "bash",
-      "line": 116,
+      "line": 118,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/configuration-tuning.md",
       "quality_contract": {
         "cleanup": false,
@@ -5267,14 +6623,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "045547df6d05acc02cd1e115e26136beba4717b281ecdb6914eb994db7f48138",
+      "sha256": "b6bf4a0688530242739e0fc9618ed1e3a5851678849e67ecf13354cfe710777c",
       "status": "illustrative-only"
     },
     {
       "evidence": "shell-syntax-only",
       "id": "d5026f91c72fed43c0bf",
       "language": "bash",
-      "line": 204,
+      "line": 206,
       "path": "docs/use-cases/configuration-tuning.md",
       "quality_contract": {
         "cleanup": false,
@@ -5291,7 +6647,7 @@
       "evidence": "shell-syntax-only",
       "id": "07804b89edfb3216aae6",
       "language": "bash",
-      "line": 287,
+      "line": 289,
       "path": "docs/use-cases/configuration-tuning.md",
       "quality_contract": {
         "cleanup": false,
@@ -5308,7 +6664,7 @@
       "evidence": "unexecuted-example",
       "id": "cabb50c259a349ffd3e4",
       "language": "plain",
-      "line": 19,
+      "line": 21,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5325,7 +6681,7 @@
       "evidence": "shell-syntax-only",
       "id": "fd9726a3646bd1597046",
       "language": "bash",
-      "line": 81,
+      "line": 83,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5342,7 +6698,7 @@
       "evidence": "shell-syntax-only",
       "id": "404e01116a5154bf79de",
       "language": "bash",
-      "line": 121,
+      "line": 123,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5359,7 +6715,7 @@
       "evidence": "shell-syntax-only",
       "id": "a3b1644722370713dab9",
       "language": "bash",
-      "line": 139,
+      "line": 141,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5376,7 +6732,7 @@
       "evidence": "shell-syntax-only",
       "id": "e731d2b31f65e8f75a7a",
       "language": "bash",
-      "line": 179,
+      "line": 181,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5393,7 +6749,7 @@
       "evidence": "shell-syntax-only",
       "id": "497e0a66cc6619cac3de",
       "language": "bash",
-      "line": 210,
+      "line": 212,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5407,10 +6763,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "31ca27b0dddb9b5406ac",
       "language": "bash",
-      "line": 246,
+      "line": 248,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5424,10 +6793,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "1dd868bdb7de8d00fbfb",
       "language": "bash",
-      "line": 263,
+      "line": 265,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5444,7 +6826,7 @@
       "evidence": "shell-syntax-only",
       "id": "e8468970b2f3a535edaf",
       "language": "bash",
-      "line": 312,
+      "line": 314,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5461,7 +6843,7 @@
       "evidence": "unexecuted-example",
       "id": "b20c566b0ae92ac36101",
       "language": "plain",
-      "line": 340,
+      "line": 342,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5478,7 +6860,7 @@
       "evidence": "shell-syntax-only",
       "id": "a274788f20b3bf711379",
       "language": "bash",
-      "line": 366,
+      "line": 368,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5495,7 +6877,7 @@
       "evidence": "visual-explanation",
       "id": "64b689e3cc6396ea2bd0",
       "language": "mermaid",
-      "line": 416,
+      "line": 418,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5512,7 +6894,7 @@
       "evidence": "swagger-union-static",
       "id": "cbd24246c987e7efe4ef",
       "language": "bash",
-      "line": 454,
+      "line": 456,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5529,7 +6911,7 @@
       "evidence": "unexecuted-example",
       "id": "8aab1d1643fc160d0b31",
       "language": "plain",
-      "line": 467,
+      "line": 469,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5546,7 +6928,7 @@
       "evidence": "unexecuted-example",
       "id": "c8a654c5712b8983324b",
       "language": "plain",
-      "line": 553,
+      "line": 555,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -5563,7 +6945,7 @@
       "evidence": "visual-explanation",
       "id": "f0a087d675c728a344f9",
       "language": "mermaid",
-      "line": 19,
+      "line": 21,
       "path": "docs/use-cases/kv-cache-aware-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -5580,7 +6962,7 @@
       "evidence": "shell-syntax-only",
       "id": "23d881cf83f0b40fb5a5",
       "language": "bash",
-      "line": 177,
+      "line": 179,
       "path": "docs/use-cases/kv-cache-aware-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -5594,10 +6976,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "49e41cd224fcbbf0c9fb",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "dcd4e3882a75e0f21c2d",
       "language": "bash",
-      "line": 274,
+      "line": 276,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/kv-cache-aware-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -5607,14 +7002,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "086cf88968eaf271e64b30931b48909639009fb51945ae9c471dd721811b451b",
+      "sha256": "3a2a10d98833f6a3a031aa740d3a29d9617f44881179e10105f6812371097f9f",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "403ecd038d714de5d13c",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "6941f0949b3bb690451d",
       "language": "bash",
-      "line": 297,
+      "line": 299,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/kv-cache-aware-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -5624,14 +7032,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "aa695efd7502740b45395c89f745af2d2372ba47de2371701e89caa7af6e4fd2",
+      "sha256": "ac323e271a82bd574c10b4dfb06065bece909144b4f14adc6f07b22f876abf62",
       "status": "illustrative-only"
     },
     {
       "evidence": "shell-syntax-only",
       "id": "b392ee81f7bbefcee83f",
       "language": "bash",
-      "line": 326,
+      "line": 328,
       "path": "docs/use-cases/kv-cache-aware-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -5646,9 +7054,9 @@
     },
     {
       "evidence": "swagger-union-static",
-      "id": "28543a2eaa7d6d91d0be",
+      "id": "78eb26a2cfe03b843d4f",
       "language": "bash",
-      "line": 363,
+      "line": 365,
       "path": "docs/use-cases/kv-cache-aware-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -5658,14 +7066,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "bc6838ea409ea43da4a029028b10b4d91b643c1ff6d38f6b7a43cba34054b594",
+      "sha256": "416547b444baa1bb65a1b043048e439a755db939dad6867651a29f681dff7e72",
       "status": "illustrative-only"
     },
     {
       "evidence": "swagger-union-static",
-      "id": "416cd061317ffb691971",
+      "id": "c8e4e2adc4bae1860e42",
       "language": "bash",
-      "line": 384,
+      "line": 386,
       "path": "docs/use-cases/kv-cache-aware-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -5675,14 +7083,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "04dea07a177a4beddce1f15dc640bb61dfc94309ce54af5371e9b581b7ec3437",
+      "sha256": "8b7379c2df0b2d3ec5f73502a8ea5f813a06b3a92361bfd454a1a15d7d30b439",
       "status": "illustrative-only"
     },
     {
       "evidence": "cli-contract-static",
       "id": "5e356affb990624d4e7f",
       "language": "bash",
-      "line": 388,
+      "line": 390,
       "path": "docs/use-cases/kv-cache-aware-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -5699,7 +7107,7 @@
       "evidence": "shell-syntax-only",
       "id": "79e85eec2e8c094e6f3b",
       "language": "bash",
-      "line": 400,
+      "line": 402,
       "path": "docs/use-cases/kv-cache-aware-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -5714,9 +7122,9 @@
     },
     {
       "evidence": "swagger-union-static",
-      "id": "a5b5092249a181cda32f",
+      "id": "22bdab59ef23fe1475e7",
       "language": "bash",
-      "line": 415,
+      "line": 417,
       "path": "docs/use-cases/kv-cache-aware-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -5726,14 +7134,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "bfb25f0b21faaf429cd71c4daca61d70e84958cbe2cc2ca3f7978fc20391869a",
+      "sha256": "64bd68edb0844194cce801fd75a28cd172eec9cc1f223015aef64365c90479a8",
       "status": "illustrative-only"
     },
     {
       "evidence": "cli-contract-static",
       "id": "2f5d43f9d96ad3de994d",
       "language": "bash",
-      "line": 420,
+      "line": 422,
       "path": "docs/use-cases/kv-cache-aware-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -5748,9 +7156,9 @@
     },
     {
       "evidence": "syntax-only",
-      "id": "5c8b6261fd3b927447a4",
+      "id": "1d6dff12a5641d53efd9",
       "language": "yaml",
-      "line": 509,
+      "line": 511,
       "path": "docs/use-cases/kv-cache-aware-routing.md",
       "quality_contract": {
         "cleanup": false,
@@ -5760,7 +7168,7 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "8cd256a128bc4c233f8d40d1b3be5eacdb70b348f9e09493a60d2745c895d416",
+      "sha256": "d0d2aaf2852d64c4c425405e0096fb2721959407d1254d87064965e16b791251",
       "status": "illustrative-only"
     },
     {
@@ -5818,7 +7226,7 @@
       "evidence": "unexecuted-example",
       "id": "61baabd68b2a8f3e2cac",
       "language": "plain",
-      "line": 169,
+      "line": 171,
       "path": "docs/use-cases/routing-hierarchy.md",
       "quality_contract": {
         "cleanup": false,
@@ -5835,7 +7243,7 @@
       "evidence": "unexecuted-example",
       "id": "f985c8b91d17047ab187",
       "language": "plain",
-      "line": 190,
+      "line": 192,
       "path": "docs/use-cases/routing-hierarchy.md",
       "quality_contract": {
         "cleanup": false,
@@ -5852,7 +7260,7 @@
       "evidence": "unexecuted-example",
       "id": "d921e243215e444a584c",
       "language": "plain",
-      "line": 204,
+      "line": 206,
       "path": "docs/use-cases/routing-hierarchy.md",
       "quality_contract": {
         "cleanup": false,
@@ -5869,7 +7277,7 @@
       "evidence": "visual-explanation",
       "id": "c1be9768dddb86cbbf8b",
       "language": "mermaid",
-      "line": 236,
+      "line": 238,
       "path": "docs/use-cases/routing-hierarchy.md",
       "quality_contract": {
         "cleanup": false,
@@ -5883,10 +7291,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "eae4f1da8e64e6589654",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "b31f64db67852ee86b9a",
       "language": "bash",
-      "line": 314,
+      "line": 316,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/routing-hierarchy.md",
       "quality_contract": {
         "cleanup": false,
@@ -5896,14 +7317,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "0325d84aafa331d91d255e1a0dee056b7ad1c50831beb20ad57c0f11b18a405d",
+      "sha256": "c338a9e0510939307e85c7319b1ee3b7f56ce3a2c94312f6076bc7a2ba397379",
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "9404292be0d3a922102d",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "37c0416a5334a29746c8",
       "language": "bash",
-      "line": 341,
+      "line": 343,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/routing-hierarchy.md",
       "quality_contract": {
         "cleanup": false,
@@ -5913,14 +7347,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "7a17a35e7e7b60f285040f09d5e695d7f025f5cf3c12c1c2868f10b1129132a2",
+      "sha256": "9ebb54ed060129dee8a81482f1463781f8125071c2418d7b210bf2298a3f5ce0",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "55693bc8a65c7129640a",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "d40a1f811495047afb68",
       "language": "bash",
-      "line": 363,
+      "line": 365,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/routing-hierarchy.md",
       "quality_contract": {
         "cleanup": false,
@@ -5930,14 +7377,27 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "6ccde0e059a877a5aa98bad20018c33a5bfefa4792429a6dfc93c2d91cc1fc82",
+      "sha256": "295469c28bf483a4d47140e9b1cacde4abdc19089fad68e4173d786b55f34727",
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
-      "id": "8618fcb7775b62c19766",
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "18d21bd54b0e3bf07024",
       "language": "bash",
-      "line": 371,
+      "line": 373,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/routing-hierarchy.md",
       "quality_contract": {
         "cleanup": false,
@@ -5947,7 +7407,7 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "eff7a87bc84b495cfff9fe8af9ecd978a950630addfbcee3dc7910b00d9fce8f",
+      "sha256": "709cb5dd3f2f9d1b31f85eed91f0957151df4f24061bc34ea84f21631f247346",
       "status": "illustrative-only"
     },
     {
@@ -6022,7 +7482,7 @@
       "evidence": "visual-explanation",
       "id": "90f16b24d71de094ff90",
       "language": "mermaid",
-      "line": 13,
+      "line": 15,
       "path": "docs/use-cases/sglang-routing.md",
       "quality_contract": {
         "cleanup": true,
@@ -6039,7 +7499,7 @@
       "evidence": "visual-explanation",
       "id": "b6705e1e7d497c0f053d",
       "language": "mermaid",
-      "line": 36,
+      "line": 38,
       "path": "docs/use-cases/sglang-routing.md",
       "quality_contract": {
         "cleanup": true,
@@ -6053,10 +7513,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "ec73c4e1de74fde31373",
       "language": "bash",
-      "line": 78,
+      "line": 80,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/sglang-routing.md",
       "quality_contract": {
         "cleanup": true,
@@ -6070,10 +7543,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "cli-contract-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "7c5a7fe819c36f6838f5",
       "language": "bash",
-      "line": 111,
+      "line": 113,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/sglang-routing.md",
       "quality_contract": {
         "cleanup": true,
@@ -6090,7 +7576,7 @@
       "evidence": "swagger-union-static",
       "id": "00ecd53d2f3d05c41475",
       "language": "bash",
-      "line": 141,
+      "line": 143,
       "path": "docs/use-cases/sglang-routing.md",
       "quality_contract": {
         "cleanup": true,
@@ -6104,10 +7590,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "3e68bdbc46841aeea1c2",
       "language": "bash",
-      "line": 166,
+      "line": 168,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/loadbalancer/externalipaddress/192.0.2.10/port/2090/protocol/tcp"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "docs/use-cases/sglang-routing.md",
       "quality_contract": {
         "cleanup": true,
@@ -6189,10 +7688,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "explicit-public-classification",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "fa991024925ea05ed5a0",
       "language": "bash",
       "line": 4,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/ai/apikey"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "snippets/common/create-api-key.md",
       "quality_contract": {
         "cleanup": false,
@@ -6224,7 +7736,7 @@
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "150cd9777cc5a8d9bb04",
+      "id": "93dca2d475785b076b37",
       "language": "bash",
       "line": 4,
       "path": "snippets/common/load-balancer-readback-rest.md",
@@ -6236,7 +7748,7 @@
         "prerequisites": false,
         "validation": false
       },
-      "sha256": "377b3a853fee784df59986911e878a441d5768ec3ae3b7ad72076b6a8d8fc598",
+      "sha256": "204fdd14bda0ea425420841c4385d850a404d0047632bbaa331fe628334a4555",
       "status": "illustrative-only"
     },
     {
@@ -6274,10 +7786,23 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "explicit-public-classification",
+      "evidence": "non-standalone-mutation-fragment",
       "id": "da6494165f895ea63c57",
       "language": "bash",
       "line": 4,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/ai/apikey"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "snippets/common/unauthenticated-key-create.md",
       "quality_contract": {
         "cleanup": false,
@@ -6430,7 +7955,20 @@
       "evidence": "explicit-public-classification",
       "id": "831b73caec275793a40a",
       "language": "bash",
-      "line": 15,
+      "line": 18,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "standalone-workflow",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "snippets/getting-started/04-create.md",
       "quality_contract": {
         "cleanup": true,
@@ -6447,7 +7985,20 @@
       "evidence": "explicit-public-classification",
       "id": "a2718be70f38828a0ffe",
       "language": "bash",
-      "line": 44,
+      "line": 47,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "standalone-workflow",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "snippets/getting-started/04-create.md",
       "quality_contract": {
         "cleanup": true,
@@ -6464,7 +8015,7 @@
       "evidence": "explicit-public-classification",
       "id": "643cb96fcda837641ec6",
       "language": "bash",
-      "line": 64,
+      "line": 67,
       "path": "snippets/getting-started/04-create.md",
       "quality_contract": {
         "cleanup": true,
@@ -6479,9 +8030,39 @@
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "4bafcf9ef1ddc2bb40cd",
+      "id": "6edf37b2a73a7c3e3fa3",
       "language": "bash",
-      "line": 11,
+      "line": 83,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "standalone-workflow",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "snippets/getting-started/04-create.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "3ca80e412685deb6d91ad72612ca8cb69f2251ff4e294493da3cd50d54d77982",
+      "status": "verified"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "567e9d47f99b76e51e0c",
+      "language": "bash",
+      "line": 15,
       "path": "snippets/getting-started/05-traffic.md",
       "quality_contract": {
         "cleanup": true,
@@ -6491,14 +8072,14 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "73e779dd3102bec8b50dcdb86a5cb72a96969da00c523ce33b82ab7a402ec338",
+      "sha256": "69c8800520256dd03aae06a47c42120c9eb1806761e19d98ded48d19d898492b",
       "status": "verified"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "f44e862009e6708d90e1",
+      "id": "35628df9fad6b7093cfa",
       "language": "bash",
-      "line": 28,
+      "line": 44,
       "path": "snippets/getting-started/05-traffic.md",
       "quality_contract": {
         "cleanup": true,
@@ -6508,14 +8089,14 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "ab642c575111652a46ebb8bd942694a45170eee07e8fa3eaa834945904a288be",
+      "sha256": "2507d486ed194320572ce65882005f0d7ed71ca7bb618878eaea7769908c1352",
       "status": "verified"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "07c87f4ef83f222d09d9",
+      "id": "8ba06f38046966b82045",
       "language": "bash",
-      "line": 35,
+      "line": 53,
       "path": "snippets/getting-started/05-traffic.md",
       "quality_contract": {
         "cleanup": true,
@@ -6525,14 +8106,14 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "3280637be699b7efdeef24ebd255097394f9458e04bf96b41feb9058cbc32b58",
+      "sha256": "7919805de63cd80f06908d6ca504814c1be32f172d6e50b823dea52283d7a4b1",
       "status": "verified"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "f17663393a4fd8dfe304",
+      "id": "9ea54f7c6e2ff85ee478",
       "language": "bash",
-      "line": 11,
+      "line": 13,
       "path": "snippets/getting-started/06-metrics.md",
       "quality_contract": {
         "cleanup": true,
@@ -6542,14 +8123,14 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "98ab7d9797e31c8c9ca0445174768e20d3181e6392fdd1534f4fcaf2f4aa03e6",
+      "sha256": "16bbad26cb234667f7a323e113db5a6320b2b9c45e9814e80b9aaf0d41b0e525",
       "status": "verified"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "3ebb212eb5ae04ead160",
+      "id": "ac68111e91bfe390aeb2",
       "language": "bash",
-      "line": 26,
+      "line": 29,
       "path": "snippets/getting-started/06-metrics.md",
       "quality_contract": {
         "cleanup": true,
@@ -6559,14 +8140,27 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "97e4db196d6e78660d1f330d364276263ed067d8af11262d9c19567263177949",
+      "sha256": "c8dc0d74c613d8fca83be4d04453448ef4b253edc31cf0f6b6a61fff390c7f1b",
       "status": "verified"
     },
     {
       "evidence": "explicit-public-classification",
       "id": "752ab7d3333136d3013c",
       "language": "bash",
-      "line": 13,
+      "line": 14,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "standalone-workflow",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/2020/protocol/tcp"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "snippets/getting-started/07-cleanup.md",
       "quality_contract": {
         "cleanup": true,
@@ -6583,7 +8177,20 @@
       "evidence": "explicit-public-classification",
       "id": "5c5db280b11bdfa1c653",
       "language": "bash",
-      "line": 24,
+      "line": 25,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "standalone-workflow",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd delete lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
       "path": "snippets/getting-started/07-cleanup.md",
       "quality_contract": {
         "cleanup": true,
@@ -6598,9 +8205,9 @@
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "72aed585db34efd4e49f",
+      "id": "22715a46feb4a0904144",
       "language": "bash",
-      "line": 40,
+      "line": 41,
       "path": "snippets/getting-started/07-cleanup.md",
       "quality_contract": {
         "cleanup": true,
@@ -6610,14 +8217,14 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "bf6c59d82a08ce43667397ed023b179ff7df3acd0830e2e26e59f33e9d12ac6b",
+      "sha256": "241ddbb9c6e7fe06159e9e5bea2c820b20731a83cde072803e651117ebb81b83",
       "status": "verified"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "0f6e64b48410b7a40810",
+      "id": "6dc6fa1155097c2d7b69",
       "language": "bash",
-      "line": 57,
+      "line": 62,
       "path": "snippets/getting-started/07-cleanup.md",
       "quality_contract": {
         "cleanup": true,
@@ -6627,11 +8234,12 @@
         "prerequisites": true,
         "validation": true
       },
-      "sha256": "6249bdbc7481932bda5e00a50caa52c9af3700a355b04eada9f852b3b7d8ae52",
+      "sha256": "d9d34e7bbe740aa27a5679b6df76c584ce532bbfbf870348b2ac2377865ff885",
       "status": "verified"
     }
   ],
-  "schema_version": 1,
+  "mutation_policy": "/reference/example-quality-contract/",
+  "schema_version": 2,
   "status_definitions": {
     "blocked": "Must not be followed until the documented contract or evidence blocker is resolved.",
     "illustrative-only": "Explains shape or intent and is not represented as an executed workflow.",

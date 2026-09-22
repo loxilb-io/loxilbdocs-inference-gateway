@@ -1,4 +1,5 @@
 <!-- example-status-default: verified -->
+<!-- mutation-workflow: quickstart-model-route -->
 
 ### Prerequisites
 
@@ -47,6 +48,10 @@ curl --fail-with-body --silent --show-error \
   select(.serviceArguments.port == 2020) |
   select(.serviceArguments.model_name == "llama-70b")
 ' rules-after-cleanup.json
+curl --fail-with-body --silent --show-error \
+  --header @control-plane.headers \
+  "$CONTROL_API/status/ready" > ready-after-cleanup.json
+jq -e '.ready == true and (.reasons | length == 0)' ready-after-cleanup.json
 ```
 
 ### Cleanup
@@ -56,9 +61,10 @@ Remove local credential and response files:
 ```bash
 rm -f ./gateway.token ./control-plane.headers ready.json \
   unauthenticated.json authenticated.json create.json rules.json \
-  inference.json wrong-model.json metrics.prom cleanup.json \
-  rules-after-cleanup.json gateway-version.json gateway-image.id
-unset CONTROL_PLANE_TOKEN CONTROL_API
+  invalid-create.json rules-before-invalid.json rules-after-invalid.json \
+  inference.json wrong-model.json metrics-before.prom metrics-after.prom cleanup.json \
+  rules-after-cleanup.json ready-after-cleanup.json gateway-version.json gateway-image.id
+unset CONTROL_PLANE_TOKEN CONTROL_API BACKEND_RECEIPT_LOG
 ```
 
 ### Diagnose
@@ -68,3 +74,4 @@ unset CONTROL_PLANE_TOKEN CONTROL_API
 | HTTP `404` | One rule-key component differs from create; inspect the exact readback. |
 | Rule remains | Repeat the complete model-keyed delete; do not use delete-all on a shared Gateway. |
 | Other rules disappeared | Stop and restore from the pre-change snapshot; cleanup scope was too broad. |
+| Readiness fails after cleanup | Inspect `reasons[]`; cleanup is not complete until readiness recovers. |

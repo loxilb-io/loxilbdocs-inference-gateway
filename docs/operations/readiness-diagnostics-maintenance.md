@@ -1,5 +1,7 @@
 # Readiness, Capabilities, Diagnostics, and Maintenance
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Gateway main exposes four related operational surfaces:
 
 - `GET /status/ready` answers whether configuration recovery is ready;

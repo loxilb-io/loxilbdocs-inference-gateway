@@ -1,5 +1,7 @@
 # CLI Reference
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 The LoxiLB Inference Gateway can be managed three ways: the AI-aware **`loxicmd`**
 CLI, the **`loxilb-mcp`** Model Context Protocol server, and the [REST API](api.md)
 directly. This page documents **`loxilb-mcp`**, an MCP server that exposes the
@@ -52,7 +54,7 @@ tokens and their roles:
 default_target: gateway-1
 targets:
   gateway-1:
-    url: http://10.10.10.254:11111
+    url: http://192.0.2.254:11111
     # username/password_env or token_env when LoxiLB runs with --userservice
     # tls_ca / timeout_sec as needed
     # insecure_skip_verify disables TLS verification — development only, never production
@@ -262,7 +264,7 @@ as an MCP tool call and the equivalent REST call the bridge makes on your behalf
         "name": "lb_create",
         "arguments": {
           "target": "gateway-1",
-          "external_ip": "10.10.10.254",
+          "external_ip": "192.0.2.254",
           "port": 8080,
           "protocol": "tcp",
           "mode": 4,
@@ -279,11 +281,11 @@ as an MCP tool call and the equivalent REST call the bridge makes on your behalf
     install -m 600 /dev/null ./control-plane.headers
     printf 'Authorization: Bearer %s\n' "$GATEWAY_TOKEN" > ./control-plane.headers
 
-    curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
       -H @control-plane.headers \
       -H 'Content-Type: application/json' \
       -d '{
-        "serviceArguments": { "externalIP": "10.10.10.254", "port": 8080,
+        "serviceArguments": { "externalIP": "192.0.2.254", "port": 8080,
                               "protocol": "tcp", "sel": 0, "mode": 4 },
         "endpoints": [ { "endpointIP": "198.51.100.11", "targetPort": 8000, "weight": 1 } ]
       }'
@@ -291,7 +293,7 @@ as an MCP tool call and the equivalent REST call the bridge makes on your behalf
 
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=198.51.100.11:1 --mode=fullproxy
+    loxicmd create lb 192.0.2.254 --tcp=8080:8000 --endpoints=198.51.100.11:1 --mode=fullproxy
     ```
 
 !!! note "`mode: 4` is required for AI routing"
@@ -409,7 +411,7 @@ Repeat the complete L7 key used at creation. Omitting `--model-name` matches onl
 empty model name.
 
 ```bash
-loxicmd delete lb 10.10.10.254 --tcp=8080 --host=10.10.10.254 \
+loxicmd delete lb 192.0.2.254 --tcp=8080 --host=192.0.2.254 \
   --path-prefix=/ --path-match-mode=prefix --model-name=llama-70b
 ```
 

@@ -1,5 +1,7 @@
 # vLLM Integration
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 !!! warning "Keep AI-aware vLLM rules on HTTP/1.1"
     Current HTTP/2 forwarding lacks model-aware pool lookup, selector 10, P/D, and KV-exact
     integration; selector 9 becomes round-robin. Treat HTTP/2 parity as a release gate.
@@ -82,7 +84,7 @@ loxilb can actively health-check each vLLM backend and take failing endpoints ou
       -H 'Content-Type: application/json' \
       -d '{
         "serviceArguments": {
-          "externalIP": "10.10.10.254",
+          "externalIP": "192.0.2.254",
           "port": 8080,
           "protocol": "tcp",
           "sel": 0,
@@ -105,7 +107,7 @@ loxilb can actively health-check each vLLM backend and take failing endpoints ou
 
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --backend-protocol=http1 --monitor --probetype=http --probeport=8000 --probereq=/health --probetimeout=5 --proberetries=2
+    loxicmd create lb 192.0.2.254 --tcp=8080:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --backend-protocol=http1 --monitor --probetype=http --probeport=8000 --probereq=/health --probetimeout=5 --proberetries=2
     ```
 
 A backend that fails its probe is reported with `"inActiveEP": true` in `GET /config/loadbalancer/all` and is skipped by endpoint selection until it recovers.

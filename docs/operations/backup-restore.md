@@ -1,5 +1,7 @@
 # Configuration Persistence, Backup, and Restore
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Use the Gateway lifecycle APIs to capture live configuration, prove a restore
 plan without mutation, commit the reviewed document, and persist the resulting
 state for restart recovery. This is a **Gateway configuration** lifecycle. It

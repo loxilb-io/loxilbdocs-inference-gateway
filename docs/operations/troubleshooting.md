@@ -1,5 +1,7 @@
 # Troubleshooting
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 A symptom → likely cause → fix guide for the real failure modes of the LoxiLB Inference
 Gateway: AI routing that never engages, model 503s, silently-broken KV-cache routing,
 prefill/decode handoff stalls, streaming cut-offs, and metrics gaps.

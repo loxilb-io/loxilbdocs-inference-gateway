@@ -1,5 +1,7 @@
 # swagger-extras: Raw Handler API
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 `api/swagger-extras.yml` is the companion contract for five endpoint groups
 dispatched directly by the API server's global middleware. They do not use the
 normal generated handler pipeline, even when the same path is also mentioned

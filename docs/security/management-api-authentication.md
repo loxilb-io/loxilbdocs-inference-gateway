@@ -1,5 +1,7 @@
 # Management API Authentication
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Protect the Gateway management listener on port `11111` before configuring
 load balancers, API keys, quotas, or security policy. Management bearer
 credentials and inference API keys belong to different trust planes and are

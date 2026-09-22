@@ -1,5 +1,7 @@
 # Data-Plane Authentication and JWT
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Inference credentials are evaluated on a `mode: 4` fullproxy service. They do
 not authenticate operators to the management API. Configure management
 authentication separately before creating API keys, JWT profiles, load

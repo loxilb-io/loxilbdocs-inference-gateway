@@ -1,5 +1,10 @@
 # LoxiLB Inference Gateway
 
+!!! note "Illustrative mutation fragments"
+    The management mutations on this page are non-standalone fragments. Follow
+    the [mutating example contract](reference/example-quality-contract.md) and
+    the complete [quickstart lifecycle](getting-started/quickstart.md) before adapting them.
+
 An inference-aware L4/L7 load balancer for LLM serving fleets — the same GoLang/eBPF
 data path as [loxilb](https://github.com/loxilb-io/loxilb), extended with routing that
 understands the distinct serving contracts of vLLM, SGLang, TensorRT-LLM, and llama.cpp.

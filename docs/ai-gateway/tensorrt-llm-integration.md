@@ -1,5 +1,7 @@
 # TensorRT-LLM Integration
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Configure TensorRT-LLM for plain fullproxy routing, single-pool KV-exact routing, or sequential context/generation disaggregation. The event plane uses a destructive HTTP drain, which makes consumer ownership a central operational requirement.
 
 ## Prerequisites

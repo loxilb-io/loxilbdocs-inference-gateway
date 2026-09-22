@@ -1,5 +1,7 @@
 # Model Profiles and KV-Exact Readiness
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Use a published model profile to bind a KV-exact rule to one verified tokenizer/template
 identity, then verify what the data plane actually enforces. A successful rule `POST` or a
 matching `GET` response is not the final readiness signal.

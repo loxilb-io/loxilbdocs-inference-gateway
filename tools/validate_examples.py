@@ -25,6 +25,31 @@ MAIN_ONLY_MARKER = "CLI availability: main-only"
 EXPECTED_SCHEMA_FAILURE_MARKER = "docs-example: expect-schema-error"
 EXAMPLE_STATUSES = {"verified", "blocked", "illustrative-only"}
 EXAMPLE_INVENTORY = Path("tests/contracts/docs_examples/example-inventory.json")
+MUTATION_POLICY_PATH = "/reference/example-quality-contract/"
+CANONICAL_MUTATION_WORKFLOW = "/getting-started/quickstart/"
+MUTATING_HTTP_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
+MUTATING_CLI_VERBS = {"create", "delete", "set", "apply"}
+MUTATING_CLI_COMMANDS = {
+    "appliance backup create",
+    "appliance backup key-create",
+    "appliance diagnostics create",
+    "appliance factory-reset execute",
+    "appliance restore execute",
+    "appliance rollback execute",
+    "appliance update execute",
+}
+RFC1918_ADDRESS = re.compile(
+    r"(?<![0-9.])(?:"
+    r"10(?:\.[0-9]{1,3}){3}|"
+    r"172\.(?:1[6-9]|2[0-9]|3[01])(?:\.[0-9]{1,3}){2}|"
+    r"192\.168(?:\.[0-9]{1,3}){2}"
+    r")(?![0-9.])"
+)
+RFC1918_REFERENCE_NETWORKS = {
+    "10.0.0.0/8",
+    "172.16.0.0/12",
+    "192.168.0.0/16",
+}
 JWT_AUTH_MODES = {"jwt", "apikey-or-jwt"}
 JWT_ALGORITHMS = {
     "RS256", "RS384", "RS512",
@@ -606,6 +631,57 @@ class ExampleValidator:
             path = "/"
         return path.split("?", 1)[0]
 
+    def mutation_operations(self, block: Block) -> list[str]:
+        """Return management mutations represented by one fenced example."""
+        operations: list[str] = []
+        for command in extract_shell_commands(block.text, "curl"):
+            try:
+                method, url, _ = self._curl_details(command)
+            except ValueError:
+                continue
+            route = self._management_route(url)
+            if route is not None and method in MUTATING_HTTP_METHODS:
+                operations.append(f"{method} {route}")
+        for command in extract_shell_commands(block.text, "loxicmd"):
+            try:
+                tokens = shell_tokens(command)
+            except ValueError:
+                continue
+            args = tokens[1:]
+            command_name = next(
+                (
+                    name
+                    for name in sorted(
+                        self.cli_contract["commands"],
+                        key=lambda value: len(value.split()),
+                        reverse=True,
+                    )
+                    if args[: len(name.split())] == name.split()
+                ),
+                None,
+            )
+            if command_name and (
+                command_name.split()[0] in MUTATING_CLI_VERBS
+                or command_name in MUTATING_CLI_COMMANDS
+            ):
+                operations.append(f"loxicmd {command_name}")
+        return operations
+
+    @staticmethod
+    def private_example_addresses(text: str) -> list[str]:
+        """Reject RFC1918 host examples while allowing the three named CIDRs."""
+        found: list[str] = []
+        for match in RFC1918_ADDRESS.finditer(text):
+            tail = text[match.start() :]
+            if any(
+                tail.startswith(network)
+                and (len(tail) == len(network) or not tail[len(network)].isdigit())
+                for network in RFC1918_REFERENCE_NETWORKS
+            ):
+                continue
+            found.append(match.group(0))
+        return sorted(set(found))
+
     def _run_tool(self, report: ValidationReport, location: str, args: list[str], text: str) -> None:
         if shutil.which(args[0]) is None:
             if self.require_external_tools:
@@ -640,6 +716,10 @@ class ExampleValidator:
         except (json.JSONDecodeError, OSError) as exc:
             report.error(inventory_path.as_posix(), f"cannot read example inventory: {exc}")
             return
+        if document.get("schema_version") != 2:
+            report.error(inventory_path.as_posix(), "inventory schema_version must be 2")
+        if document.get("mutation_policy") != MUTATION_POLICY_PATH:
+            report.error(inventory_path.as_posix(), "inventory mutation policy is missing or stale")
         entries = document.get("entries")
         if not isinstance(entries, list):
             report.error(inventory_path.as_posix(), "inventory entries must be a list")
@@ -715,8 +795,58 @@ class ExampleValidator:
                     f"verified example lacks quality fields: {', '.join(missing)}",
                 )
 
+            operations = self.mutation_operations(block)
+            mutation = entry.get("mutation_contract")
+            if operations:
+                mutation_fields = {
+                    "detected", "mode", "operations", "workflow",
+                    "independent_oracle", "negative_no_mutation",
+                    "active_path", "cleanup", "cleanup_verification",
+                }
+                if not isinstance(mutation, dict) or set(mutation) != mutation_fields:
+                    report.error(block.location, "inventory mutation contract is incomplete")
+                    continue
+                if mutation.get("detected") is not True:
+                    report.error(block.location, "inventory mutation detection is stale")
+                if mutation.get("operations") != operations:
+                    report.error(block.location, "inventory mutation operation list is stale")
+                report.count("mutation_examples")
+                required = (
+                    "independent_oracle", "negative_no_mutation", "active_path",
+                    "cleanup", "cleanup_verification",
+                )
+                missing = [field for field in required if mutation.get(field) is not True]
+                if missing:
+                    report.error(
+                        block.location,
+                        "mutating example lacks contract fields: " + ", ".join(missing),
+                    )
+                if mutation.get("mode") == "standalone-workflow":
+                    if status != "verified":
+                        report.error(block.location, "standalone mutation workflow must be verified")
+                    if mutation.get("workflow") != CANONICAL_MUTATION_WORKFLOW:
+                        report.error(block.location, "standalone mutation workflow path is stale")
+                elif mutation.get("mode") == "illustrative-fragment":
+                    if status != "illustrative-only":
+                        report.error(block.location, "mutation fragment must be illustrative-only")
+                    if mutation.get("workflow") != CANONICAL_MUTATION_WORKFLOW:
+                        report.error(block.location, "mutation fragment lacks canonical workflow")
+                else:
+                    report.error(block.location, "mutating example has an invalid contract mode")
+            else:
+                if mutation is not None:
+                    report.error(block.location, "non-mutating example has a stale mutation contract")
+
     def validate_repository(self) -> ValidationReport:
         report = ValidationReport()
+        for path in public_markdown_paths(self.root):
+            relative = path.relative_to(self.root)
+            for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+                for address in self.private_example_addresses(line):
+                    report.error(
+                        f"{relative.as_posix()}:{line_number}",
+                        f"RFC1918 host address is not allowed in public examples: {address}",
+                    )
         collected = collect_public_blocks(self.root)
         blocks = [block for _, block, _ in collected]
         report.count("fenced_blocks", len(blocks))
@@ -822,6 +952,7 @@ def print_report(report: ValidationReport) -> None:
         "examples_verified",
         "examples_blocked",
         "examples_illustrative_only",
+        "mutation_examples",
     )
     for name in order:
         print(f"{name}: {report.counts.get(name, 0)}")

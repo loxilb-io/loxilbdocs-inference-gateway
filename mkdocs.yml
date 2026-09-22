@@ -143,6 +143,7 @@ nav:
       - Metrics: reference/metrics.md
       - Verification Status: reference/verification-status.md
       - Example Verification Inventory: reference/example-inventory.md
+      - Example Quality Contract: reference/example-quality-contract.md
       - API (swagger): reference/api.md
       - Current-main API Schema Models: reference/api-schema-models.md
       - swagger-extras (raw): reference/swagger-extras.md

@@ -1,5 +1,7 @@
 # API Reference
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 The LoxiLB Inference Gateway management API is served under
 `/netlox/v1` on port `11111`. This page catalogs every current endpoint family
 and highlights contracts that require special handling.

@@ -1,5 +1,7 @@
 # Deploy: Prefill/Decode Disaggregation
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 A hands-on, cloud-agnostic deploy and debug guide for running KV-cache-aware routing on a
 real GPU fleet with **prefill/decode (P/D) disaggregation** — bring-your-own hardware, any
 GPU instance. This page is the operational companion to the mechanism reference in

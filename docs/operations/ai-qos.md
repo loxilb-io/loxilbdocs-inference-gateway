@@ -1,5 +1,7 @@
 # AI Quotas and QoS
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 LoxiLB provides request and token admission controls plus network byte-rate
 controls. This page explains where each control runs and gives repeatable
 attach, measure, detach, and recovery procedures.

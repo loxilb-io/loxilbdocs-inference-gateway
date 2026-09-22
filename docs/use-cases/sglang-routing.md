@@ -1,5 +1,7 @@
 # SGLang Routing
 
+--8<-- "snippets/common/mutation-fragment-notice.md"
+
 Route SGLang as either a role-less single pool or a prefill/decode deployment. Both shapes use `kvEngineType: "sglang"`, but they use different request flows and different `kvExactMode` values.
 
 ## Choose the SGLang shape
