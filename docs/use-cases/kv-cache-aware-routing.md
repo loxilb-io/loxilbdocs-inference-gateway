@@ -279,6 +279,7 @@ Create one fullproxy (`mode=4`) rule per model. Tag prefill endpoints `ep_role: 
         "protocol": "tcp",
         "sel": 3,
         "mode": 4,
+        "pd_disagg_mode": true,
         "kvExactMode": 1,
         "kvZmqPort": 5557,
         "kvHashAlgo": "sha256_cbor",
@@ -293,7 +294,7 @@ Create one fullproxy (`mode=4`) rule per model. Tag prefill endpoints `ep_role: 
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=192.0.2.1:1,192.0.2.2:1 --mode=fullproxy --select=persist --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --kv-warmup=30 --ep-role=prefill,decode
+    loxicmd create lb 10.10.10.254 --tcp=8080:8000 --endpoints=192.0.2.1:1,192.0.2.2:1 --mode=fullproxy --select=persist --pd-disagg --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --kv-warmup=30 --ep-role=prefill,decode
     ```
 
 KV fields (all match the swagger `serviceArguments` defaults):

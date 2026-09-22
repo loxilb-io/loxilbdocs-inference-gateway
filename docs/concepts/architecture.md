@@ -62,6 +62,11 @@ The gateway splits cleanly into a control plane and a data plane.
   inspection limits, runs admission and endpoint selection, and manages the backend
   connection. Engine-specific P/D orchestration also runs in this serving path.
 
+Sockmap acceleration can replace only the steady-state byte relay of an eligible plaintext
+HTTP/1.1 service. It cannot coexist with `sse_mode`, P/D, any `api_key_auth` declaration, or an
+attached L7 policy because those features require userspace on every request. HTTP/2 and h2c are
+never accelerated. See [Sockmap Acceleration](../operations/sockmap-acceleration.md).
+
 !!! note "Why AI routing needs the userspace proxy"
     L4 eBPF forwarding never sees HTTP — it makes its decision from the packet's 5-tuple before
     any request body arrives. Model-name routing, KV-cache-aware prefix matching, P/D request

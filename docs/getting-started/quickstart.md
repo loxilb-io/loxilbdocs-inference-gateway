@@ -269,6 +269,12 @@ curl -s -H @control-plane.headers \
   | jq '.lbAttr[].serviceArguments | {port, model_name, mode}'
 ```
 
+!!! tip "Before adding KV-exact routing"
+    Do not jump from a working model pool directly to a profile name copied from another
+    deployment. Discover the running Gateway's published profiles, create the strict rule with
+    REST, then require the intended `enforcedState` from `kvexactstatus`. Follow
+    [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md).
+
 ## Step 5 — Clean up safely
 
 Each model name is part of its rule key. Delete a model-specific rule with the same host, path, path
@@ -339,6 +345,8 @@ unset GATEWAY_TOKEN
   routing in depth, including multi-pool and wildcard strategies.
 - [LLM Routing](../ai-gateway/llm-routing.md) — CHWBL prefix-cache affinity and
   GPU-aware selection.
+- [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md) —
+  discover a strict profile and verify data-plane enforcement.
 - [Configuration Reference](../ai-gateway/configuration-reference.md) — every
   `serviceArguments` field, default, and enum.
 - [Management API Authentication](../security/management-api-authentication.md) — secure port

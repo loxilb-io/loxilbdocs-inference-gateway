@@ -76,6 +76,143 @@ class DocumentationExampleTests(unittest.TestCase):
             with self.subTest(method=method, route=route):
                 self.assertEqual([], self.validator.validate_route(method, route))
 
+    def test_engine_kv_and_sockmap_operations_are_in_the_swagger_union(self) -> None:
+        operations = (
+            ("GET", "/config/ai/model-profiles"),
+            ("GET", "/config/ai/model-profiles/example-profile"),
+            (
+                "GET",
+                "/config/loadbalancer/externalipaddress/192.0.2.10/port/8080/protocol/tcp/kvexactstatus",
+            ),
+            (
+                "POST",
+                "/config/loadbalancer/externalipaddress/192.0.2.10/port/8080/protocol/tcp/sockmapreset",
+            ),
+        )
+        for method, route in operations:
+            with self.subTest(method=method, route=route):
+                self.assertEqual([], self.validator.validate_route(method, route))
+
+    def test_engine_support_catalog_exact_tuples_are_frozen(self) -> None:
+        entries = self.validator.gateway_contract["support_catalog"]["entries"]
+        tuples = {
+            (
+                entry["engine"],
+                entry["version"],
+                entry.get("revision", ""),
+                entry.get("image", {}).get("platformDigest", ""),
+                entry["gatewayRelease"],
+                entry["profile"],
+                entry["promotion"],
+            )
+            for entry in entries
+        }
+        self.assertEqual(
+            {
+                ("vllm", "v0.23.0", "", "", "v0.9.8.9-rc.1", "vllm-kv-array-v1", "candidate"),
+                (
+                    "vllm", "v0.28.0", "2cf0a6915ce544dc493a0990f2ea38d81601128a",
+                    "sha256:61fc8a896b0a4fbbbdc063bc4b0dbc25ce98e02b5050c24aeb7830ac02039b14",
+                    "v0.9.8.9-rc.1", "vllm-kv-map-v2", "validated",
+                ),
+                (
+                    "sglang", "v0.5.18", "71de97b264b04dcd514cf904003028aefe9775c8",
+                    "sha256:9e148f5ac788e856a06166bd6347a831831eb9fcfab4d1770874823a7c29a1a1",
+                    "v0.9.8.9-rc.1", "sglang-kv-rank-v1", "validated",
+                ),
+                ("trtllm", "v1.2.1", "", "", "v0.9.8.9-rc.1", "trtllm-kv-http-v1", "candidate"),
+                (
+                    "trtllm", "1.3.0rc24", "1cef02e901be43081b1ba6d4981e94ed3bd9c1e8",
+                    "sha256:a867619fd56c85225927dac27e2111ae90ff66e23c59d9c5f8b9f345577cab6d",
+                    "v0.9.8.9-rc.1", "trtllm-kv-http-preview-v1", "validated",
+                ),
+                ("llamacpp", "v0.3.0", "", "", "v0.9.8.9-rc.1", "llamacpp-nokv-v1", "candidate"),
+            },
+            tuples,
+        )
+
+    def test_validated_catalog_tuples_have_real_engine_evidence(self) -> None:
+        entries = self.validator.gateway_contract["support_catalog"]["entries"]
+        for entry in entries:
+            if entry["promotion"] != "validated":
+                continue
+            with self.subTest(engine=entry["engine"], version=entry["version"]):
+                self.assertTrue(entry["revision"])
+                self.assertTrue(entry.get("image", {}).get("platformDigest"))
+                for capability in entry["capabilities"].values():
+                    self.assertEqual("pass", capability["evidence"]["realEngine"])
+
+    def test_required_engine_scenario_sources_are_frozen(self) -> None:
+        trees = {
+            entry["path"]
+            for entry in self.validator.gateway_contract["scenario_evidence"]["trees"]
+        }
+        self.assertEqual(
+            {
+                "cicd/kv-mixed-version",
+                "cicd/kv-profile-admission",
+                "cicd/kv-sglang-attest",
+                "cicd/sockmap-fullproxy",
+                "cicd/vllm-kvcache-routing-cpu",
+                "cicd/vllm-pd-admission-cpu",
+            },
+            trees,
+        )
+
+    def test_strict_kv_fields_are_rest_only(self) -> None:
+        flags = set(self.validator.cli_contract["commands"]["create lb"]["main"]["flags"])
+        self.assertNotIn("--kv-exact-api-mode", flags)
+        self.assertNotIn("--kv-model-profile", flags)
+
+    def test_strict_kv_field_schema_is_frozen(self) -> None:
+        spec = self.validator.gateway_contract["specs"][0]
+        fields = spec["definitions"]["LoadbalanceEntry"]["properties"][
+            "serviceArguments"
+        ]["properties"]
+        self.assertEqual(
+            {"completions", "chat", "both"}, set(fields["kvExactApiMode"]["enum"])
+        )
+        self.assertEqual("string", fields["kvModelProfile"]["type"])
+        self.assertEqual(
+            {"off", "both", "request", "response"}, set(fields["sockMapMode"]["enum"])
+        )
+
+    def test_red_twin_kv_api_mode_without_exact_is_killed(self) -> None:
+        body = {
+            "serviceArguments": {
+                "externalIP": "192.0.2.10", "port": 8080, "protocol": "tcp",
+                "mode": 4, "kvExactApiMode": "chat",
+            },
+            "endpoints": [],
+        }
+        self.assertTrue(
+            self.validator.validate_contract_semantics("POST", "/config/loadbalancer", body)
+        )
+
+    def test_red_twin_sockmap_with_request_rewrite_is_killed(self) -> None:
+        for conflicting in (
+            {"sse_mode": True},
+            {"pd_disagg_mode": True},
+            {"api_key_auth": "disabled"},
+            {"api_key_auth": "required"},
+            {"api_key_auth": "jwt"},
+            {"api_key_auth": "apikey-or-jwt"},
+        ):
+            with self.subTest(conflicting=conflicting):
+                body = {
+                    "serviceArguments": {
+                        "externalIP": "192.0.2.10", "port": 8080,
+                        "protocol": "tcp", "mode": 4, "sockMapMode": "both",
+                        **conflicting,
+                    },
+                    "endpoints": [],
+                }
+                self.assertTrue(
+                    self.validator.validate_contract_semantics(
+                        "POST", "/config/loadbalancer", body
+                    )
+                )
+
     def test_capability_readiness_contract_is_frozen(self) -> None:
         spec = self.validator.gateway_contract["specs"][0]
         capability = spec["definitions"]["CapabilityStatus"]

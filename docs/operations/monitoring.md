@@ -207,6 +207,16 @@ refresh. A frozen series after detach is not the expected representation.
 |---|---|
 | `loxilb_ai_engine_info{service,engine}` | Engine identity currently emitted only for llama.cpp rules |
 | `loxilb_ai_llamacpp_probe_warnings_total{service,kind}` | llama.cpp `/props` findings such as model/build/slot mismatch, sleeping, or unanswered |
+| `loxilb_ai_pd_requests_total{model,phase,status}` | One terminal P/D outcome: complete/success; prefill timeout/error/rejected; decode timeout/error; or defensive unknown/error |
+| `loxilb_ai_pd_prefill_duration_seconds{model}` | Observed prefill phase duration when known |
+| `loxilb_ai_pd_decode_ttft_seconds{model}` | Decode time to first token/byte when known |
+| `loxilb_ai_pd_kv_params_found_total{model}` | A completed prefill response carried `kv_transfer_params` |
+| `loxilb_ai_pd_kv_params_missing_total{model}` | A prefill response was actually inspected but lacked `kv_transfer_params`; prefill failures do not increment it |
+| `loxilb_ai_pd_session_hits_total{model}` | Tier-0 P/D session-stickiness selections |
+| `loxilb_ai_pd_tier_selected_total{tier,model}` | Successful terminal prefill selections by `tier0`, `tier1`, `tier15`, or `tier2`; pre-routing admission outcomes increment nothing |
+| `loxilb_pd_admission_shed_total` | Every eligible prefill endpoint was at its in-flight cap and queueing was disabled; request refused |
+| `loxilb_pd_admission_queued_total` | Request parked in a per-endpoint FIFO because the pool was capped and queueing was enabled |
+| `loxilb_pd_admission_overflow_shed_total` | Pool and eligible per-endpoint FIFOs were full; overflow request refused |
 | `loxilb_pd_sg_prefill_abort_decode_total` | SGLang prefill failure aborted the decode leg |
 | `loxilb_pd_sg_decode_close_drain_total` | SGLang decode failure closed the prefill drain leg |
 | `loxilb_pd_sg_room_retry_total` | SGLang pair retried with a new bootstrap room |
@@ -225,6 +235,11 @@ counter also does not prove that origin HTTP `5xx` responses were hidden:
 correlate circuit transitions and endpoint-death counters with
 `loxilb_proxy_http_responses_by_status_total`, endpoint health, logs, and the
 client-visible result.
+
+For `loxilb_ai_pd_requests_total`, alert on the typed `phase` and `status` pair rather than an
+HTTP-code guess. Reconcile `tier_selected` only against successfully selected P/D requests;
+parked and refused admission events belong to the three admission families and intentionally do
+not choose a routing tier.
 
 ## Relay cache and backpressure metrics
 

@@ -334,6 +334,36 @@ class ExampleValidator:
             elif policy not in JWT_AUTH_MODES and isinstance(profile, str) and profile:
                 errors.append("jwt_auth_profile is valid only with api_key_auth 'jwt' or 'apikey-or-jwt'")
 
+            exact_mode = args.get("kvExactMode", 0)
+            pd_enabled = args.get("pd_disagg_mode") is True
+            if exact_mode not in {0, 1, 3}:
+                errors.append("kvExactMode must be one of 0, 1, or 3")
+            elif exact_mode == 1 and not pd_enabled:
+                errors.append("kvExactMode 1 requires pd_disagg_mode true")
+            elif exact_mode == 3 and pd_enabled:
+                errors.append("kvExactMode 3 is incompatible with pd_disagg_mode true")
+            if exact_mode in {1, 3} and args.get("mode") != 4:
+                errors.append("KV-exact routing requires fullproxy mode 4")
+            if "kvExactApiMode" in args and exact_mode not in {1, 3}:
+                errors.append("kvExactApiMode is meaningful only with KV-exact routing")
+            if "kvModelProfile" in args and exact_mode not in {1, 3}:
+                errors.append("kvModelProfile is meaningful only with KV-exact routing")
+            if args.get("kvEngineType") == "llamacpp" and (
+                exact_mode in {1, 3} or pd_enabled
+            ):
+                errors.append("llamacpp does not support KV-exact or P/D routing")
+
+            sockmap_mode = args.get("sockMapMode", "off")
+            if sockmap_mode != "off":
+                if args.get("mode") != 4 or args.get("protocol") != "tcp":
+                    errors.append("sockmap acceleration requires TCP fullproxy mode 4")
+                if args.get("sse_mode") is True:
+                    errors.append("sockmap acceleration is incompatible with sse_mode")
+                if pd_enabled:
+                    errors.append("sockmap acceleration is incompatible with pd_disagg_mode")
+                if "api_key_auth" in args:
+                    errors.append("sockmap acceleration is incompatible with any api_key_auth declaration")
+
         elif route == "/config/ai/jwtauthprofile":
             name = body.get("name")
             if isinstance(name, str) and len(name.encode("utf-8")) > 63:
