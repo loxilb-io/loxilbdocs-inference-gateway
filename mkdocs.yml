@@ -111,6 +111,7 @@ nav:
       - Performance Methodology: use-cases/performance-methodology.md
   - Security:
       - Management API Authentication: security/management-api-authentication.md
+      - Data-Plane Authentication and JWT: security/data-plane-jwt-auth.md
       - AI Safety Scanning: security/ai-safety.md
       - OPA L4 Policy: security/opa-l4.md
       - Frontend mTLS: security/mtls.md
@@ -121,7 +122,9 @@ nav:
       - LoxiLB OAM API: management/loxilb-oam.md
   - Operations:
       - AI Key Store: operations/ai-key-store.md
-      - Backup & Restore: operations/backup-restore.md
+      - Persistence, Backup & Restore: operations/backup-restore.md
+      - Readiness, Capabilities, Diagnostics & Maintenance: operations/readiness-diagnostics-maintenance.md
+      - Appliance CLI: operations/appliance-cli.md
       - Application & L4 Tracing: operations/tracing.md
       - DPU Offload Observability: operations/dpu-offload.md
       - Monitoring & Metrics: operations/monitoring.md

@@ -76,18 +76,27 @@ AI-enabled rule, the gateway proceeds roughly as follows:
 
 1. **Terminate and parse.** The fullproxy accepts the client connection (optionally
    terminating TLS per the rule's `security` mode) and reads the HTTP request.
-2. **Model selection.** If `model_name` pools are configured, the requested model (from the
+2. **Credential admission.** The service's `api_key_auth` declaration decides
+   whether Gateway authentication is absent, disabled-with-header-stripping,
+   API-key-only, JWT-only, or API-key-or-JWT. This is independent of SSE and
+   P/D. Management authentication is a separate control-plane decision.
+3. **Model selection and authorization.** If `model_name` pools are configured, the requested model (from the
    `X-Model` header or the body `model` field) picks the endpoint pool; `""` is the catch-all.
-3. **Endpoint selection.** The rule's `sel` algorithm chooses an endpoint within the pool.
+   An attributed API key or JWT must also authorize the effective model.
+4. **Quota admission.** Applicable key, user, user-model, tenant,
+   tenant-model, shared-VIP, and default buckets must admit before dispatch.
+5. **Endpoint selection.** The rule's `sel` algorithm chooses an endpoint within the pool.
    For LLM fleets this is typically CHWBL prefix affinity (`sel: 8`/`10`) or, when a KV-cache
    event stream is wired, engine-exact KV routing that places the request on the endpoint
    already holding the longest matching prompt prefix.
-4. **P/D orchestration (optional).** With `pd_disagg_mode` enabled, the proxy applies the
+6. **P/D orchestration (optional).** With `pd_disagg_mode` enabled, the proxy applies the
    selected engine dialect: sequential vLLM prefill/decode, concurrent SGLang
    prefill/decode, or sequential TensorRT-LLM context/generation. llama.cpp P/D is
    rejected at rule creation.
-5. **Stream relay.** With `sse_mode` enabled, the response is relayed as SSE with idle-timeout
+7. **Stream relay and settlement.** With `sse_mode` enabled, the response is relayed as SSE with idle-timeout
    suppression while the stream is active, a wall-clock cap, and optional backend keepalive.
+   Token reservations are released and measured usage is settled when the
+   response completes.
 
 The KV inventory services run alongside this path. As supported backends publish events, the
 gateway updates its per-endpoint hash inventory so KV-exact selection can reflect observed

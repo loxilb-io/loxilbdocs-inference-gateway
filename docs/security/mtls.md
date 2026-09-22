@@ -54,10 +54,13 @@ Set `GATEWAY_API` to the protected management origin and obtain
 `GATEWAY_TOKEN` through the approved identity workflow:
 
 ```bash
+install -m 600 /dev/null ./control-plane.headers
+printf 'Authorization: Bearer %s\n' "$GATEWAY_TOKEN" > ./control-plane.headers
+
 curl --fail-with-body --silent --show-error \
   --request POST \
   --header 'Content-Type: application/json' \
-  --header "Authorization: Bearer $GATEWAY_TOKEN" \
+  --header @control-plane.headers \
   --data '{
     "serviceArguments": {
       "externalIP": "192.0.2.10",
@@ -90,7 +93,7 @@ Read-back confirms the control-plane object, not the TLS behavior:
 
 ```bash
 curl --fail-with-body --silent --show-error \
-  --header "Authorization: Bearer $GATEWAY_TOKEN" \
+  --header @control-plane.headers \
   "$GATEWAY_API/netlox/v1/config/loadbalancer/all" | jq .
 ```
 

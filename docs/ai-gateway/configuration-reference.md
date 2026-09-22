@@ -9,7 +9,18 @@ created; a client must not assume that every individually valid field can be com
 A load-balancer create body has three top-level keys:
 
 ```json
-{ "serviceArguments": { ... }, "endpoints": [ ... ], "secondaryIPs": [ ... ] }
+{
+  "serviceArguments": {
+    "externalIP": "192.0.2.10",
+    "port": 8080,
+    "protocol": "tcp",
+    "mode": 4
+  },
+  "endpoints": [
+    { "endpointIP": "198.51.100.11", "targetPort": 8000, "weight": 1 }
+  ],
+  "secondaryIPs": []
+}
 ```
 
 `serviceArguments` carries the VIP, the L4/L7 behaviour, and every AI-routing knob. `endpoints`
@@ -108,11 +119,11 @@ apply to every rule, AI or not.
 | `backend_keepalive_interval_sec` | int32 | `0` | ≥0 | Sets `SO_KEEPALIVE`+`TCP_KEEPIDLE` on the backend socket (seconds). `0` = disabled. **Recommended `60`** to survive cloud NAT during long SSE streams. |
 
 !!! note "SSE lifecycle and admission controls are enforced"
-    SSE lifecycle handling is part of the fullproxy stream path. API-key model authorization,
-    request-rate limits, and token quotas use the independent PostgreSQL key store configured by
-    `--aikey-db-*`. Without `--aikey-db-host`, the current data path admits requests without key
-    validation. Prove a missing-key request receives `401` before using these controls as an
-    access boundary.
+    SSE lifecycle handling is part of the fullproxy stream path and does not activate
+    authentication. `api_key_auth` independently selects omitted, `disabled`, `required`, `jwt`,
+    or `apikey-or-jwt`. A required API-key policy uses the PostgreSQL store configured by
+    `--aikey-db-*`; if it cannot evaluate the key, it fails closed with `503`. Prove missing or
+    unknown key `401`, store failure `503`, and backend receipt delta `0` separately.
 
 ---
 
@@ -152,7 +163,10 @@ overlap silently drops to zero. See [KV-Cache Routing](kv-caching.md).
     (`PYTHONHASHSEED` == `LLB_KV_NONE_HASH_SEED`), hash algo (set vLLM
     `--prefix-caching-hash-algo=sha256_cbor` — its default `sha256` is non-portable), and block
     size (`--block-size` == `kvBlockSize`). vLLM must also set
-    `VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES=1`.
+    `VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES=1`. Current Gateway main also requires a nonempty
+    Gateway seed of at most 23 bytes and returns HTTP `412` before mutation otherwise. Query the
+    REST-only `GET /status/capabilities` surface and require `kv_exact_vllm.ready=true` before
+    presenting or submitting the rule.
 
 ---
 

@@ -50,6 +50,117 @@ These policies are independent from API-key and tenant request-per-second
 [AI Traffic Governance](../ai-gateway/ai-traffic-governance.md) for admission
 controls.
 
+## Request and token quota ladder
+
+Request/token admission and network byte shaping are different systems. An
+attributed request must pass every applicable RPS bucket. Token reservation
+and settlement charge every applicable TPM bucket.
+
+| Scope | Identity source | Resolution and isolation |
+|---|---|---|
+| Key | Validated `X-Api-Key` | Key RPS and the implementation's post-response TPM debt latch are active; primary Swagger text must be corrected before this becomes a published support guarantee |
+| User | Verified JWT tenant plus user claim | Explicit user row, otherwise rule/global user default, otherwise unlimited |
+| User + model | Verified JWT user and effective model | Explicit pair only; debt must not affect another model or user |
+| Tenant | API-key tenant or verified JWT tenant | Explicit tenant row, otherwise rule/global tenant default, otherwise unlimited; caps the sum of its users/keys |
+| Tenant + model | Tenant and effective model | Explicit pair only; combines with the aggregate tenant bucket |
+| Shared VIP | Service identity | Opt-in `vip_shared_rps` for keyless traffic; `vip_shared_tpm` is charged by token-metered traffic on the service |
+| Defaults | `global` and optional `rule_ident` | Rule fields override global fields individually; a zero field falls through |
+
+An explicit user or tenant row wins for its dimension even when it is looser
+than the default. All-zero user/default rows are rejected; use `DELETE` to
+remove them. Removing an explicit row makes that identity fall through to its
+default, not necessarily to unlimited.
+
+The JWT arm supplies tenant/user identities. API-key traffic supplies a tenant
+and key but no user. Keyless traffic has neither and consults only the optional
+shared-VIP bucket.
+
+### Configure user and default rows through REST
+
+`loxicmd` does not currently expose user or defaults CRUD. Use the management
+REST API and a protected header file.
+
+```bash
+curl --fail-with-body --silent --show-error \
+  --request POST "$CONTROL_API/config/ai/user/ratelimit" \
+  --header @control-plane.headers \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "tenant_id": "team-a",
+    "user_id": "user-123",
+    "rps": 5,
+    "burst_size": 10,
+    "tokens_per_min": 12000,
+    "model_limits": [
+      {"model": "example-chat-model", "tokens_per_min": 4000}
+    ]
+  }'
+
+curl --fail-with-body --silent --show-error \
+  --request POST "$CONTROL_API/config/ai/ratelimit/defaults" \
+  --header @control-plane.headers \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "scope": "rule",
+    "rule_ident": "192.0.2.20:8443",
+    "default_user_rps": 2,
+    "default_user_tpm": 6000,
+    "default_tenant_rps": 20,
+    "default_tenant_tpm": 60000,
+    "vip_shared_rps": 10,
+    "vip_shared_tpm": 30000
+  }'
+```
+
+Expected result: `204` for each mutation. Read the rows back and compare every
+field before testing traffic:
+
+```bash
+curl --fail-with-body --silent --show-error \
+  --header @control-plane.headers \
+  "$CONTROL_API/config/ai/user/ratelimit/team-a/user-123" | jq .
+
+curl --fail-with-body --silent --show-error \
+  --get "$CONTROL_API/config/ai/ratelimit/defaults/rule" \
+  --header @control-plane.headers \
+  --data-urlencode 'rule_ident=192.0.2.20:8443' | jq .
+```
+
+### Fail-open and fail-closed boundaries
+
+| Evaluation state | Decision |
+|---|---|
+| Credential/tenant/user identity exists but its explicit/default limit is unknowable and no last-known-good answer exists | `503 policy_store_unavailable`; no backend delivery |
+| Keyless traffic and optional shared-VIP defaults are unknowable | Fail open for that optional bucket; do not invent an outage for a service that may never have enabled it |
+| Cached or last-known-good row exists during store outage | Continue with that confirmed row until its cache/outage contract expires or is replaced |
+| Token state warming from peers | `429 token_quota_warming` during the bounded warm-up window |
+| Warm-up deadline expires without peer state | Compatibility path fails open and increments the cold-open metric |
+
+For every denial, use a unique nonce and require backend receipt delta `0`.
+After exhausting one user or model, probe an unrelated user and model and
+require no denial-counter or receipt change attributable to the exhausted
+identity. That unrelated-identity probe is the independent oracle that the
+bucket did not bleed across scopes.
+
+### Remove the test rows
+
+```bash
+curl --fail-with-body --silent --show-error \
+  --request DELETE \
+  --header @control-plane.headers \
+  "$CONTROL_API/config/ai/user/ratelimit/team-a/user-123"
+
+curl --fail-with-body --silent --show-error \
+  --request DELETE \
+  --get "$CONTROL_API/config/ai/ratelimit/defaults/rule" \
+  --header @control-plane.headers \
+  --data-urlencode 'rule_ident=192.0.2.20:8443'
+```
+
+Expected result: `204`. A later per-user read returns `404`; the identity then
+uses matching defaults if they remain. Verify the intended fallback instead of
+assuming delete means unlimited.
+
 ## Units and behavior
 
 | Field or metric | Unit | Notes |
@@ -307,6 +418,9 @@ their previous values.
 - Runtime policer and shaper token buckets are node-local. Promotion rebuilds
   or resets that transient state, so a newly active node can begin with fresh
   burst credit.
+- Key, user, user-model, tenant, tenant-model, and shared-VIP token buckets
+  require same-version quota-state exchange. Treat mixed-version promotion as
+  unsafe until a two-node scenario proves scope/version compatibility.
 - Single-node functional scenarios do not prove quota or rate-limit failover, cross-node
   bucket continuity, or connection migration.
 - Active TCP, TLS, and SSE connections are not transferred to another process;

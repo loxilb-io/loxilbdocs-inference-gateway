@@ -1,0 +1,245 @@
+from __future__ import annotations
+
+import importlib.util
+import sys
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+SPEC = importlib.util.spec_from_file_location(
+    "validate_examples", ROOT / "tools/validate_examples.py"
+)
+assert SPEC and SPEC.loader
+MODULE = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = MODULE
+SPEC.loader.exec_module(MODULE)
+ExampleValidator = MODULE.ExampleValidator
+
+
+class DocumentationExampleTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.validator = ExampleValidator(ROOT)
+
+    def test_all_normal_fixtures_pass(self) -> None:
+        report = self.validator.validate_repository()
+        self.assertEqual([], report.errors, "\n".join(report.errors))
+
+    def test_red_twin_route_typo_is_killed(self) -> None:
+        errors = self.validator.validate_route("POST", "/config/workre/metrics")
+        self.assertTrue(errors)
+
+    def test_red_twin_removed_flag_is_killed(self) -> None:
+        errors = self.validator.validate_cli_command(
+            "loxicmd create lb 192.0.2.10 --tcp=8080:8000 "
+            "--endpoints=198.51.100.11:1 --removed-flag=true"
+        )
+        self.assertTrue(errors)
+
+    def test_release_lifecycle_commands_are_frozen(self) -> None:
+        for command in (
+            "get snapshot", "create restore", "create persist",
+            "get ready", "get diagnostics", "get maintenance",
+            "set maintenance", "appliance status",
+        ):
+            with self.subTest(command=command):
+                contract = self.validator.cli_contract["commands"][command]
+                self.assertTrue(contract["release"]["available"])
+                self.assertTrue(contract["main"]["available"])
+
+    def test_main_only_appliance_lifecycle_needs_marker(self) -> None:
+        command = (
+            "loxicmd appliance restore plan /var/lib/backup/appliance.tar.age "
+            "--key-file /root/backup.key"
+        )
+        self.assertTrue(self.validator.validate_cli_command(command))
+        self.assertEqual(
+            [],
+            self.validator.validate_cli_command(
+                command, "CLI availability: main-only"
+            ),
+        )
+
+    def test_recovery_operations_are_in_the_swagger_union(self) -> None:
+        operations = (
+            ("GET", "/config/snapshot"),
+            ("POST", "/config/restore"),
+            ("POST", "/config/persist"),
+            ("GET", "/status/ready"),
+            ("GET", "/status/capabilities"),
+            ("GET", "/diagnostics"),
+            ("GET", "/maintenance"),
+            ("PUT", "/maintenance"),
+        )
+        for method, route in operations:
+            with self.subTest(method=method, route=route):
+                self.assertEqual([], self.validator.validate_route(method, route))
+
+    def test_capability_readiness_contract_is_frozen(self) -> None:
+        spec = self.validator.gateway_contract["specs"][0]
+        capability = spec["definitions"]["CapabilityStatus"]
+        self.assertEqual({"name", "ready"}, set(capability["required"]))
+        self.assertEqual("string", capability["properties"]["name"]["type"])
+        self.assertNotIn("enum", capability["properties"]["name"])
+
+        capability_list = spec["definitions"]["CapabilityStatusList"]
+        self.assertEqual({"capabilities"}, set(capability_list["required"]))
+        self.assertEqual(
+            "#/definitions/CapabilityStatus",
+            capability_list["properties"]["capabilities"]["items"]["$ref"],
+        )
+
+    def test_maintenance_requires_explicit_enabled_state(self) -> None:
+        errors = self.validator.validate_json_body("PUT", "/maintenance", {})
+        self.assertTrue(errors)
+
+    def test_red_twin_wrong_enum_is_killed(self) -> None:
+        errors = self.validator.validate_cli_command(
+            "loxicmd create lb 192.0.2.10 --tcp=8080:8000 "
+            "--endpoints=198.51.100.11:1 --mode=sideways"
+        )
+        self.assertTrue(errors)
+
+    def test_red_twin_wrong_json_field_casing_is_killed(self) -> None:
+        body = {
+            "endpointIP": "198.51.100.11:8000",
+            "queued_requests": 1,
+            "kv_cache_usage_perc": 50,
+        }
+        errors = self.validator.validate_json_body(
+            "POST", "/config/worker/metrics", body
+        )
+        self.assertTrue(errors)
+
+    def test_red_twin_missing_required_field_is_killed(self) -> None:
+        body = {
+            "endpoint_ip": "198.51.100.11:8000",
+            "kv_cache_usage_perc": 50,
+        }
+        errors = self.validator.validate_json_body(
+            "POST", "/config/worker/metrics", body
+        )
+        self.assertTrue(errors)
+
+    def test_five_state_credential_contract_is_frozen(self) -> None:
+        spec = self.validator.gateway_contract["specs"][0]
+        field = spec["definitions"]["LoadbalanceEntry"]["properties"][
+            "serviceArguments"
+        ]["properties"]["api_key_auth"]
+        self.assertEqual(
+            {"disabled", "required", "jwt", "apikey-or-jwt"},
+            set(field["enum"]),
+        )
+        self.assertNotIn("default", field)
+
+    def test_companion_apikey_patch_contract_has_all_runtime_fields(self) -> None:
+        matches = self.validator.matching_operations(
+            "PATCH", "/config/ai/apikey/example-key-id"
+        )
+        self.assertEqual(2, len(matches))
+        body_property_sets = []
+        for _, operation in matches:
+            for parameter in operation.get("parameters", []):
+                if parameter.get("in") == "body":
+                    body_property_sets.append(
+                        set(parameter.get("schema", {}).get("properties", {}))
+                    )
+        self.assertIn(
+            {
+                "allowed_models", "enabled", "rate_limit_rps",
+                "burst_size", "tokens_per_min",
+            },
+            body_property_sets,
+        )
+
+    def test_red_twin_empty_apikey_patch_is_killed(self) -> None:
+        errors = self.validator.validate_json_body(
+            "PATCH", "/config/ai/apikey/example-key-id", {}
+        )
+        self.assertTrue(errors)
+
+    def test_explicit_empty_allowlist_patch_is_not_a_noop(self) -> None:
+        errors = self.validator.validate_json_body(
+            "PATCH",
+            "/config/ai/apikey/example-key-id",
+            {"allowed_models": []},
+        )
+        self.assertEqual([], errors)
+
+    def test_red_twin_jwt_without_profile_is_killed(self) -> None:
+        body = {
+            "serviceArguments": {"api_key_auth": "jwt"},
+            "endpoints": [],
+        }
+        errors = self.validator.validate_contract_semantics(
+            "POST", "/config/loadbalancer", body
+        )
+        self.assertTrue(errors)
+
+    def test_red_twin_profile_on_required_rule_is_killed(self) -> None:
+        body = {
+            "serviceArguments": {
+                "api_key_auth": "required",
+                "jwt_auth_profile": "issuer-a",
+            },
+            "endpoints": [],
+        }
+        errors = self.validator.validate_contract_semantics(
+            "POST", "/config/loadbalancer", body
+        )
+        self.assertTrue(errors)
+
+    def test_red_twin_qos_rule_defaults_without_identity_is_killed(self) -> None:
+        errors = self.validator.validate_contract_semantics(
+            "POST",
+            "/config/ai/ratelimit/defaults",
+            {"scope": "rule", "default_user_rps": 1},
+        )
+        self.assertTrue(errors)
+
+    def test_red_twin_empty_user_model_is_killed(self) -> None:
+        errors = self.validator.validate_contract_semantics(
+            "POST",
+            "/config/ai/user/ratelimit",
+            {
+                "tenant_id": "team-a",
+                "user_id": "user-a",
+                "model_limits": [{"tokens_per_min": 100}],
+            },
+        )
+        self.assertTrue(errors)
+
+    def test_wrong_limit_type_reports_errors_instead_of_crashing(self) -> None:
+        errors = self.validator.validate_json_body(
+            "POST",
+            "/config/ai/user/ratelimit",
+            {
+                "tenant_id": "team-a",
+                "user_id": "user-a",
+                "rps": "not-a-number",
+            },
+        )
+        self.assertTrue(errors)
+
+    def test_red_twin_inline_management_bearer_is_killed(self) -> None:
+        errors = self.validator.validate_curl_credential_hygiene(
+            "curl -H 'Authorization: Bearer $TOKEN' https://gateway.example.com"
+        )
+        self.assertTrue(errors)
+
+    def test_red_twin_inline_api_key_is_killed(self) -> None:
+        errors = self.validator.validate_curl_credential_hygiene(
+            "curl -H 'X-Api-Key: $INFERENCE_API_KEY' https://ai.example.com"
+        )
+        self.assertTrue(errors)
+
+    def test_protected_header_file_passes_credential_hygiene(self) -> None:
+        errors = self.validator.validate_curl_credential_hygiene(
+            "curl --header @control-plane.headers https://gateway.example.com"
+        )
+        self.assertEqual([], errors)
+
+
+if __name__ == "__main__":
+    unittest.main()

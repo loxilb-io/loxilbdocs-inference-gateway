@@ -2,9 +2,10 @@
 
 The AI Gateway stores data-plane API keys and tenant quotas in a dedicated
 PostgreSQL schema. This store is independent of the management user service:
-its availability controls key/quota CRUD and validation on eligible SSE or P/D
-fullproxy rules, not operator login. Plain `mode: 4` rules do not invoke the
-current key gate.
+its availability controls key/quota CRUD and evaluation on fullproxy services
+that declare Gateway-owned authentication, not operator login. `api_key_auth`
+is independent of SSE and P/D. A rule that omits it preserves a backend-owned
+`X-Api-Key`; `disabled` strips that header; `required` validates it.
 
 !!! warning "Development-source behavior"
     The independent PostgreSQL store and peer invalidation described here are implemented in the
@@ -34,7 +35,9 @@ verifying that the schema already exists and the role has `USAGE` and `CREATE`:
 
 - `aigw.api_keys`;
 - `aigw.tenant_rate_limits`;
-- `aigw.tenant_model_rate_limits`.
+- `aigw.tenant_model_rate_limits`;
+- `aigw.user_rate_limits` and `aigw.user_model_rate_limits`;
+- `aigw.rate_limit_defaults`.
 
 Only a SHA-256 hash of each API key is stored. The opaque `key_id` is generated
 independently from the secret, so the identifier does not disclose key
@@ -130,8 +133,10 @@ There is no automatic data migration.
 
 !!! danger "Do not upgrade with only `--userservice`"
     An upgraded Gateway with `--userservice` but no `--aikey-db-host` has management login but no
-    AI-key store. Key/quota CRUD returns `503`, while the current inference compatibility path
-    admits requests without a key. Treat this as an exposure-blocking configuration error.
+    AI-key store. Key/quota CRUD returns `503`; a service declaring `api_key_auth: required`
+    also returns `503 policy_store_unavailable` before backend dispatch. A service that omitted
+    the declaration remains keyless by contract. Treat either unintended state as an
+    exposure-blocking configuration error.
 
 Choose one migration strategy:
 
@@ -154,22 +159,25 @@ new independently generated key IDs; reissue when that distinction matters.
 
 | State | Key/quota management API | Inference key validation |
 |---|---|---|
-| `--aikey-db-host` unset | `503 ai_key_store_unconfigured` | **Current code admits the request without checking a key** |
-| Store configured and healthy; SSE or P/D fullproxy rule | CRUD succeeds | Cache hit or PostgreSQL lookup; invalid key `401`, disallowed model `403` |
-| Store configured and healthy; plain `mode: 4` rule | CRUD succeeds | **Current rule does not enter the key gate and remains keyless** |
-| Store configured but unavailable at startup | `503 ai_key_store_unavailable` | An uncached credential is denied as `401 invalid_api_key`; a first boot normally has no warm cache |
-| Store becomes unreachable after startup | Store-backed CRUD fails; an unclassified driver error may surface as a generic service error | Cached entries remain usable until expiry; misses fail closed |
+| `--aikey-db-host` unset; `api_key_auth: required` | `503 ai_key_store_unconfigured` | `503 policy_store_unavailable`; backend receipt delta `0` |
+| Store configured and healthy; `required` fullproxy rule | CRUD succeeds | Cache hit or PostgreSQL lookup; unknown key `401`, disallowed model `403` |
+| Store healthy; `api_key_auth` omitted | CRUD succeeds | Gateway does not validate or strip backend-owned `X-Api-Key` |
+| Store healthy; `api_key_auth: disabled` | CRUD succeeds | No validation; Gateway strips `X-Api-Key` |
+| Store configured but unavailable before an answer is cached | `503 ai_key_store_unavailable` | `503 policy_store_unavailable`; do not misclassify as an invalid key |
+| Store becomes unreachable after a confirmed answer was cached | Store-backed CRUD fails; an unclassified driver error may surface as a generic service error | Cached/last-known-good entries remain usable under their cache contract; unknown evaluation fails closed |
 | Store reconnects | CRUD resumes after the reconnect path attaches the pool | New misses can validate again |
 
-!!! danger "No-store is a fail-open compatibility path"
-    No-store and unavailable-store are deliberately different. A configured-but-unavailable store
-    creates a degraded service and denies uncached credentials. An entirely unconfigured store
-    leaves the current data path's compatibility branch active and admits keyless traffic. Treat a
-    missing `--aikey-db-host` as a failed production deployment.
+!!! danger "Declaration determines the no-store posture"
+    No store does not silently downgrade a `required` rule: it fails closed with `503`. An omitted
+    or `disabled` rule intentionally has no API-key validation dependency. Verify the exact
+    declaration by read-back instead of inferring it from store health, SSE, or P/D flags.
 
-Per-key `tokens_per_min` is stored and round-tripped by this service but is not
-consumed by the current data-plane limiter. Use the tenant aggregate and
-tenant/model quota APIs for enforced TPM controls.
+Per-key `tokens_per_min` is actively consumed by the implementation and its
+unit/integration tests. The frozen primary Swagger text is stale and calls it
+stored-only metadata, while the companion PATCH description says it is
+enforced. Do not present this implemented behavior as a released support
+guarantee until the primary contract is corrected and qualified. The complete
+ladder is documented in [AI Quotas and QoS](ai-qos.md).
 
 The management handlers expose unconfigured and unavailable as separate `503`
 error codes because they require different operator actions. The inference
@@ -202,6 +210,7 @@ Run these checks in a non-production tenant before exposure:
    returning `401`:
 
    ```bash
+   # docs-example: expect-schema-error
    curl --silent --output /dev/null --write-out '%{http_code}\n' \
      --request POST https://gateway.example.com/netlox/v1/config/ai/apikey \
      --header 'Content-Type: application/json' \
@@ -212,17 +221,19 @@ Run these checks in a non-production tenant before exposure:
    must be `200` and must not contain `raw_key` or `key_hash`.
 3. Create a narrowly scoped test key and move the returned secret immediately
    into a secret manager.
-4. Create or select a `mode: 4` test rule with `sse_mode: true` or
-   `pd_disagg_mode: true`; a plain fullproxy rule does not enter the current key
-   gate.
-5. On that gated rule, send an inference request without `X-Api-Key`; require
-   `401` and confirm the backend request counter does not change.
+4. Create or select a `mode: 4` test rule with `api_key_auth: required` and
+   read the declaration back exactly.
+5. On that rule, send an inference request without or with an unknown
+   `X-Api-Key`; require `401 invalid_api_key` and confirm the unique backend
+   receipt counter does not change.
 6. Disable the test key with `PATCH`; require subsequent use on the same gated
    rule to return `401`.
 7. In a multi-node lab, warm the key on that gated rule through every peer
    before disabling it, then verify every peer denies it. Record any
    TTL-bounded convergence separately.
 8. Delete the test key and remove all temporary header and response files.
+9. In a separate outage probe, make the policy unevaluable; require
+   `503 policy_store_unavailable` and another backend receipt delta of `0`.
 
 ## Troubleshooting
 
@@ -241,4 +252,5 @@ Run these checks in a non-production tenant before exposure:
 - [API Key Management](../ai-gateway/api-key-management.md)
 - [AI Traffic Governance](../ai-gateway/ai-traffic-governance.md)
 - [Management API Authentication](../security/management-api-authentication.md)
+- [Data-Plane Authentication and JWT](../security/data-plane-jwt-auth.md)
 - [HA and Upgrade Limitations](ha-limitations.md)

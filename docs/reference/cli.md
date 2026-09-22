@@ -150,18 +150,17 @@ plus the confirm-token flow.
 ### AI gateway
 
 !!! note "Data-plane enforcement"
-    Enforcement requires the independent PostgreSQL key store **and** a `mode: 4` rule with
-    `sse_mode: true` or `pd_disagg_mode: true`. Plain `mode: 4` remains keyless. On a gated rule,
-    the path enforces API-key authentication and model authorization (`401`/`403`) plus request-rate
-    and tenant/model token quotas (`429`). Per-key `tokens_per_min` is stored but not enforced.
-    Without `--aikey-db-host`, the gated path admits requests without API-key checks. Prove the
-    expected `401` behavior on the exact VIP before exposure.
+    A `mode: 4` rule's independent `api_key_auth` declaration activates authentication; SSE and
+    P/D do not. The CLI can set only `disabled` or `required`. A required rule returns `401` for an
+    unknown key and fails closed with `503` if the PostgreSQL policy store cannot answer. JWT modes,
+    profile association, user quotas, and defaults are REST-only. Per-key TPM is implemented, but
+    its primary Swagger description is stale; published support remains pending convergence.
 
 | Tool | Purpose |
 |---|---|
 | `ai_apikey_list` | List AI-gateway API keys, optionally filtered by tenant. Returns key metadata only, never key material. |
 | `ai_apikey_get` | Get one API-key summary by `key_id`. Metadata only. |
-| `ai_apikey_create` | Create a tenant API key: allowed models, enforced per-key RPS/burst values, and stored `tokens_per_min` metadata (not currently enforced per key). Key material is written to a secrets file by default. |
+| `ai_apikey_create` | Create a tenant API key: allowed models and per-key RPS/burst values. Key material is written to a secrets file by default. The implementation enforces per-key TPM, but do not treat it as release-qualified until primary Swagger converges. |
 | `ai_apikey_update` | Update an API key's allowed-model list and/or enabled flag. Disabling is reversible; deleting is not. |
 | `ai_apikey_delete` | Permanently delete an API key by `key_id` (destructive; confirm-token gated). |
 | `ai_ratelimit_set` | Create or update a tenant's AI rate limit: requests/s and LLM tokens/min. Set quotas to 0 to lift (there is no delete endpoint). |
@@ -277,8 +276,11 @@ as an MCP tool call and the equivalent REST call the bridge makes on your behalf
 
 === "curl (REST)"
     ```bash
+    install -m 600 /dev/null ./control-plane.headers
+    printf 'Authorization: Bearer %s\n' "$GATEWAY_TOKEN" > ./control-plane.headers
+
     curl -s -X POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer \
-      -H "Authorization: Bearer $GATEWAY_TOKEN" \
+      -H @control-plane.headers \
       -H 'Content-Type: application/json' \
       -d '{
         "serviceArguments": { "externalIP": "10.10.10.254", "port": 8080,
@@ -333,6 +335,24 @@ The AI-aware `loxicmd` is available now. It provides AI verbs for the gateway:
 Its examples sit beside the MCP and REST forms in the tabbed blocks on this page
 and throughout the docs, so the same operation reads across all three surfaces:
 
+### Configuration and appliance lifecycle
+
+The CLI release line and the Gateway release line are independent. Confirm both installed
+versions before assuming a command has a server-side implementation.
+
+| CLI surface | Availability | Contract boundary |
+|---|---|---|
+| `get snapshot`, `create restore`, `create persist` | CLI `v0.9.8.9-rc.2` | Gateway configuration lifecycle; restore defaults to dry-run and commit is explicit. |
+| `get ready`, `get diagnostics`, `get maintenance`, `set maintenance` | CLI `v0.9.8.9-rc.2` | The CLI exists in rc.2, but the backing Gateway routes are absent from Gateway `v0.9.8.9-rc.1` and require a compatible current-main image. |
+| `appliance status`, `appliance network`, `appliance gateway`, `appliance credentials`, `appliance diagnostics`, `appliance backup` | CLI `v0.9.8.9-rc.2` | Whole-appliance observation, validation, support-bundle, and backup operations. |
+| Appliance restore, update, rollback, and factory-reset plan/execute/status commands | CLI `main` only | Governed whole-appliance lifecycle. The rc.2 commands are visible unavailable stubs and exit `6`; source presence on main is not installed Product qualification. |
+
+Readiness and diagnostics print the Gateway's typed body directly in JSON mode. Restore,
+persist, maintenance, and appliance operations use the CLI command-result envelope and its exact
+exit taxonomy. See [Persistence, Backup, and Restore](../operations/backup-restore.md),
+[Readiness, Capabilities, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md),
+and [Appliance CLI](../operations/appliance-cli.md).
+
 ### Load-balancer contract flags
 
 The current CLI maps these flags to the Gateway API contract:
@@ -344,6 +364,12 @@ The current CLI maps these flags to the Gateway API contract:
 | Typed engine | `--kv-engine-type=<engine>` | Sends `kvEngineType`; the server accepts `vllm`, `sglang`, `trtllm`, or `llamacpp` and applies engine-specific guards. |
 | Hash contract | `--kv-hash-algo=<algorithm>` | Sends an explicit hash algorithm. Prefer omission so the server derives the coherent engine default. |
 | Model-keyed create/delete | `--model-name=<model>` | Repeats the model component of the L7 rule key. |
+| API-key policy | `--api-key-auth=disabled|required` | CLI supports exactly these two values. Omission and explicit `disabled` are different contracts. |
+
+The Gateway REST contract also accepts `jwt` and `apikey-or-jwt`, but the CLI
+does not. There is no supported `--jwt-auth-profile` flag. Create JWT-capable
+services and associate profiles through REST; do not substitute a fabricated
+CLI option. User-limit and global/rule-default QoS CRUD are also REST-only.
 
 `pdBootstrapPort` does not currently have a `loxicmd create lb` flag. Configure that SGLang P/D
 field through the REST API. Do not substitute `--kv-zmq-port`; it configures a different transport.
@@ -381,7 +407,11 @@ then delete by name. This avoids deleting a similarly keyed service.
 - [REST API reference](api.md) — the endpoints these tools call.
 - [API Key Management](../ai-gateway/api-key-management.md) — scoped key lifecycle and enforcement behavior.
 - [Management API Authentication](../security/management-api-authentication.md) — gateway auth modes and RBAC.
+- [Data-Plane Authentication and JWT](../security/data-plane-jwt-auth.md) — five-state service policy and REST-only JWT profiles.
 - [AI Key Store Operations](../operations/ai-key-store.md) — independent data-plane credential storage.
 - [KV-Cache Routing](../ai-gateway/kv-caching.md) — what `ai_kv_inventory_get` inspects.
 - [Monitoring & Metrics](../operations/monitoring.md) — the metric families read by the observability tools.
+- [Persistence, Backup, and Restore](../operations/backup-restore.md) — dry-run, commit, write-through, restart, and quarantine semantics.
+- [Readiness, Capabilities, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md) — typed recovery state, optional-capability preflight, and the configuration-write gate.
+- [Appliance CLI](../operations/appliance-cli.md) — Gateway configuration versus whole-appliance lifecycle boundaries.
 - [Troubleshooting](../operations/troubleshooting.md) — companion to the `diagnose_*` tools.

@@ -83,7 +83,9 @@ Without the mount, configuration survives a container *restart* but is **lost
 when the container is recreated**.
 
 For a controlled backup, dry-run, restore, and rollback procedure, see
-[Configuration Backup and Restore](../operations/backup-restore.md). The
+[Persistence, Backup, and Restore](../operations/backup-restore.md). Boot profiles,
+quarantine, lineage, and the current-main recovery signal are covered there and in
+[Readiness, Capabilities, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md). The
 snapshot can contain sensitive network and security configuration, so restrict
 host-directory permissions and backup access.
 
@@ -116,7 +118,7 @@ done
   `mode: 4` (fullproxy).
 - [AI Gateway Overview](../ai-gateway/overview.md) — the full set of
   inference-aware routing features.
-- [Configuration Backup and Restore](../operations/backup-restore.md) — safely
+- [Persistence, Backup, and Restore](../operations/backup-restore.md) — safely
   persist, validate, restore, and monitor Gateway configuration.
 - [Management API Authentication](../security/management-api-authentication.md)
   — protect the operator control plane before remote access.

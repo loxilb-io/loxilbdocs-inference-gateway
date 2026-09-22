@@ -24,12 +24,77 @@ Report a bug in the gateway itself in the **code** repository; report a document
    ```
 3. Make sure the strict build passes (this is what CI runs):
    ```bash
+   python tools/validate_examples.py
+   python -m unittest discover -s tests -p 'test_*.py' -v
    mkdocs build --strict
    ```
 4. Open a pull request and fill in the template.
 
 The full workflow and style conventions are in
 [CONTRIBUTING.md](https://github.com/loxilb-io/loxilbdocs-inference-gateway/blob/main/CONTRIBUTING.md).
+
+### Usage-example contracts
+
+The example validator extracts `loxicmd`, `curl`, JSON, and YAML from Markdown fenced blocks.
+It checks CLI paths, flags, and enums against frozen CLI contracts; REST methods and paths against
+the combined primary and supplemental Swagger contracts; inline JSON request bodies against the
+matching Swagger request schema; shell syntax with `bash -n`; JSON with `jq`; and YAML with `yq`.
+Referenced snapshot and bootstrap bodies use public, non-secret fixtures for schema validation.
+The unit suite also applies deliberately broken examples and requires the validator to reject route
+typos, removed flags, invalid enum values, incorrect JSON field casing, and missing required fields.
+
+The tracked snapshots under `tests/contracts/docs_examples/` make the CI check deterministic and
+network-independent. Maintainers can refresh them from exact local clones after reviewing an
+upstream contract change:
+
+```bash
+python tools/refresh_example_contracts.py \
+  --gateway-repo ../loxilb-inference-gateway \
+  --cli-repo ../loxicmd-inference-gateway
+```
+
+### Validate a Gateway upgrade before refreshing the snapshot
+
+The `Gateway contract drift` workflow checks out a selected Gateway branch,
+tag, or commit and performs two independent gates:
+
+1. regenerate the candidate contract from both `api/swagger.yml` and
+   `api/swagger-extras.yml`, then validate every documented route and inline
+   request body against their union;
+2. compare both raw Swagger hashes and compact operation/schema structure with
+   the tracked contract. Any content drift fails until it is reviewed.
+
+Run the same gate locally with one command:
+
+```bash
+python tools/validate_gateway_docs.py \
+  --gateway-repo ../loxilb-inference-gateway \
+  --gateway-ref main
+```
+
+After reviewing the report and updating affected pages, refresh only the
+Gateway snapshot from the exact accepted commit:
+
+```bash
+python tools/refresh_example_contracts.py \
+  --only gateway \
+  --gateway-repo ../loxilb-inference-gateway \
+  --gateway-ref <accepted-gateway-commit>
+
+python tools/validate_examples.py
+python -m unittest discover -s tests -p 'test_*.py' -v
+```
+
+The workflow runs on relevant documentation pull requests, weekly against
+Gateway `main`, and on manual dispatch with a selectable `gateway_ref`. It also
+accepts a `repository_dispatch` event named `gateway-api-updated`; a Gateway
+release workflow can send that event with `client_payload.gateway_ref` set to
+the immutable commit or tag. The dispatch token must stay in repository
+secrets and must never be placed in the event payload or logs.
+
+These checks establish static command, route, schema, and syntax consistency. They do not execute
+the Linux CLI binary, send requests to a running gateway, or qualify GPU, high-availability, or
+production behavior.
 
 ## Visual and security style
 
