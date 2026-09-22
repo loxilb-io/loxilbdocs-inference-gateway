@@ -2538,6 +2538,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/example-quality-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Quality Contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/api/" class="md-nav__link">
         
   
@@ -3026,6 +3054,13 @@
 
 
 <h1 id="llm-routing">LLM Routing<a class="headerlink" href="#llm-routing" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Illustrative mutation fragments</p>
+<p>The management mutations on this page are non-standalone fragments. Before
+adapting them, follow this site's <strong>Example Quality Contract</strong> and complete
+<strong>Quickstart</strong> lifecycle. Do not treat HTTP success or management readback
+alone as runtime proof.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">HTTP/1.1 is required for the routing laws on this page</p>
 <p>Current HTTP/2 forwarding reduces selector 9 to round-robin and does not integrate selector
@@ -3093,7 +3128,7 @@ only and cannot do model, session, or prefix-hash routing. See
 <a href="../../concepts/lb-algorithms/">LB Algorithms</a> — this page does not repeat them.</p>
 <div class="admonition note">
 <p class="admonition-title">Lab addresses</p>
-<p>Examples use the reference-lab topology: VIP <code>10.10.10.254</code>, two vLLM backends at
+<p>Examples use the reference-lab topology: VIP <code>192.0.2.254</code>, two vLLM backends at
 <code>192.0.2.1:8000</code> and <code>198.51.100.1:8000</code>, and the gateway REST API on <code>&lt;loxilb-host&gt;:11111</code>.
 Substitute your own addresses. <code>security: 1</code> selects an HTTPS frontend (certificates staged on
 the gateway); use <code>security: 0</code> for a plain-HTTP frontend.</p>
@@ -3115,7 +3150,7 @@ affinity — a good starting point and a control against which to measure cache-
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="s1">    "serviceArguments": {</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">      "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">      "externalIP": "192.0.2.254",</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">      "port": 2020,</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">      "protocol": "tcp",</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">      "sel": 0,</span>
@@ -3134,7 +3169,7 @@ affinity — a good starting point and a control against which to measure cache-
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>rr<span class="w"> </span>--security<span class="o">=</span>https<span class="w"> </span>--monitor<span class="w"> </span>--probetype<span class="o">=</span>http<span class="w"> </span>--probeport<span class="o">=</span><span class="m">8000</span><span class="w"> </span>--probereq<span class="o">=</span>/v1/models
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>rr<span class="w"> </span>--security<span class="o">=</span>https<span class="w"> </span>--monitor<span class="w"> </span>--probetype<span class="o">=</span>http<span class="w"> </span>--probeport<span class="o">=</span><span class="m">8000</span><span class="w"> </span>--probereq<span class="o">=</span>/v1/models
 </code></pre></div>
 </div>
 </div>
@@ -3157,7 +3192,7 @@ the rule with <code>sel: 8</code>, then verify affinity and spill behavior with 
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s1">    "serviceArguments": {</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">      "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">      "externalIP": "192.0.2.254",</span>
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">      "port": 2021,</span>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">      "protocol": "tcp",</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">      "sel": 8,</span>
@@ -3172,7 +3207,7 @@ the rule with <code>sel: 8</code>, then verify affinity and spill behavior with 
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2021</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>chwbl<span class="w"> </span>--security<span class="o">=</span>https
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2021</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>chwbl<span class="w"> </span>--security<span class="o">=</span>https
 </code></pre></div>
 </div>
 </div>
@@ -3247,7 +3282,7 @@ still preserving prefix locality.</p>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s1">    "serviceArguments": {</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s1">      "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s1">      "externalIP": "192.0.2.254",</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s1">      "port": 2020,</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s1">      "protocol": "tcp",</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s1">      "sel": 10,</span>
@@ -3262,7 +3297,7 @@ still preserving prefix locality.</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:8,198.51.100.1:2<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>chwbl-wrr<span class="w"> </span>--security<span class="o">=</span>https
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:8,198.51.100.1:2<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>chwbl-wrr<span class="w"> </span>--security<span class="o">=</span>https
 </code></pre></div>
 </div>
 </div>
@@ -3291,7 +3326,7 @@ corrected and validated end to end.</p>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="s1">    "serviceArguments": {</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="s1">      "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="s1">      "externalIP": "192.0.2.254",</span>
 <a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="s1">      "port": 2020,</span>
 <a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="s1">      "protocol": "tcp",</span>
 <a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="s1">      "sel": 9,</span>
@@ -3306,7 +3341,7 @@ corrected and validated end to end.</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>gpuaware<span class="w"> </span>--security<span class="o">=</span>https
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>gpuaware<span class="w"> </span>--security<span class="o">=</span>https
 </code></pre></div>
 </div>
 </div>
@@ -3356,7 +3391,7 @@ stickiness (see <a href="../mcp-gateway/">MCP Gateway</a>).</p>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
 <a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s1">    "serviceArguments": {</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s1">      "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s1">      "externalIP": "192.0.2.254",</span>
 <a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s1">      "port": 2020,</span>
 <a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="s1">      "protocol": "tcp",</span>
 <a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="s1">      "sel": 3,</span>
@@ -3372,7 +3407,7 @@ stickiness (see <a href="../mcp-gateway/">MCP Gateway</a>).</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>persist<span class="w"> </span>--security<span class="o">=</span>https<span class="w"> </span>--session-header-name<span class="o">=</span>X-Session-ID
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>persist<span class="w"> </span>--security<span class="o">=</span>https<span class="w"> </span>--session-header-name<span class="o">=</span>X-Session-ID
 </code></pre></div>
 </div>
 </div>
@@ -3387,7 +3422,7 @@ stickiness (see <a href="../mcp-gateway/">MCP Gateway</a>).</p>
 </code></pre></div>
 <p>Then send a client request through the VIP and confirm you get a valid response:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># HTTPS frontend (security: 1) — -k skips CA verification in the lab</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://10.10.10.254:2020/v1/models<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>curl<span class="w"> </span>-sk<span class="w"> </span>https://192.0.2.254:2020/v1/models<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
 </code></pre></div>
 <p>For CHWBL / weighted modes, send several requests carrying the same prefix (e.g. an identical
 system prompt) and confirm they consistently reach the same backend — inspect the backend

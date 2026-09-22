@@ -2727,6 +2727,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/example-quality-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Quality Contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/api/" class="md-nav__link">
         
   
@@ -3404,6 +3432,13 @@
 
 
 <h1 id="configuration-tuning">Configuration &amp; Tuning<a class="headerlink" href="#configuration-tuning" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Illustrative mutation fragments</p>
+<p>The management mutations on this page are non-standalone fragments. Before
+adapting them, follow this site's <strong>Example Quality Contract</strong> and complete
+<strong>Quickstart</strong> lifecycle. Do not treat HTTP success or management readback
+alone as runtime proof.</p>
+</div>
 <p>Every operator-facing knob for LoxiLB's AI routing hierarchy — REST rule fields, LoxiLB
 environment variables, the vLLM-side matching contract — plus a tuning playbook and the
 observability needed to verify each layer engaged.</p>
@@ -3474,7 +3509,7 @@ per-model runbook).</p>
 them requires <strong>recreating the LoxiLB container</strong>. REST rules can be re-posted at runtime.</p>
 </div>
 <h2 id="rest-rule-fields">REST rule fields<a class="headerlink" href="#rest-rule-fields" title="Permanent link">&para;</a></h2>
-<p>Endpoint: <code>POST http://10.10.10.254:11111/netlox/v1/config/loadbalancer</code>.</p>
+<p>Endpoint: <code>POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Field-casing trap (silent)</p>
 <p><code>pd_disagg_mode</code>, <code>pd_cache_aware_mode</code>, <code>pd_session_ttl_sec</code>, <code>pd_cache_threshold</code>,
@@ -3725,16 +3760,16 @@ TLS-protected management endpoint and keep authorization values out of command a
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="s1">  "serviceArguments": {</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">    "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">    "externalIP": "192.0.2.254",</span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">    "port": 2022,</span>
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">    "protocol": "tcp",</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">    "sel": 8,</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s1">    "mode": 4,</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">    "host": "10.10.10.254"</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">    "host": "192.0.2.254"</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="s1">  },</span>
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s1">  "endpoints": [</span>
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s1">    { "endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1 },</span>
@@ -3744,7 +3779,7 @@ TLS-protected management endpoint and keep authorization values out of command a
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2022</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>chwbl<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2022</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>chwbl<span class="w"> </span>--host<span class="o">=</span><span class="m">192</span>.0.2.254
 </code></pre></div>
 </div>
 </div>
@@ -4124,7 +4159,7 @@ capacity-routing validation. Do not interpret the current placement result as pr
 release-blocked selector-9 arm is active.</p>
 <h2 id="per-layer-enablement-matrix">Per-layer enablement matrix<a class="headerlink" href="#per-layer-enablement-matrix" title="Permanent link">&para;</a></h2>
 <p>What turns each layer on, and the <em>fastest</em> check that it engaged (metrics on
-<code>GET http://10.10.10.254:11111/netlox/v1/metrics</code> unless noted):</p>
+<code>GET http://192.0.2.254:11111/netlox/v1/metrics</code> unless noted):</p>
 <table>
 <thead>
 <tr>
@@ -4239,7 +4274,7 @@ real inventory. Alert on <code>loxilb_kv_inv_cap_evictions_total</code> &gt; 0 �
 nonzero means an endpoint's publisher outran the cap and overlap scoring for it is degraded
 (routing stays correct; only the optimization decays).</p>
 <h2 id="observability-quick-reference">Observability quick reference<a class="headerlink" href="#observability-quick-reference" title="Permanent link">&para;</a></h2>
-<p>LoxiLB metrics: <code>GET http://10.10.10.254:11111/netlox/v1/metrics</code>. Inventory snapshot:
+<p>LoxiLB metrics: <code>GET http://192.0.2.254:11111/netlox/v1/metrics</code>. Inventory snapshot:
 <code>GET /netlox/v1/config/ai/kv/inventory</code>.</p>
 <p><strong>Routing-decision set:</strong> <code>loxilb_pd_kv_tier15_hits_total{ep_idx}</code> ·
 <code>loxilb_pd_kv_tier15_miss_reason_total{reason}</code> (reasons: <code>mode_off, warmup, text_empty,

@@ -2515,6 +2515,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/example-quality-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Quality Contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/api/" class="md-nav__link">
         
   
@@ -2980,6 +3008,13 @@
 
 
 <h1 id="opa-l4-policy-watcher">OPA L4 Policy Watcher<a class="headerlink" href="#opa-l4-policy-watcher" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Illustrative mutation fragments</p>
+<p>The management mutations on this page are non-standalone fragments. Before
+adapting them, follow this site's <strong>Example Quality Contract</strong> and complete
+<strong>Quickstart</strong> lifecycle. Do not treat HTTP success or management readback
+alone as runtime proof.</p>
+</div>
 <p>The OPA L4 watcher polls an Open Policy Agent (OPA) data document, converts its
 desired rules into Gateway firewall rules, diffs them against a local cache,
 and applies additions and deletions through the Gateway REST API. It is a

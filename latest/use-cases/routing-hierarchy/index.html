@@ -2648,6 +2648,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/example-quality-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Quality Contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/api/" class="md-nav__link">
         
   
@@ -3246,6 +3274,13 @@
 
 
 <h1 id="routing-hierarchy">Routing Hierarchy<a class="headerlink" href="#routing-hierarchy" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Illustrative mutation fragments</p>
+<p>The management mutations on this page are non-standalone fragments. Before
+adapting them, follow this site's <strong>Example Quality Contract</strong> and complete
+<strong>Quickstart</strong> lifecycle. Do not treat HTTP success or management readback
+alone as runtime proof.</p>
+</div>
 <p>How LoxiLB decides which worker serves each request: a strict, fail-through
 priority ladder that prefers the strongest cache-affinity signal available, then bounds
 it by load, capacity, health, and admission.</p>
@@ -3617,16 +3652,16 @@ permission-restricted file.</p>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>P/D-disaggregated rule with Tier 1.5 KV-exact:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s1">  "serviceArguments": {</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s1">    "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s1">    "externalIP": "192.0.2.254",</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s1">    "port": 2020,</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s1">    "protocol": "tcp",</span>
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s1">    "sel": 0,</span>
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s1">    "mode": 4,</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s1">    "host": "10.10.10.254",</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s1">    "host": "192.0.2.254",</span>
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s1">    "pd_disagg_mode": true,</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s1">    "pd_cache_aware_mode": true,</span>
 <a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s1">    "kvExactMode": 1,</span>
@@ -3641,16 +3676,16 @@ permission-restricted file.</p>
 <a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="s1">}'</span>
 </code></pre></div>
 <p>Single-pool CHWBL rule (<code>sel:8</code>) — cache affinity without P/D:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s1">  "serviceArguments": {</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s1">    "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s1">    "externalIP": "192.0.2.254",</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s1">    "port": 2021,</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s1">    "protocol": "tcp",</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s1">    "sel": 8,</span>
 <a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s1">    "mode": 4,</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">    "host": "10.10.10.254"</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">    "host": "192.0.2.254"</span>
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s1">  },</span>
 <a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s1">  "endpoints": [</span>
 <a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s1">    { "endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1 },</span>
@@ -3663,17 +3698,17 @@ permission-restricted file.</p>
 <p>P/D-disaggregated rule with Tier 1.5 KV-exact:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># NOTE: loxicmd applies one --tcp target port to every endpoint; the decode EP's</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># targetPort 8200 (curl) cannot be set per-endpoint — post it via REST if it differs.</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8100<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>rr<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254<span class="w"> </span>--pd-disagg<span class="w"> </span>--pd-cache-aware<span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5557</span><span class="w"> </span>--kv-hash-algo<span class="o">=</span>sha256_cbor<span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,decode<span class="w"> </span>--nixl-port<span class="o">=</span><span class="m">5600</span>,5600
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2020</span>:8100<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>rr<span class="w"> </span>--host<span class="o">=</span><span class="m">192</span>.0.2.254<span class="w"> </span>--pd-disagg<span class="w"> </span>--pd-cache-aware<span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5557</span><span class="w"> </span>--kv-hash-algo<span class="o">=</span>sha256_cbor<span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,decode<span class="w"> </span>--nixl-port<span class="o">=</span><span class="m">5600</span>,5600
 </code></pre></div>
 <p>Single-pool CHWBL rule (<code>sel:8</code>) — cache affinity without P/D:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2021</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>chwbl<span class="w"> </span>--host<span class="o">=</span><span class="m">10</span>.10.10.254
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">2021</span>:8000<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>chwbl<span class="w"> </span>--host<span class="o">=</span><span class="m">192</span>.0.2.254
 </code></pre></div>
 </div>
 </div>
 </div>
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
 <p>Confirm the rule and watch the ladder engage on the metrics endpoint
-(<code>GET http://10.10.10.254:11111/netlox/v1/metrics</code>):</p>
+(<code>GET http://192.0.2.254:11111/netlox/v1/metrics</code>):</p>
 <ul>
 <li><code>loxilb_ai_pd_requests_total</code> advances for a P/D rule.</li>
 <li><code>loxilb_pd_kv_tier15_hits_total{ep_idx}</code> advances after inventory is nonzero and repeated

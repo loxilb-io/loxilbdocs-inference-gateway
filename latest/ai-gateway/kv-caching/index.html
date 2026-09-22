@@ -2671,6 +2671,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/example-quality-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Quality Contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/api/" class="md-nav__link">
         
   
@@ -3292,6 +3320,13 @@
 
 
 <h1 id="kv-cache-aware-routing">KV-Cache-Aware Routing<a class="headerlink" href="#kv-cache-aware-routing" title="Permanent link">&para;</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Illustrative mutation fragments</p>
+<p>The management mutations on this page are non-standalone fragments. Before
+adapting them, follow this site's <strong>Example Quality Contract</strong> and complete
+<strong>Quickstart</strong> lifecycle. Do not treat HTTP success or management readback
+alone as runtime proof.</p>
+</div>
 <p>Route each inference request to the backend that already holds the matching
 prompt prefix in its GPU KV cache, so tokens are reused instead of recomputed.
 This is the <strong>Tier 1.5</strong> stage of the routing cascade.</p>
@@ -3554,7 +3589,7 @@ falls through to the load-based tier. There is no request error.</p>
 </div>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <p>Configure a rule with <code>POST /netlox/v1/config/loadbalancer</code> on port <code>11111</code>.
-Both examples below mirror the reference topologies (VIP <code>10.10.10.254</code>, prefill
+Both examples below mirror the reference topologies (VIP <code>192.0.2.254</code>, prefill
 endpoints <code>192.0.2.1 / 203.0.113.1 / 198.51.100.101</code>).</p>
 <div class="admonition warning">
 <p class="admonition-title">Protect the management API</p>
@@ -3569,11 +3604,11 @@ are never Tier-1.5 targets.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s1">    "serviceArguments": {</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">      "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">      "externalIP": "192.0.2.254",</span>
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">      "port": 8080,</span>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">      "protocol": "tcp",</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">      "sel": 0,</span>
@@ -3597,7 +3632,7 @@ are never Tier-1.5 targets.</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1,203.0.113.1:1,192.0.2.101:1,198.51.100.101:1,203.0.113.101:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--pd-disagg<span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5557</span><span class="w"> </span>--kv-hash-algo<span class="o">=</span>sha256_cbor<span class="w"> </span>--kv-warmup<span class="o">=</span><span class="m">30</span><span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,decode,prefill,decode,prefill,decode
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1,203.0.113.1:1,192.0.2.101:1,198.51.100.101:1,203.0.113.101:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--pd-disagg<span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5557</span><span class="w"> </span>--kv-hash-algo<span class="o">=</span>sha256_cbor<span class="w"> </span>--kv-warmup<span class="o">=</span><span class="m">30</span><span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,decode,prefill,decode,prefill,decode
 </code></pre></div>
 </div>
 </div>
@@ -3609,11 +3644,11 @@ and <code>kvDpRankCount</code> equal to the SGLang <code>--dp-size</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s1">    "serviceArguments": {</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s1">      "externalIP": "10.10.10.254",</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s1">      "externalIP": "192.0.2.254",</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s1">      "port": 9090,</span>
 <a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s1">      "protocol": "tcp",</span>
 <a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s1">      "sel": 0,</span>
@@ -3634,7 +3669,7 @@ and <code>kvDpRankCount</code> equal to the SGLang <code>--dp-size</code>.</p>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">10</span>.10.10.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">9090</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">198</span>.51.100.101:1,203.0.113.101:1,192.0.2.102:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">3</span><span class="w"> </span>--kv-engine-type<span class="o">=</span>sglang<span class="w"> </span>--kv-dp-ranks<span class="o">=</span><span class="m">3</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5561</span><span class="w"> </span>--kv-warmup<span class="o">=</span><span class="m">30</span><span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">9090</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">198</span>.51.100.101:1,203.0.113.101:1,192.0.2.102:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">3</span><span class="w"> </span>--kv-engine-type<span class="o">=</span>sglang<span class="w"> </span>--kv-dp-ranks<span class="o">=</span><span class="m">3</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5561</span><span class="w"> </span>--kv-warmup<span class="o">=</span><span class="m">30</span><span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span>
 </code></pre></div>
 </div>
 </div>
@@ -3650,13 +3685,13 @@ enforced. See <a href="../model-profiles-kv-readiness/">Model Profiles and KV-Ex
 <p>Confirm the rule is live and carries the KV fields you set:</p>
 <!-- example-status-default: illustrative-only -->
 
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/loadbalancer/all
 </code></pre></div>
 <p>Look for <code>kvExactMode</code>, <code>kvBlockSize</code>, <code>kvHashAlgo</code> (vLLM) or <code>kvEngineType</code> /
 <code>kvDpRankCount</code> (SGLang) on the rule. On a strict rule, also require the intended
 <code>kvModelProfile</code> and <code>kvExactApiMode</code>.</p>
 <p>Query the dedicated status read model for a strict rule:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">"http://10.10.10.254:11111/netlox/v1/config/loadbalancer/externalipaddress/10.10.10.254/port/8080/protocol/tcp/kvexactstatus"</span><span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">"http://192.0.2.254:11111/netlox/v1/config/loadbalancer/externalipaddress/192.0.2.254/port/8080/protocol/tcp/kvexactstatus"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.kvExactStatusAttr[] | {</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="s1">    modelName, modelProfileId, modelProfileGen, apiMode,</span>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s1">    bindingDigest, desiredState, enforcedState, reasonCodes,</span>
@@ -3668,7 +3703,7 @@ unknown states as not ready/in transition. A legacy rule reports
 <code>LEGACY_ACTIVE_UNATTESTED</code>; it is active but not strict or attested.</p>
 <p>Then inspect the live per-endpoint block inventory with the raw-middleware
 endpoint:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">"http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=0&amp;ep_idx=0"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">"http://192.0.2.254:11111/netlox/v1/config/ai/kv/inventory?service_id=0&amp;ep_idx=0"</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">"service_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>

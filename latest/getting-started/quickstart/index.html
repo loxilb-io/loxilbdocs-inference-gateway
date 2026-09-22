@@ -3019,6 +3019,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/example-quality-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Quality Contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/api/" class="md-nav__link">
         
   
@@ -4213,6 +4241,7 @@ before exposing a protected inference VIP.</p>
 and the public model-routing scenario. Run either the REST tab or the CLI tab,
 not both.</p>
 <!-- example-status-default: verified -->
+<!-- mutation-workflow: quickstart-model-route -->
 
 <h3 id="prerequisites_3">Prerequisites<a class="headerlink" href="#prerequisites_3" title="Permanent link">&para;</a></h3>
 <ul>
@@ -4220,6 +4249,8 @@ not both.</p>
 <li><code>198.51.100.11:8080</code> is an HTTP backend that returns the marker
   <code>backend-llama</code>.</li>
 <li>The management authentication negative and positive checks passed.</li>
+<li>This is an isolated lab with no concurrent configuration writer or traffic
+  generator; exact state and metric deltas depend on that isolation.</li>
 </ul>
 <h3 id="exact-command_3">Exact command<a class="headerlink" href="#exact-command_3" title="Permanent link">&para;</a></h3>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">REST</label><label for="__tabbed_2_2">loxicmd</label></div>
@@ -4282,6 +4313,35 @@ invalid body returns a non-success status and must not be counted as created.</p
 <a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="s1">  .serviceArguments.mode == 4</span>
 <a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="s1">'</span><span class="w"> </span>rules.json
 </code></pre></div>
+<p>Also prove a rejected mutation leaves the complete readback unchanged:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># docs-example: expect-schema-error</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>jq<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>rules.json<span class="w"> </span>&gt;<span class="w"> </span>rules-before-invalid.json
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nv">invalid_status</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="s1">    "serviceArguments": {</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="s1">      "externalIP": "192.0.2.10",</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="s1">      "port": 2020,</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="s1">      "protocol": "not-a-protocol",</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="s1">      "sel": 0,</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="s1">      "mode": 4</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="s1">    },</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="s1">    "endpoints": [</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="s1">      {"endpointIP": "198.51.100.11", "targetPort": 8080, "weight": 1}</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="s1">    ]</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="s1">  }'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="w">  </span>--output<span class="w"> </span>invalid-create.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="w">  </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer"</span><span class="k">)</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="nb">test</span><span class="w"> </span><span class="s2">"</span><span class="nv">$invalid_status</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">400</span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer/all"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>&gt;<span class="w"> </span>rules-after-invalid.json
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a>cmp<span class="w"> </span>--silent<span class="w"> </span>rules-before-invalid.json<span class="w"> </span>rules-after-invalid.json
+</code></pre></div>
 <h3 id="cleanup_3">Cleanup<a class="headerlink" href="#cleanup_3" title="Permanent link">&para;</a></h3>
 <p>If validation fails after creation, run the exact delete in step 7 before
 changing any key field.</p>
@@ -4295,7 +4355,7 @@ changing any key field.</p>
 </thead>
 <tbody>
 <tr>
-<td>HTTP <code>400</code></td>
+<td>HTTP <code>400</code> on the valid create</td>
 <td>Validate JSON field casing and required endpoint fields.</td>
 </tr>
 <tr>
@@ -4306,6 +4366,10 @@ changing any key field.</p>
 <td>Rule reads back without the model</td>
 <td>Recheck exact <code>model_name</code> spelling and the complete L7 key.</td>
 </tr>
+<tr>
+<td>Invalid create changes readback</td>
+<td>Stop and restore the pre-change snapshot; rejection was not atomic.</td>
+</tr>
 </tbody>
 </table>
 <h2 id="5-send-traffic">5. Send traffic<a class="headerlink" href="#5-send-traffic" title="Permanent link">&para;</a></h2>
@@ -4313,38 +4377,61 @@ changing any key field.</p>
 backend marker is the independent delivery oracle; HTTP <code>200</code> without the
 expected marker is not a pass.</p>
 <!-- example-status-default: verified -->
+<!-- mutation-workflow: quickstart-model-route -->
 
 <h3 id="prerequisites_4">Prerequisites<a class="headerlink" href="#prerequisites_4" title="Permanent link">&para;</a></h3>
 <ul>
 <li>The rule readback passed.</li>
-<li>The backend is healthy and returns <code>backend-llama</code> in its response body.</li>
+<li>The backend is healthy, returns <code>backend-llama</code>, and appends each received
+  <code>X-Docs-Nonce</code> value to a line-oriented log available to the operator.</li>
+<li>Set <code>BACKEND_RECEIPT_LOG</code> to that backend-owned log. It must not be produced
+  from Gateway or client output.</li>
 </ul>
 <h3 id="exact-command_4">Exact command<a class="headerlink" href="#exact-command_4" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nv">traffic_status</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{"model":"llama-70b","messages":[{"role":"user","content":"hello"}]}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span>--output<span class="w"> </span>inference.json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">  </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span>http://192.0.2.10:2020/v1/chat/completions<span class="k">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">BACKEND_RECEIPT_LOG</span><span class="o">=</span><span class="s1">'/var/tmp/docs-backend-receipts.log'</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">test</span><span class="w"> </span>-r<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKEND_RECEIPT_LOG</span><span class="s2">"</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>receipt_count<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span>grep<span class="w"> </span>-cF<span class="w"> </span>--<span class="w"> </span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BACKEND_RECEIPT_LOG</span><span class="s2">"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="o">}</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/metrics"</span><span class="w"> </span>&gt;<span class="w"> </span>metrics-before.prom
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="nv">positive_nonce</span><span class="o">=</span><span class="s2">"docs-positive-</span><span class="k">$(</span>date<span class="w"> </span>+%s<span class="k">)</span><span class="s2">-</span><span class="nv">$$</span><span class="s2">"</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="nv">positive_receipts_before</span><span class="o">=</span><span class="k">$(</span>receipt_count<span class="w"> </span><span class="s2">"</span><span class="nv">$positive_nonce</span><span class="s2">"</span><span class="k">)</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="nv">traffic_status</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">  </span>--header<span class="w"> </span><span class="s2">"X-Docs-Nonce: </span><span class="nv">$positive_nonce</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{"model":"llama-70b","messages":[{"role":"user","content":"hello"}]}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="w">  </span>--output<span class="w"> </span>inference.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a><span class="w">  </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a><span class="w">  </span>http://192.0.2.10:2020/v1/chat/completions<span class="k">)</span>
 </code></pre></div>
 <h3 id="expected-result_4">Expected result<a class="headerlink" href="#expected-result_4" title="Permanent link">&para;</a></h3>
 <p>The request returns HTTP <code>200</code>, and the backend-specific marker appears in the
 response. The exact OpenAI response shape belongs to the backend.</p>
 <h3 id="validate_4">Validate<a class="headerlink" href="#validate_4" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nb">test</span><span class="w"> </span><span class="s2">"</span><span class="nv">$traffic_status</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">200</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>grep<span class="w"> </span>-q<span class="w"> </span><span class="s1">'backend-llama'</span><span class="w"> </span>inference.json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nb">test</span><span class="w"> </span><span class="s2">"</span><span class="nv">$traffic_status</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">200</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>grep<span class="w"> </span>-q<span class="w"> </span><span class="s1">'backend-llama'</span><span class="w"> </span>inference.json
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nv">positive_receipts_after</span><span class="o">=</span><span class="k">$(</span>receipt_count<span class="w"> </span><span class="s2">"</span><span class="nv">$positive_nonce</span><span class="s2">"</span><span class="k">)</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="nb">test</span><span class="w"> </span><span class="s2">"</span><span class="k">$((</span><span class="nv">positive_receipts_after</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">positive_receipts_before</span><span class="k">))</span><span class="s2">"</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">1</span>
 </code></pre></div>
 <p>Also prove a wrong model does not reach this backend:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nv">wrong_model_status</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{"model":"unknown-model","messages":[]}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span>--output<span class="w"> </span>wrong-model.json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">  </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">  </span>http://192.0.2.10:2020/v1/chat/completions<span class="k">)</span>
-<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="nb">test</span><span class="w"> </span><span class="s2">"</span><span class="nv">$wrong_model_status</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">503</span>
-<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>!<span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s1">'backend-llama'</span><span class="w"> </span>wrong-model.json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nv">wrong_model_nonce</span><span class="o">=</span><span class="s2">"docs-negative-</span><span class="k">$(</span>date<span class="w"> </span>+%s<span class="k">)</span><span class="s2">-</span><span class="nv">$$</span><span class="s2">"</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nv">negative_receipts_before</span><span class="o">=</span><span class="k">$(</span>receipt_count<span class="w"> </span><span class="s2">"</span><span class="nv">$wrong_model_nonce</span><span class="s2">"</span><span class="k">)</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nv">wrong_model_status</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">  </span>--header<span class="w"> </span><span class="s2">"X-Docs-Nonce: </span><span class="nv">$wrong_model_nonce</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{"model":"unknown-model","messages":[]}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">  </span>--output<span class="w"> </span>wrong-model.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="w">  </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="w">  </span>http://192.0.2.10:2020/v1/chat/completions<span class="k">)</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="nb">test</span><span class="w"> </span><span class="s2">"</span><span class="nv">$wrong_model_status</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">503</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>!<span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s1">'backend-llama'</span><span class="w"> </span>wrong-model.json
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="nv">negative_receipts_after</span><span class="o">=</span><span class="k">$(</span>receipt_count<span class="w"> </span><span class="s2">"</span><span class="nv">$wrong_model_nonce</span><span class="s2">"</span><span class="k">)</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="nb">test</span><span class="w"> </span><span class="s2">"</span><span class="nv">$negative_receipts_after</span><span class="s2">"</span><span class="w"> </span>-eq<span class="w"> </span><span class="s2">"</span><span class="nv">$negative_receipts_before</span><span class="s2">"</span>
 </code></pre></div>
 <h3 id="cleanup_4">Cleanup<a class="headerlink" href="#cleanup_4" title="Permanent link">&para;</a></h3>
 <p>Keep the rule until after the metrics check. Remove response files when they
@@ -4363,12 +4450,16 @@ are no longer needed.</p>
 <td>Model matching is case-sensitive; confirm <code>llama-70b</code>.</td>
 </tr>
 <tr>
-<td>HTTP <code>200</code> without the marker</td>
-<td>The response did not come from the expected backend.</td>
+<td>HTTP <code>200</code> without the marker or receipt delta</td>
+<td>The request did not prove the expected active backend path.</td>
 </tr>
 <tr>
 <td>Connection refused</td>
 <td>Confirm the VIP, fullproxy listener, and backend reachability.</td>
+</tr>
+<tr>
+<td>Wrong-model receipt count increases</td>
+<td>Stop; the rejected request reached the backend.</td>
 </tr>
 </tbody>
 </table>
@@ -4377,28 +4468,38 @@ are no longer needed.</p>
 manifest and current writer mapping. The documentation check validates the
 name and labels; it does not claim a live scrape occurred on your host.</p>
 <!-- example-status-default: verified -->
+<!-- mutation-workflow: quickstart-model-route -->
 
 <h3 id="prerequisites_5">Prerequisites<a class="headerlink" href="#prerequisites_5" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Metrics export is enabled and <code>GET /metrics</code> is reachable.</li>
-<li>At least one successful request has traversed the service.</li>
+<li><code>metrics-before.prom</code> was captured immediately before the single positive
+  request on an otherwise idle, isolated Gateway.</li>
 </ul>
 <h3 id="exact-command_5">Exact command<a class="headerlink" href="#exact-command_5" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nv">metrics_status</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span>--output<span class="w"> </span>metrics.prom<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/metrics"</span><span class="k">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nv">metrics_status</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span>--output<span class="w"> </span>metrics-after.prom<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/metrics"</span><span class="k">)</span>
 </code></pre></div>
 <h3 id="expected-result_5">Expected result<a class="headerlink" href="#expected-result_5" title="Permanent link">&para;</a></h3>
-<p>The scrape returns HTTP <code>200</code>. When the service-request writer has emitted for
-this service, the response contains <code>loxilb_service_requests_total</code> with only
-the documented <code>service</code> label.</p>
+<p>The scrape returns HTTP <code>200</code>. The sum of
+<code>loxilb_service_requests_total</code> across its documented <code>service</code> label grows by
+exactly one for the one positive request. The rejected wrong-model request must
+not add to that service-delivery counter.</p>
 <h3 id="validate_5">Validate<a class="headerlink" href="#validate_5" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nb">test</span><span class="w"> </span><span class="s2">"</span><span class="nv">$metrics_status</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">200</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'^loxilb_service_requests_total\{service="[^"]+"\} [0-9]+'</span><span class="w"> </span>metrics.prom
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nb">test</span><span class="w"> </span><span class="s2">"</span><span class="nv">$metrics_status</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">200</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'^loxilb_service_requests_total\{service="[^"]+"\} [0-9]+'</span><span class="w"> </span>metrics-after.prom
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>service_request_total<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span>awk<span class="w"> </span><span class="s1">'$1 ~ /^loxilb_service_requests_total\{service=/ {sum += $2}</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="s1">       END {printf "%.0f\n", sum + 0}'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="o">}</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="nv">requests_before</span><span class="o">=</span><span class="k">$(</span>service_request_total<span class="w"> </span>metrics-before.prom<span class="k">)</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="nv">requests_after</span><span class="o">=</span><span class="k">$(</span>service_request_total<span class="w"> </span>metrics-after.prom<span class="k">)</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="nb">test</span><span class="w"> </span><span class="s2">"</span><span class="k">$((</span><span class="nv">requests_after</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">requests_before</span><span class="k">))</span><span class="s2">"</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">1</span>
 </code></pre></div>
 <h3 id="cleanup_5">Cleanup<a class="headerlink" href="#cleanup_5" title="Permanent link">&para;</a></h3>
-<p>Remove <code>metrics.prom</code> after retaining only the sanitized evidence required by
+<p>Remove both metric snapshots after retaining only the sanitized evidence required by
 your deployment process.</p>
 <h3 id="diagnose_5">Diagnose<a class="headerlink" href="#diagnose_5" title="Permanent link">&para;</a></h3>
 <table>
@@ -4418,6 +4519,10 @@ your deployment process.</p>
 <td>Confirm export activation and that traffic crossed the active service path.</td>
 </tr>
 <tr>
+<td>Delta is not exactly one</td>
+<td>Stop other traffic, repeat from a clean isolated rule, and compare backend receipts.</td>
+</tr>
+<tr>
 <td>Unexpected labels</td>
 <td>Compare the query with the frozen metric reference.</td>
 </tr>
@@ -4427,6 +4532,7 @@ your deployment process.</p>
 <p><strong>Example status:</strong> <code>verified</code> against the exact model-keyed REST and CLI
 delete contracts. Run the cleanup form that matches the create form you chose.</p>
 <!-- example-status-default: verified -->
+<!-- mutation-workflow: quickstart-model-route -->
 
 <h3 id="prerequisites_6">Prerequisites<a class="headerlink" href="#prerequisites_6" title="Permanent link">&para;</a></h3>
 <ul>
@@ -4437,22 +4543,22 @@ delete contracts. Run the cleanup form that matches the create form you chose.</
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">REST</label><label for="__tabbed_3_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nv">cleanup_status</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span>--output<span class="w"> </span>cleanup.json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">  </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/2020/protocol/tcp?path_prefix=%2F&amp;path_match_mode=prefix&amp;model_name=llama-70b"</span><span class="k">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nv">cleanup_status</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">  </span>--output<span class="w"> </span>cleanup.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">  </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/2020/protocol/tcp?path_prefix=%2F&amp;path_match_mode=prefix&amp;model_name=llama-70b"</span><span class="k">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>loxicmd<span class="w"> </span>delete<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span>--tcp<span class="o">=</span><span class="m">2020</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span>--host<span class="o">=</span><span class="m">192</span>.0.2.10<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">  </span>--path-prefix<span class="o">=</span>/<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">  </span>--path-match-mode<span class="o">=</span>prefix<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">  </span>--model-name<span class="o">=</span>llama-70b<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">  </span>--token-file<span class="w"> </span>./gateway.token
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>loxicmd<span class="w"> </span>delete<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span>--tcp<span class="o">=</span><span class="m">2020</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span>--host<span class="o">=</span><span class="m">192</span>.0.2.10<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">  </span>--path-prefix<span class="o">=</span>/<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">  </span>--path-match-mode<span class="o">=</span>prefix<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">  </span>--model-name<span class="o">=</span>llama-70b<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">  </span>--token-file<span class="w"> </span>./gateway.token
 </code></pre></div>
 </div>
 </div>
@@ -4460,24 +4566,29 @@ delete contracts. Run the cleanup form that matches the create form you chose.</
 <h3 id="expected-result_6">Expected result<a class="headerlink" href="#expected-result_6" title="Permanent link">&para;</a></h3>
 <p>The REST form returns <code>200</code>; the CLI exits <code>0</code>.</p>
 <h3 id="validate_6">Validate<a class="headerlink" href="#validate_6" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nb">test</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">cleanup_status</span><span class="k">:-</span><span class="nv">200</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">200</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer/all"</span><span class="w"> </span>&gt;<span class="w"> </span>rules-after-cleanup.json
-<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>!<span class="w"> </span>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'</span>
-<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="s1">  .lbAttr[] |</span>
-<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="s1">  select(.serviceArguments.externalIP == "192.0.2.10") |</span>
-<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="s1">  select(.serviceArguments.port == 2020) |</span>
-<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="s1">  select(.serviceArguments.model_name == "llama-70b")</span>
-<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="s1">'</span><span class="w"> </span>rules-after-cleanup.json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nb">test</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">cleanup_status</span><span class="k">:-</span><span class="nv">200</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">200</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer/all"</span><span class="w"> </span>&gt;<span class="w"> </span>rules-after-cleanup.json
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>!<span class="w"> </span>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="s1">  .lbAttr[] |</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="s1">  select(.serviceArguments.externalIP == "192.0.2.10") |</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="s1">  select(.serviceArguments.port == 2020) |</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="s1">  select(.serviceArguments.model_name == "llama-70b")</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="s1">'</span><span class="w"> </span>rules-after-cleanup.json
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/status/ready"</span><span class="w"> </span>&gt;<span class="w"> </span>ready-after-cleanup.json
+<a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'.ready == true and (.reasons | length == 0)'</span><span class="w"> </span>ready-after-cleanup.json
 </code></pre></div>
 <h3 id="cleanup_6">Cleanup<a class="headerlink" href="#cleanup_6" title="Permanent link">&para;</a></h3>
 <p>Remove local credential and response files:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./gateway.token<span class="w"> </span>./control-plane.headers<span class="w"> </span>ready.json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span>unauthenticated.json<span class="w"> </span>authenticated.json<span class="w"> </span>create.json<span class="w"> </span>rules.json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span>inference.json<span class="w"> </span>wrong-model.json<span class="w"> </span>metrics.prom<span class="w"> </span>cleanup.json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span>rules-after-cleanup.json<span class="w"> </span>gateway-version.json<span class="w"> </span>gateway-image.id
-<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN<span class="w"> </span>CONTROL_API
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./gateway.token<span class="w"> </span>./control-plane.headers<span class="w"> </span>ready.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span>unauthenticated.json<span class="w"> </span>authenticated.json<span class="w"> </span>create.json<span class="w"> </span>rules.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span>invalid-create.json<span class="w"> </span>rules-before-invalid.json<span class="w"> </span>rules-after-invalid.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">  </span>inference.json<span class="w"> </span>wrong-model.json<span class="w"> </span>metrics-before.prom<span class="w"> </span>metrics-after.prom<span class="w"> </span>cleanup.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">  </span>rules-after-cleanup.json<span class="w"> </span>ready-after-cleanup.json<span class="w"> </span>gateway-version.json<span class="w"> </span>gateway-image.id
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN<span class="w"> </span>CONTROL_API<span class="w"> </span>BACKEND_RECEIPT_LOG
 </code></pre></div>
 <h3 id="diagnose_6">Diagnose<a class="headerlink" href="#diagnose_6" title="Permanent link">&para;</a></h3>
 <table>
@@ -4499,6 +4610,10 @@ delete contracts. Run the cleanup form that matches the create form you chose.</
 <tr>
 <td>Other rules disappeared</td>
 <td>Stop and restore from the pre-change snapshot; cleanup scope was too broad.</td>
+</tr>
+<tr>
+<td>Readiness fails after cleanup</td>
+<td>Inspect <code>reasons[]</code>; cleanup is not complete until readiness recovers.</td>
 </tr>
 </tbody>
 </table>
