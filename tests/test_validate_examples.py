@@ -52,7 +52,7 @@ class DocumentationExampleTests(unittest.TestCase):
     def test_gateway_main_and_release_sources_are_exactly_frozen(self) -> None:
         contract = self.validator.gateway_contract
         self.assertEqual(
-            "a8d3ed567f0bcd338ab584ac353f62a9d4393995",
+            "dbb2ff5bed48d21a108d6c53a62a3119cec9f780",
             contract["source"]["commit"],
         )
         self.assertEqual(
@@ -328,6 +328,37 @@ class DocumentationExampleTests(unittest.TestCase):
                         "POST", "/config/loadbalancer", body
                     )
                 )
+
+    def test_sockmap_response_with_apikey_keeps_request_admission(self) -> None:
+        body = {
+            "serviceArguments": {
+                "externalIP": "192.0.2.10", "port": 8080,
+                "protocol": "tcp", "mode": 4, "sockMapMode": "response",
+                "api_key_auth": "required",
+            },
+            "endpoints": [],
+        }
+        self.assertEqual(
+            [],
+            self.validator.validate_contract_semantics(
+                "POST", "/config/loadbalancer", body
+            ),
+        )
+
+    def test_red_twin_sockmap_response_with_sse_is_killed(self) -> None:
+        body = {
+            "serviceArguments": {
+                "externalIP": "192.0.2.10", "port": 8080,
+                "protocol": "tcp", "mode": 4, "sockMapMode": "response",
+                "sse_mode": True,
+            },
+            "endpoints": [],
+        }
+        self.assertTrue(
+            self.validator.validate_contract_semantics(
+                "POST", "/config/loadbalancer", body
+            )
+        )
 
     def test_capability_readiness_contract_is_frozen(self) -> None:
         spec = self.validator.gateway_contract["specs"][0]

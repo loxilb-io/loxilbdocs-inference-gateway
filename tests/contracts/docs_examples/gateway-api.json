@@ -89,7 +89,7 @@
         "claim": "sockmap-observability",
         "matching_workflow_objects": {},
         "matching_workflows": [],
-        "scenario_object_id": "8a6d5e5811214e96f0ea35222ed56802fa5a1ae5",
+        "scenario_object_id": "a0e56c243affd78c06d8db04da567ecea705af98",
         "scenario_path": "cicd/sockmap-fullproxy",
         "validation_object_id": "78b125dae6b883fa9ef2960e0ef90d47dae5677b",
         "validation_path": "cicd/sockmap-fullproxy/validation_observability.sh",
@@ -2672,7 +2672,7 @@
         "path": "cicd/kv-sglang-attest"
       },
       {
-        "object_id": "8a6d5e5811214e96f0ea35222ed56802fa5a1ae5",
+        "object_id": "a0e56c243affd78c06d8db04da567ecea705af98",
         "path": "cicd/sockmap-fullproxy"
       },
       {
@@ -2690,7 +2690,7 @@
     }
   },
   "source": {
-    "commit": "a8d3ed567f0bcd338ab584ac353f62a9d4393995",
+    "commit": "dbb2ff5bed48d21a108d6c53a62a3119cec9f780",
     "ebpf_submodule_commit": "462a1e5412f46ca53574b9c079005bb3da3cfa20",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
@@ -10303,7 +10303,7 @@
           }
         }
       },
-      "sha256": "efe4b66445bfbd2d49cdcab5158d6680f616f5f17cae17e3289554e6d9d66872",
+      "sha256": "67ffeeb29fdbef18f35d46219e2ab0249d4b7cdfb348ad8e2f2d5c80a52666dc",
       "source_path": "api/swagger.yml"
     },
     {

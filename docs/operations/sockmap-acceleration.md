@@ -23,22 +23,25 @@ Every non-`off` service must satisfy all of these conditions:
 | Proxy shape | `mode: 4`, TCP, plaintext frontend/backend, IPv4 VIP, and IPv4 endpoints |
 | Daemon opt-in | Gateway started with `--sockmapsupport` so the BPF assets are loaded |
 | Request path | Plain HTTP/1.1; HTTP/2 and h2c are never accelerated |
-| Per-request rewriting | No `sse_mode`, no `pd_disagg_mode`, no `api_key_auth` declaration, and no attached L7 policy |
+| Per-direction rewriting | `sse_mode`, `pd_disagg_mode`, and an attached L7 policy require `off`. An `api_key_auth` declaration rejects `request` and `both`, but permits response-only acceleration. |
 
-The last row is a hard mutual-exclusion boundary. Once a direction is redirected in the kernel,
-userspace cannot inspect or rewrite later keep-alive requests or record their responses.
+The last row is enforced per direction. Once a direction is redirected in the
+kernel, userspace cannot inspect or rewrite bytes in that direction.
 
 | Conflicting declaration | Work that acceleration would skip |
 |---|---|
 | `sse_mode` | Per-request streaming lifecycle and response accounting |
 | `pd_disagg_mode` | Per-request admission and the engine-specific two-leg lifecycle |
-| `api_key_auth: required`, `jwt`, or `apikey-or-jwt` | Credential admission and header stripping |
-| explicit `api_key_auth: disabled` | `X-Api-Key` stripping; explicit disabled still claims the Gateway header namespace |
+| `api_key_auth: required`, `jwt`, or `apikey-or-jwt` | Owns the request direction for credential admission and header stripping; response-only acceleration remains eligible |
+| explicit `api_key_auth: disabled` | Still owns the request direction for `X-Api-Key` stripping; response-only acceleration remains eligible |
 | attached L7 policy | Request-header rewrites and policy actions |
 
-Only an **omitted** `api_key_auth` remains eligible. Omission leaves a backend-owned `X-Api-Key`
-untouched. Updating a protected service while omitting the field does not erase its retained
-declaration, so it still cannot enable sockmap.
+Only an **omitted** `api_key_auth` is eligible for request or bidirectional
+acceleration. Omission leaves a backend-owned `X-Api-Key` untouched. A service
+with any retained authentication declaration may select `response`, because
+credential admission and header stripping remain on the userspace request
+path. Accelerated responses are not recorded by the userspace response path;
+the Gateway logs this tradeoff when accepting the configuration.
 
 The pairing is rejected from either direction: enabling sockmap on a service with an attached L7
 policy fails, and attaching a policy to a service that declares sockmap also fails. The Gateway
@@ -174,9 +177,12 @@ the HTTP/1.1 AI path. Current HTTP/2 admission tests cover specific authenticati
 multiplexing, teardown, and TLS/ALPN cases; they do not qualify model-aware selection, P/D,
 KV-exact routing, SSE, or sockmap acceleration.
 
-Do not present sockmap as an accelerator for an AI rule that declares `sse_mode`, P/D,
-authentication, or an L7 policy. Those combinations are rejected precisely because their
-per-request behavior would be skipped after the first accelerated pairing.
+Do not present sockmap as an accelerator for an AI rule that declares
+`sse_mode`, P/D, or an L7 policy. A rule with `api_key_auth` may use only
+response acceleration: every request remains in userspace and is admitted
+independently, while response accounting is intentionally unavailable. Request
+or bidirectional acceleration is rejected because later keep-alive requests
+would otherwise skip admission and header stripping.
 
 ## Evidence boundary
 

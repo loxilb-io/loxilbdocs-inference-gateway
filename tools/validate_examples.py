@@ -426,8 +426,10 @@ class ExampleValidator:
                     errors.append("sockmap acceleration is incompatible with sse_mode")
                 if pd_enabled:
                     errors.append("sockmap acceleration is incompatible with pd_disagg_mode")
-                if "api_key_auth" in args:
-                    errors.append("sockmap acceleration is incompatible with any api_key_auth declaration")
+                if "api_key_auth" in args and sockmap_mode in {"both", "request"}:
+                    errors.append(
+                        "api_key_auth is incompatible with sockmap request acceleration"
+                    )
 
         elif route == "/config/ai/jwtauthprofile":
             name = body.get("name")

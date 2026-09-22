@@ -365,6 +365,13 @@ equivalence, and an `off` control as described in
 `loxilb_sockproxy_sync_*` peer-synchronization family: it describes xSync, not
 sockmap accelerator engagement.
 
+Response-only sockmap acceleration may be combined with `api_key_auth` on
+current Gateway main because requests still traverse userspace admission.
+Those accelerated responses are not recorded by the userspace response path,
+so a flat AI response counter is not proof of failure. Request and
+bidirectional acceleration remain incompatible with any `api_key_auth`
+declaration.
+
 ## OPA and optional DPU metrics
 
 OPA watcher signals are
