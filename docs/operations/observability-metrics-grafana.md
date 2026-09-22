@@ -98,6 +98,36 @@ An increase in `loxilb_ai_tokens_estimated_total` or
 responses without readable usage. Enforcement remains active, but operators
 should check engine response compatibility.
 
+## JWT and JWKS row
+
+Keep policy verdicts separate from key-fetch health. An allowed JWT decision
+does not imply the next refresh will succeed, and a refresh failure does not
+immediately invalidate a still-fresh last-known-good keyset.
+
+```promql
+# JWT verdict rate by tenant and reason
+sum by (tenant, reason) (
+  rate(loxilb_ai_jwt_validation_total{
+    instance=~"$instance"
+  }[$__rate_interval])
+)
+
+# JWKS refresh failures by profile
+sum by (profile) (
+  rate(loxilb_ai_jwks_refresh_total{
+    outcome="failure", instance=~"$instance"
+  }[$__rate_interval])
+)
+
+# Current keyset usability and key count
+loxilb_ai_jwks_usable{instance=~"$instance"}
+loxilb_ai_jwks_keys{instance=~"$instance"}
+```
+
+An absent last-success timestamp means no successful fetch was recorded; it is
+not a zero-age keyset. Correlate refresh failures, usability, key count, and
+policy-store refusal before paging.
+
 ## L7 byte-shaper row
 
 The dashboard includes per-VIP, port, and direction panels for:
@@ -281,6 +311,32 @@ Always compare a counter rate with request volume. A large cumulative counter
 can represent an old incident, while a current `rate()` of zero shows no new
 events.
 
+## Worker scrape row
+
+Split worker scrape outcomes by the closed `result` label. This distinguishes
+reachability, HTTP, response-body, parsing, and request failures.
+
+```promql
+sum by (result) (
+  rate(loxilb_ai_worker_scrape_total{
+    instance=~"$instance"
+  }[$__rate_interval])
+)
+
+sum(rate(loxilb_ai_worker_scrape_total{
+  result!="ok", instance=~"$instance"
+}[$__rate_interval]))
+/
+clamp_min(sum(rate(loxilb_ai_worker_scrape_total{
+  instance=~"$instance"
+}[$__rate_interval])), 1)
+```
+
+Allowed values are `ok`, `unreachable`, `http_error`, `body_error`,
+`unparseable`, `bad_request`, and `unknown`. A successful scrape is not an
+inference success signal; compare it with endpoint health, data freshness, and
+backend receipts.
+
 ## KV Tier-1.5 panels
 
 Use the exact current `tier15` metric names and verify them against a live
@@ -329,7 +385,9 @@ histogram_quantile(0.95,
 
 Also display `loxilb_sockproxy_sync_apply_errors_total`,
 `loxilb_sockproxy_sync_health_reject_total{reason}`, and
-`loxilb_sockproxy_sync_inflight_rpc{peer}`. A no-data or zero result is not
+`loxilb_sockproxy_sync_inflight_rpc{peer}`. Add
+`loxilb_sockproxy_sync_peer_scope_version{peer}` and require compatible values
+before treating quota synchronization as safe. A no-data or zero result is not
 proof that a peer is connected. Confirm the peer path with a controlled state
 change, and review the reconciliation and transport limits in
 [HA and Upgrade Limitations](ha-limitations.md).
@@ -388,3 +446,5 @@ green CI do not establish production performance or HA readiness.
 - [AI Traffic Governance](../ai-gateway/ai-traffic-governance.md)
 - [AI Quotas and QoS](ai-qos.md)
 - [HA and Upgrade Limitations](ha-limitations.md)
+- [Metrics Reference](../reference/metrics.md)
+- [Verification Status](../reference/verification-status.md)

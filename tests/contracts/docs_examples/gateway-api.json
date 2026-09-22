@@ -1,5 +1,2662 @@
 {
+  "claim_evidence": {
+    "claims": [
+      {
+        "case_ids": [
+          "G2",
+          "M4",
+          "U1",
+          "U2",
+          "UH1",
+          "UH2",
+          "UE",
+          "UE3"
+        ],
+        "claim": "jwt-policy-and-token-accounting",
+        "matching_workflow_objects": {
+          ".github/workflows/ai-gateway-sanity.yml": "3bb77d1ef39e0cb413482509693dfb05d9d2ca21"
+        },
+        "matching_workflows": [
+          ".github/workflows/ai-gateway-sanity.yml"
+        ],
+        "scenario_object_id": "06b030e93c4178ce5622f0579f14dad399fbc7be",
+        "scenario_path": "cicd/ai-jwtauth",
+        "validation_object_id": "b96545006a2fcbe96351ef992efd453996d6b48c",
+        "validation_path": "cicd/ai-jwtauth/validation.sh",
+        "workflow_membership": "wired",
+        "workflow_object_id": "3bb77d1ef39e0cb413482509693dfb05d9d2ca21",
+        "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
+      },
+      {
+        "case_ids": [
+          "SYNC-1",
+          "SYNC-2",
+          "QOS-METRIC-1",
+          "QOS-METRIC-2",
+          "QOS-HA-013",
+          "QOS-HA-014"
+        ],
+        "claim": "qos-ha-and-scope-metrics",
+        "matching_workflow_objects": {},
+        "matching_workflows": [],
+        "scenario_object_id": "e25a8a415ee7d00989ac0d346080b60e66462dc4",
+        "scenario_path": "cicd/ai-qos-ha-sync",
+        "validation_object_id": "75d61b13e75c1b6450d5a8ae0b64f906976c0251",
+        "validation_path": "cicd/ai-qos-ha-sync/validation.sh",
+        "workflow_membership": "not-wired",
+        "workflow_object_id": null,
+        "workflow_path": null
+      },
+      {
+        "case_ids": [
+          "TH1",
+          "TH2",
+          "TH3",
+          "TH4",
+          "TH5a",
+          "TM1b",
+          "TM2d",
+          "TN1",
+          "TN2b",
+          "TN3b",
+          "TN4b",
+          "TN5a",
+          "TN6b"
+        ],
+        "claim": "pd-and-worker-scrape-metrics",
+        "matching_workflow_objects": {
+          ".github/workflows/ai-gateway-sanity.yml": "3bb77d1ef39e0cb413482509693dfb05d9d2ca21"
+        },
+        "matching_workflows": [
+          ".github/workflows/ai-gateway-sanity.yml"
+        ],
+        "scenario_object_id": "5c06fcf0b5139f93fc5515ede5bf825a7867750f",
+        "scenario_path": "cicd/vllm-pd-disagg",
+        "validation_object_id": "732dba079be92270c1ae0dd0ee635f8ca423adc3",
+        "validation_path": "cicd/vllm-pd-disagg/validation.sh",
+        "workflow_membership": "wired",
+        "workflow_object_id": "3bb77d1ef39e0cb413482509693dfb05d9d2ca21",
+        "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
+      },
+      {
+        "case_ids": [
+          "O-1",
+          "O-2",
+          "O-3",
+          "O-5",
+          "O-6"
+        ],
+        "claim": "sockmap-observability",
+        "matching_workflow_objects": {},
+        "matching_workflows": [],
+        "scenario_object_id": "a0e56c243affd78c06d8db04da567ecea705af98",
+        "scenario_path": "cicd/sockmap-fullproxy",
+        "validation_object_id": "78b125dae6b883fa9ef2960e0ef90d47dae5677b",
+        "validation_path": "cicd/sockmap-fullproxy/validation_observability.sh",
+        "workflow_membership": "not-wired",
+        "workflow_object_id": null,
+        "workflow_path": null
+      },
+      {
+        "case_ids": [],
+        "claim": "monitoring-stack",
+        "matching_workflow_objects": {
+          ".github/workflows/monitoring-drill.yml": "77d732b3789a1f925e61e07f303b906347800e4a",
+          ".github/workflows/monitoring-e2e.yml": "dc6de4a712dd22930ccd6f212861e19b5cfb4628"
+        },
+        "matching_workflows": [
+          ".github/workflows/monitoring-drill.yml",
+          ".github/workflows/monitoring-e2e.yml"
+        ],
+        "scenario_object_id": "1c5ef406139492ab02b6e5b20becbfdf7c785c7c",
+        "scenario_path": "cicd/monitoring",
+        "validation_object_id": "a17e250316c008e96b7cfd75a1e5731f17ae8ba7",
+        "validation_path": "cicd/monitoring/validation.sh",
+        "workflow_membership": "wired",
+        "workflow_object_id": "dc6de4a712dd22930ccd6f212861e19b5cfb4628",
+        "workflow_path": ".github/workflows/monitoring-e2e.yml"
+      }
+    ]
+  },
   "contract_version": 1,
+  "metric_manifest": {
+    "coverage": {
+      "default_families": 197,
+      "default_referenced": 157,
+      "default_unreferenced": 19,
+      "default_waived": 21,
+      "writer_classified": 197,
+      "writer_unclassified": 0,
+      "writer_unverified": 64
+    },
+    "families": [
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_active_conntrack_entries",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_active_flow_count_sctp",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_active_flow_count_tcp",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_active_flow_count_udp",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "model"
+        ],
+        "name": "loxilb_ai_active_streams",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "engine"
+        ],
+        "name": "loxilb_ai_engine_info",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "profile"
+        ],
+        "name": "loxilb_ai_jwks_keys",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "profile"
+        ],
+        "name": "loxilb_ai_jwks_last_success_timestamp_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "profile",
+          "outcome"
+        ],
+        "name": "loxilb_ai_jwks_refresh_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "profile"
+        ],
+        "name": "loxilb_ai_jwks_usable",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "tenant",
+          "reason"
+        ],
+        "name": "loxilb_ai_jwt_validation_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "Q",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "key_id"
+        ],
+        "name": "loxilb_ai_key_token_quota_limit_tokens",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "Q",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "key_id"
+        ],
+        "name": "loxilb_ai_key_token_quota_utilization",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_ai_keyed_services",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "result"
+        ],
+        "name": "loxilb_ai_kv_attest_echo_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "reason"
+        ],
+        "name": "loxilb_ai_kv_attest_probe_fail_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "rule",
+          "state"
+        ],
+        "name": "loxilb_ai_kv_attest_state",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "rule"
+        ],
+        "name": "loxilb_ai_kv_enforcement_fault",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "reason"
+        ],
+        "name": "loxilb_ai_kv_trtllm_drain_ownership_fault_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [],
+        "name": "loxilb_ai_kv_trtllm_drain_ownership_heal_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "kind"
+        ],
+        "name": "loxilb_ai_llamacpp_probe_warnings_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "model",
+          "tenant"
+        ],
+        "name": "loxilb_ai_model_not_allowed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "model"
+        ],
+        "name": "loxilb_ai_normal_session_hits_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "model"
+        ],
+        "name": "loxilb_ai_pd_decode_ttft_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "model"
+        ],
+        "name": "loxilb_ai_pd_kv_params_found_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "model"
+        ],
+        "name": "loxilb_ai_pd_kv_params_missing_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "model"
+        ],
+        "name": "loxilb_ai_pd_prefill_duration_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "model",
+          "phase",
+          "status"
+        ],
+        "name": "loxilb_ai_pd_requests_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "model"
+        ],
+        "name": "loxilb_ai_pd_session_hits_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "tier",
+          "model"
+        ],
+        "name": "loxilb_ai_pd_tier_selected_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [],
+        "name": "loxilb_ai_policy_store_unavailable_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "tenant",
+          "reason"
+        ],
+        "name": "loxilb_ai_rate_limit_hits_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "model",
+          "tenant"
+        ],
+        "name": "loxilb_ai_request_duration_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "model",
+          "tenant",
+          "status",
+          "outcome"
+        ],
+        "name": "loxilb_ai_requests_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_ai_token_quota_cold_open_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "tenant"
+        ],
+        "name": "loxilb_ai_token_quota_denied_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "Q",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "tenant"
+        ],
+        "name": "loxilb_ai_token_quota_limit_tokens",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "Q",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "tenant",
+          "model"
+        ],
+        "name": "loxilb_ai_token_quota_model_limit_tokens",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "Q",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "tenant",
+          "model"
+        ],
+        "name": "loxilb_ai_token_quota_model_utilization",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "Q",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "tenant"
+        ],
+        "name": "loxilb_ai_token_quota_utilization",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "model",
+          "tenant",
+          "kind"
+        ],
+        "name": "loxilb_ai_tokens_consumed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "model",
+          "tenant"
+        ],
+        "name": "loxilb_ai_tokens_estimated_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "model",
+          "tenant",
+          "reason"
+        ],
+        "name": "loxilb_ai_tokens_missing_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "vip"
+        ],
+        "name": "loxilb_ai_unmetered_requests_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "Q",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "tenant",
+          "user",
+          "model"
+        ],
+        "name": "loxilb_ai_user_model_token_quota_limit_tokens",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "Q",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "tenant",
+          "user",
+          "model"
+        ],
+        "name": "loxilb_ai_user_model_token_quota_utilization",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "Q",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "tenant",
+          "user"
+        ],
+        "name": "loxilb_ai_user_token_quota_limit_tokens",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "Q",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "tenant",
+          "user"
+        ],
+        "name": "loxilb_ai_user_token_quota_utilization",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "Q",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "service"
+        ],
+        "name": "loxilb_ai_vip_token_quota_limit_tokens",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "Q",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "service"
+        ],
+        "name": "loxilb_ai_vip_token_quota_utilization",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "result"
+        ],
+        "name": "loxilb_ai_worker_scrape_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_autopersist_consecutive_failures",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "endpoint"
+        ],
+        "name": "loxilb_backend_traffic_bytes_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [
+          "service",
+          "endpoint"
+        ],
+        "name": "loxilb_backend_traffic_connections_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "endpoint"
+        ],
+        "name": "loxilb_backend_traffic_packets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_boot_config_conflict_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_boot_legacy_fallback_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "sip"
+        ],
+        "name": "loxilb_client_traffic_packets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_closed_connections_processed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_config_dirty",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "DP",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [],
+        "name": "loxilb_conntrack_max_entries",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_conntrack_stat_resets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "dip"
+        ],
+        "name": "loxilb_endpoint_traffic_bytes_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_errors_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_firewall_rules",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_fw_drop_packets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "fw_rule"
+        ],
+        "name": "loxilb_fw_rule_drop_packets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_healthy_endpoints",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_host_cpu_utilization_percent",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "cidr",
+          "priority",
+          "zone"
+        ],
+        "name": "loxilb_ipfilter_blacklist_bytes_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "cidr",
+          "priority",
+          "zone"
+        ],
+        "name": "loxilb_ipfilter_blacklist_packets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "type"
+        ],
+        "name": "loxilb_ipfilter_rules",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "cidr",
+          "priority",
+          "zone"
+        ],
+        "name": "loxilb_ipfilter_whitelist_bytes_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "cidr",
+          "priority",
+          "zone"
+        ],
+        "name": "loxilb_ipfilter_whitelist_packets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "ep"
+        ],
+        "name": "loxilb_kv_inv_cap_evictions_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "ep"
+        ],
+        "name": "loxilb_kv_inventory_fresh",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "ep"
+        ],
+        "name": "loxilb_kv_subscriber_connected",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "ep"
+        ],
+        "name": "loxilb_kv_subscriber_last_event_timestamp_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "ep"
+        ],
+        "name": "loxilb_kv_subscriber_reconnect_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "ep"
+        ],
+        "name": "loxilb_kv_subscriber_recv_error_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "ep",
+          "reason"
+        ],
+        "name": "loxilb_kv_subscriber_wire_reject_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [
+          "proto",
+          "reason"
+        ],
+        "name": "loxilb_l4_error_events_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_last_restore_timestamp_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "sip",
+          "dip"
+        ],
+        "name": "loxilb_lb_rule_interaction_bytes_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "sip",
+          "dip"
+        ],
+        "name": "loxilb_lb_rule_interaction_packets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_lb_rules",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_lb_select_failure_shutdown_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_new_flows",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [],
+        "name": "loxilb_opa_circuit_breaker_state",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [],
+        "name": "loxilb_opa_firewall_rules",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [],
+        "name": "loxilb_opa_sync_duration_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "status"
+        ],
+        "name": "loxilb_opa_watcher_syncs_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "protocol"
+        ],
+        "name": "loxilb_parser_attributes_extracted_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "protocol"
+        ],
+        "name": "loxilb_parser_body_size_bytes",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "protocol",
+          "status"
+        ],
+        "name": "loxilb_parser_calls_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "protocol"
+        ],
+        "name": "loxilb_parser_duration_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_admission_overflow_shed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_admission_queued_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_admission_shed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_cb_flips_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_cb_proactive_heal_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_connect_failover_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_connect_retry_same_ep_ok_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_connect_retry_same_ep_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_decode_ep_died_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_decode_zero_byte_eof_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "ep_idx",
+          "ep"
+        ],
+        "name": "loxilb_pd_ep_info",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_pd_fallback_to_normal_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service",
+          "ep_idx"
+        ],
+        "name": "loxilb_pd_kv_blocks",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "ep_idx"
+        ],
+        "name": "loxilb_pd_kv_tier15_cold_seeds_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_kv_tier15_fallthrough_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "ep_idx"
+        ],
+        "name": "loxilb_pd_kv_tier15_hits_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "reason"
+        ],
+        "name": "loxilb_pd_kv_tier15_miss_reason_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "ep_idx"
+        ],
+        "name": "loxilb_pd_kv_tier15_spills_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service_id"
+        ],
+        "name": "loxilb_pd_kv_zero_hit_watchdog_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_prefill_ep_died_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_sessions_active",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_sg_decode_close_drain_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_sg_oversize_reject_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_sg_prefill_abort_decode_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_sg_prefill_reject_relay_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_sg_room_retry_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_trie_nodes",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_pd_trt_ctx_early_exit_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [
+          "result"
+        ],
+        "name": "loxilb_persist_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "ident"
+        ],
+        "name": "loxilb_policer_attached",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_processed_bytes_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_processed_packets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_processed_sctp_bytes_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_processed_sctp_packets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_processed_tcp_bytes_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_processed_tcp_packets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_processed_udp_bytes_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_processed_udp_packets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_active_connections",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_active_ssl_connections",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_cache_backpressure_ratio",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_cache_bytes",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_cache_bytes_max_conn",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_cache_conns_queued",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_cache_drain_partial_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_cache_high_water_events_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_chunked_responses_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_conversation_hits_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_conversation_misses_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_conversation_sessions",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_conversation_ttl_expired_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_graceful_close_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_proxy_header_deadline_drops_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_http2_sessions_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "status_class"
+        ],
+        "name": "loxilb_proxy_http_responses_by_status_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_http_responses_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "H",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [],
+        "name": "loxilb_proxy_http_ttfb_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_proxy_listen_drops_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_proxy_listen_overflows_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_pd_kv_params_overflow_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "vip",
+          "port",
+          "proto",
+          "direction"
+        ],
+        "name": "loxilb_proxy_qos_bytes_delayed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "vip",
+          "port",
+          "proto",
+          "direction"
+        ],
+        "name": "loxilb_proxy_qos_bytes_passed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "vip",
+          "port",
+          "proto",
+          "direction"
+        ],
+        "name": "loxilb_proxy_qos_cbs_bytes",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "vip",
+          "port",
+          "proto",
+          "direction"
+        ],
+        "name": "loxilb_proxy_qos_cir_bytes_per_second",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "vip",
+          "port",
+          "proto",
+          "direction"
+        ],
+        "name": "loxilb_proxy_qos_park_seconds_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "vip",
+          "port",
+          "proto",
+          "direction"
+        ],
+        "name": "loxilb_proxy_qos_parked_connections",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "vip",
+          "port",
+          "proto",
+          "direction"
+        ],
+        "name": "loxilb_proxy_qos_parks_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "vip",
+          "port",
+          "proto",
+          "direction"
+        ],
+        "name": "loxilb_proxy_qos_tokens_bytes",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_requests_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_restore_duration_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "mode",
+          "result"
+        ],
+        "name": "loxilb_restore_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_conn_blocked_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_conn_passed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_syn_blocked_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_syn_cookies_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_syn_passed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_udp_blocked_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_udp_bytes_blocked_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_udp_bytes_passed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_udp_passed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_unique_ips",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service"
+        ],
+        "name": "loxilb_service_errors_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service"
+        ],
+        "name": "loxilb_service_requests_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service"
+        ],
+        "name": "loxilb_service_traffic_bytes_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "service"
+        ],
+        "name": "loxilb_service_traffic_packets_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_snapshot_quarantine_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "trigger"
+        ],
+        "name": "loxilb_snapshot_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [],
+        "name": "loxilb_sockproxy_sync_apply_errors_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "outcome"
+        ],
+        "name": "loxilb_sockproxy_sync_conflict_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "reason"
+        ],
+        "name": "loxilb_sockproxy_sync_drop_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "reason"
+        ],
+        "name": "loxilb_sockproxy_sync_health_reject_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "peer"
+        ],
+        "name": "loxilb_sockproxy_sync_inflight_rpc",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "kind"
+        ],
+        "name": "loxilb_sockproxy_sync_overflow_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "peer"
+        ],
+        "name": "loxilb_sockproxy_sync_peer_lag_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "peer"
+        ],
+        "name": "loxilb_sockproxy_sync_peer_scope_version",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "peer"
+        ],
+        "name": "loxilb_sockproxy_sync_peer_up",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "peer",
+          "rpc"
+        ],
+        "name": "loxilb_sockproxy_sync_push_latency_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_system_cpu_utilization_percent",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_system_disk_utilization_percent",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_system_memory_utilization_percent",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_unhealthy_endpoints",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      }
+    ],
+    "label_enums": {
+      "loxilb_ai_jwks_refresh_total": {
+        "outcome": [
+          "success",
+          "failure"
+        ]
+      },
+      "loxilb_ai_pd_requests_total": {
+        "phase": [
+          "complete",
+          "prefill",
+          "decode",
+          "unknown"
+        ],
+        "status": [
+          "success",
+          "timeout",
+          "error",
+          "rejected"
+        ]
+      },
+      "loxilb_ai_pd_tier_selected_total": {
+        "tier": [
+          "tier0",
+          "tier1",
+          "tier15",
+          "tier2"
+        ]
+      },
+      "loxilb_ai_requests_total": {
+        "outcome": [
+          "completed",
+          "denied"
+        ]
+      },
+      "loxilb_ai_tokens_consumed_total": {
+        "kind": [
+          "prompt",
+          "completion"
+        ]
+      },
+      "loxilb_ai_worker_scrape_total": {
+        "result": [
+          "ok",
+          "unreachable",
+          "http_error",
+          "body_error",
+          "unparseable",
+          "bad_request",
+          "unknown"
+        ]
+      }
+    },
+    "provenance": {
+      "generated_at": "2026-09-21T23:52:14+00:00",
+      "source_revision": "5324fd737f22174f25c06462f39f68a925388aee"
+    },
+    "schema_version": 1,
+    "sha256": "44986a8ebf59b271a0f455b6c68be4d9e1aba8fb5fb8fae9f70fbe83e361a2de",
+    "source_path": "deploy/monitoring/manifest/metric-manifest.json"
+  },
+  "release_snapshot": {
+    "commit": "f08b18beda587217265c9ba6419159119914795c",
+    "ebpf_submodule_commit": "5536a2117ad2ad1128900a0d808ad7dec2eee2b5",
+    "metric_manifest_available": false,
+    "spec_sha256": {
+      "api/swagger-extras.yml": "d0837dd58d05007b740b61e49914831c1fd55d44826fd756a709cd8f7a1307bc",
+      "api/swagger.yml": "b89eddbc14a4ea21774e6a609209f0f43786e52a2fe2b1ca5434dc648c39480d"
+    },
+    "tag": "v0.9.8.9-rc.1",
+    "tag_object": "db28353e50f7031157187fdd2250d1098c97963a"
+  },
   "scenario_evidence": {
     "trees": [
       {
@@ -15,7 +2672,7 @@
         "path": "cicd/kv-sglang-attest"
       },
       {
-        "object_id": "8a6d5e5811214e96f0ea35222ed56802fa5a1ae5",
+        "object_id": "a0e56c243affd78c06d8db04da567ecea705af98",
         "path": "cicd/sockmap-fullproxy"
       },
       {
@@ -33,7 +2690,11 @@
     }
   },
   "source": {
-    "commit": "144118b532333b7ca4bfc4a82cb162878db5213e",
+    "commit": "dbb2ff5bed48d21a108d6c53a62a3119cec9f780",
+    "ebpf_submodule_commit": "462a1e5412f46ca53574b9c079005bb3da3cfa20",
+    "release_commit": "f08b18beda587217265c9ba6419159119914795c",
+    "release_tag": "v0.9.8.9-rc.1",
+    "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",
     "repository": "https://github.com/loxilb-io/loxilb-inference-gateway"
   },
   "specs": [
@@ -7642,7 +10303,7 @@
           }
         }
       },
-      "sha256": "efe4b66445bfbd2d49cdcab5158d6680f616f5f17cae17e3289554e6d9d66872",
+      "sha256": "67ffeeb29fdbef18f35d46219e2ab0249d4b7cdfb348ad8e2f2d5c80a52666dc",
       "source_path": "api/swagger.yml"
     },
     {

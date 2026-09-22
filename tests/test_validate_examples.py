@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -36,6 +37,121 @@ class DocumentationExampleTests(unittest.TestCase):
             "--endpoints=198.51.100.11:1 --removed-flag=true"
         )
         self.assertTrue(errors)
+
+    def test_release_metric_manifest_is_frozen_without_missing_writers(self) -> None:
+        manifest = self.validator.gateway_contract["metric_manifest"]
+        families = [
+            family for family in manifest["families"]
+            if family["release_scope"] == "release"
+        ]
+        self.assertEqual(197, len(families))
+        self.assertEqual(197, len(manifest["families"]))
+        self.assertTrue(all(family["writer_present"] for family in families))
+        self.assertTrue(all(family["evidence_present"] for family in families))
+
+    def test_gateway_main_and_release_sources_are_exactly_frozen(self) -> None:
+        contract = self.validator.gateway_contract
+        self.assertEqual(
+            "dbb2ff5bed48d21a108d6c53a62a3119cec9f780",
+            contract["source"]["commit"],
+        )
+        self.assertEqual(
+            "462a1e5412f46ca53574b9c079005bb3da3cfa20",
+            contract["source"]["ebpf_submodule_commit"],
+        )
+        self.assertEqual("v0.9.8.9-rc.1", contract["source"]["release_tag"])
+        self.assertEqual(
+            "f08b18beda587217265c9ba6419159119914795c",
+            contract["source"]["release_commit"],
+        )
+        self.assertFalse(contract["release_snapshot"]["metric_manifest_available"])
+        self.assertEqual(
+            "5536a2117ad2ad1128900a0d808ad7dec2eee2b5",
+            contract["release_snapshot"]["ebpf_submodule_commit"],
+        )
+
+    def test_cli_main_and_release_sources_are_exactly_frozen(self) -> None:
+        source = self.validator.cli_contract["source"]
+        self.assertEqual(
+            "27d6717438abf4dcdb605d7036cf5173e40c5e59",
+            source["main_commit"],
+        )
+        self.assertEqual("v0.9.8.9-rc.2", source["release_tag"])
+        self.assertEqual(
+            "2dd7dbe215982859c2ee5cfc836fe34ac4e54a37",
+            source["release_tag_object"],
+        )
+        self.assertEqual(
+            "5dd978c25c967b8192c5fe9cd448783e1e74be7c",
+            source["release_commit"],
+        )
+
+    def test_public_metric_fixture_omits_raw_writer_and_evidence_text(self) -> None:
+        allowed = {
+            "name", "type", "labels", "activation", "release_scope",
+            "runtime_scope", "implementation_status", "writer_present",
+            "evidence_present",
+        }
+        for family in self.validator.gateway_contract["metric_manifest"]["families"]:
+            with self.subTest(metric=family["name"]):
+                self.assertEqual(allowed, set(family))
+        serialized = json.dumps(self.validator.gateway_contract).lower()
+        private_markers = (
+            "work-" "package",
+            "w" "p-5",
+            "llbig" "w",
+            "loxilb" "-app",
+        )
+        for private_marker in private_markers:
+            with self.subTest(private_marker=private_marker):
+                self.assertNotIn(private_marker, serialized)
+
+    def test_public_claim_evidence_membership_and_cases_are_frozen(self) -> None:
+        claims = {
+            claim["claim"]: claim
+            for claim in self.validator.gateway_contract["claim_evidence"]["claims"]
+        }
+        self.assertEqual("wired", claims["jwt-policy-and-token-accounting"]["workflow_membership"])
+        self.assertEqual("not-wired", claims["qos-ha-and-scope-metrics"]["workflow_membership"])
+        self.assertEqual("wired", claims["pd-and-worker-scrape-metrics"]["workflow_membership"])
+        self.assertEqual("not-wired", claims["sockmap-observability"]["workflow_membership"])
+        self.assertEqual(
+            [".github/workflows/ai-gateway-sanity.yml"],
+            claims["jwt-policy-and-token-accounting"]["matching_workflows"],
+        )
+        self.assertEqual([], claims["qos-ha-and-scope-metrics"]["matching_workflows"])
+        self.assertEqual(
+            {
+                ".github/workflows/monitoring-drill.yml",
+                ".github/workflows/monitoring-e2e.yml",
+            },
+            set(claims["monitoring-stack"]["matching_workflows"]),
+        )
+        self.assertEqual(
+            {"G2", "M4", "U1", "U2", "UH1", "UH2", "UE", "UE3"},
+            set(claims["jwt-policy-and-token-accounting"]["case_ids"]),
+        )
+        self.assertEqual(
+            {"SYNC-1", "SYNC-2", "QOS-METRIC-1", "QOS-METRIC-2", "QOS-HA-013", "QOS-HA-014"},
+            set(claims["qos-ha-and-scope-metrics"]["case_ids"]),
+        )
+
+    def test_red_twin_metric_typo_is_killed(self) -> None:
+        self.assertTrue(self.validator.validate_promql("rate(loxilb_ai_requestz_total[5m])"))
+
+    def test_red_twin_metric_label_is_killed(self) -> None:
+        self.assertTrue(
+            self.validator.validate_promql(
+                'loxilb_ai_worker_scrape_total{worker="198.51.100.11"}'
+            )
+        )
+
+    def test_red_twin_metric_enum_is_killed(self) -> None:
+        self.assertTrue(
+            self.validator.validate_promql(
+                'loxilb_ai_worker_scrape_total{result="healthy"}'
+            )
+        )
 
     def test_release_lifecycle_commands_are_frozen(self) -> None:
         for command in (
@@ -212,6 +328,37 @@ class DocumentationExampleTests(unittest.TestCase):
                         "POST", "/config/loadbalancer", body
                     )
                 )
+
+    def test_sockmap_response_with_apikey_keeps_request_admission(self) -> None:
+        body = {
+            "serviceArguments": {
+                "externalIP": "192.0.2.10", "port": 8080,
+                "protocol": "tcp", "mode": 4, "sockMapMode": "response",
+                "api_key_auth": "required",
+            },
+            "endpoints": [],
+        }
+        self.assertEqual(
+            [],
+            self.validator.validate_contract_semantics(
+                "POST", "/config/loadbalancer", body
+            ),
+        )
+
+    def test_red_twin_sockmap_response_with_sse_is_killed(self) -> None:
+        body = {
+            "serviceArguments": {
+                "externalIP": "192.0.2.10", "port": 8080,
+                "protocol": "tcp", "mode": 4, "sockMapMode": "response",
+                "sse_mode": True,
+            },
+            "endpoints": [],
+        }
+        self.assertTrue(
+            self.validator.validate_contract_semantics(
+                "POST", "/config/loadbalancer", body
+            )
+        )
 
     def test_capability_readiness_contract_is_frozen(self) -> None:
         spec = self.validator.gateway_contract["specs"][0]

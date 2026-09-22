@@ -51,6 +51,15 @@ REFERENCED_BODY_FIXTURES = {
         "role": "admin",
     },
 }
+PROMETHEUS_TARGET_LABELS = {"instance", "job"}
+PROMQL_METRIC = re.compile(
+    r"\b(?P<name>(?:loxilb|doca)_[A-Za-z0-9_:]+)"
+    r"(?:\{(?P<selectors>[^{}]*)\})?"
+)
+PROMQL_SELECTOR = re.compile(
+    r'(?P<label>[A-Za-z_][A-Za-z0-9_]*)\s*'
+    r'(?P<operator>=~|!~|!=|=)\s*"(?P<value>(?:\\.|[^"\\])*)"'
+)
 
 
 @dataclass(frozen=True)
@@ -169,7 +178,63 @@ class ExampleValidator:
         contract_dir = contract_dir or root / "tests/contracts/docs_examples"
         self.cli_contract = json.loads((contract_dir / "cli.json").read_text())
         self.gateway_contract = json.loads((contract_dir / "gateway-api.json").read_text())
+        self.metric_manifest = {
+            family["name"]: family
+            for family in self.gateway_contract.get("metric_manifest", {}).get(
+                "families", []
+            )
+            if family.get("release_scope") == "release"
+        }
+        self.metric_label_enums = self.gateway_contract.get(
+            "metric_manifest", {}
+        ).get("label_enums", {})
         self.require_external_tools = require_external_tools
+
+    def _metric_family(self, name: str) -> tuple[str, dict[str, Any] | None]:
+        family = self.metric_manifest.get(name)
+        if family is not None:
+            return name, family
+        for suffix in ("_bucket", "_sum", "_count", "_created"):
+            if not name.endswith(suffix):
+                continue
+            base = name[: -len(suffix)]
+            candidate = self.metric_manifest.get(base)
+            if candidate and candidate.get("type") == "histogram":
+                return base, candidate
+        return name, None
+
+    def validate_promql(self, expression: str) -> list[str]:
+        """Validate documented metric names, selector labels, and closed enums."""
+        errors: list[str] = []
+        for match in PROMQL_METRIC.finditer(expression):
+            rendered_name = match.group("name")
+            family_name, family = self._metric_family(rendered_name)
+            if family is None:
+                errors.append(
+                    f"metric is absent from the frozen release-scope manifest: {rendered_name}"
+                )
+                continue
+            selectors = match.group("selectors") or ""
+            allowed_labels = set(family.get("labels", [])) | PROMETHEUS_TARGET_LABELS
+            if rendered_name.endswith("_bucket"):
+                allowed_labels.add("le")
+            for selector in PROMQL_SELECTOR.finditer(selectors):
+                label = selector.group("label")
+                operator = selector.group("operator")
+                value = selector.group("value")
+                if label not in allowed_labels:
+                    errors.append(
+                        f"label {label!r} is absent from metric {family_name}; "
+                        f"expected one of {sorted(allowed_labels)}"
+                    )
+                    continue
+                allowed_values = self.metric_label_enums.get(family_name, {}).get(label)
+                if allowed_values and operator in {"=", "!="} and value not in allowed_values:
+                    errors.append(
+                        f"invalid {family_name} label {label}={value!r}; "
+                        f"expected one of {sorted(allowed_values)}"
+                    )
+        return errors
 
     def validate_cli_command(self, command: str, context: str = "") -> list[str]:
         errors: list[str] = []
@@ -361,8 +426,10 @@ class ExampleValidator:
                     errors.append("sockmap acceleration is incompatible with sse_mode")
                 if pd_enabled:
                     errors.append("sockmap acceleration is incompatible with pd_disagg_mode")
-                if "api_key_auth" in args:
-                    errors.append("sockmap acceleration is incompatible with any api_key_auth declaration")
+                if "api_key_auth" in args and sockmap_mode in {"both", "request"}:
+                    errors.append(
+                        "api_key_auth is incompatible with sockmap request acceleration"
+                    )
 
         elif route == "/config/ai/jwtauthprofile":
             name = body.get("name")
@@ -554,6 +621,10 @@ class ExampleValidator:
                     report.error(block.location, f"invalid YAML: {str(exc).splitlines()[0]}")
                 else:
                     self._validate_yaml_tool(report, block, safe_text)
+            elif block.language == "promql":
+                report.count("promql_blocks")
+                for error in self.validate_promql(block.text):
+                    report.error(block.location, error)
 
             for command in extract_shell_commands(block.text, "loxicmd"):
                 report.count("loxicmd_commands")
@@ -618,6 +689,7 @@ def print_report(report: ValidationReport) -> None:
         "bash_blocks",
         "json_blocks",
         "yaml_blocks",
+        "promql_blocks",
         "loxicmd_commands",
         "curl_commands",
         "management_routes",
