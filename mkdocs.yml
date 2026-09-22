@@ -123,7 +123,7 @@ nav:
   - Operations:
       - AI Key Store: operations/ai-key-store.md
       - Persistence, Backup & Restore: operations/backup-restore.md
-      - Readiness, Diagnostics & Maintenance: operations/readiness-diagnostics-maintenance.md
+      - Readiness, Capabilities, Diagnostics & Maintenance: operations/readiness-diagnostics-maintenance.md
       - Appliance CLI: operations/appliance-cli.md
       - Application & L4 Tracing: operations/tracing.md
       - DPU Offload Observability: operations/dpu-offload.md

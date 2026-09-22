@@ -178,6 +178,6 @@ host lifecycle mutation is performed by the documentation checks.
 ## See also
 
 - [Configuration Persistence, Backup, and Restore](backup-restore.md)
-- [Readiness, Diagnostics, and Maintenance](readiness-diagnostics-maintenance.md)
+- [Readiness, Capabilities, Diagnostics, and Maintenance](readiness-diagnostics-maintenance.md)
 - [CLI Reference](../reference/cli.md)
 - [HA and Upgrade Limitations](ha-limitations.md)

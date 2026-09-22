@@ -77,7 +77,9 @@ For `kvEngineType: "vllm"` (`kvExactMode: 1`), align these three legs between
 your vLLM launch and the loxilb rule:
 
 1. **Seed** — vLLM `PYTHONHASHSEED` must equal loxilb's `LLB_KV_NONE_HASH_SEED`.
-   This seeds the "none hash" that anchors the first block of every chain.
+   This seeds the "none hash" that anchors the first block of every chain. Current Gateway main
+   refuses vLLM KV-exact rule creation with HTTP `412` unless the Gateway seed is nonempty and at
+   most 23 bytes.
 2. **Hash algorithm** — vLLM `--prefix-caching-hash-algo=sha256_cbor` must equal
    the rule's `kvHashAlgo`. vLLM's *default* is a pickle-based `sha256` that is
    not portable across processes — you must select the `*_cbor` variant on both
@@ -86,6 +88,13 @@ your vLLM launch and the loxilb rule:
    the public `xxhash_cbor` contract, not an `xxhash128` value.
 3. **Block size** — vLLM `--block-size` must equal `kvBlockSize` (both `16` in
    the reference topology). CPU vLLM defaults to `128`, so this is easy to miss.
+
+Before presenting or submitting a vLLM KV-exact rule, query
+`GET /netlox/v1/status/capabilities` and require the `kv_exact_vllm` entry to report
+`ready=true`. `KV_EXACT_SEED_UNSET` and `KV_EXACT_SEED_TOO_LONG` are launch-environment
+preconditions; changing the rule body cannot satisfy them. The capability query is a REST-only,
+current-main surface and does not replace tokenizer, event-stream, inventory, or hit-counter
+verification. See [Readiness, Capabilities, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md).
 
 Under the hood the vLLM contract encodes each block as a canonical CBOR tuple
 `[parent_hash, [token_ids…], null]`, hashes it, and takes the **last** 8 digest

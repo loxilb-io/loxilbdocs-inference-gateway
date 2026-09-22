@@ -350,7 +350,7 @@ versions before assuming a command has a server-side implementation.
 Readiness and diagnostics print the Gateway's typed body directly in JSON mode. Restore,
 persist, maintenance, and appliance operations use the CLI command-result envelope and its exact
 exit taxonomy. See [Persistence, Backup, and Restore](../operations/backup-restore.md),
-[Readiness, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md),
+[Readiness, Capabilities, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md),
 and [Appliance CLI](../operations/appliance-cli.md).
 
 ### Load-balancer contract flags
@@ -412,6 +412,6 @@ then delete by name. This avoids deleting a similarly keyed service.
 - [KV-Cache Routing](../ai-gateway/kv-caching.md) — what `ai_kv_inventory_get` inspects.
 - [Monitoring & Metrics](../operations/monitoring.md) — the metric families read by the observability tools.
 - [Persistence, Backup, and Restore](../operations/backup-restore.md) — dry-run, commit, write-through, restart, and quarantine semantics.
-- [Readiness, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md) — typed recovery state and the configuration-write gate.
+- [Readiness, Capabilities, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md) — typed recovery state, optional-capability preflight, and the configuration-write gate.
 - [Appliance CLI](../operations/appliance-cli.md) — Gateway configuration versus whole-appliance lifecycle boundaries.
 - [Troubleshooting](../operations/troubleshooting.md) — companion to the `diagnose_*` tools.

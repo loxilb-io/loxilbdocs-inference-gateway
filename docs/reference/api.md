@@ -118,7 +118,7 @@ the Swagger document.
 | Area | Methods and path families | Purpose / status |
 |---|---|---|
 | Configuration lifecycle | `POST /config/import`, `GET /config/export`, `GET /config/snapshot`, `POST /config/restore`, `POST /config/persist` | Import/export, transactional snapshot/restore, and durable persistence |
-| Recovery operations | `GET /status/ready`, `GET /diagnostics`, `GET/PUT /maintenance` | Main-only configuration readiness, bounded diagnostics, and operator configuration-write gate; absent from Gateway `v0.9.8.9-rc.1` |
+| Recovery and capability status | `GET /status/ready`, `GET /status/capabilities`, `GET /diagnostics`, `GET/PUT /maintenance` | Main-only configuration readiness, optional launch-environment capability readiness, bounded diagnostics, and operator configuration-write gate; absent from Gateway `v0.9.8.9-rc.1` |
 | API metadata | `GET /meta` | Public generated metadata for POST operations |
 | Authentication and users | `POST /auth/login`, `POST /auth/logout`, `GET/POST /auth/users`, `PUT/DELETE /auth/users/{id}`, `POST /auth/token/upgrade` | User login/logout, exact-role user administration, and manual-token update |
 | Load balancers | `POST /config/loadbalancer`, `GET/DELETE /config/loadbalancer/all`, and `GET/PATCH/DELETE` id/name/VIP/host-key variants | Core L4/L7 and AI service rules, status, and statistics |
@@ -169,14 +169,45 @@ lifecycle rather than independent convenience endpoints.
 | `POST /config/restore` (`commit: true`) | `RestoreResult` | Preserves pre-state, applies, verifies, and rolls back on failure; inspect `persisted` separately because write-through can fail after the live restore succeeds. |
 | `POST /config/persist` | `PersistResult` | Atomically writes the active configuration and returns identity, coverage, and monotonic generation. |
 | `GET /status/ready` | `ReadyStatus` | Returns the same typed body with HTTP `200` or `503`; covers configuration recovery, not GPU, inference, or complete data-plane health. |
+| `GET /status/capabilities` | `CapabilityStatusList` | Returns HTTP `200` with per-capability `ready` verdicts for optional features gated by the launch environment. It is not overall health and does not affect `/status/ready`. |
 | `GET /diagnostics` | `DiagnosticsStatus` | Bounded version, readiness, maintenance, eBPF, map, and dependency context; sanitize output before sharing. |
 | `GET/PUT /maintenance` | `MaintenanceStatus` | Gates configuration writes. It does not reject new inference traffic and does not drain non-streaming requests. |
 
 The recovery endpoints are implemented on current Gateway `main`; Gateway
 `v0.9.8.9-rc.1` includes snapshot, restore, and persist but not readiness, diagnostics, or
-maintenance. See [Persistence, Backup, and Restore](../operations/backup-restore.md) and
-[Readiness, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md)
+maintenance, and it does not include the capability surface. See
+[Persistence, Backup, and Restore](../operations/backup-restore.md) and
+[Readiness, Capabilities, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md)
 for sequencing and validation gates.
+
+### Optional capability readiness
+
+Current Gateway main exposes a REST-only preflight for optional features whose availability is
+decided by the Gateway process environment rather than by a request body:
+
+```bash
+curl --fail-with-body --silent --show-error \
+  --header @control-plane.headers \
+  "$CONTROL_API/status/capabilities" \
+  > capabilities.json
+
+jq -e '
+  .capabilities[] |
+  select(.name == "kv_exact_vllm") |
+  .ready == true
+' capabilities.json
+```
+
+The endpoint always returns HTTP `200` for an authorized request; readiness lives in each entry.
+An absent name means the build does not know that capability, which is different from a present
+entry with `ready=false`. Clients must tolerate capability names they do not recognize.
+
+The current known capability is `kv_exact_vllm`. It uses the same predicate as rule admission:
+a nonempty `LLB_KV_NONE_HASH_SEED` of at most 23 bytes is required and must match vLLM's
+`PYTHONHASHSEED`. An unready entry carries `KV_EXACT_SEED_UNSET` or
+`KV_EXACT_SEED_TOO_LONG`; attempting to create a vLLM KV-exact rule is then refused with HTTP
+`412` and the same operator-facing reason. This surface does not establish tokenizer, engine,
+event-stream, or data-plane readiness.
 
 Worker metric updates do not make a plain `sel: 9` rule capacity-aware. That path uses
 prefix-affinity, conversation-affinity, and healthy-endpoint fallbacks without consuming pushed

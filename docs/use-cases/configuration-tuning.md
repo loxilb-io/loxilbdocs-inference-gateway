@@ -141,7 +141,7 @@ Set with `docker run -e …`; all read once at startup.
 
 | Var | Default | Accepted | Effect |
 |---|---|---|---|
-| `LLB_KV_NONE_HASH_SEED` | unset (zero seed) | ≤23 bytes | **Must equal vLLM's `PYTHONHASHSEED`** (parity triad leg) |
+| `LLB_KV_NONE_HASH_SEED` | Required for vLLM KV-exact; otherwise unset | 1–23 bytes for vLLM KV-exact | **Must equal vLLM's `PYTHONHASHSEED`**. Current Gateway main refuses vLLM `kvExactMode` rule creation with HTTP `412` when the value is unset, empty, or too long. |
 | `LLB_KV_HASH_DEBUG` | off | `1` | Per-block hash forensic logging (testbed only) |
 | `LLB_KV_LOADGUARD` | off | non-`0` | Hard load-imbalance pre-guard before Tier 1.5 |
 | `LLB_PD_PREFILL_TIMEOUT_SEC` | 30 | int | Prefill-leg timeout. **Raise to ≥180 for long-context (32k) fleets** — the 30 s default times out most requests under load |

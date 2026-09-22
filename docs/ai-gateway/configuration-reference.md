@@ -163,7 +163,10 @@ overlap silently drops to zero. See [KV-Cache Routing](kv-caching.md).
     (`PYTHONHASHSEED` == `LLB_KV_NONE_HASH_SEED`), hash algo (set vLLM
     `--prefix-caching-hash-algo=sha256_cbor` — its default `sha256` is non-portable), and block
     size (`--block-size` == `kvBlockSize`). vLLM must also set
-    `VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES=1`.
+    `VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES=1`. Current Gateway main also requires a nonempty
+    Gateway seed of at most 23 bytes and returns HTTP `412` before mutation otherwise. Query the
+    REST-only `GET /status/capabilities` surface and require `kv_exact_vllm.ready=true` before
+    presenting or submitting the rule.
 
 ---
 

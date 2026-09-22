@@ -67,6 +67,7 @@ class DocumentationExampleTests(unittest.TestCase):
             ("POST", "/config/restore"),
             ("POST", "/config/persist"),
             ("GET", "/status/ready"),
+            ("GET", "/status/capabilities"),
             ("GET", "/diagnostics"),
             ("GET", "/maintenance"),
             ("PUT", "/maintenance"),
@@ -74,6 +75,20 @@ class DocumentationExampleTests(unittest.TestCase):
         for method, route in operations:
             with self.subTest(method=method, route=route):
                 self.assertEqual([], self.validator.validate_route(method, route))
+
+    def test_capability_readiness_contract_is_frozen(self) -> None:
+        spec = self.validator.gateway_contract["specs"][0]
+        capability = spec["definitions"]["CapabilityStatus"]
+        self.assertEqual({"name", "ready"}, set(capability["required"]))
+        self.assertEqual("string", capability["properties"]["name"]["type"])
+        self.assertNotIn("enum", capability["properties"]["name"])
+
+        capability_list = spec["definitions"]["CapabilityStatusList"]
+        self.assertEqual({"capabilities"}, set(capability_list["required"]))
+        self.assertEqual(
+            "#/definitions/CapabilityStatus",
+            capability_list["properties"]["capabilities"]["items"]["$ref"],
+        )
 
     def test_maintenance_requires_explicit_enabled_state(self) -> None:
         errors = self.validator.validate_json_body("PUT", "/maintenance", {})

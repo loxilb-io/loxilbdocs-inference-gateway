@@ -306,7 +306,7 @@ installed-host restart, Linux datapath, GPU, HA, or release qualification.
 
 ## See also
 
-- [Readiness, Diagnostics, and Maintenance](readiness-diagnostics-maintenance.md)
+- [Readiness, Capabilities, Diagnostics, and Maintenance](readiness-diagnostics-maintenance.md)
 - [Appliance Lifecycle CLI](appliance-cli.md)
 - [HA and Upgrade Limitations](ha-limitations.md)
 - [Monitoring and Metrics](monitoring.md)

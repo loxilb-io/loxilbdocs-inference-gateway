@@ -1,7 +1,7 @@
 {
   "contract_version": 1,
   "source": {
-    "commit": "307b4c7173cdd2867ae0f29fe9e0c6ae16536c11",
+    "commit": "144118b532333b7ca4bfc4a82cb162878db5213e",
     "repository": "https://github.com/loxilb-io/loxilb-inference-gateway"
   },
   "specs": [
@@ -704,6 +704,41 @@
           },
           "required": [
             "sync"
+          ],
+          "type": "object"
+        },
+        "CapabilityStatus": {
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "ready": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "reason_code": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "ready"
+          ],
+          "type": "object"
+        },
+        "CapabilityStatusList": {
+          "properties": {
+            "capabilities": {
+              "items": {
+                "$ref": "#/definitions/CapabilityStatus"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "capabilities"
           ],
           "type": "object"
         },
@@ -7544,6 +7579,11 @@
             ]
           }
         },
+        "/status/capabilities": {
+          "get": {
+            "parameters": []
+          }
+        },
         "/status/device": {
           "get": {
             "parameters": []
@@ -7570,7 +7610,7 @@
           }
         }
       },
-      "sha256": "0c5a8441e6bb141292324daff3b4bafa0e1f69e80cfe00011b939cc4f347cb09",
+      "sha256": "efe4b66445bfbd2d49cdcab5158d6680f616f5f17cae17e3289554e6d9d66872",
       "source_path": "api/swagger.yml"
     },
     {

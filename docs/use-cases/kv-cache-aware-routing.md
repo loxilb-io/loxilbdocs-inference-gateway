@@ -127,7 +127,7 @@ vLLM prefill worker:
 
 1. **Block size.** vLLM's `--block-size` must equal the rule's `kvBlockSize` (both `16` in the reference). CPU vLLM defaults to `128` and emits **zero** `BlockStored` events for prompts shorter than 128 tokens — run CPU vLLM with `--block-size 16`.
 2. **Hash algorithm.** vLLM's `--prefix-caching-hash-algo` must equal the rule's `kvHashAlgo`, one of `sha256_cbor` or `xxhash_cbor`. vLLM's *own* default is a non-portable pickle-based `sha256` — you must explicitly select a `*_cbor` variant so both sides agree.
-3. **NONE_HASH seed.** vLLM's `PYTHONHASHSEED` must equal LoxiLB's `LLB_KV_NONE_HASH_SEED`. This seeds the first block's parent (`NONE_HASH`); a mismatch corrupts *every* chained hash. Leaving both unset (an all-zero seed) is only correct if vLLM is also unseeded.
+3. **NONE_HASH seed.** vLLM's `PYTHONHASHSEED` must equal LoxiLB's `LLB_KV_NONE_HASH_SEED`. This seeds the first block's parent (`NONE_HASH`); a mismatch corrupts *every* chained hash. Current Gateway main requires the Gateway value to be nonempty and at most 23 bytes for every vLLM KV-exact rule; an unset or empty value is refused before mutation with HTTP `412`.
 
 Two more mechanical requirements complete the contract:
 
@@ -162,7 +162,12 @@ All three legs must agree, or you are measuring the fallback selector instead of
 | 2 | Block / page size | vLLM `--block-size 16` (SGLang: effective page size) | — | `kvBlockSize` == that value |
 | 3 | Hash algorithm | `--prefix-caching-hash-algo *_cbor` | — | `kvHashAlgo` matches |
 
-The seeds must be *equal*, not necessarily zero — but `0` on both sides is the reproducible default and the value the rest of these docs assume.
+The seeds must be *equal*, nonempty, and the Gateway value must be at most 23 bytes. `0` on both
+sides is the reproducible value the rest of these docs assume.
+
+On current Gateway main, query `GET /netlox/v1/status/capabilities` before rule creation and
+require `kv_exact_vllm.ready=true`. This catches an unset or oversized Gateway seed before a
+request is submitted; it does not validate the engine-side seed or the other parity legs.
 
 ### 6.2 The read-only preflight — read the live container, not the script
 
@@ -183,7 +188,12 @@ docker inspect <loxilb-container> \
   | grep -E 'LLB_KV_NONE_HASH_SEED|LOXILB_KV_LB_MODE|LLB_PD_PREFILL_TIMEOUT_SEC'
 ```
 
-If `PYTHONHASHSEED` and `LLB_KV_NONE_HASH_SEED` differ — or either is set while the other is unset — every seeded block hash is corrupt and overlap will read zero. Fix that before doing anything else. Select a reviewed, immutable tag or digest from the `ghcr.io/loxilb-io/loxilb-inference-gateway` image repository; do not derive production behavior from a moving tag.
+If `PYTHONHASHSEED` and `LLB_KV_NONE_HASH_SEED` differ, every seeded block hash is corrupt and
+overlap will read zero. Current Gateway main refuses an unset, empty, or longer-than-23-byte
+Gateway seed before rule mutation; an unset engine seed or a nonmatching nonempty value still
+breaks parity. Fix that before doing anything else. Select a reviewed, immutable tag or digest
+from the `ghcr.io/loxilb-io/loxilb-inference-gateway` image repository; do not derive production
+behavior from a moving tag.
 
 ### 6.3 Tested-artifact rule
 
@@ -302,7 +312,7 @@ KV fields (all match the swagger `serviceArguments` defaults):
 
 | Variable | Purpose |
 |---|---|
-| `LLB_KV_NONE_HASH_SEED` | NONE_HASH seed; **must equal vLLM's `PYTHONHASHSEED`**. Unset ⇒ zero seed (correct only if vLLM is also unseeded). |
+| `LLB_KV_NONE_HASH_SEED` | Required nonempty NONE_HASH seed for vLLM KV-exact; at most 23 bytes and **must equal vLLM's `PYTHONHASHSEED`**. Current Gateway main refuses an unset, empty, or oversized value with HTTP `412`. |
 | `LLB_KV_HASH_DEBUG=1` | Emit one hash-debug log line per computed block (hash + CBOR hex) for byte-level parity forensics. Zero cost when unset. |
 
 ### 8.3 Tokenizer staging
