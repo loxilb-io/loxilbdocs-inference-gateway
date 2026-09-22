@@ -209,13 +209,7 @@ Run these checks in a non-production tenant before exposure:
    invalid-body key creation. Authentication must run before body validation,
    returning `401`:
 
-   ```bash
-   # docs-example: expect-schema-error
-   curl --silent --output /dev/null --write-out '%{http_code}\n' \
-     --request POST https://gateway.example.com/netlox/v1/config/ai/apikey \
-     --header 'Content-Type: application/json' \
-     --data '{}'
-   ```
+   --8<-- "snippets/common/unauthenticated-key-create.md"
 
 2. Authenticate as an administrator and list the test tenant. The response
    must be `200` and must not contain `raw_key` or `key_hash`.

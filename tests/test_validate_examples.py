@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -26,6 +27,35 @@ class DocumentationExampleTests(unittest.TestCase):
     def test_all_normal_fixtures_pass(self) -> None:
         report = self.validator.validate_repository()
         self.assertEqual([], report.errors, "\n".join(report.errors))
+
+    def test_red_twin_unclassified_example_is_killed(self) -> None:
+        inventory = json.loads(
+            (ROOT / "tests/contracts/docs_examples/example-inventory.json").read_text()
+        )
+        inventory["entries"].pop()
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "example-inventory.json"
+            path.write_text(json.dumps(inventory))
+            report = MODULE.ValidationReport()
+            self.validator.validate_inventory(
+                MODULE.collect_public_blocks(ROOT), report, path
+            )
+        self.assertTrue(
+            any("example is not classified in inventory" in error for error in report.errors),
+            "missing example classification must fail closed",
+        )
+
+    def test_red_twin_duplicate_example_is_killed(self) -> None:
+        collected = MODULE.collect_public_blocks(ROOT)
+        identity, block, digest = collected[0]
+        report = MODULE.ValidationReport()
+        self.validator.validate_inventory(
+            collected + [(f"duplicate-{identity}", block, digest)], report
+        )
+        self.assertTrue(
+            any("must use a canonical snippet" in error for error in report.errors),
+            "duplicate examples must fail closed",
+        )
 
     def test_red_twin_route_typo_is_killed(self) -> None:
         errors = self.validator.validate_route("POST", "/config/workre/metrics")
@@ -279,6 +309,12 @@ class DocumentationExampleTests(unittest.TestCase):
         flags = set(self.validator.cli_contract["commands"]["create lb"]["main"]["flags"])
         self.assertNotIn("--kv-exact-api-mode", flags)
         self.assertNotIn("--kv-model-profile", flags)
+        self.assertNotIn("--jwt-auth-profile", flags)
+
+    def test_pd_bootstrap_port_is_supported_by_cli_main_and_release(self) -> None:
+        contract = self.validator.cli_contract["commands"]["create lb"]
+        self.assertIn("--pd-bootstrap-port", contract["main"]["flags"])
+        self.assertIn("--pd-bootstrap-port", contract["release"]["flags"])
 
     def test_strict_kv_field_schema_is_frozen(self) -> None:
         spec = self.validator.gateway_contract["specs"][0]

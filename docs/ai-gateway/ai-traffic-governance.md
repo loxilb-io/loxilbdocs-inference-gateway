@@ -73,11 +73,7 @@ Keep the management bearer token and inference API key separate. The following
 examples read the management header from a permission-restricted file so the
 token is not written directly into every shell command:
 
-```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-```
+--8<-- "snippets/common/control-api-header.md"
 
 Replace the example URL with your deployment. Obtain `CONTROL_PLANE_TOKEN`
 from your identity and secret-management workflow; do not paste it into shell
@@ -94,23 +90,7 @@ history, source control, tickets, or logs.
 
 Start with only the models and request rate the workload needs:
 
-```bash
-curl --fail-with-body --silent --show-error \
-  --request POST "$CONTROL_API/config/ai/apikey" \
-  --header @control-plane.headers \
-  --header 'Content-Type: application/json' \
-  --data '{
-    "tenant_id": "team-a",
-    "name": "chat-service",
-    "allowed_models": ["example-chat-model"],
-    "rate_limit_rps": 5,
-    "burst_size": 10,
-    "tokens_per_min": 0,
-    "enabled": true
-  }' > ./new-key.json
-
-jq '{key_id, raw_key_present: (.raw_key | type == "string")}' ./new-key.json
-```
+--8<-- "snippets/common/create-api-key.md"
 
 Expected result: `201 Created`; the response contains a `key_id` and a
 `raw_key`. The raw key is returned only by this create operation. Store it in a

@@ -193,13 +193,7 @@ Before allowing remote access to port `11111`:
 3. Send a protected, invalid-body mutation without a credential and require
    `401` before request validation:
 
-   ```bash
-   # docs-example: expect-schema-error
-   curl --silent --output /dev/null --write-out '%{http_code}\n' \
-     --request POST https://gateway.example.com/netlox/v1/config/ai/apikey \
-     --header 'Content-Type: application/json' \
-     --data '{}'
-   ```
+--8<-- "snippets/common/unauthenticated-key-create.md"
 
 4. After the user-list response is fixed to omit password material, authenticate
    as a viewer: a safe representative `GET` must succeed, `GET /auth/users`

@@ -443,10 +443,7 @@ Use low-cardinality, non-secret labels. Restrict Prometheus and Grafana access,
 change default credentials, validate TLS, and apply retention appropriate for
 tenant activity metadata. Remove temporary header files after management calls:
 
-```bash
-rm -f ./control-plane.headers
-unset CONTROL_PLANE_TOKEN
-```
+--8<-- "snippets/common/control-api-cleanup.md"
 
 ## Related pages
 

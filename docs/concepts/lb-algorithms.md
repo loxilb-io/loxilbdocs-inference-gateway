@@ -331,15 +331,11 @@ List the LB rules and confirm the `sel` value in effect:
 
 === "curl"
 
-    ```bash
-    curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
-    ```
+    --8<-- "snippets/common/load-balancer-readback-rest.md"
 
 === "loxicmd"
 
-    ```bash
-    loxicmd get lb
-    ```
+    --8<-- "snippets/common/load-balancer-readback-cli.md"
 
 ---
 

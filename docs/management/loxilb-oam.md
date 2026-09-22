@@ -58,11 +58,7 @@ Set the required values in `.env`:
 Generate independent JWT, database, and snapshot-key values without committing
 them:
 
-```bash
-openssl rand -base64 48
-openssl rand -base64 48
-openssl rand -base64 32
-```
+--8<-- "snippets/common/oam-secret-generation.md"
 
 Create the bootstrap administrator password with your password manager. The
 fresh-database policy requires at least nine characters, including upper case,
@@ -135,9 +131,7 @@ OAuth login has been removed from the current source. Do not carry old
 
 Register a TLS Gateway endpoint as:
 
-```text
-https://<gateway-host>:8091/netlox/v1
-```
+--8<-- "snippets/common/oam-gateway-url.md"
 
 Set `OAM_INSTANCE_CA_BUNDLE` to the CA that issued the Gateway certificate and
 keep `OAM_INSTANCE_TLS_INSECURE=false`.

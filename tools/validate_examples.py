@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import shlex
@@ -22,6 +23,8 @@ from jsonschema import Draft4Validator, FormatChecker
 
 MAIN_ONLY_MARKER = "CLI availability: main-only"
 EXPECTED_SCHEMA_FAILURE_MARKER = "docs-example: expect-schema-error"
+EXAMPLE_STATUSES = {"verified", "blocked", "illustrative-only"}
+EXAMPLE_INVENTORY = Path("tests/contracts/docs_examples/example-inventory.json")
 JWT_AUTH_MODES = {"jwt", "apikey-or-jwt"}
 JWT_ALGORITHMS = {
     "RS256", "RS384", "RS512",
@@ -113,6 +116,38 @@ def markdown_blocks(path: Path) -> Iterable[Block]:
             index += 1
         yield Block(path, start_line, language, textwrap.dedent("\n".join(body)))
         index += 1
+
+
+def public_markdown_paths(root: Path) -> list[Path]:
+    paths = list((root / "docs").rglob("*.md"))
+    snippets = root / "snippets"
+    if snippets.exists():
+        paths.extend(snippets.rglob("*.md"))
+    return sorted(paths)
+
+
+def collect_public_blocks(root: Path) -> list[tuple[str, Block, str]]:
+    """Return stable inventory IDs, blocks, and content digests."""
+    collected: list[tuple[str, Block, str]] = []
+    occurrences: dict[tuple[str, str, str], int] = {}
+    for path in public_markdown_paths(root):
+        relative = path.relative_to(root)
+        for block in markdown_blocks(path):
+            digest = hashlib.sha256(block.text.encode()).hexdigest()
+            key = (relative.as_posix(), block.language, digest)
+            ordinal = occurrences.get(key, 0) + 1
+            occurrences[key] = ordinal
+            identity = hashlib.sha256(
+                f"{key[0]}\0{key[1]}\0{key[2]}\0{ordinal}".encode()
+            ).hexdigest()[:20]
+            collected.append(
+                (
+                    identity,
+                    Block(relative, block.line, block.language, block.text),
+                    digest,
+                )
+            )
+    return collected
 
 
 def extract_shell_commands(text: str, executable: str) -> list[str]:
@@ -590,15 +625,102 @@ class ExampleValidator:
         command = ["yq", "eval", ".", "-"] if "mikefarah" in (version.stdout + version.stderr).lower() else ["yq", "."]
         self._run_tool(report, block.location, command, text)
 
+    def validate_inventory(
+        self,
+        collected: list[tuple[str, Block, str]],
+        report: ValidationReport,
+        inventory_path: Path | None = None,
+    ) -> None:
+        inventory_path = inventory_path or self.root / EXAMPLE_INVENTORY
+        if not inventory_path.exists():
+            report.error(inventory_path.as_posix(), "public example inventory is missing")
+            return
+        try:
+            document = json.loads(inventory_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError) as exc:
+            report.error(inventory_path.as_posix(), f"cannot read example inventory: {exc}")
+            return
+        entries = document.get("entries")
+        if not isinstance(entries, list):
+            report.error(inventory_path.as_posix(), "inventory entries must be a list")
+            return
+        indexed: dict[str, dict[str, Any]] = {}
+        for entry in entries:
+            if not isinstance(entry, dict) or not isinstance(entry.get("id"), str):
+                report.error(inventory_path.as_posix(), "every inventory entry needs a string id")
+                continue
+            if entry["id"] in indexed:
+                report.error(inventory_path.as_posix(), f"duplicate inventory id: {entry['id']}")
+                continue
+            indexed[entry["id"]] = entry
+
+        actual_ids = {identity for identity, _, _ in collected}
+        by_digest: dict[str, list[Block]] = {}
+        for _, block, digest in collected:
+            by_digest.setdefault(digest, []).append(block)
+        for digest, duplicate_blocks in sorted(by_digest.items()):
+            if len(duplicate_blocks) < 2:
+                continue
+            locations = ", ".join(block.location for block in duplicate_blocks)
+            report.error(
+                inventory_path.as_posix(),
+                f"duplicate fenced example {digest[:12]} must use a canonical snippet: {locations}",
+            )
+        stale_ids = sorted(set(indexed) - actual_ids)
+        missing_ids = sorted(actual_ids - set(indexed))
+        for identity in stale_ids:
+            report.error(inventory_path.as_posix(), f"stale example inventory entry: {identity}")
+        for identity in missing_ids:
+            block = next(item[1] for item in collected if item[0] == identity)
+            report.error(block.location, f"example is not classified in inventory: {identity}")
+
+        for identity, block, digest in collected:
+            entry = indexed.get(identity)
+            if entry is None:
+                continue
+            expected = {
+                "path": block.path.as_posix(),
+                "line": block.line,
+                "language": block.language or "plain",
+                "sha256": digest,
+            }
+            for field, value in expected.items():
+                if entry.get(field) != value:
+                    report.error(
+                        block.location,
+                        f"inventory {field} is stale for {identity}: "
+                        f"expected {value!r}, got {entry.get(field)!r}",
+                    )
+            status = entry.get("status")
+            if status not in EXAMPLE_STATUSES:
+                report.error(
+                    block.location,
+                    f"inventory status must be one of {sorted(EXAMPLE_STATUSES)}",
+                )
+                continue
+            report.count(f"examples_{status.replace('-', '_')}")
+            if not isinstance(entry.get("evidence"), str) or not entry["evidence"].strip():
+                report.error(block.location, "inventory evidence classification is required")
+            quality = entry.get("quality_contract")
+            quality_fields = {
+                "prerequisites", "exact_command", "expected_result",
+                "validation", "cleanup", "diagnosis",
+            }
+            if not isinstance(quality, dict) or set(quality) != quality_fields:
+                report.error(block.location, "inventory quality contract is incomplete")
+            elif status == "verified" and not all(quality.values()):
+                missing = sorted(name for name, present in quality.items() if not present)
+                report.error(
+                    block.location,
+                    f"verified example lacks quality fields: {', '.join(missing)}",
+                )
+
     def validate_repository(self) -> ValidationReport:
         report = ValidationReport()
-        blocks: list[Block] = []
-        for path in sorted((self.root / "docs").rglob("*.md")):
-            for block in markdown_blocks(path):
-                blocks.append(
-                    Block(block.path.relative_to(self.root), block.line, block.language, block.text)
-                )
+        collected = collect_public_blocks(self.root)
+        blocks = [block for _, block, _ in collected]
         report.count("fenced_blocks", len(blocks))
+        self.validate_inventory(collected, report)
 
         for block in blocks:
             safe_text = substitute_placeholders(block.text)
@@ -697,6 +819,9 @@ def print_report(report: ValidationReport) -> None:
         "substituted_request_bodies",
         "expected_schema_rejections",
         "curl_external",
+        "examples_verified",
+        "examples_blocked",
+        "examples_illustrative_only",
     )
     for name in order:
         print(f"{name}: {report.counts.get(name, 0)}")

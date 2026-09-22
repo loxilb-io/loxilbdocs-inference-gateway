@@ -33,11 +33,7 @@ management network. The responses can reveal flow keys, endpoints, service
 names, MAC addresses, routes, and hardware activity; never expose them to
 tenants or a public diagnostics service.
 
-```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-```
+--8<-- "snippets/common/control-api-header.md"
 
 ## Step 1: Read aggregate state
 

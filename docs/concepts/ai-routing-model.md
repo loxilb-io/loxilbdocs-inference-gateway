@@ -143,15 +143,11 @@ List the rules on the VIP and confirm each carries the expected `model_name` and
 
 === "curl"
 
-    ```bash
-    curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
-    ```
+    --8<-- "snippets/common/load-balancer-readback-rest.md"
 
 === "loxicmd"
 
-    ```bash
-    loxicmd get lb
-    ```
+    --8<-- "snippets/common/load-balancer-readback-cli.md"
 
 If you created only the named rule above and intentionally did not add a wildcard, send a known
 and an unknown model to confirm matching and the 503 fall-through:

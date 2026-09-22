@@ -139,13 +139,9 @@ session.
 the round-robin service does not need a session key:
 
 === "curl"
-    ```bash
-    curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
-    ```
+    --8<-- "snippets/common/load-balancer-readback-rest.md"
 === "loxicmd"
-    ```bash
-    loxicmd get lb
-    ```
+    --8<-- "snippets/common/load-balancer-readback-cli.md"
 
 **2. Probe MCP over the VIP.** Point an MCP client (or plain `curl`) at the
 HTTPS VIP endpoint, trusting the CA you staged:

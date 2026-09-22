@@ -79,6 +79,8 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Validate documented commands and payloads
         run: python tools/validate_examples.py
+      - name: Verify every public example is classified
+        run: python tools/refresh_example_inventory.py --check
       - name: Run validator mutation tests
         run: python -m unittest discover -s tests -p 'test_*.py' -v
 
@@ -89,5 +91,5 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         with:
-          args: --config .lychee.toml --no-progress './docs/**/*.md' './*.md'
+          args: --config .lychee.toml --no-progress './docs/**/*.md' './snippets/**/*.md' './*.md'
           fail: true
