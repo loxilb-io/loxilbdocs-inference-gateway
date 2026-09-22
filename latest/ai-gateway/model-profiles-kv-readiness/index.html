@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/community/roadmap/">
+        <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/model-profiles-kv-readiness/">
       
       
-        <link rel="prev" href="../contributing/">
+        <link rel="prev" href="../kv-caching/">
       
       
-        <link rel="next" href="../faq/">
+        <link rel="next" href="../pd-disaggregation/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Roadmap - LoxiLB Inference Gateway</title>
+        <title>Model Profiles & KV Readiness - LoxiLB Inference Gateway</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#roadmap" class="md-skip">
+        <a href="#model-profiles-and-kv-exact-readiness" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Roadmap
+              Model Profiles & KV Readiness
             
           </span>
         </div>
@@ -634,8 +634,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -646,11 +648,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
@@ -671,7 +673,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -689,7 +691,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/overview/" class="md-nav__link">
+      <a href="../overview/" class="md-nav__link">
         
   
   
@@ -717,7 +719,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/model-load-balancing/" class="md-nav__link">
+      <a href="../model-load-balancing/" class="md-nav__link">
         
   
   
@@ -745,7 +747,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/llm-routing/" class="md-nav__link">
+      <a href="../llm-routing/" class="md-nav__link">
         
   
   
@@ -773,7 +775,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/kv-caching/" class="md-nav__link">
+      <a href="../kv-caching/" class="md-nav__link">
         
   
   
@@ -798,10 +800,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../ai-gateway/model-profiles-kv-readiness/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Profiles & KV Readiness
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -817,6 +846,114 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-each-surface-answers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What each surface answers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discover-a-profile-before-creating-the-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discover a profile before creating the rule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-strict-kv-exact-rule-with-rest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a strict KV-exact rule with REST
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verify-the-binding-and-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify the binding and enforcement
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rejections-are-no-mutation-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rejections are no-mutation results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evidence-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evidence boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cleanup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -829,7 +966,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/pd-disaggregation/" class="md-nav__link">
+      <a href="../pd-disaggregation/" class="md-nav__link">
         
   
   
@@ -857,7 +994,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/vllm-integration/" class="md-nav__link">
+      <a href="../vllm-integration/" class="md-nav__link">
         
   
   
@@ -885,7 +1022,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/sglang-pd-disaggregation/" class="md-nav__link">
+      <a href="../sglang-pd-disaggregation/" class="md-nav__link">
         
   
   
@@ -913,7 +1050,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/tensorrt-llm-integration/" class="md-nav__link">
+      <a href="../tensorrt-llm-integration/" class="md-nav__link">
         
   
   
@@ -941,7 +1078,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/llamacpp-integration/" class="md-nav__link">
+      <a href="../llamacpp-integration/" class="md-nav__link">
         
   
   
@@ -969,7 +1106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/ai-traffic-governance/" class="md-nav__link">
+      <a href="../ai-traffic-governance/" class="md-nav__link">
         
   
   
@@ -997,7 +1134,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/sse-quota-management/" class="md-nav__link">
+      <a href="../sse-quota-management/" class="md-nav__link">
         
   
   
@@ -1025,7 +1162,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/api-key-management/" class="md-nav__link">
+      <a href="../api-key-management/" class="md-nav__link">
         
   
   
@@ -1053,7 +1190,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/mcp-gateway/" class="md-nav__link">
+      <a href="../mcp-gateway/" class="md-nav__link">
         
   
   
@@ -1081,7 +1218,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../ai-gateway/configuration-reference/" class="md-nav__link">
+      <a href="../configuration-reference/" class="md-nav__link">
         
   
   
@@ -2416,8 +2553,6 @@
       
   
   
-    
-  
   
   
     
@@ -2430,11 +2565,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
         
           
           <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
@@ -2455,7 +2590,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
@@ -2473,7 +2608,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contributing/" class="md-nav__link">
+      <a href="../../community/contributing/" class="md-nav__link">
         
   
   
@@ -2498,37 +2633,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Roadmap
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../community/roadmap/" class="md-nav__link">
         
   
   
@@ -2544,70 +2652,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#available-today" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Available today
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#current-focus" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Current focus
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#maturing-experimental" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Maturing / experimental
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#longer-term" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Longer term
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2620,7 +2664,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../faq/" class="md-nav__link">
+      <a href="../../community/faq/" class="md-nav__link">
         
   
   
@@ -2675,10 +2719,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#available-today" class="md-nav__link">
+  <a href="#what-each-surface-answers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Available today
+        What each surface answers
       
     </span>
   </a>
@@ -2686,10 +2730,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#current-focus" class="md-nav__link">
+  <a href="#discover-a-profile-before-creating-the-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Current focus
+        Discover a profile before creating the rule
       
     </span>
   </a>
@@ -2697,10 +2741,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#maturing-experimental" class="md-nav__link">
+  <a href="#create-a-strict-kv-exact-rule-with-rest" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Maturing / experimental
+        Create a strict KV-exact rule with REST
       
     </span>
   </a>
@@ -2708,10 +2752,54 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#longer-term" class="md-nav__link">
+  <a href="#verify-the-binding-and-enforcement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Longer term
+        Verify the binding and enforcement
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rejections-are-no-mutation-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rejections are no-mutation results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evidence-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evidence boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cleanup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cleanup
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
       
     </span>
   </a>
@@ -2735,72 +2823,243 @@
 
 
 
-<h1 id="roadmap">Roadmap<a class="headerlink" href="#roadmap" title="Permanent link">&para;</a></h1>
-<p>This page describes the direction of the LoxiLB Inference Gateway. It is a guide to intent, not a
-commitment to dates — priorities are shaped by the community and by real deployment feedback. The
-authoritative, up-to-the-minute view is the
-<a href="https://github.com/loxilb-io/loxilb-inference-gateway/issues">issue tracker</a>.</p>
-<p>“Available” below describes the current documented implementation. A capability
-is part of a production release only when it is present in a published,
-immutable image and has passed the deployment's release qualification.</p>
-<h2 id="available-today">Available today<a class="headerlink" href="#available-today" title="Permanent link">&para;</a></h2>
+<h1 id="model-profiles-and-kv-exact-readiness">Model Profiles and KV-Exact Readiness<a class="headerlink" href="#model-profiles-and-kv-exact-readiness" title="Permanent link">&para;</a></h1>
+<p>Use a published model profile to bind a KV-exact rule to one verified tokenizer/template
+identity, then verify what the data plane actually enforces. A successful rule <code>POST</code> or a
+matching <code>GET</code> response is not the final readiness signal.</p>
+<div class="admonition info">
+<p class="admonition-title">Current-main contract</p>
+<p>Model-profile discovery, <code>kvModelProfile</code>, <code>kvExactApiMode</code>, and <code>kvexactstatus</code> are
+implemented on Gateway <code>main</code> at the contract snapshot used by this site. They are absent
+from Gateway <code>v0.9.8.9-rc.1</code>. Check the installed Gateway identity before using these
+routes; CLI <code>v0.9.8.9-rc.2</code> does not make an older Gateway implement them.</p>
+</div>
+<h2 id="what-each-surface-answers">What each surface answers<a class="headerlink" href="#what-each-surface-answers" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Question it answers</th>
+<th>Authority boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /config/ai/model-profiles</code></td>
+<td>Which operator-published profiles are discoverable now?</td>
+<td>Read-only cache of the current registry generation; rule admission revalidates at <code>POST</code> time.</td>
+</tr>
+<tr>
+<td><code>GET /config/ai/model-profiles/{profile_id}</code></td>
+<td>What exact tokenizer, template, aliases, and API surfaces does one profile declare?</td>
+<td>Same schema as a list entry; artifact paths are deliberately not exposed.</td>
+</tr>
+<tr>
+<td><code>kvModelProfile</code></td>
+<td>Which one published profile should this rule bind?</td>
+<td>REST-only create/replace field; scalar and normally immutable.</td>
+</tr>
+<tr>
+<td><code>kvExactApiMode</code></td>
+<td>Which request surfaces should exact hashing serve: <code>completions</code>, <code>chat</code>, or <code>both</code>?</td>
+<td>REST-only create/replace field; scalar and immutable.</td>
+</tr>
+<tr>
+<td><code>GET .../kvexactstatus</code></td>
+<td>Which composed profile/engine binding is desired and actually enforced?</td>
+<td>Dedicated read model; never replay it as load-balancer configuration.</td>
+</tr>
+</tbody>
+</table>
+<p><code>setDigest</code> identifies the whole published profile set. <code>bindingDigest</code> identifies one rule's
+composed model-profile and engine-contract binding. They identify different objects and must not
+be compared with each other.</p>
+<h2 id="discover-a-profile-before-creating-the-rule">Discover a profile before creating the rule<a class="headerlink" href="#discover-a-profile-before-creating-the-rule" title="Permanent link">&para;</a></h2>
+<p>Prepare a protected management header file once:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
+</code></pre></div>
+<p>List the published generation and retain the identity used for the decision:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/model-profiles"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>&gt;<span class="w"> </span>model-profiles.json
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>jq<span class="w"> </span><span class="s1">'{registryGeneration, setDigest, profiles: [.profiles[] | {</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">  profileId, gen, baseModel, aliasPolicy, allowedAliases,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">  supportedApis, tokenizerSha256, templateSha256</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">}]}'</span><span class="w"> </span>model-profiles.json
+</code></pre></div>
+<p><code>registryGeneration: 0</code> with an empty <code>profiles</code> array means that no registry is published. It is
+a valid legacy-mode discovery response, not readiness for a strict rule. A detail lookup returns
+<code>404</code> when the profile is absent from the currently published generation:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/model-profiles/example-profile"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</code></pre></div>
+<p>Choose a profile only when:</p>
 <ul>
-<li><strong>Model-name routing</strong> — per-model backend pools with wildcard fallback.</li>
-<li><strong>Engine-aware routing</strong> for vLLM, SGLang, TensorRT-LLM, and llama.cpp, with validation that
-  rejects unsupported engine/feature combinations.</li>
-<li><strong>KV-cache-aware routing</strong> for vLLM, SGLang, and TensorRT-LLM through engine-specific event
-  contracts; llama.cpp uses CHWBL or session affinity without KV events.</li>
-<li><strong>Engine-specific prefill/decode disaggregation</strong> for vLLM, SGLang, and TensorRT-LLM.</li>
-<li><strong>Consistent-hash cache routing</strong> (CHWBL) and GPU-aware selection.</li>
-<li><strong>OpenAI-compatible SSE streaming</strong> with token accounting.</li>
-<li><strong>MCP gateway</strong> with session-sticky routing.</li>
-<li><strong>API-key authentication, model authorization, request-rate limits, and tenant/model token
-  quotas</strong> enforced on the inference path.</li>
-<li><strong>Frontend client-certificate verification</strong> for qualified FullProxy paths;
-  backend identity verification remains an implementation gap.</li>
-<li>Versioned Gateway configuration snapshots with dry-run/commit restore,
-  automatic rollback, atomic persistence, and boot replay.</li>
-<li>HTTP/L4 tracing and OTLP export in the trace-enabled Ubuntu 24.04 build
-  profile.</li>
-<li>A <strong>Prometheus + Grafana</strong> monitoring stack and the <strong><code>loxilb-mcp</code></strong> management surface.</li>
-<li>AI-aware <strong><code>loxicmd</code></strong> commands for load-balancer rules, keys, limits, metrics, GPU state,
-  OPA, SNI, and KV inventory.</li>
+<li><code>baseModel</code> or <code>allowedAliases</code> admits the rule's exact <code>model_name</code>;</li>
+<li><code>supportedApis</code> contains every surface the rule will declare;</li>
+<li>a chat profile exposes a verified template identity; and</li>
+<li>the engine tuple is appropriate for the topology in the
+  <a href="../../concepts/engine-capability-matrix/">Engine Capability Matrix</a>.</li>
 </ul>
-<h2 id="current-focus">Current focus<a class="headerlink" href="#current-focus" title="Permanent link">&para;</a></h2>
+<h2 id="create-a-strict-kv-exact-rule-with-rest">Create a strict KV-exact rule with REST<a class="headerlink" href="#create-a-strict-kv-exact-rule-with-rest" title="Permanent link">&para;</a></h2>
+<p>The example is a single-pool vLLM shape. Replace <code>example-profile</code> with an ID returned by
+discovery and make the block/hash settings match the deployed engine. For vLLM, first require
+<code>kv_exact_vllm.ready=true</code> from <code>GET /status/capabilities</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--data-binary<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s1">    "serviceArguments": {</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s1">      "externalIP": "192.0.2.10",</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s1">      "port": 8080,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s1">      "protocol": "tcp",</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s1">      "mode": 4,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s1">      "sel": 0,</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s1">      "model_name": "Qwen/Qwen3-0.6B",</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s1">      "kvExactMode": 3,</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="s1">      "kvEngineType": "vllm",</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="s1">      "kvBlockSize": 16,</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="s1">      "kvHashAlgo": "sha256_cbor",</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="s1">      "kvModelProfile": "example-profile",</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="s1">      "kvExactApiMode": "both"</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="s1">    },</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="s1">    "endpoints": [</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="s1">      {"endpointIP": "198.51.100.11", "targetPort": 8000, "weight": 1},</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="s1">      {"endpointIP": "198.51.100.12", "targetPort": 8000, "weight": 1}</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="s1">    ]</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="s1">  }'</span>
+</code></pre></div>
+<p><code>kvModelProfile</code> and <code>kvExactApiMode</code> have no corresponding <code>loxicmd create lb</code> flags in the
+current CLI. Model-profile discovery and resolved status also have no dedicated CLI commands.
+Use REST for this strict workflow; do not invent flags or infer strict readiness from
+<code>loxicmd get kvinventory</code>.</p>
+<h2 id="verify-the-binding-and-enforcement">Verify the binding and enforcement<a class="headerlink" href="#verify-the-binding-and-enforcement" title="Permanent link">&para;</a></h2>
+<p>First verify the stored declaration, then query the dedicated status resource:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer/all"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[] | select(.serviceArguments.port == 8080) |</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s1">    .serviceArguments | {</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s1">      model_name, kvExactMode, kvEngineType, kvModelProfile, kvExactApiMode</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s1">    }'</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer/externalipaddress/192.0.2.10/port/8080/protocol/tcp/kvexactstatus?model_name=Qwen%2FQwen3-0.6B"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span>&gt;<span class="w"> </span>kv-status.json
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>jq<span class="w"> </span><span class="s1">'.kvExactStatusAttr[] | {</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s1">  ruleIdentity, modelName, engineFamily, apiMode,</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s1">  modelProfileId, modelProfileGen,</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="s1">  engineContractId, engineContractGen,</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="s1">  bindingGen, bindingDigest, requiredEvidenceLevel,</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="s1">  desiredState, enforcedState, reasonCodes,</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="s1">  enforcement</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="s1">}'</span><span class="w"> </span>kv-status.json
+</code></pre></div>
+<p>Treat these states conservatively:</p>
+<table>
+<thead>
+<tr>
+<th><code>enforcedState</code></th>
+<th>Operator interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>READY</code></td>
+<td>Strict binding is attested and enforced under the normal identity trust contract.</td>
+</tr>
+<tr>
+<td><code>READY_FUNCTIONAL_ONLY</code></td>
+<td>Functionally attested under an explicit limited-trust opt-in; do not report it as <code>READY</code>.</td>
+</tr>
+<tr>
+<td><code>PROFILE_VALIDATED</code>, <code>PENDING_DATAPLANE_CONTRACT</code>, <code>TOKEN_PARITY_VERIFIED</code>, <code>ENGINE_HASH_ATTESTED</code></td>
+<td>A ladder step or transition, not final readiness.</td>
+</tr>
+<tr>
+<td><code>DEGRADING</code>, <code>DEGRADED</code>, <code>ENFORCEMENT_FAULT</code>, <code>REQUIRES_MIGRATION</code></td>
+<td>Exact routing is fenced or requires operator action. Inspect <code>reasonCodes</code>, <code>enforcement.enforced</code>, and <code>enforcement.goFenced</code>.</td>
+</tr>
+<tr>
+<td><code>LEGACY_ACTIVE_UNATTESTED</code></td>
+<td>Profile-less legacy operation. Active does not mean strict or attested.</td>
+</tr>
+<tr>
+<td>Unknown value</td>
+<td>Render it unchanged and treat it as not ready/in transition. The vocabulary is open.</td>
+</tr>
+</tbody>
+</table>
+<p>For a strict rule, require the selected <code>profileId</code>/generation to equal
+<code>modelProfileId</code>/<code>modelProfileGen</code>, retain <code>bindingDigest</code> as the binding identity proof, require
+the intended <code>apiMode</code>, and check <code>enforcement.goFenced</code> independently. Inventory and hit metrics
+are still needed to prove event ingestion and traffic engagement.</p>
+<h2 id="rejections-are-no-mutation-results">Rejections are no-mutation results<a class="headerlink" href="#rejections-are-no-mutation-results" title="Permanent link">&para;</a></h2>
+<p>The Gateway rejects unsupported declarations before rule state changes. Important examples are:</p>
+<table>
+<thead>
+<tr>
+<th>Rejected declaration</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kvExactApiMode</code> or <code>kvModelProfile</code> without <code>kvExactMode: 1</code> or <code>3</code></td>
+<td>The fields are meaningless without an exact-routing tier.</td>
+</tr>
+<tr>
+<td><code>kvExactMode: 1</code> without P/D, or <code>kvExactMode: 3</code> with P/D</td>
+<td>The topology and exact mode disagree.</td>
+</tr>
+<tr>
+<td>API surface not contained in the profile, or chat without a validated renderer</td>
+<td>The Gateway refuses silent fallback to an untemplated or unsupported hash.</td>
+</tr>
+<tr>
+<td>Unknown profile, alias mismatch, artifact mismatch, or unavailable engine-contract registry</td>
+<td>Strict admission fails closed.</td>
+</tr>
+<tr>
+<td>Changing <code>kvExactApiMode</code>, dropping a profile, or changing one bound profile to another</td>
+<td>These identities are immutable; delete and recreate the rule.</td>
+</tr>
+</tbody>
+</table>
+<p>The one migration exception attaches a profile to an existing profile-less KV-exact rule. It
+must preserve the raw <code>kvExactApiMode</code> declaration exactly. A refused attach leaves the rule and
+data plane unchanged. After every rejected create or replace, independently read the rule and
+<code>kvexactstatus</code>; HTTP status alone is not the no-mutation oracle.</p>
+<h2 id="evidence-boundary">Evidence boundary<a class="headerlink" href="#evidence-boundary" title="Permanent link">&para;</a></h2>
+<p>The documentation contract freezes both Swagger files, the support catalog, unit-test schemas,
+and the committed engine scenarios. That proves current static contracts and reproducible
+scenario definitions. It does not rerun Linux, GPU, HA, or production qualification. Exact
+real-engine support remains limited to the immutable tuples marked <code>validated</code> in the
+<a href="../../concepts/engine-capability-matrix/">Engine Capability Matrix</a>.</p>
+<h2 id="cleanup">Cleanup<a class="headerlink" href="#cleanup" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/8080/protocol/tcp?model_name=Qwen%2FQwen3-0.6B"</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers<span class="w"> </span>./model-profiles.json<span class="w"> </span>./kv-status.json
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN<span class="w"> </span>CONTROL_API
+</code></pre></div>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Broader scenario coverage across supported engine versions and deployment topologies.</li>
-<li>Safer multi-node promotion, state reconciliation, and upgrade evidence. See
-  <a href="../../operations/ha-limitations/">HA and Upgrade Limitations</a> for the current boundaries.</li>
-<li>Additional dashboards and alerts for authorization, token quotas, engine event health, and QoS.</li>
-<li>Release packaging and representative validation for build-tag-dependent AI
-  safety and DPU capabilities.</li>
+<li><a href="../kv-caching/">KV-Cache-Aware Routing</a></li>
+<li><a href="../../concepts/engine-capability-matrix/">Engine Capability Matrix</a></li>
+<li><a href="../../operations/troubleshooting/">Troubleshooting</a></li>
+<li><a href="../../operations/readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a></li>
 </ul>
-<h2 id="maturing-experimental">Maturing / experimental<a class="headerlink" href="#maturing-experimental" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Adaptive routing controller</strong> (<code>loxilb-ai-controller</code>) — TTFT-aware, capacity-weighted prefill
-  selection for heterogeneous fleets. Experimental and off by default.</li>
-<li><strong>Tiered caching with LMCache</strong> — a CPU (and optional remote) KV tier beneath the GPU cache.
-  Advanced; gate before production rollout.</li>
-<li><strong>OPA L4 policy watcher</strong> — desired-state firewall synchronization is
-  implemented, but authenticated internal rule apply, meaningful fail-mode
-  behavior, atomic document validation, cache permissions, and complete SSRF
-  controls remain release gates.</li>
-<li><strong>Presidio PII scanning</strong> — optional source build, currently request-direction
-  only; standard release images use the stub implementation.</li>
-<li><strong>Llama Firewall</strong> — source integration and API contract exist, but standard
-  release images use a stub and no supported release packaging path is defined.</li>
-<li><strong>NVIDIA DOCA DPU offload</strong> — optional hardware/source build that requires
-  target-specific SDK, driver, firmware, correctness, fallback, and performance
-  qualification.</li>
-</ul>
-<h2 id="longer-term">Longer term<a class="headerlink" href="#longer-term" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Broader serving-engine coverage and more turnkey deployment recipes.</li>
-<li>Expanded dashboards and alerting for inference-specific SLOs.</li>
-</ul>
-<p>Have a use case or a feature request? Open an issue in the
-<a href="https://github.com/loxilb-io/loxilb-inference-gateway/issues">code repository</a> or say hello on
-<a href="https://www.loxilb.io/members">Slack</a>.</p>
 
 
 

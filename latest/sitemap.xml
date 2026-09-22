@@ -37,6 +37,10 @@
          <lastmod>2026-09-22</lastmod>
     </url>
     <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/model-profiles-kv-readiness/</loc>
+         <lastmod>2026-09-22</lastmod>
+    </url>
+    <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/overview/</loc>
          <lastmod>2026-09-22</lastmod>
     </url>
@@ -162,6 +166,10 @@
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/readiness-diagnostics-maintenance/</loc>
+         <lastmod>2026-09-22</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/sockmap-acceleration/</loc>
          <lastmod>2026-09-22</lastmod>
     </url>
     <url>

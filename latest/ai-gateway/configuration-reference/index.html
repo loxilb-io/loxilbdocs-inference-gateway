@@ -803,6 +803,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Profiles & KV Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../pd-disaggregation/" class="md-nav__link">
         
   
@@ -2192,6 +2220,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/sockmap-acceleration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sockmap Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/tracing/" class="md-nav__link">
         
   
@@ -3242,6 +3298,13 @@ apply to every rule, AI or not.</p>
 <td>Emit PROXY protocol v2 to backends.</td>
 </tr>
 <tr>
+<td><code>sockMapMode</code></td>
+<td>string</td>
+<td><code>off</code></td>
+<td><code>off</code>, <code>request</code>, <code>response</code>, <code>both</code></td>
+<td>Experimental directional sockmap relay acceleration. Non-<code>off</code> requires plaintext IPv4 TCP fullproxy, daemon <code>--sockmapsupport</code>, and no <code>sse_mode</code>, P/D, <code>api_key_auth</code> declaration, or attached L7 policy. HTTP/2/h2c is never accelerated. See <a href="../../operations/sockmap-acceleration/">Sockmap Acceleration</a>.</td>
+</tr>
+<tr>
 <td><code>oper</code></td>
 <td>int32</td>
 <td><code>0</code></td>
@@ -3549,6 +3612,20 @@ overlap silently drops to zero. See <a href="../kv-caching/">KV-Cache Routing</a
 <td>SGLang data-parallel rank count. Rank N publishes at <code>kvZmqPort+N</code>; all ranks union into one per-endpoint inventory. Values above 1 are rejected for TensorRT-LLM and llama.cpp.</td>
 </tr>
 <tr>
+<td><code>kvExactApiMode</code></td>
+<td>string</td>
+<td>profile surfaces or legacy <code>both</code> when omitted</td>
+<td><code>completions</code>, <code>chat</code>, <code>both</code></td>
+<td>REST-only scalar declaration. Requires <code>kvExactMode: 1</code> or <code>3</code>; immutable after create. With a bound profile, an explicit value must be a subset of <code>supportedApis</code>.</td>
+</tr>
+<tr>
+<td><code>kvModelProfile</code></td>
+<td>string</td>
+<td>profile-less legacy mode when omitted</td>
+<td>one published profile ID</td>
+<td>REST-only scalar binding. Requires <code>kvExactMode: 1</code> or <code>3</code>; strict admission validates aliases and artifacts. Normally immutable; the sole exception is attaching a profile to a profile-less KV-exact rule.</td>
+</tr>
+<tr>
 <td><code>pdBootstrapPort</code></td>
 <td>int32</td>
 <td><code>0</code></td>
@@ -3557,6 +3634,13 @@ overlap silently drops to zero. See <a href="../kv-caching/">KV-Cache Routing</a
 </tr>
 </tbody>
 </table>
+<div class="admonition info">
+<p class="admonition-title">Strict profile configuration is REST-only</p>
+<p>Current <code>loxicmd create lb</code> has no flags for <code>kvExactApiMode</code> or <code>kvModelProfile</code>. Discover
+published profiles through REST, create the strict rule through REST, then verify the
+dedicated <code>kvexactstatus</code> read model. See
+<a href="../model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a>.</p>
+</div>
 <h3 id="engine-and-field-coherence">Engine and field coherence<a class="headerlink" href="#engine-and-field-coherence" title="Permanent link">&para;</a></h3>
 <table>
 <thead>

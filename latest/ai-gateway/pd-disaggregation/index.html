@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/pd-disaggregation/">
       
       
-        <link rel="prev" href="../kv-caching/">
+        <link rel="prev" href="../model-profiles-kv-readiness/">
       
       
         <link rel="next" href="../vllm-integration/">
@@ -800,6 +800,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Profiles & KV Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -925,6 +953,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Minimal validation workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle-outcome-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle outcome contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2081,6 +2126,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/sockmap-acceleration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sockmap Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/tracing/" class="md-nav__link">
         
   
@@ -2765,6 +2838,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Minimal validation workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle-outcome-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle outcome contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2873,6 +2963,13 @@
 <li>at least one <code>ep_role: 2</code> endpoint</li>
 <li>one coherent <code>kvEngineType</code> for the entire rule</li>
 </ul>
+<div class="admonition warning">
+<p class="admonition-title">HTTP/1.1 engine path</p>
+<p>Current HTTP/2 tests qualify specific admission, authentication, accounting, multiplexing,
+and connection-lifecycle legs. The HTTP/2 forwarding path does not integrate P/D,
+model-aware pools, or KV-exact selection. Use the HTTP/1.1 fullproxy path for the P/D
+contracts on this page; do not generalize a passing HTTP/2 auth test into engine parity.</p>
+</div>
 <h2 id="the-request-flow-depends-on-the-engine">The request flow depends on the engine<a class="headerlink" href="#the-request-flow-depends-on-the-engine" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -3008,13 +3105,79 @@
 </ol>
 <p>Useful Gateway metric families include:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>loxilb_ai_pd_requests_total
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>loxilb_pd_kv_tier15_hits_total
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>loxilb_pd_kv_blocks
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>loxilb_kv_subscriber_connected
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>loxilb_pd_sg_room_retry_total
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>loxilb_pd_trt_ctx_early_exit_total
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>loxilb_ai_pd_prefill_duration_seconds
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>loxilb_ai_pd_decode_ttft_seconds
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>loxilb_ai_pd_kv_params_found_total
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>loxilb_ai_pd_kv_params_missing_total
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>loxilb_ai_pd_session_hits_total
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>loxilb_ai_pd_tier_selected_total
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>loxilb_pd_kv_tier15_hits_total
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>loxilb_pd_kv_blocks
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>loxilb_kv_subscriber_connected
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>loxilb_pd_admission_shed_total
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>loxilb_pd_admission_queued_total
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>loxilb_pd_admission_overflow_shed_total
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>loxilb_pd_sg_room_retry_total
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>loxilb_pd_trt_ctx_early_exit_total
 </code></pre></div>
 <p>Metric availability depends on the configured engine and optional routing layers.</p>
+<h3 id="lifecycle-outcome-contract">Lifecycle outcome contract<a class="headerlink" href="#lifecycle-outcome-contract" title="Permanent link">&para;</a></h3>
+<p><code>loxilb_ai_pd_requests_total{model,phase,status}</code> records one terminal P/D lifecycle outcome. The
+current closed mappings are:</p>
+<table>
+<thead>
+<tr>
+<th><code>phase</code></th>
+<th><code>status</code></th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>complete</code></td>
+<td><code>success</code></td>
+<td>Both required stages completed successfully.</td>
+</tr>
+<tr>
+<td><code>prefill</code></td>
+<td><code>timeout</code></td>
+<td>The prefill-side lifecycle ran out of time.</td>
+</tr>
+<tr>
+<td><code>prefill</code></td>
+<td><code>error</code></td>
+<td>The prefill endpoint or transport failed.</td>
+</tr>
+<tr>
+<td><code>prefill</code></td>
+<td><code>rejected</code></td>
+<td>The prefill origin rejected the request and that response was relayed.</td>
+</tr>
+<tr>
+<td><code>decode</code></td>
+<td><code>timeout</code></td>
+<td>Prefill completed, but decode produced no byte before its deadline.</td>
+</tr>
+<tr>
+<td><code>decode</code></td>
+<td><code>error</code></td>
+<td>Prefill completed, but the decode endpoint or transport failed.</td>
+</tr>
+<tr>
+<td><code>unknown</code></td>
+<td><code>error</code></td>
+<td>Defensive fallback for an unrecognized internal outcome; investigate as contract drift.</td>
+</tr>
+</tbody>
+</table>
+<p><code>loxilb_ai_pd_kv_params_missing_total</code> is not a generic failure counter. It advances only after
+the Gateway actually inspected a completed prefill response and found no <code>kv_transfer_params</code>.
+Prefill timeout, death, or rejection does not count as "missing" because nothing was inspected.</p>
+<p><code>loxilb_ai_pd_tier_selected_total{tier,model}</code> increments once per successful prefill selection
+with <code>tier0</code>, <code>tier1</code>, <code>tier15</code>, or <code>tier2</code>. Requests refused or parked by bounded admission do not
+select a tier and therefore do not increment it. Diagnose admission with the separate
+<code>shed</code>, <code>queued</code>, and <code>overflow_shed</code> families; a <code>429 pd_overloaded</code> must also have backend
+receipt delta <code>0</code>.</p>
 <h2 id="failure-diagnosis">Failure diagnosis<a class="headerlink" href="#failure-diagnosis" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -3050,6 +3213,10 @@
 </tr>
 </tbody>
 </table>
+<p>Client-visible status and metric phase answer different questions. A <code>504</code> timeout should map to
+the leg that actually timed out; an endpoint death commonly returns <code>503</code>; a prefill-origin 4xx is
+relayed and recorded as <code>prefill/rejected</code>. Correlate the client receipt, backend delivery, the
+typed <code>phase/status</code> counter, and engine logs instead of classifying by HTTP status alone.</p>
 <h3 id="circuit-breaker-behavior">Circuit-breaker behavior<a class="headerlink" href="#circuit-breaker-behavior" title="Permanent link">&para;</a></h3>
 <p>P/D rule creation enables a per-endpoint breaker with a three-connect-failure threshold and a
 30-second open window in the current implementation. An enabled breaker also tracks

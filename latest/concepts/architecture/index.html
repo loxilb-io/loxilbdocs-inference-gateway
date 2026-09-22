@@ -905,6 +905,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Profiles & KV Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/pd-disaggregation/" class="md-nav__link">
         
   
@@ -2009,6 +2037,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/sockmap-acceleration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sockmap Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/tracing/" class="md-nav__link">
         
   
@@ -2755,6 +2811,10 @@ mandatory Kubernetes control plane — L4 through inference-aware L7 lives in on
   inspection limits, runs admission and endpoint selection, and manages the backend
   connection. Engine-specific P/D orchestration also runs in this serving path.</li>
 </ul>
+<p>Sockmap acceleration can replace only the steady-state byte relay of an eligible plaintext
+HTTP/1.1 service. It cannot coexist with <code>sse_mode</code>, P/D, any <code>api_key_auth</code> declaration, or an
+attached L7 policy because those features require userspace on every request. HTTP/2 and h2c are
+never accelerated. See <a href="../../operations/sockmap-acceleration/">Sockmap Acceleration</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Why AI routing needs the userspace proxy</p>
 <p>L4 eBPF forwarding never sees HTTP — it makes its decision from the packet's 5-tuple before

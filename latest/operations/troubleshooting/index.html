@@ -801,6 +801,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Profiles & KV Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/pd-disaggregation/" class="md-nav__link">
         
   
@@ -1907,6 +1935,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../sockmap-acceleration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sockmap Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../tracing/" class="md-nav__link">
         
   
@@ -2219,10 +2275,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#verify-it-fired-the-essential-recipe" class="md-nav__link">
+  <a href="#verify-profile-binding-then-verify-engagement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify it fired (the essential recipe)
+        Verify profile binding, then verify engagement
       
     </span>
   </a>
@@ -2846,10 +2902,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#verify-it-fired-the-essential-recipe" class="md-nav__link">
+  <a href="#verify-profile-binding-then-verify-engagement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify it fired (the essential recipe)
+        Verify profile binding, then verify engagement
       
     </span>
   </a>
@@ -3057,8 +3113,16 @@ succeed — always run the "verify it fired" step.</strong> Each section below i
 <td><a href="#kv-cache-routing-silently-not-firing">KV-cache routing silently not firing</a></td>
 </tr>
 <tr>
+<td>KV-exact rule exists but profile/attestation readiness is unknown or rejected</td>
+<td><a href="../../ai-gateway/model-profiles-kv-readiness/#verify-the-binding-and-enforcement">Model-profile and KV-exact readiness</a></td>
+</tr>
+<tr>
 <td>Prefill/decode handoff empty, <code>504 pd_prefill_timeout</code>, wedged mesh</td>
 <td><a href="#pd-handoff-fails">P/D handoff fails</a></td>
+</tr>
+<tr>
+<td>Sockmap is rejected, bypassed, or configured but not accelerating</td>
+<td><a href="../sockmap-acceleration/#verify-engagement">Sockmap Acceleration</a></td>
 </tr>
 <tr>
 <td>API-key request unexpectedly succeeds or fails with 401/403/429</td>
@@ -3247,6 +3311,11 @@ no error to grep for; you must assert engagement from metrics.</p>
 <td><strong>Missing tokenizer directory</strong> for the model.</td>
 <td>Populate <code>/etc/loxilb/tokenizers/&lt;model-id&gt;</code> (replace <code>/</code> with <code>__</code> in the model id) and restart loxilb so it loads at startup.</td>
 </tr>
+<tr>
+<td>Strict rule exists but <code>enforcedState</code> is pending, degraded, faulted, or migration-required</td>
+<td>The profile/engine binding is not fully acknowledged, attestation is incomplete/stale, or the rule is fenced</td>
+<td>Query <code>kvexactstatus</code>; compare <code>modelProfileId</code>/generation, <code>apiMode</code>, <code>bindingDigest</code>, <code>reasonCodes</code>, <code>enforcement.enforced</code>, and <code>enforcement.goFenced</code>. Do not infer readiness from rule read-back or inventory.</td>
+</tr>
 </tbody>
 </table>
 <div class="admonition danger">
@@ -3256,7 +3325,12 @@ framework per VIP. To switch engines, delete and recreate the rule. Engine-speci
 rejects incoherent shapes where possible; a mismatched event/hash contract can otherwise fall
 through silently to the topology fallback.</p>
 </div>
-<h3 id="verify-it-fired-the-essential-recipe">Verify it fired (the essential recipe)<a class="headerlink" href="#verify-it-fired-the-essential-recipe" title="Permanent link">&para;</a></h3>
+<h3 id="verify-profile-binding-then-verify-engagement">Verify profile binding, then verify engagement<a class="headerlink" href="#verify-profile-binding-then-verify-engagement" title="Permanent link">&para;</a></h3>
+<p>For a rule with <code>kvModelProfile</code>, query the composite-key <code>kvexactstatus</code> resource first. Require
+the expected profile/generation and API surface, then require <code>READY</code> for the normal trust
+contract. <code>READY_FUNCTIONAL_ONLY</code> is a distinct limited-trust state; unknown states are not ready.
+See <a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a>.</p>
+<p>After binding status is acceptable, verify that traffic engages the cache path:</p>
 <p>Do not trust KV-cache results until all four checks pass. Run against <code>GET /netlox/v1/metrics</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>M<span class="o">()</span><span class="w"> </span><span class="o">{</span><span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/metrics<span class="p">;</span><span class="w"> </span><span class="o">}</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
@@ -3864,6 +3938,8 @@ can unregister a plugin or force the circuit breaker. See
 <li><a href="../dpu-offload/">DPU Offload Observability</a> — optional hardware diagnostics</li>
 <li><a href="../ha-limitations/">HA and Upgrade Limitations</a> — promotion and rolling-upgrade boundaries</li>
 <li><a href="../monitoring/">Monitoring &amp; Metrics</a> — enabling export and the metric catalog</li>
+<li><a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a> — strict binding and typed status diagnosis</li>
+<li><a href="../sockmap-acceleration/">Sockmap Acceleration</a> — eligibility refusals, HTTP/2 fallback, reset, and kernel integrity boundary</li>
 </ul>
 
 

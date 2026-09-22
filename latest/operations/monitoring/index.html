@@ -801,6 +801,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Profiles & KV Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/pd-disaggregation/" class="md-nav__link">
         
   
@@ -1887,6 +1915,34 @@
     
   
     Appliance CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sockmap-acceleration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sockmap Acceleration
   
 
     
@@ -3321,6 +3377,46 @@ refresh. A frozen series after detach is not the expected representation.</p>
 <td>llama.cpp <code>/props</code> findings such as model/build/slot mismatch, sleeping, or unanswered</td>
 </tr>
 <tr>
+<td><code>loxilb_ai_pd_requests_total{model,phase,status}</code></td>
+<td>One terminal P/D outcome: complete/success; prefill timeout/error/rejected; decode timeout/error; or defensive unknown/error</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_pd_prefill_duration_seconds{model}</code></td>
+<td>Observed prefill phase duration when known</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_pd_decode_ttft_seconds{model}</code></td>
+<td>Decode time to first token/byte when known</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_pd_kv_params_found_total{model}</code></td>
+<td>A completed prefill response carried <code>kv_transfer_params</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_pd_kv_params_missing_total{model}</code></td>
+<td>A prefill response was actually inspected but lacked <code>kv_transfer_params</code>; prefill failures do not increment it</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_pd_session_hits_total{model}</code></td>
+<td>Tier-0 P/D session-stickiness selections</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_pd_tier_selected_total{tier,model}</code></td>
+<td>Successful terminal prefill selections by <code>tier0</code>, <code>tier1</code>, <code>tier15</code>, or <code>tier2</code>; pre-routing admission outcomes increment nothing</td>
+</tr>
+<tr>
+<td><code>loxilb_pd_admission_shed_total</code></td>
+<td>Every eligible prefill endpoint was at its in-flight cap and queueing was disabled; request refused</td>
+</tr>
+<tr>
+<td><code>loxilb_pd_admission_queued_total</code></td>
+<td>Request parked in a per-endpoint FIFO because the pool was capped and queueing was enabled</td>
+</tr>
+<tr>
+<td><code>loxilb_pd_admission_overflow_shed_total</code></td>
+<td>Pool and eligible per-endpoint FIFOs were full; overflow request refused</td>
+</tr>
+<tr>
 <td><code>loxilb_pd_sg_prefill_abort_decode_total</code></td>
 <td>SGLang prefill failure aborted the decode leg</td>
 </tr>
@@ -3372,6 +3468,10 @@ counter also does not prove that origin HTTP <code>5xx</code> responses were hid
 correlate circuit transitions and endpoint-death counters with
 <code>loxilb_proxy_http_responses_by_status_total</code>, endpoint health, logs, and the
 client-visible result.</p>
+<p>For <code>loxilb_ai_pd_requests_total</code>, alert on the typed <code>phase</code> and <code>status</code> pair rather than an
+HTTP-code guess. Reconcile <code>tier_selected</code> only against successfully selected P/D requests;
+parked and refused admission events belong to the three admission families and intentionally do
+not choose a routing tier.</p>
 <h2 id="relay-cache-and-backpressure-metrics">Relay cache and backpressure metrics<a class="headerlink" href="#relay-cache-and-backpressure-metrics" title="Permanent link">&para;</a></h2>
 <p>The fullproxy relay cache is bounded per connection but not by one aggregate
 process-wide cap. Slow backends and many concurrent request bodies can therefore

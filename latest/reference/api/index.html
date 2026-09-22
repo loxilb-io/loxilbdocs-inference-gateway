@@ -801,6 +801,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Profiles & KV Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/pd-disaggregation/" class="md-nav__link">
         
   
@@ -1885,6 +1913,34 @@
     
   
     Appliance CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sockmap-acceleration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sockmap Acceleration
   
 
     
@@ -3304,6 +3360,16 @@ the Swagger document.</p>
 <td>Data-plane credentials and the quota ladder; independent from management authentication</td>
 </tr>
 <tr>
+<td>Engine and KV discovery</td>
+<td><code>GET /config/ai/model-profiles[/{profile_id}]</code>; <code>GET .../kvexactstatus</code></td>
+<td>Read-only published profile discovery and dedicated desired/enforced KV binding status; current main, REST-only</td>
+</tr>
+<tr>
+<td>Sockmap control</td>
+<td><code>POST .../sockmapreset</code></td>
+<td>Close this service's currently accelerated connections without changing <code>sockMapMode</code>; current main, REST-only</td>
+</tr>
+<tr>
 <td>OPA watcher</td>
 <td><code>GET/POST/DELETE /config/opa/watcher</code></td>
 <td>Runtime is intercepted by the raw handler; use the companion contract</td>
@@ -3514,6 +3580,16 @@ release-blocked.</p>
 <td>Read lifecycle state or service counters</td>
 </tr>
 <tr>
+<td><code>GET</code></td>
+<td>Same VIP key plus <code>/kvexactstatus</code></td>
+<td>Read strict/legacy KV binding identity, desired/enforced state, reason codes, and fence position; it is not configuration replay data</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td>Same VIP key plus <code>/sockmapreset</code></td>
+<td>Close currently accelerated connections only; configuration stays unchanged</td>
+</tr>
+<tr>
 <td><code>DELETE</code></td>
 <td>Name, host-keyed, or port-range variants</td>
 <td>Repeat every path, host, and model component used at creation</td>
@@ -3543,6 +3619,10 @@ wildcard deletion.</p>
 </code></pre></div>
 <p>See <a href="../../ai-gateway/configuration-reference/">Configuration Reference</a> for
 the full field contract.</p>
+<p>Current <code>kvModelProfile</code> and <code>kvExactApiMode</code> are REST-only load-balancer fields. Discover the
+profile with <code>GET /config/ai/model-profiles</code>, create or replace the rule, then verify the separate
+<code>kvexactstatus</code> response. See
+<a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a>.</p>
 <h2 id="management-users-and-status-codes">Management users and status codes<a class="headerlink" href="#management-users-and-status-codes" title="Permanent link">&para;</a></h2>
 <p>The current authorization model uses exact <code>admin</code> and <code>viewer</code> roles. Admins
 may read and mutate. Viewers may call <code>GET</code> and may log out, but other mutations
@@ -3722,6 +3802,8 @@ fields before applying configuration, especially across mixed versions.</p>
 <li><a href="../../ai-gateway/configuration-reference/">Configuration Reference</a></li>
 <li><a href="../../ai-gateway/api-key-management/">API Key Management</a></li>
 <li><a href="../../operations/log-api/">Log API Operations</a></li>
+<li><a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a></li>
+<li><a href="../../operations/sockmap-acceleration/">Sockmap Acceleration</a></li>
 </ul>
 
 

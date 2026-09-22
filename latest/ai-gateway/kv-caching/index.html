@@ -16,7 +16,7 @@
         <link rel="prev" href="../llm-routing/">
       
       
-        <link rel="next" href="../pd-disaggregation/">
+        <link rel="next" href="../model-profiles-kv-readiness/">
       
       
         
@@ -1104,6 +1104,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Profiles & KV Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -2220,6 +2248,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/sockmap-acceleration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sockmap Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/tracing/" class="md-nav__link">
         
   
@@ -3226,6 +3282,20 @@ the API schema — defaults and ranges are authoritative).</p>
 <td>SGLang data-parallel rank count. Rank <em>N</em> publishes at <code>kvZmqPort + N</code>; all ranks union into one endpoint inventory. Keep <code>1</code> for other engines.</td>
 </tr>
 <tr>
+<td><code>kvExactApiMode</code></td>
+<td>string</td>
+<td>profile surfaces or legacy <code>both</code> when omitted</td>
+<td><code>completions</code>, <code>chat</code>, <code>both</code></td>
+<td>REST-only strict API-surface declaration. Requires KV-exact and is immutable.</td>
+</tr>
+<tr>
+<td><code>kvModelProfile</code></td>
+<td>string</td>
+<td>profile-less legacy mode when omitted</td>
+<td>published profile ID</td>
+<td>REST-only strict tokenizer/template binding. Requires KV-exact; discover it before create and verify <code>kvexactstatus</code> afterward.</td>
+</tr>
+<tr>
 <td><code>LLB_KV_MIN_MATCH_TOKENS</code></td>
 <td>environment</td>
 <td><code>16</code></td>
@@ -3461,24 +3531,40 @@ and <code>kvDpRankCount</code> equal to the SGLang <code>--dp-size</code>.</p>
 <code>5561</code>, <code>5562</code>, and <code>5563</code> on each endpoint and unions them into one inventory
 per endpoint.</p>
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
-<p>First confirm the rule is live and carries the KV fields you set:</p>
+<p>For a strict rule, first discover the profile and retain its registry generation and artifact
+digests. After create, <code>GET .../kvexactstatus</code> is the mandatory readiness check; a successful
+<code>POST</code>, load-balancer read-back, or nonempty inventory does not prove that the composed binding is
+enforced. See <a href="../model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a>.</p>
+<p>Confirm the rule is live and carries the KV fields you set:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
 </code></pre></div>
 <p>Look for <code>kvExactMode</code>, <code>kvBlockSize</code>, <code>kvHashAlgo</code> (vLLM) or <code>kvEngineType</code> /
-<code>kvDpRankCount</code> (SGLang) on the rule.</p>
+<code>kvDpRankCount</code> (SGLang) on the rule. On a strict rule, also require the intended
+<code>kvModelProfile</code> and <code>kvExactApiMode</code>.</p>
+<p>Query the dedicated status read model for a strict rule:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">"http://10.10.10.254:11111/netlox/v1/config/loadbalancer/externalipaddress/10.10.10.254/port/8080/protocol/tcp/kvexactstatus"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.kvExactStatusAttr[] | {</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="s1">    modelName, modelProfileId, modelProfileGen, apiMode,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s1">    bindingDigest, desiredState, enforcedState, reasonCodes,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="s1">    enforcement</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s1">  }'</span>
+</code></pre></div>
+<p>Require <code>READY</code> for normal strict qualification. Keep <code>READY_FUNCTIONAL_ONLY</code> distinct, and treat
+unknown states as not ready/in transition. A legacy rule reports
+<code>LEGACY_ACTIVE_UNATTESTED</code>; it is active but not strict or attested.</p>
 <p>Then inspect the live per-endpoint block inventory with the raw-middleware
 endpoint:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">"http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=0&amp;ep_idx=0"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">"http://10.10.10.254:11111/netlox/v1/config/ai/kv/inventory?service_id=0&amp;ep_idx=0"</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">"service_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">"ep_idx"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">"hash_algo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sha256_cbor"</span><span class="p">,</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nt">"blocks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="p">{</span><span class="nt">"block_idx"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"hash_uint64"</span><span class="p">:</span><span class="w"> </span><span class="mi">1234567890123456789</span><span class="p">}</span>
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">  </span><span class="p">],</span>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">  </span><span class="nt">"total"</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">"service_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">"ep_idx"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">"hash_algo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sha256_cbor"</span><span class="p">,</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">"blocks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="p">{</span><span class="nt">"block_idx"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"hash_uint64"</span><span class="p">:</span><span class="w"> </span><span class="mi">1234567890123456789</span><span class="p">}</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">  </span><span class="nt">"total"</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="p">}</span>
 </code></pre></div>
 <ul>
 <li><code>service_id</code> — numeric service identifier (uint32); <code>ep_idx</code> — the endpoint
@@ -3694,6 +3780,7 @@ to confirm the triad and the version/platform matrix are still intact.</p>
 <li><a href="../../use-cases/kv-cache-aware-routing/">KV-Cache-Aware Routing (use-case)</a> — flagship deep dive: architecture and the vLLM hash contract in full.</li>
 <li><a href="../../use-cases/sglang-routing/">SGLang Routing</a> — SGLang architecture, launch flags, and the single-role contract.</li>
 <li><a href="../tensorrt-llm-integration/">TensorRT-LLM Integration</a> — destructive HTTP event ownership and context/generation P/D.</li>
+<li><a href="../model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a> — strict profile discovery and enforcement status.</li>
 <li><a href="../llamacpp-integration/">llama.cpp Integration</a> — the plain-pool alternative for an engine without a supported KV event plane.</li>
 <li><a href="../llm-routing/">LLM Routing</a> — the full routing-tier cascade.</li>
 <li><a href="../pd-disaggregation/">P/D Disaggregation</a> — combine KV routing with prefill/decode separation.</li>

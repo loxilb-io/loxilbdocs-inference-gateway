@@ -664,10 +664,49 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#capability-summary" class="md-nav__link">
+  <a href="#exact-support-catalog-tuples" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Capability summary
+        Exact support-catalog tuples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exact support-catalog tuples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#validated-immutable-identities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validated immutable identities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evidence-gates-recorded-by-the-catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evidence gates recorded by the catalog
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implemented-rule-shape-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implemented rule-shape summary
       
     </span>
   </a>
@@ -708,6 +747,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#scenario-evidence-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario evidence map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#common-rule-requirements" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -723,6 +773,17 @@
     <span class="md-ellipsis">
       
         Failure demotion contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#http2-evidence-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP/2 evidence boundary
       
     </span>
   </a>
@@ -918,6 +979,34 @@
     
   
     KV-Cache Routing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-gateway/model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Profiles & KV Readiness
   
 
     
@@ -2042,6 +2131,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/sockmap-acceleration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sockmap Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/tracing/" class="md-nav__link">
         
   
@@ -2663,10 +2780,49 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#capability-summary" class="md-nav__link">
+  <a href="#exact-support-catalog-tuples" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Capability summary
+        Exact support-catalog tuples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exact support-catalog tuples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#validated-immutable-identities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validated immutable identities
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evidence-gates-recorded-by-the-catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evidence gates recorded by the catalog
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implemented-rule-shape-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implemented rule-shape summary
       
     </span>
   </a>
@@ -2707,6 +2863,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#scenario-evidence-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scenario evidence map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#common-rule-requirements" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2722,6 +2889,17 @@
     <span class="md-ellipsis">
       
         Failure demotion contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#http2-evidence-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP/2 evidence boundary
       
     </span>
   </a>
@@ -2768,8 +2946,160 @@
 
 
 <h1 id="engine-capability-matrix">Engine Capability Matrix<a class="headerlink" href="#engine-capability-matrix" title="Permanent link">&para;</a></h1>
-<p>Use this matrix to identify supported Gateway rule shapes before writing configuration. A supported engine name does not mean every routing capability applies to that engine.</p>
-<h2 id="capability-summary">Capability summary<a class="headerlink" href="#capability-summary" title="Permanent link">&para;</a></h2>
+<p>Use this matrix to separate three questions before writing configuration:</p>
+<ol>
+<li>Does the schema accept this engine and rule shape?</li>
+<li>Does the support catalog name this exact engine identity as a candidate or validated tuple?</li>
+<li>Has the intended topology been verified on the deployed Linux/GPU environment?</li>
+</ol>
+<p>An accepted engine name does not answer the other two questions.</p>
+<h2 id="exact-support-catalog-tuples">Exact support-catalog tuples<a class="headerlink" href="#exact-support-catalog-tuples" title="Permanent link">&para;</a></h2>
+<p>The tables below are generated from <code>engine-contracts/support-catalog.yaml</code> at Gateway commit
+<a href="https://github.com/loxilb-io/loxilb-inference-gateway/commit/144118b532333b7ca4bfc4a82cb162878db5213e"><code>144118b532333b7ca4bfc4a82cb162878db5213e</code></a>.
+The catalog is embedded into the Gateway binary at build time; it is not an unsigned runtime
+file. A newer catalog therefore requires a newer Gateway build or release.</p>
+<table>
+<thead>
+<tr>
+<th>Engine tuple</th>
+<th>Gateway release recorded by catalog</th>
+<th>Profile</th>
+<th>Promotion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vLLM <code>v0.23.0</code></td>
+<td><code>v0.9.8.9-rc.1</code></td>
+<td><code>vllm-kv-array-v1</code></td>
+<td><code>candidate</code></td>
+</tr>
+<tr>
+<td>vLLM <code>v0.28.0</code></td>
+<td><code>v0.9.8.9-rc.1</code></td>
+<td><code>vllm-kv-map-v2</code></td>
+<td><code>validated</code></td>
+</tr>
+<tr>
+<td>SGLang <code>v0.5.18</code></td>
+<td><code>v0.9.8.9-rc.1</code></td>
+<td><code>sglang-kv-rank-v1</code></td>
+<td><code>validated</code></td>
+</tr>
+<tr>
+<td>TensorRT-LLM <code>v1.2.1</code></td>
+<td><code>v0.9.8.9-rc.1</code></td>
+<td><code>trtllm-kv-http-v1</code></td>
+<td><code>candidate</code></td>
+</tr>
+<tr>
+<td>TensorRT-LLM <code>1.3.0rc24</code></td>
+<td><code>v0.9.8.9-rc.1</code></td>
+<td><code>trtllm-kv-http-preview-v1</code></td>
+<td><code>validated</code></td>
+</tr>
+<tr>
+<td>llama.cpp <code>v0.3.0</code></td>
+<td><code>v0.9.8.9-rc.1</code></td>
+<td><code>llamacpp-nokv-v1</code></td>
+<td><code>candidate</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>candidate</code> is not a synonym for supported or runtime-qualified. The candidate entries above do
+not carry a complete immutable engine identity and have at least one required evidence gate marked
+<code>not_run</code> or <code>n_a</code>.</p>
+<h3 id="validated-immutable-identities">Validated immutable identities<a class="headerlink" href="#validated-immutable-identities" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Engine</th>
+<th>Upstream revision</th>
+<th>Exact image identity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vLLM <code>v0.28.0</code></td>
+<td><code>2cf0a6915ce544dc493a0990f2ea38d81601128a</code></td>
+<td><code>sha256:61fc8a896b0a4fbbbdc063bc4b0dbc25ce98e02b5050c24aeb7830ac02039b14</code></td>
+</tr>
+<tr>
+<td>SGLang <code>v0.5.18</code></td>
+<td><code>71de97b264b04dcd514cf904003028aefe9775c8</code></td>
+<td><code>sha256:9e148f5ac788e856a06166bd6347a831831eb9fcfab4d1770874823a7c29a1a1</code></td>
+</tr>
+<tr>
+<td>TensorRT-LLM <code>1.3.0rc24</code></td>
+<td><code>1cef02e901be43081b1ba6d4981e94ed3bd9c1e8</code></td>
+<td><code>sha256:a867619fd56c85225927dac27e2111ae90ff66e23c59d9c5f8b9f345577cab6d</code></td>
+</tr>
+</tbody>
+</table>
+<p>These identities are indivisible tuples. A matching version string with a different revision,
+platform digest, model profile, Gateway build, or topology is a new qualification target.</p>
+<h3 id="evidence-gates-recorded-by-the-catalog">Evidence gates recorded by the catalog<a class="headerlink" href="#evidence-gates-recorded-by-the-catalog" title="Permanent link">&para;</a></h3>
+<p><code>S/F/Y/R</code> below means source, fixture, synthetic scenario, and real-engine evidence.</p>
+<table>
+<thead>
+<tr>
+<th>Tuple</th>
+<th>KV events <code>S/F/Y/R</code></th>
+<th>Prefix routing <code>S/F/Y/R</code></th>
+<th>P/D routing <code>S/F/Y/R</code></th>
+<th>Runtime probe <code>S/F/Y/R</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vLLM <code>v0.28.0</code></td>
+<td><code>pass/pass/pass/pass</code></td>
+<td><code>pass/pass/pass/pass</code></td>
+<td><code>pass/pass/not_run/pass</code></td>
+<td><code>pass/pass/pass/pass</code></td>
+</tr>
+<tr>
+<td>SGLang <code>v0.5.18</code></td>
+<td><code>pass/pass/pass/pass</code></td>
+<td><code>pass/pass/pass/pass</code></td>
+<td><code>pass/pass/pass/pass</code></td>
+<td><code>pass/pass/pass/pass</code></td>
+</tr>
+<tr>
+<td>TensorRT-LLM <code>1.3.0rc24</code></td>
+<td><code>pass/pass/pass/pass</code></td>
+<td><code>pass/pass/not_run/pass</code></td>
+<td><code>pass/pass/pass/pass</code></td>
+<td><code>pass/pass/not_run/pass</code></td>
+</tr>
+<tr>
+<td>vLLM <code>v0.23.0</code> candidate</td>
+<td><code>pass/pass/pass/not_run</code></td>
+<td><code>pass/pass/pass/not_run</code></td>
+<td><code>pass/pass/pass/not_run</code></td>
+<td><code>pass/pass/not_run/not_run</code></td>
+</tr>
+<tr>
+<td>TensorRT-LLM <code>v1.2.1</code> candidate</td>
+<td><code>not_run/not_run/not_run/not_run</code></td>
+<td><code>not_run/not_run/not_run/not_run</code></td>
+<td><code>not_run/not_run/not_run/not_run</code></td>
+<td><code>not_run/not_run/not_run/not_run</code></td>
+</tr>
+<tr>
+<td>llama.cpp <code>v0.3.0</code> candidate</td>
+<td><code>n_a/n_a/n_a/n_a</code></td>
+<td><code>n_a/n_a/n_a/n_a</code></td>
+<td><code>n_a/n_a/n_a/n_a</code></td>
+<td><code>pass/pass/not_run/not_run</code></td>
+</tr>
+</tbody>
+</table>
+<p>An individual <code>pass</code> does not promote a tuple. Only the catalog's <code>promotion</code> field is the support
+status, and <code>not_run</code> is never treated as a pass.</p>
+<h2 id="implemented-rule-shape-summary">Implemented rule-shape summary<a class="headerlink" href="#implemented-rule-shape-summary" title="Permanent link">&para;</a></h2>
+<p>This table describes implemented/accepted shapes. It does not upgrade a candidate tuple to
+validated status.</p>
 <table>
 <thead>
 <tr>
@@ -2808,7 +3138,7 @@
 <td><code>kvExactMode: 3</code></td>
 <td>Sequential context/generation; <code>kvExactMode: 1</code> optionally adds KV-exact context selection</td>
 <td>Destructive HTTP drain on each endpoint's serving port</td>
-<td>The gateway must be the sole event consumer; <code>kvBlockSize</code> must match <code>tokens_per_block</code>.</td>
+<td>The Gateway must be the sole event consumer; <code>kvBlockSize</code> must match <code>tokens_per_block</code>.</td>
 </tr>
 <tr>
 <td>llama.cpp</td>
@@ -2838,7 +3168,8 @@
     style PDLADDER fill:#fff3e0,stroke:#f57c00</code></pre>
 <p><code>kvExactMode: 2</code> is reserved and is not an operational choice.</p>
 <h2 id="engine-and-hash-coherence">Engine and hash coherence<a class="headerlink" href="#engine-and-hash-coherence" title="Permanent link">&para;</a></h2>
-<p>Omit <code>kvHashAlgo</code> unless a tested deployment requires an explicit value. When omitted, the gateway selects the engine's coherent default.</p>
+<p>Omit <code>kvHashAlgo</code> unless a tested deployment requires an explicit value. When omitted, the
+Gateway selects the engine's coherent default.</p>
 <table>
 <thead>
 <tr>
@@ -2872,7 +3203,9 @@
 </table>
 <div class="admonition warning">
 <p class="admonition-title">A hash contract is all-or-nothing</p>
-<p>A mismatched tokenizer or block size can make every lookup miss while requests still succeed through a fallback selector. Verify inventory and hit metrics before claiming that KV-exact routing is active.</p>
+<p>A mismatched tokenizer or block size can make every lookup miss while requests still succeed
+through a fallback selector. Verify strict binding status, inventory, and hit metrics before
+claiming that KV-exact routing is active.</p>
 </div>
 <h2 id="pd-dialects">P/D dialects<a class="headerlink" href="#pd-dialects" title="Permanent link">&para;</a></h2>
 <table>
@@ -2911,6 +3244,58 @@
 </tr>
 </tbody>
 </table>
+<h2 id="scenario-evidence-map">Scenario evidence map<a class="headerlink" href="#scenario-evidence-map" title="Permanent link">&para;</a></h2>
+<p>The documentation contract freezes these committed scenario sources with the catalog and both
+Swagger files. The links are definitions and reproducible gates, not a claim that this docs build
+reran them.</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Evidence class</th>
+<th>What it can establish</th>
+<th>Boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/144118b532333b7ca4bfc4a82cb162878db5213e/cicd/kv-profile-admission"><code>kv-profile-admission</code></a></td>
+<td>Linux/mock contract scenario</td>
+<td>Strict profile admission, refusal, and status vocabulary</td>
+<td>Does not replace a real engine or GPU run</td>
+</tr>
+<tr>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/144118b532333b7ca4bfc4a82cb162878db5213e/cicd/kv-mixed-version"><code>kv-mixed-version</code></a></td>
+<td>Linux/mock compatibility scenario</td>
+<td>Mixed-version rejection/fencing behavior</td>
+<td>Not general HA qualification</td>
+</tr>
+<tr>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/144118b532333b7ca4bfc4a82cb162878db5213e/cicd/kv-sglang-attest"><code>kv-sglang-attest</code></a></td>
+<td>Linux/synthetic attestation</td>
+<td>SGLang identity, geometry, and attestation paths</td>
+<td>Not real SGLang performance or GPU proof</td>
+</tr>
+<tr>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/144118b532333b7ca4bfc4a82cb162878db5213e/cicd/vllm-kvcache-routing-cpu"><code>vllm-kvcache-routing-cpu</code></a></td>
+<td>Linux/CPU mock plus separate real-engine exit gate</td>
+<td>Hash parity, event ingest, exact selection, failure twins</td>
+<td>The in-tree mock alone cannot promote an upstream engine tuple</td>
+</tr>
+<tr>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/144118b532333b7ca4bfc4a82cb162878db5213e/cicd/vllm-pd-admission-cpu"><code>vllm-pd-admission-cpu</code></a></td>
+<td>Linux/CPU mock</td>
+<td>Bounded P/D admission, queue, overflow, and independent counter/log/client oracles</td>
+<td>No GPU or engine-transfer qualification</td>
+</tr>
+<tr>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/144118b532333b7ca4bfc4a82cb162878db5213e/cicd/sockmap-fullproxy"><code>sockmap-fullproxy</code></a></td>
+<td>Manual Linux scenario</td>
+<td>Eligibility refusals, HTTP/1.1 equivalence, h2c fallback, integrity and control probes</td>
+<td>Not wired into GitHub Actions; vendor-kernel safety must be qualified separately</td>
+</tr>
+</tbody>
+</table>
 <h2 id="common-rule-requirements">Common rule requirements<a class="headerlink" href="#common-rule-requirements" title="Permanent link">&para;</a></h2>
 <ul>
 <li>AI request inspection and P/D use fullproxy (<code>mode: 4</code>).</li>
@@ -2932,15 +3317,30 @@ three-failure, 30-second breaker in the current rule path. In addition to connec
 three consecutive origin 5xx responses open an enabled breaker by default. The 5xx response is
 still relayed to the current client; the open breaker changes later endpoint selection and is
 not an automatic retry. <code>LLB_PD_ORIGIN_ERR_THRESHOLD=0</code> disables origin-5xx demotion.</p>
+<h2 id="http2-evidence-boundary">HTTP/2 evidence boundary<a class="headerlink" href="#http2-evidence-boundary" title="Permanent link">&para;</a></h2>
+<p>Current HTTP/2 tests cover bounded admission/authentication cases, multiplexing, selected
+request/accounting lifecycles, h2c, and specific TLS/ALPN legs. They do <strong>not</strong> establish feature
+parity for model-aware selection, selector 10, P/D, KV-exact routing, SSE, or engine transport.
+Those engine features remain on the HTTP/1.1 fullproxy path unless an exact release adds and
+qualifies a different contract.</p>
+<p>Sockmap does not fill this gap. HTTP/2 and h2c connections are never accelerated, and AI rules
+that declare per-request rewrites are ineligible for sockmap. See
+<a href="../../operations/sockmap-acceleration/">Sockmap Acceleration</a>.</p>
 <h2 id="evidence-limits">Evidence limits<a class="headerlink" href="#evidence-limits" title="Permanent link">&para;</a></h2>
-<p>The matrix describes accepted configuration and implemented request paths. It does not promise a particular throughput, latency, cache-hit rate, engine-version compatibility, or high-availability result. Validate the chosen engine build and topology in a representative environment before production use.</p>
+<p>The exact tuple tables reproduce the embedded support catalog. The rule-shape and scenario tables
+describe static contracts and committed validation sources. This docs update does not rerun
+Linux, GPU, HA, or release qualification, and the catalog does not promise a particular
+throughput, latency, or cache-hit rate. Validate the chosen immutable tuple and topology in a
+representative environment before production use.</p>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../../getting-started/choose-your-engine/">Choose an Inference Engine</a></li>
+<li><a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a></li>
 <li><a href="../../ai-gateway/pd-disaggregation/">P/D Disaggregation</a></li>
 <li><a href="../../ai-gateway/sglang-pd-disaggregation/">SGLang P/D Disaggregation</a></li>
 <li><a href="../../ai-gateway/tensorrt-llm-integration/">TensorRT-LLM Integration</a></li>
 <li><a href="../../ai-gateway/llamacpp-integration/">llama.cpp Integration</a></li>
+<li><a href="../../operations/sockmap-acceleration/">Sockmap Acceleration</a></li>
 </ul>
 
 

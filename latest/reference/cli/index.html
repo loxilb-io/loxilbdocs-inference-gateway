@@ -801,6 +801,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Profiles & KV Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/pd-disaggregation/" class="md-nav__link">
         
   
@@ -1885,6 +1913,34 @@
     
   
     Appliance CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/sockmap-acceleration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sockmap Acceleration
   
 
     
@@ -3693,6 +3749,11 @@ and <a href="../../operations/appliance-cli/">Appliance CLI</a>.</p>
 <td>Sends an explicit hash algorithm. Prefer omission so the server derives the coherent engine default.</td>
 </tr>
 <tr>
+<td>Sockmap direction</td>
+<td><code>--sockmap-mode=off|request|response|both</code></td>
+<td>Sends <code>sockMapMode</code>; a non-<code>off</code> value still requires Gateway <code>--sockmapsupport</code>, an eligible plain HTTP/1.1 service, and a compatible Gateway main build.</td>
+</tr>
+<tr>
 <td>Model-keyed create/delete</td>
 <td><code>--model-name=&lt;model&gt;</code></td>
 <td>Repeats the model component of the L7 rule key.</td>
@@ -3710,6 +3771,10 @@ services and associate profiles through REST; do not substitute a fabricated
 CLI option. User-limit and global/rule-default QoS CRUD are also REST-only.</p>
 <p><code>pdBootstrapPort</code> does not currently have a <code>loxicmd create lb</code> flag. Configure that SGLang P/D
 field through the REST API. Do not substitute <code>--kv-zmq-port</code>; it configures a different transport.</p>
+<p><code>kvModelProfile</code> and <code>kvExactApiMode</code> also have no current CLI flags, and there are no dedicated
+CLI commands for model-profile discovery or <code>kvexactstatus</code>. Use the REST workflow in
+<a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a>. The
+<code>sockmapreset</code> action is REST-only even though rule creation supports <code>--sockmap-mode</code>.</p>
 <h3 id="delete-a-model-keyed-rule">Delete a model-keyed rule<a class="headerlink" href="#delete-a-model-keyed-rule" title="Permanent link">&para;</a></h3>
 <p>Repeat the complete L7 key used at creation. Omitting <code>--model-name</code> matches only a rule with an
 empty model name.</p>
@@ -3742,6 +3807,8 @@ then delete by name. This avoids deleting a similarly keyed service.</p>
 <li><a href="../../security/data-plane-jwt-auth/">Data-Plane Authentication and JWT</a> — five-state service policy and REST-only JWT profiles.</li>
 <li><a href="../../operations/ai-key-store/">AI Key Store Operations</a> — independent data-plane credential storage.</li>
 <li><a href="../../ai-gateway/kv-caching/">KV-Cache Routing</a> — what <code>ai_kv_inventory_get</code> inspects.</li>
+<li><a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a> — REST-only strict fields and resolved status.</li>
+<li><a href="../../operations/sockmap-acceleration/">Sockmap Acceleration</a> — daemon prerequisite, eligibility, and REST-only reset.</li>
 <li><a href="../../operations/monitoring/">Monitoring &amp; Metrics</a> — the metric families read by the observability tools.</li>
 <li><a href="../../operations/backup-restore/">Persistence, Backup, and Restore</a> — dry-run, commit, write-through, restart, and quarantine semantics.</li>
 <li><a href="../../operations/readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a> — typed recovery state, optional-capability preflight, and the configuration-write gate.</li>

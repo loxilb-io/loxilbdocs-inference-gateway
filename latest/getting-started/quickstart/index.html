@@ -988,6 +988,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Profiles & KV Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/pd-disaggregation/" class="md-nav__link">
         
   
@@ -2092,6 +2120,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../operations/sockmap-acceleration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sockmap Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../operations/tracing/" class="md-nav__link">
         
   
@@ -3125,6 +3181,13 @@ should see all three services, each with its <code>model_name</code> and single 
 <a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | {port, model_name, mode}'</span>
 </code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Before adding KV-exact routing</p>
+<p>Do not jump from a working model pool directly to a profile name copied from another
+deployment. Discover the running Gateway's published profiles, create the strict rule with
+REST, then require the intended <code>enforcedState</code> from <code>kvexactstatus</code>. Follow
+<a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a>.</p>
+</div>
 <h2 id="step-5-clean-up-safely">Step 5 — Clean up safely<a class="headerlink" href="#step-5-clean-up-safely" title="Permanent link">&para;</a></h2>
 <p>Each model name is part of its rule key. Delete a model-specific rule with the same host, path, path
 mode, and model used at creation. A delete without <code>model_name</code> matches only the wildcard rule.</p>
@@ -3213,6 +3276,8 @@ gateway because it removes unrelated services.</p>
   routing in depth, including multi-pool and wildcard strategies.</li>
 <li><a href="../../ai-gateway/llm-routing/">LLM Routing</a> — CHWBL prefix-cache affinity and
   GPU-aware selection.</li>
+<li><a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a> —
+  discover a strict profile and verify data-plane enforcement.</li>
 <li><a href="../../ai-gateway/configuration-reference/">Configuration Reference</a> — every
   <code>serviceArguments</code> field, default, and enum.</li>
 <li><a href="../../security/management-api-authentication/">Management API Authentication</a> — secure port
