@@ -22,6 +22,7 @@ on:
       - 'tests/test_validate_examples.py'
       - 'tools/compare_gateway_contracts.py'
       - 'tools/refresh_example_contracts.py'
+      - 'tools/render_metrics_reference.py'
       - 'tools/validate_examples.py'
       - 'tools/validate_gateway_docs.py'
   push:
@@ -34,6 +35,7 @@ on:
       - 'tests/test_validate_examples.py'
       - 'tools/compare_gateway_contracts.py'
       - 'tools/refresh_example_contracts.py'
+      - 'tools/render_metrics_reference.py'
       - 'tools/validate_examples.py'
       - 'tools/validate_gateway_docs.py'
 
@@ -58,7 +60,8 @@ jobs:
           repository: loxilb-io/loxilb-inference-gateway
           ref: ${{ github.event.client_payload.gateway_ref || github.event.inputs.gateway_ref || 'main' }}
           path: upstream-gateway
-          fetch-depth: 1
+          # The contract also freezes the immutable comparison release.
+          fetch-depth: 0
           persist-credentials: false
 
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
@@ -68,7 +71,7 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: Generate candidate contract from Swagger, catalog, and scenarios
+      - name: Generate candidate contract from Swagger, metrics, catalog, and scenarios
         id: candidate
         env:
           REQUESTED_GATEWAY_REF: ${{ github.event.client_payload.gateway_ref || github.event.inputs.gateway_ref || 'main' }}
@@ -98,7 +101,16 @@ jobs:
           python tools/validate_examples.py
           --contract-dir "$RUNNER_TEMP/gateway-contract"
 
-      - name: Compare tracked and candidate Swagger contracts
+      - name: Check generated metric reference against candidate manifest
+        id: metrics
+        continue-on-error: true
+        run: >-
+          python tools/render_metrics_reference.py
+          --contract "$RUNNER_TEMP/gateway-contract/gateway-api.json"
+          --output docs/reference/metrics.md
+          --check
+
+      - name: Compare tracked and candidate documentation contracts
         id: drift
         continue-on-error: true
         run: >-
@@ -111,11 +123,12 @@ jobs:
         if: always()
         env:
           EXAMPLE_OUTCOME: ${{ steps.examples.outcome }}
+          METRIC_OUTCOME: ${{ steps.metrics.outcome }}
           DRIFT_OUTCOME: ${{ steps.drift.outcome }}
         shell: bash
         run: |
-          if [[ "$EXAMPLE_OUTCOME" != success || "$DRIFT_OUTCOME" != success ]]; then
-            echo 'Gateway API usage validation or Swagger drift gate failed.' >&2
-            echo 'Review both Swagger files, update docs, then refresh the tracked contract.' >&2
+          if [[ "$EXAMPLE_OUTCOME" != success || "$METRIC_OUTCOME" != success || "$DRIFT_OUTCOME" != success ]]; then
+            echo 'Gateway docs validation, generated metric catalog, or contract drift gate failed.' >&2
+            echo 'Review Swagger, metrics, catalog, and evidence changes; update docs; then refresh the tracked contract.' >&2
             exit 1
           fi

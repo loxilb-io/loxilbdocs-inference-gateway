@@ -137,6 +137,8 @@ nav:
       - Troubleshooting: operations/troubleshooting.md
       - Logging & Audit: operations/audit-log.md
   - Reference:
+      - Metrics: reference/metrics.md
+      - Verification Status: reference/verification-status.md
       - API (swagger): reference/api.md
       - swagger-extras (raw): reference/swagger-extras.md
       - Configuration: reference/configuration.md

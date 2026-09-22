@@ -10,6 +10,7 @@ from pathlib import Path
 
 from compare_gateway_contracts import compare_contracts, load_contract, markdown_report
 from refresh_example_contracts import build_gateway_contract, write_json
+from render_metrics_reference import render as render_metrics_reference
 from validate_examples import ExampleValidator, print_report
 
 
@@ -50,7 +51,15 @@ def main() -> int:
         )
         print()
         print(markdown_report(comparison))
-        return 1 if validation.errors or comparison.changed else 0
+        rendered_metrics_match = (
+            (root / "docs/reference/metrics.md").read_text()
+            == render_metrics_reference(load_contract(candidate_path))
+        )
+        print(
+            "Generated metric reference: "
+            + ("up to date" if rendered_metrics_match else "STALE")
+        )
+        return 1 if validation.errors or comparison.changed or not rendered_metrics_match else 0
 
 
 if __name__ == "__main__":
