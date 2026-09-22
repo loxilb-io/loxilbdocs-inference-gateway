@@ -2882,7 +2882,7 @@ membership, recorded scenario assertions, and deployment qualification. A
 scenario checked into the repository—or referenced by a workflow—is not by
 itself evidence that its latest run passed.</p>
 <p>The frozen source for this page is Gateway commit
-<code>dbb2ff5bed48d21a108d6c53a62a3119cec9f780</code>. Git object IDs for every listed
+<code>142e731e7568d30bf468065addd8b4929065e381</code>. Git object IDs for every listed
 scenario, validation script, and workflow are retained in the docs contract
 fixture and checked for drift.</p>
 <p>The Gateway commit pins eBPF submodule commit
@@ -2959,35 +2959,35 @@ does not qualify either eBPF revision on a kernel or installed host.</p>
 <tbody>
 <tr>
 <td>JWT policy and token accounting</td>
-<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/dbb2ff5bed48d21a108d6c53a62a3119cec9f780/cicd/ai-jwtauth"><code>cicd/ai-jwtauth</code></a></td>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/142e731e7568d30bf468065addd8b4929065e381/cicd/ai-jwtauth"><code>cicd/ai-jwtauth</code></a></td>
 <td><code>wired</code>: <code>ai-gateway-sanity.yml</code> invokes the scenario</td>
 <td><code>G2</code>, <code>M4</code>, <code>U1</code>, <code>U2</code>, <code>UH1</code>, <code>UH2</code>, <code>UE</code>, <code>UE3</code></td>
 <td>Policy-store behavior and token-accounting assertions only; this set does not directly runtime-assert every JWT/JWKS metric</td>
 </tr>
 <tr>
 <td>QoS HA and quota-scope metrics</td>
-<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/dbb2ff5bed48d21a108d6c53a62a3119cec9f780/cicd/ai-qos-ha-sync"><code>cicd/ai-qos-ha-sync</code></a></td>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/142e731e7568d30bf468065addd8b4929065e381/cicd/ai-qos-ha-sync"><code>cicd/ai-qos-ha-sync</code></a></td>
 <td><code>not wired</code> to a frozen GitHub workflow</td>
 <td><code>SYNC-1</code>, <code>SYNC-2</code>, <code>QOS-METRIC-1</code>, <code>QOS-METRIC-2</code>, <code>QOS-HA-013</code>, <code>QOS-HA-014</code></td>
 <td>Scenario source exists; no current public workflow-run or two-node qualification claim</td>
 </tr>
 <tr>
 <td>P/D and worker scrape metrics</td>
-<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/dbb2ff5bed48d21a108d6c53a62a3119cec9f780/cicd/vllm-pd-disagg"><code>cicd/vllm-pd-disagg</code></a></td>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/142e731e7568d30bf468065addd8b4929065e381/cicd/vllm-pd-disagg"><code>cicd/vllm-pd-disagg</code></a></td>
 <td><code>wired</code>: <code>ai-gateway-sanity.yml</code> invokes the scenario</td>
 <td><code>TH1</code>, <code>TH2</code>, <code>TH3</code>, <code>TH4</code>, <code>TH5a</code>, <code>TM1b</code>, <code>TM2d</code>, <code>TN1</code>, <code>TN2b</code>, <code>TN3b</code>, <code>TN4b</code>, <code>TN5a</code>, <code>TN6b</code></td>
 <td>Source membership only; a current run and real GPU backend are separate evidence</td>
 </tr>
 <tr>
 <td>Sockmap observability</td>
-<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/dbb2ff5bed48d21a108d6c53a62a3119cec9f780/cicd/sockmap-fullproxy"><code>cicd/sockmap-fullproxy</code></a></td>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/142e731e7568d30bf468065addd8b4929065e381/cicd/sockmap-fullproxy"><code>cicd/sockmap-fullproxy</code></a></td>
 <td><code>not wired</code> to a frozen GitHub workflow</td>
 <td><code>O-1</code>, <code>O-2</code>, <code>O-3</code>, <code>O-5</code>, <code>O-6</code></td>
 <td>Uses status/counter/reset observations; the manifest has no dedicated sockmap Prometheus family</td>
 </tr>
 <tr>
 <td>Monitoring stack</td>
-<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/dbb2ff5bed48d21a108d6c53a62a3119cec9f780/cicd/monitoring"><code>cicd/monitoring</code></a></td>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/142e731e7568d30bf468065addd8b4929065e381/cicd/monitoring"><code>cicd/monitoring</code></a></td>
 <td><code>wired</code>: <code>monitoring-e2e.yml</code> and <code>monitoring-drill.yml</code> reference the scenario</td>
 <td>Scenario-level validation; no stable public case IDs</td>
 <td>Workflow membership is not a current run result</td>
