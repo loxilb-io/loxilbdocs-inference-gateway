@@ -144,6 +144,7 @@ nav:
       - Verification Status: reference/verification-status.md
       - Example Verification Inventory: reference/example-inventory.md
       - API (swagger): reference/api.md
+      - Current-main API Schema Models: reference/api-schema-models.md
       - swagger-extras (raw): reference/swagger-extras.md
       - Configuration: reference/configuration.md
       - CLI: reference/cli.md

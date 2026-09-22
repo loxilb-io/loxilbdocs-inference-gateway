@@ -15,6 +15,7 @@ import yaml
 
 
 DEFAULT_GATEWAY_REF = "HEAD"
+GATEWAY_PUBLIC_SCHEMA_BASELINE_REF = "47803fb660ed54cd1f180b616db628461ad85d1a"
 GATEWAY_RELEASE_TAG = "v0.9.8.9-rc.1"
 GATEWAY_RELEASE_TAG_OBJECT = "db28353e50f7031157187fdd2250d1098c97963a"
 GATEWAY_RELEASE_REF = "f08b18beda587217265c9ba6419159119914795c"
@@ -501,6 +502,33 @@ def build_gateway_contract(
     for source_path in GATEWAY_FILES:
         raw = git_show(gateway_repo, resolved_ref, source_path)
         specs.append(compact_swagger(raw, source_path))
+    schema_baseline_ref = resolve_ref(
+        gateway_repo, GATEWAY_PUBLIC_SCHEMA_BASELINE_REF
+    )
+    schema_baseline_specs = {
+        source_path: compact_swagger(
+            git_show(gateway_repo, schema_baseline_ref, source_path), source_path
+        )
+        for source_path in GATEWAY_FILES
+    }
+    schema_delta = []
+    for spec in specs:
+        source_path = spec["source_path"]
+        baseline_definitions = schema_baseline_specs[source_path]["definitions"]
+        candidate_definitions = spec["definitions"]
+        schema_delta.append(
+            {
+                "source_path": source_path,
+                "baseline_definition_count": len(baseline_definitions),
+                "candidate_definition_count": len(candidate_definitions),
+                "added_definitions": sorted(
+                    candidate_definitions.keys() - baseline_definitions.keys()
+                ),
+                "removed_definitions": sorted(
+                    baseline_definitions.keys() - candidate_definitions.keys()
+                ),
+            }
+        )
     catalog_raw = git_show(gateway_repo, resolved_ref, SUPPORT_CATALOG_FILE)
     metric_manifest_raw = git_show(gateway_repo, resolved_ref, METRIC_MANIFEST_FILE)
     release_commit = resolve_ref(gateway_repo, GATEWAY_RELEASE_REF)
@@ -515,6 +543,10 @@ def build_gateway_contract(
             "release_tag": GATEWAY_RELEASE_TAG,
             "release_tag_object": GATEWAY_RELEASE_TAG_OBJECT,
             "release_commit": release_commit,
+        },
+        "schema_relevance": {
+            "baseline_commit": schema_baseline_ref,
+            "specs": schema_delta,
         },
         "release_snapshot": {
             "tag": GATEWAY_RELEASE_TAG,

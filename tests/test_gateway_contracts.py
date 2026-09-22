@@ -20,6 +20,10 @@ def contract(*, commit: str = "a", description_hash: str = "same") -> dict:
     return {
         "contract_version": 1,
         "source": {"commit": commit, "ebpf_submodule_commit": "ebpf-main"},
+        "schema_relevance": {
+            "baseline_commit": "baseline",
+            "specs": [],
+        },
         "specs": [
             {
                 "source_path": "api/swagger.yml",
@@ -152,6 +156,18 @@ class GatewayContractComparisonTests(unittest.TestCase):
         comparison = MODULE.compare_contracts(contract(), candidate)
         self.assertTrue(comparison.changed)
         self.assertTrue(comparison.source_ebpf_changed)
+
+    def test_schema_relevance_change_is_contract_drift(self) -> None:
+        candidate = contract()
+        candidate["schema_relevance"]["specs"] = [
+            {
+                "source_path": "api/swagger.yml",
+                "added_definitions": ["NewPublicModel"],
+            }
+        ]
+        comparison = MODULE.compare_contracts(contract(), candidate)
+        self.assertTrue(comparison.changed)
+        self.assertTrue(comparison.schema_relevance_changed)
 
 
 if __name__ == "__main__":

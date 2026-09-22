@@ -27,6 +27,7 @@ Report a bug in the gateway itself in the **code** repository; report a document
    python tools/validate_examples.py
    python tools/refresh_example_inventory.py --check
    python tools/render_metrics_reference.py --check
+   python tools/render_schema_reference.py --check
    python -m unittest discover -s tests -p 'test_*.py' -v
    mkdocs build --strict
    ```
@@ -57,20 +58,23 @@ python tools/refresh_example_contracts.py \
   --gateway-repo ../loxilb-inference-gateway \
   --cli-repo ../loxicmd-inference-gateway
 python tools/refresh_example_inventory.py
+python tools/render_schema_reference.py --write
 python tools/refresh_example_inventory.py --check
 ```
 
 ### Validate a Gateway upgrade before refreshing the snapshot
 
 The `Gateway contract drift` workflow checks out a selected Gateway branch,
-tag, or commit and performs three independent gates:
+tag, or commit and performs four independent gates:
 
 1. regenerate the candidate contract from both Swagger files, the engine
    support catalog, the release-scope metric manifest, and selected public
    scenario/workflow evidence;
 2. validate documented routes, request bodies, and PromQL against that
    candidate contract;
-3. compare Swagger, catalog, metric-manifest, and scenario/claim evidence with
+3. require every Swagger definition added since the public schema baseline to
+   have an explicit relevance classification and generated field reference;
+4. compare Swagger, catalog, metric-manifest, and scenario/claim evidence with
    the tracked contract. Any drift fails until it is reviewed.
 
 Run the same gate locally with one command:
@@ -93,6 +97,7 @@ python tools/refresh_example_contracts.py \
 python tools/validate_examples.py
 python tools/refresh_example_inventory.py --check
 python tools/render_metrics_reference.py --check
+python tools/render_schema_reference.py --check
 python -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
