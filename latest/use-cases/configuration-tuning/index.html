@@ -1822,6 +1822,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -2171,7 +2199,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -3597,9 +3681,9 @@ TLS-protected management endpoint and keep authorization values out of command a
 <tbody>
 <tr>
 <td><code>LLB_KV_NONE_HASH_SEED</code></td>
-<td>unset (zero seed)</td>
-<td>≤23 bytes</td>
-<td><strong>Must equal vLLM's <code>PYTHONHASHSEED</code></strong> (parity triad leg)</td>
+<td>Required for vLLM KV-exact; otherwise unset</td>
+<td>1–23 bytes for vLLM KV-exact</td>
+<td><strong>Must equal vLLM's <code>PYTHONHASHSEED</code></strong>. Current Gateway main refuses vLLM <code>kvExactMode</code> rule creation with HTTP <code>412</code> when the value is unset, empty, or too long.</td>
 </tr>
 <tr>
 <td><code>LLB_KV_HASH_DEBUG</code></td>

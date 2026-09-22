@@ -1927,6 +1927,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -2276,7 +2304,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -3495,7 +3579,7 @@ vLLM prefill worker:</p>
 <ol>
 <li><strong>Block size.</strong> vLLM's <code>--block-size</code> must equal the rule's <code>kvBlockSize</code> (both <code>16</code> in the reference). CPU vLLM defaults to <code>128</code> and emits <strong>zero</strong> <code>BlockStored</code> events for prompts shorter than 128 tokens — run CPU vLLM with <code>--block-size 16</code>.</li>
 <li><strong>Hash algorithm.</strong> vLLM's <code>--prefix-caching-hash-algo</code> must equal the rule's <code>kvHashAlgo</code>, one of <code>sha256_cbor</code> or <code>xxhash_cbor</code>. vLLM's <em>own</em> default is a non-portable pickle-based <code>sha256</code> — you must explicitly select a <code>*_cbor</code> variant so both sides agree.</li>
-<li><strong>NONE_HASH seed.</strong> vLLM's <code>PYTHONHASHSEED</code> must equal LoxiLB's <code>LLB_KV_NONE_HASH_SEED</code>. This seeds the first block's parent (<code>NONE_HASH</code>); a mismatch corrupts <em>every</em> chained hash. Leaving both unset (an all-zero seed) is only correct if vLLM is also unseeded.</li>
+<li><strong>NONE_HASH seed.</strong> vLLM's <code>PYTHONHASHSEED</code> must equal LoxiLB's <code>LLB_KV_NONE_HASH_SEED</code>. This seeds the first block's parent (<code>NONE_HASH</code>); a mismatch corrupts <em>every</em> chained hash. Current Gateway main requires the Gateway value to be nonempty and at most 23 bytes for every vLLM KV-exact rule; an unset or empty value is refused before mutation with HTTP <code>412</code>.</li>
 </ol>
 <p>Two more mechanical requirements complete the contract:</p>
 <ul>
@@ -3552,7 +3636,11 @@ Always verify engagement with the metrics in §9 rather than assuming it worked.
 </tr>
 </tbody>
 </table>
-<p>The seeds must be <em>equal</em>, not necessarily zero — but <code>0</code> on both sides is the reproducible default and the value the rest of these docs assume.</p>
+<p>The seeds must be <em>equal</em>, nonempty, and the Gateway value must be at most 23 bytes. <code>0</code> on both
+sides is the reproducible value the rest of these docs assume.</p>
+<p>On current Gateway main, query <code>GET /netlox/v1/status/capabilities</code> before rule creation and
+require <code>kv_exact_vllm.ready=true</code>. This catches an unset or oversized Gateway seed before a
+request is submitted; it does not validate the engine-side seed or the other parity legs.</p>
 <h3 id="62-the-read-only-preflight-read-the-live-container-not-the-script">6.2 The read-only preflight — read the live container, not the script<a class="headerlink" href="#62-the-read-only-preflight-read-the-live-container-not-the-script" title="Permanent link">&para;</a></h3>
 <p>Never trust the deploy script; read what Docker actually launched. These commands mutate nothing:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># the engine's real launch command (flags exactly as passed)</span>
@@ -3568,7 +3656,12 @@ Always verify engagement with the metrics in §9 rather than assuming it worked.
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span>--format<span class="w"> </span><span class="s1">'{{range .Config.Env}}{{println .}}{{end}}'</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'LLB_KV_NONE_HASH_SEED|LOXILB_KV_LB_MODE|LLB_PD_PREFILL_TIMEOUT_SEC'</span>
 </code></pre></div>
-<p>If <code>PYTHONHASHSEED</code> and <code>LLB_KV_NONE_HASH_SEED</code> differ — or either is set while the other is unset — every seeded block hash is corrupt and overlap will read zero. Fix that before doing anything else. Select a reviewed, immutable tag or digest from the <code>ghcr.io/loxilb-io/loxilb-inference-gateway</code> image repository; do not derive production behavior from a moving tag.</p>
+<p>If <code>PYTHONHASHSEED</code> and <code>LLB_KV_NONE_HASH_SEED</code> differ, every seeded block hash is corrupt and
+overlap will read zero. Current Gateway main refuses an unset, empty, or longer-than-23-byte
+Gateway seed before rule mutation; an unset engine seed or a nonmatching nonempty value still
+breaks parity. Fix that before doing anything else. Select a reviewed, immutable tag or digest
+from the <code>ghcr.io/loxilb-io/loxilb-inference-gateway</code> image repository; do not derive production
+behavior from a moving tag.</p>
 <h3 id="63-tested-artifact-rule">6.3 Tested-artifact rule<a class="headerlink" href="#63-tested-artifact-rule" title="Permanent link">&para;</a></h3>
 <p>Do not infer support from an OS, kernel, driver, or engine version table in a guide. Record the
 exact immutable Gateway and engine image identities plus the host/kernel/GPU-driver tuple used
@@ -3816,7 +3909,7 @@ permission-restricted file.</p>
 <tbody>
 <tr>
 <td><code>LLB_KV_NONE_HASH_SEED</code></td>
-<td>NONE_HASH seed; <strong>must equal vLLM's <code>PYTHONHASHSEED</code></strong>. Unset ⇒ zero seed (correct only if vLLM is also unseeded).</td>
+<td>Required nonempty NONE_HASH seed for vLLM KV-exact; at most 23 bytes and <strong>must equal vLLM's <code>PYTHONHASHSEED</code></strong>. Current Gateway main refuses an unset, empty, or oversized value with HTTP <code>412</code>.</td>
 </tr>
 <tr>
 <td><code>LLB_KV_HASH_DEBUG=1</code></td>

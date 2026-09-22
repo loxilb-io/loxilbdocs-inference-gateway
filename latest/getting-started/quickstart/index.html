@@ -1638,6 +1638,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1987,7 +2015,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2804,10 +2888,13 @@ and prove an unauthenticated mutation returns <code>401</code>.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">This is a keyless routing lab</p>
-<p>These are plain <code>mode: 4</code> rules. They do not enter the current API-key/quota gate, even when an
-independent AI-key store is configured, and adding <code>X-Api-Key</code> does not turn that gate on.
-Protected inference requires a fullproxy rule with <code>sse_mode: true</code> or <code>pd_disagg_mode: true</code>.
-Complete <a href="../../ai-gateway/api-key-management/">API Key Management</a> before exposing such a VIP.</p>
+<p>These rules omit <code>api_key_auth</code>, so the Gateway declares no data-plane credential namespace.
+A backend-owned <code>X-Api-Key</code> therefore passes through unchanged. Adding a credential header does
+not turn authentication on. Use <code>api_key_auth: required</code>, <code>jwt</code>, or <code>apikey-or-jwt</code> on a
+fullproxy rule to require a credential; the declaration is independent of <code>sse_mode</code> and
+<code>pd_disagg_mode</code>. An explicit <code>disabled</code> remains keyless but strips <code>X-Api-Key</code>. Complete
+<a href="../../security/data-plane-jwt-auth/">Data-Plane Authentication and JWT</a> before exposing a
+protected VIP.</p>
 </div>
 <h2 id="what-you-will-build">What you will build<a class="headerlink" href="#what-you-will-build" title="Permanent link">&para;</a></h2>
 <p>A single VIP (<code>10.10.10.254</code>) fronting three model pools. Each pool is a
@@ -2844,7 +2931,7 @@ separate L7 rule on its own port, distinguished by <code>model_name</code>:</p>
 </table>
 <p>For <strong>routing</strong>, the gateway reads the model from the <code>X-Model</code> header or the
 <code>"model"</code> field of an OpenAI-compatible JSON body; when both are present, the
-header wins. On an API-key-gated SSE or P/D rule, model authorization has a
+header wins. On a credential-protected rule, model authorization has a
 different precedence: it uses the JSON body model first, then falls back to
 the path prefix or header. Keep these inputs consistent so routing and
 authorization cannot select different model names. A
@@ -2991,7 +3078,7 @@ body. This request hits the <code>mistral-7b</code> rule on port 2021:</p>
 <p class="admonition-title">Header overrides body for routing</p>
 <p>If both <code>X-Model</code> and a JSON <code>"model"</code> are present, the header wins routing. Sending
 <code>X-Model: llama-70b</code> with a body of <code>"model":"mistral-7b"</code> to port 2020
-routes to the <strong>llama</strong> pool. On a protected SSE or P/D rule, authorization checks the body
+routes to the <strong>llama</strong> pool. On a credential-protected rule, authorization checks the body
 model first; avoid conflicting values.</p>
 </div>
 <h3 id="wildcard-fallback">Wildcard fallback<a class="headerlink" href="#wildcard-fallback" title="Permanent link">&para;</a></h3>

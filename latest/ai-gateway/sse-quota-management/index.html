@@ -1599,6 +1599,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1948,7 +1976,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2711,11 +2795,12 @@ streams tokens. LoxiLB protects this long-lived path from normal idle reaping,
 requests usage accounting, and settles token-quota reservations when the
 response completes.</p>
 <div class="admonition danger">
-<p class="admonition-title">Quota enforcement requires the independent key store</p>
-<p>SSE relay behavior is part of fullproxy, but API-key and token-quota admission uses the
-PostgreSQL store configured by <code>--aikey-db-*</code>, not the management user service. With no
-<code>--aikey-db-host</code>, the current data path admits requests without key checks. Verify a
-missing-key request returns <code>401</code> before relying on quota enforcement.</p>
+<p class="admonition-title">SSE does not activate authentication</p>
+<p>SSE relay behavior is part of fullproxy. <code>api_key_auth</code> separately decides whether the
+request is keyless, API-key protected, JWT protected, or accepts either. A <code>required</code> rule
+uses the PostgreSQL store configured by <code>--aikey-db-*</code> and fails closed with <code>503</code> when the
+policy cannot be evaluated. Verify missing/unknown credential <code>401</code>, store failure <code>503</code>, and
+backend receipt delta <code>0</code> before relying on quota enforcement.</p>
 </div>
 <h2 id="stream-lifecycle">Stream lifecycle<a class="headerlink" href="#stream-lifecycle" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>sequenceDiagram

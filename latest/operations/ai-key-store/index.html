@@ -1451,6 +1451,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1948,7 +1976,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2708,9 +2792,10 @@
 <h1 id="ai-key-store-operations">AI Key Store Operations<a class="headerlink" href="#ai-key-store-operations" title="Permanent link">&para;</a></h1>
 <p>The AI Gateway stores data-plane API keys and tenant quotas in a dedicated
 PostgreSQL schema. This store is independent of the management user service:
-its availability controls key/quota CRUD and validation on eligible SSE or P/D
-fullproxy rules, not operator login. Plain <code>mode: 4</code> rules do not invoke the
-current key gate.</p>
+its availability controls key/quota CRUD and evaluation on fullproxy services
+that declare Gateway-owned authentication, not operator login. <code>api_key_auth</code>
+is independent of SSE and P/D. A rule that omits it preserves a backend-owned
+<code>X-Api-Key</code>; <code>disabled</code> strips that header; <code>required</code> validates it.</p>
 <div class="admonition warning">
 <p class="admonition-title">Development-source behavior</p>
 <p>The independent PostgreSQL store and peer invalidation described here are implemented in the
@@ -2736,7 +2821,9 @@ verifying that the schema already exists and the role has <code>USAGE</code> and
 <ul>
 <li><code>aigw.api_keys</code>;</li>
 <li><code>aigw.tenant_rate_limits</code>;</li>
-<li><code>aigw.tenant_model_rate_limits</code>.</li>
+<li><code>aigw.tenant_model_rate_limits</code>;</li>
+<li><code>aigw.user_rate_limits</code> and <code>aigw.user_model_rate_limits</code>;</li>
+<li><code>aigw.rate_limit_defaults</code>.</li>
 </ul>
 <p>Only a SHA-256 hash of each API key is stored. The opaque <code>key_id</code> is generated
 independently from the secret, so the identifier does not disclose key
@@ -2878,8 +2965,10 @@ There is no automatic data migration.</p>
 <div class="admonition danger">
 <p class="admonition-title">Do not upgrade with only <code>--userservice</code></p>
 <p>An upgraded Gateway with <code>--userservice</code> but no <code>--aikey-db-host</code> has management login but no
-AI-key store. Key/quota CRUD returns <code>503</code>, while the current inference compatibility path
-admits requests without a key. Treat this as an exposure-blocking configuration error.</p>
+AI-key store. Key/quota CRUD returns <code>503</code>; a service declaring <code>api_key_auth: required</code>
+also returns <code>503 policy_store_unavailable</code> before backend dispatch. A service that omitted
+the declaration remains keyless by contract. Treat either unintended state as an
+exposure-blocking configuration error.</p>
 </div>
 <p>Choose one migration strategy:</p>
 <ul>
@@ -2908,29 +2997,34 @@ new independently generated key IDs; reissue when that distinction matters.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>--aikey-db-host</code> unset</td>
+<td><code>--aikey-db-host</code> unset; <code>api_key_auth: required</code></td>
 <td><code>503 ai_key_store_unconfigured</code></td>
-<td><strong>Current code admits the request without checking a key</strong></td>
+<td><code>503 policy_store_unavailable</code>; backend receipt delta <code>0</code></td>
 </tr>
 <tr>
-<td>Store configured and healthy; SSE or P/D fullproxy rule</td>
+<td>Store configured and healthy; <code>required</code> fullproxy rule</td>
 <td>CRUD succeeds</td>
-<td>Cache hit or PostgreSQL lookup; invalid key <code>401</code>, disallowed model <code>403</code></td>
+<td>Cache hit or PostgreSQL lookup; unknown key <code>401</code>, disallowed model <code>403</code></td>
 </tr>
 <tr>
-<td>Store configured and healthy; plain <code>mode: 4</code> rule</td>
+<td>Store healthy; <code>api_key_auth</code> omitted</td>
 <td>CRUD succeeds</td>
-<td><strong>Current rule does not enter the key gate and remains keyless</strong></td>
+<td>Gateway does not validate or strip backend-owned <code>X-Api-Key</code></td>
 </tr>
 <tr>
-<td>Store configured but unavailable at startup</td>
+<td>Store healthy; <code>api_key_auth: disabled</code></td>
+<td>CRUD succeeds</td>
+<td>No validation; Gateway strips <code>X-Api-Key</code></td>
+</tr>
+<tr>
+<td>Store configured but unavailable before an answer is cached</td>
 <td><code>503 ai_key_store_unavailable</code></td>
-<td>An uncached credential is denied as <code>401 invalid_api_key</code>; a first boot normally has no warm cache</td>
+<td><code>503 policy_store_unavailable</code>; do not misclassify as an invalid key</td>
 </tr>
 <tr>
-<td>Store becomes unreachable after startup</td>
+<td>Store becomes unreachable after a confirmed answer was cached</td>
 <td>Store-backed CRUD fails; an unclassified driver error may surface as a generic service error</td>
-<td>Cached entries remain usable until expiry; misses fail closed</td>
+<td>Cached/last-known-good entries remain usable under their cache contract; unknown evaluation fails closed</td>
 </tr>
 <tr>
 <td>Store reconnects</td>
@@ -2940,15 +3034,17 @@ new independently generated key IDs; reissue when that distinction matters.</p>
 </tbody>
 </table>
 <div class="admonition danger">
-<p class="admonition-title">No-store is a fail-open compatibility path</p>
-<p>No-store and unavailable-store are deliberately different. A configured-but-unavailable store
-creates a degraded service and denies uncached credentials. An entirely unconfigured store
-leaves the current data path's compatibility branch active and admits keyless traffic. Treat a
-missing <code>--aikey-db-host</code> as a failed production deployment.</p>
+<p class="admonition-title">Declaration determines the no-store posture</p>
+<p>No store does not silently downgrade a <code>required</code> rule: it fails closed with <code>503</code>. An omitted
+or <code>disabled</code> rule intentionally has no API-key validation dependency. Verify the exact
+declaration by read-back instead of inferring it from store health, SSE, or P/D flags.</p>
 </div>
-<p>Per-key <code>tokens_per_min</code> is stored and round-tripped by this service but is not
-consumed by the current data-plane limiter. Use the tenant aggregate and
-tenant/model quota APIs for enforced TPM controls.</p>
+<p>Per-key <code>tokens_per_min</code> is actively consumed by the implementation and its
+unit/integration tests. The frozen primary Swagger text is stale and calls it
+stored-only metadata, while the companion PATCH description says it is
+enforced. Do not present this implemented behavior as a released support
+guarantee until the primary contract is corrected and qualified. The complete
+ladder is documented in <a href="../ai-qos/">AI Quotas and QoS</a>.</p>
 <p>The management handlers expose unconfigured and unavailable as separate <code>503</code>
 error codes because they require different operator actions. The inference
 path deliberately returns the same <code>401 invalid_api_key</code> for unknown,
@@ -2975,27 +3071,30 @@ best-effort fan-out as proof of instantaneous cluster-wide revocation.</p>
    invalid-body key creation. Authentication must run before body validation,
    returning <code>401</code>:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>--silent<span class="w"> </span>--output<span class="w"> </span>/dev/null<span class="w"> </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}\n'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span>https://gateway.example.com/netlox/v1/config/ai/apikey<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{}'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># docs-example: expect-schema-error</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>--silent<span class="w"> </span>--output<span class="w"> </span>/dev/null<span class="w"> </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}\n'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span>https://gateway.example.com/netlox/v1/config/ai/apikey<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{}'</span>
 </code></pre></div>
 <ol>
 <li>Authenticate as an administrator and list the test tenant. The response
    must be <code>200</code> and must not contain <code>raw_key</code> or <code>key_hash</code>.</li>
 <li>Create a narrowly scoped test key and move the returned secret immediately
    into a secret manager.</li>
-<li>Create or select a <code>mode: 4</code> test rule with <code>sse_mode: true</code> or
-   <code>pd_disagg_mode: true</code>; a plain fullproxy rule does not enter the current key
-   gate.</li>
-<li>On that gated rule, send an inference request without <code>X-Api-Key</code>; require
-   <code>401</code> and confirm the backend request counter does not change.</li>
+<li>Create or select a <code>mode: 4</code> test rule with <code>api_key_auth: required</code> and
+   read the declaration back exactly.</li>
+<li>On that rule, send an inference request without or with an unknown
+   <code>X-Api-Key</code>; require <code>401 invalid_api_key</code> and confirm the unique backend
+   receipt counter does not change.</li>
 <li>Disable the test key with <code>PATCH</code>; require subsequent use on the same gated
    rule to return <code>401</code>.</li>
 <li>In a multi-node lab, warm the key on that gated rule through every peer
    before disabling it, then verify every peer denies it. Record any
    TTL-bounded convergence separately.</li>
 <li>Delete the test key and remove all temporary header and response files.</li>
+<li>In a separate outage probe, make the policy unevaluable; require
+   <code>503 policy_store_unavailable</code> and another backend receipt delta of <code>0</code>.</li>
 </ol>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <table>
@@ -3049,6 +3148,7 @@ best-effort fan-out as proof of instantaneous cluster-wide revocation.</p>
 <li><a href="../../ai-gateway/api-key-management/">API Key Management</a></li>
 <li><a href="../../ai-gateway/ai-traffic-governance/">AI Traffic Governance</a></li>
 <li><a href="../../security/management-api-authentication/">Management API Authentication</a></li>
+<li><a href="../../security/data-plane-jwt-auth/">Data-Plane Authentication and JWT</a></li>
 <li><a href="../ha-limitations/">HA and Upgrade Limitations</a></li>
 </ul>
 

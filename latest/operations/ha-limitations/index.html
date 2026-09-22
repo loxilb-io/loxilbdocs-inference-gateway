@@ -1451,6 +1451,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1802,7 +1830,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2785,8 +2869,13 @@ not proof of two-node failover.</p>
 </tr>
 <tr>
 <td>External durable store</td>
-<td>AI API keys, tenant and per-model limits in the AI key PostgreSQL store; management identities in their configured store</td>
+<td>AI API keys; tenant, user, model, and defaults rows in the AI key PostgreSQL store; management identities in their configured store</td>
 <td>Back up independently, restrict access, and verify every node reaches the same intended source of truth</td>
+</tr>
+<tr>
+<td>JWT profile and key lifecycle</td>
+<td>Profile desired configuration plus node-local fetched JWKS snapshot and refresh timers</td>
+<td>Keep profiles identical; each node must fetch and prove its own usable keyset</td>
 </tr>
 <tr>
 <td>Replicated runtime</td>
@@ -2866,7 +2955,8 @@ approved procedure.</p>
 <p>Metric presence confirms that instrumentation is registered. It does not prove
 that the peer link is complete, private, or loss-free.</p>
 <h2 id="token-quota-mixed-version-boundary">Token-quota mixed-version boundary<a class="headerlink" href="#token-quota-mixed-version-boundary" title="Permanent link">&para;</a></h2>
-<p>Peers must run the same quota wire semantics. A rolling upgrade across the
+<p>Peers must run the same quota wire semantics for key, user, user-model,
+tenant, tenant-model, and shared-VIP buckets. A rolling upgrade across the
 quota-state format change is unsupported while token quotas are enabled. A
 newer peer can send a drain-time timestamp that an older peer interprets as a
 very large consumed-token count, causing erroneous <code>429</code> denials until the
@@ -2879,8 +2969,11 @@ wire compatibility.</p>
 <p>Prefer upgrading both peers together inside an approved maintenance window. If
 nodes must be upgraded one at a time:</p>
 <ol>
-<li>Inventory every tenant and per-model <code>tokens_per_min</code> value on both peers.</li>
-<li>Set aggregate and model token quotas to <code>0</code> before upgrading the first node.</li>
+<li>Inventory every key, user, user-model, tenant, tenant-model, defaults, and
+   shared-VIP token limit on both peers. Per-key TPM is implemented but its
+   primary Swagger contract remains stale; record it without presenting it as
+   release-qualified support.</li>
+<li>Disable every active token-quota scope before upgrading the first node.</li>
 <li>Confirm both peers read back quotas as disabled.</li>
 <li>Wait for old in-memory quota entries to age out. The normal default idle
    horizon is about ten minutes, but deployments can extend it; use the
@@ -2905,7 +2998,9 @@ incompatible entry. Wait for expiry and verify before proceeding.</p>
 <li>compare snapshot-covered rules/endpoints/policies on both nodes and verify the
   approved configuration checksum;</li>
 <li>verify the external AI key store is available and that each node reads the
-  same API-key and tenant-limit records without exporting credentials;</li>
+  same key, user, tenant, model, and defaults records without exporting credentials;</li>
+<li>verify every JWT profile reports a usable JWKS snapshot on each node; a
+  profile list alone is only desired configuration;</li>
 <li>confirm certificate validity and trust configuration without printing key
   material;</li>
 <li>verify the same Gateway version and immutable image identity;</li>
@@ -2933,6 +3028,7 @@ evidence:</p>
 <li>the Gateway snapshot contains or restores external API-key, tenant-quota, or
   management-user databases;</li>
 <li>peer synchronization is authenticated or confidential by the Gateway;</li>
+<li>a JWKS snapshot fetched on one node is replicated to another node;</li>
 <li>quota, QoS, KV, and session state survive promotion without gaps;</li>
 <li>mixed-version rolling upgrades are seamless with quotas enabled;</li>
 <li>active connections migrate transparently;</li>

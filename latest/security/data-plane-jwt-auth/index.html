@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/audit-log/">
+        <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/security/data-plane-jwt-auth/">
       
       
-        <link rel="prev" href="../troubleshooting/">
+        <link rel="prev" href="../management-api-authentication/">
       
       
-        <link rel="next" href="../../reference/api/">
+        <link rel="next" href="../ai-safety/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Logging & Audit - LoxiLB Inference Gateway</title>
+        <title>Data-Plane Authentication and JWT - LoxiLB Inference Gateway</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#logging-and-audit" class="md-skip">
+        <a href="#data-plane-authentication-and-jwt" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Logging & Audit
+              Data-Plane Authentication and JWT
             
           </span>
         </div>
@@ -1368,8 +1368,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -1380,11 +1382,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
           <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
@@ -1405,7 +1407,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1423,7 +1425,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../security/management-api-authentication/" class="md-nav__link">
+      <a href="../management-api-authentication/" class="md-nav__link">
         
   
   
@@ -1448,10 +1450,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1467,6 +1496,125 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#keep-the-authentication-planes-separate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keep the authentication planes separate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-five-api_key_auth-states" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The five api_key_auth states
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-jwt-profile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a JWT profile
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attach-the-profile-to-a-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attach the profile to a service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#claim-mapping-and-model-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Claim mapping and model authorization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jwks-lifecycle-and-http-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JWKS lifecycle and HTTP boundaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validate-without-creating-a-false-green" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validate without creating a false green
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clean-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clean up
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1479,7 +1627,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../security/ai-safety/" class="md-nav__link">
+      <a href="../ai-safety/" class="md-nav__link">
         
   
   
@@ -1507,7 +1655,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../security/opa-l4/" class="md-nav__link">
+      <a href="../opa-l4/" class="md-nav__link">
         
   
   
@@ -1535,7 +1683,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../security/mtls/" class="md-nav__link">
+      <a href="../mtls/" class="md-nav__link">
         
   
   
@@ -1738,8 +1886,6 @@
       
   
   
-    
-  
   
   
     
@@ -1752,11 +1898,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
         
           
           <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
@@ -1777,7 +1923,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1795,7 +1941,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ai-key-store/" class="md-nav__link">
+      <a href="../../operations/ai-key-store/" class="md-nav__link">
         
   
   
@@ -1823,7 +1969,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../backup-restore/" class="md-nav__link">
+      <a href="../../operations/backup-restore/" class="md-nav__link">
         
   
   
@@ -1851,7 +1997,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../readiness-diagnostics-maintenance/" class="md-nav__link">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
         
   
   
@@ -1879,7 +2025,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../appliance-cli/" class="md-nav__link">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
         
   
   
@@ -1907,7 +2053,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tracing/" class="md-nav__link">
+      <a href="../../operations/tracing/" class="md-nav__link">
         
   
   
@@ -1935,7 +2081,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dpu-offload/" class="md-nav__link">
+      <a href="../../operations/dpu-offload/" class="md-nav__link">
         
   
   
@@ -1963,7 +2109,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../monitoring/" class="md-nav__link">
+      <a href="../../operations/monitoring/" class="md-nav__link">
         
   
   
@@ -1991,7 +2137,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../observability-metrics-grafana/" class="md-nav__link">
+      <a href="../../operations/observability-metrics-grafana/" class="md-nav__link">
         
   
   
@@ -2019,7 +2165,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ai-qos/" class="md-nav__link">
+      <a href="../../operations/ai-qos/" class="md-nav__link">
         
   
   
@@ -2047,7 +2193,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../log-api/" class="md-nav__link">
+      <a href="../../operations/log-api/" class="md-nav__link">
         
   
   
@@ -2075,7 +2221,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../ha-limitations/" class="md-nav__link">
+      <a href="../../operations/ha-limitations/" class="md-nav__link">
         
   
   
@@ -2103,7 +2249,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../troubleshooting/" class="md-nav__link">
+      <a href="../../operations/troubleshooting/" class="md-nav__link">
         
   
   
@@ -2128,37 +2274,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Logging & Audit
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../operations/audit-log/" class="md-nav__link">
         
   
   
@@ -2174,137 +2293,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#structured-logging-configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Structured logging configuration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Structured logging configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#production-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Production example
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#development-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Development example
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#log-files-rotation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Log files &amp; rotation
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Log files &amp; rotation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#built-in-rotation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Built-in rotation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#loxilb-mcp-audit-trail" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        loxilb-mcp audit trail
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#read-logs-through-the-api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Read logs through the API
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#audit-review-checklist" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Audit review checklist
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-is-not-covered" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What is not covered
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2686,77 +2674,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#structured-logging-configuration" class="md-nav__link">
+  <a href="#keep-the-authentication-planes-separate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Structured logging configuration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Structured logging configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#production-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Production example
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#development-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Development example
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#log-files-rotation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Log files &amp; rotation
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Log files &amp; rotation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#built-in-rotation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Built-in rotation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#loxilb-mcp-audit-trail" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        loxilb-mcp audit trail
+        Keep the authentication planes separate
       
     </span>
   </a>
@@ -2764,10 +2685,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#read-logs-through-the-api" class="md-nav__link">
+  <a href="#the-five-api_key_auth-states" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Read logs through the API
+        The five api_key_auth states
       
     </span>
   </a>
@@ -2775,10 +2696,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#audit-review-checklist" class="md-nav__link">
+  <a href="#create-a-jwt-profile" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Audit review checklist
+        Create a JWT profile
       
     </span>
   </a>
@@ -2786,10 +2707,65 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-not-covered" class="md-nav__link">
+  <a href="#attach-the-profile-to-a-service" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is not covered
+        Attach the profile to a service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#claim-mapping-and-model-authorization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Claim mapping and model authorization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jwks-lifecycle-and-http-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JWKS lifecycle and HTTP boundaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validate-without-creating-a-false-green" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validate without creating a false green
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clean-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clean up
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related pages
       
     </span>
   </a>
@@ -2813,266 +2789,322 @@
 
 
 
-<h1 id="logging-and-audit">Logging and Audit<a class="headerlink" href="#logging-and-audit" title="Permanent link">&para;</a></h1>
-<p>The Inference Gateway writes structured operational logs from the LoxiLB process and a separate action audit trail from the <code>loxilb-mcp</code> management surface. This page covers how to configure both, where the files land, and how they are rotated.</p>
-<div class="admonition note">
-<p class="admonition-title">Audience</p>
-<p>Infrastructure operators, DevOps engineers, and platform SREs who need durable logs for troubleshooting and an audit record of management actions.</p>
-</div>
-<hr />
-<h2 id="structured-logging-configuration">Structured logging configuration<a class="headerlink" href="#structured-logging-configuration" title="Permanent link">&para;</a></h2>
-<p>LoxiLB emits structured log events to files under a configurable log directory. Three startup options control this behaviour. Each can be set as a command-line flag or, where noted, an environment variable.</p>
-<table>
-<thead>
-<tr>
-<th>Flag</th>
-<th>Env var</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>--loglevel</code></td>
-<td>—</td>
-<td><code>debug</code></td>
-<td>Minimum severity emitted. One of <code>trace</code>, <code>debug</code>, <code>info</code>, <code>error</code>, <code>warning</code>, <code>notice</code>, <code>critical</code>, <code>emergency</code>, <code>alert</code>.</td>
-</tr>
-<tr>
-<td><code>--log-dir</code></td>
-<td><code>LOXILB_LOG_DIR</code></td>
-<td><code>/var/log/loxilb/</code></td>
-<td>Directory the log files are written to.</td>
-</tr>
-<tr>
-<td><code>--log-format</code></td>
-<td><code>LOXILB_LOG_FORMAT</code></td>
-<td><code>both</code></td>
-<td>Output format: <code>json</code>, <code>text</code>, or <code>both</code>.</td>
-</tr>
-</tbody>
-</table>
+<h1 id="data-plane-authentication-and-jwt">Data-Plane Authentication and JWT<a class="headerlink" href="#data-plane-authentication-and-jwt" title="Permanent link">&para;</a></h1>
+<p>Inference credentials are evaluated on a <code>mode: 4</code> fullproxy service. They do
+not authenticate operators to the management API. Configure management
+authentication separately before creating API keys, JWT profiles, load
+balancers, or quota policy.</p>
 <div class="admonition warning">
-<p class="admonition-title">These are startup options</p>
-<p>All three are read once, when the process starts. Changing a value requires a restart of LoxiLB to take effect.</p>
+<p class="admonition-title">Development contract</p>
+<p>The five-state credential policy, JWT profile API, and HTTP/1.1 and HTTP/2
+admission paths are present in the current development contract. They have
+not completed release, Linux appliance, GPU, or two-node HA qualification.
+Confirm the served Swagger and immutable image before deployment.</p>
 </div>
-<h3 id="production-example">Production example<a class="headerlink" href="#production-example" title="Permanent link">&para;</a></h3>
-<p>Emit machine-readable JSON only, at <code>info</code> and above — the right balance of signal and volume for a log aggregator (Loki, Elasticsearch, Splunk):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>loxilb<span class="w"> </span>--log-dir<span class="o">=</span>/var/log/loxilb/<span class="w"> </span>--log-format<span class="o">=</span>json<span class="w"> </span>--loglevel<span class="o">=</span>info
-</code></pre></div>
-<p>The equivalent using environment variables (convenient for containers and systemd units):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">LOXILB_LOG_DIR</span><span class="o">=</span>/var/log/loxilb/<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">LOXILB_LOG_FORMAT</span><span class="o">=</span>json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>loxilb<span class="w"> </span>--loglevel<span class="o">=</span>info
-</code></pre></div>
-<h3 id="development-example">Development example<a class="headerlink" href="#development-example" title="Permanent link">&para;</a></h3>
-<p>Emit both formats at full <code>debug</code> verbosity so you get human-readable plaintext for terminal triage alongside the JSON stream:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>loxilb<span class="w"> </span>--log-dir<span class="o">=</span>/tmp/loxilb-logs/<span class="w"> </span>--log-format<span class="o">=</span>both<span class="w"> </span>--loglevel<span class="o">=</span>debug
-</code></pre></div>
-<hr />
-<h2 id="log-files-rotation">Log files &amp; rotation<a class="headerlink" href="#log-files-rotation" title="Permanent link">&para;</a></h2>
-<p>All log files are written to the directory named by <code>--log-dir</code> (default <code>/var/log/loxilb/</code>). Which files appear depends on <code>--log-format</code>:</p>
+<h2 id="keep-the-authentication-planes-separate">Keep the authentication planes separate<a class="headerlink" href="#keep-the-authentication-planes-separate" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    OP([Operator]) --&gt;|management bearer| API["Management API&lt;br/&gt;:11111/netlox/v1"]
+    APP([Inference workload]) --&gt;|X-Api-Key or bearer JWT| VIP["Inference VIP&lt;br/&gt;mode 4 fullproxy"]
+    API --&gt; CFG["Profiles, keys, rules,&lt;br/&gt;and quota configuration"]
+    VIP --&gt; ADMIT{"Per-service&lt;br/&gt;credential policy"}
+    ADMIT --&gt; BACKEND[Inference backend]</code></pre>
 <table>
 <thead>
 <tr>
-<th>File</th>
 <th>Plane</th>
-<th>Format</th>
-<th>Written when <code>--log-format</code> is</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>loxilb-audit.json.log</code></td>
-<td>Control plane</td>
-<td>Structured JSON, one object per line</td>
-<td><code>json</code> or <code>both</code></td>
-</tr>
-<tr>
-<td><code>loxilb&lt;HOSTNAME&gt;.log</code></td>
-<td>Control plane</td>
-<td>Human-readable plaintext</td>
-<td><code>text</code> or <code>both</code></td>
-</tr>
-<tr>
-<td><code>loxilb-dp-audit.json.log</code></td>
-<td>Data plane</td>
-<td>Structured JSON, one object per line</td>
-<td><code>json</code> or <code>both</code></td>
-</tr>
-<tr>
-<td><code>loxilb-dp&lt;HOSTNAME&gt;.log</code></td>
-<td>Data plane</td>
-<td>Human-readable plaintext</td>
-<td><code>text</code> or <code>both</code></td>
-</tr>
-</tbody>
-</table>
-<p><code>&lt;HOSTNAME&gt;</code> is the value of the <code>$HOSTNAME</code> environment variable at process start. If it is empty, the plaintext files are simply <code>loxilb.log</code> and <code>loxilb-dp.log</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Confirm the files are being written</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ls<span class="w"> </span>-lh<span class="w"> </span>/var/log/loxilb/
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Follow the structured JSON stream (pretty-printed)</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/loxilb/loxilb-audit.json.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Follow the human-readable stream</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/loxilb/loxilb.log
-</code></pre></div>
-<h3 id="built-in-rotation">Built-in rotation<a class="headerlink" href="#built-in-rotation" title="Permanent link">&para;</a></h3>
-<p>Rotation is handled inside the gateway — there is no need to configure an external <code>logrotate</code> unit. When a structured log file would exceed its size limit it is rotated in place: the current file is renamed with a UTC timestamp (<code>&lt;base&gt;-&lt;timestamp&gt;.log</code>), gzip-compressed, and old backups are pruned by count and age. The same rotation covers the <code>loxilb-mcp</code> audit trail described below.</p>
-<p>The structured log files rotate with these production defaults:</p>
-<table>
-<thead>
-<tr>
-<th>Setting</th>
-<th>Flag</th>
-<th>Env var</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Rotate above size (MB)</td>
-<td><code>--log-max-size</code></td>
-<td><code>LOXILB_LOG_MAX_SIZE</code></td>
-<td><code>50</code></td>
-</tr>
-<tr>
-<td>Backups kept per file</td>
-<td><code>--log-max-backups</code></td>
-<td><code>LOXILB_LOG_MAX_BACKUPS</code></td>
-<td><code>4</code></td>
-</tr>
-<tr>
-<td>Retention (days)</td>
-<td><code>--log-max-age</code></td>
-<td><code>LOXILB_LOG_MAX_AGE</code></td>
-<td><code>28</code></td>
-</tr>
-<tr>
-<td>Skip gzip of backups</td>
-<td><code>--log-no-compress</code></td>
-<td><code>LOXILB_LOG_NO_COMPRESS</code></td>
-<td>off (backups are compressed)</td>
-</tr>
-</tbody>
-</table>
-<p>Setting <code>--log-max-size=0</code> disables rotation and lets a file grow unbounded — not recommended in production. Rotated backups keep the <code>.log</code> / <code>.log.gz</code> naming so they remain easy to locate and archive.</p>
-<div class="admonition tip">
-<p class="admonition-title">Persist logs in Docker</p>
-<p>A container's filesystem is discarded when the container is removed, taking <code>/var/log/loxilb/</code> with it. Mount a host volume at the log directory so logs (and their rotated backups) survive restarts and redeploys:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span>run<span class="w"> </span>...<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">LOXILB_LOG_DIR</span><span class="o">=</span>/var/log/loxilb/<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">LOXILB_LOG_FORMAT</span><span class="o">=</span>json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>-v<span class="w"> </span>loxilb-logs:/var/log/loxilb/<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>&lt;loxilb-image&gt;<span class="w"> </span>--loglevel<span class="o">=</span>info
-</code></pre></div>
-</div>
-<hr />
-<h2 id="loxilb-mcp-audit-trail">loxilb-mcp audit trail<a class="headerlink" href="#loxilb-mcp-audit-trail" title="Permanent link">&para;</a></h2>
-<p>The <a href="../../reference/cli/"><code>loxilb-mcp</code></a> management surface keeps its own audit log: every tool call an agent or operator makes against the gateway is recorded, separately from LoxiLB's operational logs. Use it to answer "who changed what, and when".</p>
-<p>The audit log is an append-only JSON-lines file named <code>audit.jsonl</code>. It is written to the audit directory, resolved in this order:</p>
-<ol>
-<li>the <code>--audit-dir</code> flag, if set;</li>
-<li>the <code>audit_dir</code> field in the <code>loxilb-mcp</code> config file;</li>
-<li>otherwise <code>~/.loxilb-mcp/</code> (created with <code>0700</code> permissions).</li>
-</ol>
-<p>Each line is one event. Recorded event kinds include tool calls, authentication rejections, request-origin rejections, rate-limit hits, and autopilot executions. A typical record carries the timestamp, event kind, client and target names, the tool and its arguments, the outcome (<code>ok</code>), any error, latency, and the remote address:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="nt">"ts"</span><span class="p">:</span><span class="s2">"2026-07-27T09:14:02.481Z"</span><span class="p">,</span><span class="nt">"kind"</span><span class="p">:</span><span class="s2">"tool_call"</span><span class="p">,</span><span class="nt">"client"</span><span class="p">:</span><span class="s2">"operator"</span><span class="p">,</span><span class="nt">"target"</span><span class="p">:</span><span class="s2">"gateway"</span><span class="p">,</span><span class="nt">"tool"</span><span class="p">:</span><span class="s2">"lb_create"</span><span class="p">,</span><span class="nt">"args"</span><span class="p">:{</span><span class="nt">"externalIP"</span><span class="p">:</span><span class="s2">"192.0.2.10"</span><span class="p">},</span><span class="nt">"ok"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nt">"latency_ms"</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="nt">"remote"</span><span class="p">:</span><span class="s2">"192.0.2.20"</span><span class="p">}</span>
-</code></pre></div>
-<p>Known top-level secret-shaped argument fields (tokens, passwords, API keys, and similar) are
-masked as <code>[REDACTED]</code> before the event is written. This is a best-effort safeguard, not a
-guarantee for arbitrary nested or unexpectedly named values. Treat every audit record as
-sensitive.</p>
-<div class="admonition warning">
-<p class="admonition-title">Redaction is defense in depth</p>
-<p>Do not rely on automatic masking as the only control. Avoid putting
-credentials or prompt content in tool arguments, names, and free-form
-fields. Restrict audit-file and archive access, and review a sanitized
-sample before exporting logs to another system.</p>
-</div>
-<p>The audit log is rotated by the same built-in mechanism as the structured logs, with a longer forensic window: it rotates above <strong>20 MB</strong>, keeps <strong>8</strong> gzipped backups, and retains them for <strong>90 days</strong>.</p>
-<p>For the full <code>loxilb-mcp</code> command surface, transports, and role model, see the <a href="../../reference/cli/">CLI Reference</a>.</p>
-<hr />
-<h2 id="read-logs-through-the-api">Read logs through the API<a class="headerlink" href="#read-logs-through-the-api" title="Permanent link">&para;</a></h2>
-<p>Operators can page current and rotated logs without receiving shell access to
-the Gateway. The API returns newest entries first and follows an opaque cursor
-backward:</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Path</th>
+<th>Credential</th>
 <th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>GET</code></td>
-<td><code>/logs</code></td>
-<td>Read current or archived log lines</td>
+<td>Management</td>
+<td><code>Authorization: Bearer</code> management token</td>
+<td>Authorize configuration and lifecycle operations</td>
 </tr>
 <tr>
-<td><code>GET</code></td>
-<td><code>/log-archives</code></td>
-<td>List archive names, compressed size, and modification time</td>
+<td>Data plane, API-key arm</td>
+<td><code>X-Api-Key</code></td>
+<td>Authenticate a workload, identify its tenant/key, and apply model and quota policy</td>
 </tr>
 <tr>
-<td><code>GET</code></td>
-<td><code>/log-archives/{filename}</code></td>
-<td>Download one archive</td>
+<td>Data plane, JWT arm</td>
+<td><code>Authorization: Bearer</code> JWT</td>
+<td>Verify the issuer and claims, derive tenant/user/model identity, and apply model and quota policy</td>
 </tr>
 </tbody>
 </table>
-<p>Important response semantics:</p>
+<p>A management token is not an inference credential. An inference JWT is not a
+management token. Never forward a browser or operator credential to an
+inference VIP as a substitute for a data-plane credential.</p>
+<h2 id="the-five-api_key_auth-states">The five <code>api_key_auth</code> states<a class="headerlink" href="#the-five-api_key_auth-states" title="Permanent link">&para;</a></h2>
+<p>Omission is a real state; it is not an alias for <code>disabled</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Service declaration</th>
+<th>Credential decision</th>
+<th>Header ownership before backend dispatch</th>
+<th>Dependency failure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>field omitted</td>
+<td>No Gateway credential namespace is declared</td>
+<td>Preserve backend-owned <code>X-Api-Key</code>; proxying stays byte-identical for this contract</td>
+<td>No auth-store dependency is introduced</td>
+</tr>
+<tr>
+<td><code>disabled</code></td>
+<td>Do not authenticate</td>
+<td>Strip <code>X-Api-Key</code>; the service has explicitly declared the Gateway namespace</td>
+<td>Keyless traffic continues; optional shared-VIP QoS has its own outage posture</td>
+</tr>
+<tr>
+<td><code>required</code></td>
+<td>Require <code>X-Api-Key</code></td>
+<td>Validate, then strip before dispatch</td>
+<td>No store or an unevaluable policy returns <code>503 policy_store_unavailable</code></td>
+</tr>
+<tr>
+<td><code>jwt</code></td>
+<td>Require a bearer JWT and named <code>jwt_auth_profile</code></td>
+<td>Validate; strip <code>Authorization</code> by default; strip <code>X-Api-Key</code></td>
+<td>Missing/unusable keyset returns <code>503 policy_store_unavailable</code></td>
+</tr>
+<tr>
+<td><code>apikey-or-jwt</code></td>
+<td>If <code>X-Api-Key</code> is present, it decides alone; otherwise evaluate bearer JWT</td>
+<td>Strip Gateway-owned credential headers</td>
+<td>A rejected present API key is final; there is no JWT fallback</td>
+</tr>
+</tbody>
+</table>
+<p>The declaration is independent of <code>sse_mode</code> and <code>pd_disagg_mode</code>. Reading a
+service back preserves omission versus an explicit value. When replacing a
+service, omitting <code>api_key_auth</code> preserves the existing declaration; use
+<code>disabled</code> explicitly to turn off enforcement and keep header stripping.</p>
+<p><code>loxicmd create lb --api-key-auth</code> currently accepts only <code>disabled</code> and
+<code>required</code>. The <code>jwt</code> and <code>apikey-or-jwt</code> values and the
+<code>jwt_auth_profile</code> association are REST-only. There is no supported
+<code>--jwt-auth-profile</code> CLI flag.</p>
+<h2 id="create-a-jwt-profile">Create a JWT profile<a class="headerlink" href="#create-a-jwt-profile" title="Permanent link">&para;</a></h2>
+<p>Use a protected file for the management credential so it is not repeated in
+<code>curl</code> arguments or command logs:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/jwtauthprofile"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">    "name": "example-issuer",</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="s1">    "issuer": "https://idp.example.com/realms/inference",</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s1">    "jwks_url": "https://idp.example.com/realms/inference/protocol/openid-connect/certs",</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s1">    "audiences": ["inference-client"],</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="s1">    "algs": ["RS256"],</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="s1">    "tenant_claim": "tenant_id",</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="s1">    "user_claim": "sub",</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="s1">    "roles_claim": "realm_access.roles",</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="s1">    "model_role_prefix": "model:",</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="s1">    "model_authz": "claims-required",</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="s1">    "refresh_sec": 3600,</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="s1">    "leeway_sec": 30</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="s1">  }'</span>
+</code></pre></div>
+<p>Expected result: <code>200</code>. Creating a profile starts its JWKS lifecycle but does
+not wait for the first fetch. A successful management response therefore does
+not prove the issuer is reachable or the profile can admit requests.</p>
+<p>Read desired configuration back without exposing any token:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/jwtauthprofile"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.jwtAuthProfileAttr[] | {name, issuer, audiences, model_authz}'</span>
+</code></pre></div>
+<p><code>POST</code> replaces a profile with the same name. An unchanged replacement keeps
+its running keyset. A changed replacement restarts the key lifecycle and fails
+closed until the new configuration fetches a usable keyset. A profile
+referenced by any LB rule cannot be deleted; delete returns <code>409</code> until every
+reference is detached.</p>
+<h2 id="attach-the-profile-to-a-service">Attach the profile to a service<a class="headerlink" href="#attach-the-profile-to-a-service" title="Permanent link">&para;</a></h2>
+<p>This operation is REST-only:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">    "serviceArguments": {</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">      "externalIP": "192.0.2.20",</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">      "port": 8443,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">      "protocol": "tcp",</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">      "sel": 0,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">      "mode": 4,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">      "host": "ai.example.com",</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s1">      "path_prefix": "/",</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s1">      "path_match_mode": "prefix",</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s1">      "model_name": "example-chat-model",</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s1">      "api_key_auth": "jwt",</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s1">      "jwt_auth_profile": "example-issuer"</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s1">    },</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s1">    "endpoints": [</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="s1">      {"endpointIP": "198.51.100.20", "targetPort": 8000, "weight": 1}</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="s1">    ]</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="s1">  }'</span>
+</code></pre></div>
+<p>The Gateway rejects a JWT mode without a configured profile. It also rejects
+<code>jwt_auth_profile</code> on omitted, <code>disabled</code>, or <code>required</code> policies. On replace,
+omitting the profile preserves the existing reference while the policy remains
+JWT-capable.</p>
+<h2 id="claim-mapping-and-model-authorization">Claim mapping and model authorization<a class="headerlink" href="#claim-mapping-and-model-authorization" title="Permanent link">&para;</a></h2>
+<p>Claim paths use dot-separated object traversal. Defaults are Keycloak-shaped:</p>
+<table>
+<thead>
+<tr>
+<th>Profile field</th>
+<th>Default</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tenant_claim</code></td>
+<td><code>tenant_id</code></td>
+<td>Required metering tenant; absent/invalid denies <code>401</code> unless <code>default_tenant</code> is set</td>
+</tr>
+<tr>
+<td><code>user_claim</code></td>
+<td><code>sub</code></td>
+<td>Stable user identity for user/user-model QoS; absence falls through to tenant scopes</td>
+</tr>
+<tr>
+<td><code>username_claim</code></td>
+<td><code>preferred_username</code></td>
+<td>Display-only identity</td>
+</tr>
+<tr>
+<td><code>roles_claim</code></td>
+<td><code>realm_access.roles</code></td>
+<td>Role source for model derivation</td>
+</tr>
+<tr>
+<td><code>model_role_prefix</code></td>
+<td><code>model:</code></td>
+<td>Turns a role such as <code>model:example-chat-model</code> into an allowed model</td>
+</tr>
+<tr>
+<td><code>models_claim</code></td>
+<td>unset</td>
+<td>When configured and present, its model list is authoritative, including an empty list</td>
+</tr>
+<tr>
+<td><code>model_authz</code></td>
+<td><code>claims-required</code></td>
+<td>Deny a named model when no model list can be derived; <code>allow-all</code> is an explicit relaxation</td>
+</tr>
+</tbody>
+</table>
+<p>Issuer equality, signature algorithm, signature, time claims, and optional
+audience/authorized-party matching are verified before claims are trusted.
+<code>none</code> and HMAC algorithms are always rejected. Tenant and user identities
+that cannot be safely carried into headers, logs, metrics, and quota keys are
+rejected rather than truncated.</p>
+<p>By default the Gateway strips <code>Authorization</code>. Set
+<code>authorization_passthrough: true</code> only when the backend must receive the
+verified token and has a separate reason to trust it. Set
+<code>forward_identity: true</code> only when the backend trusts Gateway-injected
+<code>X-Auth-Tenant</code> and <code>X-Auth-User</code>; client-supplied copies are stripped.</p>
+<h2 id="jwks-lifecycle-and-http-boundaries">JWKS lifecycle and HTTP boundaries<a class="headerlink" href="#jwks-lifecycle-and-http-boundaries" title="Permanent link">&para;</a></h2>
 <ul>
-<li>
-<p>REST log handlers resolve files under <code>/var/log</code> and do not honor
-  <code>--log-dir</code> or <code>LOXILB_LOG_DIR</code>; those settings affect writers only, so use
-  the filesystem/aggregator when logs are written elsewhere;</p>
-</li>
-<li>
-<p><code>log_count</code> is the number of lines in this page, not total file matches;</p>
-</li>
-<li><code>total_size</code> is the whole uncompressed file size;</li>
-<li><code>scanned_bytes</code> is how much content the server examined for this page;</li>
-<li>filtered searches stop after reaching the 32 MiB threshold and completing the current read
-  batch, so <code>scanned_bytes</code> may be slightly higher;</li>
-<li><code>.log.gz</code> archives are decompressed transparently for paging, with a 64 MiB
-  decompressed-size ceiling;</li>
-<li>a filtered page may contain no lines while <code>has_more</code> remains true, so clients
-  must continue until <code>has_more: false</code>.</li>
+<li><code>jwks_url</code> pins the key endpoint. If omitted, the Gateway performs OIDC
+  discovery at <code>issuer + /.well-known/openid-configuration</code>.</li>
+<li>Verification reads an in-memory snapshot; it performs no network I/O on the
+  request path.</li>
+<li>Before the first successful fetch, or after the last-known-good keyset ages
+  past the 24-hour staleness cutoff, admission fails closed with <code>503</code>.</li>
+<li>A refresh failure keeps the last-known-good keyset until that cutoff. A key
+  ID miss requests a rate-limited background refetch; the current request is
+  still denied.</li>
+<li>HTTP/1.1 and HTTP/2 run the same credential and model decision per request or
+  stream. A denial must not establish backend delivery. HTTP/2 connection
+  reuse never authorizes later streams from an earlier stream's credential.</li>
+<li>The effective bearer-token size reachable through the data plane is 4088
+  bytes: the captured <code>Bearer</code> header value must fit in 4095 bytes. The next
+  byte is refused before verification on both HTTP versions.</li>
+<li>A model-routed request whose body framing prevents safe model resolution is
+  refused before dispatch. Do not interpret TCP segmentation as HTTP chunked
+  framing coverage.</li>
 </ul>
-<p>Use TLS and a least-privileged management identity. Treat every returned line
-as potentially sensitive, even when known secret-shaped fields are masked. The
-complete paging, archive, rotation, and cleanup procedure is in
-<a href="../log-api/">Log API Operations</a>.</p>
-<h2 id="audit-review-checklist">Audit review checklist<a class="headerlink" href="#audit-review-checklist" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Confirm system clocks are synchronized so events can be correlated.</li>
-<li>Record the immutable Gateway version and product flavor without including
-   credentials or private topology.</li>
-<li>Query the smallest time, file, level, and keyword scope needed.</li>
-<li>Walk every cursor to <code>has_more: false</code> before concluding that no older match
-   exists.</li>
-<li>Correlate management changes with policy read-back and relevant metrics.</li>
-<li>Redact credentials, API keys, prompts, personal information, tenant names,
-   client addresses, and internal hostnames before sharing evidence.</li>
-<li>Store exported evidence under the organization's access and retention
-   policy, then securely remove temporary copies.</li>
-</ol>
-<h2 id="what-is-not-covered">What is not covered<a class="headerlink" href="#what-is-not-covered" title="Permanent link">&para;</a></h2>
-<p>This page documents the logging and audit capabilities that ship in the open-source Inference Gateway. Advanced structured audit-logging features — a runtime API for changing per-category log levels without a restart, compliance-oriented export formats, and long-term audit warehousing — are outside the scope of this gateway and are intentionally not documented here. Configure log severity through the <code>--loglevel</code> startup option, and ship the JSON files to your own aggregator for retention and search.</p>
-<p>For the metrics side of observability, see
-<a href="../observability-metrics-grafana/">Grafana Dashboards and Observability</a>.</p>
-<p>Recovery and high-risk diagnostics need additional evidence beyond logs:</p>
+<h2 id="validate-without-creating-a-false-green">Validate without creating a false green<a class="headerlink" href="#validate-without-creating-a-false-green" title="Permanent link">&para;</a></h2>
+<p>Use a dedicated staging service and an independent backend receipt counter.
+Give every probe a unique non-secret nonce, then compare the backend count
+before and after. The client status alone cannot prove non-delivery.</p>
+<table>
+<thead>
+<tr>
+<th>Probe</th>
+<th>Client result</th>
+<th style="text-align: right;">Backend receipt delta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Valid token, allowed model</td>
+<td>Backend response</td>
+<td style="text-align: right;"><code>+1</code></td>
+</tr>
+<tr>
+<td>Missing, malformed, expired, wrong issuer/audience, or bad-signature token</td>
+<td><code>401</code> (<code>missing_token</code>, <code>invalid_token</code>, or <code>token_expired</code>)</td>
+<td style="text-align: right;"><code>0</code></td>
+</tr>
+<tr>
+<td>Valid token, unauthorized model</td>
+<td><code>403 model_not_allowed</code></td>
+<td style="text-align: right;"><code>0</code></td>
+</tr>
+<tr>
+<td>Profile with no usable keyset</td>
+<td><code>503 policy_store_unavailable</code></td>
+<td style="text-align: right;"><code>0</code></td>
+</tr>
+<tr>
+<td>Same token on HTTP/1.1 and HTTP/2</td>
+<td>Same authorization decision</td>
+<td style="text-align: right;"><code>+1</code> only for each admitted request/stream</td>
+</tr>
+<tr>
+<td>One user/model is throttled; unrelated user or model is probed</td>
+<td>Denied identity gets <code>429</code>; unrelated identity remains eligible</td>
+<td style="text-align: right;"><code>0</code> for the denied request; no denial bleed</td>
+</tr>
+</tbody>
+</table>
+<p>Do not log the JWT, <code>Authorization</code>, <code>X-Api-Key</code>, raw API key, request body,
+or prompt while collecting evidence.</p>
+<h2 id="clean-up">Clean up<a class="headerlink" href="#clean-up" title="Permanent link">&para;</a></h2>
+<p>Remove the LB rule first, verify that its profile reference is gone, and then
+delete the profile:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/jwtauthprofile/example-issuer"</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN
+</code></pre></div>
+<p>Expected profile delete result after detachment: <code>200</code>. A <code>409</code> means at least
+one service still references the profile.</p>
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../backup-restore/">Configuration Backup and Restore</a> — checksums, dry-run,
-  commit, rollback, and restore metrics;</li>
-<li><a href="../tracing/">Application and L4 Tracing</a> — trace data handling and OTLP
-  verification;</li>
-<li><a href="../dpu-offload/">DPU Offload Observability</a> — sensitive and disruptive debug
-  boundaries.</li>
+<li><a href="../management-api-authentication/">Management API Authentication</a></li>
+<li><a href="../../ai-gateway/api-key-management/">API Key Management</a></li>
+<li><a href="../../ai-gateway/ai-traffic-governance/">AI Traffic Governance</a></li>
+<li><a href="../../operations/ai-qos/">AI Quotas and QoS</a></li>
+<li><a href="../../operations/monitoring/">Monitoring and Metrics</a></li>
+<li><a href="../../operations/ha-limitations/">HA and Upgrade Limitations</a></li>
 </ul>
 
 

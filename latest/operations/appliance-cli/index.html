@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/audit-log/">
+        <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/appliance-cli/">
       
       
-        <link rel="prev" href="../troubleshooting/">
+        <link rel="prev" href="../readiness-diagnostics-maintenance/">
       
       
-        <link rel="next" href="../../reference/api/">
+        <link rel="next" href="../tracing/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Logging & Audit - LoxiLB Inference Gateway</title>
+        <title>Appliance CLI - LoxiLB Inference Gateway</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#logging-and-audit" class="md-skip">
+        <a href="#appliance-lifecycle-cli" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Logging & Audit
+              Appliance CLI
             
           </span>
         </div>
@@ -1876,10 +1876,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../appliance-cli/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1895,6 +1922,136 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#choose-the-correct-recovery-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose the correct recovery boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rc2-read-only-status-and-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rc.2 read-only status and validation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rc2-encrypted-backup-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rc.2 encrypted backup workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redacted-appliance-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redacted appliance diagnostics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#main-only-governed-lifecycle-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Main-only governed lifecycle preview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backend-trust-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend trust boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-and-envelope-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit and envelope rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2128,37 +2285,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Logging & Audit
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../audit-log/" class="md-nav__link">
         
   
   
@@ -2174,137 +2304,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#structured-logging-configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Structured logging configuration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Structured logging configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#production-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Production example
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#development-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Development example
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#log-files-rotation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Log files &amp; rotation
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Log files &amp; rotation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#built-in-rotation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Built-in rotation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#loxilb-mcp-audit-trail" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        loxilb-mcp audit trail
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#read-logs-through-the-api" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Read logs through the API
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#audit-review-checklist" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Audit review checklist
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-is-not-covered" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What is not covered
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2686,77 +2685,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#structured-logging-configuration" class="md-nav__link">
+  <a href="#choose-the-correct-recovery-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Structured logging configuration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Structured logging configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#production-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Production example
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#development-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Development example
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#log-files-rotation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Log files &amp; rotation
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Log files &amp; rotation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#built-in-rotation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Built-in rotation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#loxilb-mcp-audit-trail" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        loxilb-mcp audit trail
+        Choose the correct recovery boundary
       
     </span>
   </a>
@@ -2764,10 +2696,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#read-logs-through-the-api" class="md-nav__link">
+  <a href="#release-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Read logs through the API
+        Release boundary
       
     </span>
   </a>
@@ -2775,10 +2707,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#audit-review-checklist" class="md-nav__link">
+  <a href="#rc2-read-only-status-and-validation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Audit review checklist
+        rc.2 read-only status and validation
       
     </span>
   </a>
@@ -2786,10 +2718,76 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-not-covered" class="md-nav__link">
+  <a href="#rc2-encrypted-backup-workflow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is not covered
+        rc.2 encrypted backup workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#redacted-appliance-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redacted appliance diagnostics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#main-only-governed-lifecycle-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Main-only governed lifecycle preview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backend-trust-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend trust boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-and-envelope-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit and envelope rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
       
     </span>
   </a>
@@ -2813,266 +2811,270 @@
 
 
 
-<h1 id="logging-and-audit">Logging and Audit<a class="headerlink" href="#logging-and-audit" title="Permanent link">&para;</a></h1>
-<p>The Inference Gateway writes structured operational logs from the LoxiLB process and a separate action audit trail from the <code>loxilb-mcp</code> management surface. This page covers how to configure both, where the files land, and how they are rotated.</p>
-<div class="admonition note">
-<p class="admonition-title">Audience</p>
-<p>Infrastructure operators, DevOps engineers, and platform SREs who need durable logs for troubleshooting and an audit record of management actions.</p>
-</div>
-<hr />
-<h2 id="structured-logging-configuration">Structured logging configuration<a class="headerlink" href="#structured-logging-configuration" title="Permanent link">&para;</a></h2>
-<p>LoxiLB emits structured log events to files under a configurable log directory. Three startup options control this behaviour. Each can be set as a command-line flag or, where noted, an environment variable.</p>
+<h1 id="appliance-lifecycle-cli">Appliance Lifecycle CLI<a class="headerlink" href="#appliance-lifecycle-cli" title="Permanent link">&para;</a></h1>
+<p><code>loxicmd appliance</code> is the host-lifecycle surface. It dispatches directly to
+the fixed appliance backend installed by the Product and does not depend on a
+running Gateway API. This is separate from Gateway configuration
+snapshot/restore.</p>
+<h2 id="choose-the-correct-recovery-boundary">Choose the correct recovery boundary<a class="headerlink" href="#choose-the-correct-recovery-boundary" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Flag</th>
-<th>Env var</th>
-<th>Default</th>
-<th>Description</th>
+<th>Need</th>
+<th>Use</th>
+<th>Ownership</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>--loglevel</code></td>
-<td>—</td>
-<td><code>debug</code></td>
-<td>Minimum severity emitted. One of <code>trace</code>, <code>debug</code>, <code>info</code>, <code>error</code>, <code>warning</code>, <code>notice</code>, <code>critical</code>, <code>emergency</code>, <code>alert</code>.</td>
+<td>Capture, dry-run, replace, and persist Gateway configuration domains</td>
+<td><code>loxicmd get snapshot</code>, <code>create restore</code>, <code>create persist</code></td>
+<td>Gateway REST lifecycle</td>
 </tr>
 <tr>
-<td><code>--log-dir</code></td>
-<td><code>LOXILB_LOG_DIR</code></td>
-<td><code>/var/log/loxilb/</code></td>
-<td>Directory the log files are written to.</td>
+<td>Back up or recover the assembled host, OAM database, certificates, Gateway snapshot, and Product identity</td>
+<td><code>loxicmd appliance backup/restore</code></td>
+<td>Product-installed appliance backend</td>
 </tr>
 <tr>
-<td><code>--log-format</code></td>
-<td><code>LOXILB_LOG_FORMAT</code></td>
-<td><code>both</code></td>
-<td>Output format: <code>json</code>, <code>text</code>, or <code>both</code>.</td>
+<td>Update or roll back appliance software</td>
+<td><code>loxicmd appliance update/rollback</code></td>
+<td>Product-installed appliance backend</td>
+</tr>
+<tr>
+<td>Reset the assembled appliance</td>
+<td><code>loxicmd appliance factory-reset</code></td>
+<td>Product-installed appliance backend</td>
 </tr>
 </tbody>
 </table>
+<p>Do not use Gateway <code>/config/restore</code> as a whole-appliance recovery mechanism.
+It does not reinstall packages, restore OAM PostgreSQL, or drive Product
+rollback.</p>
+<h2 id="release-boundary">Release boundary<a class="headerlink" href="#release-boundary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Command family</th>
+<th style="text-align: right;">CLI <code>v0.9.8.9-rc.2</code></th>
+<th style="text-align: right;">CLI main after <code>56bff57</code></th>
+<th>Additional requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>appliance status</code>, <code>network validate</code></td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">Yes</td>
+<td>Compatible installed backend</td>
+</tr>
+<tr>
+<td><code>public-address configure</code>, <code>gateway register-local</code>, <code>credentials bootstrap</code></td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">Yes</td>
+<td>Backend capability and required privilege</td>
+</tr>
+<tr>
+<td><code>diagnostics create</code>, <code>logs</code></td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">Yes</td>
+<td>Redaction and bounded-output contract</td>
+</tr>
+<tr>
+<td><code>backup key-create/create/verify</code></td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">Yes</td>
+<td>Root-only key and compatible backend</td>
+</tr>
+<tr>
+<td><code>restore plan/execute</code></td>
+<td style="text-align: right;"><strong>Unavailable stub; exit 6</strong></td>
+<td style="text-align: right;">Source implemented</td>
+<td>Matching Product backend and release qualification</td>
+</tr>
+<tr>
+<td><code>update plan/execute/status</code></td>
+<td style="text-align: right;"><strong>Unavailable stub; exit 6</strong></td>
+<td style="text-align: right;">Source implemented</td>
+<td>Signed bundle, matching backend, Product policy</td>
+</tr>
+<tr>
+<td><code>rollback plan/execute/status</code></td>
+<td style="text-align: right;"><strong>Unavailable stub; exit 6</strong></td>
+<td style="text-align: right;">Source implemented</td>
+<td>Approved release and recovery point</td>
+</tr>
+<tr>
+<td><code>factory-reset plan/execute</code></td>
+<td style="text-align: right;"><strong>Unavailable stub; exit 6</strong></td>
+<td style="text-align: right;">Source implemented</td>
+<td>Safety-preserving Product backend policy</td>
+</tr>
+</tbody>
+</table>
+<p>The main-only rows are <strong>not released features</strong>. Source availability does not
+prove that the installed backend advertises the required ordered capability
+matrix, that the Product contains a matching payload schema, or that an
+installed host passed the lifecycle scenario.</p>
+<h2 id="rc2-read-only-status-and-validation">rc.2 read-only status and validation<a class="headerlink" href="#rc2-read-only-status-and-validation" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>loxicmd<span class="w"> </span>appliance<span class="w"> </span>status<span class="w"> </span>--output<span class="w"> </span>json<span class="w"> </span>&gt;<span class="w"> </span>appliance-status.json
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="s1">  .kind == "CommandResult" and</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="s1">  .command == "appliance.status" and</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">  .success == true and</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">  (.correlationId | length &gt; 0)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">'</span><span class="w"> </span>appliance-status.json
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>loxicmd<span class="w"> </span>appliance<span class="w"> </span>network<span class="w"> </span>validate<span class="w"> </span>--output<span class="w"> </span>json<span class="w"> </span>&gt;<span class="w"> </span>network-validation.json
+</code></pre></div>
+<p>These commands are host-local. Gateway reachability flags do not turn them
+into REST calls.</p>
+<h2 id="rc2-encrypted-backup-workflow">rc.2 encrypted backup workflow<a class="headerlink" href="#rc2-encrypted-backup-workflow" title="Permanent link">&para;</a></h2>
+<p>Create a key at a new absolute path; the command refuses to overwrite an
+existing file and never returns the key value:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>loxicmd<span class="w"> </span>appliance<span class="w"> </span>backup<span class="w"> </span>key-create<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--key-file<span class="w"> </span>/var/lib/loxilb-backups/appliance-backup.key<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--output<span class="w"> </span>json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>&gt;<span class="w"> </span>backup-key-receipt.json
+</code></pre></div>
+<p>Create and independently verify an authenticated encrypted archive:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>loxicmd<span class="w"> </span>appliance<span class="w"> </span>backup<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>/var/lib/loxilb-backups/appliance-backup.tar.age<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--key-file<span class="w"> </span>/var/lib/loxilb-backups/appliance-backup.key<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--output<span class="w"> </span>json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>&gt;<span class="w"> </span>backup-create.json
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>loxicmd<span class="w"> </span>appliance<span class="w"> </span>backup<span class="w"> </span>verify<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span>/var/lib/loxilb-backups/appliance-backup.tar.age<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span>--key-file<span class="w"> </span>/var/lib/loxilb-backups/appliance-backup.key<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span>--output<span class="w"> </span>json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span>&gt;<span class="w"> </span>backup-verify.json
+</code></pre></div>
+<p>A backup can return <code>PARTIAL</code> when its application-consistent scope is
+incomplete. Preserve both the exit code and JSON receipt; archive existence
+alone is not recovery evidence.</p>
+<h2 id="redacted-appliance-diagnostics">Redacted appliance diagnostics<a class="headerlink" href="#redacted-appliance-diagnostics" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>appliance<span class="w"> </span>diagnostics<span class="w"> </span>create<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--redact<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--output<span class="w"> </span>/var/lib/loxilb-backups/support.tar
+</code></pre></div>
+<p><code>--redact</code> is mandatory and there is no unredacted mode. The backend must
+apply its allowlist and post-generation secret scan before reporting success.
+Still treat the archive as sensitive operator evidence.</p>
+<h2 id="main-only-governed-lifecycle-preview">Main-only governed lifecycle preview<a class="headerlink" href="#main-only-governed-lifecycle-preview" title="Permanent link">&para;</a></h2>
 <div class="admonition warning">
-<p class="admonition-title">These are startup options</p>
-<p>All three are read once, when the process starts. Changing a value requires a restart of LoxiLB to take effect.</p>
+<p class="admonition-title">CLI availability: main-only</p>
+<p>The following syntax exists in CLI main, not in <code>v0.9.8.9-rc.2</code>. Do not
+use it as released-product guidance. It also requires a Product-installed
+backend that advertises the exact lifecycle capability matrix.</p>
 </div>
-<h3 id="production-example">Production example<a class="headerlink" href="#production-example" title="Permanent link">&para;</a></h3>
-<p>Emit machine-readable JSON only, at <code>info</code> and above — the right balance of signal and volume for a log aggregator (Loki, Elasticsearch, Splunk):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>loxilb<span class="w"> </span>--log-dir<span class="o">=</span>/var/log/loxilb/<span class="w"> </span>--log-format<span class="o">=</span>json<span class="w"> </span>--loglevel<span class="o">=</span>info
-</code></pre></div>
-<p>The equivalent using environment variables (convenient for containers and systemd units):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nv">LOXILB_LOG_DIR</span><span class="o">=</span>/var/log/loxilb/<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">LOXILB_LOG_FORMAT</span><span class="o">=</span>json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>loxilb<span class="w"> </span>--loglevel<span class="o">=</span>info
-</code></pre></div>
-<h3 id="development-example">Development example<a class="headerlink" href="#development-example" title="Permanent link">&para;</a></h3>
-<p>Emit both formats at full <code>debug</code> verbosity so you get human-readable plaintext for terminal triage alongside the JSON stream:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>loxilb<span class="w"> </span>--log-dir<span class="o">=</span>/tmp/loxilb-logs/<span class="w"> </span>--log-format<span class="o">=</span>both<span class="w"> </span>--loglevel<span class="o">=</span>debug
-</code></pre></div>
-<hr />
-<h2 id="log-files-rotation">Log files &amp; rotation<a class="headerlink" href="#log-files-rotation" title="Permanent link">&para;</a></h2>
-<p>All log files are written to the directory named by <code>--log-dir</code> (default <code>/var/log/loxilb/</code>). Which files appear depends on <code>--log-format</code>:</p>
-<table>
-<thead>
-<tr>
-<th>File</th>
-<th>Plane</th>
-<th>Format</th>
-<th>Written when <code>--log-format</code> is</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>loxilb-audit.json.log</code></td>
-<td>Control plane</td>
-<td>Structured JSON, one object per line</td>
-<td><code>json</code> or <code>both</code></td>
-</tr>
-<tr>
-<td><code>loxilb&lt;HOSTNAME&gt;.log</code></td>
-<td>Control plane</td>
-<td>Human-readable plaintext</td>
-<td><code>text</code> or <code>both</code></td>
-</tr>
-<tr>
-<td><code>loxilb-dp-audit.json.log</code></td>
-<td>Data plane</td>
-<td>Structured JSON, one object per line</td>
-<td><code>json</code> or <code>both</code></td>
-</tr>
-<tr>
-<td><code>loxilb-dp&lt;HOSTNAME&gt;.log</code></td>
-<td>Data plane</td>
-<td>Human-readable plaintext</td>
-<td><code>text</code> or <code>both</code></td>
-</tr>
-</tbody>
-</table>
-<p><code>&lt;HOSTNAME&gt;</code> is the value of the <code>$HOSTNAME</code> environment variable at process start. If it is empty, the plaintext files are simply <code>loxilb.log</code> and <code>loxilb-dp.log</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Confirm the files are being written</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>ls<span class="w"> </span>-lh<span class="w"> </span>/var/log/loxilb/
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Follow the structured JSON stream (pretty-printed)</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/loxilb/loxilb-audit.json.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Follow the human-readable stream</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/loxilb/loxilb.log
-</code></pre></div>
-<h3 id="built-in-rotation">Built-in rotation<a class="headerlink" href="#built-in-rotation" title="Permanent link">&para;</a></h3>
-<p>Rotation is handled inside the gateway — there is no need to configure an external <code>logrotate</code> unit. When a structured log file would exceed its size limit it is rotated in place: the current file is renamed with a UTC timestamp (<code>&lt;base&gt;-&lt;timestamp&gt;.log</code>), gzip-compressed, and old backups are pruned by count and age. The same rotation covers the <code>loxilb-mcp</code> audit trail described below.</p>
-<p>The structured log files rotate with these production defaults:</p>
-<table>
-<thead>
-<tr>
-<th>Setting</th>
-<th>Flag</th>
-<th>Env var</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Rotate above size (MB)</td>
-<td><code>--log-max-size</code></td>
-<td><code>LOXILB_LOG_MAX_SIZE</code></td>
-<td><code>50</code></td>
-</tr>
-<tr>
-<td>Backups kept per file</td>
-<td><code>--log-max-backups</code></td>
-<td><code>LOXILB_LOG_MAX_BACKUPS</code></td>
-<td><code>4</code></td>
-</tr>
-<tr>
-<td>Retention (days)</td>
-<td><code>--log-max-age</code></td>
-<td><code>LOXILB_LOG_MAX_AGE</code></td>
-<td><code>28</code></td>
-</tr>
-<tr>
-<td>Skip gzip of backups</td>
-<td><code>--log-no-compress</code></td>
-<td><code>LOXILB_LOG_NO_COMPRESS</code></td>
-<td>off (backups are compressed)</td>
-</tr>
-</tbody>
-</table>
-<p>Setting <code>--log-max-size=0</code> disables rotation and lets a file grow unbounded — not recommended in production. Rotated backups keep the <code>.log</code> / <code>.log.gz</code> naming so they remain easy to locate and archive.</p>
-<div class="admonition tip">
-<p class="admonition-title">Persist logs in Docker</p>
-<p>A container's filesystem is discarded when the container is removed, taking <code>/var/log/loxilb/</code> with it. Mount a host volume at the log directory so logs (and their rotated backups) survive restarts and redeploys:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span>run<span class="w"> </span>...<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">LOXILB_LOG_DIR</span><span class="o">=</span>/var/log/loxilb/<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-e<span class="w"> </span><span class="nv">LOXILB_LOG_FORMAT</span><span class="o">=</span>json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>-v<span class="w"> </span>loxilb-logs:/var/log/loxilb/<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>&lt;loxilb-image&gt;<span class="w"> </span>--loglevel<span class="o">=</span>info
-</code></pre></div>
-</div>
-<hr />
-<h2 id="loxilb-mcp-audit-trail">loxilb-mcp audit trail<a class="headerlink" href="#loxilb-mcp-audit-trail" title="Permanent link">&para;</a></h2>
-<p>The <a href="../../reference/cli/"><code>loxilb-mcp</code></a> management surface keeps its own audit log: every tool call an agent or operator makes against the gateway is recorded, separately from LoxiLB's operational logs. Use it to answer "who changed what, and when".</p>
-<p>The audit log is an append-only JSON-lines file named <code>audit.jsonl</code>. It is written to the audit directory, resolved in this order:</p>
+<p>Every lifecycle mutation is two phase:</p>
 <ol>
-<li>the <code>--audit-dir</code> flag, if set;</li>
-<li>the <code>audit_dir</code> field in the <code>loxilb-mcp</code> config file;</li>
-<li>otherwise <code>~/.loxilb-mcp/</code> (created with <code>0700</code> permissions).</li>
+<li><code>plan</code> validates inputs and returns a stable expiring plan without changing
+   the host;</li>
+<li><code>execute</code> accepts only that plan's 64-character lowercase SHA-256 and its
+   short-lived, one-time confirmation challenge.</li>
 </ol>
-<p>Each line is one event. Recorded event kinds include tool calls, authentication rejections, request-origin rejections, rate-limit hits, and autopilot executions. A typical record carries the timestamp, event kind, client and target names, the tool and its arguments, the outcome (<code>ok</code>), any error, latency, and the remote address:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="nt">"ts"</span><span class="p">:</span><span class="s2">"2026-07-27T09:14:02.481Z"</span><span class="p">,</span><span class="nt">"kind"</span><span class="p">:</span><span class="s2">"tool_call"</span><span class="p">,</span><span class="nt">"client"</span><span class="p">:</span><span class="s2">"operator"</span><span class="p">,</span><span class="nt">"target"</span><span class="p">:</span><span class="s2">"gateway"</span><span class="p">,</span><span class="nt">"tool"</span><span class="p">:</span><span class="s2">"lb_create"</span><span class="p">,</span><span class="nt">"args"</span><span class="p">:{</span><span class="nt">"externalIP"</span><span class="p">:</span><span class="s2">"192.0.2.10"</span><span class="p">},</span><span class="nt">"ok"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nt">"latency_ms"</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="nt">"remote"</span><span class="p">:</span><span class="s2">"192.0.2.20"</span><span class="p">}</span>
+<p>CLI availability: main-only</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># CLI availability: main-only</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>loxicmd<span class="w"> </span>appliance<span class="w"> </span>restore<span class="w"> </span>plan<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>/var/lib/loxilb-backups/appliance-backup.tar.age<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>--key-file<span class="w"> </span>/var/lib/loxilb-backups/appliance-backup.key<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>--output<span class="w"> </span>json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>&gt;<span class="w"> </span>restore-plan.json
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>loxicmd<span class="w"> </span>appliance<span class="w"> </span>restore<span class="w"> </span>execute<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span>--plan-hash<span class="w"> </span>0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span>--confirm<span class="w"> </span>plan-12345678<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span>--output<span class="w"> </span>json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span>&gt;<span class="w"> </span>restore-execute.json
 </code></pre></div>
-<p>Known top-level secret-shaped argument fields (tokens, passwords, API keys, and similar) are
-masked as <code>[REDACTED]</code> before the event is written. This is a best-effort safeguard, not a
-guarantee for arbitrary nested or unexpectedly named values. Treat every audit record as
-sensitive.</p>
-<div class="admonition warning">
-<p class="admonition-title">Redaction is defense in depth</p>
-<p>Do not rely on automatic masking as the only control. Avoid putting
-credentials or prompt content in tool arguments, names, and free-form
-fields. Restrict audit-file and archive access, and review a sanitized
-sample before exporting logs to another system.</p>
-</div>
-<p>The audit log is rotated by the same built-in mechanism as the structured logs, with a longer forensic window: it rotates above <strong>20 MB</strong>, keeps <strong>8</strong> gzipped backups, and retains them for <strong>90 days</strong>.</p>
-<p>For the full <code>loxilb-mcp</code> command surface, transports, and role model, see the <a href="../../reference/cli/">CLI Reference</a>.</p>
-<hr />
-<h2 id="read-logs-through-the-api">Read logs through the API<a class="headerlink" href="#read-logs-through-the-api" title="Permanent link">&para;</a></h2>
-<p>Operators can page current and rotated logs without receiving shell access to
-the Gateway. The API returns newest entries first and follows an opaque cursor
-backward:</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Path</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>GET</code></td>
-<td><code>/logs</code></td>
-<td>Read current or archived log lines</td>
-</tr>
-<tr>
-<td><code>GET</code></td>
-<td><code>/log-archives</code></td>
-<td>List archive names, compressed size, and modification time</td>
-</tr>
-<tr>
-<td><code>GET</code></td>
-<td><code>/log-archives/{filename}</code></td>
-<td>Download one archive</td>
-</tr>
-</tbody>
-</table>
-<p>Important response semantics:</p>
+<p>The same plan/execute shape applies to <code>update</code>, <code>rollback</code>, and
+<code>factory-reset</code>; update and rollback additionally expose a status command for
+the durable operation ID. Archive and bundle references must be absolute,
+existing regular files and may not be symlinks. Key files must satisfy the
+root-only secret-file policy.</p>
+<h2 id="backend-trust-boundary">Backend trust boundary<a class="headerlink" href="#backend-trust-boundary" title="Permanent link">&para;</a></h2>
+<p>The CLI does not implement lifecycle mutations itself:</p>
 <ul>
-<li>
-<p>REST log handlers resolve files under <code>/var/log</code> and do not honor
-  <code>--log-dir</code> or <code>LOXILB_LOG_DIR</code>; those settings affect writers only, so use
-  the filesystem/aggregator when logs are written elsewhere;</p>
-</li>
-<li>
-<p><code>log_count</code> is the number of lines in this page, not total file matches;</p>
-</li>
-<li><code>total_size</code> is the whole uncompressed file size;</li>
-<li><code>scanned_bytes</code> is how much content the server examined for this page;</li>
-<li>filtered searches stop after reaching the 32 MiB threshold and completing the current read
-  batch, so <code>scanned_bytes</code> may be slightly higher;</li>
-<li><code>.log.gz</code> archives are decompressed transparently for paging, with a 64 MiB
-  decompressed-size ceiling;</li>
-<li>a filtered page may contain no lines while <code>has_more</code> remains true, so clients
-  must continue until <code>has_more: false</code>.</li>
+<li>the backend path is fixed at build time;</li>
+<li>execution uses direct argv, never a shell;</li>
+<li>argv is allowlisted and the child environment is fixed;</li>
+<li>secrets are file/stdin inputs, never literal argv or JSON fields;</li>
+<li>mutating calls require a contract-version and capability handshake;</li>
+<li>JSON payloads are selected and validated by command/schema tuple;</li>
+<li>the correlation ID must join CLI output to the host journal/audit record.</li>
 </ul>
-<p>Use TLS and a least-privileged management identity. Treat every returned line
-as potentially sensitive, even when known secret-shaped fields are masked. The
-complete paging, archive, rotation, and cleanup procedure is in
-<a href="../log-api/">Log API Operations</a>.</p>
-<h2 id="audit-review-checklist">Audit review checklist<a class="headerlink" href="#audit-review-checklist" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Confirm system clocks are synchronized so events can be correlated.</li>
-<li>Record the immutable Gateway version and product flavor without including
-   credentials or private topology.</li>
-<li>Query the smallest time, file, level, and keyword scope needed.</li>
-<li>Walk every cursor to <code>has_more: false</code> before concluding that no older match
-   exists.</li>
-<li>Correlate management changes with policy read-back and relevant metrics.</li>
-<li>Redact credentials, API keys, prompts, personal information, tenant names,
-   client addresses, and internal hostnames before sharing evidence.</li>
-<li>Store exported evidence under the organization's access and retention
-   policy, then securely remove temporary copies.</li>
-</ol>
-<h2 id="what-is-not-covered">What is not covered<a class="headerlink" href="#what-is-not-covered" title="Permanent link">&para;</a></h2>
-<p>This page documents the logging and audit capabilities that ship in the open-source Inference Gateway. Advanced structured audit-logging features — a runtime API for changing per-category log levels without a restart, compliance-oriented export formats, and long-term audit warehousing — are outside the scope of this gateway and are intentionally not documented here. Configure log severity through the <code>--loglevel</code> startup option, and ship the JSON files to your own aggregator for retention and search.</p>
-<p>For the metrics side of observability, see
-<a href="../observability-metrics-grafana/">Grafana Dashboards and Observability</a>.</p>
-<p>Recovery and high-risk diagnostics need additional evidence beyond logs:</p>
+<p>An absent backend returns exit <code>5</code>. A major/capability/schema mismatch returns
+exit <code>6</code> without host mutation. If a mutating backend is killed or times out
+after it may have changed state, the CLI returns exit <code>8</code> and an operation ID;
+automation must inspect actual host state rather than retry blindly.</p>
+<h2 id="exit-and-envelope-rules">Exit and envelope rules<a class="headerlink" href="#exit-and-envelope-rules" title="Permanent link">&para;</a></h2>
+<p>JSON mode emits exactly one <code>CommandResult</code>. Progress and warnings use stderr.
+Automation must require agreement between the process exit and envelope code:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Exit</th>
+<th>Code</th>
+<th>Recovery behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;"><code>0</code></td>
+<td><code>OK</code></td>
+<td>Continue with independent read-back</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>2</code></td>
+<td><code>INVALID_ARGUMENT</code></td>
+<td>Correct input</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>3</code></td>
+<td><code>AUTH</code></td>
+<td>Correct OS privilege/credential</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>4</code></td>
+<td><code>PRECONDITION</code></td>
+<td>Repair host state or input files</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>5</code></td>
+<td><code>UNAVAILABLE</code></td>
+<td>Bounded retry only when no mutation was possible</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>6</code></td>
+<td><code>CONTRACT_MISMATCH</code></td>
+<td>Install a compatible CLI/backend/Product tuple</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>7</code></td>
+<td><code>FAILED</code></td>
+<td>Address the confirmed failure</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>8</code></td>
+<td><code>PARTIAL</code></td>
+<td>Do not retry; recover using operation ID and receipts</td>
+</tr>
+</tbody>
+</table>
+<h2 id="validation-boundary">Validation boundary<a class="headerlink" href="#validation-boundary" title="Permanent link">&para;</a></h2>
+<p>The rc.2 and main command paths/flags on this page are checked against their
+exact completion goldens. The main-only lifecycle is source/contract evidence,
+not installed-host, Linux runtime, Product release, GPU, or HA evidence. No
+host lifecycle mutation is performed by the documentation checks.</p>
+<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../backup-restore/">Configuration Backup and Restore</a> — checksums, dry-run,
-  commit, rollback, and restore metrics;</li>
-<li><a href="../tracing/">Application and L4 Tracing</a> — trace data handling and OTLP
-  verification;</li>
-<li><a href="../dpu-offload/">DPU Offload Observability</a> — sensitive and disruptive debug
-  boundaries.</li>
+<li><a href="../backup-restore/">Configuration Persistence, Backup, and Restore</a></li>
+<li><a href="../readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a></li>
+<li><a href="../../reference/cli/">CLI Reference</a></li>
+<li><a href="../ha-limitations/">HA and Upgrade Limitations</a></li>
 </ul>
 
 

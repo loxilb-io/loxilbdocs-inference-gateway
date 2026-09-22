@@ -16,7 +16,7 @@
         <link rel="prev" href="../ai-key-store/">
       
       
-        <link rel="next" href="../tracing/">
+        <link rel="next" href="../readiness-diagnostics-maintenance/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Backup & Restore - LoxiLB Inference Gateway</title>
+        <title>Persistence, Backup & Restore - LoxiLB Inference Gateway</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#configuration-backup-and-restore" class="md-skip">
+        <a href="#configuration-persistence-backup-and-restore" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Backup & Restore
+              Persistence, Backup & Restore
             
           </span>
         </div>
@@ -1451,6 +1451,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1811,7 +1839,7 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
   
 
     
@@ -1829,7 +1857,7 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
   
 
     
@@ -1855,10 +1883,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-the-snapshot-contains" class="md-nav__link">
+  <a href="#availability-and-evidence-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What the snapshot contains
+        Availability and evidence boundary
       
     </span>
   </a>
@@ -1866,10 +1894,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-restore-protects-the-running-gateway" class="md-nav__link">
+  <a href="#what-a-snapshot-covers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        How restore protects the running Gateway
+        What a snapshot covers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-state-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore state machine
       
     </span>
   </a>
@@ -1888,10 +1927,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-1-download-and-inspect-a-snapshot" class="md-nav__link">
+  <a href="#step-1-prove-readiness-and-capture-identity" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 1: Download and inspect a snapshot
+        Step 1: Prove readiness and capture identity
       
     </span>
   </a>
@@ -1899,10 +1938,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-run-a-dry-run-restore" class="md-nav__link">
+  <a href="#step-2-download-and-verify-a-snapshot" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2: Run a dry-run restore
+        Step 2: Download and verify a snapshot
       
     </span>
   </a>
@@ -1910,10 +1949,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-3-commit-the-reviewed-snapshot" class="md-nav__link">
+  <a href="#step-3-dry-run-and-prove-no-mutation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3: Commit the reviewed snapshot
+        Step 3: Dry-run and prove no mutation
       
     </span>
   </a>
@@ -1921,10 +1960,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-4-verify-the-data-plane" class="md-nav__link">
+  <a href="#step-4-commit-and-verify-write-through" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 4: Verify the data plane
+        Step 4: Commit and verify write-through
       
     </span>
   </a>
@@ -1932,10 +1971,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#persist-current-live-configuration" class="md-nav__link">
+  <a href="#step-5-persist-an-approved-live-state" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Persist current live configuration
+        Step 5: Persist an approved live state
       
     </span>
   </a>
@@ -1943,10 +1982,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#restart-and-legacy-file-behavior" class="md-nav__link">
+  <a href="#step-6-restart-and-prove-durable-read-back" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Restart and legacy-file behavior
+        Step 6: Restart and prove durable read-back
       
     </span>
   </a>
@@ -1954,10 +1993,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#monitor-backup-and-restore" class="md-nav__link">
+  <a href="#boot-profiles-quarantine-and-lineage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Monitor backup and restore
+        Boot profiles, quarantine, and lineage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failure-injection-expectations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failure-injection expectations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-and-json-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit and JSON contract
       
     </span>
   </a>
@@ -1990,6 +2051,62 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -2623,10 +2740,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-the-snapshot-contains" class="md-nav__link">
+  <a href="#availability-and-evidence-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What the snapshot contains
+        Availability and evidence boundary
       
     </span>
   </a>
@@ -2634,10 +2751,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-restore-protects-the-running-gateway" class="md-nav__link">
+  <a href="#what-a-snapshot-covers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        How restore protects the running Gateway
+        What a snapshot covers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-state-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore state machine
       
     </span>
   </a>
@@ -2656,10 +2784,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-1-download-and-inspect-a-snapshot" class="md-nav__link">
+  <a href="#step-1-prove-readiness-and-capture-identity" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 1: Download and inspect a snapshot
+        Step 1: Prove readiness and capture identity
       
     </span>
   </a>
@@ -2667,10 +2795,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-2-run-a-dry-run-restore" class="md-nav__link">
+  <a href="#step-2-download-and-verify-a-snapshot" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2: Run a dry-run restore
+        Step 2: Download and verify a snapshot
       
     </span>
   </a>
@@ -2678,10 +2806,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-3-commit-the-reviewed-snapshot" class="md-nav__link">
+  <a href="#step-3-dry-run-and-prove-no-mutation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3: Commit the reviewed snapshot
+        Step 3: Dry-run and prove no mutation
       
     </span>
   </a>
@@ -2689,10 +2817,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-4-verify-the-data-plane" class="md-nav__link">
+  <a href="#step-4-commit-and-verify-write-through" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 4: Verify the data plane
+        Step 4: Commit and verify write-through
       
     </span>
   </a>
@@ -2700,10 +2828,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#persist-current-live-configuration" class="md-nav__link">
+  <a href="#step-5-persist-an-approved-live-state" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Persist current live configuration
+        Step 5: Persist an approved live state
       
     </span>
   </a>
@@ -2711,10 +2839,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#restart-and-legacy-file-behavior" class="md-nav__link">
+  <a href="#step-6-restart-and-prove-durable-read-back" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Restart and legacy-file behavior
+        Step 6: Restart and prove durable read-back
       
     </span>
   </a>
@@ -2722,10 +2850,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#monitor-backup-and-restore" class="md-nav__link">
+  <a href="#boot-profiles-quarantine-and-lineage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Monitor backup and restore
+        Boot profiles, quarantine, and lineage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failure-injection-expectations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failure-injection expectations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-and-json-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit and JSON contract
       
     </span>
   </a>
@@ -2771,183 +2921,381 @@
 
 
 
-<h1 id="configuration-backup-and-restore">Configuration Backup and Restore<a class="headerlink" href="#configuration-backup-and-restore" title="Permanent link">&para;</a></h1>
-<p>Use the Gateway snapshot API to capture live configuration, validate a restore
-without changing traffic, commit the reviewed document, and persist the result
-for restart recovery. This procedure covers the Gateway's built-in snapshot;
-it does not replace database backup for external identity, API-key, or tenant
-quota stores.</p>
-<h2 id="what-the-snapshot-contains">What the snapshot contains<a class="headerlink" href="#what-the-snapshot-contains" title="Permanent link">&para;</a></h2>
-<p>Snapshot schema <code>1.0</code> covers these configuration domains:</p>
-<ul>
-<li>endpoints, load balancers, firewall rules, policies, and mirrors;</li>
-<li>sessions, session ULCL, IP filters, and security rate limits;</li>
-<li>BFD, BGP, and IPsec configuration.</li>
-</ul>
-<p>The document's <code>excluded_domains</code> marker lists <code>cluster</code>, <code>conntrack</code>,
-<code>ai_keys</code>, and <code>interface</code>. Tenant limits stored with AI keys and management
-identity databases are also outside the named snapshot domains. Inventory and
-back up those sources separately. Do not infer coverage for any configuration
-family that is not listed above merely because it is visible in another API.</p>
-<div class="admonition danger">
-<p class="admonition-title">Treat every snapshot as sensitive</p>
-<p>A snapshot can contain network topology, policy, certificate/private-key,
-and IPsec key material. Download it only over a protected management channel,
-store it with owner-only permissions, encrypt backups at rest, and never
-attach an unredacted snapshot to a public issue or test report.</p>
-</div>
-<h2 id="how-restore-protects-the-running-gateway">How restore protects the running Gateway<a class="headerlink" href="#how-restore-protects-the-running-gateway" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>flowchart LR
-    D["Download snapshot"] --&gt; V["Dry-run restore&lt;br/&gt;parse and validate"]
-    V --&gt; R{"Review plan and warnings"}
-    R --&gt;|approved| C["Commit restore"]
-    R --&gt;|not approved| S["Stop without mutation"]
-    C --&gt; P["Preserve pre-restore state"]
-    P --&gt; A["Apply and verify"]
-    A --&gt;|success| W["Persist snapshot.json"]
-    A --&gt;|failure| B["Automatic rollback"]
-
-    style V fill:#e1f5fe,stroke:#0288d1
-    style W fill:#e8f5e9,stroke:#43a047
-    style B fill:#ffcdd2,stroke:#e53935</code></pre>
-<p><code>POST /config/restore</code> defaults to <code>dry-run</code>. A commit must be explicit. During
-a restore, other mutating configuration calls are rejected with <code>503</code> and a
-<code>Retry-After</code> header. A concurrent snapshot, restore, or persist request is
-rejected with <code>409</code>. Clients should wait and retry rather than bypassing this
-single-writer protection.</p>
-<h2 id="before-you-begin">Before you begin<a class="headerlink" href="#before-you-begin" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Use an immutable, approved Gateway image on the source and target.</li>
-<li>Send requests through the protected management API and use an identity
-   permitted to change configuration.</li>
-<li>Keep a persistent mount for the configured directory. Its default is
-   <code>/etc/loxilb</code>.</li>
-<li>Pause automated configuration writers for the maintenance window.</li>
-<li>Verify backend health and save an independent inventory of external stores.</li>
-</ol>
-<p>The examples keep credentials in an owner-readable header file:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
-</code></pre></div>
-<h2 id="step-1-download-and-inspect-a-snapshot">Step 1: Download and inspect a snapshot<a class="headerlink" href="#step-1-download-and-inspect-a-snapshot" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">umask</span><span class="w"> </span><span class="m">077</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--output<span class="w"> </span>gateway-snapshot.json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/snapshot"</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'.schema_version == "1.0" and (.checksum | length &gt; 0)'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span>gateway-snapshot.json
-</code></pre></div>
-<p>You can request a subset with a comma-separated <code>components</code> query, but a
-full-instance recovery requires the complete document. Preserve the original
-file unchanged; editing content invalidates its checksum.</p>
-<h2 id="step-2-run-a-dry-run-restore">Step 2: Run a dry-run restore<a class="headerlink" href="#step-2-run-a-dry-run-restore" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--data-binary<span class="w"> </span>@gateway-snapshot.json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/restore?mode=dry-run"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>restore-dry-run.json
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>jq<span class="w"> </span>.<span class="w"> </span>restore-dry-run.json
-</code></pre></div>
-<p>Review the returned per-domain plan, compatibility flag, schema/source version,
-errors, and result. Dry-run performs no configuration mutation. Stop if the
-source version, planned deletes, or errors do not match the approved change.</p>
-<h2 id="step-3-commit-the-reviewed-snapshot">Step 3: Commit the reviewed snapshot<a class="headerlink" href="#step-3-commit-the-reviewed-snapshot" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--data-binary<span class="w"> </span>@gateway-snapshot.json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/restore?mode=commit"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>restore-commit.json
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>jq<span class="w"> </span>.<span class="w"> </span>restore-commit.json
-</code></pre></div>
-<p>A successful commit triggers a write-through to <code>snapshot.json</code>. Inspect the
-response's <code>errors</code> array even when <code>result</code> is <code>ok</code>: if persistence fails, the
-live restore remains applied but is not guaranteed to survive a restart until
-a later <code>POST /config/persist</code> succeeds. If apply or verify fails, the engine
-attempts to restore the preserved pre-restore state. Treat a <code>ROLLBACK-FAILED</code>
-result as an incident: isolate the node from new traffic, retain sanitized logs
-and both snapshots, and rebuild from a known-good image and reviewed
-configuration.</p>
-<h2 id="step-4-verify-the-data-plane">Step 4: Verify the data plane<a class="headerlink" href="#step-4-verify-the-data-plane" title="Permanent link">&para;</a></h2>
-<p>Do not stop at a successful API result:</p>
-<ol>
-<li>read back critical load balancers, endpoints, policies, and certificates;</li>
-<li>check endpoint health and send a small authorized inference request;</li>
-<li>inspect new <code>401</code>, <code>403</code>, <code>429</code>, <code>5xx</code>, and restore errors;</li>
-<li>confirm the expected snapshot and restore metrics;</li>
-<li>restart only in a maintenance window, then repeat the checks.</li>
-</ol>
-<h2 id="persist-current-live-configuration">Persist current live configuration<a class="headerlink" href="#persist-current-live-configuration" title="Permanent link">&para;</a></h2>
-<p>Auto-persist is on by default and coalesces successful mutations before writing
-<code>snapshot.json</code>. To force an immediate atomic write:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/persist"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
-</code></pre></div>
-<p>The Gateway writes a temporary file and renames it into place with mode <code>0600</code>.
-The containing directory and backup destination still require appropriate
-ownership and access controls. If <code>--config-auto-persist=off</code> is selected, make
-explicit persist calls part of every approved change procedure.</p>
-<h2 id="restart-and-legacy-file-behavior">Restart and legacy-file behavior<a class="headerlink" href="#restart-and-legacy-file-behavior" title="Permanent link">&para;</a></h2>
-<p>At startup the Gateway restores <code>snapshot.json</code>. When both that file and legacy
-<code>*.txt</code> artifacts exist, the newest configuration source wins. If snapshot boot
-restore fails, the file is quarantined with a <code>.failed-&lt;timestamp&gt;</code> suffix and
-the legacy path can be used. Investigate the failure; do not silently copy the
-quarantined file back into service.</p>
-<h2 id="monitor-backup-and-restore">Monitor backup and restore<a class="headerlink" href="#monitor-backup-and-restore" title="Permanent link">&para;</a></h2>
+<h1 id="configuration-persistence-backup-and-restore">Configuration Persistence, Backup, and Restore<a class="headerlink" href="#configuration-persistence-backup-and-restore" title="Permanent link">&para;</a></h1>
+<p>Use the Gateway lifecycle APIs to capture live configuration, prove a restore
+plan without mutation, commit the reviewed document, and persist the resulting
+state for restart recovery. This is a <strong>Gateway configuration</strong> lifecycle. It
+does not restore the appliance operating system, product packages, OAM
+database, or external identity and quota stores.</p>
+<h2 id="availability-and-evidence-boundary">Availability and evidence boundary<a class="headerlink" href="#availability-and-evidence-boundary" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Metric</th>
-<th>What to watch</th>
+<th>Surface</th>
+<th>Immutable release status</th>
+<th>Current-main status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>loxilb_snapshot_total{trigger}</code></td>
-<td>Captures produced by <code>manual</code>, <code>write-through</code>, and <code>pre-restore</code>; the precreated <code>scheduled</code> and <code>pre-upgrade</code> labels are reserved and remain zero because no current automatic producer invokes them</td>
+<td>Gateway <code>snapshot</code> / <code>restore</code> / <code>persist</code></td>
+<td>Gateway <code>v0.9.8.9-rc.1</code> exposes schema <code>1.0</code></td>
+<td>Gateway main exposes schema <code>1.6</code>, dependency manifests, lineage generations, write-through disposition, boot profiles, and readiness evidence</td>
 </tr>
 <tr>
-<td><code>loxilb_restore_total{mode,result}</code></td>
-<td>Dry-run, commit, and boot outcomes, including rollback failures</td>
+<td><code>loxicmd get snapshot</code>, <code>create restore</code>, <code>create persist</code></td>
+<td>Present in CLI <code>v0.9.8.9-rc.2</code></td>
+<td>Present</td>
 </tr>
 <tr>
-<td><code>loxilb_restore_duration_seconds</code></td>
-<td>Restore duration changes</td>
-</tr>
-<tr>
-<td><code>loxilb_last_restore_timestamp_seconds</code></td>
-<td>Last successful commit or boot restore</td>
-</tr>
-<tr>
-<td><code>loxilb_boot_config_conflict_total</code></td>
-<td>Boots that had to arbitrate snapshot and legacy files</td>
+<td><code>ready</code>, <code>diagnostics</code>, <code>maintenance</code> Gateway APIs</td>
+<td>Not present in Gateway <code>v0.9.8.9-rc.1</code></td>
+<td>Implemented on Gateway main</td>
 </tr>
 </tbody>
 </table>
-<p>Alert on any <code>result="ROLLBACK-FAILED"</code>, repeated boot conflicts, or a missing
-successful boot/commit timestamp after a planned recovery.</p>
+<p>The examples below target the current-main Gateway contract and the CLI
+<code>v0.9.8.9-rc.2</code> command surface. A green CLI command test does not make a
+Gateway main-only API part of <code>v0.9.8.9-rc.1</code>. Pin a compatible Gateway build
+and inspect <code>/version</code> before using the procedure.</p>
+<h2 id="what-a-snapshot-covers">What a snapshot covers<a class="headerlink" href="#what-a-snapshot-covers" title="Permanent link">&para;</a></h2>
+<p>Current schema <code>1.6</code> records <code>included_domains</code>, <code>excluded_domains</code>, a checksum,
+and recovery-dependency identities. Full current-main captures can include
+endpoint, JWT profile, load-balancer, KV-exact binding, L7 policy, firewall,
+policy, mirror, session, session-ULCL, IP filter, security-rate, BFD, BGP,
+IPsec, CORS, tracing, and certificate metadata domains.</p>
+<p>Do not infer coverage from that list alone:</p>
+<ul>
+<li>a partial capture contains only its declared <code>included_domains</code>;</li>
+<li><code>excluded_domains</code> is an explicit honesty marker for state the snapshot does
+  not own;</li>
+<li>external API-key, management-identity, and other stores are referenced by
+  identity and readiness, not copied into the document;</li>
+<li>runtime-only state such as conntrack and open inference streams is not a
+  configuration backup;</li>
+<li>certificate and secret recovery can depend on node-local protected material.</li>
+</ul>
+<div class="admonition danger">
+<p class="admonition-title">Treat every snapshot as sensitive</p>
+<p>A snapshot can disclose topology and policy and can reference protected
+material. Download it only over an authenticated management channel, use
+owner-only storage, encrypt backups at rest, and never attach an unredacted
+document to a public issue or report.</p>
+</div>
+<h2 id="restore-state-machine">Restore state machine<a class="headerlink" href="#restore-state-machine" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    C["Capture and verify checksum"] --&gt; D["Dry-run: parse, migrate,&lt;br/&gt;verify dependencies, plan"]
+    D --&gt; N{"Plan and read-back unchanged?"}
+    N --&gt;|no| X["Stop: no mutation"]
+    N --&gt;|yes| M["Enter approved maintenance window"]
+    M --&gt; P["Commit: preserve pre-state"]
+    P --&gt; A["Apply and verify"]
+    A --&gt;|success| W["Write-through persist&lt;br/&gt;new lineage generation"]
+    A --&gt;|failure| R["Automatic rollback"]
+    W --&gt; B["Restart and verify read-back"]
+    R --&gt;|rollback failed| I["Isolate and recover"]
+
+    style D fill:#e1f5fe,stroke:#0288d1
+    style X fill:#fff9c4,stroke:#f9a825
+    style W fill:#e8f5e9,stroke:#43a047
+    style I fill:#ffcdd2,stroke:#e53935</code></pre>
+<p><code>POST /config/restore</code> defaults to <code>dry-run</code>; mutation requires explicit
+<code>mode=commit</code>. Dry-run proves parsing, schema compatibility, declared
+dependency checks, and the replacement plan. It does <strong>not</strong> run every
+apply-time check and therefore cannot guarantee commit success.</p>
+<p>During snapshot or restore, another lifecycle operation receives <code>409</code>. Other
+mutating configuration requests receive <code>503</code> plus <code>Retry-After</code> while restore
+holds the write freeze. Requests already in flight when the freeze begins are
+not interrupted.</p>
+<h2 id="before-you-begin">Before you begin<a class="headerlink" href="#before-you-begin" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Pin the Gateway image or commit and CLI binary used for the operation.</li>
+<li>Confirm <code>GET /status/ready</code> exists on that Gateway tuple; a <code>404</code> indicates
+   the released <code>rc.1</code> surface or another incompatible build.</li>
+<li>Pause external configuration writers and choose a maintenance window.</li>
+<li>Inventory external recovery dependencies and back them up independently.</li>
+<li>Record independent pre-change read-back for critical rules and endpoints.</li>
+<li>Keep the Gateway config directory on persistent, access-controlled storage.</li>
+</ol>
+<p>Create protected management credentials for the examples:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./gateway.token
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'%s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./gateway.token
+</code></pre></div>
+<h2 id="step-1-prove-readiness-and-capture-identity">Step 1: Prove readiness and capture identity<a class="headerlink" href="#step-1-prove-readiness-and-capture-identity" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--output<span class="w"> </span>ready-before.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}\n'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/status/ready"</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'.ready == true and (.reasons | length == 0)'</span><span class="w"> </span>ready-before.json
+</code></pre></div>
+<p>Readiness here means configuration recovery is evaluable: boot replay settled,
+required dependencies passed their implemented checks, and no auto-persist
+failure streak remains. It is not proof of inference success, GPU health, or
+HA synchronization.</p>
+<h2 id="step-2-download-and-verify-a-snapshot">Step 2: Download and verify a snapshot<a class="headerlink" href="#step-2-download-and-verify-a-snapshot" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">umask</span><span class="w"> </span><span class="m">077</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>snapshot<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--token-file<span class="w"> </span>./gateway.token<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--strict<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--file<span class="w"> </span>gateway-snapshot.json
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">  .kind == "loxilb-snapshot" and</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">  (.schema_version | length &gt; 0) and</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">  (.checksum | startswith("sha256:")) and</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">  (.included_domains | length &gt; 0)</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">'</span><span class="w"> </span>gateway-snapshot.json
+</code></pre></div>
+<p><code>get snapshot</code> checks the document's own checksum before atomically replacing
+the destination with a mode-<code>0600</code> file. A bare capture has generation <code>0</code> or
+no <code>generation</code>; only persistence assigns a position in the node's durable
+lineage.</p>
+<h2 id="step-3-dry-run-and-prove-no-mutation">Step 3: Dry-run and prove no mutation<a class="headerlink" href="#step-3-dry-run-and-prove-no-mutation" title="Permanent link">&para;</a></h2>
+<p>Capture a stable read-only oracle before and after the dry-run. Choose objects
+that the planned restore would replace; the abbreviated example uses the
+load-balancer list.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer/all"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>&gt;<span class="w"> </span>lb-before.json
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>restore<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span>--token-file<span class="w"> </span>./gateway.token<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span>--file<span class="w"> </span>gateway-snapshot.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span>--strict<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">  </span>--output<span class="w"> </span>json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">  </span>&gt;<span class="w"> </span>restore-dry-run.json
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="s1">  .kind == "CommandResult" and</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="s1">  .command == "create.restore" and</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="s1">  .success == true and</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="s1">  .code == "OK" and</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="s1">  .data.restore.mode == "dry-run"</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="s1">'</span><span class="w"> </span>restore-dry-run.json
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer/all"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>&gt;<span class="w"> </span>lb-after-dry-run.json
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>cmp<span class="w"> </span>lb-before.json<span class="w"> </span>lb-after-dry-run.json
+</code></pre></div>
+<p>Review <code>plan</code>, <code>warnings</code>, <code>errors</code>, <code>external_dependencies</code>, source/current
+versions, and any planned deletes. Stop if the tuple or plan differs from the
+approved change.</p>
+<h2 id="step-4-commit-and-verify-write-through">Step 4: Commit and verify write-through<a class="headerlink" href="#step-4-commit-and-verify-write-through" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>restore<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--token-file<span class="w"> </span>./gateway.token<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--file<span class="w"> </span>gateway-snapshot.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>--commit<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>--strict<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>--output<span class="w"> </span>json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span>&gt;<span class="w"> </span>restore-commit.json
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">  .success == true and</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s1">  .code == "OK" and</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s1">  .data.restore.mode == "commit" and</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s1">  .data.restore.result == "ok" and</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s1">  .data.restore.persisted == true and</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s1">  (.data.restore.persisted_generation &gt; 0)</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s1">'</span><span class="w"> </span>restore-commit.json
+</code></pre></div>
+<p>An HTTP <code>200</code> alone is insufficient. Inspect <code>result</code>, <code>errors</code>, <code>persisted</code>,
+and <code>persisted_generation</code> together. If apply/verify fails, the Gateway tries
+to restore the preserved pre-state. A <code>ROLLBACK-FAILED</code> result means the node
+is not in a known state: isolate it and recover from a known-good image and
+reviewed backup. If the live restore succeeds but write-through fails, the CLI
+returns exit <code>8</code> (<code>PARTIAL</code>); do not restart until a later persist succeeds.</p>
+<h2 id="step-5-persist-an-approved-live-state">Step 5: Persist an approved live state<a class="headerlink" href="#step-5-persist-an-approved-live-state" title="Permanent link">&para;</a></h2>
+<p>Auto-persist is enabled by default and coalesces successful mutations after a
+quiet interval. Force an immediate atomic write when an operational checkpoint
+is required:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>persist<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--token-file<span class="w"> </span>./gateway.token<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>--strict<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span>--output<span class="w"> </span>json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span>&gt;<span class="w"> </span>persist-result.json
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s1">  .success == true and</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s1">  .code == "OK" and</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s1">  .data.persist.result == "ok" and</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="s1">  (.data.persist.generation &gt; 0) and</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="s1">  (.data.persist.checksum | startswith("sha256:"))</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="s1">'</span><span class="w"> </span>persist-result.json
+</code></pre></div>
+<p>The Gateway writes a temporary file and renames it to
+<code>{config-path}/snapshot.json</code> with mode <code>0600</code>. If
+<code>--config-auto-persist=off</code> is selected, every approved mutation procedure
+must include an explicit persist and identity check.</p>
+<h2 id="step-6-restart-and-prove-durable-read-back">Step 6: Restart and prove durable read-back<a class="headerlink" href="#step-6-restart-and-prove-durable-read-back" title="Permanent link">&para;</a></h2>
+<p>Use the deployment's approved restart mechanism; this guide does not prescribe
+a container, systemd, or appliance restart command. After restart:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>ready<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--token-file<span class="w"> </span>./gateway.token<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--output<span class="w"> </span>json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>&gt;<span class="w"> </span>ready-after-restart.json
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="s1">  .ready == true and</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="s1">  .boot.snapshot_found == true and</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="s1">  .boot.succeeded == true and</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="s1">  (.boot.generation &gt; 0) and</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="s1">  (.reasons | length == 0)</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="s1">'</span><span class="w"> </span>ready-after-restart.json
+</code></pre></div>
+<p>Then repeat exact object read-back and a small authorized data-plane request.
+The CLI prints the raw <code>ReadyStatus</code> body for <code>get ready -o json</code>; unlike
+restore/persist/maintenance commands, it does not wrap that body in
+<code>CommandResult</code>.</p>
+<h2 id="boot-profiles-quarantine-and-lineage">Boot profiles, quarantine, and lineage<a class="headerlink" href="#boot-profiles-quarantine-and-lineage" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th><code>compat</code> profile</th>
+<th><code>strict</code> profile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Valid <code>snapshot.json</code></td>
+<td>Restore it and report the applied generation</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>Snapshot restore fails</td>
+<td>Quarantine the file and replay legacy <code>*.txt</code> configuration; readiness remains degraded</td>
+<td>Quarantine the file and boot without legacy fallback pending operator recovery</td>
+</tr>
+<tr>
+<td>No snapshot exists</td>
+<td>Use the legacy boot path</td>
+<td>Use the legacy boot path; <code>strict</code> changes failed-snapshot fallback, not the no-snapshot path</td>
+</tr>
+</tbody>
+</table>
+<p>A failed file is preserved with a <code>.failed-&lt;timestamp&gt;</code> suffix. Do not copy it
+back into service. The next persistence generation is greater than every
+parseable active or quarantined lineage file, so quarantine does not silently
+reset generation numbering.</p>
+<h2 id="failure-injection-expectations">Failure-injection expectations<a class="headerlink" href="#failure-injection-expectations" title="Permanent link">&para;</a></h2>
+<p>The Gateway source includes negative persistence scenarios for malformed and
+incompatible documents, missing/divergent recovery dependencies, subsystem
+startup ordering, secret drift, write failure/ENOSPC, boot quarantine, and
+restore storms. Treat these as CI evidence for the cited source revision, not
+as proof for an installed host. An acceptance run should retain:</p>
+<table>
+<thead>
+<tr>
+<th>Injection</th>
+<th>Required observable result</th>
+<th>Mutation rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Corrupt checksum or unsupported schema</td>
+<td><code>400</code> / CLI exit <code>6</code></td>
+<td>No configuration mutation</td>
+</tr>
+<tr>
+<td>Required external dependency unavailable</td>
+<td>Restore refused before planning/apply</td>
+<td>No configuration mutation</td>
+</tr>
+<tr>
+<td>Apply failure with successful rollback</td>
+<td><code>500</code>, <code>result=rolled-back</code>, CLI exit <code>7</code></td>
+<td>Pre-state restored</td>
+</tr>
+<tr>
+<td>Apply and rollback failure</td>
+<td><code>500</code>, <code>result=ROLLBACK-FAILED</code>, CLI exit <code>8</code></td>
+<td>State unknown; isolate</td>
+</tr>
+<tr>
+<td>Persist storage full</td>
+<td>persist failure or committed restore with <code>persisted=false</code>, CLI exit <code>7</code> or <code>8</code> as applicable</td>
+<td>Never claim restart durability</td>
+</tr>
+<tr>
+<td>Boot restore failure</td>
+<td>Quarantine path and degraded readiness reason</td>
+<td>Do not silently report ready</td>
+</tr>
+</tbody>
+</table>
+<h2 id="exit-and-json-contract">Exit and JSON contract<a class="headerlink" href="#exit-and-json-contract" title="Permanent link">&para;</a></h2>
+<p>Lifecycle automation must branch on both process exit and structured output:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Exit</th>
+<th>Code</th>
+<th>Meaning for this workflow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;"><code>0</code></td>
+<td><code>OK</code></td>
+<td>Verified success</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>2</code></td>
+<td><code>INVALID_ARGUMENT</code></td>
+<td>Correct invocation</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>3</code></td>
+<td><code>AUTH</code></td>
+<td>Correct credential/privilege</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>4</code></td>
+<td><code>PRECONDITION</code></td>
+<td>Repair state or dependency first</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>5</code></td>
+<td><code>UNAVAILABLE</code></td>
+<td>Bounded retry may be safe</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>6</code></td>
+<td><code>CONTRACT_MISMATCH</code></td>
+<td>Use compatible CLI/Gateway or document</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>7</code></td>
+<td><code>FAILED</code></td>
+<td>Failure with no confirmed net mutation</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>8</code></td>
+<td><code>PARTIAL</code></td>
+<td>State changed or outcome is unknown; never auto-retry</td>
+</tr>
+</tbody>
+</table>
 <h2 id="current-validation-boundary">Current validation boundary<a class="headerlink" href="#current-validation-boundary" title="Permanent link">&para;</a></h2>
-<p>The API implements staged validation, preservation, rollback, atomic persist,
-and boot replay. These controls do not prove that a particular release, plugin,
-hardware target, or multi-node promotion preserves every deployment-specific
-dependency. Qualify backup and restore with the exact immutable image and
-configuration used in production.</p>
+<p>The procedures and examples are statically checked against Gateway main
+Swagger and CLI <code>v0.9.8.9-rc.2</code>/main command goldens. They do not establish an
+installed-host restart, Linux datapath, GPU, HA, or release qualification.</p>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
+<li><a href="../readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a></li>
+<li><a href="../appliance-cli/">Appliance Lifecycle CLI</a></li>
 <li><a href="../ha-limitations/">HA and Upgrade Limitations</a></li>
 <li><a href="../monitoring/">Monitoring and Metrics</a></li>
-<li><a href="../audit-log/">Audit Log</a></li>
 <li><a href="../../security/management-api-authentication/">Management API Authentication</a></li>
 </ul>
 

@@ -1561,6 +1561,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1910,7 +1938,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2705,7 +2789,9 @@ example an image upgrade:</p>
 <p>Without the mount, configuration survives a container <em>restart</em> but is <strong>lost
 when the container is recreated</strong>.</p>
 <p>For a controlled backup, dry-run, restore, and rollback procedure, see
-<a href="../../operations/backup-restore/">Configuration Backup and Restore</a>. The
+<a href="../../operations/backup-restore/">Persistence, Backup, and Restore</a>. Boot profiles,
+quarantine, lineage, and the current-main recovery signal are covered there and in
+<a href="../../operations/readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a>. The
 snapshot can contain sensitive network and security configuration, so restrict
 host-directory permissions and backup access.</p>
 <h2 id="verify-the-rest-api">Verify the REST API<a class="headerlink" href="#verify-the-rest-api" title="Permanent link">&para;</a></h2>
@@ -2730,7 +2816,7 @@ reachable from your client) — give it a few seconds and retry:</p>
   <code>mode: 4</code> (fullproxy).</li>
 <li><a href="../../ai-gateway/overview/">AI Gateway Overview</a> — the full set of
   inference-aware routing features.</li>
-<li><a href="../../operations/backup-restore/">Configuration Backup and Restore</a> — safely
+<li><a href="../../operations/backup-restore/">Persistence, Backup, and Restore</a> — safely
   persist, validate, restore, and monitor Gateway configuration.</li>
 <li><a href="../../security/management-api-authentication/">Management API Authentication</a>
   — protect the operator control plane before remote access.</li>

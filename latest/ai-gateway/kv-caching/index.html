@@ -1766,6 +1766,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -2115,7 +2143,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -3168,7 +3252,9 @@ mysterious 0% hit rate. Get every leg right.</p>
 your vLLM launch and the loxilb rule:</p>
 <ol>
 <li><strong>Seed</strong> — vLLM <code>PYTHONHASHSEED</code> must equal loxilb's <code>LLB_KV_NONE_HASH_SEED</code>.
-   This seeds the "none hash" that anchors the first block of every chain.</li>
+   This seeds the "none hash" that anchors the first block of every chain. Current Gateway main
+   refuses vLLM KV-exact rule creation with HTTP <code>412</code> unless the Gateway seed is nonempty and at
+   most 23 bytes.</li>
 <li><strong>Hash algorithm</strong> — vLLM <code>--prefix-caching-hash-algo=sha256_cbor</code> must equal
    the rule's <code>kvHashAlgo</code>. vLLM's <em>default</em> is a pickle-based <code>sha256</code> that is
    not portable across processes — you must select the <code>*_cbor</code> variant on both
@@ -3178,6 +3264,12 @@ your vLLM launch and the loxilb rule:</p>
 <li><strong>Block size</strong> — vLLM <code>--block-size</code> must equal <code>kvBlockSize</code> (both <code>16</code> in
    the reference topology). CPU vLLM defaults to <code>128</code>, so this is easy to miss.</li>
 </ol>
+<p>Before presenting or submitting a vLLM KV-exact rule, query
+<code>GET /netlox/v1/status/capabilities</code> and require the <code>kv_exact_vllm</code> entry to report
+<code>ready=true</code>. <code>KV_EXACT_SEED_UNSET</code> and <code>KV_EXACT_SEED_TOO_LONG</code> are launch-environment
+preconditions; changing the rule body cannot satisfy them. The capability query is a REST-only,
+current-main surface and does not replace tokenizer, event-stream, inventory, or hit-counter
+verification. See <a href="../../operations/readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a>.</p>
 <p>Under the hood the vLLM contract encodes each block as a canonical CBOR tuple
 <code>[parent_hash, [token_ids…], null]</code>, hashes it, and takes the <strong>last</strong> 8 digest
 bytes big-endian as the u64 key. The PUB socket binds <code>tcp://*:5557</code> and vLLM

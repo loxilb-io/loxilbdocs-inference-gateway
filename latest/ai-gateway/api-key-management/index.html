@@ -1621,6 +1621,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1970,7 +1998,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2751,10 +2835,10 @@
 
 <h1 id="api-key-management">API Key Management<a class="headerlink" href="#api-key-management" title="Permanent link">&para;</a></h1>
 <p>Use the AI Gateway key API to create, inspect, rotate, and revoke
-workload credentials. On a <code>mode: 4</code> rule with <code>sse_mode: true</code> or
-<code>pd_disagg_mode: true</code>, the request path actively enforces key validity, model
-allow-lists, per-key request rate, and tenant request rate. Plain fullproxy
-rules do not enter this gate.</p>
+workload credentials. On a <code>mode: 4</code> rule with <code>api_key_auth: required</code>, the
+request path enforces key validity, model allow-lists, per-key request rate,
+and the configured quota ladder. This declaration is independent of
+<code>sse_mode</code> and <code>pd_disagg_mode</code>.</p>
 <h2 id="request-path">Request path<a class="headerlink" href="#request-path" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart LR
     C([Client]) --&gt; K{"X-Api-Key&lt;br/&gt;valid?"}
@@ -2780,12 +2864,12 @@ implemented in the current development source but have not completed release qua
 Confirm the flags and API schema exposed by the exact image you deploy.</p>
 </div>
 <div class="admonition danger">
-<p class="admonition-title">Key checks require both a store and an AI-processing rule</p>
-<p>The current data-plane key gate runs only for <code>mode: 4</code> rules that also set
-<code>sse_mode: true</code> or <code>pd_disagg_mode: true</code>. A plain <code>mode: 4</code> rule remains keyless even when
-<code>--aikey-db-host</code> is configured. If the store is unset, the gated paths also admit requests
-without validating <code>X-Api-Key</code>. Configure both prerequisites, then prove a missing-key request
-returns <code>401</code> on every protected VIP before exposure.</p>
+<p class="admonition-title">The service declaration, not SSE or P/D, activates authentication</p>
+<p>Omitted <code>api_key_auth</code> preserves a backend-owned <code>X-Api-Key</code>. Explicit <code>disabled</code> strips that
+header without validating it. <code>required</code> validates and strips it. If a <code>required</code> rule has no
+usable key store, the request fails closed with <code>503 policy_store_unavailable</code>; an unknown key
+returns <code>401 invalid_api_key</code>. Prove those two failures separately and require a zero backend
+receipt delta before exposure.</p>
 </div>
 <div class="admonition danger">
 <p class="admonition-title">A key store does not protect the management listener</p>
@@ -2841,7 +2925,7 @@ request returns <code>401</code>.</p>
 <tr>
 <td><code>PATCH</code></td>
 <td><code>/config/ai/apikey/{key_id}</code></td>
-<td>Replace <code>allowed_models</code> and/or change <code>enabled</code>; raw-middleware route</td>
+<td>Update <code>allowed_models</code>, <code>enabled</code>, <code>rate_limit_rps</code>, <code>burst_size</code>, and/or <code>tokens_per_min</code>; raw-middleware route</td>
 </tr>
 <tr>
 <td><code>DELETE</code></td>
@@ -2923,7 +3007,7 @@ directly into your secret manager, then securely remove the temporary file.</p>
 <tr>
 <td><code>tokens_per_min</code></td>
 <td>Integer</td>
-<td>Persisted and returned by the key API, but <strong>not enforced</strong> by the current data path; use tenant/model TPM</td>
+<td>The implementation charges a per-key TPM bucket and denies the next request after debt; primary Swagger text is stale, so published support remains pending contract convergence</td>
 </tr>
 <tr>
 <td><code>expires_at</code></td>
@@ -2939,9 +3023,12 @@ directly into your secret manager, then securely remove the temporary file.</p>
 </table>
 <p>An empty model list records no model restriction. Prefer an explicit list when
 the workload should use only known models.</p>
-<p>Per-key <code>tokens_per_min</code> is currently a round-trip schema field, not an
-enforcement control. Configure aggregate and per-model token budgets through
-the tenant rate-limit API and verify their <code>429</code> behavior independently.</p>
+<p>The implementation is authoritative for observed behavior: the current limiter
+and tests charge and latch a per-key bucket. The frozen primary Swagger text
+incorrectly calls the field stored-only metadata, while <code>swagger-extras.yml</code>
+describes PATCH enforcement. Until the primary schema text is corrected and
+release-qualified, do not call per-key TPM a supported release contract; use
+tenant/user/model or shared-VIP limits when a published guarantee is required.</p>
 <p>The normal path omits <code>api_key</code>, lets the Gateway generate the credential, and
 receives it once as <code>raw_key</code>. The development contract also accepts a
 caller-supplied key between 16 and 512 printable, non-space ASCII characters.
@@ -2991,11 +3078,10 @@ OpenAPI handler chain.</p>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/apikey/</span><span class="nv">$OLD_KEY_ID</span><span class="s2">"</span>
 </code></pre></div>
-<p>Expected result: <code>204 No Content</code>; subsequent get returns not found. On the
-current development data path, prove that inference use fails on the same
-<code>mode: 4</code> rule with <code>sse_mode: true</code> or <code>pd_disagg_mode: true</code>; a plain
-fullproxy rule does not enter the key gate. A delete is permanent—create a new
-key if access is needed again.</p>
+<p>Expected result: <code>204 No Content</code>; subsequent get returns not found. Prove
+that inference use fails on the same <code>mode: 4</code> rule declaring
+<code>api_key_auth: required</code>. A rule that omits the field does not enter the key
+gate. A delete is permanent—create a new key if access is needed again.</p>
 <p>Disable, allow-list changes, and delete evict the local authentication and
 key-summary caches before the operation returns. The development HA path also
 sends a best-effort invalidation to peers. An unreachable or older peer may
@@ -3035,10 +3121,16 @@ guarantee.</p>
 <td>Burst over key or tenant request bucket</td>
 <td><code>429</code></td>
 </tr>
+<tr>
+<td>Required rule with no/evaluable store</td>
+<td><code>503 policy_store_unavailable</code></td>
+</tr>
 </tbody>
 </table>
 <p>Run destructive or throttling probes only with a dedicated non-production
-tenant. Never print the test key in the result.</p>
+tenant. Give each request a non-secret nonce and require backend receipt delta
+<code>0</code> for every <code>401</code>, <code>403</code>, <code>429</code>, and <code>503</code>; a client status alone does not
+prove non-delivery. Never print the test key in the result.</p>
 <h2 id="tenant-limits">Tenant limits<a class="headerlink" href="#tenant-limits" title="Permanent link">&para;</a></h2>
 <p>Tenant RPS, aggregate TPM, per-model TPM, and token burst capacity use the
 tenant rate-limit API. These limits are shared by the tenant's keys and are
@@ -3084,6 +3176,11 @@ explained step by step in <a href="../ai-traffic-governance/">AI Traffic Governa
 <td>Inspect summary by <code>key_id</code>; do not log the raw key</td>
 </tr>
 <tr>
+<td>Required inference call returns <code>503 policy_store_unavailable</code></td>
+<td>No store, unreachable store without a usable cached answer, or policy evaluation failure</td>
+<td>Restore the store; do not relabel this as an invalid client key</td>
+</tr>
+<tr>
 <td>Inference call returns <code>403</code></td>
 <td>Effective model is not allowed</td>
 <td>Compare the exact model with <code>allowed_models</code></td>
@@ -3116,6 +3213,7 @@ explained step by step in <a href="../ai-traffic-governance/">AI Traffic Governa
 <li><a href="../../operations/ai-qos/">AI Quotas and QoS</a></li>
 <li><a href="../../operations/ai-key-store/">AI Key Store Operations</a></li>
 <li><a href="../../security/management-api-authentication/">Management API Authentication</a></li>
+<li><a href="../../security/data-plane-jwt-auth/">Data-Plane Authentication and JWT</a></li>
 <li><a href="../../operations/monitoring/">Monitoring and Metrics</a></li>
 </ul>
 

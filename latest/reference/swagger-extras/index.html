@@ -1451,6 +1451,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1800,7 +1828,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2832,7 +2916,7 @@ mutation returns <code>401</code>.</p>
 <tr>
 <td>AI key update</td>
 <td><code>PATCH /config/ai/apikey/{key_id}</code></td>
-<td>Replace a key allow-list and/or change its enabled state</td>
+<td>Update a key allow-list, enabled state, and/or its three rate-limit fields</td>
 </tr>
 </tbody>
 </table>
@@ -3046,19 +3130,43 @@ runtime behavior and companion contract for response details.</p>
 <ul>
 <li><code>allowed_models</code>: replacement array; an empty array removes the model
   restriction;</li>
-<li><code>enabled</code>: <code>false</code> soft-disables the key and <code>true</code> re-enables it.</li>
+<li><code>enabled</code>: <code>false</code> soft-disables the key and <code>true</code> re-enables it;</li>
+<li><code>rate_limit_rps</code>: per-key requests per second; <code>0</code> disables that limit;</li>
+<li><code>burst_size</code>: per-key request-bucket capacity; <code>0</code> falls back to
+  <code>rate_limit_rps</code>;</li>
+<li><code>tokens_per_min</code>: per-key token quota; <code>0</code> disables it. Current
+  implementation charges the completed response and denies the next request
+  after the bucket enters debt.</li>
 </ul>
+<p>Omitted or <code>null</code> fields remain unchanged. The handler rejects a body that
+names none of these five fields, including <code>{}</code>, top-level <code>null</code>, an all-null
+body, or a body containing only unknown names. An explicit empty
+<code>allowed_models</code> is a real update, not an empty patch.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--request<span class="w"> </span>PATCH<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{"allowed_models":["example-chat-model"],"enabled":false}'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/apikey/</span><span class="nv">$KEY_ID</span><span class="s2">"</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s1">    "allowed_models": ["example-chat-model"],</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s1">    "enabled": true,</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s1">    "rate_limit_rps": 5,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s1">    "burst_size": 10,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s1">    "tokens_per_min": 12000</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="s1">  }'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/apikey/</span><span class="nv">$KEY_ID</span><span class="s2">"</span>
 </code></pre></div>
 <p>Expected success is <code>204 No Content</code>. Invalid JSON or an empty key ID returns
-<code>400</code>; an unknown key returns <code>404</code>. In the development implementation, an
-unconfigured or unavailable key store returns <code>503</code> even though the current
-companion specification still lists only a generic <code>500</code> for update failure.</p>
+<code>400</code>; an unknown key returns <code>404</code>. The companion specification distinguishes
+recognized unconfigured/unavailable key-store errors as <code>503</code> and other
+unclassified lookup or statement failures as <code>500</code>. Because the model-list and
+rate-limit writes are not one database transaction, a <code>400</code> or <code>500</code> after a
+preceding write does not prove rollback; read the key summary again.</p>
+<p>This is one place where <code>swagger-extras.yml</code> matches the implementation better
+than the primary <code>swagger.yml</code>: the companion description says per-key TPM is
+enforced post-hoc, while the primary key schemas still call it stored-only
+metadata. Implementation behavior takes precedence for diagnosis, but
+published support remains pending correction of the primary Swagger,
+regenerated artifacts, and release qualification.</p>
 <p>The update evicts local key caches and sends best-effort peer invalidation.
 Peer delivery is not an instantaneous cluster-wide revocation guarantee; see
 <a href="../../operations/ai-key-store/">AI Key Store Operations</a>.</p>

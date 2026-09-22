@@ -16,7 +16,7 @@
         <link rel="prev" href="../../use-cases/performance-methodology/">
       
       
-        <link rel="next" href="../ai-safety/">
+        <link rel="next" href="../data-plane-jwt-auth/">
       
       
         
@@ -1588,6 +1588,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../ai-safety/" class="md-nav__link">
         
   
@@ -1937,7 +1965,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2697,7 +2781,7 @@ Confirm them against the exact image and Swagger document used by your deploymen
 <h2 id="two-credential-planes">Two credential planes<a class="headerlink" href="#two-credential-planes" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart LR
     OP([Operator]) --&gt;|Authorization: Bearer| MGMT["Management API&lt;br/&gt;:11111/netlox/v1"]
-    APP([Inference workload]) --&gt;|X-Api-Key| VIP["Inference VIP&lt;br/&gt;fullproxy rule"]
+    APP([Inference workload]) --&gt;|X-Api-Key or bearer JWT| VIP["Inference VIP&lt;br/&gt;fullproxy rule"]
     MGMT --&gt; AUTH{"Management&lt;br/&gt;authenticator"}
     AUTH --&gt; RBAC{"admin / viewer&lt;br/&gt;authorization"}
     RBAC --&gt; CFG["Configuration and&lt;br/&gt;key lifecycle handlers"]
@@ -2710,9 +2794,13 @@ Confirm them against the exact image and Swagger document used by your deploymen
 <ul>
 <li><code>Authorization: Bearer ...</code> authenticates an operator to the management API.</li>
 <li><code>X-Api-Key: ...</code> authenticates a workload on an inference VIP.</li>
+<li><code>Authorization: Bearer ...</code> on a JWT-capable inference VIP is a data-plane
+  JWT selected by that service's profile, not the management token.</li>
 <li>Presenting a data-plane key to the management API does not grant management
   authority and receives the same <code>401</code> response as an unknown credential.</li>
 <li>A management token is not an inference API key.</li>
+<li>Never reuse or forward a browser/operator bearer token as an inference JWT.
+  The two token issuers and authorization policies are independent.</li>
 </ul>
 <h2 id="choose-one-management-authentication-mode">Choose one management authentication mode<a class="headerlink" href="#choose-one-management-authentication-mode" title="Permanent link">&para;</a></h2>
 <table>
@@ -2809,6 +2897,9 @@ testing a management authentication mode.</p>
 <p>Use separate operator identities where possible. The manual-token mode has no
 per-user role or attribution, so reserve it for tightly controlled bootstrap,
 recovery, or single-operator deployments.</p>
+<p>See <a href="../data-plane-jwt-auth/">Data-Plane Authentication and JWT</a> for omitted
+versus <code>disabled</code>, API-key/JWT precedence, profile lifecycle, and backend
+header handling.</p>
 <div class="admonition danger">
 <p class="admonition-title">Current user and token handling blocks production release</p>
 <p>A viewer can call <code>GET /auth/users</code>, and the current response exposes stored password material.
@@ -2932,10 +3023,11 @@ sanitized service health and logs.</p>
 <li>Send a protected, invalid-body mutation without a credential and require
    <code>401</code> before request validation:</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--silent<span class="w"> </span>--output<span class="w"> </span>/dev/null<span class="w"> </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}\n'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span>https://gateway.example.com/netlox/v1/config/ai/apikey<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{}'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># docs-example: expect-schema-error</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>curl<span class="w"> </span>--silent<span class="w"> </span>--output<span class="w"> </span>/dev/null<span class="w"> </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}\n'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span>https://gateway.example.com/netlox/v1/config/ai/apikey<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{}'</span>
 </code></pre></div>
 <ol>
 <li>After the user-list response is fixed to omit password material, authenticate

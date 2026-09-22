@@ -1451,6 +1451,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1800,7 +1828,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2495,6 +2579,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#configuration-and-appliance-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration and appliance lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#load-balancer-contract-flags" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2963,6 +3058,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#configuration-and-appliance-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration and appliance lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#load-balancer-contract-flags" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3192,12 +3298,11 @@ reference a specific backend are surfaced by <code>diagnose_endpoint</code>.</p>
 <h3 id="ai-gateway">AI gateway<a class="headerlink" href="#ai-gateway" title="Permanent link">&para;</a></h3>
 <div class="admonition note">
 <p class="admonition-title">Data-plane enforcement</p>
-<p>Enforcement requires the independent PostgreSQL key store <strong>and</strong> a <code>mode: 4</code> rule with
-<code>sse_mode: true</code> or <code>pd_disagg_mode: true</code>. Plain <code>mode: 4</code> remains keyless. On a gated rule,
-the path enforces API-key authentication and model authorization (<code>401</code>/<code>403</code>) plus request-rate
-and tenant/model token quotas (<code>429</code>). Per-key <code>tokens_per_min</code> is stored but not enforced.
-Without <code>--aikey-db-host</code>, the gated path admits requests without API-key checks. Prove the
-expected <code>401</code> behavior on the exact VIP before exposure.</p>
+<p>A <code>mode: 4</code> rule's independent <code>api_key_auth</code> declaration activates authentication; SSE and
+P/D do not. The CLI can set only <code>disabled</code> or <code>required</code>. A required rule returns <code>401</code> for an
+unknown key and fails closed with <code>503</code> if the PostgreSQL policy store cannot answer. JWT modes,
+profile association, user quotas, and defaults are REST-only. Per-key TPM is implemented, but
+its primary Swagger description is stale; published support remains pending convergence.</p>
 </div>
 <table>
 <thead>
@@ -3217,7 +3322,7 @@ expected <code>401</code> behavior on the exact VIP before exposure.</p>
 </tr>
 <tr>
 <td><code>ai_apikey_create</code></td>
-<td>Create a tenant API key: allowed models, enforced per-key RPS/burst values, and stored <code>tokens_per_min</code> metadata (not currently enforced per key). Key material is written to a secrets file by default.</td>
+<td>Create a tenant API key: allowed models and per-key RPS/burst values. Key material is written to a secrets file by default. The implementation enforces per-key TPM, but do not treat it as release-qualified until primary Swagger converges.</td>
 </tr>
 <tr>
 <td><code>ai_apikey_update</code></td>
@@ -3457,14 +3562,17 @@ as an MCP tool call and the equivalent REST call the bridge makes on your behalf
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$GATEWAY_TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s1">    "serviceArguments": { "externalIP": "10.10.10.254", "port": 8080,</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s1">                          "protocol": "tcp", "sel": 0, "mode": 4 },</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s1">    "endpoints": [ { "endpointIP": "198.51.100.11", "targetPort": 8000, "weight": 1 } ]</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s1">  }'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$GATEWAY_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s1">    "serviceArguments": { "externalIP": "10.10.10.254", "port": 8080,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s1">                          "protocol": "tcp", "sel": 0, "mode": 4 },</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s1">    "endpoints": [ { "endpointIP": "198.51.100.11", "targetPort": 8000, "weight": 1 } ]</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="s1">  }'</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -3514,6 +3622,45 @@ config (<code>prometheus_url</code>). This example reads active AI streams per m
 <code>set</code>/<code>get</code>/<code>delete opa</code>, <code>create sni</code>, and <code>get kvinventory</code>.</p>
 <p>Its examples sit beside the MCP and REST forms in the tabbed blocks on this page
 and throughout the docs, so the same operation reads across all three surfaces:</p>
+<h3 id="configuration-and-appliance-lifecycle">Configuration and appliance lifecycle<a class="headerlink" href="#configuration-and-appliance-lifecycle" title="Permanent link">&para;</a></h3>
+<p>The CLI release line and the Gateway release line are independent. Confirm both installed
+versions before assuming a command has a server-side implementation.</p>
+<table>
+<thead>
+<tr>
+<th>CLI surface</th>
+<th>Availability</th>
+<th>Contract boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get snapshot</code>, <code>create restore</code>, <code>create persist</code></td>
+<td>CLI <code>v0.9.8.9-rc.2</code></td>
+<td>Gateway configuration lifecycle; restore defaults to dry-run and commit is explicit.</td>
+</tr>
+<tr>
+<td><code>get ready</code>, <code>get diagnostics</code>, <code>get maintenance</code>, <code>set maintenance</code></td>
+<td>CLI <code>v0.9.8.9-rc.2</code></td>
+<td>The CLI exists in rc.2, but the backing Gateway routes are absent from Gateway <code>v0.9.8.9-rc.1</code> and require a compatible current-main image.</td>
+</tr>
+<tr>
+<td><code>appliance status</code>, <code>appliance network</code>, <code>appliance gateway</code>, <code>appliance credentials</code>, <code>appliance diagnostics</code>, <code>appliance backup</code></td>
+<td>CLI <code>v0.9.8.9-rc.2</code></td>
+<td>Whole-appliance observation, validation, support-bundle, and backup operations.</td>
+</tr>
+<tr>
+<td>Appliance restore, update, rollback, and factory-reset plan/execute/status commands</td>
+<td>CLI <code>main</code> only</td>
+<td>Governed whole-appliance lifecycle. The rc.2 commands are visible unavailable stubs and exit <code>6</code>; source presence on main is not installed Product qualification.</td>
+</tr>
+</tbody>
+</table>
+<p>Readiness and diagnostics print the Gateway's typed body directly in JSON mode. Restore,
+persist, maintenance, and appliance operations use the CLI command-result envelope and its exact
+exit taxonomy. See <a href="../../operations/backup-restore/">Persistence, Backup, and Restore</a>,
+<a href="../../operations/readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a>,
+and <a href="../../operations/appliance-cli/">Appliance CLI</a>.</p>
 <h3 id="load-balancer-contract-flags">Load-balancer contract flags<a class="headerlink" href="#load-balancer-contract-flags" title="Permanent link">&para;</a></h3>
 <p>The current CLI maps these flags to the Gateway API contract:</p>
 <table>
@@ -3550,8 +3697,17 @@ and throughout the docs, so the same operation reads across all three surfaces:<
 <td><code>--model-name=&lt;model&gt;</code></td>
 <td>Repeats the model component of the L7 rule key.</td>
 </tr>
+<tr>
+<td>API-key policy</td>
+<td><code>--api-key-auth=disabled|required</code></td>
+<td>CLI supports exactly these two values. Omission and explicit <code>disabled</code> are different contracts.</td>
+</tr>
 </tbody>
 </table>
+<p>The Gateway REST contract also accepts <code>jwt</code> and <code>apikey-or-jwt</code>, but the CLI
+does not. There is no supported <code>--jwt-auth-profile</code> flag. Create JWT-capable
+services and associate profiles through REST; do not substitute a fabricated
+CLI option. User-limit and global/rule-default QoS CRUD are also REST-only.</p>
 <p><code>pdBootstrapPort</code> does not currently have a <code>loxicmd create lb</code> flag. Configure that SGLang P/D
 field through the REST API. Do not substitute <code>--kv-zmq-port</code>; it configures a different transport.</p>
 <h3 id="delete-a-model-keyed-rule">Delete a model-keyed rule<a class="headerlink" href="#delete-a-model-keyed-rule" title="Permanent link">&para;</a></h3>
@@ -3583,9 +3739,13 @@ then delete by name. This avoids deleting a similarly keyed service.</p>
 <li><a href="../api/">REST API reference</a> — the endpoints these tools call.</li>
 <li><a href="../../ai-gateway/api-key-management/">API Key Management</a> — scoped key lifecycle and enforcement behavior.</li>
 <li><a href="../../security/management-api-authentication/">Management API Authentication</a> — gateway auth modes and RBAC.</li>
+<li><a href="../../security/data-plane-jwt-auth/">Data-Plane Authentication and JWT</a> — five-state service policy and REST-only JWT profiles.</li>
 <li><a href="../../operations/ai-key-store/">AI Key Store Operations</a> — independent data-plane credential storage.</li>
 <li><a href="../../ai-gateway/kv-caching/">KV-Cache Routing</a> — what <code>ai_kv_inventory_get</code> inspects.</li>
 <li><a href="../../operations/monitoring/">Monitoring &amp; Metrics</a> — the metric families read by the observability tools.</li>
+<li><a href="../../operations/backup-restore/">Persistence, Backup, and Restore</a> — dry-run, commit, write-through, restart, and quarantine semantics.</li>
+<li><a href="../../operations/readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a> — typed recovery state, optional-capability preflight, and the configuration-write gate.</li>
+<li><a href="../../operations/appliance-cli/">Appliance CLI</a> — Gateway configuration versus whole-appliance lifecycle boundaries.</li>
 <li><a href="../../operations/troubleshooting/">Troubleshooting</a> — companion to the <code>diagnose_*</code> tools.</li>
 </ul>
 

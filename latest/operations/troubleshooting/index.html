@@ -1451,6 +1451,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1802,7 +1830,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2945,7 +3029,7 @@ prefill/decode handoff stalls, streaming cut-offs, and metrics gaps.</p>
 <p class="admonition-title">Most AI-routing misconfiguration fails <em>silently</em></p>
 <p>The recurring failure theme on this gateway is not a loud error — it is <strong>silent degradation
 to round-robin</strong> (or silent metric loss). A block-size mismatch, a non-portable hash algorithm,
-an unset <code>PYTHONHASHSEED</code>, the wrong ZMQ port, or a missing tokenizer directory will not raise
+an engine-side <code>PYTHONHASHSEED</code> mismatch, the wrong ZMQ port, or a missing tokenizer directory will not raise
 an exception; the request is simply served by the fallback tier and your carefully-tuned
 KV-cache routing never fires. <strong>Never trust that a feature engaged just because requests
 succeed — always run the "verify it fired" step.</strong> Each section below includes one.</p>
@@ -3027,6 +3111,9 @@ your environment and use TLS outside an isolated lab. Keep management
 tokens and inference API keys in protected header files, and redact secrets,
 prompts, tenant data, and private topology before sharing output. The current
 <code>/metrics</code> route itself is bearer-auth exempt; configuration endpoints are not.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
+</code></pre></div>
 <hr />
 <h2 id="ai-routing-not-happening-at-all">AI routing not happening at all<a class="headerlink" href="#ai-routing-not-happening-at-all" title="Permanent link">&para;</a></h2>
 <p><strong>Symptom:</strong> the gateway behaves like a plain L4 load balancer — the HTTP body is never parsed,
@@ -3054,9 +3141,9 @@ routing, P/D) engages.</p>
 </tbody>
 </table>
 <p><strong>Verify it fired</strong> — confirm the rule actually carries <code>mode: 4</code> and the AI field you expect:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | {port, mode, model_name, kvExactMode, pd_disagg_mode}'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | {port, mode, model_name, kvExactMode, pd_disagg_mode}'</span>
 </code></pre></div>
 <p>Every AI rule must show <code>mode: 4</code>. If <code>mode</code> is anything else, the body is never inspected.</p>
 <hr />
@@ -3096,19 +3183,19 @@ routing, P/D) engages.</p>
 </tbody>
 </table>
 <p><strong>Verify it fired</strong> — list rules and their model keys, then probe both selection paths:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># What model_name does each rule on this VIP carry?</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | {port, model_name, mode}'</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># JSON body path</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:2020/v1/chat/completions<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"model":"llama-70b","messages":[{"role":"user","content":"hi"}]}'</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># Header path (X-Model wins over the body's model field)</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:2020/v1/chat/completions<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"X-Model: llama-70b"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"model":"ignored","messages":[{"role":"user","content":"hi"}]}'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># What model_name does each rule on this VIP carry?</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | {port, model_name, mode}'</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># JSON body path</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:2020/v1/chat/completions<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"model":"llama-70b","messages":[{"role":"user","content":"hi"}]}'</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># Header path (X-Model wins over the body's model field)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:2020/v1/chat/completions<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"X-Model: llama-70b"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"model":"ignored","messages":[{"role":"user","content":"hi"}]}'</span>
 </code></pre></div>
 <p>See <a href="../../ai-gateway/model-load-balancing/">Model Load Balancing</a> for the full match hierarchy.</p>
 <hr />
@@ -3130,6 +3217,11 @@ no error to grep for; you must assert engagement from metrics.</p>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>vLLM KV-exact rule creation returns <code>412</code></td>
+<td>Gateway launch environment cannot admit vLLM KV-exact: <code>LLB_KV_NONE_HASH_SEED</code> is unset/empty or exceeds 23 bytes</td>
+<td>Read <code>GET /status/capabilities</code>, require <code>kv_exact_vllm.ready=true</code>, then set a nonempty Gateway seed of at most 23 bytes that exactly matches vLLM <code>PYTHONHASHSEED</code>; restart through the approved deployment procedure before retrying</td>
+</tr>
 <tr>
 <td><code>loxilb_pd_kv_tier15_hits_total</code> never advances after a cold request</td>
 <td><strong>Block/page-size mismatch</strong> — <code>kvBlockSize</code> ≠ engine block size.</td>
@@ -3166,21 +3258,21 @@ through silently to the topology fallback.</p>
 </div>
 <h3 id="verify-it-fired-the-essential-recipe">Verify it fired (the essential recipe)<a class="headerlink" href="#verify-it-fired-the-essential-recipe" title="Permanent link">&para;</a></h3>
 <p>Do not trust KV-cache results until all four checks pass. Run against <code>GET /netlox/v1/metrics</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>M<span class="o">()</span><span class="w"> </span><span class="o">{</span><span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/metrics<span class="p">;</span><span class="w"> </span><span class="o">}</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># 1. Inventory ingested — must be &gt; 0 (endpoint block inventory arrived over ZMQ)</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>M<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^loxilb_pd_kv_blocks'</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># 2. THE key assertion — send ONE cold request, then confirm the hit counter ADVANCES.</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1">#    A flat delta = a broken parity leg. You are measuring the fallback selector: stop and fix.</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>M<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^loxilb_pd_kv_tier15_hits_total'</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># 3. Subscribers connected — climbs by N after a rule with N endpoints</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>M<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^loxilb_kv_subscriber_connected'</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># 4. Publisher-side, on EACH prefill host — at least one listener on the ZMQ port</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="c1">#    (missing = the engine's --kv-events-config never took effect)</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>ss<span class="w"> </span>-tln<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>:5557
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>M<span class="o">()</span><span class="w"> </span><span class="o">{</span><span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/metrics<span class="p">;</span><span class="w"> </span><span class="o">}</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># 1. Inventory ingested — must be &gt; 0 (endpoint block inventory arrived over ZMQ)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>M<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^loxilb_pd_kv_blocks'</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1"># 2. THE key assertion — send ONE cold request, then confirm the hit counter ADVANCES.</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1">#    A flat delta = a broken parity leg. You are measuring the fallback selector: stop and fix.</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>M<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^loxilb_pd_kv_tier15_hits_total'</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># 3. Subscribers connected — climbs by N after a rule with N endpoints</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>M<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^loxilb_kv_subscriber_connected'</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># 4. Publisher-side, on EACH prefill host — at least one listener on the ZMQ port</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="c1">#    (missing = the engine's --kv-events-config never took effect)</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>ss<span class="w"> </span>-tln<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>:5557
 </code></pre></div>
 <p>Also useful: <code>GET /netlox/v1/config/ai/kv/inventory</code> shows the ingested per-endpoint block
 inventory. Informational miss reasons live in
@@ -3226,13 +3318,13 @@ side-channel. It is sensitive to GPU block-count agreement and to mesh restart d
 </table>
 <p><strong>Verify it fired</strong> — confirm the block counts match before trusting handoff, and that the rule is
 in P/D mode:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Every engine in the mesh should report the SAME num_gpu_blocks</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://198.51.100.10:8100/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'vllm:cache_config_info'</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Rule must carry pd_disagg_mode: true and endpoints with ep_role 1 (prefill) / 2 (decode)</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | select(.pd_disagg_mode==true) | {port, pd_disagg_mode, kvExactMode}'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Every engine in the mesh should report the SAME num_gpu_blocks</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://198.51.100.10:8100/metrics<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'vllm:cache_config_info'</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Rule must carry pd_disagg_mode: true and endpoints with ep_role 1 (prefill) / 2 (decode)</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | select(.pd_disagg_mode==true) | {port, pd_disagg_mode, kvExactMode}'</span>
 </code></pre></div>
 <p>See <a href="../../use-cases/deploy-pd-disaggregation/">Deploy P/D Disaggregation</a> for the NIXL launch flags
 and full-mesh redeploy procedure.</p>
@@ -3251,8 +3343,8 @@ limits, and tenant/model token quotas are enforced in the request path.</p>
 <tbody>
 <tr>
 <td>Missing or unknown key is accepted</td>
-<td>Rule is not using the AI Gateway fullproxy path, or traffic bypasses the intended VIP</td>
-<td>Confirm <code>mode: 4</code>, AI handling on the rule, and the actual destination</td>
+<td><code>api_key_auth</code> is omitted/disabled, traffic bypasses the rule, or the wrong VIP was tested</td>
+<td>Read back the exact service; require <code>mode: 4</code> plus <code>api_key_auth: required</code> for API-key-only enforcement</td>
 </tr>
 <tr>
 <td>Valid key returns <code>401</code></td>
@@ -3260,14 +3352,29 @@ limits, and tenant/model token quotas are enforced in the request path.</p>
 <td>Inspect the key summary by <code>key_id</code>; send it as <code>X-Api-Key</code>; never log its value</td>
 </tr>
 <tr>
-<td>Valid key returns <code>403</code></td>
-<td>Effective model is not in <code>allowed_models</code></td>
-<td>Compare <code>X-Model</code>/body model precedence and exact spelling</td>
+<td>Required key call returns <code>503 policy_store_unavailable</code></td>
+<td>No usable store or the credential/quota policy cannot be evaluated</td>
+<td>Restore the policy store; require backend receipt delta <code>0</code>; do not rotate a valid key for an operator outage</td>
+</tr>
+<tr>
+<td>Valid JWT returns <code>401</code></td>
+<td>Signature, time, issuer/audience, tenant mapping, or token-size boundary failed</td>
+<td>Compare the profile contract and JWT metrics without logging the token</td>
+</tr>
+<tr>
+<td>Valid JWT returns <code>503 policy_store_unavailable</code></td>
+<td>Profile has no usable JWKS snapshot</td>
+<td>Inspect JWKS usable/keys/refresh metrics and issuer reachability</td>
+</tr>
+<tr>
+<td>Valid credential returns <code>403</code></td>
+<td>Effective model is not authorized by key allow-list or JWT claim mapping</td>
+<td>Compare the effective model and exact authorized set</td>
 </tr>
 <tr>
 <td>Request returns <code>429</code></td>
-<td>Key RPS, tenant RPS, aggregate TPM, or model TPM denied admission</td>
-<td>Read the error reason and <code>Retry-After</code>; inspect dedicated denial and utilization metrics</td>
+<td>Applicable key/user/tenant/model/shared-VIP RPS or TPM bucket denied admission</td>
+<td>Read the error reason and <code>Retry-After</code>; inspect the matching scoped metric</td>
 </tr>
 <tr>
 <td>Large request always returns <code>429</code> despite low average TPM</td>
@@ -3281,7 +3388,10 @@ limits, and tenant/model token quotas are enforced in the request path.</p>
 </tr>
 </tbody>
 </table>
-<p>Use a dedicated non-production tenant to test denial behavior. See
+<p>Use a dedicated non-production tenant to test denial behavior. Add a unique
+nonce and require backend receipt delta <code>0</code> for <code>401</code>, <code>403</code>, <code>429</code>, and <code>503</code>.
+After a scoped denial, an unrelated user/model probe must remain eligible; this
+is the no-bleed oracle. See
 <a href="../../ai-gateway/ai-traffic-governance/">AI Traffic Governance</a> for reservation,
 settlement, and status-code details.</p>
 <hr />
@@ -3315,10 +3425,10 @@ severed mid-flight.</p>
 </tbody>
 </table>
 <p><strong>Verify it fired</strong> — check the streaming knobs on the rule:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | select(.sse_mode==true)</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s1">        | {port, sse_mode, max_stream_duration_sec, inactiveTimeOut}'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | select(.sse_mode==true)</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s1">        | {port, sse_mode, max_stream_duration_sec, inactiveTimeOut}'</span>
 </code></pre></div>
 <p>See <a href="../../ai-gateway/sse-quota-management/">SSE &amp; Quota Management</a> for the full lifecycle.</p>
 <hr />
@@ -3360,25 +3470,25 @@ the series you expect.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/metrics<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># Confirm the current setting</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/metrics<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/metrics<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1"># Confirm the current setting</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/metrics<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>loxicmd<span class="w"> </span><span class="nb">set</span><span class="w"> </span>metrics<span class="w"> </span>--enable
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># Confirm the current setting</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>metrics
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>loxicmd<span class="w"> </span><span class="nb">set</span><span class="w"> </span>metrics<span class="w"> </span>--enable
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># Confirm the current setting</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>metrics
 </code></pre></div>
 </div>
 </div>
 </div>
 <p><strong>Verify it fired:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># After enabling + one warm-up request, the scrape should return prometheus text</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/metrics<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^loxilb_pd_kv_blocks'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># After enabling + one warm-up request, the scrape should return prometheus text</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/metrics<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^loxilb_pd_kv_blocks'</span>
 </code></pre></div>
 <p>See <a href="../monitoring/">Monitoring &amp; Metrics</a> for the full metric catalog.</p>
 <hr />
@@ -3416,10 +3526,10 @@ the series you expect.</p>
 </tbody>
 </table>
 <p><strong>Verify it fired</strong> — reproduce the scrape exactly as Prometheus would:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-w<span class="w"> </span><span class="s1">'%{http_code}\n'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>http://192.0.2.10:11111/netlox/v1/metrics
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="c1"># Expect 200. 503 = export disabled; connection refused = port/firewall;</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># TLS error = scheme mismatch.</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-w<span class="w"> </span><span class="s1">'%{http_code}\n'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span>http://192.0.2.10:11111/netlox/v1/metrics
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1"># Expect 200. 503 = export disabled; connection refused = port/firewall;</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># TLS error = scheme mismatch.</span>
 </code></pre></div>
 <p>A working scrape job points at <code>metrics_path: /netlox/v1/metrics</code>, the correct
 listener and scheme, and is restricted at the network boundary. A roughly
@@ -3539,11 +3649,11 @@ recovery procedures.</p>
 </tbody>
 </table>
 <p>Check the current values together:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nv">loxilb_proxy_cache_bytes</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nv">loxilb_proxy_cache_bytes_max_conn</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nv">loxilb_proxy_cache_conns_queued</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="nv">loxilb_proxy_cache_backpressure_ratio</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_drain_partial_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nv">loxilb_proxy_cache_bytes</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nv">loxilb_proxy_cache_bytes_max_conn</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nv">loxilb_proxy_cache_conns_queued</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="nv">loxilb_proxy_cache_backpressure_ratio</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_drain_partial_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
 </code></pre></div>
 <p>Do not interpret aggregate cached bytes as a fixed-size cache setting. The cap
 is per connection, so aggregate memory grows with concurrency. See
@@ -3589,10 +3699,27 @@ is per connection, so aggregate memory grows with concurrency. See
 <td>Boot restore failed</td>
 <td>Preserve the <code>.failed-&lt;timestamp&gt;</code> file securely, inspect sanitized logs, and validate the selected legacy/fallback state</td>
 </tr>
+<tr>
+<td><code>GET /status/ready</code> returns typed HTTP <code>503</code></td>
+<td>Configuration recovery, dependency probing, or persistence state is not ready</td>
+<td>Inspect <code>reasons</code> and the last restore/persist fields; do not treat this endpoint as GPU, inference, or full data-plane proof</td>
+</tr>
+<tr>
+<td>Maintenance reports <code>refusing_new_inference: false</code></td>
+<td>Maintenance gates configuration writes, not inference admission</td>
+<td>Drain traffic with the service/load-balancer procedure before disruptive work; maintenance timeout is informational</td>
+</tr>
+<tr>
+<td>Appliance lifecycle exits <code>6</code></td>
+<td>The command is unavailable in this CLI build, the fixed backend is absent/incompatible, or Product enablement is missing</td>
+<td>Compare CLI/Gateway/Product versions and installed backend marker; do not infer support from current-main source</td>
+</tr>
 </tbody>
 </table>
 <p>Never retry a failed commit without a fresh dry-run and root-cause review. See
-<a href="../backup-restore/">Configuration Backup and Restore</a>.</p>
+<a href="../backup-restore/">Persistence, Backup, and Restore</a>,
+<a href="../readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a>, and
+<a href="../appliance-cli/">Appliance CLI</a>.</p>
 <hr />
 <h2 id="trace-export-failures">Trace export failures<a class="headerlink" href="#trace-export-failures" title="Permanent link">&para;</a></h2>
 <table>
@@ -3730,7 +3857,9 @@ can unregister a plugin or force the circuit breaker. See
 <li><a href="../../ai-gateway/api-key-management/">API Key Management</a> — key lifecycle and active enforcement</li>
 <li><a href="../../ai-gateway/ai-traffic-governance/">AI Traffic Governance</a> — RPS and TPM diagnosis</li>
 <li><a href="../ai-qos/">AI Quotas and QoS</a> — byte-rate control labs</li>
-<li><a href="../backup-restore/">Configuration Backup and Restore</a> — dry-run, commit, rollback, and boot recovery</li>
+<li><a href="../backup-restore/">Persistence, Backup, and Restore</a> — dry-run, commit, write-through, restart, quarantine, and lineage</li>
+<li><a href="../readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a> — interpret typed recovery state, optional-capability preflight, and configuration-write gating</li>
+<li><a href="../appliance-cli/">Appliance CLI</a> — distinguish Gateway recovery from whole-appliance lifecycle operations</li>
 <li><a href="../tracing/">Application and L4 Tracing</a> — OTLP and sampling diagnostics</li>
 <li><a href="../dpu-offload/">DPU Offload Observability</a> — optional hardware diagnostics</li>
 <li><a href="../ha-limitations/">HA and Upgrade Limitations</a> — promotion and rolling-upgrade boundaries</li>

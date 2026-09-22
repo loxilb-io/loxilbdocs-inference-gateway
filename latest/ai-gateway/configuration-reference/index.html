@@ -1738,6 +1738,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -2087,7 +2115,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2990,7 +3074,18 @@
 server's engine-coherence and topology validation. Invalid combinations fail before a rule is
 created; a client must not assume that every individually valid field can be combined.</p>
 <p>A load-balancer create body has three top-level keys:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="w"> </span><span class="nt">"serviceArguments"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nt">"endpoints"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">],</span><span class="w"> </span><span class="nt">"secondaryIPs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">"serviceArguments"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">"externalIP"</span><span class="p">:</span><span class="w"> </span><span class="s2">"192.0.2.10"</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">"port"</span><span class="p">:</span><span class="w"> </span><span class="mi">8080</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">"protocol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tcp"</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="nt">"mode"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="p">},</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nt">"endpoints"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"endpointIP"</span><span class="p">:</span><span class="w"> </span><span class="s2">"198.51.100.11"</span><span class="p">,</span><span class="w"> </span><span class="nt">"targetPort"</span><span class="p">:</span><span class="w"> </span><span class="mi">8000</span><span class="p">,</span><span class="w"> </span><span class="nt">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="nt">"secondaryIPs"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">}</span>
 </code></pre></div>
 <p><code>serviceArguments</code> carries the VIP, the L4/L7 behaviour, and every AI-routing knob. <code>endpoints</code>
 carries the backend pool. This page documents both.</p>
@@ -3382,11 +3477,11 @@ apply to every rule, AI or not.</p>
 </table>
 <div class="admonition note">
 <p class="admonition-title">SSE lifecycle and admission controls are enforced</p>
-<p>SSE lifecycle handling is part of the fullproxy stream path. API-key model authorization,
-request-rate limits, and token quotas use the independent PostgreSQL key store configured by
-<code>--aikey-db-*</code>. Without <code>--aikey-db-host</code>, the current data path admits requests without key
-validation. Prove a missing-key request receives <code>401</code> before using these controls as an
-access boundary.</p>
+<p>SSE lifecycle handling is part of the fullproxy stream path and does not activate
+authentication. <code>api_key_auth</code> independently selects omitted, <code>disabled</code>, <code>required</code>, <code>jwt</code>,
+or <code>apikey-or-jwt</code>. A required API-key policy uses the PostgreSQL store configured by
+<code>--aikey-db-*</code>; if it cannot evaluate the key, it fails closed with <code>503</code>. Prove missing or
+unknown key <code>401</code>, store failure <code>503</code>, and backend receipt delta <code>0</code> separately.</p>
 </div>
 <hr />
 <h2 id="4-kv-cache-exact-routing">4. KV-cache exact routing<a class="headerlink" href="#4-kv-cache-exact-routing" title="Permanent link">&para;</a></h2>
@@ -3511,7 +3606,10 @@ fields and silent hash mismatches.</p>
 (<code>PYTHONHASHSEED</code> == <code>LLB_KV_NONE_HASH_SEED</code>), hash algo (set vLLM
 <code>--prefix-caching-hash-algo=sha256_cbor</code> — its default <code>sha256</code> is non-portable), and block
 size (<code>--block-size</code> == <code>kvBlockSize</code>). vLLM must also set
-<code>VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES=1</code>.</p>
+<code>VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES=1</code>. Current Gateway main also requires a nonempty
+Gateway seed of at most 23 bytes and returns HTTP <code>412</code> before mutation otherwise. Query the
+REST-only <code>GET /status/capabilities</code> surface and require <code>kv_exact_vllm.ready=true</code> before
+presenting or submitting the rule.</p>
 </div>
 <hr />
 <h2 id="5-chwbl-wrr-hash-tuning-knobs">5. CHWBL / WRR-HASH tuning knobs<a class="headerlink" href="#5-chwbl-wrr-hash-tuning-knobs" title="Permanent link">&para;</a></h2>

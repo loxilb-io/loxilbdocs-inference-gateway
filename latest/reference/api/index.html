@@ -1451,6 +1451,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1800,7 +1828,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2216,6 +2300,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#authqos-implementation-versus-swagger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auth/QoS implementation versus Swagger
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2240,6 +2335,34 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Complete endpoint-family catalog">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-lifecycle-and-recovery-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration lifecycle and recovery operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-capability-readiness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional capability readiness
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2640,6 +2763,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#authqos-implementation-versus-swagger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auth/QoS implementation versus Swagger
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2664,6 +2798,34 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Complete endpoint-family catalog">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration-lifecycle-and-recovery-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration lifecycle and recovery operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-capability-readiness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional capability readiness
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2832,6 +2994,75 @@ that must be resolved or explicitly accepted before release:</p>
 <p>Generated clients may not model these responses correctly. Use the HTTP status
 and sanitized body during development validation, then update clients only
 after the release contract is frozen.</p>
+<h3 id="authqos-implementation-versus-swagger">Auth/QoS implementation versus Swagger<a class="headerlink" href="#authqos-implementation-versus-swagger" title="Permanent link">&para;</a></h3>
+<p>For runtime behavior, the reviewed implementation and its focused tests take
+precedence over stale descriptive text. That does not make a drifted feature a
+released support guarantee: update both Swagger sources, regenerate models,
+and repeat release qualification before removing the limitation.</p>
+<p>The frozen documentation contract reviewed both <code>api/swagger.yml</code> and
+<code>api/swagger-extras.yml</code>. The companion file owns the raw API-key PATCH
+contract; the primary file owns JWT profiles, LB credential fields, and the
+user/default QoS APIs.</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Implementation behavior</th>
+<th><code>swagger.yml</code> state</th>
+<th><code>swagger-extras.yml</code> state</th>
+<th>Required upstream correction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Per-key TPM</td>
+<td>Key settlement charges <code>tokens_per_min</code>; debt denies the next request and exports key-scoped metrics</td>
+<td><code>ApiKeyCreateRequest</code>, <code>ApiKeySummary</code>, and related prose incorrectly say stored-only/not connected</td>
+<td>PATCH description correctly says the value is enforced post-hoc</td>
+<td>Make primary descriptions match implementation, keep PATCH wording aligned, regenerate models/embedded spec, and qualify the active path</td>
+</tr>
+<tr>
+<td>API-key PATCH fields</td>
+<td>Handler updates <code>allowed_models</code>, <code>enabled</code>, <code>rate_limit_rps</code>, <code>burst_size</code>, and <code>tokens_per_min</code> with presence semantics</td>
+<td>Generated path is intentionally a marked stub and does not enumerate the body fields</td>
+<td>Companion schema is authoritative and enumerates all five fields</td>
+<td>Keep the stub/companion split explicit; test union-based client validation so the primary stub is never mistaken for the whole PATCH contract</td>
+</tr>
+<tr>
+<td>JWT profile name</td>
+<td>Profile creation rejects names longer than 63 bytes; the LB reference has the same limit</td>
+<td><code>jwt_auth_profile</code> has <code>maxLength: 63</code>, but <code>JWTAuthProfileEntry.name</code> lacks the matching bound</td>
+<td>Not defined</td>
+<td>Add <code>maxLength: 63</code> to profile <code>name</code> so invalid configuration is rejected by schema before handler dispatch</td>
+</tr>
+<tr>
+<td>JWT numeric and algorithm validation</td>
+<td>Negative leeway/refresh is rejected; algorithms are a closed asymmetric set and <code>none</code>/HMAC are always rejected</td>
+<td>Constraints are described in prose, but <code>leeway_sec</code>/<code>refresh_sec</code> lack <code>minimum: 0</code> and <code>algs.items</code> lacks the closed enum</td>
+<td>Not defined</td>
+<td>Encode the machine-checkable minimum and algorithm enum; retain handler tests as the authority for http(s)-only URL and safety checks</td>
+</tr>
+<tr>
+<td>Tenant/user model row</td>
+<td>Handler requires a nonempty model and rejects unsafe identity delimiters/prefixes</td>
+<td><code>TenantModelRateLimit.model</code> and <code>UserModelRateLimit.model</code> are described as required but are not in each schema's <code>required</code> list</td>
+<td>Not defined</td>
+<td>Add <code>required: [model]</code>; preserve handler validation for cross-field and reserved-prefix rules that OpenAPI 2.0 cannot express cleanly</td>
+</tr>
+<tr>
+<td>Rule/default QoS conditions</td>
+<td><code>scope=global</code> forbids <code>rule_ident</code>; <code>scope=rule</code> requires it; all-zero rows are rejected; rule values override global values field by field</td>
+<td>Prose is accurate, but the schema cannot enforce the conditional requirement or nonzero-row invariant</td>
+<td>Not defined</td>
+<td>Retain explicit prose and negative handler tests; add vendor/schema constraints only if generated clients and validators honor them consistently</td>
+</tr>
+</tbody>
+</table>
+<p>No mismatch was found in the reviewed five-state <code>api_key_auth</code> description,
+the <code>jwt_auth_profile</code> pairing/deletion rules, or the required-policy status
+split: unknown key is <code>401</code>, while an unevaluable required policy is
+<code>503 policy_store_unavailable</code>. Those still require an independent backend
+receipt delta of <code>0</code>; Swagger text alone cannot prove non-delivery.</p>
 <h2 id="authentication-and-public-exceptions">Authentication and public exceptions<a class="headerlink" href="#authentication-and-public-exceptions" title="Permanent link">&para;</a></h2>
 <p>The primary Swagger applies <code>BearerAuth</code> globally. The current runtime
 evaluates that bearer credential only when user-service, OAuth, or manual-token
@@ -2911,6 +3142,11 @@ the Swagger document.</p>
 <td>Configuration lifecycle</td>
 <td><code>POST /config/import</code>, <code>GET /config/export</code>, <code>GET /config/snapshot</code>, <code>POST /config/restore</code>, <code>POST /config/persist</code></td>
 <td>Import/export, transactional snapshot/restore, and durable persistence</td>
+</tr>
+<tr>
+<td>Recovery and capability status</td>
+<td><code>GET /status/ready</code>, <code>GET /status/capabilities</code>, <code>GET /diagnostics</code>, <code>GET/PUT /maintenance</code></td>
+<td>Main-only configuration readiness, optional launch-environment capability readiness, bounded diagnostics, and operator configuration-write gate; absent from Gateway <code>v0.9.8.9-rc.1</code></td>
 </tr>
 <tr>
 <td>API metadata</td>
@@ -3063,9 +3299,9 @@ the Swagger document.</p>
 <td>CORS origin lifecycle</td>
 </tr>
 <tr>
-<td>AI keys and quotas</td>
-<td><code>GET/POST /config/ai/apikey</code>, <code>GET/DELETE /config/ai/apikey/{key_id}</code>, tenant rate-limit paths</td>
-<td>Workload credentials and tenant/model limits; independent PostgreSQL store</td>
+<td>AI keys, JWT, and quotas</td>
+<td>API-key paths; <code>GET/POST /config/ai/jwtauthprofile</code>; <code>DELETE /config/ai/jwtauthprofile/{name}</code>; tenant, user, and defaults rate-limit paths</td>
+<td>Data-plane credentials and the quota ladder; independent from management authentication</td>
 </tr>
 <tr>
 <td>OPA watcher</td>
@@ -3078,29 +3314,112 @@ the Swagger document.</p>
 <code>lbrulecount</code>, <code>newflowcount</code>, <code>requestcount</code>, <code>errorcount</code>,
 <code>processedtraffic</code>, <code>lbprocessedtraffic</code>, <code>epdisttraffic</code>,
 <code>servicedisttraffic</code>, <code>fwdrops</code>, and <code>reqcountperclient</code>.</p>
+<h3 id="configuration-lifecycle-and-recovery-operations">Configuration lifecycle and recovery operations<a class="headerlink" href="#configuration-lifecycle-and-recovery-operations" title="Permanent link">&para;</a></h3>
+<p>Treat snapshot, restore, persistence, readiness, diagnostics, and maintenance as one recovery
+lifecycle rather than independent convenience endpoints.</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Typed result</th>
+<th>Contract boundary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /config/snapshot</code></td>
+<td>Snapshot document</td>
+<td>Captures the current configuration with schema and checksum; a bare capture has no persisted lineage generation.</td>
+</tr>
+<tr>
+<td><code>POST /config/restore</code> (<code>commit: false</code>)</td>
+<td><code>RestoreResult</code></td>
+<td>Parses, migrates, checks dependencies, and plans without mutation; success is not proof that apply-time validation will pass.</td>
+</tr>
+<tr>
+<td><code>POST /config/restore</code> (<code>commit: true</code>)</td>
+<td><code>RestoreResult</code></td>
+<td>Preserves pre-state, applies, verifies, and rolls back on failure; inspect <code>persisted</code> separately because write-through can fail after the live restore succeeds.</td>
+</tr>
+<tr>
+<td><code>POST /config/persist</code></td>
+<td><code>PersistResult</code></td>
+<td>Atomically writes the active configuration and returns identity, coverage, and monotonic generation.</td>
+</tr>
+<tr>
+<td><code>GET /status/ready</code></td>
+<td><code>ReadyStatus</code></td>
+<td>Returns the same typed body with HTTP <code>200</code> or <code>503</code>; covers configuration recovery, not GPU, inference, or complete data-plane health.</td>
+</tr>
+<tr>
+<td><code>GET /status/capabilities</code></td>
+<td><code>CapabilityStatusList</code></td>
+<td>Returns HTTP <code>200</code> with per-capability <code>ready</code> verdicts for optional features gated by the launch environment. It is not overall health and does not affect <code>/status/ready</code>.</td>
+</tr>
+<tr>
+<td><code>GET /diagnostics</code></td>
+<td><code>DiagnosticsStatus</code></td>
+<td>Bounded version, readiness, maintenance, eBPF, map, and dependency context; sanitize output before sharing.</td>
+</tr>
+<tr>
+<td><code>GET/PUT /maintenance</code></td>
+<td><code>MaintenanceStatus</code></td>
+<td>Gates configuration writes. It does not reject new inference traffic and does not drain non-streaming requests.</td>
+</tr>
+</tbody>
+</table>
+<p>The recovery endpoints are implemented on current Gateway <code>main</code>; Gateway
+<code>v0.9.8.9-rc.1</code> includes snapshot, restore, and persist but not readiness, diagnostics, or
+maintenance, and it does not include the capability surface. See
+<a href="../../operations/backup-restore/">Persistence, Backup, and Restore</a> and
+<a href="../../operations/readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a>
+for sequencing and validation gates.</p>
+<h3 id="optional-capability-readiness">Optional capability readiness<a class="headerlink" href="#optional-capability-readiness" title="Permanent link">&para;</a></h3>
+<p>Current Gateway main exposes a REST-only preflight for optional features whose availability is
+decided by the Gateway process environment rather than by a request body:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/status/capabilities"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>&gt;<span class="w"> </span>capabilities.json
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">  .capabilities[] |</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">  select(.name == "kv_exact_vllm") |</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">  .ready == true</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s1">'</span><span class="w"> </span>capabilities.json
+</code></pre></div>
+<p>The endpoint always returns HTTP <code>200</code> for an authorized request; readiness lives in each entry.
+An absent name means the build does not know that capability, which is different from a present
+entry with <code>ready=false</code>. Clients must tolerate capability names they do not recognize.</p>
+<p>The current known capability is <code>kv_exact_vllm</code>. It uses the same predicate as rule admission:
+a nonempty <code>LLB_KV_NONE_HASH_SEED</code> of at most 23 bytes is required and must match vLLM's
+<code>PYTHONHASHSEED</code>. An unready entry carries <code>KV_EXACT_SEED_UNSET</code> or
+<code>KV_EXACT_SEED_TOO_LONG</code>; attempting to create a vLLM KV-exact rule is then refused with HTTP
+<code>412</code> and the same operator-facing reason. This surface does not establish tokenizer, engine,
+event-stream, or data-plane readiness.</p>
 <p>Worker metric updates do not make a plain <code>sel: 9</code> rule capacity-aware. That path uses
 prefix-affinity, conversation-affinity, and healthy-endpoint fallbacks without consuming pushed
 worker metrics. A P/D capacity-aware scorer exists, but its activation is currently release-blocked
 because the gate checks a mutable endpoint cursor instead of the configured selector.</p>
 <h2 id="worker-telemetry-contract">Worker telemetry contract<a class="headerlink" href="#worker-telemetry-contract" title="Permanent link">&para;</a></h2>
 <p>Enable GPU monitoring before publishing worker telemetry:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/gpu/enable"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/gpu/enable"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers
 </code></pre></div>
 <p>Then publish one worker sample:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/worker/metrics"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">    "endpoint_ip": "198.51.100.11:8000",</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">    "queued_requests": 3,</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">    "swapped_requests": 0,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">    "kv_cache_usage_perc": 62,</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">    "num_gpu_blocks": 8192,</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">    "timestamp": "2026-08-27T00:00:00Z"</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">  }'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/worker/metrics"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s1">    "endpoint_ip": "198.51.100.11:8000",</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s1">    "queued_requests": 3,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s1">    "swapped_requests": 0,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s1">    "kv_cache_usage_perc": 62,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s1">    "num_gpu_blocks": 8192,</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s1">    "timestamp": "2026-08-27T00:00:00Z"</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s1">  }'</span>
 </code></pre></div>
 <table>
 <thead>
@@ -3204,23 +3523,23 @@ release-blocked.</p>
 <p><code>model_name</code>, <code>path_prefix</code>, and <code>path_match_mode</code> can be part of the exact
 rule key. Omitting <code>model_name</code> matches only a model-less rule; it is not a
 wildcard deletion.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s1">    "serviceArguments": {</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s1">      "externalIP": "192.0.2.20",</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s1">      "port": 8080,</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s1">      "protocol": "tcp",</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s1">      "sel": 0,</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s1">      "mode": 4,</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s1">      "model_name": "example-model"</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s1">    },</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="s1">    "endpoints": [</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="s1">      {"endpointIP":"198.51.100.20","targetPort":8000,"weight":1}</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="s1">    ]</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="s1">  }'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s1">    "serviceArguments": {</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s1">      "externalIP": "192.0.2.20",</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s1">      "port": 8080,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s1">      "protocol": "tcp",</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">      "sel": 0,</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s1">      "mode": 4,</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s1">      "model_name": "example-model"</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s1">    },</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s1">    "endpoints": [</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s1">      {"endpointIP":"198.51.100.20","targetPort":8000,"weight":1}</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s1">    ]</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="s1">  }'</span>
 </code></pre></div>
 <p>See <a href="../../ai-gateway/configuration-reference/">Configuration Reference</a> for
 the full field contract.</p>
@@ -3304,7 +3623,7 @@ the development raw path use the generated-style error envelope.</p>
 <tr>
 <td><code>PATCH</code></td>
 <td><code>/config/ai/apikey/{key_id}</code></td>
-<td>Raw-handler update of <code>allowed_models</code> and/or <code>enabled</code></td>
+<td>Raw-handler update of <code>allowed_models</code>, <code>enabled</code>, <code>rate_limit_rps</code>, <code>burst_size</code>, and/or <code>tokens_per_min</code></td>
 </tr>
 <tr>
 <td><code>DELETE</code></td>
@@ -3321,6 +3640,41 @@ the development raw path use the generated-style error envelope.</p>
 <td><code>/config/ai/tenant/ratelimit/{tenant_id}</code></td>
 <td>Read tenant and model limits</td>
 </tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/config/ai/user/ratelimit</code></td>
+<td>Replace explicit user RPS/TPM and user-model TPM rows</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/config/ai/user/ratelimit/{tenant_id}</code></td>
+<td>List explicit user rows for a tenant</td>
+</tr>
+<tr>
+<td><code>GET/DELETE</code></td>
+<td><code>/config/ai/user/ratelimit/{tenant_id}/{user_id}</code></td>
+<td>Read or remove one user's explicit row</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/config/ai/ratelimit/defaults</code></td>
+<td>Replace global or rule-scoped defaults and optional shared-VIP limits</td>
+</tr>
+<tr>
+<td><code>GET/DELETE</code></td>
+<td><code>/config/ai/ratelimit/defaults/{scope}</code></td>
+<td>Read or remove a <code>global</code> or <code>rule</code> defaults row</td>
+</tr>
+<tr>
+<td><code>GET/POST</code></td>
+<td><code>/config/ai/jwtauthprofile</code></td>
+<td>List desired JWT profiles or create/replace one</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/config/ai/jwtauthprofile/{name}</code></td>
+<td>Delete an unreferenced profile; referenced profiles return <code>409</code></td>
+</tr>
 </tbody>
 </table>
 <p>These routes exist independently of <code>--userservice</code>. Their storage comes from
@@ -3333,28 +3687,33 @@ the PostgreSQL service configured by <code>--aikey-db-*</code>:</p>
 <li>no management auth mode: the routes are callable without a credential even
   if the key store itself is healthy.</li>
 </ul>
-<p>The data plane accepts <code>X-Api-Key</code>. With no key store configured, the current
-compatibility branch admits AI requests without validating that header. The
-key gate is entered only by <code>mode: 4</code> rules with <code>sse_mode: true</code> or
-<code>pd_disagg_mode: true</code>; a plain fullproxy rule is keyless even with a healthy
-store. Per-key <code>tokens_per_min</code> is persisted and returned but not enforced;
-tenant and model TPM controls are enforced. Treat both management-auth and
-missing-key <code>401</code> probes on the exact protected rule as production gates.</p>
+<p>The <code>api_key_auth</code> field has five user-visible states: omitted, <code>disabled</code>,
+<code>required</code>, <code>jwt</code>, and <code>apikey-or-jwt</code>. Omitted preserves backend-owned
+<code>X-Api-Key</code>; <code>disabled</code> strips it without validation; <code>required</code> validates it
+against the key store; JWT modes require <code>jwt_auth_profile</code>. The declaration is
+independent of <code>sse_mode</code> and <code>pd_disagg_mode</code>. A required policy that cannot
+be evaluated returns <code>503 policy_store_unavailable</code>; an unknown key returns
+<code>401 invalid_api_key</code>. Require backend receipt delta <code>0</code> for both.</p>
+<p>Per-key <code>tokens_per_min</code> is enforced by current code/unit/integration evidence,
+but the primary Swagger description incorrectly says stored-only metadata.
+The companion PATCH description matches the implementation. Published support
+remains pending correction and release qualification.</p>
 <p>See <a href="../../ai-gateway/api-key-management/">API Key Management</a> and
-<a href="../../operations/ai-key-store/">AI Key Store Operations</a>.</p>
+<a href="../../operations/ai-key-store/">AI Key Store Operations</a>. JWT profile and
+claim behavior is in <a href="../../security/data-plane-jwt-auth/">Data-Plane Authentication and JWT</a>.</p>
 <h2 id="product-identity-and-capability-discovery">Product identity and capability discovery<a class="headerlink" href="#product-identity-and-capability-discovery" title="Permanent link">&para;</a></h2>
 <p><code>GET /version</code> returns <code>version</code>, <code>buildInfo</code>, and <code>product</code> without bearer
 authentication. The inference distribution reports
 <code>product: "loxilb-inference-gateway"</code>; older or upstream builds may omit the
 field.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/version"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{product, version, buildInfo}'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/version"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{product, version, buildInfo}'</span>
 </code></pre></div>
 <p>Use the product value only as an initial hint. Verify required paths and schema
 fields before applying configuration, especially across mixed versions.</p>
 <h2 id="cleanup">Cleanup<a class="headerlink" href="#cleanup" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN
 </code></pre></div>
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>

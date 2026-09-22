@@ -129,6 +129,10 @@
          <lastmod>2026-09-22</lastmod>
     </url>
     <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/appliance-cli/</loc>
+         <lastmod>2026-09-22</lastmod>
+    </url>
+    <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/audit-log/</loc>
          <lastmod>2026-09-22</lastmod>
     </url>
@@ -154,6 +158,10 @@
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/observability-metrics-grafana/</loc>
+         <lastmod>2026-09-22</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/readiness-diagnostics-maintenance/</loc>
          <lastmod>2026-09-22</lastmod>
     </url>
     <url>
@@ -186,6 +194,10 @@
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/security/ai-safety/</loc>
+         <lastmod>2026-09-22</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/security/data-plane-jwt-auth/</loc>
          <lastmod>2026-09-22</lastmod>
     </url>
     <url>

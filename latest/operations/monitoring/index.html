@@ -1451,6 +1451,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1802,7 +1830,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -1965,6 +2049,17 @@
     <span class="md-ellipsis">
       
         AI access and request metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jwt-and-policy-store-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JWT and policy-store metrics
       
     </span>
   </a>
@@ -2689,6 +2784,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#jwt-and-policy-store-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JWT and policy-store metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#token-quota-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2974,6 +3080,59 @@ therefore expected to be equal.</p>
 <p>Denials are recorded at the decision point. Do not assume a generic completed
 request query includes every pre-dispatch denial; use the dedicated denial
 counters when alerting on <code>403</code> and <code>429</code>.</p>
+<h2 id="jwt-and-policy-store-metrics">JWT and policy-store metrics<a class="headerlink" href="#jwt-and-policy-store-metrics" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Type</th>
+<th>Labels</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loxilb_ai_jwt_validation_total</code></td>
+<td>Counter</td>
+<td><code>tenant</code>, <code>reason</code></td>
+<td>Bearer verdicts; <code>allowed</code> is admission, while denial reasons use the closed client error-code set. Tenant <code>-</code> means no verified tenant was available.</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_jwks_refresh_total</code></td>
+<td>Counter</td>
+<td><code>profile</code>, <code>outcome</code></td>
+<td>JWKS fetch attempts; outcome is <code>success</code> or <code>failure</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_jwks_keys</code></td>
+<td>Gauge</td>
+<td><code>profile</code></td>
+<td>Usable verification keys in the current snapshot</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_jwks_usable</code></td>
+<td>Gauge</td>
+<td><code>profile</code></td>
+<td><code>1</code> only when a fetched keyset is inside the staleness cutoff</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_jwks_last_success_timestamp_seconds</code></td>
+<td>Gauge</td>
+<td><code>profile</code></td>
+<td>Last successful fetch time; absent before the first success</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_policy_store_unavailable_total</code></td>
+<td>Counter</td>
+<td>none</td>
+<td>Requests refused <code>503</code> because a required credential or quota policy could not be evaluated</td>
+</tr>
+</tbody>
+</table>
+<p>A rising JWKS failure counter with a flat success counter is a warning while
+the last-known-good keyset still admits traffic. Alert before
+<code>loxilb_ai_jwks_usable</code> becomes <code>0</code>. Do not treat an absent last-success series
+as a zero timestamp; it means no fetch has succeeded.</p>
 <h2 id="token-quota-metrics">Token quota metrics<a class="headerlink" href="#token-quota-metrics" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -3023,6 +3182,26 @@ counters when alerting on <code>403</code> and <code>429</code>.</p>
 <td><code>loxilb_ai_token_quota_model_limit_tokens{tenant,model}</code></td>
 <td>Gauge</td>
 <td>Model-specific TPM limit</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_user_token_quota_utilization{tenant,user}</code> / <code>_limit_tokens</code></td>
+<td>Gauge</td>
+<td>User TPM state and last charged limit</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_user_model_token_quota_utilization{tenant,user,model}</code> / <code>_limit_tokens</code></td>
+<td>Gauge</td>
+<td>User-and-model TPM state</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_key_token_quota_utilization{key_id}</code> / <code>_limit_tokens</code></td>
+<td>Gauge</td>
+<td>Implemented per-key TPM state; primary Swagger text is stale and release support remains pending convergence</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_vip_token_quota_utilization{service}</code> / <code>_limit_tokens</code></td>
+<td>Gauge</td>
+<td>Shared service TPM state</td>
 </tr>
 <tr>
 <td><code>loxilb_ai_token_quota_cold_open_total</code></td>
@@ -3430,6 +3609,21 @@ panel with the raw series before relying on its units or aggregation.</p>
 <td>Display them as separate gates</td>
 </tr>
 <tr>
+<td>JWT requests switch from success to <code>503</code></td>
+<td>JWKS never fetched or last-known-good set became stale</td>
+<td>Compare usable, keys, last-success, and refresh outcomes for the profile</td>
+</tr>
+<tr>
+<td><code>401 invalid_api_key</code> rises with no store alert</td>
+<td>Unknown/disabled/expired client key</td>
+<td>Investigate credential lifecycle; do not classify as a store outage</td>
+</tr>
+<tr>
+<td><code>policy_store_unavailable_total</code> rises</td>
+<td>Required policy cannot be evaluated</td>
+<td>Restore the key/JWKS/quota dependency and verify backend receipt delta remains <code>0</code></td>
+</tr>
+<tr>
 <td>QoS rate is eight times smaller than API number</td>
 <td>Bits-versus-bytes mismatch</td>
 <td>API is Mbps; shaper metric is bytes/s</td>
@@ -3473,6 +3667,7 @@ tenant activity metadata. Remove temporary header files after management calls:<
 <li><a href="../observability-metrics-grafana/">Grafana Dashboards</a></li>
 <li><a href="../../ai-gateway/ai-traffic-governance/">AI Traffic Governance</a></li>
 <li><a href="../ai-qos/">AI Quotas and QoS</a></li>
+<li><a href="../../security/data-plane-jwt-auth/">Data-Plane Authentication and JWT</a></li>
 <li><a href="../backup-restore/">Configuration Backup and Restore</a></li>
 <li><a href="../tracing/">Application and L4 Tracing</a></li>
 <li><a href="../dpu-offload/">DPU Offload Observability</a></li>

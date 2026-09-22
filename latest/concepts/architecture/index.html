@@ -1555,6 +1555,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1904,7 +1932,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2685,8 +2769,15 @@ AI-enabled rule, the gateway proceeds roughly as follows:</p>
 <ol>
 <li><strong>Terminate and parse.</strong> The fullproxy accepts the client connection (optionally
    terminating TLS per the rule's <code>security</code> mode) and reads the HTTP request.</li>
-<li><strong>Model selection.</strong> If <code>model_name</code> pools are configured, the requested model (from the
-   <code>X-Model</code> header or the body <code>model</code> field) picks the endpoint pool; <code>""</code> is the catch-all.</li>
+<li><strong>Credential admission.</strong> The service's <code>api_key_auth</code> declaration decides
+   whether Gateway authentication is absent, disabled-with-header-stripping,
+   API-key-only, JWT-only, or API-key-or-JWT. This is independent of SSE and
+   P/D. Management authentication is a separate control-plane decision.</li>
+<li><strong>Model selection and authorization.</strong> If <code>model_name</code> pools are configured, the requested model (from the
+   <code>X-Model</code> header or the body <code>model</code> field) picks the endpoint pool; <code>""</code> is the catch-all.
+   An attributed API key or JWT must also authorize the effective model.</li>
+<li><strong>Quota admission.</strong> Applicable key, user, user-model, tenant,
+   tenant-model, shared-VIP, and default buckets must admit before dispatch.</li>
 <li><strong>Endpoint selection.</strong> The rule's <code>sel</code> algorithm chooses an endpoint within the pool.
    For LLM fleets this is typically CHWBL prefix affinity (<code>sel: 8</code>/<code>10</code>) or, when a KV-cache
    event stream is wired, engine-exact KV routing that places the request on the endpoint
@@ -2695,8 +2786,10 @@ AI-enabled rule, the gateway proceeds roughly as follows:</p>
    selected engine dialect: sequential vLLM prefill/decode, concurrent SGLang
    prefill/decode, or sequential TensorRT-LLM context/generation. llama.cpp P/D is
    rejected at rule creation.</li>
-<li><strong>Stream relay.</strong> With <code>sse_mode</code> enabled, the response is relayed as SSE with idle-timeout
-   suppression while the stream is active, a wall-clock cap, and optional backend keepalive.</li>
+<li><strong>Stream relay and settlement.</strong> With <code>sse_mode</code> enabled, the response is relayed as SSE with idle-timeout
+   suppression while the stream is active, a wall-clock cap, and optional backend keepalive.
+   Token reservations are released and measured usage is settled when the
+   response completes.</li>
 </ol>
 <p>The KV inventory services run alongside this path. As supported backends publish events, the
 gateway updates its per-endpoint hash inventory so KV-exact selection can reflect observed

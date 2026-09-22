@@ -1451,6 +1451,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1802,7 +1830,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2002,6 +2086,56 @@
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#request-and-token-quota-ladder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request and token quota ladder
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Request and token quota ladder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configure-user-and-default-rows-through-rest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configure user and default rows through REST
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fail-open-and-fail-closed-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fail-open and fail-closed boundaries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-the-test-rows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remove the test rows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2729,6 +2863,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#request-and-token-quota-ladder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request and token quota ladder
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Request and token quota ladder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configure-user-and-default-rows-through-rest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configure user and default rows through REST
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fail-open-and-fail-closed-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fail-open and fail-closed boundaries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-the-test-rows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remove the test rows
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#units-and-behavior" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3031,6 +3215,158 @@ shaper supports IPv4 rule keys only; an IPv6 fullproxy rule cannot use this shap
 (RPS) limits and token-per-minute (TPM) quotas. See
 <a href="../../ai-gateway/ai-traffic-governance/">AI Traffic Governance</a> for admission
 controls.</p>
+<h2 id="request-and-token-quota-ladder">Request and token quota ladder<a class="headerlink" href="#request-and-token-quota-ladder" title="Permanent link">&para;</a></h2>
+<p>Request/token admission and network byte shaping are different systems. An
+attributed request must pass every applicable RPS bucket. Token reservation
+and settlement charge every applicable TPM bucket.</p>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Identity source</th>
+<th>Resolution and isolation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Key</td>
+<td>Validated <code>X-Api-Key</code></td>
+<td>Key RPS and the implementation's post-response TPM debt latch are active; primary Swagger text must be corrected before this becomes a published support guarantee</td>
+</tr>
+<tr>
+<td>User</td>
+<td>Verified JWT tenant plus user claim</td>
+<td>Explicit user row, otherwise rule/global user default, otherwise unlimited</td>
+</tr>
+<tr>
+<td>User + model</td>
+<td>Verified JWT user and effective model</td>
+<td>Explicit pair only; debt must not affect another model or user</td>
+</tr>
+<tr>
+<td>Tenant</td>
+<td>API-key tenant or verified JWT tenant</td>
+<td>Explicit tenant row, otherwise rule/global tenant default, otherwise unlimited; caps the sum of its users/keys</td>
+</tr>
+<tr>
+<td>Tenant + model</td>
+<td>Tenant and effective model</td>
+<td>Explicit pair only; combines with the aggregate tenant bucket</td>
+</tr>
+<tr>
+<td>Shared VIP</td>
+<td>Service identity</td>
+<td>Opt-in <code>vip_shared_rps</code> for keyless traffic; <code>vip_shared_tpm</code> is charged by token-metered traffic on the service</td>
+</tr>
+<tr>
+<td>Defaults</td>
+<td><code>global</code> and optional <code>rule_ident</code></td>
+<td>Rule fields override global fields individually; a zero field falls through</td>
+</tr>
+</tbody>
+</table>
+<p>An explicit user or tenant row wins for its dimension even when it is looser
+than the default. All-zero user/default rows are rejected; use <code>DELETE</code> to
+remove them. Removing an explicit row makes that identity fall through to its
+default, not necessarily to unlimited.</p>
+<p>The JWT arm supplies tenant/user identities. API-key traffic supplies a tenant
+and key but no user. Keyless traffic has neither and consults only the optional
+shared-VIP bucket.</p>
+<h3 id="configure-user-and-default-rows-through-rest">Configure user and default rows through REST<a class="headerlink" href="#configure-user-and-default-rows-through-rest" title="Permanent link">&para;</a></h3>
+<p><code>loxicmd</code> does not currently expose user or defaults CRUD. Use the management
+REST API and a protected header file.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/user/ratelimit"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="s1">    "tenant_id": "team-a",</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="s1">    "user_id": "user-123",</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="s1">    "rps": 5,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="s1">    "burst_size": 10,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="s1">    "tokens_per_min": 12000,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="s1">    "model_limits": [</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="s1">      {"model": "example-chat-model", "tokens_per_min": 4000}</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="s1">    ]</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="s1">  }'</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/ratelimit/defaults"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="s1">    "scope": "rule",</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="s1">    "rule_ident": "192.0.2.20:8443",</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="s1">    "default_user_rps": 2,</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="s1">    "default_user_tpm": 6000,</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="s1">    "default_tenant_rps": 20,</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="s1">    "default_tenant_tpm": 60000,</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="s1">    "vip_shared_rps": 10,</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="s1">    "vip_shared_tpm": 30000</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="s1">  }'</span>
+</code></pre></div>
+<p>Expected result: <code>204</code> for each mutation. Read the rows back and compare every
+field before testing traffic:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/user/ratelimit/team-a/user-123"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span>--get<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/ratelimit/defaults/rule"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span>--data-urlencode<span class="w"> </span><span class="s1">'rule_ident=192.0.2.20:8443'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</code></pre></div>
+<h3 id="fail-open-and-fail-closed-boundaries">Fail-open and fail-closed boundaries<a class="headerlink" href="#fail-open-and-fail-closed-boundaries" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Evaluation state</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Credential/tenant/user identity exists but its explicit/default limit is unknowable and no last-known-good answer exists</td>
+<td><code>503 policy_store_unavailable</code>; no backend delivery</td>
+</tr>
+<tr>
+<td>Keyless traffic and optional shared-VIP defaults are unknowable</td>
+<td>Fail open for that optional bucket; do not invent an outage for a service that may never have enabled it</td>
+</tr>
+<tr>
+<td>Cached or last-known-good row exists during store outage</td>
+<td>Continue with that confirmed row until its cache/outage contract expires or is replaced</td>
+</tr>
+<tr>
+<td>Token state warming from peers</td>
+<td><code>429 token_quota_warming</code> during the bounded warm-up window</td>
+</tr>
+<tr>
+<td>Warm-up deadline expires without peer state</td>
+<td>Compatibility path fails open and increments the cold-open metric</td>
+</tr>
+</tbody>
+</table>
+<p>For every denial, use a unique nonce and require backend receipt delta <code>0</code>.
+After exhausting one user or model, probe an unrelated user and model and
+require no denial-counter or receipt change attributable to the exhausted
+identity. That unrelated-identity probe is the independent oracle that the
+bucket did not bleed across scopes.</p>
+<h3 id="remove-the-test-rows">Remove the test rows<a class="headerlink" href="#remove-the-test-rows" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/user/ratelimit/team-a/user-123"</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span>--get<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/ratelimit/defaults/rule"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span>--data-urlencode<span class="w"> </span><span class="s1">'rule_ident=192.0.2.20:8443'</span>
+</code></pre></div>
+<p>Expected result: <code>204</code>. A later per-user read returns <code>404</code>; the identity then
+uses matching defaults if they remain. Verify the intended fallback instead of
+assuming delete means unlimited.</p>
 <h2 id="units-and-behavior">Units and behavior<a class="headerlink" href="#units-and-behavior" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -3093,39 +3429,39 @@ between directions.</p>
 <p>Use a staging service first. A policer can drop traffic immediately, and a
 bad port or rule choice can affect unrelated workloads.</p>
 <p>The examples use a protected management header file:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
 </code></pre></div>
 <h2 id="lab-1-rule-attached-l4-policer">Lab 1 — Rule-attached L4 policer<a class="headerlink" href="#lab-1-rule-attached-l4-policer" title="Permanent link">&para;</a></h2>
 <h3 id="baseline">Baseline<a class="headerlink" href="#baseline" title="Permanent link">&para;</a></h3>
 <p>Measure both client-to-backend and reverse traffic through the target NAT LB
 rule. Record the baseline before attaching anything:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>iperf3<span class="w"> </span>--client<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>--port<span class="w"> </span><span class="m">2020</span><span class="w"> </span>--time<span class="w"> </span><span class="m">10</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>iperf3<span class="w"> </span>--client<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>--port<span class="w"> </span><span class="m">2020</span><span class="w"> </span>--time<span class="w"> </span><span class="m">10</span><span class="w"> </span>--reverse
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>iperf3<span class="w"> </span>--client<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>--port<span class="w"> </span><span class="m">2020</span><span class="w"> </span>--time<span class="w"> </span><span class="m">10</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>iperf3<span class="w"> </span>--client<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>--port<span class="w"> </span><span class="m">2020</span><span class="w"> </span>--time<span class="w"> </span><span class="m">10</span><span class="w"> </span>--reverse
 </code></pre></div>
 <p>Replace <code>192.0.2.10</code> with your test VIP. Stop if the baseline is already near
 the planned CIR; the lab would not distinguish policy enforcement from an
 unhealthy path.</p>
 <h3 id="attach">Attach<a class="headerlink" href="#attach" title="Permanent link">&para;</a></h3>
 <p>This policy attaches 10 Mbps to an IPv4 TCP rule:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/policy"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">    "policyIdent": "example-rule-policy",</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">    "policyInfo": {</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">      "type": 0,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">      "committedInfoRate": 10,</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">      "peakInfoRate": 10,</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">      "committedBlkSize": 125000</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">    },</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s1">    "targetObject": {</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s1">      "attachment": 0,</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s1">      "polObjName": "192.0.2.10:2020:tcp"</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s1">    }</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s1">  }'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/policy"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s1">    "policyIdent": "example-rule-policy",</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s1">    "policyInfo": {</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s1">      "type": 0,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s1">      "committedInfoRate": 10,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s1">      "peakInfoRate": 10,</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="s1">      "committedBlkSize": 125000</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="s1">    },</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="s1">    "targetObject": {</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="s1">      "attachment": 0,</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="s1">      "polObjName": "192.0.2.10:2020:tcp"</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="s1">    }</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="s1">  }'</span>
 </code></pre></div>
 <p>For IPv6, include brackets: <code>[2001:db8::10]:2020:tcp</code>. A bare IPv6 address is
 ambiguous and is rejected for an LB-rule attachment.</p>
@@ -3133,13 +3469,13 @@ ambiguous and is rejected for an LB-rule attachment.</p>
 <p>Open <strong>new</strong> test connections and repeat both directions. Throughput should
 fall toward the configured rate and remain bounded for the whole flow. Then
 detach and confirm the baseline returns:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/policy/ident/example-rule-policy"</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>iperf3<span class="w"> </span>--client<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>--port<span class="w"> </span><span class="m">2020</span><span class="w"> </span>--time<span class="w"> </span><span class="m">10</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>iperf3<span class="w"> </span>--client<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>--port<span class="w"> </span><span class="m">2020</span><span class="w"> </span>--time<span class="w"> </span><span class="m">10</span><span class="w"> </span>--reverse
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/policy/ident/example-rule-policy"</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>iperf3<span class="w"> </span>--client<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>--port<span class="w"> </span><span class="m">2020</span><span class="w"> </span>--time<span class="w"> </span><span class="m">10</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>iperf3<span class="w"> </span>--client<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>--port<span class="w"> </span><span class="m">2020</span><span class="w"> </span>--time<span class="w"> </span><span class="m">10</span><span class="w"> </span>--reverse
 </code></pre></div>
 <p>Successful recovery proves the policy is no longer attached. It does not
 prove an exact production throughput value; transport overhead, burst depth,
@@ -3156,23 +3492,23 @@ hook could enforce it.</p>
 <h3 id="baseline-and-attach">Baseline and attach<a class="headerlink" href="#baseline-and-attach" title="Permanent link">&para;</a></h3>
 <p>Measure a host-originated upload from the Gateway and a transit upload through
 the LB rule. Then attach the policy to the backend-facing port:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/policy"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s1">    "policyIdent": "example-egress-policy",</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s1">    "policyInfo": {</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s1">      "type": 0,</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s1">      "committedInfoRate": 10,</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">      "peakInfoRate": 10,</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s1">      "committedBlkSize": 125000</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s1">    },</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s1">    "targetObject": {</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s1">      "attachment": 2,</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s1">      "polObjName": "backend-facing-port"</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s1">    }</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="s1">  }'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/policy"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s1">    "policyIdent": "example-egress-policy",</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="s1">    "policyInfo": {</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="s1">      "type": 0,</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="s1">      "committedInfoRate": 10,</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="s1">      "peakInfoRate": 10,</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="s1">      "committedBlkSize": 125000</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="s1">    },</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="s1">    "targetObject": {</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="s1">      "attachment": 2,</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="s1">      "polObjName": "backend-facing-port"</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="s1">    }</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="s1">  }'</span>
 </code></pre></div>
 <p>Expected result: missing egress hooks are rejected. A missing named port can leave the policy
 pending instead of returning an error, so confirm read-back and enforcement on the intended
@@ -3181,10 +3517,10 @@ egress port.</p>
 <p>Repeat both baseline transfers. Host-originated and transit uploads leaving
 through the named port should be bounded. Traffic leaving another port should
 not be charged to this policy.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/policy/ident/example-egress-policy"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/policy/ident/example-egress-policy"</span>
 </code></pre></div>
 <p>Confirm both traffic classes recover. If they do not, verify the policy is
 gone and inspect the actual forwarding egress port before changing another
@@ -3197,29 +3533,29 @@ It configures the fullproxy relay to pace plaintext payload bytes.</p>
 Small probes can fit entirely inside the burst and will not show the steady
 rate.</p>
 <p>Attach a 16 Mbps policy:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/policy"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="s1">    "policyIdent": "example-fullproxy-shaper",</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="s1">    "policyInfo": {</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="s1">      "type": 0,</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="s1">      "committedInfoRate": 16,</span>
-<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="s1">      "peakInfoRate": 16,</span>
-<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="s1">      "committedBlkSize": 250000</span>
-<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="s1">    },</span>
-<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="s1">    "targetObject": {</span>
-<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="s1">      "attachment": 0,</span>
-<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="s1">      "polObjName": "192.0.2.20:2020:tcp"</span>
-<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="s1">    }</span>
-<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="s1">  }'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/policy"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="s1">    "policyIdent": "example-fullproxy-shaper",</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="s1">    "policyInfo": {</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="s1">      "type": 0,</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="s1">      "committedInfoRate": 16,</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="s1">      "peakInfoRate": 16,</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="s1">      "committedBlkSize": 250000</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="s1">    },</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="s1">    "targetObject": {</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="s1">      "attachment": 0,</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="s1">      "polObjName": "192.0.2.20:2020:tcp"</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="s1">    }</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="s1">  }'</span>
 </code></pre></div>
 <p>Large uploads and downloads should approach 2,000,000 bytes per second after
 the initial burst. Upload and download are independently metered.</p>
 <h3 id="verify-with-metrics">Verify with metrics<a class="headerlink" href="#verify-with-metrics" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/metrics"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^loxilb_proxy_qos_'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/metrics"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^loxilb_proxy_qos_'</span>
 </code></pre></div>
 <p>Every series uses <code>vip</code>, <code>port</code>, <code>proto</code>, and <code>direction</code> labels.</p>
 <table>
@@ -3283,10 +3619,10 @@ reaping. This prevents configured shaping from manufacturing an SSE timeout.
 Genuinely slow unshaped streams remain subject to their configured duration
 limit.</p>
 <h3 id="detach-and-confirm-series-removal">Detach and confirm series removal<a class="headerlink" href="#detach-and-confirm-series-removal" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/policy/ident/example-fullproxy-shaper"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/policy/ident/example-fullproxy-shaper"</span>
 </code></pre></div>
 <p>Confirm upload and download recover. After the metrics collection interval,
 series for the detached shaped service should disappear rather than freeze at
@@ -3355,6 +3691,9 @@ their previous values.</p>
 <li>Runtime policer and shaper token buckets are node-local. Promotion rebuilds
   or resets that transient state, so a newly active node can begin with fresh
   burst credit.</li>
+<li>Key, user, user-model, tenant, tenant-model, and shared-VIP token buckets
+  require same-version quota-state exchange. Treat mixed-version promotion as
+  unsafe until a two-node scenario proves scope/version compatibility.</li>
 <li>Single-node functional scenarios do not prove quota or rate-limit failover, cross-node
   bucket continuity, or connection migration.</li>
 <li>Active TCP, TLS, and SSE connections are not transferred to another process;
@@ -3374,8 +3713,8 @@ pair.</p>
 <li>Confirm fullproxy shaper series disappear after collection refresh.</li>
 <li>Remove local header files and unset secret-bearing variables.</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN
 </code></pre></div>
 <h2 id="what-these-labs-do-not-prove">What these labs do not prove<a class="headerlink" href="#what-these-labs-do-not-prove" title="Permanent link">&para;</a></h2>
 <p>They validate attachment behavior, directional enforcement, detach recovery,

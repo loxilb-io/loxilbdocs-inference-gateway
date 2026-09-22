@@ -1573,6 +1573,34 @@
   
   
     <li class="md-nav__item">
+      <a href="security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="security/ai-safety/" class="md-nav__link">
         
   
@@ -1922,7 +1950,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2713,7 +2797,7 @@ path (<code>mode: 4</code>) — see <a href="concepts/running-modes/">Running Mo
 </tr>
 <tr>
 <td><strong>AI traffic governance</strong></td>
-<td>On eligible SSE or P/D fullproxy rules, validate API keys, authorize models, and enforce request/token quotas before dispatch; apply byte-rate QoS separately to rules or ports. The separated key-store/auth plane is development-stage and must be qualified against the deployed image.</td>
+<td>On fullproxy rules, an independent five-state credential policy selects keyless, API-key, JWT, or either credential; model authorization and scoped request/token quotas run before dispatch. Byte-rate QoS remains separate. The development contract must be qualified against the deployed image.</td>
 </tr>
 <tr>
 <td><strong>CHWBL / GPU-aware algorithms</strong></td>
@@ -2812,7 +2896,9 @@ runtime constants; stored <code>chwbl_*</code> tuning fields do not change them 
   provisioned dashboards and alerts.</li>
 <li><strong><a href="security/management-api-authentication/">Security → Management API Authentication</a></strong> — separate operator credentials from inference API keys and review current release blockers.</li>
 <li><strong><a href="operations/ai-key-store/">Operations → AI Key Store</a></strong> — provision, protect, back up, and diagnose the development PostgreSQL key store.</li>
-<li><strong><a href="operations/backup-restore/">Operations → Backup and Restore</a></strong> — define recovery scope and test restore gates before production use.</li>
+<li><strong><a href="operations/backup-restore/">Operations → Persistence, Backup, and Restore</a></strong> — prove no-mutation dry-run, commit write-through, restart readback, rollback, quarantine, and lineage.</li>
+<li><strong><a href="operations/readiness-diagnostics-maintenance/">Operations → Readiness, Capabilities, Diagnostics, and Maintenance</a></strong> — interpret configuration recovery readiness, preflight optional capabilities, and use the configuration-write maintenance gate safely.</li>
+<li><strong><a href="operations/appliance-cli/">Operations → Appliance CLI</a></strong> — keep Gateway configuration recovery separate from whole-appliance backup, update, rollback, and factory reset.</li>
 <li><strong><a href="operations/ha-limitations/">Operations → HA &amp; Upgrade Limitations</a></strong> — understand which state is synchronized, rebuilt, or lost during promotion.</li>
 </ul>
 <h2 id="where-it-fits-scope-and-non-goals">Where it fits (scope and non-goals)<a class="headerlink" href="#where-it-fits-scope-and-non-goals" title="Permanent link">&para;</a></h2>

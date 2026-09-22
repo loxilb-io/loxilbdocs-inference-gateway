@@ -1660,6 +1660,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -2009,7 +2037,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2832,9 +2916,10 @@
 call, how quickly they may submit requests, how many tokens they may consume,
 and how much network bandwidth a service may use. These controls solve
 different problems and should be configured independently.</p>
-<p>The request-admission flow below applies only to a <code>mode: 4</code> rule with
-<code>sse_mode: true</code> or <code>pd_disagg_mode: true</code>. Plain fullproxy rules bypass the
-current AI key and quota gate.</p>
+<p>The request-admission flow below applies to a <code>mode: 4</code> rule whose
+<code>api_key_auth</code> declaration attributes a credential. The declaration is
+independent of <code>sse_mode</code> and <code>pd_disagg_mode</code>. Omission preserves
+backend-owned <code>X-Api-Key</code>; explicit <code>disabled</code> strips it without validation.</p>
 <h2 id="choose-the-control-that-matches-the-problem">Choose the control that matches the problem<a class="headerlink" href="#choose-the-control-that-matches-the-problem" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TD
     REQ([Inference request]) --&gt; AUTH{"API key valid,&lt;br/&gt;enabled, and unexpired?"}
@@ -2882,10 +2967,22 @@ or tokens.</p>
 <td>Protect against one noisy credential</td>
 </tr>
 <tr>
-<td>Per-key TPM field</td>
+<td>Per-key TPM</td>
 <td>One API key</td>
 <td>Tokens per minute</td>
-<td>Persisted and returned, but <strong>not enforced</strong> in the current data path</td>
+<td>Implemented as a post-response debt latch; primary Swagger text is stale, so published support remains pending convergence</td>
+</tr>
+<tr>
+<td>User RPS/TPM</td>
+<td>One verified tenant/user pair</td>
+<td>Requests or tokens</td>
+<td>Bound an identity derived from JWT claims</td>
+</tr>
+<tr>
+<td>User-and-model TPM</td>
+<td>One verified user and model</td>
+<td>Tokens per minute</td>
+<td>Isolate one user's expensive-model spend</td>
 </tr>
 <tr>
 <td>Tenant RPS</td>
@@ -2906,6 +3003,18 @@ or tokens.</p>
 <td>Reserve a smaller budget for an expensive model</td>
 </tr>
 <tr>
+<td>Shared VIP RPS/TPM</td>
+<td>One service</td>
+<td>Requests or tokens</td>
+<td>Optional bucket for keyless traffic; token spend also includes attributed traffic on that service</td>
+</tr>
+<tr>
+<td>Rule/global defaults</td>
+<td>Identities without explicit rows</td>
+<td>Requests or tokens</td>
+<td>Rule fields override global fields; zero falls through</td>
+</tr>
+<tr>
 <td>QoS policy</td>
 <td>LB rule or network port</td>
 <td>Megabits per second at the API</td>
@@ -2919,8 +3028,8 @@ at the top of each minute.</p>
 <h2 id="prerequisites-and-secure-api-access">Prerequisites and secure API access<a class="headerlink" href="#prerequisites-and-secure-api-access" title="Permanent link">&para;</a></h2>
 <p>You need:</p>
 <ul>
-<li>a fullproxy inference rule (<code>mode: 4</code>) with <code>sse_mode: true</code> or
-  <code>pd_disagg_mode: true</code>; plain <code>mode: 4</code> does not enter the current key/quota gate;</li>
+<li>a fullproxy inference rule (<code>mode: 4</code>) declaring <code>api_key_auth: required</code>,
+  <code>jwt</code>, or <code>apikey-or-jwt</code>;</li>
 <li>the Gateway started with the independent PostgreSQL AI-key store configured through
   <code>--aikey-db-*</code> options;</li>
 <li>one management authentication mode enabled for port <code>11111</code>;</li>
@@ -2939,8 +3048,8 @@ from your identity and secret-management workflow; do not paste it into shell
 history, source control, tickets, or logs.</p>
 <div class="admonition danger">
 <p class="admonition-title">Prove both authentication planes before exposure</p>
-<p>A plain <code>mode: 4</code> rule is keyless even with a healthy key store. On an SSE- or P/D-enabled
-rule, no <code>--aikey-db-host</code> also admits requests without API-key checks.
+<p>A <code>mode: 4</code> rule that omits <code>api_key_auth</code> is keyless even with a healthy key store. A
+<code>required</code> rule with no usable store fails closed with <code>503</code>; it does not become keyless.
 With no user, OAuth, or manual-token management mode, key and quota CRUD is callable without
 credentials. Require <code>401</code> from both a missing-key inference probe and an unauthenticated
 management mutation before proceeding.</p>
@@ -2972,10 +3081,12 @@ operations never return the raw key or its stored hash.</p>
 <p>Do not print <code>raw_key</code> in a terminal recording, CI log, dashboard, or issue.
 If it is exposed or lost, delete the key and create a replacement.</p>
 </div>
-<p>Per-key <code>tokens_per_min</code> remains part of the key schema and round-trips through
-CRUD, but the current data path does not enforce it. Tenant and
-tenant-and-model token budgets are the enforced TPM controls and are configured
-through the tenant rate-limit API described next.</p>
+<p>Per-key <code>tokens_per_min</code> is enforced by the implementation: settlement charges
+the key bucket and debt denies the next request. The primary Swagger text still
+describes stored-only metadata, while the companion PATCH contract describes
+enforcement. Treat that as contract drift requiring an upstream Swagger update,
+not as proof the implementation is inactive. Published support remains pending
+convergence and release qualification.</p>
 <h2 id="step-2-set-tenant-and-per-model-token-budgets">Step 2 — Set tenant and per-model token budgets<a class="headerlink" href="#step-2-set-tenant-and-per-model-token-budgets" title="Permanent link">&para;</a></h2>
 <p>This example gives the tenant an aggregate budget of 60,000 TPM and limits one
 model to 20,000 TPM:</p>
@@ -3100,6 +3211,11 @@ reason as the control-plane token:</p>
 <td><code>429</code> with retry guidance</td>
 <td>Token reservation is active</td>
 </tr>
+<tr>
+<td>Stop or remove the store behind a <code>required</code> rule</td>
+<td><code>503</code>, <code>policy_store_unavailable</code></td>
+<td>Policy evaluation fails closed</td>
+</tr>
 </tbody>
 </table>
 <p>Do not load-test a shared production tenant to prove a limiter. Use a dedicated
@@ -3206,8 +3322,13 @@ together; they are two gates over the same request.</p>
 <td>Endpoint health and backend/proxy logs</td>
 </tr>
 <tr>
-<td><code>503</code></td>
-<td>No usable route/backend, maintenance, or a dialect-specific fail-closed condition</td>
+<td><code>503 policy_store_unavailable</code></td>
+<td>Required credential or identity-bearing quota policy cannot be evaluated</td>
+<td>Key/JWKS store health and cached last-known-good state; backend delta must remain <code>0</code></td>
+</tr>
+<tr>
+<td>Other <code>503</code></td>
+<td>No usable route/backend, maintenance, or an engine-specific fail-closed condition</td>
 <td>Rule read-back, endpoint health, and engine-specific metrics</td>
 </tr>
 <tr>
@@ -3265,6 +3386,7 @@ in-flight requests. See <a href="../../operations/ha-limitations/">HA and Upgrad
 <li><a href="../../operations/ai-qos/">AI Quotas and QoS</a></li>
 <li><a href="../../operations/ai-key-store/">AI Key Store Operations</a></li>
 <li><a href="../../security/management-api-authentication/">Management API Authentication</a></li>
+<li><a href="../../security/data-plane-jwt-auth/">Data-Plane Authentication and JWT</a></li>
 <li><a href="../../operations/monitoring/">Monitoring and Metrics</a></li>
 </ul>
 

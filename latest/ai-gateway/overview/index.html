@@ -1627,6 +1627,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../security/ai-safety/" class="md-nav__link">
         
   
@@ -1976,7 +2004,63 @@
   <span class="md-ellipsis">
     
   
-    Backup & Restore
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
   
 
     
@@ -2834,7 +2918,7 @@ decisions are required.</p>
 </tr>
 <tr>
 <td><strong>Admission and authorization</strong></td>
-<td>When the separate AI data-plane key store is configured, the inference path validates <code>X-Api-Key</code>, the key's model allow-list, request-rate buckets, and tenant/model token quotas before dispatch. Management users and inference keys use separate stores. See <a href="../ai-traffic-governance/">AI Traffic Governance</a>.</td>
+<td>A fullproxy service's independent <code>api_key_auth</code> declaration selects omitted, disabled, API-key, JWT, or API-key-or-JWT behavior. Attributed requests apply model authorization and the scoped quota ladder before dispatch. Management and data-plane authentication remain separate. See <a href="../ai-traffic-governance/">AI Traffic Governance</a>.</td>
 </tr>
 <tr>
 <td><strong>Stage 1 — model pool selection</strong></td>
@@ -2865,19 +2949,19 @@ model requests. Do not reuse them, expose them over plaintext networks, or place
 in URLs, logs, metric labels, screenshots, or committed examples.</p>
 </div>
 <div class="admonition danger">
-<p class="admonition-title">A missing AI key store is currently fail-open</p>
-<p>If <code>--aikey-db-host</code> is unset, the current data path admits inference requests without
-validating a key and emits a one-time critical log. A deployment that requires inference
-authentication must configure the dedicated PostgreSQL key store, require verified TLS to
-it, and run a negative request test before exposing the inference VIP. Enabling the
-management user service does not configure this data-plane store.</p>
+<p class="admonition-title">Read the credential declaration back exactly</p>
+<p>A <code>required</code> service with no usable key store fails closed with <code>503</code>; it does not downgrade
+to keyless. A service that omits <code>api_key_auth</code> intentionally preserves backend-owned
+<code>X-Api-Key</code>, while explicit <code>disabled</code> strips the header. Management user service health does
+not prove any data-plane credential dependency. Test <code>401</code>, <code>403</code>, and dependency <code>503</code> with
+an independent backend receipt oracle before exposure.</p>
 </div>
 <div class="admonition danger">
 <p class="admonition-title">Canonical-model and HTTP/2 release boundaries</p>
 <p>HTTP/1.1 routing prefers <code>X-Model</code>, but authorization currently prefers the JSON body model;
-reject conflicting values before the Gateway. The HTTP/2 backend path supplies an empty model
-to lookup, reduces selector 9 to round-robin, and does not integrate selector 10, P/D, or
-KV-exact routing. Use <code>backend_protocol: http1</code> for these inference features.</p>
+reject conflicting values before the Gateway. API-key/JWT admission now has HTTP/1.1 and
+HTTP/2 contract tests, but that does not qualify every routing, P/D, KV-exact, TLS/ALPN, SSE,
+or HA combination. Use only combinations proven by the exact image's release evidence.</p>
 </div>
 <h3 id="do-not-confuse-relay-cache-with-model-kv-cache">Do not confuse relay cache with model KV cache<a class="headerlink" href="#do-not-confuse-relay-cache-with-model-kv-cache" title="Permanent link">&para;</a></h3>
 <p>The fullproxy may temporarily cache request or response bytes while a peer drains slowly. This
