@@ -1,10 +1,10 @@
 # API Key Management
 
 Use the AI Gateway key API to create, inspect, rotate, and revoke
-workload credentials. On a `mode: 4` rule with `sse_mode: true` or
-`pd_disagg_mode: true`, the request path actively enforces key validity, model
-allow-lists, per-key request rate, and tenant request rate. Plain fullproxy
-rules do not enter this gate.
+workload credentials. On a `mode: 4` rule with `api_key_auth: required`, the
+request path enforces key validity, model allow-lists, per-key request rate,
+and the configured quota ladder. This declaration is independent of
+`sse_mode` and `pd_disagg_mode`.
 
 ## Request path
 
@@ -34,12 +34,12 @@ inference requests use `X-Api-Key` and never use the management bearer token.
     implemented in the current development source but have not completed release qualification.
     Confirm the flags and API schema exposed by the exact image you deploy.
 
-!!! danger "Key checks require both a store and an AI-processing rule"
-    The current data-plane key gate runs only for `mode: 4` rules that also set
-    `sse_mode: true` or `pd_disagg_mode: true`. A plain `mode: 4` rule remains keyless even when
-    `--aikey-db-host` is configured. If the store is unset, the gated paths also admit requests
-    without validating `X-Api-Key`. Configure both prerequisites, then prove a missing-key request
-    returns `401` on every protected VIP before exposure.
+!!! danger "The service declaration, not SSE or P/D, activates authentication"
+    Omitted `api_key_auth` preserves a backend-owned `X-Api-Key`. Explicit `disabled` strips that
+    header without validating it. `required` validates and strips it. If a `required` rule has no
+    usable key store, the request fails closed with `503 policy_store_unavailable`; an unknown key
+    returns `401 invalid_api_key`. Prove those two failures separately and require a zero backend
+    receipt delta before exposure.
 
 !!! danger "A key store does not protect the management listener"
     The key lifecycle routes are registered independently of `--userservice`. If none of the
@@ -76,7 +76,7 @@ printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.hea
 | `POST` | `/config/ai/apikey` | Create a key; raw value is returned once |
 | `GET` | `/config/ai/apikey?tenant_id=...` | List key summaries, optionally by tenant |
 | `GET` | `/config/ai/apikey/{key_id}` | Read one key summary |
-| `PATCH` | `/config/ai/apikey/{key_id}` | Replace `allowed_models` and/or change `enabled`; raw-middleware route |
+| `PATCH` | `/config/ai/apikey/{key_id}` | Update `allowed_models`, `enabled`, `rate_limit_rps`, `burst_size`, and/or `tokens_per_min`; raw-middleware route |
 | `DELETE` | `/config/ai/apikey/{key_id}` | Permanently delete a key |
 | `POST` | `/config/ai/tenant/ratelimit` | Set tenant RPS and token quotas |
 | `GET` | `/config/ai/tenant/ratelimit/{tenant_id}` | Read tenant limits |
@@ -115,16 +115,19 @@ directly into your secret manager, then securely remove the temporary file.
 | `allowed_models` | String array | Exact model identifiers this key may use |
 | `rate_limit_rps` | Integer | Per-key requests per second; `0` disables this limit |
 | `burst_size` | Integer | Per-key request bucket capacity |
-| `tokens_per_min` | Integer | Persisted and returned by the key API, but **not enforced** by the current data path; use tenant/model TPM |
+| `tokens_per_min` | Integer | The implementation charges a per-key TPM bucket and denies the next request after debt; primary Swagger text is stale, so published support remains pending contract convergence |
 | `expires_at` | RFC 3339 timestamp | Optional key expiry |
 | `enabled` | Boolean | Defaults to enabled when omitted |
 
 An empty model list records no model restriction. Prefer an explicit list when
 the workload should use only known models.
 
-Per-key `tokens_per_min` is currently a round-trip schema field, not an
-enforcement control. Configure aggregate and per-model token budgets through
-the tenant rate-limit API and verify their `429` behavior independently.
+The implementation is authoritative for observed behavior: the current limiter
+and tests charge and latch a per-key bucket. The frozen primary Swagger text
+incorrectly calls the field stored-only metadata, while `swagger-extras.yml`
+describes PATCH enforcement. Until the primary schema text is corrected and
+release-qualified, do not call per-key TPM a supported release contract; use
+tenant/user/model or shared-VIP limits when a published guarantee is required.
 
 The normal path omits `api_key`, lets the Gateway generate the credential, and
 receives it once as `raw_key`. The development contract also accepts a
@@ -185,11 +188,10 @@ curl --fail-with-body --silent --show-error \
   "$CONTROL_API/config/ai/apikey/$OLD_KEY_ID"
 ```
 
-Expected result: `204 No Content`; subsequent get returns not found. On the
-current development data path, prove that inference use fails on the same
-`mode: 4` rule with `sse_mode: true` or `pd_disagg_mode: true`; a plain
-fullproxy rule does not enter the key gate. A delete is permanent—create a new
-key if access is needed again.
+Expected result: `204 No Content`; subsequent get returns not found. Prove
+that inference use fails on the same `mode: 4` rule declaring
+`api_key_auth: required`. A rule that omits the field does not enter the key
+gate. A delete is permanent—create a new key if access is needed again.
 
 Disable, allow-list changes, and delete evict the local authentication and
 key-summary caches before the operation returns. The development HA path also
@@ -214,9 +216,12 @@ printf 'X-Api-Key: %s\n' "$INFERENCE_API_KEY" > ./inference.headers
 | Disabled, expired, or revoked key | `401` |
 | Valid key, disallowed model | `403 model_not_allowed` |
 | Burst over key or tenant request bucket | `429` |
+| Required rule with no/evaluable store | `503 policy_store_unavailable` |
 
 Run destructive or throttling probes only with a dedicated non-production
-tenant. Never print the test key in the result.
+tenant. Give each request a non-secret nonce and require backend receipt delta
+`0` for every `401`, `403`, `429`, and `503`; a client status alone does not
+prove non-delivery. Never print the test key in the result.
 
 ## Tenant limits
 
@@ -234,6 +239,7 @@ explained step by step in [AI Traffic Governance](ai-traffic-governance.md).
 | Key or quota call returns `503 ai_key_store_unconfigured` | `--aikey-db-host` is unset | Stop exposure, configure the independent key store, and re-run missing-key probes |
 | Key or quota call returns `503 ai_key_store_unavailable` | A configured store did not initialize or is unreachable | Restore the store and verify the reconnect; do not bypass the key check |
 | Inference call returns `401` | Key missing, unknown, disabled, expired, or revoked | Inspect summary by `key_id`; do not log the raw key |
+| Required inference call returns `503 policy_store_unavailable` | No store, unreachable store without a usable cached answer, or policy evaluation failure | Restore the store; do not relabel this as an invalid client key |
 | Inference call returns `403` | Effective model is not allowed | Compare the exact model with `allowed_models` |
 | Inference call returns `429` | Key/tenant RPS or token quota | Inspect the error reason, `Retry-After`, and metrics |
 | Key cannot be recovered | Raw value was not stored | Revoke the record and rotate to a new key |
@@ -253,4 +259,5 @@ unset CONTROL_PLANE_TOKEN INFERENCE_API_KEY KEY_ID OLD_KEY_ID
 - [AI Quotas and QoS](../operations/ai-qos.md)
 - [AI Key Store Operations](../operations/ai-key-store.md)
 - [Management API Authentication](../security/management-api-authentication.md)
+- [Data-Plane Authentication and JWT](../security/data-plane-jwt-auth.md)
 - [Monitoring and Metrics](../operations/monitoring.md)

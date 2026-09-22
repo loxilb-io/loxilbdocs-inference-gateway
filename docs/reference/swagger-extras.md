@@ -48,7 +48,7 @@ printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.hea
 | DPU debug | `GET`, `POST /config/dpu/debug` | Inspect DPU state or trigger a guarded debug action |
 | DPU hardware counters | `GET /config/dpu/hwcounters` | Read per-flow hardware packet and byte counters |
 | OPA watcher | `GET`, `POST`, `DELETE /config/opa/watcher` | Inspect, configure, or remove the OPA L4 watcher |
-| AI key update | `PATCH /config/ai/apikey/{key_id}` | Replace a key allow-list and/or change its enabled state |
+| AI key update | `PATCH /config/ai/apikey/{key_id}` | Update a key allow-list, enabled state, and/or its three rate-limit fields |
 
 ## AI KV inventory
 
@@ -189,21 +189,47 @@ runtime behavior and companion contract for response details.
 
 - `allowed_models`: replacement array; an empty array removes the model
   restriction;
-- `enabled`: `false` soft-disables the key and `true` re-enables it.
+- `enabled`: `false` soft-disables the key and `true` re-enables it;
+- `rate_limit_rps`: per-key requests per second; `0` disables that limit;
+- `burst_size`: per-key request-bucket capacity; `0` falls back to
+  `rate_limit_rps`;
+- `tokens_per_min`: per-key token quota; `0` disables it. Current
+  implementation charges the completed response and denies the next request
+  after the bucket enters debt.
+
+Omitted or `null` fields remain unchanged. The handler rejects a body that
+names none of these five fields, including `{}`, top-level `null`, an all-null
+body, or a body containing only unknown names. An explicit empty
+`allowed_models` is a real update, not an empty patch.
 
 ```bash
 curl --fail-with-body --silent --show-error \
   --request PATCH \
   --header @control-plane.headers \
   --header 'Content-Type: application/json' \
-  --data '{"allowed_models":["example-chat-model"],"enabled":false}' \
+  --data '{
+    "allowed_models": ["example-chat-model"],
+    "enabled": true,
+    "rate_limit_rps": 5,
+    "burst_size": 10,
+    "tokens_per_min": 12000
+  }' \
   "$CONTROL_API/config/ai/apikey/$KEY_ID"
 ```
 
 Expected success is `204 No Content`. Invalid JSON or an empty key ID returns
-`400`; an unknown key returns `404`. In the development implementation, an
-unconfigured or unavailable key store returns `503` even though the current
-companion specification still lists only a generic `500` for update failure.
+`400`; an unknown key returns `404`. The companion specification distinguishes
+recognized unconfigured/unavailable key-store errors as `503` and other
+unclassified lookup or statement failures as `500`. Because the model-list and
+rate-limit writes are not one database transaction, a `400` or `500` after a
+preceding write does not prove rollback; read the key summary again.
+
+This is one place where `swagger-extras.yml` matches the implementation better
+than the primary `swagger.yml`: the companion description says per-key TPM is
+enforced post-hoc, while the primary key schemas still call it stored-only
+metadata. Implementation behavior takes precedence for diagnosis, but
+published support remains pending correction of the primary Swagger,
+regenerated artifacts, and release qualification.
 
 The update evicts local key caches and sends best-effort peer invalidation.
 Peer delivery is not an instantaneous cluster-wide revocation guarantee; see

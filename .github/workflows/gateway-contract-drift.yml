@@ -1,0 +1,121 @@
+name: Gateway contract drift
+
+on:
+  workflow_dispatch:
+    inputs:
+      gateway_ref:
+        description: Gateway branch, tag, or commit to validate
+        required: true
+        default: main
+        type: string
+  repository_dispatch:
+    types: [gateway-api-updated]
+  schedule:
+    - cron: '17 3 * * 1'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/gateway-contract-drift.yml'
+      - 'docs/**'
+      - 'tests/contracts/docs_examples/gateway-api.json'
+      - 'tests/test_gateway_contracts.py'
+      - 'tests/test_validate_examples.py'
+      - 'tools/compare_gateway_contracts.py'
+      - 'tools/refresh_example_contracts.py'
+      - 'tools/validate_examples.py'
+      - 'tools/validate_gateway_docs.py'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gateway-contract-drift.yml'
+      - 'docs/**'
+      - 'tests/contracts/docs_examples/gateway-api.json'
+      - 'tests/test_gateway_contracts.py'
+      - 'tests/test_validate_examples.py'
+      - 'tools/compare_gateway_contracts.py'
+      - 'tools/refresh_example_contracts.py'
+      - 'tools/validate_examples.py'
+      - 'tools/validate_gateway_docs.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gateway-contract-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Swagger union versus public docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out documentation
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Check out selected Gateway contract
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: loxilb-io/loxilb-inference-gateway
+          ref: ${{ github.event.client_payload.gateway_ref || github.event.inputs.gateway_ref || 'main' }}
+          path: upstream-gateway
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Generate candidate contract from both Swagger files
+        id: candidate
+        env:
+          REQUESTED_GATEWAY_REF: ${{ github.event.client_payload.gateway_ref || github.event.inputs.gateway_ref || 'main' }}
+        shell: bash
+        run: |
+          gateway_sha=$(git -C upstream-gateway rev-parse HEAD)
+          echo "gateway_sha=$gateway_sha" >> "$GITHUB_OUTPUT"
+          mkdir -p "$RUNNER_TEMP/gateway-contract"
+          python tools/refresh_example_contracts.py \
+            --only gateway \
+            --gateway-repo upstream-gateway \
+            --gateway-ref "$gateway_sha" \
+            --output-dir "$RUNNER_TEMP/gateway-contract"
+          cp tests/contracts/docs_examples/cli.json \
+            "$RUNNER_TEMP/gateway-contract/cli.json"
+          {
+            echo '## Gateway contract validation target'
+            echo
+            echo "- Gateway ref: \`$REQUESTED_GATEWAY_REF\`"
+            echo "- Resolved commit: \`$gateway_sha\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Validate documented API usage against candidate Swagger union
+        id: examples
+        continue-on-error: true
+        run: >-
+          python tools/validate_examples.py
+          --contract-dir "$RUNNER_TEMP/gateway-contract"
+
+      - name: Compare tracked and candidate Swagger contracts
+        id: drift
+        continue-on-error: true
+        run: >-
+          python tools/compare_gateway_contracts.py
+          --baseline tests/contracts/docs_examples/gateway-api.json
+          --candidate "$RUNNER_TEMP/gateway-contract/gateway-api.json"
+          --markdown-summary "$GITHUB_STEP_SUMMARY"
+
+      - name: Enforce documentation contract gate
+        if: always()
+        env:
+          EXAMPLE_OUTCOME: ${{ steps.examples.outcome }}
+          DRIFT_OUTCOME: ${{ steps.drift.outcome }}
+        shell: bash
+        run: |
+          if [[ "$EXAMPLE_OUTCOME" != success || "$DRIFT_OUTCOME" != success ]]; then
+            echo 'Gateway API usage validation or Swagger drift gate failed.' >&2
+            echo 'Review both Swagger files, update docs, then refresh the tracked contract.' >&2
+            exit 1
+          fi

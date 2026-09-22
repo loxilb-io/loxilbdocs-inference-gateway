@@ -119,11 +119,11 @@ apply to every rule, AI or not.
 | `backend_keepalive_interval_sec` | int32 | `0` | ≥0 | Sets `SO_KEEPALIVE`+`TCP_KEEPIDLE` on the backend socket (seconds). `0` = disabled. **Recommended `60`** to survive cloud NAT during long SSE streams. |
 
 !!! note "SSE lifecycle and admission controls are enforced"
-    SSE lifecycle handling is part of the fullproxy stream path. API-key model authorization,
-    request-rate limits, and token quotas use the independent PostgreSQL key store configured by
-    `--aikey-db-*`. Without `--aikey-db-host`, the current data path admits requests without key
-    validation. Prove a missing-key request receives `401` before using these controls as an
-    access boundary.
+    SSE lifecycle handling is part of the fullproxy stream path and does not activate
+    authentication. `api_key_auth` independently selects omitted, `disabled`, `required`, `jwt`,
+    or `apikey-or-jwt`. A required API-key policy uses the PostgreSQL store configured by
+    `--aikey-db-*`; if it cannot evaluate the key, it fails closed with `503`. Prove missing or
+    unknown key `401`, store failure `503`, and backend receipt delta `0` separately.
 
 ---
 

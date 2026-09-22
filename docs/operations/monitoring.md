@@ -104,6 +104,22 @@ Denials are recorded at the decision point. Do not assume a generic completed
 request query includes every pre-dispatch denial; use the dedicated denial
 counters when alerting on `403` and `429`.
 
+## JWT and policy-store metrics
+
+| Metric | Type | Labels | Meaning |
+|---|---|---|---|
+| `loxilb_ai_jwt_validation_total` | Counter | `tenant`, `reason` | Bearer verdicts; `allowed` is admission, while denial reasons use the closed client error-code set. Tenant `-` means no verified tenant was available. |
+| `loxilb_ai_jwks_refresh_total` | Counter | `profile`, `outcome` | JWKS fetch attempts; outcome is `success` or `failure` |
+| `loxilb_ai_jwks_keys` | Gauge | `profile` | Usable verification keys in the current snapshot |
+| `loxilb_ai_jwks_usable` | Gauge | `profile` | `1` only when a fetched keyset is inside the staleness cutoff |
+| `loxilb_ai_jwks_last_success_timestamp_seconds` | Gauge | `profile` | Last successful fetch time; absent before the first success |
+| `loxilb_ai_policy_store_unavailable_total` | Counter | none | Requests refused `503` because a required credential or quota policy could not be evaluated |
+
+A rising JWKS failure counter with a flat success counter is a warning while
+the last-known-good keyset still admits traffic. Alert before
+`loxilb_ai_jwks_usable` becomes `0`. Do not treat an absent last-success series
+as a zero timestamp; it means no fetch has succeeded.
+
 ## Token quota metrics
 
 | Metric | Type | Meaning |
@@ -116,6 +132,10 @@ counters when alerting on `403` and `429`.
 | `loxilb_ai_token_quota_limit_tokens{tenant}` | Gauge | Aggregate TPM limit |
 | `loxilb_ai_token_quota_model_utilization{tenant,model}` | Gauge | Model-specific spent fraction |
 | `loxilb_ai_token_quota_model_limit_tokens{tenant,model}` | Gauge | Model-specific TPM limit |
+| `loxilb_ai_user_token_quota_utilization{tenant,user}` / `_limit_tokens` | Gauge | User TPM state and last charged limit |
+| `loxilb_ai_user_model_token_quota_utilization{tenant,user,model}` / `_limit_tokens` | Gauge | User-and-model TPM state |
+| `loxilb_ai_key_token_quota_utilization{key_id}` / `_limit_tokens` | Gauge | Implemented per-key TPM state; primary Swagger text is stale and release support remains pending convergence |
+| `loxilb_ai_vip_token_quota_utilization{service}` / `_limit_tokens` | Gauge | Shared service TPM state |
 | `loxilb_ai_token_quota_cold_open_total` | Counter | Quota service began with empty state because no peers were available, peer warmup was disabled, or peer warmup timed out |
 
 Utilization can exceed `1` while a completed response has created post-hoc
@@ -328,6 +348,9 @@ panel with the raw series before relying on its units or aggregation.
 | System CPU looks like host CPU in a container | Cgroup accounting unreadable | Check CPU-source startup log and cgroup mounts/permissions |
 | Host CPU high, scoped CPU low | Unrelated host workload | Inspect host processes and scheduling pressure before restarting Gateway |
 | Quota usage seems doubled | Aggregate and model gauges were summed | Display them as separate gates |
+| JWT requests switch from success to `503` | JWKS never fetched or last-known-good set became stale | Compare usable, keys, last-success, and refresh outcomes for the profile |
+| `401 invalid_api_key` rises with no store alert | Unknown/disabled/expired client key | Investigate credential lifecycle; do not classify as a store outage |
+| `policy_store_unavailable_total` rises | Required policy cannot be evaluated | Restore the key/JWKS/quota dependency and verify backend receipt delta remains `0` |
 | QoS rate is eight times smaller than API number | Bits-versus-bytes mismatch | API is Mbps; shaper metric is bytes/s |
 | llama.cpp warning rate increases | Fleet consistency or sleeping endpoint | Inspect `kind` and compare endpoint `/props` safely |
 | Aggregate relay cache rises while max-connection cache stays low | Many concurrent slow drains | Correlate queued connections, backpressure ratio, backend latency, and memory |
@@ -351,6 +374,7 @@ unset CONTROL_PLANE_TOKEN
 - [Grafana Dashboards](observability-metrics-grafana.md)
 - [AI Traffic Governance](../ai-gateway/ai-traffic-governance.md)
 - [AI Quotas and QoS](ai-qos.md)
+- [Data-Plane Authentication and JWT](../security/data-plane-jwt-auth.md)
 - [Configuration Backup and Restore](backup-restore.md)
 - [Application and L4 Tracing](tracing.md)
 - [DPU Offload Observability](dpu-offload.md)

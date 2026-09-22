@@ -1,7 +1,7 @@
 {
   "contract_version": 1,
   "source": {
-    "commit": "df2a7c32a7848e463955bbc8caf23ffcd89e22cd",
+    "commit": "307b4c7173cdd2867ae0f29fe9e0c6ae16536c11",
     "repository": "https://github.com/loxilb-io/loxilb-inference-gateway"
   },
   "specs": [
@@ -7570,7 +7570,7 @@
           }
         }
       },
-      "sha256": "055f093166cea13ade33d68aac4ef0a437079f16eac2cde1058e0db6ab5f3fa3",
+      "sha256": "0c5a8441e6bb141292324daff3b4bafa0e1f69e80cfe00011b939cc4f347cb09",
       "source_path": "api/swagger.yml"
     },
     {

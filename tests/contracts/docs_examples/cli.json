@@ -1,5 +1,518 @@
 {
   "commands": {
+    "appliance backup create": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      }
+    },
+    "appliance backup key-create": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      }
+    },
+    "appliance backup verify": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      }
+    },
+    "appliance diagnostics create": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--redact",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--redact",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      }
+    },
+    "appliance factory-reset execute": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--confirm",
+          "--insecure",
+          "--key",
+          "--output",
+          "--plan-hash",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": false,
+        "flags": []
+      }
+    },
+    "appliance factory-reset plan": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": false,
+        "flags": []
+      }
+    },
+    "appliance network validate": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      }
+    },
+    "appliance restore execute": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--confirm",
+          "--insecure",
+          "--key",
+          "--output",
+          "--plan-hash",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": false,
+        "flags": []
+      }
+    },
+    "appliance restore plan": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": false,
+        "flags": []
+      }
+    },
+    "appliance rollback execute": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--confirm",
+          "--insecure",
+          "--key",
+          "--output",
+          "--plan-hash",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": false,
+        "flags": []
+      }
+    },
+    "appliance rollback plan": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--archive",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": false,
+        "flags": []
+      }
+    },
+    "appliance rollback status": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": false,
+        "flags": []
+      }
+    },
+    "appliance status": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      }
+    },
+    "appliance update execute": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--confirm",
+          "--insecure",
+          "--key",
+          "--output",
+          "--plan-hash",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": false,
+        "flags": []
+      }
+    },
+    "appliance update plan": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": false,
+        "flags": []
+      }
+    },
+    "appliance update status": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": false,
+        "flags": []
+      }
+    },
     "create apikey": {
       "enums": {},
       "main": {
@@ -309,6 +822,94 @@
         ]
       }
     },
+    "create persist": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--strict",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--strict",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      }
+    },
+    "create restore": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--commit",
+          "--components",
+          "--file",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--strict",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--commit",
+          "--components",
+          "--file",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--strict",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      }
+    },
     "delete lb": {
       "enums": {
         "--path-match-mode": [
@@ -373,6 +974,45 @@
           "--token",
           "--token-file",
           "--udp"
+        ]
+      }
+    },
+    "get diagnostics": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       }
     },
@@ -460,6 +1100,45 @@
         ]
       }
     },
+    "get maintenance": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      }
+    },
     "get metrics": {
       "enums": {},
       "main": {
@@ -488,6 +1167,131 @@
           "--bearer",
           "--cacert",
           "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      }
+    },
+    "get ready": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      }
+    },
+    "get snapshot": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--components",
+          "--file",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--strict",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--components",
+          "--file",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--strict",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      }
+    },
+    "set maintenance": {
+      "enums": {},
+      "main": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--drain-timeout",
+          "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ]
+      },
+      "release": {
+        "aliases": [],
+        "available": true,
+        "flags": [
+          "--apiserver",
+          "--bearer",
+          "--cacert",
+          "--cert",
+          "--drain-timeout",
           "--insecure",
           "--key",
           "--output",

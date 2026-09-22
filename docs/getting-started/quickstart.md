@@ -18,10 +18,13 @@ header or in the JSON request body. This walkthrough is built from the runnable
     and prove an unauthenticated mutation returns `401`.
 
 !!! note "This is a keyless routing lab"
-    These are plain `mode: 4` rules. They do not enter the current API-key/quota gate, even when an
-    independent AI-key store is configured, and adding `X-Api-Key` does not turn that gate on.
-    Protected inference requires a fullproxy rule with `sse_mode: true` or `pd_disagg_mode: true`.
-    Complete [API Key Management](../ai-gateway/api-key-management.md) before exposing such a VIP.
+    These rules omit `api_key_auth`, so the Gateway declares no data-plane credential namespace.
+    A backend-owned `X-Api-Key` therefore passes through unchanged. Adding a credential header does
+    not turn authentication on. Use `api_key_auth: required`, `jwt`, or `apikey-or-jwt` on a
+    fullproxy rule to require a credential; the declaration is independent of `sse_mode` and
+    `pd_disagg_mode`. An explicit `disabled` remains keyless but strips `X-Api-Key`. Complete
+    [Data-Plane Authentication and JWT](../security/data-plane-jwt-auth.md) before exposing a
+    protected VIP.
 
 ## What you will build
 
@@ -36,7 +39,7 @@ separate L7 rule on its own port, distinguished by `model_name`:
 
 For **routing**, the gateway reads the model from the `X-Model` header or the
 `"model"` field of an OpenAI-compatible JSON body; when both are present, the
-header wins. On an API-key-gated SSE or P/D rule, model authorization has a
+header wins. On a credential-protected rule, model authorization has a
 different precedence: it uses the JSON body model first, then falls back to
 the path prefix or header. Keep these inputs consistent so routing and
 authorization cannot select different model names. A
@@ -204,7 +207,7 @@ curl -s -X POST http://10.10.10.254:2021/ \
 !!! note "Header overrides body for routing"
     If both `X-Model` and a JSON `"model"` are present, the header wins routing. Sending
     `X-Model: llama-70b` with a body of `"model":"mistral-7b"` to port 2020
-    routes to the **llama** pool. On a protected SSE or P/D rule, authorization checks the body
+    routes to the **llama** pool. On a credential-protected rule, authorization checks the body
     model first; avoid conflicting values.
 
 ### Wildcard fallback

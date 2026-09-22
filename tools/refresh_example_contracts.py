@@ -14,7 +14,7 @@ from typing import Any
 import yaml
 
 
-GATEWAY_REF = "df2a7c32a7848e463955bbc8caf23ffcd89e22cd"
+DEFAULT_GATEWAY_REF = "HEAD"
 CLI_MAIN_REF = "27d6717438abf4dcdb605d7036cf5173e40c5e59"
 CLI_RELEASE_REF = "5dd978c25c967b8192c5fe9cd448783e1e74be7c"
 CLI_RELEASE_TAG = "v0.9.8.9-rc.2"
@@ -25,12 +25,35 @@ COMPLETION_GOLDEN = "cmd/goldens/testdata/completion-bash.golden"
 # Only command leaves used by the public Markdown are retained. The completion
 # golden remains the authority for command paths and flags.
 CLI_FUNCTIONS = {
+    "appliance backup create": "_loxicmd_appliance_backup_create",
+    "appliance backup key-create": "_loxicmd_appliance_backup_key-create",
+    "appliance backup verify": "_loxicmd_appliance_backup_verify",
+    "appliance diagnostics create": "_loxicmd_appliance_diagnostics_create",
+    "appliance factory-reset execute": "_loxicmd_appliance_factory-reset_execute",
+    "appliance factory-reset plan": "_loxicmd_appliance_factory-reset_plan",
+    "appliance network validate": "_loxicmd_appliance_network_validate",
+    "appliance restore execute": "_loxicmd_appliance_restore_execute",
+    "appliance restore plan": "_loxicmd_appliance_restore_plan",
+    "appliance rollback execute": "_loxicmd_appliance_rollback_execute",
+    "appliance rollback plan": "_loxicmd_appliance_rollback_plan",
+    "appliance rollback status": "_loxicmd_appliance_rollback_status",
+    "appliance status": "_loxicmd_appliance_status",
+    "appliance update execute": "_loxicmd_appliance_update_execute",
+    "appliance update plan": "_loxicmd_appliance_update_plan",
+    "appliance update status": "_loxicmd_appliance_update_status",
     "create apikey": "_loxicmd_create_apikey",
     "create lb": "_loxicmd_create_lb",
+    "create persist": "_loxicmd_create_persist",
+    "create restore": "_loxicmd_create_restore",
     "delete lb": "_loxicmd_delete_lb",
+    "get diagnostics": "_loxicmd_get_diagnostics",
     "get kvinventory": "_loxicmd_get_kvinventory",
     "get lb": "_loxicmd_get_loadbalancer",
+    "get maintenance": "_loxicmd_get_maintenance",
     "get metrics": "_loxicmd_get_metrics",
+    "get ready": "_loxicmd_get_ready",
+    "get snapshot": "_loxicmd_get_snapshot",
+    "set maintenance": "_loxicmd_set_maintenance",
     "set metrics": "_loxicmd_set_metrics",
 }
 
@@ -104,6 +127,14 @@ def git_show(repo: Path, ref: str, path: str) -> bytes:
         ["git", "-C", str(repo), "show", f"{ref}:{path}"],
         stderr=subprocess.PIPE,
     )
+
+
+def resolve_ref(repo: Path, ref: str) -> str:
+    return subprocess.check_output(
+        ["git", "-C", str(repo), "rev-parse", f"{ref}^{{commit}}"],
+        text=True,
+        stderr=subprocess.PIPE,
+    ).strip()
 
 
 def sha256(data: bytes) -> str:
@@ -236,16 +267,19 @@ def build_cli_contract(cli_repo: Path) -> dict[str, Any]:
     }
 
 
-def build_gateway_contract(gateway_repo: Path) -> dict[str, Any]:
+def build_gateway_contract(
+    gateway_repo: Path, gateway_ref: str = DEFAULT_GATEWAY_REF
+) -> dict[str, Any]:
+    resolved_ref = resolve_ref(gateway_repo, gateway_ref)
     specs = []
     for source_path in GATEWAY_FILES:
-        raw = git_show(gateway_repo, GATEWAY_REF, source_path)
+        raw = git_show(gateway_repo, resolved_ref, source_path)
         specs.append(compact_swagger(raw, source_path))
     return {
         "contract_version": 1,
         "source": {
             "repository": "https://github.com/loxilb-io/loxilb-inference-gateway",
-            "commit": GATEWAY_REF,
+            "commit": resolved_ref,
         },
         "specs": specs,
     }
@@ -258,8 +292,15 @@ def write_json(path: Path, value: Any) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--gateway-repo", type=Path, required=True)
-    parser.add_argument("--cli-repo", type=Path, required=True)
+    parser.add_argument("--gateway-repo", type=Path)
+    parser.add_argument("--gateway-ref", default=DEFAULT_GATEWAY_REF)
+    parser.add_argument("--cli-repo", type=Path)
+    parser.add_argument(
+        "--only",
+        choices=("all", "gateway", "cli"),
+        default="all",
+        help="refresh both contracts or only one repository's contract",
+    )
     parser.add_argument(
         "--output-dir",
         type=Path,
@@ -267,8 +308,17 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    write_json(args.output_dir / "gateway-api.json", build_gateway_contract(args.gateway_repo))
-    write_json(args.output_dir / "cli.json", build_cli_contract(args.cli_repo))
+    if args.only in {"all", "gateway"}:
+        if args.gateway_repo is None:
+            parser.error("--gateway-repo is required when refreshing the gateway contract")
+        write_json(
+            args.output_dir / "gateway-api.json",
+            build_gateway_contract(args.gateway_repo, args.gateway_ref),
+        )
+    if args.only in {"all", "cli"}:
+        if args.cli_repo is None:
+            parser.error("--cli-repo is required when refreshing the CLI contract")
+        write_json(args.output_dir / "cli.json", build_cli_contract(args.cli_repo))
     return 0
 
 
