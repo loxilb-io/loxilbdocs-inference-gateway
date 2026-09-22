@@ -133,7 +133,7 @@ runtime constants; stored `chwbl_*` tuning fields do not change them yet.
 - **[Security → Management API Authentication](security/management-api-authentication.md)** — separate operator credentials from inference API keys and review current release blockers.
 - **[Operations → AI Key Store](operations/ai-key-store.md)** — provision, protect, back up, and diagnose the development PostgreSQL key store.
 - **[Operations → Persistence, Backup, and Restore](operations/backup-restore.md)** — prove no-mutation dry-run, commit write-through, restart readback, rollback, quarantine, and lineage.
-- **[Operations → Readiness, Diagnostics, and Maintenance](operations/readiness-diagnostics-maintenance.md)** — interpret configuration recovery readiness and use the configuration-write maintenance gate safely.
+- **[Operations → Readiness, Capabilities, Diagnostics, and Maintenance](operations/readiness-diagnostics-maintenance.md)** — interpret configuration recovery readiness, preflight optional capabilities, and use the configuration-write maintenance gate safely.
 - **[Operations → Appliance CLI](operations/appliance-cli.md)** — keep Gateway configuration recovery separate from whole-appliance backup, update, rollback, and factory reset.
 - **[Operations → HA & Upgrade Limitations](operations/ha-limitations.md)** — understand which state is synchronized, rebuilt, or lost during promotion.
 

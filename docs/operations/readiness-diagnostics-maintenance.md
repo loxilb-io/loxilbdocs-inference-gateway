@@ -1,20 +1,23 @@
-# Readiness, Diagnostics, and Maintenance
+# Readiness, Capabilities, Diagnostics, and Maintenance
 
-Gateway main exposes three related operational surfaces:
+Gateway main exposes four related operational surfaces:
 
 - `GET /status/ready` answers whether configuration recovery is ready;
+- `GET /status/capabilities` reports optional features gated by the launch environment;
 - `GET /diagnostics` assembles bounded operational evidence;
 - `GET/PUT /maintenance` controls the operator-owned configuration write gate.
 
 These APIs are not present in Gateway `v0.9.8.9-rc.1`. The matching
-`loxicmd` commands are present in CLI `v0.9.8.9-rc.2`, but they require a
-compatible Gateway main build until a later Gateway release includes the API.
+`loxicmd` readiness, diagnostics, and maintenance commands are present in CLI
+`v0.9.8.9-rc.2`, but they require a compatible Gateway main build until a later
+Gateway release includes the API. Capability readiness is REST-only.
 
-## Three different questions
+## Four different questions
 
 | Surface | Question it answers | What it does not prove |
 |---|---|---|
 | Readiness | Did boot replay settle, are required recovery dependencies evaluable, and is persistence free of a current failure streak? | Inference success, endpoint/model readiness, GPU operation, complete datapath health, or HA convergence |
+| Capability readiness | Can this process environment admit an optional feature whose prerequisite cannot be supplied in the request? | Overall health, rule-specific tokenizer/model/event readiness, or successful data-plane engagement |
 | Diagnostics | What build/API identity, recovery state, maintenance state, attachment state, map utilization, and dependency evidence can this node report? | A complete support archive or proof that every dependency check performed live external I/O |
 | Maintenance | Is the operator refusing new **configuration mutations**, and what is the observed streaming-session count? | A data-plane drain; current implementation reports `refusing_new_inference=false` |
 
@@ -43,6 +46,9 @@ Always parse the body. Important fields are:
 ```bash
 install -m 600 /dev/null ./gateway.token
 printf '%s\n' "$CONTROL_PLANE_TOKEN" > ./gateway.token
+export CONTROL_API="https://gateway.example.com/netlox/v1"
+install -m 600 /dev/null ./control-plane.headers
+printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
 
 loxicmd get ready \
   --token-file ./gateway.token \
@@ -55,6 +61,39 @@ jq -e '.ready == true and (.reasons | length == 0)' ready.json
 `loxicmd get ready` exits nonzero for a decoded not-ready response while still
 printing the `ReadyStatus` body. Under `-o json`, this command deliberately
 prints the raw Gateway body rather than a `CommandResult` envelope.
+
+## Optional capability readiness
+
+Read capability readiness before presenting or submitting controls whose prerequisites belong to
+the Gateway launch environment:
+
+```bash
+curl --fail-with-body --silent --show-error \
+  --header @control-plane.headers \
+  "$CONTROL_API/status/capabilities" \
+  > capabilities.json
+
+jq -e '.capabilities | type == "array"' capabilities.json
+
+jq -e '
+  .capabilities[] |
+  select(.name == "kv_exact_vllm") |
+  .ready == true
+' capabilities.json
+```
+
+For an authorized request the endpoint always returns HTTP `200`; individual verdicts are carried
+by `capabilities[]`. An empty array means the build gates no known capability on its environment.
+An absent capability name means the build does not know it, not that it is unready. Clients should
+ignore names they do not recognize rather than rejecting the whole response.
+
+| `name` | Ready when | Current not-ready codes | Admission consequence |
+|---|---|---|---|
+| `kv_exact_vllm` | `LLB_KV_NONE_HASH_SEED` is nonempty, at most 23 bytes, and is configured to match vLLM `PYTHONHASHSEED` | `KV_EXACT_SEED_UNSET`, `KV_EXACT_SEED_TOO_LONG` | Every vLLM `kvExactMode` 1 or 3 rule is refused with HTTP `412` and the same reason |
+
+This query and vLLM rule admission call the same seed predicate. A `ready=true` result still does
+not prove that the tokenizer, block size, hash algorithm, event stream, endpoint inventory, or
+data plane is ready. Those remain separate configuration and runtime checks.
 
 ## Diagnostics contract
 
@@ -154,10 +193,6 @@ query `get maintenance` before retrying.
 ## Direct REST form
 
 ```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-
 curl --fail-with-body --silent --show-error \
   --request PUT \
   --header @control-plane.headers \

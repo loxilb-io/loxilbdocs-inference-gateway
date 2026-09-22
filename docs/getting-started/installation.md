@@ -85,7 +85,7 @@ when the container is recreated**.
 For a controlled backup, dry-run, restore, and rollback procedure, see
 [Persistence, Backup, and Restore](../operations/backup-restore.md). Boot profiles,
 quarantine, lineage, and the current-main recovery signal are covered there and in
-[Readiness, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md). The
+[Readiness, Capabilities, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md). The
 snapshot can contain sensitive network and security configuration, so restrict
 host-directory permissions and backup access.
 

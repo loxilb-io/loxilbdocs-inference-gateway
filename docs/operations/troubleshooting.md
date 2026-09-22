@@ -7,7 +7,7 @@ prefill/decode handoff stalls, streaming cut-offs, and metrics gaps.
 !!! warning "Most AI-routing misconfiguration fails *silently*"
     The recurring failure theme on this gateway is not a loud error — it is **silent degradation
     to round-robin** (or silent metric loss). A block-size mismatch, a non-portable hash algorithm,
-    an unset `PYTHONHASHSEED`, the wrong ZMQ port, or a missing tokenizer directory will not raise
+    an engine-side `PYTHONHASHSEED` mismatch, the wrong ZMQ port, or a missing tokenizer directory will not raise
     an exception; the request is simply served by the fallback tier and your carefully-tuned
     KV-cache routing never fires. **Never trust that a feature engaged just because requests
     succeed — always run the "verify it fired" step.** Each section below includes one.
@@ -120,6 +120,7 @@ no error to grep for; you must assert engagement from metrics.
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
+| vLLM KV-exact rule creation returns `412` | Gateway launch environment cannot admit vLLM KV-exact: `LLB_KV_NONE_HASH_SEED` is unset/empty or exceeds 23 bytes | Read `GET /status/capabilities`, require `kv_exact_vllm.ready=true`, then set a nonempty Gateway seed of at most 23 bytes that exactly matches vLLM `PYTHONHASHSEED`; restart through the approved deployment procedure before retrying |
 | `loxilb_pd_kv_tier15_hits_total` never advances after a cold request | **Block/page-size mismatch** — `kvBlockSize` ≠ engine block size. | Set `kvBlockSize` to the engine value: vLLM `--block-size 16` (CPU vLLM defaults to 128 — override to 16); SGLang `--page-size` (default is 1, model-dependent — read it from `GET /get_server_info`). |
 | Hits flat despite matching block size | **Non-portable hash algorithm** — vLLM's default `sha256` is pickle-based and not portable; loxilb hashes CBOR. | Launch vLLM with `--prefix-caching-hash-algo sha256_cbor` (or `xxhash_cbor`) and set `kvHashAlgo` to match. **For SGLang, OMIT `kvHashAlgo`** — the engine identity implies the algorithm; an explicit value scores 0. |
 | Hits flat, block sizes and algo correct | **Hash-seed parity broken** — `PYTHONHASHSEED` unset on the engine, or `LLB_KV_NONE_HASH_SEED` unset on loxilb. Both must pin the seed. | Set `PYTHONHASHSEED=0` in every applicable engine container **and** `LLB_KV_NONE_HASH_SEED=0` in the loxilb container. All three (block size, hash algo, seed) must agree or you measure the topology fallback instead of KV-exact. |
@@ -388,7 +389,7 @@ is per connection, so aggregate memory grows with concurrency. See
 
 Never retry a failed commit without a fresh dry-run and root-cause review. See
 [Persistence, Backup, and Restore](backup-restore.md),
-[Readiness, Diagnostics, and Maintenance](readiness-diagnostics-maintenance.md), and
+[Readiness, Capabilities, Diagnostics, and Maintenance](readiness-diagnostics-maintenance.md), and
 [Appliance CLI](appliance-cli.md).
 
 ---
@@ -451,7 +452,7 @@ Do not treat single-node validation or green CI as failover proof. See
 - [AI Traffic Governance](../ai-gateway/ai-traffic-governance.md) — RPS and TPM diagnosis
 - [AI Quotas and QoS](ai-qos.md) — byte-rate control labs
 - [Persistence, Backup, and Restore](backup-restore.md) — dry-run, commit, write-through, restart, quarantine, and lineage
-- [Readiness, Diagnostics, and Maintenance](readiness-diagnostics-maintenance.md) — interpret typed recovery state and configuration-write gating
+- [Readiness, Capabilities, Diagnostics, and Maintenance](readiness-diagnostics-maintenance.md) — interpret typed recovery state, optional-capability preflight, and configuration-write gating
 - [Appliance CLI](appliance-cli.md) — distinguish Gateway recovery from whole-appliance lifecycle operations
 - [Application and L4 Tracing](tracing.md) — OTLP and sampling diagnostics
 - [DPU Offload Observability](dpu-offload.md) — optional hardware diagnostics
