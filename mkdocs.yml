@@ -122,7 +122,9 @@ nav:
       - LoxiLB OAM API: management/loxilb-oam.md
   - Operations:
       - AI Key Store: operations/ai-key-store.md
-      - Backup & Restore: operations/backup-restore.md
+      - Persistence, Backup & Restore: operations/backup-restore.md
+      - Readiness, Diagnostics & Maintenance: operations/readiness-diagnostics-maintenance.md
+      - Appliance CLI: operations/appliance-cli.md
       - Application & L4 Tracing: operations/tracing.md
       - DPU Offload Observability: operations/dpu-offload.md
       - Monitoring & Metrics: operations/monitoring.md

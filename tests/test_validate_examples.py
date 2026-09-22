@@ -37,6 +37,48 @@ class DocumentationExampleTests(unittest.TestCase):
         )
         self.assertTrue(errors)
 
+    def test_release_lifecycle_commands_are_frozen(self) -> None:
+        for command in (
+            "get snapshot", "create restore", "create persist",
+            "get ready", "get diagnostics", "get maintenance",
+            "set maintenance", "appliance status",
+        ):
+            with self.subTest(command=command):
+                contract = self.validator.cli_contract["commands"][command]
+                self.assertTrue(contract["release"]["available"])
+                self.assertTrue(contract["main"]["available"])
+
+    def test_main_only_appliance_lifecycle_needs_marker(self) -> None:
+        command = (
+            "loxicmd appliance restore plan /var/lib/backup/appliance.tar.age "
+            "--key-file /root/backup.key"
+        )
+        self.assertTrue(self.validator.validate_cli_command(command))
+        self.assertEqual(
+            [],
+            self.validator.validate_cli_command(
+                command, "CLI availability: main-only"
+            ),
+        )
+
+    def test_recovery_operations_are_in_the_swagger_union(self) -> None:
+        operations = (
+            ("GET", "/config/snapshot"),
+            ("POST", "/config/restore"),
+            ("POST", "/config/persist"),
+            ("GET", "/status/ready"),
+            ("GET", "/diagnostics"),
+            ("GET", "/maintenance"),
+            ("PUT", "/maintenance"),
+        )
+        for method, route in operations:
+            with self.subTest(method=method, route=route):
+                self.assertEqual([], self.validator.validate_route(method, route))
+
+    def test_maintenance_requires_explicit_enabled_state(self) -> None:
+        errors = self.validator.validate_json_body("PUT", "/maintenance", {})
+        self.assertTrue(errors)
+
     def test_red_twin_wrong_enum_is_killed(self) -> None:
         errors = self.validator.validate_cli_command(
             "loxicmd create lb 192.0.2.10 --tcp=8080:8000 "

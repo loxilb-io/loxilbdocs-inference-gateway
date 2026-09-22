@@ -118,6 +118,7 @@ the Swagger document.
 | Area | Methods and path families | Purpose / status |
 |---|---|---|
 | Configuration lifecycle | `POST /config/import`, `GET /config/export`, `GET /config/snapshot`, `POST /config/restore`, `POST /config/persist` | Import/export, transactional snapshot/restore, and durable persistence |
+| Recovery operations | `GET /status/ready`, `GET /diagnostics`, `GET/PUT /maintenance` | Main-only configuration readiness, bounded diagnostics, and operator configuration-write gate; absent from Gateway `v0.9.8.9-rc.1` |
 | API metadata | `GET /meta` | Public generated metadata for POST operations |
 | Authentication and users | `POST /auth/login`, `POST /auth/logout`, `GET/POST /auth/users`, `PUT/DELETE /auth/users/{id}`, `POST /auth/token/upgrade` | User login/logout, exact-role user administration, and manual-token update |
 | Load balancers | `POST /config/loadbalancer`, `GET/DELETE /config/loadbalancer/all`, and `GET/PATCH/DELETE` id/name/VIP/host-key variants | Core L4/L7 and AI service rules, status, and statistics |
@@ -155,6 +156,27 @@ The twelve not-implemented legacy metric paths are `flowcount`, `hostcount`,
 `lbrulecount`, `newflowcount`, `requestcount`, `errorcount`,
 `processedtraffic`, `lbprocessedtraffic`, `epdisttraffic`,
 `servicedisttraffic`, `fwdrops`, and `reqcountperclient`.
+
+### Configuration lifecycle and recovery operations
+
+Treat snapshot, restore, persistence, readiness, diagnostics, and maintenance as one recovery
+lifecycle rather than independent convenience endpoints.
+
+| Operation | Typed result | Contract boundary |
+|---|---|---|
+| `GET /config/snapshot` | Snapshot document | Captures the current configuration with schema and checksum; a bare capture has no persisted lineage generation. |
+| `POST /config/restore` (`commit: false`) | `RestoreResult` | Parses, migrates, checks dependencies, and plans without mutation; success is not proof that apply-time validation will pass. |
+| `POST /config/restore` (`commit: true`) | `RestoreResult` | Preserves pre-state, applies, verifies, and rolls back on failure; inspect `persisted` separately because write-through can fail after the live restore succeeds. |
+| `POST /config/persist` | `PersistResult` | Atomically writes the active configuration and returns identity, coverage, and monotonic generation. |
+| `GET /status/ready` | `ReadyStatus` | Returns the same typed body with HTTP `200` or `503`; covers configuration recovery, not GPU, inference, or complete data-plane health. |
+| `GET /diagnostics` | `DiagnosticsStatus` | Bounded version, readiness, maintenance, eBPF, map, and dependency context; sanitize output before sharing. |
+| `GET/PUT /maintenance` | `MaintenanceStatus` | Gates configuration writes. It does not reject new inference traffic and does not drain non-streaming requests. |
+
+The recovery endpoints are implemented on current Gateway `main`; Gateway
+`v0.9.8.9-rc.1` includes snapshot, restore, and persist but not readiness, diagnostics, or
+maintenance. See [Persistence, Backup, and Restore](../operations/backup-restore.md) and
+[Readiness, Diagnostics, and Maintenance](../operations/readiness-diagnostics-maintenance.md)
+for sequencing and validation gates.
 
 Worker metric updates do not make a plain `sel: 9` rule capacity-aware. That path uses
 prefix-affinity, conversation-affinity, and healthy-endpoint fallbacks without consuming pushed

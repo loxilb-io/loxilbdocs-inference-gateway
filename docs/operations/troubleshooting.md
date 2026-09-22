@@ -382,9 +382,14 @@ is per connection, so aggregate memory grows with concurrency. See
 | Commit result is `rolled-back` | Apply/verify failed and pre-restore state was restored | Keep the node out of normal traffic until read-back and data-plane checks pass |
 | Commit result is `ROLLBACK-FAILED` | Apply and automatic rollback both failed | Isolate the node immediately and recover from a known-good image and snapshot |
 | Boot quarantines `snapshot.json` | Boot restore failed | Preserve the `.failed-<timestamp>` file securely, inspect sanitized logs, and validate the selected legacy/fallback state |
+| `GET /status/ready` returns typed HTTP `503` | Configuration recovery, dependency probing, or persistence state is not ready | Inspect `reasons` and the last restore/persist fields; do not treat this endpoint as GPU, inference, or full data-plane proof |
+| Maintenance reports `refusing_new_inference: false` | Maintenance gates configuration writes, not inference admission | Drain traffic with the service/load-balancer procedure before disruptive work; maintenance timeout is informational |
+| Appliance lifecycle exits `6` | The command is unavailable in this CLI build, the fixed backend is absent/incompatible, or Product enablement is missing | Compare CLI/Gateway/Product versions and installed backend marker; do not infer support from current-main source |
 
 Never retry a failed commit without a fresh dry-run and root-cause review. See
-[Configuration Backup and Restore](backup-restore.md).
+[Persistence, Backup, and Restore](backup-restore.md),
+[Readiness, Diagnostics, and Maintenance](readiness-diagnostics-maintenance.md), and
+[Appliance CLI](appliance-cli.md).
 
 ---
 
@@ -445,7 +450,9 @@ Do not treat single-node validation or green CI as failover proof. See
 - [API Key Management](../ai-gateway/api-key-management.md) — key lifecycle and active enforcement
 - [AI Traffic Governance](../ai-gateway/ai-traffic-governance.md) — RPS and TPM diagnosis
 - [AI Quotas and QoS](ai-qos.md) — byte-rate control labs
-- [Configuration Backup and Restore](backup-restore.md) — dry-run, commit, rollback, and boot recovery
+- [Persistence, Backup, and Restore](backup-restore.md) — dry-run, commit, write-through, restart, quarantine, and lineage
+- [Readiness, Diagnostics, and Maintenance](readiness-diagnostics-maintenance.md) — interpret typed recovery state and configuration-write gating
+- [Appliance CLI](appliance-cli.md) — distinguish Gateway recovery from whole-appliance lifecycle operations
 - [Application and L4 Tracing](tracing.md) — OTLP and sampling diagnostics
 - [DPU Offload Observability](dpu-offload.md) — optional hardware diagnostics
 - [HA and Upgrade Limitations](ha-limitations.md) — promotion and rolling-upgrade boundaries
