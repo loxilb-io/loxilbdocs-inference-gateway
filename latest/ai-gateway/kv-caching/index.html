@@ -2643,6 +2643,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/example-inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Verification Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/api/" class="md-nav__link">
         
   
@@ -3592,6 +3620,8 @@ digests. After create, <code>GET .../kvexactstatus</code> is the mandatory readi
 <code>POST</code>, load-balancer read-back, or nonempty inventory does not prove that the composed binding is
 enforced. See <a href="../model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a>.</p>
 <p>Confirm the rule is live and carries the KV fields you set:</p>
+<!-- example-status-default: illustrative-only -->
+
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
 </code></pre></div>
 <p>Look for <code>kvExactMode</code>, <code>kvBlockSize</code>, <code>kvHashAlgo</code> (vLLM) or <code>kvEngineType</code> /

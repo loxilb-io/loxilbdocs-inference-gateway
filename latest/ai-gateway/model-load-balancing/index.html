@@ -2504,6 +2504,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/example-inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Verification Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/api/" class="md-nav__link">
         
   
@@ -3184,6 +3212,8 @@ release-blocked. See <a href="../llm-routing/">LLM Routing</a>.</p>
 <hr />
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
 <p>List every rule and confirm each shows the expected <code>model_name</code>, <code>mode: 4</code>, and <code>sel</code>:</p>
+<!-- example-status-default: illustrative-only -->
+
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
 </code></pre></div>
 <p>Then exercise each pool end-to-end:</p>

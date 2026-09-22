@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/reference/api/">
       
       
-        <link rel="prev" href="../verification-status/">
+        <link rel="prev" href="../example-inventory/">
       
       
         <link rel="next" href="../swagger-extras/">
@@ -2327,6 +2327,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../example-inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Verification Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -3064,6 +3092,10 @@ release qualification. Confirm the exact Swagger served by the image you deploy.
 </ol>
 <p>Do not infer that a declared path is operational. Operations marked
 <code>x-not-implemented: true</code> have no wired handler and return <code>501</code>.</p>
+<p>The <a href="../../getting-started/quickstart/">Quickstart</a> is the canonical runnable
+workflow for readiness, authenticated create, independent traffic validation,
+metrics, and exact cleanup. This reference describes contracts and links to
+that workflow rather than maintaining a second copy of the commands.</p>
 <h3 id="development-contract-deltas">Development contract deltas<a class="headerlink" href="#development-contract-deltas" title="Permanent link">&para;</a></h3>
 <p>The current development source has several known wire-contract differences
 that must be resolved or explicitly accepted before release:</p>
@@ -3233,6 +3265,8 @@ express “loopback peer and empty user table.” It is not unconditionally open
 the development implementation. See
 <a href="../../security/management-api-authentication/">Management API Authentication</a>.</p>
 <p>Prepare a reusable protected header:</p>
+<!-- example-status-default: illustrative-only -->
+
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
@@ -3848,6 +3882,8 @@ field.</p>
 <p>Use the product value only as an initial hint. Verify required paths and schema
 fields before applying configuration, especially across mixed versions.</p>
 <h2 id="cleanup">Cleanup<a class="headerlink" href="#cleanup" title="Permanent link">&para;</a></h2>
+<!-- example-status-default: illustrative-only -->
+
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN
 </code></pre></div>

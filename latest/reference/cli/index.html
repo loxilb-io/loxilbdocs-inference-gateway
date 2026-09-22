@@ -2330,6 +2330,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../example-inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Verification Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/" class="md-nav__link">
         
   
@@ -2706,6 +2734,17 @@
     <span class="md-ellipsis">
       
         Load-balancer contract flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rest-only-capability-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        REST-only capability matrix
       
     </span>
   </a>
@@ -3185,6 +3224,17 @@
     <span class="md-ellipsis">
       
         Load-balancer contract flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rest-only-capability-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        REST-only capability matrix
       
     </span>
   </a>
@@ -3821,16 +3871,70 @@ and <a href="../../operations/appliance-cli/">Appliance CLI</a>.</p>
 </tr>
 </tbody>
 </table>
-<p>The Gateway REST contract also accepts <code>jwt</code> and <code>apikey-or-jwt</code>, but the CLI
-does not. There is no supported <code>--jwt-auth-profile</code> flag. Create JWT-capable
-services and associate profiles through REST; do not substitute a fabricated
-CLI option. User-limit and global/rule-default QoS CRUD are also REST-only.</p>
-<p><code>pdBootstrapPort</code> does not currently have a <code>loxicmd create lb</code> flag. Configure that SGLang P/D
-field through the REST API. Do not substitute <code>--kv-zmq-port</code>; it configures a different transport.</p>
+<h3 id="rest-only-capability-matrix">REST-only capability matrix<a class="headerlink" href="#rest-only-capability-matrix" title="Permanent link">&para;</a></h3>
+<p>The Gateway REST contract is larger than the current CLI surface. The entries
+below have no supported CLI equivalent; do not substitute a fabricated flag or
+command.</p>
+<table>
+<thead>
+<tr>
+<th>REST-only surface</th>
+<th>REST contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JWT profile create/list/delete</td>
+<td><code>/config/ai/jwtauthprofile</code> and <code>/config/ai/jwtauthprofile/{name}</code></td>
+</tr>
+<tr>
+<td>JWT-capable service binding</td>
+<td><code>api_key_auth: jwt|apikey-or-jwt</code> plus <code>jwt_auth_profile</code></td>
+</tr>
+<tr>
+<td>Global and rule-default QoS</td>
+<td><code>/config/ai/ratelimit/defaults...</code></td>
+</tr>
+<tr>
+<td>User and user-model QoS</td>
+<td><code>/config/ai/user/ratelimit...</code></td>
+</tr>
+<tr>
+<td>Model-profile discovery</td>
+<td><code>/config/ai/model-profiles[/{profile_id}]</code></td>
+</tr>
+<tr>
+<td>Strict KV readiness</td>
+<td><code>.../kvexactstatus</code></td>
+</tr>
+<tr>
+<td>Strict KV binding fields</td>
+<td><code>kvModelProfile</code> and <code>kvExactApiMode</code></td>
+</tr>
+<tr>
+<td>Optional capability readiness</td>
+<td><code>/status/capabilities</code></td>
+</tr>
+<tr>
+<td>Active sockmap connection reset</td>
+<td><code>.../sockmapreset</code></td>
+</tr>
+</tbody>
+</table>
+<p>The CLI supports only <code>disabled</code> and <code>required</code> for <code>--api-key-auth</code>; omission
+and explicit <code>disabled</code> remain different contracts. Create JWT-capable services
+and associate profiles through REST. User-limit and global/rule-default QoS
+CRUD are also REST-only.</p>
+<p><code>pdBootstrapPort</code> is supported by <code>loxicmd create lb</code> as
+<code>--pd-bootstrap-port</code>; it is distinct from <code>--kv-zmq-port</code>. Both CLI
+<code>v0.9.8.9-rc.2</code> and current main carry the bootstrap-port flag.</p>
 <p><code>kvModelProfile</code> and <code>kvExactApiMode</code> also have no current CLI flags, and there are no dedicated
 CLI commands for model-profile discovery or <code>kvexactstatus</code>. Use the REST workflow in
 <a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a>. The
 <code>sockmapreset</code> action is REST-only even though rule creation supports <code>--sockmap-mode</code>.</p>
+<p>For a canonical create/readback/traffic/metrics/delete sequence, follow the
+<a href="../../getting-started/quickstart/">Quickstart</a>. Reference pages intentionally
+link to that workflow instead of copying commands that can drift.</p>
 <h3 id="delete-a-model-keyed-rule">Delete a model-keyed rule<a class="headerlink" href="#delete-a-model-keyed-rule" title="Permanent link">&para;</a></h3>
 <p>Repeat the complete L7 key used at creation. Omitting <code>--model-name</code> matches only a rule with an
 empty model name.</p>

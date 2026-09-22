@@ -2476,6 +2476,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/example-inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Verification Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/api/" class="md-nav__link">
         
   
@@ -3183,6 +3211,8 @@ best-effort fan-out as proof of instantaneous cluster-wide revocation.</p>
    invalid-body key creation. Authentication must run before body validation,
    returning <code>401</code>:</li>
 </ol>
+<!-- example-status-default: illustrative-only -->
+
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># docs-example: expect-schema-error</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>curl<span class="w"> </span>--silent<span class="w"> </span>--output<span class="w"> </span>/dev/null<span class="w"> </span>--write-out<span class="w"> </span><span class="s1">'%{http_code}\n'</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span>https://gateway.example.com/netlox/v1/config/ai/apikey<span class="w"> </span><span class="se">\</span>
