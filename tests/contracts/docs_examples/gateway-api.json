@@ -2639,11 +2639,11 @@
       }
     },
     "provenance": {
-      "generated_at": "2026-09-21T23:52:14+00:00",
-      "source_revision": "5324fd737f22174f25c06462f39f68a925388aee"
+      "generated_at": "2026-09-22T12:08:49+00:00",
+      "source_revision": "593f1d37d9e3b6ecc0f6764d46cff45cf7ae2834"
     },
     "schema_version": 1,
-    "sha256": "44986a8ebf59b271a0f455b6c68be4d9e1aba8fb5fb8fae9f70fbe83e361a2de",
+    "sha256": "614ad0f5690736bfdfe26df8c3fb174d6a1189c89230ebdefd15355d4189bb10",
     "source_path": "deploy/monitoring/manifest/metric-manifest.json"
   },
   "release_snapshot": {
@@ -2741,7 +2741,7 @@
     ]
   },
   "source": {
-    "commit": "dbb2ff5bed48d21a108d6c53a62a3119cec9f780",
+    "commit": "142e731e7568d30bf468065addd8b4929065e381",
     "ebpf_submodule_commit": "462a1e5412f46ca53574b9c079005bb3da3cfa20",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
