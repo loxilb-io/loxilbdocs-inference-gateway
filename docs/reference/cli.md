@@ -367,18 +367,41 @@ The current CLI maps these flags to the Gateway API contract:
 | Model-keyed create/delete | `--model-name=<model>` | Repeats the model component of the L7 rule key. |
 | API-key policy | `--api-key-auth=disabled|required` | CLI supports exactly these two values. Omission and explicit `disabled` are different contracts. |
 
-The Gateway REST contract also accepts `jwt` and `apikey-or-jwt`, but the CLI
-does not. There is no supported `--jwt-auth-profile` flag. Create JWT-capable
-services and associate profiles through REST; do not substitute a fabricated
-CLI option. User-limit and global/rule-default QoS CRUD are also REST-only.
+### REST-only capability matrix
 
-`pdBootstrapPort` does not currently have a `loxicmd create lb` flag. Configure that SGLang P/D
-field through the REST API. Do not substitute `--kv-zmq-port`; it configures a different transport.
+The Gateway REST contract is larger than the current CLI surface. The entries
+below have no supported CLI equivalent; do not substitute a fabricated flag or
+command.
+
+| REST-only surface | REST contract |
+|---|---|
+| JWT profile create/list/delete | `/config/ai/jwtauthprofile` and `/config/ai/jwtauthprofile/{name}` |
+| JWT-capable service binding | `api_key_auth: jwt|apikey-or-jwt` plus `jwt_auth_profile` |
+| Global and rule-default QoS | `/config/ai/ratelimit/defaults...` |
+| User and user-model QoS | `/config/ai/user/ratelimit...` |
+| Model-profile discovery | `/config/ai/model-profiles[/{profile_id}]` |
+| Strict KV readiness | `.../kvexactstatus` |
+| Strict KV binding fields | `kvModelProfile` and `kvExactApiMode` |
+| Optional capability readiness | `/status/capabilities` |
+| Active sockmap connection reset | `.../sockmapreset` |
+
+The CLI supports only `disabled` and `required` for `--api-key-auth`; omission
+and explicit `disabled` remain different contracts. Create JWT-capable services
+and associate profiles through REST. User-limit and global/rule-default QoS
+CRUD are also REST-only.
+
+`pdBootstrapPort` is supported by `loxicmd create lb` as
+`--pd-bootstrap-port`; it is distinct from `--kv-zmq-port`. Both CLI
+`v0.9.8.9-rc.2` and current main carry the bootstrap-port flag.
 
 `kvModelProfile` and `kvExactApiMode` also have no current CLI flags, and there are no dedicated
 CLI commands for model-profile discovery or `kvexactstatus`. Use the REST workflow in
 [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md). The
 `sockmapreset` action is REST-only even though rule creation supports `--sockmap-mode`.
+
+For a canonical create/readback/traffic/metrics/delete sequence, follow the
+[Quickstart](../getting-started/quickstart.md). Reference pages intentionally
+link to that workflow instead of copying commands that can drift.
 
 ### Delete a model-keyed rule
 

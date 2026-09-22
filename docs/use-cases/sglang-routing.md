@@ -70,11 +70,7 @@ The example uses documentation-only addresses. Confirm the deployed page size be
 Prepare a protected management header and an HTTPS API base URL as described in
 [Monitoring and Metrics](../operations/monitoring.md#enable-and-scrape-metrics):
 
-```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-```
+--8<-- "snippets/common/control-api-header.md"
 
 === "curl"
 

@@ -208,9 +208,7 @@ An empty `model_name` (`""`) makes this rule the catch-all for any model that do
 
 List every rule and confirm each shows the expected `model_name`, `mode: 4`, and `sel`:
 
-```bash
-curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
-```
+--8<-- "snippets/common/load-balancer-readback-rest.md"
 
 Then exercise each pool end-to-end:
 

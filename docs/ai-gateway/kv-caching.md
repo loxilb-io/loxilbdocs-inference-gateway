@@ -294,9 +294,7 @@ enforced. See [Model Profiles and KV-Exact Readiness](model-profiles-kv-readines
 
 Confirm the rule is live and carries the KV fields you set:
 
-```bash
-curl -s http://10.10.10.254:11111/netlox/v1/config/loadbalancer/all
-```
+--8<-- "snippets/common/load-balancer-readback-rest.md"
 
 Look for `kvExactMode`, `kvBlockSize`, `kvHashAlgo` (vLLM) or `kvEngineType` /
 `kvDpRankCount` (SGLang) on the rule. On a strict rule, also require the intended

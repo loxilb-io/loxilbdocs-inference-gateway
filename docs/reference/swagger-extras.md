@@ -34,11 +34,7 @@ fail-closed `401` path, so correlate authentication failures with store health.
 
 Prepare a protected header file once:
 
-```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-```
+--8<-- "snippets/common/control-api-header.md"
 
 ## Endpoint groups
 

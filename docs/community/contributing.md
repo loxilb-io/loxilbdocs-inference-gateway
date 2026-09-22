@@ -25,6 +25,7 @@ Report a bug in the gateway itself in the **code** repository; report a document
 3. Make sure the strict build passes (this is what CI runs):
    ```bash
    python tools/validate_examples.py
+   python tools/refresh_example_inventory.py --check
    python tools/render_metrics_reference.py --check
    python -m unittest discover -s tests -p 'test_*.py' -v
    mkdocs build --strict
@@ -55,6 +56,8 @@ upstream contract change:
 python tools/refresh_example_contracts.py \
   --gateway-repo ../loxilb-inference-gateway \
   --cli-repo ../loxicmd-inference-gateway
+python tools/refresh_example_inventory.py
+python tools/refresh_example_inventory.py --check
 ```
 
 ### Validate a Gateway upgrade before refreshing the snapshot
@@ -88,6 +91,7 @@ python tools/refresh_example_contracts.py \
   --gateway-ref <accepted-gateway-commit>
 
 python tools/validate_examples.py
+python tools/refresh_example_inventory.py --check
 python tools/render_metrics_reference.py --check
 python -m unittest discover -s tests -p 'test_*.py' -v
 ```

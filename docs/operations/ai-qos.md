@@ -191,11 +191,7 @@ bad port or rule choice can affect unrelated workloads.
 
 The examples use a protected management header file:
 
-```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-```
+--8<-- "snippets/common/control-api-header.md"
 
 ## Lab 1 — Rule-attached L4 policer
 
@@ -441,10 +437,7 @@ pair.
 4. Confirm fullproxy shaper series disappear after collection refresh.
 5. Remove local header files and unset secret-bearing variables.
 
-```bash
-rm -f ./control-plane.headers
-unset CONTROL_PLANE_TOKEN
-```
+--8<-- "snippets/common/control-api-cleanup.md"
 
 ## What these labs do not prove
 

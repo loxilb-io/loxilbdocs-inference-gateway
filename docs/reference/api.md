@@ -28,6 +28,11 @@ and highlights contracts that require special handling.
 Do not infer that a declared path is operational. Operations marked
 `x-not-implemented: true` have no wired handler and return `501`.
 
+The [Quickstart](../getting-started/quickstart.md) is the canonical runnable
+workflow for readiness, authenticated create, independent traffic validation,
+metrics, and exact cleanup. This reference describes contracts and links to
+that workflow rather than maintaining a second copy of the commands.
+
 ### Development contract deltas
 
 The current development source has several known wire-contract differences
@@ -103,11 +108,7 @@ the development implementation. See
 
 Prepare a reusable protected header:
 
-```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-```
+--8<-- "snippets/common/control-api-header.md"
 
 ## Complete endpoint-family catalog
 
@@ -401,10 +402,7 @@ fields before applying configuration, especially across mixed versions.
 
 ## Cleanup
 
-```bash
-rm -f ./control-plane.headers
-unset CONTROL_PLANE_TOKEN
-```
+--8<-- "snippets/common/control-api-cleanup.md"
 
 ## Related pages
 

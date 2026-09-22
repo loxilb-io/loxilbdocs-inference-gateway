@@ -16,11 +16,7 @@ Run SGLang prefill/decode disaggregation through a concurrent two-leg Gateway fl
 
 Prepare the management client without placing its token in each command:
 
-```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
-install -m 600 /dev/null ./control-plane.headers
-printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
-```
+--8<-- "snippets/common/control-api-header.md"
 
 ## Mental model
 
