@@ -4,7 +4,7 @@
       "evidence": "visual-explanation",
       "id": "7e101a2c6392b12dbc4e",
       "language": "mermaid",
-      "line": 23,
+      "line": 25,
       "path": "docs/ai-gateway/admission-flow-control.md",
       "quality_contract": {
         "cleanup": false,
@@ -21,7 +21,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "a4b214074945bc27b1af",
       "language": "bash",
-      "line": 87,
+      "line": 89,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -51,7 +51,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "ec7f698964315778f695",
       "language": "bash",
-      "line": 111,
+      "line": 113,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -81,7 +81,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "e29eeacddcc1bcc1a039",
       "language": "bash",
-      "line": 143,
+      "line": 145,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -111,7 +111,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "c4f1347f76d8bc858a74",
       "language": "bash",
-      "line": 163,
+      "line": 165,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -141,7 +141,7 @@
       "evidence": "unexecuted-example",
       "id": "b9c08bfeda280250a913",
       "language": "text",
-      "line": 217,
+      "line": 219,
       "path": "docs/ai-gateway/admission-flow-control.md",
       "quality_contract": {
         "cleanup": false,
@@ -158,7 +158,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "2aea3ed650be6e45682b",
       "language": "bash",
-      "line": 259,
+      "line": 261,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -188,7 +188,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "2cc913a0412d1204e999",
       "language": "bash",
-      "line": 285,
+      "line": 287,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -218,7 +218,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "76d775f0da0e4583f62d",
       "language": "bash",
-      "line": 331,
+      "line": 333,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -248,7 +248,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "f4a5c131e75d59d8473e",
       "language": "bash",
-      "line": 356,
+      "line": 358,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -278,7 +278,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "16f751db4affd9e00aaa",
       "language": "bash",
-      "line": 397,
+      "line": 399,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -308,7 +308,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "2a970757b6acf4aa560d",
       "language": "bash",
-      "line": 418,
+      "line": 420,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -594,7 +594,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "0f8ba8345a9fa4e3fcf4",
       "language": "bash",
-      "line": 386,
+      "line": 387,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -624,7 +624,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "469ff84d884af3db8b8a",
       "language": "bash",
-      "line": 417,
+      "line": 418,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -654,7 +654,7 @@
       "evidence": "syntax-only",
       "id": "97719106288800271ea8",
       "language": "json",
-      "line": 425,
+      "line": 426,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -671,7 +671,7 @@
       "evidence": "swagger-union-static",
       "id": "0c9409d1f0ea6ac8f193",
       "language": "bash",
-      "line": 444,
+      "line": 445,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -688,7 +688,7 @@
       "evidence": "cli-contract-static",
       "id": "14b64cf9f36bfc739c2b",
       "language": "bash",
-      "line": 452,
+      "line": 453,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,

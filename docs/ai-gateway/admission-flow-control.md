@@ -16,8 +16,10 @@ answer instead of a timeout.
 ## Concept
 
 The gate runs on every **AI-gateway service**: a `mode: 4` (fullproxy) rule that sets
-`sse_mode`, `pd_disagg_mode`, or an `api_key_auth` policy. It runs after the policy checks
-(credential, quota, rate limit) and before dispatch.
+`sse_mode`, `pd_disagg_mode`, or an `api_key_auth` policy that enforces a credential (`required`,
+`jwt`, or `apikey-or-jwt`). A rule that omits `api_key_auth`, or declares `disabled`, and sets
+neither `sse_mode` nor `pd_disagg_mode`, is not an AI-gateway service and is not gated. The gate
+runs after the policy checks (credential, quota, rate limit) and before dispatch.
 
 ```mermaid
 flowchart LR
@@ -422,8 +424,11 @@ response head the backend split across several reads is sent without them.
 !!! warning "Not with directional sockmap acceleration"
     A rule refuses `fc_expose_headers` `on` with a `sockMapMode` of `both` or `response` (`400`):
     those responses go from the backend to the client in the kernel and the gateway never sees
-    them. Set process-wide with `LLB_FC_EXPOSE_HEADERS=on`, the headers appear only on the
-    responses the gateway relays. See [Sockmap Acceleration](../operations/sockmap-acceleration.md).
+    them. A service that sets `sse_mode`, `pd_disagg_mode`, or an attached L7 policy cannot carry
+    any sockmap mode at all; the shape this affects is a service whose only AI declaration is an
+    enforcing `api_key_auth`, where a response-direction mode is allowed. Set process-wide with
+    `LLB_FC_EXPOSE_HEADERS=on`, the headers appear only on the responses the gateway relays. See
+    [Sockmap Acceleration](../operations/sockmap-acceleration.md).
 
 ## Maintenance drain
 

@@ -132,7 +132,8 @@ apply to every rule, AI or not.
 ### Capacity admission gate (`fc_*`)
 
 These fields configure the capacity admission gate of an AI-gateway service (`mode: 4` with
-`sse_mode`, `pd_disagg_mode`, or an `api_key_auth` policy). Every one is optional. `0` (or
+`sse_mode`, `pd_disagg_mode`, or an `api_key_auth` policy other than omitted or `disabled`). Every
+one is optional. `0` (or
 `inherit`) on a rule declares nothing, and the value then comes from the process environment
 variable in the last column, else the product default. Every field is changeable at runtime by a
 replace `POST`; explicit JSON `null` is refused. The full behavior is in
