@@ -369,6 +369,34 @@ The current CLI maps these flags to the Gateway API contract:
 | Model-keyed create/delete | `--model-name=<model>` | Repeats the model component of the L7 rule key. |
 | API-key policy | `--api-key-auth=disabled|required` | CLI supports exactly these two values. Omission and explicit `disabled` are different contracts. |
 
+### Admission flow-control flags
+
+`loxicmd create lb` carries the capacity admission gate's per-rule settings. The flags are on CLI
+main; they are **not** in `v0.9.8.9-rc.2`, so they need a matching CLI build and a Gateway build
+that carries the `fc_*` fields. On a replace of an existing rule an omitted flag keeps the rule's
+stored value, and `0` (or `inherit` for the string flags) returns the setting to the process
+default. See [Admission Flow Control](../ai-gateway/admission-flow-control.md).
+
+| CLI flag | Sends | Values |
+|---|---|---|
+| `--fc-mode` | `fc_mode` | `off`, `observe`, `enforce`, `inherit` |
+| `--fc-max-outstanding` | `fc_max_outstanding` | `0`–`100000` |
+| `--fc-ep-max-inflight` | `fc_ep_max_inflight` | `0`–`100000` |
+| `--fc-prefill-max-inflight` | `fc_prefill_max_inflight` | `0`–`100000` |
+| `--fc-decode-max-inflight` | `fc_decode_max_inflight` | `0`–`100000` |
+| `--fc-max-queue-depth` | `fc_max_queue_depth` | `0`–`65536`; needs a wait window |
+| `--fc-max-queue-wait-ms` | `fc_max_queue_wait_ms` | `0`–`3600000`; non-zero whenever a depth is set |
+| `--fc-adaptive` | `fc_adaptive` | `on`, `off`, `inherit` |
+| `--fc-ttft-target-ms` | `fc_ttft_target_ms` | `0`–`3600000` |
+| `--fc-telemetry-stale-ms` | `fc_telemetry_stale_ms` | `0`–`3600000` |
+| `--fc-warmup-ms` | `fc_warmup_ms` | `0`–`3600000` |
+| `--fc-tenant-max-share-pct` | `fc_tenant_max_share_pct` | `0`–`100` |
+| `--fc-expose-headers` | `fc_expose_headers` | `on`, `off`, `inherit` |
+| `--connection-limit` | `connectionLimit` | uint32; enforced on DNAT-mode rules, not on `mode: 4` |
+
+`loxicmd get lb -o wide` shows the rule's admission settings beside the rest of the rule. The
+complete resolved state, `fc_effective`, is read from the REST `GET /config/loadbalancer/all`.
+
 ### REST-only capability matrix
 
 The Gateway REST contract is larger than the current CLI surface. The entries

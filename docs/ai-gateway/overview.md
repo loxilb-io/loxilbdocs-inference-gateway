@@ -144,6 +144,7 @@ flowchart TD
         SSE["SSE & Quota<br/>stream lifecycle, token accounting"]
         API["API Key Management<br/>credential lifecycle"]
         GOV["AI Traffic Governance<br/>authorization, RPS, TPM"]
+        FLOW["Admission Flow Control<br/>ceilings, queue, adaptive limit"]
         MCP["MCP Gateway<br/>session-affinity L7"]
     end
 
@@ -161,6 +162,7 @@ flowchart TD
     OV --> SSE
     OV --> API
     OV --> GOV
+    OV --> FLOW
     OV --> MCP
     OV --> CFG
 
@@ -183,6 +185,7 @@ flowchart TD
 | SSE & Quota | Streaming lifecycle, stream duration caps, token accounting | [sse-quota-management.md](sse-quota-management.md) |
 | API Key Management | Create, inspect, disable, rotate, and revoke inference credentials | [api-key-management.md](api-key-management.md) |
 | AI Traffic Governance | Enforce model authorization, RPS, and aggregate/per-model TPM limits | [ai-traffic-governance.md](ai-traffic-governance.md) |
+| Admission Flow Control | Bound executing requests per model pool with ceilings, a bounded queue, an adaptive limit, warm-up, and tenant fair share | [admission-flow-control.md](admission-flow-control.md) |
 | MCP Gateway | Session-affinity L7 routing for Model Context Protocol backends | [mcp-gateway.md](mcp-gateway.md) |
 | Configuration Reference | Every `serviceArguments` field, default, and enum | [configuration-reference.md](configuration-reference.md) |
 
@@ -273,6 +276,7 @@ Each rule in the response should show `mode: 4` and the `model_name` you configu
 | Integrate TensorRT-LLM | [TensorRT-LLM Integration](tensorrt-llm-integration.md) |
 | Integrate llama.cpp | [llama.cpp Integration](llamacpp-integration.md) |
 | Enforce keys, RPS, and TPM | [AI Traffic Governance](ai-traffic-governance.md) |
+| Protect engines from overload | [Admission Flow Control](admission-flow-control.md) |
 | Manage streaming and token accounting | [SSE & Quota](sse-quota-management.md) |
 | Manage tenant keys and limits | [API Key Management](api-key-management.md) |
 | See every config field | [Configuration Reference](configuration-reference.md) |

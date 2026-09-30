@@ -70,7 +70,7 @@ apply to every rule, AI or not.
 | `id` | string | minted | UUIDv4 if absent | Stable opaque rule identifier (Octavia). |
 | `adminStateUp` | boolean | `true` | `true`/`false` | Lifecycle flag; `false` pauses the rule. |
 | `projectId` | string | — | opaque | Tenant/project id. **Not a tenant-isolation boundary.** |
-| `connectionLimit` | uint32 | `0` (unlimited) | ≥0 | Per-rule concurrent-connection ceiling (eBPF-CT enforced). |
+| `connectionLimit` | uint32 | `0` (unlimited) | ≥0 | Per-rule concurrent-connection ceiling, counted across all of the rule's endpoints. Enforced by the conntrack selector on DNAT-mode rules: at the ceiling, further SYNs are dropped without a reset, and a slot frees when a connection is torn down. A `mode: 4` fullproxy rule is **not** gated by this field, and HTTP/2 streams are not counted as connections; bound fullproxy connections with `LLB_PD_MAX_TOTAL_INFLIGHT` and see [Admission Flow Control](admission-flow-control.md). `POST` stores it, `PATCH` overlays it when present (an explicit `0` clears it), `null` is rejected. |
 | `cb_enable` | boolean | `false` | `true`/`false` | Enable the fullproxy per-endpoint circuit breaker. The default connect-failure threshold is five with a 30-second open period. Origin-5xx demotion uses a separate threshold; P/D rules can enable breaker behavior automatically. |
 | `vip_qos_policy_id` | string | empty | existing `/config/policy` identifier | Associate a pre-created policy with the LB rule. Empty is a no-op; an unknown identifier makes creation fail. The policy must be created first. |
 | `annotations` | object (string→string) | — | opaque map | Round-trips arbitrary Octavia fields verbatim; never interpreted. |
@@ -127,6 +127,33 @@ apply to every rule, AI or not.
     or `apikey-or-jwt`. A required API-key policy uses the PostgreSQL store configured by
     `--aikey-db-*`; if it cannot evaluate the key, it fails closed with `503`. Prove missing or
     unknown key `401`, store failure `503`, and backend receipt delta `0` separately.
+
+
+### Capacity admission gate (`fc_*`)
+
+These fields configure the capacity admission gate of an AI-gateway service (`mode: 4` with
+`sse_mode`, `pd_disagg_mode`, or an `api_key_auth` policy). Every one is optional. `0` (or
+`inherit`) on a rule declares nothing, and the value then comes from the process environment
+variable in the last column, else the product default. Every field is changeable at runtime by a
+replace `POST`; explicit JSON `null` is refused. The full behavior is in
+[Admission Flow Control](admission-flow-control.md).
+
+| Field | Type | Range / Enum | Process default | Notes |
+|---|---|---|---|---|
+| `fc_mode` | string | `off`, `observe`, `enforce`, `inherit` | `LLB_FC_MODE` | `enforce` refuses or queues a request over a ceiling; `observe` counts and admits; `off` bypasses the gate. Read back only when declared; the mode in force is `fc_effective.mode`. |
+| `fc_max_outstanding` | int | `0`–`100000` | `LLB_FC_MAX_OUTSTANDING` | Pool-wide ceiling on executing requests. |
+| `fc_ep_max_inflight` | int | `0`–`100000` | `LLB_FC_EP_MAX_INFLIGHT` | Per-endpoint ceiling, normal (non-P/D) role. |
+| `fc_prefill_max_inflight` | int | `0`–`100000` | `LLB_FC_PREFILL_MAX_INFLIGHT`, else `LLB_PD_MAX_INFLIGHT_PER_EP` | Per-endpoint ceiling on prefill legs. |
+| `fc_decode_max_inflight` | int | `0`–`100000` | `LLB_FC_DECODE_MAX_INFLIGHT` | Per-endpoint ceiling on decode legs. |
+| `fc_max_queue_depth` | int | `0`–`65536` | `LLB_FC_MAX_QUEUE_DEPTH` | Requests that may wait. Depth × 1 MiB is the memory bound when full. HTTP/2 streams never wait. |
+| `fc_max_queue_wait_ms` | int | `0`–`3600000` | `LLB_FC_MAX_QUEUE_WAIT_MS` | Longest wait before `504 admission_queue_timeout`. Required, greater than `0`, whenever a depth is set. |
+| `fc_adaptive` | string | `on`, `off`, `inherit` | `LLB_FC_ADAPTIVE` | Let the service ceiling tighten on engine backpressure and climb back on fresh, clear signals. Stale telemetry never widens it. |
+| `fc_ttft_target_ms` | int | `0`–`3600000` | `LLB_FC_TTFT_TARGET_MS` | With `fc_adaptive` `on`: a streamed time to first token above this is backpressure. `0` leaves it out. |
+| `fc_telemetry_stale_ms` | int | `0`–`3600000` | `LLB_FC_TELEMETRY_STALE_MS`, else `30000` | How long a scraped queue depth or first-token average is trusted. |
+| `fc_warmup_ms` | int | `0`–`3600000` | `LLB_FC_WARMUP_MS`, else no ramp | An endpoint back in service ramps its per-endpoint ceilings from a quarter to all over this window. |
+| `fc_tenant_max_share_pct` | int | `0`–`100` | `LLB_FC_TENANT_MAX_SHARE_PCT`, else no share | The most of the ceiling in force and of the queue one tenant may hold. `100` is no share. Inert without `fc_max_outstanding`. |
+| `fc_expose_headers` | string | `on`, `off`, `inherit` | `LLB_FC_EXPOSE_HEADERS` | Put the three `X-Loxilb-Admission-*` headers on admitted responses. Refused `400` with `sockMapMode` `both` or `response`. |
+| `fc_effective` | object | read-only | — | The gate's resolved state on the rule's pool: values in force, live `inflight` and `queued`, adaptive state, and `source` (`rule`, `env`, or `default`) per value. Present on `GET`; ignored on input. |
 
 ---
 
