@@ -6,8 +6,8 @@ and `api/swagger-extras.yml`; a new or removed definition fails the docs gate
 until its public relevance is reviewed here.
 
 - Public schema baseline: `47803fb660ed54cd1f180b616db628461ad85d1a`
-- Reviewed Gateway `main`: `142e731e7568d30bf468065addd8b4929065e381`
-- Added definitions: **30**
+- Reviewed Gateway `main`: `5c0915ffa57ade157351c9811b0931bb71db282f`
+- Added definitions: **38**
 - Removed definitions: **0**
 - Evidence class: **source/static contract only**
 
@@ -20,8 +20,8 @@ deploy.
 
 | Class | Count | Meaning |
 | --- | ---: | --- |
-| `direct-operation` | 17 | Direct request, response, or operation envelope |
-| `nested-component` | 10 | Public component nested in another operation model |
+| `direct-operation` | 21 | Direct request, response, or operation envelope |
+| `nested-component` | 14 | Public component nested in another operation model |
 | `shared-envelope` | 1 | Shared public wire envelope used by multiple operations |
 | `companion-error` | 2 | Public error contract in the companion raw-handler specification |
 
@@ -30,15 +30,23 @@ referenced objects, and braces identify a closed enum from Swagger.
 
 ## `api/swagger.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/142e731e7568d30bf468065addd8b4929065e381/api/swagger.yml). Definition count changed from **147** to **175**; **28** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/5c0915ffa57ade157351c9811b0931bb71db282f/api/swagger.yml). Definition count changed from **147** to **183**; **36** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |
 | `AiModelProfileEntry` | `direct-operation` | One published model profile returned by detail lookup and nested in the registry list. | `profileId:string`, `gen:integer(uint64)`, `baseModel:string`, `aliasPolicy:string{base_model_only/list}`, `supportedApis:array<string>`, `tokenizerSha256:string` | `allowedAliases:array<string>`, `excludedFeatures:array<string>`, `oracleEngine:string`, `oracleVersion:string`, `rendererEngine:string`, `rendererVersion:string`, `supportedFeatures:array<string>`, `templateContentFormat:string`, `templateSha256:string`, `tokenizerRevision:string` | [Details](../ai-gateway/model-profiles-kv-readiness.md) |
 | `AiModelProfileRegistry` | `direct-operation` | Read-only registry generation, set digest, and published profile list. | `registryGeneration:integer(uint64)`, `profiles:array<AiModelProfileEntry>` | `setDigest:string` | [Details](../ai-gateway/model-profiles-kv-readiness.md) |
+| `AuditDropCount` | `nested-component` | One dropped-record counter, by stream and reason, nested in the audit status. | none | `count:integer(int64)`, `reason:string`, `stream:string` | [Details](../operations/audit-log.md) |
+| `AuditPolicy` | `direct-operation` | The runtime-changeable audit policy: segment sealing limits and the local retention target. | none | `max_segment_age_seconds:integer(int64)`, `max_segment_bytes:integer(int64)`, `retention_max_age_seconds:integer(int64)`, `retention_max_bytes:integer(int64)`, `retention_max_prune_per_pass:integer(int64)`, `retention_reserve_bytes:integer(int64)` | [Details](../operations/audit-log.md) |
+| `AuditProducerStatus` | `nested-component` | Per-producer record accounting nested in the audit status. | none | `accepted:integer(int64)`, `drop_ring_overflows:integer(int64)`, `dropped:object`, `id:string`, `pseq_high:integer(int64)`, `stream:string` | [Details](../operations/audit-log.md) |
+| `AuditRetentionPolicy` | `nested-component` | The retention policy in force, nested in the audit status. | none | `max_age_seconds:integer(int64)`, `max_bytes:integer(int64)`, `reserve_bytes:integer(int64)` | [Details](../operations/audit-log.md) |
+| `AuditRotateResult` | `direct-operation` | The segments either side of an operator-requested rotation. | none | `new_segment_uuid:string`, `sealed_segment_uuid:string` | [Details](../operations/audit-log.md) |
+| `AuditSegmentStatus` | `nested-component` | The active segment the audit writer is appending to, nested in the audit status. | none | `bytes:integer(int64)`, `opened:string`, `records:integer(int64)`, `uuid:string` | [Details](../operations/audit-log.md) |
+| `AuditSink` | `direct-operation` | The remote syslog sink's configuration and session state; certificate material is named by path only. | none | `address:string`, `ca_bundle_path:string`, `client_cert_path:string`, `client_key_path:string`, `connected:boolean`, `enabled:boolean`, `facility:integer(int64)`, `last_error:string`, `max_frame_bytes:integer(int64)`, `server_name:string`, `submitted:integer(int64)`, `truncated:integer(int64)`, `write_errors:integer(int64)` | [Details](../operations/audit-log.md) |
+| `AuditStatus` | `direct-operation` | State of the management audit trail: writer liveness, counters, active segment, retention, and orphaned intents. | none | `accepted:object`, `available:boolean`, `boot_id:string`, `compress_failed:integer(int64)`, `compress_skipped:integer(int64)`, `delegation_lookups:integer(int64)`, `dropped:array<AuditDropCount>`, `heartbeats:integer(int64)`, `last_orphan_event_id:string`, `last_write:string`, `mgmt_timeouts:integer(int64)`, `originator_dropped:integer(int64)`, `orphaned_intents:integer(int64)`, `panics:integer(int64)`, `path_sanitized:integer(int64)`, `perm_repaired:integer(int64)`, `producers:array<AuditProducerStatus>`, `projected_retention_days:number(double)`, `pruned:integer(int64)`, `queue_depth:object`, `queue_hwm:object`, `reserve_breached:boolean`, `reserve_breaches:integer(int64)`, `restarts:integer(int64)`, `result_drops:integer(int64)`, `retention:AuditRetentionPolicy`, `rotation_failed:integer(int64)`, `rotations:integer(int64)`, `running:boolean`, `sealed_bytes:integer(int64)`, `segment:AuditSegmentStatus`, `seq_high:integer(int64)`, `sync_failures:integer(int64)`, `unattributed:integer(int64)`, `write_failures:integer(int64)` | [Details](../operations/audit-log.md) |
 | `AutoPersistStatus` | `nested-component` | Auto-persist failure streak nested in readiness and diagnostics responses. | none | `consecutive_failures:integer`, `last_attempt:string(date-time)`, `last_error:string` | [Details](../operations/backup-restore.md) |
 | `BootStatus` | `nested-component` | Boot replay, quarantine, legacy fallback, and degraded-state evidence. | `snapshot_found:boolean`, `succeeded:boolean`, `legacy_fallback:boolean`, `degraded:boolean` | `generation:integer(uint64)`, `profile:string`, `quarantine_path:string`, `reasons:array<string>` | [Details](../operations/backup-restore.md) |
-| `CapabilityStatus` | `nested-component` | One optional capability verdict with a stable reason code and operator-facing reason. | `name:string`, `ready:boolean` | `reason:string`, `reason_code:string` | [Details](../operations/readiness-diagnostics-maintenance.md) |
+| `CapabilityStatus` | `nested-component` | One optional capability verdict with a stable reason code and operator-facing reason. | `name:string`, `ready:boolean` | `in_use:integer(int64)`, `limit:integer(int64)`, `reason:string`, `reason_code:string` | [Details](../operations/readiness-diagnostics-maintenance.md) |
 | `CapabilityStatusList` | `direct-operation` | Envelope returned by the optional capability readiness endpoint. | `capabilities:array<CapabilityStatus>` | none | [Details](../operations/readiness-diagnostics-maintenance.md) |
 | `ConfigOpRecord` | `nested-component` | Generation, checksum, mode, and time identity for the last successful persist or restore. | none | `at:string(date-time)`, `checksum:string`, `generation:integer(uint64)`, `mode:string` | [Details](../operations/backup-restore.md) |
 | `DependencyDiagnostic` | `nested-component` | Sanitized dependency type, requirement, status, and latency class in diagnostics. | `type:string`, `required:boolean`, `status:string{ready/failed}`, `latency_class:string{fast/slow/failed}` | none | [Details](../operations/readiness-diagnostics-maintenance.md) |
@@ -50,7 +58,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 | `KvExactEnforcement` | `nested-component` | Desired versus acknowledged KV-exact enforcement and migration-fence state. | `desired:string`, `enforced:string` | `fault:string`, `goFenced:boolean`, `lastAckAt:string` | [Details](../ai-gateway/model-profiles-kv-readiness.md) |
 | `KvExactStatusEntry` | `direct-operation` | Resolved rule, profile, engine-contract, binding, and enforcement readiness status. | `ruleIdentity:string`, `modelName:string`, `engineFamily:string`, `apiMode:string`, `desiredState:string`, `enforcedState:string`, `reasonCodes:array<string>` | `bindingDigest:string`, `bindingGen:integer(uint32)`, `enforcement:KvExactEnforcement`, `engineContractGen:integer(uint64)`, `engineContractId:string`, `hashContractId:string`, `modelProfileGen:integer(uint64)`, `modelProfileId:string`, `pdDialectId:string`, `requiredEvidenceLevel:string`, `wireSchemaId:string` | [Details](../ai-gateway/model-profiles-kv-readiness.md) |
 | `MaintenanceRequest` | `direct-operation` | Requested maintenance state and optional drain timeout. | `enabled:boolean` | `drain_timeout_seconds:integer(uint32)` | [Details](../operations/readiness-diagnostics-maintenance.md) |
-| `MaintenanceStatus` | `direct-operation` | Observed maintenance, refusal, in-flight stream, deadline, and cancellation state. | `state:string{active/maintenance}`, `refusing_new_config:boolean`, `refusing_new_inference:boolean`, `cancellable:boolean`, `in_flight_streams:integer(int64)`, `elapsed_seconds:integer(int64)`, `drain_deadline_exceeded:boolean` | `drain_timeout_seconds:integer(uint32)`, `entered_at:string(date-time)`, `operation_id:string` | [Details](../operations/readiness-diagnostics-maintenance.md) |
+| `MaintenanceStatus` | `direct-operation` | Observed maintenance, refusal, in-flight stream, deadline, and cancellation state. | `state:string{active/maintenance}`, `refusing_new_config:boolean`, `refusing_new_inference:boolean`, `cancellable:boolean`, `in_flight_streams:integer(int64)`, `elapsed_seconds:integer(int64)`, `drain_deadline_exceeded:boolean` | `drain_timeout_seconds:integer(uint32)`, `entered_at:string(date-time)`, `in_flight_requests:integer(int64)`, `operation_id:string` | [Details](../operations/readiness-diagnostics-maintenance.md) |
 | `MapUtilization` | `nested-component` | Bounded datapath-map count and capacity without exposing entry contents. | `name:string`, `count:integer(int64)`, `capacity:integer(int64)` | none | [Details](../operations/readiness-diagnostics-maintenance.md) |
 | `OperationResult` | `shared-envelope` | Common informational result body returned by successful configuration mutations. | none | `result:string` | [Details](api.md) |
 | `ProcessStatus` | `direct-operation` | Formal schema for the existing per-process CPU status response. | none | `processAttr:array<ProcessInfoEntry>` | [Details](api.md) |
@@ -61,11 +69,11 @@ referenced objects, and braces identify a closed enum from Swagger.
 | `UserModelRateLimit` | `nested-component` | One model-specific token quota nested in a user's QoS row. | none | `model:string`, `tokens_per_min:integer(int64)` | [Details](../operations/ai-qos.md) |
 | `UserRateLimitEntry` | `direct-operation` | Stored per-user RPS, burst, aggregate TPM, and per-model quota row. | `tenant_id:string`, `user_id:string` | `burst_size:integer(int64)`, `model_limits:array<UserModelRateLimit>`, `rps:integer(int64)`, `tokens_per_min:integer(int64)`, `updated_at:string(date-time)` | [Details](../operations/ai-qos.md) |
 | `UserRateLimitMod` | `direct-operation` | Replacement request for a user's explicit and per-model quota rows. | `tenant_id:string`, `user_id:string` | `burst_size:integer(int64)`, `model_limits:array<UserModelRateLimit>`, `rps:integer(int64)`, `tokens_per_min:integer(int64)` | [Details](../operations/ai-qos.md) |
-| `UserSummary` | `direct-operation` | Read-only account identity that excludes password material. | none | `created_at:string`, `id:integer`, `role:string{admin/viewer}`, `username:string` | [Details](../security/management-api-authentication.md) |
+| `UserSummary` | `direct-operation` | Read-only account identity that excludes password material. | none | `created_at:string`, `delegation_allowed:boolean`, `id:integer`, `role:string{admin/viewer}`, `username:string` | [Details](../security/management-api-authentication.md) |
 
 ## `api/swagger-extras.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/142e731e7568d30bf468065addd8b4929065e381/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/5c0915ffa57ade157351c9811b0931bb71db282f/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |
