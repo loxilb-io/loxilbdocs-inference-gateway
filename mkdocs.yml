@@ -82,6 +82,7 @@ nav:
       - Installation: getting-started/installation.md
       - Quickstart: getting-started/quickstart.md
       - Choose an Inference Engine: getting-started/choose-your-engine.md
+      - Prepare a Supported Model: getting-started/prepare-supported-model.md
   - Concepts:
       - Architecture: concepts/architecture.md
       - Running Modes: concepts/running-modes.md

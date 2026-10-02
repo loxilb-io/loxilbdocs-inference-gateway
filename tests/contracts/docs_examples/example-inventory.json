@@ -2772,6 +2772,125 @@
       "status": "illustrative-only"
     },
     {
+      "evidence": "explicit-public-classification",
+      "id": "f774060254a069a8c5e0",
+      "language": "bash",
+      "line": 25,
+      "path": "docs/getting-started/prepare-supported-model.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "f6c0a497413bc54a97992e591244a6114ea1b00b5c9ac3266b77b251db776b94",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9baa1784368df9f0efa8",
+      "language": "bash",
+      "line": 48,
+      "path": "docs/getting-started/prepare-supported-model.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "d47bf8b578094cce7e3b1c48cd596b8e212b9b3ed3d5c6034fcabb58f957b4b3",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "7bebda4bdfec0160e700",
+      "language": "bash",
+      "line": 78,
+      "path": "docs/getting-started/prepare-supported-model.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "2abeaa83f89f99edc76d32c24bf3de91071354be70240b8b8ca0c65a5fe79eed",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "b0ae47146a4f11211471",
+      "language": "bash",
+      "line": 94,
+      "path": "docs/getting-started/prepare-supported-model.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "1ebb16b00fa1f79930279aaf91fab9ed01ee1a671dca6bf0b6de3dc3c1398eeb",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ee6c5a66c1abe8e2dee8",
+      "language": "bash",
+      "line": 112,
+      "path": "docs/getting-started/prepare-supported-model.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "edf88391246d0c89062d1d1a4276fb2e046b5a3dee4b100b507db292fe7fc792",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "5926505df7e1c7dd2cc1",
+      "language": "bash",
+      "line": 137,
+      "path": "docs/getting-started/prepare-supported-model.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "a2d443a4316485446e4c5ab6475c0f651af36e0cae858c9f16ca42d75f8507c0",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "3c68ec5624a510f868cc",
+      "language": "bash",
+      "line": 182,
+      "path": "docs/getting-started/prepare-supported-model.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "26327b851ea31396b9d15451884544dd4f441d410e86ae2eb44bd49cea4fca37",
+      "status": "illustrative-only"
+    },
+    {
       "evidence": "visual-explanation",
       "id": "b367e0858d81126aceb8",
       "language": "mermaid",
