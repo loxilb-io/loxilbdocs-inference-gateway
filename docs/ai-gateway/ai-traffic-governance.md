@@ -41,6 +41,11 @@ It accounts for actual or estimated token use when the response completes.
 Bandwidth policies sit on a separate path and meter bytes rather than requests
 or tokens.
 
+These checks decide **who** may send a request. A separate control decides **how many** may
+execute on a model pool at once: the capacity admission gate runs after the checks above and
+before dispatch, and queues or refuses a request over a ceiling with `429`, `503`, or `504`. It is
+configured per rule and documented in [Admission Flow Control](admission-flow-control.md).
+
 | Control | Scope | Unit | Typical purpose |
 |---|---|---|---|
 | API-key model allow-list | One API key | Model identifiers | Prevent a workload from calling unauthorized models |
@@ -54,6 +59,7 @@ or tokens.
 | Shared VIP RPS/TPM | One service | Requests or tokens | Optional bucket for keyless traffic; token spend also includes attributed traffic on that service |
 | Rule/global defaults | Identities without explicit rows | Requests or tokens | Rule fields override global fields; zero falls through |
 | QoS policy | LB rule or network port | Megabits per second at the API | Bound traffic rate or pace a fullproxy service |
+| Capacity admission gate | One model pool | Executing and waiting requests | Protect the engines from overload; see [Admission Flow Control](admission-flow-control.md) |
 
 RPS means **requests per second**. TPM means **tokens per minute**. TPM is a
 smooth token bucket that refills continuously; it is not a counter that resets

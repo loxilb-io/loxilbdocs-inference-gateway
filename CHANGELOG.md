@@ -10,6 +10,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Admission Flow Control guide: the per-rule capacity admission gate
+  (`fc_mode`, ceilings, bounded queue, adaptive ceiling, warm-up, tenant fair
+  share, admission headers), its refusal codes, configuration examples for
+  `curl` and `loxicmd`, metrics and troubleshooting. The `fc_*` fields,
+  `loxicmd create lb --fc-*` flags, admission metrics, and maintenance drain
+  behavior are reflected in the configuration reference, CLI reference,
+  monitoring, troubleshooting, and readiness/maintenance pages.
 - Open-source project scaffolding: governance, maintainers, contributing guide
   (with DCO and Conventional Commits policy), full Contributor Covenant v2.1
   code of conduct, security policy, issue/PR templates, Dependabot, CI

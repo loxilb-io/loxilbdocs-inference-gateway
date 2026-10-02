@@ -178,19 +178,19 @@ class DocumentationExampleTests(unittest.TestCase):
             family for family in manifest["families"]
             if family["release_scope"] == "release"
         ]
-        self.assertEqual(197, len(families))
-        self.assertEqual(197, len(manifest["families"]))
+        self.assertEqual(231, len(families))
+        self.assertEqual(231, len(manifest["families"]))
         self.assertTrue(all(family["writer_present"] for family in families))
         self.assertTrue(all(family["evidence_present"] for family in families))
 
     def test_gateway_main_and_release_sources_are_exactly_frozen(self) -> None:
         contract = self.validator.gateway_contract
         self.assertEqual(
-            "142e731e7568d30bf468065addd8b4929065e381",
+            "5c0915ffa57ade157351c9811b0931bb71db282f",
             contract["source"]["commit"],
         )
         self.assertEqual(
-            "462a1e5412f46ca53574b9c079005bb3da3cfa20",
+            "fefb09b09f9d8f90f1f6b3e98f354249e0802c32",
             contract["source"]["ebpf_submodule_commit"],
         )
         self.assertEqual("v0.9.8.9-rc.1", contract["source"]["release_tag"])
@@ -207,7 +207,7 @@ class DocumentationExampleTests(unittest.TestCase):
     def test_cli_main_and_release_sources_are_exactly_frozen(self) -> None:
         source = self.validator.cli_contract["source"]
         self.assertEqual(
-            "27d6717438abf4dcdb605d7036cf5173e40c5e59",
+            "1b39a7e3944d3e5808870b8bd072205c878aeaa2",
             source["main_commit"],
         )
         self.assertEqual("v0.9.8.9-rc.2", source["release_tag"])
@@ -408,6 +408,30 @@ class DocumentationExampleTests(unittest.TestCase):
             },
             trees,
         )
+
+    def test_admission_flags_are_main_only_and_enumerated(self) -> None:
+        contract = self.validator.cli_contract["commands"]["create lb"]
+        for flag in (
+            "--fc-mode", "--fc-max-outstanding", "--fc-max-queue-depth",
+            "--fc-adaptive", "--fc-tenant-max-share-pct", "--fc-expose-headers",
+        ):
+            with self.subTest(flag=flag):
+                self.assertIn(flag, contract["main"]["flags"])
+                self.assertNotIn(flag, contract["release"]["flags"])
+        self.assertEqual(
+            ["off", "observe", "enforce", "inherit"], contract["enums"]["--fc-mode"]
+        )
+        errors = self.validator.validate_cli_command(
+            "loxicmd create lb 192.0.2.10 --tcp=8080:8000 "
+            "--endpoints=198.51.100.11:1 --mode=fullproxy --fc-mode=maybe",
+            context="CLI availability: main-only",
+        )
+        self.assertTrue(errors)
+        errors = self.validator.validate_cli_command(
+            "loxicmd create lb 192.0.2.10 --tcp=8080:8000 "
+            "--endpoints=198.51.100.11:1 --mode=fullproxy --fc-mode=enforce",
+        )
+        self.assertTrue(errors)  # main-only without the marker
 
     def test_strict_kv_fields_are_rest_only(self) -> None:
         flags = set(self.validator.cli_contract["commands"]["create lb"]["main"]["flags"])

@@ -27,6 +27,7 @@ prefill/decode handoff stalls, streaming cut-offs, and metrics gaps.
 | Prefill/decode handoff empty, `504 pd_prefill_timeout`, wedged mesh | [P/D handoff fails](#pd-handoff-fails) |
 | Sockmap is rejected, bypassed, or configured but not accelerating | [Sockmap Acceleration](sockmap-acceleration.md#verify-engagement) |
 | API-key request unexpectedly succeeds or fails with 401/403/429 | [API-key and quota enforcement](#api-key-and-quota-enforcement) |
+| Request refused `429 admission_capacity`, `504 admission_queue_timeout`, or `503 gateway_draining` | [Admission gate refusals](#admission-gate-refusals) |
 | SSE stream cut off early | [SSE stream cut off](#sse-stream-cut-off) |
 | `/metrics` returns `503`, is empty, or lacks a series | [Metrics endpoint disabled or incomplete](#metrics-endpoint-disabled-or-incomplete) |
 | Prometheus target shows DOWN | [Prometheus scrape down](#prometheus-scrape-down) |
@@ -235,6 +236,37 @@ settlement, and status-code details.
 
 ---
 
+## Admission gate refusals
+
+**Symptom:** inference requests are answered `429`, `503`, or `504` with an
+`X-Loxilb-Admission-*` header set, and a backend receipt count shows the request
+never reached an engine. The capacity gate is refusing on purpose; read what it holds
+before changing anything. See [Admission Flow Control](../ai-gateway/admission-flow-control.md).
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| `429 admission_capacity`, `X-Loxilb-Admission-Inflight` equals `X-Loxilb-Admission-Limit` | The pool is at its ceiling with no queue, or the queue is at its depth | Compare `fc_effective.inflight` with `max_outstanding`; raise `fc_max_outstanding` only if the engines have headroom, else add endpoints |
+| `429 admission_capacity` although the pool limit is far from full | An endpoint ceiling (`fc_ep_max_inflight`, `fc_prefill_max_inflight`, `fc_decode_max_inflight`) refused it | Read `fc_effective` for the per-endpoint ceilings and their `source` |
+| `429 admission_tenant_share` while `inflight` is below the limit | One tenant holds its `fc_tenant_max_share_pct` of the ceiling or queue; the rest is left for others | Raise the share if one tenant should be allowed more of an idle pool, or confirm the tenant id the credential resolved to |
+| `504 admission_queue_timeout` | The request waited the whole `fc_max_queue_wait_ms` | At this load the queue only delays a refusal: shorten the window or add capacity |
+| `503 admission_no_capacity` | No healthy endpoint of the pool has capacity | Check endpoint health and the per-endpoint ceilings; a warming endpoint has a reduced ceiling |
+| `503 admission_drained` on requests that were waiting | The pool was deleted, the gateway entered maintenance, or a replace changed more than the admission fields | Change the gate on its own when requests may be waiting |
+| `503 gateway_draining` | Maintenance is in effect and the pool is in `enforce` mode | Leave maintenance with `enabled: false` |
+| HTTP/2 client sees `429` but never queues | HTTP/2 streams and P/D role legs are refused at a ceiling; only HTTP/1.1 requests wait | Expected; size the ceilings for the HTTP/2 share of traffic |
+| Effective ceiling stays below the configured one | `fc_adaptive` is `on` and an endpoint reports waiting requests or a slow first token (`adapt_reason` `queued` or `ttft`) | Add capacity; a `fc_ttft_target_ms` far below what the model can do keeps the ceiling at its floor |
+| `adapt_state` is `frozen` | The engines' `/metrics` scrapes stopped while the ceiling was tightened; it holds and never widens on stale data | Restore the engines' `/metrics`, or turn `fc_adaptive` off by a replace to return to the configured ceiling |
+| Warning about `fc_max_queue_depth` and half of the node's memory at rule apply | Depth × 1 MiB exceeds half of the node's memory | Lower the depth, or bound connections with `connectionLimit` or `LLB_PD_MAX_TOTAL_INFLIGHT` |
+| `loxilb_proxy_context_inflight` at `loxilb_proxy_accept_bound` | The process accept valve is at its bound; new connections wait in the listen backlog | Raise `LLB_PD_MAX_TOTAL_INFLIGHT` if memory allows, else add gateway instances |
+
+Read the state the gate holds, not a guess:
+
+--8<-- "snippets/common/fc-effective-readback.md"
+
+`loxilb_ai_admission_anomalies_total` with `kind` `underflow` or `unknown_permit`
+above `0` is a bookkeeping defect, not load: report it with the gateway log.
+
+---
+
 ## SSE stream cut off
 
 **Symptom:** a streaming (`text/event-stream`) response ends early, or a slow-drip stream is
@@ -396,7 +428,8 @@ is per connection, so aggregate memory grows with concurrency. See
 | Commit result is `ROLLBACK-FAILED` | Apply and automatic rollback both failed | Isolate the node immediately and recover from a known-good image and snapshot |
 | Boot quarantines `snapshot.json` | Boot restore failed | Preserve the `.failed-<timestamp>` file securely, inspect sanitized logs, and validate the selected legacy/fallback state |
 | `GET /status/ready` returns typed HTTP `503` | Configuration recovery, dependency probing, or persistence state is not ready | Inspect `reasons` and the last restore/persist fields; do not treat this endpoint as GPU, inference, or full data-plane proof |
-| Maintenance reports `refusing_new_inference: false` | Maintenance gates configuration writes, not inference admission | Drain traffic with the service/load-balancer procedure before disruptive work; maintenance timeout is informational |
+| Maintenance reports `refusing_new_inference: false` | No data path is attached to the management plane, so nothing refuses inference | Drain traffic with the service/load-balancer procedure before disruptive work; maintenance timeout is informational |
+| Inference still succeeds during maintenance although `refusing_new_inference: true` | The service is not an AI-gateway service, or its `fc_mode` is `observe` or `off`: only enforcing pools refuse | Read `fc_effective.mode`; drain such a service with the load-balancer procedure and prove it with a backend receipt count |
 | Appliance lifecycle exits `6` | The command is unavailable in this CLI build, the fixed backend is absent/incompatible, or Product enablement is missing | Compare CLI/Gateway/Product versions and installed backend marker; do not infer support from current-main source |
 
 Never retry a failed commit without a fresh dry-run and root-cause review. See
@@ -462,6 +495,7 @@ Do not treat single-node validation or green CI as failover proof. See
 - [SSE & Quota Management](../ai-gateway/sse-quota-management.md) — streaming lifecycle and caps
 - [API Key Management](../ai-gateway/api-key-management.md) — key lifecycle and active enforcement
 - [AI Traffic Governance](../ai-gateway/ai-traffic-governance.md) — RPS and TPM diagnosis
+- [Admission Flow Control](../ai-gateway/admission-flow-control.md) — capacity ceilings, the bounded queue, adaptive ceiling, tenant share, and refusal codes
 - [AI Quotas and QoS](ai-qos.md) — byte-rate control labs
 - [Persistence, Backup, and Restore](backup-restore.md) — dry-run, commit, write-through, restart, quarantine, and lineage
 - [Readiness, Capabilities, Diagnostics, and Maintenance](readiness-diagnostics-maintenance.md) — interpret typed recovery state, optional-capability preflight, and configuration-write gating

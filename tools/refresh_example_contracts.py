@@ -19,7 +19,7 @@ GATEWAY_PUBLIC_SCHEMA_BASELINE_REF = "47803fb660ed54cd1f180b616db628461ad85d1a"
 GATEWAY_RELEASE_TAG = "v0.9.8.9-rc.1"
 GATEWAY_RELEASE_TAG_OBJECT = "db28353e50f7031157187fdd2250d1098c97963a"
 GATEWAY_RELEASE_REF = "f08b18beda587217265c9ba6419159119914795c"
-CLI_MAIN_REF = "27d6717438abf4dcdb605d7036cf5173e40c5e59"
+CLI_MAIN_REF = "1b39a7e3944d3e5808870b8bd072205c878aeaa2"
 CLI_RELEASE_REF = "5dd978c25c967b8192c5fe9cd448783e1e74be7c"
 CLI_RELEASE_TAG = "v0.9.8.9-rc.2"
 CLI_RELEASE_TAG_OBJECT = "2dd7dbe215982859c2ee5cfc836fe34ac4e54a37"
@@ -155,6 +155,9 @@ CLI_ENUMS = {
         "--api-key-auth": ["disabled", "required"],
         "--backend-protocol": ["http1", "http2", "both"],
         "--ep-role": ["normal", "prefill", "decode", "0", "1", "2"],
+        "--fc-adaptive": ["on", "off", "inherit"],
+        "--fc-expose-headers": ["on", "off", "inherit"],
+        "--fc-mode": ["off", "observe", "enforce", "inherit"],
         "--kv-engine-type": ["vllm", "sglang", "trtllm", "llamacpp"],
         "--kv-exact-mode": ["0", "1", "3"],
         "--kv-hash-algo": [
@@ -392,10 +395,17 @@ def build_claim_evidence(repo: Path, ref: str) -> dict[str, Any]:
             )
 
         workflow_path = entry["workflow_path"]
+        # A claim scored by a named script of a scenario directory (not the
+        # directory's default validation.sh) is wired only by a workflow that
+        # runs that script: another script of the same directory in a
+        # workflow says nothing about this claim's cases.
+        script = validation_path.rsplit("/", 1)[-1]
+        named_script = None if script == "validation.sh" else script
         matching_workflows = sorted(
             path
             for path, source in workflows.items()
             if str(entry["scenario_path"]) in source
+            and (named_script is None or named_script in source)
         )
         membership = "wired" if matching_workflows else "not-wired"
         workflow_object_id = None
