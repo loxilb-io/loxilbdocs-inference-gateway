@@ -156,6 +156,27 @@ replace `POST`; explicit JSON `null` is refused. The full behavior is in
 | `fc_expose_headers` | string | `on`, `off`, `inherit` | `LLB_FC_EXPOSE_HEADERS` | Put the three `X-Loxilb-Admission-*` headers on admitted responses. Refused `400` with `sockMapMode` `both` or `response`. |
 | `fc_effective` | object | read-only | — | The gate's resolved state on the rule's pool: values in force, live `inflight` and `queued`, adaptive state, and `source` (`rule`, `env`, or `default`) per value. Present on `GET`; ignored on input. |
 
+### Half-close hold (`half_close_mode`)
+
+What a FullProxy service does with a client that half-closes (shuts down its write side) after
+sending its request.
+
+| Field | Type | Enum | Default | Notes |
+|---|---|---|---|---|
+| `half_close_mode` | string | `off`, `hold`, `hold+parked`, `inherit` | `inherit` (process default `off`) | `off` cuts the client at its FIN. `hold` keeps it open until the answer is out, where the gateway relays the answer itself (a plaintext connection the kernel was never given to carry); the client is then closed once its answers are written, once the backend ends the answer's connection, when no answer byte has reached it for the hold bound, or on release. With `sockMapMode` other than `off`, a client whose FIN arrives before its connection is accelerated is not accelerated, so it can be held. `hold+parked` is refused `400` until it is available. `hold` is refused `400` unless the service is `mode: 4` fullproxy, without TLS (`security` 1 or 2 are never held) and without `pd_disagg_mode`. Read back only when declared. |
+
+The process-wide hold settings apply to every service whose mode is `hold`:
+
+| Operation | Purpose |
+|---|---|
+| `GET /config/halfclose` | `allow` (whether new holds may be taken) and `capSeconds` (the idle bound on a hold, `1`–`3600`). Until set, the defaults are in force: allowed, `240` seconds. |
+| `POST /config/halfclose` | Set either field; an omitted field keeps its value, and a body with neither or with an unknown field is refused `400`. `allow: false` blocks new holds only: clients already held stay held until their answers are out or the bound ends them. A new bound applies to every hold, those already held included. Kept across a restart and in a configuration snapshot. |
+| `POST /config/halfclose/release` | Close every held client on every service within a second, as it would have been closed without the hold. An answer still on its way is lost. Nothing is stored: block new holds first to stop them. |
+
+The bound's clock starts once the request has reached the backend and restarts with every write of
+the answer. The `loxilb_proxy_halfclose_*` families report held clients, refused and expired holds
+and the settings in force; see the generated [Metrics reference](../reference/metrics.md).
+
 ---
 
 ## 4. KV-cache exact routing

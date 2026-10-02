@@ -30,6 +30,26 @@ MODEL_NOTES = {
         "One dropped-record counter, by stream and reason, nested in the audit status.",
         "../operations/audit-log.md",
     ),
+    "AuditNamedSink": (
+        "direct-operation",
+        "A secondary audit sink's configuration, selection filter and export state; certificate material is named by path only.",
+        "../operations/audit-log.md",
+    ),
+    "AuditSinkCursor": (
+        "nested-component",
+        "A place in the audit trail, the last record a sink is past, nested in sink state.",
+        "../operations/audit-log.md",
+    ),
+    "AuditSinkFilter": (
+        "nested-component",
+        "What a secondary sink selects from the trail: streams, services, outcome and a data sample rate.",
+        "../operations/audit-log.md",
+    ),
+    "AuditSinkStatus": (
+        "nested-component",
+        "One sink's progress through the trail, listed in the audit status.",
+        "../operations/audit-log.md",
+    ),
     "AuditPolicy": (
         "direct-operation",
         "The runtime-changeable audit policy: segment sealing limits and the local retention target.",
@@ -114,6 +134,11 @@ MODEL_NOTES = {
         "direct-operation",
         "Formal schema for the existing filesystem-status response.",
         "api.md",
+    ),
+    "HalfCloseConfig": (
+        "direct-operation",
+        "The process-wide half-close hold settings: whether new holds may be taken and the idle bound on a hold.",
+        "../ai-gateway/configuration-reference.md#half-close-hold-half_close_mode",
     ),
     "JWTAuthProfileEntry": (
         "direct-operation",

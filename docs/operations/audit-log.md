@@ -146,6 +146,9 @@ events, never their content.
 | `GET /audit/sink` | The remote syslog sink's configuration and session state |
 | `POST /audit/sink` | Configure the remote syslog sink |
 | `POST /audit/rotate` | Seal the active segment now and open the next; the audit record names both |
+| `GET /audit/sinks/{name}` | One secondary sink: where it sends, what it selects from the trail, and how far it has got |
+| `PUT /audit/sinks/{name}` | Create or replace a secondary sink. The name `compliance` is reserved. |
+| `DELETE /audit/sinks/{name}` | Stop a secondary sink; its place in the trail and its export sequence are kept |
 
 ```bash
 curl -s http://192.0.2.254:11111/netlox/v1/audit/status | jq '{available, running, last_write, write_failures, orphaned_intents}'
@@ -169,6 +172,16 @@ curl -s http://192.0.2.254:11111/netlox/v1/audit/status | jq '{available, runnin
   the configured bundle (`ca_bundle_path`, required); there is no unverified mode. Certificate
   material is named by path and never served. `submitted` is not a delivery count: the protocol
   carries no acknowledgement.
+- **Secondary sinks follow the trail beside the compliance sink.** A secondary sink may select
+  records by stream (`mgmt`, `data`, `audit_system`), by service and by outcome (`ok`, `failed`),
+  and may keep one data record in `data_sample`; a field that is set narrows the selection, and a
+  field judges only the records that carry what it looks at. A secondary sink numbers what it sends,
+  and that export sequence travels beside each record under the configured private enterprise
+  number, so a configuration without `enterprise_number` is refused. The receiver's certificate is
+  always verified. Replacing or deleting a sink keeps its place in the trail and its export
+  sequence: a sink configured again under the same name continues both, and no export sequence
+  number is used twice. `GET /audit/status` lists every sink's progress in `sinks`, the compliance
+  sink first. Every change to a sink is audited like any other management mutation.
 - **Metrics.** The trail exports `loxilb_audit_*` families (writer liveness, records written and
   dropped by stream, write and sync failures, retention pruning); see the generated
   [Metrics reference](../reference/metrics.md).
