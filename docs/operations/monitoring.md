@@ -289,6 +289,57 @@ prove that a worker's reported values were fresh or that inference traffic
 reached that worker. Correlate them with worker-series freshness, endpoint
 health, and an independent backend receipt.
 
+## Admission gate metrics
+
+The capacity admission gate exports one series set per AI-gateway service and pool
+(`service="VIP:port"`, `pool` = the pool key) in every mode, so a scrape can tell an ungated AI
+pool from a non-AI service. The [Admission Flow Control](../ai-gateway/admission-flow-control.md)
+page explains what each decision means; the generated [Metrics reference](../reference/metrics.md)
+lists the families with their labels and evidence class.
+
+| Metric | Type | Meaning |
+|---|---|---|
+| `loxilb_ai_admission_mode` | Gauge | `0` off, `1` observe, `2` enforce |
+| `loxilb_ai_admission_inflight{role}` | Gauge | Units held: `service` pool-wide, `normal`, `prefill`, `decode` summed over the endpoints |
+| `loxilb_ai_admission_limit{role}` | Gauge | The ceiling in force per role; `role="queue"` is the queue depth |
+| `loxilb_ai_admission_queued` | Gauge | Requests waiting right now |
+| `loxilb_ai_admission_queue_wait_seconds` | Histogram | How long resumed requests waited |
+| `loxilb_ai_admission_decisions_total{reason}` | Counter | `admitted`, `capacity_shed`, `no_healthy_capacity`, `observe_would_shed`, `bypass_non_inference`, `queued`, `queue_full`, `queue_timeout`, `cancelled`, `drained`, `observe_would_queue`, `draining`, `tenant_share` |
+| `loxilb_ai_admission_effective_limit` | Gauge | The service ceiling in force now: the adaptive one while the pool adapts, else the configured one |
+| `loxilb_ai_admission_adapt_state{state}` | Gauge | State set, `1` for the current one: `off`, `open`, `tightened`, `frozen` |
+| `loxilb_ai_admission_adapt_reason{reason}` | Gauge | State set: `none`, `queued`, `ttft`, `clear`, `stale` |
+| `loxilb_ai_admission_adapt_moves_total{direction}` | Counter | Steps of the adaptive ceiling, `down` and `up` |
+| `loxilb_ai_admission_warming_endpoints` | Gauge | Endpoints inside their warm-up window |
+| `loxilb_ai_admission_tenants_active` | Gauge | Tenants holding a unit or waiting, while the pool has a tenant share |
+| `loxilb_ai_admission_anomalies_total{kind}` | Counter | Process-wide. `underflow` and `unknown_permit` are bookkeeping faults: any increase is a defect, not load. `tenant_table_full` counts requests whose tenant shared the overflow slot. |
+
+The process accept valve (`LLB_PD_MAX_TOTAL_INFLIGHT`) bounds connection contexts, not requests,
+before any pool sees them:
+
+| Metric | Type | Meaning |
+|---|---|---|
+| `loxilb_proxy_context_inflight` | Gauge | Connection contexts held, client and backend legs alike; counted only while the valve is on, so `0` when unbounded |
+| `loxilb_proxy_accept_bound` | Gauge | The bound; `0` when unbounded |
+| `loxilb_proxy_accept_blocked_total` | Counter | Times the valve paused accepting at the bound: one per pause, not per connection |
+
+```promql
+# Requests refused at the ceiling, per second, per service
+sum by (service) (rate(loxilb_ai_admission_decisions_total{reason="capacity_shed"}[5m]))
+
+# Queue fullness (1.0 means the next waiter is refused)
+loxilb_ai_admission_queued
+/
+clamp_min(loxilb_ai_admission_limit{role="queue"}, 1)
+
+# A tightened ceiling: how far the adaptive limit sits below the configured one
+loxilb_ai_admission_limit{role="service"} - loxilb_ai_admission_effective_limit
+```
+
+The shipped alert rules (`deploy/monitoring/prometheus/rules/loxilb-alerts.yml`, group
+`loxilb-ai-admission`) fire on sustained shedding, queue timeouts, a queue held near its depth, a
+frozen adaptive ceiling, the accept valve holding connections back, and any anomaly. Treat
+`loxilb_proxy_context_inflight` held at `loxilb_proxy_accept_bound` as a capacity alarm.
+
 ## Relay cache and backpressure metrics
 
 The fullproxy relay cache is bounded per connection but not by one aggregate
@@ -451,6 +502,7 @@ tenant activity metadata. Remove temporary header files after management calls:
 
 - [Grafana Dashboards](observability-metrics-grafana.md)
 - [AI Traffic Governance](../ai-gateway/ai-traffic-governance.md)
+- [Admission Flow Control](../ai-gateway/admission-flow-control.md)
 - [AI Quotas and QoS](ai-qos.md)
 - [Data-Plane Authentication and JWT](../security/data-plane-jwt-auth.md)
 - [Configuration Backup and Restore](backup-restore.md)

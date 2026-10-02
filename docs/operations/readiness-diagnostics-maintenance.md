@@ -7,7 +7,7 @@ Gateway main exposes four related operational surfaces:
 - `GET /status/ready` answers whether configuration recovery is ready;
 - `GET /status/capabilities` reports optional features gated by the launch environment;
 - `GET /diagnostics` assembles bounded operational evidence;
-- `GET/PUT /maintenance` controls the operator-owned configuration write gate.
+- `GET/PUT /maintenance` controls the operator-owned configuration write gate and, on a gateway with its data path attached, refuses new inference on enforcing admission pools.
 
 These APIs are not present in Gateway `v0.9.8.9-rc.1`. The matching
 `loxicmd` readiness, diagnostics, and maintenance commands are present in CLI
@@ -21,7 +21,7 @@ Gateway release includes the API. Capability readiness is REST-only.
 | Readiness | Did boot replay settle, are required recovery dependencies evaluable, and is persistence free of a current failure streak? | Inference success, endpoint/model readiness, GPU operation, complete datapath health, or HA convergence |
 | Capability readiness | Can this process environment admit an optional feature whose prerequisite cannot be supplied in the request? | Overall health, rule-specific tokenizer/model/event readiness, or successful data-plane engagement |
 | Diagnostics | What build/API identity, recovery state, maintenance state, attachment state, map utilization, and dependency evidence can this node report? | A complete support archive or proof that every dependency check performed live external I/O |
-| Maintenance | Is the operator refusing new **configuration mutations**, and what is the observed streaming-session count? | A data-plane drain; current implementation reports `refusing_new_inference=false` |
+| Maintenance | Is the operator refusing new **configuration mutations** and, on enforcing admission pools, new inference requests; and what are the observed streaming-session and executing-request counts? | A drain of traffic the admission gate does not govern: only pools whose gate is in `enforce` mode refuse new inference during maintenance |
 
 ## Readiness contract
 
@@ -142,8 +142,7 @@ jq -e '
   .command == "set.maintenance.on" and
   .success == true and
   .data.maintenance.state == "maintenance" and
-  .data.maintenance.refusing_new_config == true and
-  .data.maintenance.refusing_new_inference == false
+  .data.maintenance.refusing_new_config == true
 ' maintenance-on.json
 ```
 
@@ -167,10 +166,18 @@ declared drain timeout is evidence only: exceeding it sets
 `drain_deadline_exceeded=true`; the Gateway does not leave maintenance
 automatically.
 
-The in-flight count covers current AI SSE streaming sessions. It does not
-estimate non-streaming requests. Because maintenance does not refuse new
-inference, use service/endpoint-specific traffic-drain mechanisms and an
-independent backend receipt oracle before disruptive work.
+`refusing_new_inference` is `true` while maintenance is in effect on a gateway whose
+data path is attached. The [capacity admission gate](../ai-gateway/admission-flow-control.md#maintenance-drain)
+then answers new inference requests `503 gateway_draining` with `Retry-After` on every pool whose
+mode is `enforce`, and ends the requests waiting in its queues with `503 admission_drained`.
+Executing requests finish on their own. A pool in `observe` or `off` mode, and any rule that is
+not an AI-gateway service, keeps admitting, so use service/endpoint-specific traffic-drain
+mechanisms and an independent backend receipt oracle before disruptive work.
+
+`in_flight_streams` counts current AI SSE streaming sessions and does not estimate non-streaming
+requests. `in_flight_requests` is the executing count the admission gate holds, streaming and
+non-streaming alike, summed over every gated pool (`0` when none is gated). On a management
+plane with no data path attached `refusing_new_inference` stays `false`.
 
 Leave maintenance explicitly:
 

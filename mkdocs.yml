@@ -101,6 +101,7 @@ nav:
       - TensorRT-LLM Integration: ai-gateway/tensorrt-llm-integration.md
       - llama.cpp Integration: ai-gateway/llamacpp-integration.md
       - AI Traffic Governance: ai-gateway/ai-traffic-governance.md
+      - Admission Flow Control: ai-gateway/admission-flow-control.md
       - SSE & Quota: ai-gateway/sse-quota-management.md
       - API Key Management: ai-gateway/api-key-management.md
       - MCP Gateway: ai-gateway/mcp-gateway.md

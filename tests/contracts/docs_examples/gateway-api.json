@@ -14,17 +14,17 @@
         ],
         "claim": "jwt-policy-and-token-accounting",
         "matching_workflow_objects": {
-          ".github/workflows/ai-gateway-sanity.yml": "3bb77d1ef39e0cb413482509693dfb05d9d2ca21"
+          ".github/workflows/ai-gateway-sanity.yml": "2f4f78fadc5125574c3cfb385c4beee400ca0b7e"
         },
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
         ],
-        "scenario_object_id": "06b030e93c4178ce5622f0579f14dad399fbc7be",
+        "scenario_object_id": "309fe109e6a4589ee6c7ab4129846c5f2a3a407b",
         "scenario_path": "cicd/ai-jwtauth",
-        "validation_object_id": "b96545006a2fcbe96351ef992efd453996d6b48c",
+        "validation_object_id": "8484fadfc6e4e72a6c39fa7e8aee34204629368d",
         "validation_path": "cicd/ai-jwtauth/validation.sh",
         "workflow_membership": "wired",
-        "workflow_object_id": "3bb77d1ef39e0cb413482509693dfb05d9d2ca21",
+        "workflow_object_id": "2f4f78fadc5125574c3cfb385c4beee400ca0b7e",
         "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
       },
       {
@@ -65,7 +65,7 @@
         ],
         "claim": "pd-and-worker-scrape-metrics",
         "matching_workflow_objects": {
-          ".github/workflows/ai-gateway-sanity.yml": "3bb77d1ef39e0cb413482509693dfb05d9d2ca21"
+          ".github/workflows/ai-gateway-sanity.yml": "2f4f78fadc5125574c3cfb385c4beee400ca0b7e"
         },
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
@@ -75,7 +75,7 @@
         "validation_object_id": "732dba079be92270c1ae0dd0ee635f8ca423adc3",
         "validation_path": "cicd/vllm-pd-disagg/validation.sh",
         "workflow_membership": "wired",
-        "workflow_object_id": "3bb77d1ef39e0cb413482509693dfb05d9d2ca21",
+        "workflow_object_id": "2f4f78fadc5125574c3cfb385c4beee400ca0b7e",
         "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
       },
       {
@@ -89,7 +89,7 @@
         "claim": "sockmap-observability",
         "matching_workflow_objects": {},
         "matching_workflows": [],
-        "scenario_object_id": "a0e56c243affd78c06d8db04da567ecea705af98",
+        "scenario_object_id": "3c14b3915c8000eb82ba36b2f3efdc28408b3568",
         "scenario_path": "cicd/sockmap-fullproxy",
         "validation_object_id": "78b125dae6b883fa9ef2960e0ef90d47dae5677b",
         "validation_path": "cicd/sockmap-fullproxy/validation_observability.sh",
@@ -121,11 +121,11 @@
   "contract_version": 1,
   "metric_manifest": {
     "coverage": {
-      "default_families": 197,
-      "default_referenced": 157,
-      "default_unreferenced": 19,
+      "default_families": 231,
+      "default_referenced": 169,
+      "default_unreferenced": 41,
       "default_waived": 21,
-      "writer_classified": 197,
+      "writer_classified": 231,
       "writer_unclassified": 0,
       "writer_unverified": 64
     },
@@ -182,6 +182,193 @@
           "model"
         ],
         "name": "loxilb_ai_active_streams",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "pool",
+          "direction"
+        ],
+        "name": "loxilb_ai_admission_adapt_moves_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "pool",
+          "reason"
+        ],
+        "name": "loxilb_ai_admission_adapt_reason",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "pool",
+          "state"
+        ],
+        "name": "loxilb_ai_admission_adapt_state",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "kind"
+        ],
+        "name": "loxilb_ai_admission_anomalies_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "pool",
+          "reason"
+        ],
+        "name": "loxilb_ai_admission_decisions_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "pool"
+        ],
+        "name": "loxilb_ai_admission_effective_limit",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "pool",
+          "role"
+        ],
+        "name": "loxilb_ai_admission_inflight",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "pool",
+          "role"
+        ],
+        "name": "loxilb_ai_admission_limit",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "pool"
+        ],
+        "name": "loxilb_ai_admission_mode",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "pool"
+        ],
+        "name": "loxilb_ai_admission_queue_wait_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "pool"
+        ],
+        "name": "loxilb_ai_admission_queued",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "pool"
+        ],
+        "name": "loxilb_ai_admission_tenants_active",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "pool"
+        ],
+        "name": "loxilb_ai_admission_warming_endpoints",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "gauge",
@@ -802,6 +989,209 @@
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_delegation_lookups_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_last_heartbeat_timestamp_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_last_write_timestamp_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_mgmt_timeouts_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_originator_dropped_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_orphaned_intents_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "stream",
+          "reason"
+        ],
+        "name": "loxilb_audit_records_dropped_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_records_unattributed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "stream"
+        ],
+        "name": "loxilb_audit_records_written_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_reserve_breached",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_result_write_failures_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_segment_seal_failures_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_segments_pruned_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_sync_failures_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_write_failures_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_writer_panics_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_writer_restarts_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_audit_writer_up",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
         "writer_present": true
       },
       {
@@ -1820,6 +2210,28 @@
       {
         "activation": "E",
         "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_proxy_accept_blocked_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_proxy_accept_bound",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
         "implementation_status": "writer-mapped",
         "labels": [],
         "name": "loxilb_proxy_active_connections",
@@ -1914,6 +2326,17 @@
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_proxy_context_inflight",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
         "writer_present": true
       },
       {
@@ -2639,11 +3062,11 @@
       }
     },
     "provenance": {
-      "generated_at": "2026-09-22T12:08:49+00:00",
-      "source_revision": "593f1d37d9e3b6ecc0f6764d46cff45cf7ae2834"
+      "generated_at": "2026-09-29T14:28:52+00:00",
+      "source_revision": "2fd81e1b6baebbf718e55494c0e46627108e712c"
     },
     "schema_version": 1,
-    "sha256": "614ad0f5690736bfdfe26df8c3fb174d6a1189c89230ebdefd15355d4189bb10",
+    "sha256": "f3c031d6c5a81e5c1361046e1f6bc481a32cf07ccaebc18376e94cc82a6cccbc",
     "source_path": "deploy/monitoring/manifest/metric-manifest.json"
   },
   "release_snapshot": {
@@ -2672,11 +3095,11 @@
         "path": "cicd/kv-sglang-attest"
       },
       {
-        "object_id": "a0e56c243affd78c06d8db04da567ecea705af98",
+        "object_id": "3c14b3915c8000eb82ba36b2f3efdc28408b3568",
         "path": "cicd/sockmap-fullproxy"
       },
       {
-        "object_id": "c92d770b2aabaadec9fe605c84a0c1bd9a8370d1",
+        "object_id": "99b226a0bee23ba791a878bb9e8cece07915f74e",
         "path": "cicd/vllm-kvcache-routing-cpu"
       },
       {
@@ -2696,6 +3119,14 @@
         "added_definitions": [
           "AiModelProfileEntry",
           "AiModelProfileRegistry",
+          "AuditDropCount",
+          "AuditPolicy",
+          "AuditProducerStatus",
+          "AuditRetentionPolicy",
+          "AuditRotateResult",
+          "AuditSegmentStatus",
+          "AuditSink",
+          "AuditStatus",
           "AutoPersistStatus",
           "BootStatus",
           "CapabilityStatus",
@@ -2724,7 +3155,7 @@
           "UserSummary"
         ],
         "baseline_definition_count": 147,
-        "candidate_definition_count": 175,
+        "candidate_definition_count": 183,
         "removed_definitions": [],
         "source_path": "api/swagger.yml"
       },
@@ -2741,8 +3172,8 @@
     ]
   },
   "source": {
-    "commit": "142e731e7568d30bf468065addd8b4929065e381",
-    "ebpf_submodule_commit": "462a1e5412f46ca53574b9c079005bb3da3cfa20",
+    "commit": "5c0915ffa57ade157351c9811b0931bb71db282f",
+    "ebpf_submodule_commit": "fefb09b09f9d8f90f1f6b3e98f354249e0802c32",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
     "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",
@@ -2953,6 +3384,324 @@
           "required": [
             "enabled"
           ],
+          "type": "object"
+        },
+        "AuditDropCount": {
+          "properties": {
+            "count": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "stream": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "AuditPolicy": {
+          "properties": {
+            "max_segment_age_seconds": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "max_segment_bytes": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "retention_max_age_seconds": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "retention_max_bytes": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "retention_max_prune_per_pass": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "retention_reserve_bytes": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "AuditProducerStatus": {
+          "properties": {
+            "accepted": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "drop_ring_overflows": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "dropped": {
+              "additionalProperties": {
+                "format": "int64",
+                "type": "integer"
+              },
+              "type": "object"
+            },
+            "id": {
+              "type": "string"
+            },
+            "pseq_high": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "stream": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "AuditRetentionPolicy": {
+          "properties": {
+            "max_age_seconds": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "max_bytes": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "reserve_bytes": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "AuditRotateResult": {
+          "properties": {
+            "new_segment_uuid": {
+              "type": "string"
+            },
+            "sealed_segment_uuid": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "AuditSegmentStatus": {
+          "properties": {
+            "bytes": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "opened": {
+              "type": "string"
+            },
+            "records": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "uuid": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "AuditSink": {
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "ca_bundle_path": {
+              "type": "string"
+            },
+            "client_cert_path": {
+              "type": "string"
+            },
+            "client_key_path": {
+              "type": "string"
+            },
+            "connected": {
+              "type": "boolean"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "facility": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "last_error": {
+              "type": "string"
+            },
+            "max_frame_bytes": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "server_name": {
+              "type": "string"
+            },
+            "submitted": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "truncated": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "write_errors": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "AuditStatus": {
+          "properties": {
+            "accepted": {
+              "additionalProperties": {
+                "format": "int64",
+                "type": "integer"
+              },
+              "type": "object"
+            },
+            "available": {
+              "type": "boolean"
+            },
+            "boot_id": {
+              "type": "string"
+            },
+            "compress_failed": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "compress_skipped": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "delegation_lookups": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "dropped": {
+              "items": {
+                "$ref": "#/definitions/AuditDropCount"
+              },
+              "type": "array"
+            },
+            "heartbeats": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "last_orphan_event_id": {
+              "type": "string"
+            },
+            "last_write": {
+              "type": "string"
+            },
+            "mgmt_timeouts": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "originator_dropped": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "orphaned_intents": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "panics": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "path_sanitized": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "perm_repaired": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "producers": {
+              "items": {
+                "$ref": "#/definitions/AuditProducerStatus"
+              },
+              "type": "array"
+            },
+            "projected_retention_days": {
+              "format": "double",
+              "type": "number"
+            },
+            "pruned": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "queue_depth": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "type": "object"
+            },
+            "queue_hwm": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "type": "object"
+            },
+            "reserve_breached": {
+              "type": "boolean"
+            },
+            "reserve_breaches": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "restarts": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "result_drops": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "retention": {
+              "$ref": "#/definitions/AuditRetentionPolicy"
+            },
+            "rotation_failed": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "rotations": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "running": {
+              "type": "boolean"
+            },
+            "sealed_bytes": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "segment": {
+              "$ref": "#/definitions/AuditSegmentStatus"
+            },
+            "seq_high": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "sync_failures": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "unattributed": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "write_failures": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
           "type": "object"
         },
         "AutoPersistStatus": {
@@ -3453,6 +4202,14 @@
         },
         "CapabilityStatus": {
           "properties": {
+            "in_use": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "limit": {
+              "format": "int64",
+              "type": "integer"
+            },
             "name": {
               "type": "string"
             },
@@ -5542,6 +6299,12 @@
                 "$ref": "#/definitions/L7Rule"
               },
               "type": "array"
+            },
+            "trustedProxies": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
             }
           },
           "required": [
@@ -6145,6 +6908,305 @@
                 "externalIP": {
                   "type": "string"
                 },
+                "fc_adaptive": {
+                  "enum": [
+                    "on",
+                    "off",
+                    "inherit"
+                  ],
+                  "type": "string"
+                },
+                "fc_decode_max_inflight": {
+                  "format": "int32",
+                  "maximum": 100000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "fc_effective": {
+                  "properties": {
+                    "adapt_reason": {
+                      "enum": [
+                        "none",
+                        "queued",
+                        "ttft",
+                        "clear",
+                        "stale"
+                      ],
+                      "type": "string"
+                    },
+                    "adapt_state": {
+                      "enum": [
+                        "off",
+                        "open",
+                        "tightened",
+                        "frozen"
+                      ],
+                      "type": "string"
+                    },
+                    "adaptive": {
+                      "enum": [
+                        "on",
+                        "off"
+                      ],
+                      "type": "string"
+                    },
+                    "decode_max_inflight": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "effective_max_outstanding": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "ep_max_inflight": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "expose_headers": {
+                      "enum": [
+                        "on",
+                        "off"
+                      ],
+                      "type": "string"
+                    },
+                    "inflight": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "max_outstanding": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "mode": {
+                      "type": "string"
+                    },
+                    "prefill_max_inflight": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "queue_depth": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "queue_memory_bound_mib": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "queue_wait_ms": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "queued": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "source": {
+                      "properties": {
+                        "adaptive": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "decode_max_inflight": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "ep_max_inflight": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "expose_headers": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "max_outstanding": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "mode": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "prefill_max_inflight": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "queue_depth": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "queue_wait_ms": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "telemetry_stale_ms": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "tenant_max_share_pct": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "ttft_target_ms": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "warmup_ms": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "telemetry_stale_ms": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "tenant_max_share_pct": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "tenants_active": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "ttft_target_ms": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "warming_endpoints": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "warmup_ms": {
+                      "format": "int32",
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                },
+                "fc_ep_max_inflight": {
+                  "format": "int32",
+                  "maximum": 100000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "fc_expose_headers": {
+                  "enum": [
+                    "on",
+                    "off",
+                    "inherit"
+                  ],
+                  "type": "string"
+                },
+                "fc_max_outstanding": {
+                  "format": "int32",
+                  "maximum": 100000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "fc_max_queue_depth": {
+                  "format": "int32",
+                  "maximum": 65536,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "fc_max_queue_wait_ms": {
+                  "format": "int32",
+                  "maximum": 3600000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "fc_mode": {
+                  "enum": [
+                    "off",
+                    "observe",
+                    "enforce",
+                    "inherit"
+                  ],
+                  "type": "string"
+                },
+                "fc_prefill_max_inflight": {
+                  "format": "int32",
+                  "maximum": 100000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "fc_telemetry_stale_ms": {
+                  "format": "int32",
+                  "maximum": 3600000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "fc_tenant_max_share_pct": {
+                  "format": "int32",
+                  "maximum": 100,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "fc_ttft_target_ms": {
+                  "format": "int32",
+                  "maximum": 3600000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "fc_warmup_ms": {
+                  "format": "int32",
+                  "maximum": 3600000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
                 "host": {
                   "type": "string"
                 },
@@ -6642,6 +7704,10 @@
             "entered_at": {
               "format": "date-time",
               "type": "string"
+            },
+            "in_flight_requests": {
+              "format": "int64",
+              "type": "integer"
             },
             "in_flight_streams": {
               "format": "int64",
@@ -8304,6 +9370,9 @@
             "created_at": {
               "type": "string"
             },
+            "delegation_allowed": {
+              "type": "boolean"
+            },
             "id": {
               "type": "integer"
             },
@@ -8413,6 +9482,9 @@
           "properties": {
             "created_at": {
               "type": "string"
+            },
+            "delegation_allowed": {
+              "type": "boolean"
             },
             "id": {
               "type": "integer"
@@ -8626,6 +9698,50 @@
       },
       "parameters": {},
       "paths": {
+        "/audit/policy": {
+          "get": {
+            "parameters": []
+          },
+          "post": {
+            "parameters": [
+              {
+                "in": "body",
+                "name": "attr",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/AuditPolicy"
+                }
+              }
+            ]
+          }
+        },
+        "/audit/rotate": {
+          "post": {
+            "parameters": []
+          }
+        },
+        "/audit/sink": {
+          "get": {
+            "parameters": []
+          },
+          "post": {
+            "parameters": [
+              {
+                "in": "body",
+                "name": "attr",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/AuditSink"
+                }
+              }
+            ]
+          }
+        },
+        "/audit/status": {
+          "get": {
+            "parameters": []
+          }
+        },
         "/auth/login": {
           "post": {
             "parameters": [
@@ -10354,7 +11470,7 @@
           }
         }
       },
-      "sha256": "67ffeeb29fdbef18f35d46219e2ab0249d4b7cdfb348ad8e2f2d5c80a52666dc",
+      "sha256": "4cc8cb89174acdc1fca9548a56ee69bb2acf69d17e9cb2defb71028b6cc780a6",
       "source_path": "api/swagger.yml"
     },
     {

@@ -131,6 +131,54 @@ For the full `loxilb-mcp` command surface, transports, and role model, see the [
 
 ---
 
+## Gateway management audit trail
+
+Separately from the `loxilb-mcp` trail, the Gateway process keeps a **management audit trail** of
+the changes made through its management API. The management API serves its **state and policy**,
+never its records: no record content is served over the API, and identifiers name segments and
+events, never their content.
+
+| Operation | Purpose |
+|---|---|
+| `GET /audit/status` | Whether a writer is configured and running, records accepted and dropped per stream, write, sync and timeout failures, the last write, the active segment, sealed bytes, the retention policy and the retention it projects, and the previous boot's management intents that never received a result |
+| `GET /audit/policy` | The runtime-changeable policy: the limits that seal the active segment and the local retention target |
+| `POST /audit/policy` | Replace that policy. The change is itself audited before it is applied. |
+| `GET /audit/sink` | The remote syslog sink's configuration and session state |
+| `POST /audit/sink` | Configure the remote syslog sink |
+| `POST /audit/rotate` | Seal the active segment now and open the next; the audit record names both |
+
+```bash
+curl -s http://192.0.2.254:11111/netlox/v1/audit/status | jq '{available, running, last_write, write_failures, orphaned_intents}'
+```
+
+- **`available: false`** means the audit directory was unusable at start. Every audited management
+  call is refused, the remaining fields describe nothing, and the status read still answers so the
+  refused calls can be explained.
+- **The reads are not audited.** `GET /audit/status` and `GET /audit/policy` are designed to be
+  polled.
+- **The policy has a floor.** A value below the deployment profile's floor is refused for every
+  caller, the gateway administrator included, with `400` (not `403`: the caller was authorized and
+  the values were not acceptable). Lowering a retention target never deletes segments already on
+  disk: they keep the terms they were sealed under, and only what is sealed afterwards is subject
+  to the shorter one. The audit root directory, the mandatory-audit mode, and the instance
+  identity are startup-only and are not served or changeable here.
+- **`orphaned_intents`** counts management intents of the previous boot that had no result when
+  the writer started. Each one is a change whose outcome is unknown; `last_orphan_event_id` names
+  the most recent for the investigator to look up.
+- **The remote sink always verifies the receiver.** The receiver's certificate is verified against
+  the configured bundle (`ca_bundle_path`, required); there is no unverified mode. Certificate
+  material is named by path and never served. `submitted` is not a delivery count: the protocol
+  carries no acknowledgement.
+- **Metrics.** The trail exports `loxilb_audit_*` families (writer liveness, records written and
+  dropped by stream, write and sync failures, retention pruning); see the generated
+  [Metrics reference](../reference/metrics.md).
+
+Gateway audit trail files live in their own directory (default `/var/log/loxilb/audit/`), which
+the `loxilb*.log` filter of the [log API](log-api.md) never matches, so the log API cannot read
+them.
+
+---
+
 ## Read logs through the API
 
 Operators can page current and rotated logs without receiving shell access to

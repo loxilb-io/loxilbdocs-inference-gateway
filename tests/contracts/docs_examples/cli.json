@@ -591,6 +591,22 @@
           "1",
           "2"
         ],
+        "--fc-adaptive": [
+          "on",
+          "off",
+          "inherit"
+        ],
+        "--fc-expose-headers": [
+          "on",
+          "off",
+          "inherit"
+        ],
+        "--fc-mode": [
+          "off",
+          "observe",
+          "enforce",
+          "inherit"
+        ],
         "--kv-engine-type": [
           "vllm",
           "sglang",
@@ -666,10 +682,24 @@
           "--chwbl-hash-level",
           "--chwbl-load-factor",
           "--chwbl-replication",
+          "--connection-limit",
           "--detachEP",
           "--egress",
           "--endpoints",
           "--ep-role",
+          "--fc-adaptive",
+          "--fc-decode-max-inflight",
+          "--fc-ep-max-inflight",
+          "--fc-expose-headers",
+          "--fc-max-outstanding",
+          "--fc-max-queue-depth",
+          "--fc-max-queue-wait-ms",
+          "--fc-mode",
+          "--fc-prefill-max-inflight",
+          "--fc-telemetry-stale-ms",
+          "--fc-tenant-max-share-pct",
+          "--fc-ttft-target-ms",
+          "--fc-warmup-ms",
           "--host",
           "--hsts-include-subdomains",
           "--hsts-max-age",
@@ -1351,8 +1381,8 @@
   "source": {
     "enum_evidence": "frozen command conversion and validation functions",
     "golden_path": "cmd/goldens/testdata/completion-bash.golden",
-    "main_commit": "27d6717438abf4dcdb605d7036cf5173e40c5e59",
-    "main_golden_sha256": "09e11bce52e4927a6d2516a617737962132df85f32a89f96007b5d44d7d87c51",
+    "main_commit": "1b39a7e3944d3e5808870b8bd072205c878aeaa2",
+    "main_golden_sha256": "0edee0111e2e46547a4c8a1e5b3310a852cb626fca711519aad4ae7b678858da",
     "release_commit": "5dd978c25c967b8192c5fe9cd448783e1e74be7c",
     "release_golden_sha256": "399a529b416839bd93341664155e9177cf1bd079227a7e81df204f2c03887593",
     "release_tag": "v0.9.8.9-rc.2",

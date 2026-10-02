@@ -25,6 +25,46 @@ MODEL_NOTES = {
         "Read-only registry generation, set digest, and published profile list.",
         "../ai-gateway/model-profiles-kv-readiness.md",
     ),
+    "AuditDropCount": (
+        "nested-component",
+        "One dropped-record counter, by stream and reason, nested in the audit status.",
+        "../operations/audit-log.md",
+    ),
+    "AuditPolicy": (
+        "direct-operation",
+        "The runtime-changeable audit policy: segment sealing limits and the local retention target.",
+        "../operations/audit-log.md",
+    ),
+    "AuditProducerStatus": (
+        "nested-component",
+        "Per-producer record accounting nested in the audit status.",
+        "../operations/audit-log.md",
+    ),
+    "AuditRetentionPolicy": (
+        "nested-component",
+        "The retention policy in force, nested in the audit status.",
+        "../operations/audit-log.md",
+    ),
+    "AuditRotateResult": (
+        "direct-operation",
+        "The segments either side of an operator-requested rotation.",
+        "../operations/audit-log.md",
+    ),
+    "AuditSegmentStatus": (
+        "nested-component",
+        "The active segment the audit writer is appending to, nested in the audit status.",
+        "../operations/audit-log.md",
+    ),
+    "AuditSink": (
+        "direct-operation",
+        "The remote syslog sink's configuration and session state; certificate material is named by path only.",
+        "../operations/audit-log.md",
+    ),
+    "AuditStatus": (
+        "direct-operation",
+        "State of the management audit trail: writer liveness, counters, active segment, retention, and orphaned intents.",
+        "../operations/audit-log.md",
+    ),
     "AutoPersistStatus": (
         "nested-component",
         "Auto-persist failure streak nested in readiness and diagnostics responses.",
