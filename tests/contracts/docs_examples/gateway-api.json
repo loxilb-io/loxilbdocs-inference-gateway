@@ -14,7 +14,7 @@
         ],
         "claim": "jwt-policy-and-token-accounting",
         "matching_workflow_objects": {
-          ".github/workflows/ai-gateway-sanity.yml": "2f4f78fadc5125574c3cfb385c4beee400ca0b7e"
+          ".github/workflows/ai-gateway-sanity.yml": "73cf4e065eed092744d4e59483938884acf2213f"
         },
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
@@ -24,7 +24,7 @@
         "validation_object_id": "8484fadfc6e4e72a6c39fa7e8aee34204629368d",
         "validation_path": "cicd/ai-jwtauth/validation.sh",
         "workflow_membership": "wired",
-        "workflow_object_id": "2f4f78fadc5125574c3cfb385c4beee400ca0b7e",
+        "workflow_object_id": "73cf4e065eed092744d4e59483938884acf2213f",
         "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
       },
       {
@@ -65,7 +65,7 @@
         ],
         "claim": "pd-and-worker-scrape-metrics",
         "matching_workflow_objects": {
-          ".github/workflows/ai-gateway-sanity.yml": "2f4f78fadc5125574c3cfb385c4beee400ca0b7e"
+          ".github/workflows/ai-gateway-sanity.yml": "73cf4e065eed092744d4e59483938884acf2213f"
         },
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
@@ -75,7 +75,7 @@
         "validation_object_id": "732dba079be92270c1ae0dd0ee635f8ca423adc3",
         "validation_path": "cicd/vllm-pd-disagg/validation.sh",
         "workflow_membership": "wired",
-        "workflow_object_id": "2f4f78fadc5125574c3cfb385c4beee400ca0b7e",
+        "workflow_object_id": "73cf4e065eed092744d4e59483938884acf2213f",
         "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
       },
       {
@@ -89,7 +89,7 @@
         "claim": "sockmap-observability",
         "matching_workflow_objects": {},
         "matching_workflows": [],
-        "scenario_object_id": "3c14b3915c8000eb82ba36b2f3efdc28408b3568",
+        "scenario_object_id": "b83d11d6a134f70336c72d1271778223806fc8d7",
         "scenario_path": "cicd/sockmap-fullproxy",
         "validation_object_id": "78b125dae6b883fa9ef2960e0ef90d47dae5677b",
         "validation_path": "cicd/sockmap-fullproxy/validation_observability.sh",
@@ -121,11 +121,11 @@
   "contract_version": 1,
   "metric_manifest": {
     "coverage": {
-      "default_families": 231,
+      "default_families": 257,
       "default_referenced": 169,
-      "default_unreferenced": 41,
+      "default_unreferenced": 67,
       "default_waived": 21,
-      "writer_classified": 231,
+      "writer_classified": 257,
       "writer_unclassified": 0,
       "writer_unverified": 64
     },
@@ -1076,6 +1076,17 @@
         "evidence_present": true,
         "implementation_status": "verified-static",
         "labels": [],
+        "name": "loxilb_audit_records_lost_to_retention_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
         "name": "loxilb_audit_records_unattributed_total",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
@@ -1134,6 +1145,97 @@
         "implementation_status": "verified-static",
         "labels": [],
         "name": "loxilb_audit_segments_pruned_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "sink"
+        ],
+        "name": "loxilb_audit_sink_connected",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "sink"
+        ],
+        "name": "loxilb_audit_sink_cursor_lag_bytes",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "sink"
+        ],
+        "name": "loxilb_audit_sink_cursor_lag_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "sink"
+        ],
+        "name": "loxilb_audit_sink_export_failures_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "sink"
+        ],
+        "name": "loxilb_audit_sink_lag_drops_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "sink"
+        ],
+        "name": "loxilb_audit_sink_poison_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "sink"
+        ],
+        "name": "loxilb_audit_sink_records_exported_total",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "counter",
@@ -2333,6 +2435,17 @@
         "evidence_present": true,
         "implementation_status": "verified-runtime",
         "labels": [],
+        "name": "loxilb_proxy_client_reset_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
         "name": "loxilb_proxy_context_inflight",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
@@ -2389,6 +2502,191 @@
         "implementation_status": "writer-mapped",
         "labels": [],
         "name": "loxilb_proxy_graceful_close_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_proxy_halfclose_accel_early_fin_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_proxy_halfclose_accel_skipped_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "entry",
+          "stream"
+        ],
+        "name": "loxilb_proxy_halfclose_fin_gap_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "entry",
+          "outcome"
+        ],
+        "name": "loxilb_proxy_halfclose_fin_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_proxy_halfclose_held",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_proxy_halfclose_held_oldest_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_proxy_halfclose_hold_allowed",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_proxy_halfclose_hold_cap_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "reason"
+        ],
+        "name": "loxilb_proxy_halfclose_hold_ended_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "answer_started",
+          "stream"
+        ],
+        "name": "loxilb_proxy_halfclose_hold_expired_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "reason"
+        ],
+        "name": "loxilb_proxy_halfclose_hold_refused_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "kind"
+        ],
+        "name": "loxilb_proxy_halfclose_hold_spurious_wakeups_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_proxy_halfclose_hold_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "path",
+          "early_owed"
+        ],
+        "name": "loxilb_proxy_halfclose_tls_fin_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "family"
+        ],
+        "name": "loxilb_proxy_halfclose_user_agent_total",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "counter",
@@ -2610,6 +2908,32 @@
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "stream"
+        ],
+        "name": "loxilb_proxy_response_first_write_gap_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "stream"
+        ],
+        "name": "loxilb_proxy_response_max_write_gap_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
         "writer_present": true
       },
       {
@@ -3062,11 +3386,11 @@
       }
     },
     "provenance": {
-      "generated_at": "2026-09-29T14:28:52+00:00",
-      "source_revision": "2fd81e1b6baebbf718e55494c0e46627108e712c"
+      "generated_at": "2026-10-02T14:39:41+00:00",
+      "source_revision": "5a44fdd44f4a93bee3b7975550ab328d6ec9f13b"
     },
     "schema_version": 1,
-    "sha256": "f3c031d6c5a81e5c1361046e1f6bc481a32cf07ccaebc18376e94cc82a6cccbc",
+    "sha256": "637423b40f6fca290bdcca3036a505fccb007c9f90b81cc7a126fde2616db70d",
     "source_path": "deploy/monitoring/manifest/metric-manifest.json"
   },
   "release_snapshot": {
@@ -3095,7 +3419,7 @@
         "path": "cicd/kv-sglang-attest"
       },
       {
-        "object_id": "3c14b3915c8000eb82ba36b2f3efdc28408b3568",
+        "object_id": "b83d11d6a134f70336c72d1271778223806fc8d7",
         "path": "cicd/sockmap-fullproxy"
       },
       {
@@ -3120,12 +3444,16 @@
           "AiModelProfileEntry",
           "AiModelProfileRegistry",
           "AuditDropCount",
+          "AuditNamedSink",
           "AuditPolicy",
           "AuditProducerStatus",
           "AuditRetentionPolicy",
           "AuditRotateResult",
           "AuditSegmentStatus",
           "AuditSink",
+          "AuditSinkCursor",
+          "AuditSinkFilter",
+          "AuditSinkStatus",
           "AuditStatus",
           "AutoPersistStatus",
           "BootStatus",
@@ -3137,6 +3465,7 @@
           "EbpfAttachmentStatus",
           "ExternalDependencyStatus",
           "FilesystemStatus",
+          "HalfCloseConfig",
           "JWTAuthProfileEntry",
           "KvExactEnforcement",
           "KvExactStatusEntry",
@@ -3155,7 +3484,7 @@
           "UserSummary"
         ],
         "baseline_definition_count": 147,
-        "candidate_definition_count": 183,
+        "candidate_definition_count": 188,
         "removed_definitions": [],
         "source_path": "api/swagger.yml"
       },
@@ -3172,8 +3501,8 @@
     ]
   },
   "source": {
-    "commit": "5c0915ffa57ade157351c9811b0931bb71db282f",
-    "ebpf_submodule_commit": "fefb09b09f9d8f90f1f6b3e98f354249e0802c32",
+    "commit": "0d4193a7a43c05b13c5b5125d5c916a1179b2150",
+    "ebpf_submodule_commit": "3aa7b2f2b9c401134244964b88ca01a5e3d40552",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
     "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",
@@ -3401,6 +3730,89 @@
           },
           "type": "object"
         },
+        "AuditNamedSink": {
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "ca_bundle_path": {
+              "type": "string"
+            },
+            "client_cert_path": {
+              "type": "string"
+            },
+            "client_key_path": {
+              "type": "string"
+            },
+            "cursor": {
+              "$ref": "#/definitions/AuditSinkCursor"
+            },
+            "enterprise_number": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "facility": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "filter": {
+              "$ref": "#/definitions/AuditSinkFilter"
+            },
+            "filtered": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "lag_drops": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "last_error": {
+              "type": "string"
+            },
+            "max_frame_bytes": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "poison": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "resent": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "server_name": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "submitted": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "truncated": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "write_errors": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "xseq_epoch": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "xseq_high": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
         "AuditPolicy": {
           "properties": {
             "max_segment_age_seconds": {
@@ -3556,6 +3968,70 @@
           },
           "type": "object"
         },
+        "AuditSinkCursor": {
+          "properties": {
+            "segment_uuid": {
+              "type": "string"
+            },
+            "seq": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "AuditSinkFilter": {
+          "properties": {
+            "data_sample": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "outcome": {
+              "type": "string"
+            },
+            "services": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "streams": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "AuditSinkStatus": {
+          "properties": {
+            "compliance": {
+              "type": "boolean"
+            },
+            "cursor": {
+              "$ref": "#/definitions/AuditSinkCursor"
+            },
+            "in_active_segment": {
+              "type": "boolean"
+            },
+            "lag_drops": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "lag_records": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
         "AuditStatus": {
           "properties": {
             "accepted": {
@@ -3570,6 +4046,9 @@
             },
             "boot_id": {
               "type": "string"
+            },
+            "compliance_sink": {
+              "type": "boolean"
             },
             "compress_failed": {
               "format": "int64",
@@ -3688,6 +4167,12 @@
             "seq_high": {
               "format": "int64",
               "type": "integer"
+            },
+            "sinks": {
+              "items": {
+                "$ref": "#/definitions/AuditSinkStatus"
+              },
+              "type": "array"
             },
             "sync_failures": {
               "format": "int64",
@@ -5019,6 +5504,21 @@
               "type": "string"
             },
             "worker_count": {
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "HalfCloseConfig": {
+          "additionalProperties": false,
+          "properties": {
+            "allow": {
+              "type": "boolean"
+            },
+            "capSeconds": {
+              "format": "int32",
+              "maximum": 3600,
+              "minimum": 1,
               "type": "integer"
             }
           },
@@ -7206,6 +7706,15 @@
                   "maximum": 3600000,
                   "minimum": 0,
                   "type": "integer"
+                },
+                "half_close_mode": {
+                  "enum": [
+                    "off",
+                    "hold",
+                    "hold+parked",
+                    "inherit"
+                  ],
+                  "type": "string"
                 },
                 "host": {
                   "type": "string"
@@ -9737,6 +10246,26 @@
             ]
           }
         },
+        "/audit/sinks/{name}": {
+          "delete": {
+            "parameters": []
+          },
+          "get": {
+            "parameters": []
+          },
+          "put": {
+            "parameters": [
+              {
+                "in": "body",
+                "name": "attr",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/AuditNamedSink"
+                }
+              }
+            ]
+          }
+        },
         "/audit/status": {
           "get": {
             "parameters": []
@@ -10295,6 +10824,28 @@
         },
         "/config/gpu/status": {
           "get": {
+            "parameters": []
+          }
+        },
+        "/config/halfclose": {
+          "get": {
+            "parameters": []
+          },
+          "post": {
+            "parameters": [
+              {
+                "in": "body",
+                "name": "attr",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/HalfCloseConfig"
+                }
+              }
+            ]
+          }
+        },
+        "/config/halfclose/release": {
+          "post": {
             "parameters": []
           }
         },
@@ -11470,7 +12021,7 @@
           }
         }
       },
-      "sha256": "4cc8cb89174acdc1fca9548a56ee69bb2acf69d17e9cb2defb71028b6cc780a6",
+      "sha256": "7cf9cc2b36a6a7852111c0897c9f32716a6e33d5a1898f4cd71410fcc5af5a79",
       "source_path": "api/swagger.yml"
     },
     {

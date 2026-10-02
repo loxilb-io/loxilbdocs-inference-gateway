@@ -27,7 +27,7 @@ class SchemaReferenceTests(unittest.TestCase):
 
     def test_current_delta_is_fully_classified(self) -> None:
         rendered = MODULE.render(self.contract)
-        self.assertIn("- Added definitions: **38**", rendered)
+        self.assertIn("- Added definitions: **43**", rendered)
         self.assertIn("All added definitions are public-relevant", rendered)
 
     def test_unclassified_definition_is_rejected(self) -> None:
