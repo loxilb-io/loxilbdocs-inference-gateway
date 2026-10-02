@@ -997,6 +997,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/admission-flow-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admission Flow Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/sse-quota-management/" class="md-nav__link">
         
   
@@ -2882,8 +2910,8 @@ and <code>api/swagger-extras.yml</code>; a new or removed definition fails the d
 until its public relevance is reviewed here.</p>
 <ul>
 <li>Public schema baseline: <code>47803fb660ed54cd1f180b616db628461ad85d1a</code></li>
-<li>Reviewed Gateway <code>main</code>: <code>142e731e7568d30bf468065addd8b4929065e381</code></li>
-<li>Added definitions: <strong>30</strong></li>
+<li>Reviewed Gateway <code>main</code>: <code>5c0915ffa57ade157351c9811b0931bb71db282f</code></li>
+<li>Added definitions: <strong>38</strong></li>
 <li>Removed definitions: <strong>0</strong></li>
 <li>Evidence class: <strong>source/static contract only</strong></li>
 </ul>
@@ -2903,12 +2931,12 @@ deploy.</p>
 <tbody>
 <tr>
 <td><code>direct-operation</code></td>
-<td style="text-align: right;">17</td>
+<td style="text-align: right;">21</td>
 <td>Direct request, response, or operation envelope</td>
 </tr>
 <tr>
 <td><code>nested-component</code></td>
-<td style="text-align: right;">10</td>
+<td style="text-align: right;">14</td>
 <td>Public component nested in another operation model</td>
 </tr>
 <tr>
@@ -2926,7 +2954,7 @@ deploy.</p>
 <p>Field notation is <code>name:type</code>; <code>array&lt;Model&gt;</code> identifies an array of
 referenced objects, and braces identify a closed enum from Swagger.</p>
 <h2 id="apiswaggeryml"><code>api/swagger.yml</code><a class="headerlink" href="#apiswaggeryml" title="Permanent link">&para;</a></h2>
-<p><a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/142e731e7568d30bf468065addd8b4929065e381/api/swagger.yml">Open the exact source</a>. Definition count changed from <strong>147</strong> to <strong>175</strong>; <strong>28</strong> definitions were added and <strong>0</strong> removed.</p>
+<p><a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/5c0915ffa57ade157351c9811b0931bb71db282f/api/swagger.yml">Open the exact source</a>. Definition count changed from <strong>147</strong> to <strong>183</strong>; <strong>36</strong> definitions were added and <strong>0</strong> removed.</p>
 <table>
 <thead>
 <tr>
@@ -2956,6 +2984,70 @@ referenced objects, and braces identify a closed enum from Swagger.</p>
 <td><a href="../../ai-gateway/model-profiles-kv-readiness/">Details</a></td>
 </tr>
 <tr>
+<td><code>AuditDropCount</code></td>
+<td><code>nested-component</code></td>
+<td>One dropped-record counter, by stream and reason, nested in the audit status.</td>
+<td>none</td>
+<td><code>count:integer(int64)</code>, <code>reason:string</code>, <code>stream:string</code></td>
+<td><a href="../../operations/audit-log/">Details</a></td>
+</tr>
+<tr>
+<td><code>AuditPolicy</code></td>
+<td><code>direct-operation</code></td>
+<td>The runtime-changeable audit policy: segment sealing limits and the local retention target.</td>
+<td>none</td>
+<td><code>max_segment_age_seconds:integer(int64)</code>, <code>max_segment_bytes:integer(int64)</code>, <code>retention_max_age_seconds:integer(int64)</code>, <code>retention_max_bytes:integer(int64)</code>, <code>retention_max_prune_per_pass:integer(int64)</code>, <code>retention_reserve_bytes:integer(int64)</code></td>
+<td><a href="../../operations/audit-log/">Details</a></td>
+</tr>
+<tr>
+<td><code>AuditProducerStatus</code></td>
+<td><code>nested-component</code></td>
+<td>Per-producer record accounting nested in the audit status.</td>
+<td>none</td>
+<td><code>accepted:integer(int64)</code>, <code>drop_ring_overflows:integer(int64)</code>, <code>dropped:object</code>, <code>id:string</code>, <code>pseq_high:integer(int64)</code>, <code>stream:string</code></td>
+<td><a href="../../operations/audit-log/">Details</a></td>
+</tr>
+<tr>
+<td><code>AuditRetentionPolicy</code></td>
+<td><code>nested-component</code></td>
+<td>The retention policy in force, nested in the audit status.</td>
+<td>none</td>
+<td><code>max_age_seconds:integer(int64)</code>, <code>max_bytes:integer(int64)</code>, <code>reserve_bytes:integer(int64)</code></td>
+<td><a href="../../operations/audit-log/">Details</a></td>
+</tr>
+<tr>
+<td><code>AuditRotateResult</code></td>
+<td><code>direct-operation</code></td>
+<td>The segments either side of an operator-requested rotation.</td>
+<td>none</td>
+<td><code>new_segment_uuid:string</code>, <code>sealed_segment_uuid:string</code></td>
+<td><a href="../../operations/audit-log/">Details</a></td>
+</tr>
+<tr>
+<td><code>AuditSegmentStatus</code></td>
+<td><code>nested-component</code></td>
+<td>The active segment the audit writer is appending to, nested in the audit status.</td>
+<td>none</td>
+<td><code>bytes:integer(int64)</code>, <code>opened:string</code>, <code>records:integer(int64)</code>, <code>uuid:string</code></td>
+<td><a href="../../operations/audit-log/">Details</a></td>
+</tr>
+<tr>
+<td><code>AuditSink</code></td>
+<td><code>direct-operation</code></td>
+<td>The remote syslog sink's configuration and session state; certificate material is named by path only.</td>
+<td>none</td>
+<td><code>address:string</code>, <code>ca_bundle_path:string</code>, <code>client_cert_path:string</code>, <code>client_key_path:string</code>, <code>connected:boolean</code>, <code>enabled:boolean</code>, <code>facility:integer(int64)</code>, <code>last_error:string</code>, <code>max_frame_bytes:integer(int64)</code>, <code>server_name:string</code>, <code>submitted:integer(int64)</code>, <code>truncated:integer(int64)</code>, <code>write_errors:integer(int64)</code></td>
+<td><a href="../../operations/audit-log/">Details</a></td>
+</tr>
+<tr>
+<td><code>AuditStatus</code></td>
+<td><code>direct-operation</code></td>
+<td>State of the management audit trail: writer liveness, counters, active segment, retention, and orphaned intents.</td>
+<td>none</td>
+<td><code>accepted:object</code>, <code>available:boolean</code>, <code>boot_id:string</code>, <code>compress_failed:integer(int64)</code>, <code>compress_skipped:integer(int64)</code>, <code>delegation_lookups:integer(int64)</code>, <code>dropped:array&lt;AuditDropCount&gt;</code>, <code>heartbeats:integer(int64)</code>, <code>last_orphan_event_id:string</code>, <code>last_write:string</code>, <code>mgmt_timeouts:integer(int64)</code>, <code>originator_dropped:integer(int64)</code>, <code>orphaned_intents:integer(int64)</code>, <code>panics:integer(int64)</code>, <code>path_sanitized:integer(int64)</code>, <code>perm_repaired:integer(int64)</code>, <code>producers:array&lt;AuditProducerStatus&gt;</code>, <code>projected_retention_days:number(double)</code>, <code>pruned:integer(int64)</code>, <code>queue_depth:object</code>, <code>queue_hwm:object</code>, <code>reserve_breached:boolean</code>, <code>reserve_breaches:integer(int64)</code>, <code>restarts:integer(int64)</code>, <code>result_drops:integer(int64)</code>, <code>retention:AuditRetentionPolicy</code>, <code>rotation_failed:integer(int64)</code>, <code>rotations:integer(int64)</code>, <code>running:boolean</code>, <code>sealed_bytes:integer(int64)</code>, <code>segment:AuditSegmentStatus</code>, <code>seq_high:integer(int64)</code>, <code>sync_failures:integer(int64)</code>, <code>unattributed:integer(int64)</code>, <code>write_failures:integer(int64)</code></td>
+<td><a href="../../operations/audit-log/">Details</a></td>
+</tr>
+<tr>
 <td><code>AutoPersistStatus</code></td>
 <td><code>nested-component</code></td>
 <td>Auto-persist failure streak nested in readiness and diagnostics responses.</td>
@@ -2976,7 +3068,7 @@ referenced objects, and braces identify a closed enum from Swagger.</p>
 <td><code>nested-component</code></td>
 <td>One optional capability verdict with a stable reason code and operator-facing reason.</td>
 <td><code>name:string</code>, <code>ready:boolean</code></td>
-<td><code>reason:string</code>, <code>reason_code:string</code></td>
+<td><code>in_use:integer(int64)</code>, <code>limit:integer(int64)</code>, <code>reason:string</code>, <code>reason_code:string</code></td>
 <td><a href="../../operations/readiness-diagnostics-maintenance/">Details</a></td>
 </tr>
 <tr>
@@ -3072,7 +3164,7 @@ referenced objects, and braces identify a closed enum from Swagger.</p>
 <td><code>direct-operation</code></td>
 <td>Observed maintenance, refusal, in-flight stream, deadline, and cancellation state.</td>
 <td><code>state:string{active/maintenance}</code>, <code>refusing_new_config:boolean</code>, <code>refusing_new_inference:boolean</code>, <code>cancellable:boolean</code>, <code>in_flight_streams:integer(int64)</code>, <code>elapsed_seconds:integer(int64)</code>, <code>drain_deadline_exceeded:boolean</code></td>
-<td><code>drain_timeout_seconds:integer(uint32)</code>, <code>entered_at:string(date-time)</code>, <code>operation_id:string</code></td>
+<td><code>drain_timeout_seconds:integer(uint32)</code>, <code>entered_at:string(date-time)</code>, <code>in_flight_requests:integer(int64)</code>, <code>operation_id:string</code></td>
 <td><a href="../../operations/readiness-diagnostics-maintenance/">Details</a></td>
 </tr>
 <tr>
@@ -3160,13 +3252,13 @@ referenced objects, and braces identify a closed enum from Swagger.</p>
 <td><code>direct-operation</code></td>
 <td>Read-only account identity that excludes password material.</td>
 <td>none</td>
-<td><code>created_at:string</code>, <code>id:integer</code>, <code>role:string{admin/viewer}</code>, <code>username:string</code></td>
+<td><code>created_at:string</code>, <code>delegation_allowed:boolean</code>, <code>id:integer</code>, <code>role:string{admin/viewer}</code>, <code>username:string</code></td>
 <td><a href="../../security/management-api-authentication/">Details</a></td>
 </tr>
 </tbody>
 </table>
 <h2 id="apiswagger-extrasyml"><code>api/swagger-extras.yml</code><a class="headerlink" href="#apiswagger-extrasyml" title="Permanent link">&para;</a></h2>
-<p><a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/142e731e7568d30bf468065addd8b4929065e381/api/swagger-extras.yml">Open the exact source</a>. Definition count changed from <strong>2</strong> to <strong>4</strong>; <strong>2</strong> definitions were added and <strong>0</strong> removed.</p>
+<p><a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/5c0915ffa57ade157351c9811b0931bb71db282f/api/swagger-extras.yml">Open the exact source</a>. Definition count changed from <strong>2</strong> to <strong>4</strong>; <strong>2</strong> definitions were added and <strong>0</strong> removed.</p>
 <table>
 <thead>
 <tr>

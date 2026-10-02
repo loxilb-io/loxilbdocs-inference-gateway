@@ -997,6 +997,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/admission-flow-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admission Flow Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/sse-quota-management/" class="md-nav__link">
         
   
@@ -2883,17 +2911,17 @@ revision. It does <strong>not</strong> prove that every family is present in a p
 deployment: feature activation, traffic, build tags, hardware, and runtime
 configuration still determine whether a series is emitted.</p>
 <ul>
-<li>Gateway source commit: <code>142e731e7568d30bf468065addd8b4929065e381</code></li>
-<li>Gateway main eBPF submodule commit: <code>462a1e5412f46ca53574b9c079005bb3da3cfa20</code></li>
+<li>Gateway source commit: <code>5c0915ffa57ade157351c9811b0931bb71db282f</code></li>
+<li>Gateway main eBPF submodule commit: <code>fefb09b09f9d8f90f1f6b3e98f354249e0802c32</code></li>
 <li>Comparison release: <code>v0.9.8.9-rc.1</code> at <code>f08b18beda587217265c9ba6419159119914795c</code></li>
 <li>Comparison release eBPF submodule commit: <code>5536a2117ad2ad1128900a0d808ad7dec2eee2b5</code></li>
 <li>Release manifest availability: <strong>absent</strong></li>
 <li>Manifest path: <code>deploy/monitoring/manifest/metric-manifest.json</code></li>
-<li>Manifest SHA-256: <code>614ad0f5690736bfdfe26df8c3fb174d6a1189c89230ebdefd15355d4189bb10</code></li>
-<li>Embedded manifest source revision: <code>593f1d37d9e3b6ecc0f6764d46cff45cf7ae2834</code></li>
-<li>Embedded manifest generation time: <code>2026-09-22T12:08:49+00:00</code></li>
+<li>Manifest SHA-256: <code>f3c031d6c5a81e5c1361046e1f6bc481a32cf07ccaebc18376e94cc82a6cccbc</code></li>
+<li>Embedded manifest source revision: <code>2fd81e1b6baebbf718e55494c0e46627108e712c</code></li>
+<li>Embedded manifest generation time: <code>2026-09-29T14:28:52+00:00</code></li>
 <li>Manifest schema version: <code>1</code></li>
-<li>Release-scope families: <strong>197</strong></li>
+<li>Release-scope families: <strong>231</strong></li>
 <li>Raw writer paths and evidence prose are intentionally not copied into this public catalog.</li>
 </ul>
 <p>The table below is therefore a current-main source catalog, not a claim
@@ -2910,11 +2938,11 @@ Release packaging and runtime emission require separate qualification.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>verified-runtime</code> (48)</td>
+<td><code>verified-runtime</code> (51)</td>
 <td>writer plus recorded runtime evidence in the upstream manifest</td>
 </tr>
 <tr>
-<td><code>verified-static</code> (16)</td>
+<td><code>verified-static</code> (47)</td>
 <td>writer verified by static or unit evidence; no runtime claim</td>
 </tr>
 <tr>
@@ -3040,6 +3068,110 @@ lanes separate.</p>
 <td><code>V</code></td>
 <td><code>gateway-default</code></td>
 <td><code>conditional-with-proven-writer</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_adapt_moves_total</code></td>
+<td><code>counter</code></td>
+<td><code>service</code>, <code>pool</code>, <code>direction</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_adapt_reason</code></td>
+<td><code>gauge</code></td>
+<td><code>service</code>, <code>pool</code>, <code>reason</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_adapt_state</code></td>
+<td><code>gauge</code></td>
+<td><code>service</code>, <code>pool</code>, <code>state</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_anomalies_total</code></td>
+<td><code>counter</code></td>
+<td><code>kind</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_decisions_total</code></td>
+<td><code>counter</code></td>
+<td><code>service</code>, <code>pool</code>, <code>reason</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_effective_limit</code></td>
+<td><code>gauge</code></td>
+<td><code>service</code>, <code>pool</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_inflight</code></td>
+<td><code>gauge</code></td>
+<td><code>service</code>, <code>pool</code>, <code>role</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_limit</code></td>
+<td><code>gauge</code></td>
+<td><code>service</code>, <code>pool</code>, <code>role</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_mode</code></td>
+<td><code>gauge</code></td>
+<td><code>service</code>, <code>pool</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_queue_wait_seconds</code></td>
+<td><code>histogram</code></td>
+<td><code>service</code>, <code>pool</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_queued</code></td>
+<td><code>gauge</code></td>
+<td><code>service</code>, <code>pool</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_tenants_active</code></td>
+<td><code>gauge</code></td>
+<td><code>service</code>, <code>pool</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_warming_endpoints</code></td>
+<td><code>gauge</code></td>
+<td><code>service</code>, <code>pool</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
 </tr>
 <tr>
 <td><code>loxilb_ai_engine_info</code></td>
@@ -3408,6 +3540,150 @@ lanes separate.</p>
 <td><code>P</code></td>
 <td><code>gateway-default</code></td>
 <td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_delegation_lookups_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_last_heartbeat_timestamp_seconds</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_last_write_timestamp_seconds</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_mgmt_timeouts_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_originator_dropped_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_orphaned_intents_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_records_dropped_total</code></td>
+<td><code>counter</code></td>
+<td><code>stream</code>, <code>reason</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_records_unattributed_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_records_written_total</code></td>
+<td><code>counter</code></td>
+<td><code>stream</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_reserve_breached</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_result_write_failures_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_segment_seal_failures_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_segments_pruned_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_sync_failures_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_write_failures_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_writer_panics_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_writer_restarts_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_writer_up</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
 </tr>
 <tr>
 <td><code>loxilb_autopersist_consecutive_failures</code></td>
@@ -4074,6 +4350,22 @@ lanes separate.</p>
 <td><code>writer-mapped</code></td>
 </tr>
 <tr>
+<td><code>loxilb_proxy_accept_blocked_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_accept_bound</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
 <td><code>loxilb_proxy_active_connections</code></td>
 <td><code>gauge</code></td>
 <td>none</td>
@@ -4144,6 +4436,14 @@ lanes separate.</p>
 <td><code>E</code></td>
 <td><code>gateway-default</code></td>
 <td><code>writer-mapped</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_context_inflight</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
 </tr>
 <tr>
 <td><code>loxilb_proxy_conversation_hits_total</code></td>

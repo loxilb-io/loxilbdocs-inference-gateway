@@ -1173,6 +1173,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../admission-flow-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admission Flow Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../sse-quota-management/" class="md-nav__link">
         
   
@@ -3239,6 +3267,7 @@ hit metrics answer a different question: whether prompt blocks matched an engine
         SSE["SSE &amp; Quota&lt;br/&gt;stream lifecycle, token accounting"]
         API["API Key Management&lt;br/&gt;credential lifecycle"]
         GOV["AI Traffic Governance&lt;br/&gt;authorization, RPS, TPM"]
+        FLOW["Admission Flow Control&lt;br/&gt;ceilings, queue, adaptive limit"]
         MCP["MCP Gateway&lt;br/&gt;session-affinity L7"]
     end
 
@@ -3256,6 +3285,7 @@ hit metrics answer a different question: whether prompt blocks matched an engine
     OV --&gt; SSE
     OV --&gt; API
     OV --&gt; GOV
+    OV --&gt; FLOW
     OV --&gt; MCP
     OV --&gt; CFG
 
@@ -3330,6 +3360,11 @@ hit metrics answer a different question: whether prompt blocks matched an engine
 <td>AI Traffic Governance</td>
 <td>Enforce model authorization, RPS, and aggregate/per-model TPM limits</td>
 <td><a href="../ai-traffic-governance/">ai-traffic-governance.md</a></td>
+</tr>
+<tr>
+<td>Admission Flow Control</td>
+<td>Bound executing requests per model pool with ceilings, a bounded queue, an adaptive limit, warm-up, and tenant fair share</td>
+<td><a href="../admission-flow-control/">admission-flow-control.md</a></td>
 </tr>
 <tr>
 <td>MCP Gateway</td>
@@ -3473,6 +3508,10 @@ cannot inspect HTTP bodies for model routing. See
 <tr>
 <td>Enforce keys, RPS, and TPM</td>
 <td><a href="../ai-traffic-governance/">AI Traffic Governance</a></td>
+</tr>
+<tr>
+<td>Protect engines from overload</td>
+<td><a href="../admission-flow-control/">Admission Flow Control</a></td>
 </tr>
 <tr>
 <td>Manage streaming and token accounting</td>

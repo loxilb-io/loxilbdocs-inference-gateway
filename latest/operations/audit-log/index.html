@@ -997,6 +997,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/admission-flow-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admission Flow Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/sse-quota-management/" class="md-nav__link">
         
   
@@ -2325,6 +2353,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#gateway-management-audit-trail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gateway management audit trail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#read-logs-through-the-api" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2960,6 +2999,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#gateway-management-audit-trail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gateway management audit trail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#read-logs-through-the-api" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3189,6 +3239,74 @@ sample before exporting logs to another system.</p>
 </div>
 <p>The audit log is rotated by the same built-in mechanism as the structured logs, with a longer forensic window: it rotates above <strong>20 MB</strong>, keeps <strong>8</strong> gzipped backups, and retains them for <strong>90 days</strong>.</p>
 <p>For the full <code>loxilb-mcp</code> command surface, transports, and role model, see the <a href="../../reference/cli/">CLI Reference</a>.</p>
+<hr />
+<h2 id="gateway-management-audit-trail">Gateway management audit trail<a class="headerlink" href="#gateway-management-audit-trail" title="Permanent link">&para;</a></h2>
+<p>Separately from the <code>loxilb-mcp</code> trail, the Gateway process keeps a <strong>management audit trail</strong> of
+the changes made through its management API. The management API serves its <strong>state and policy</strong>,
+never its records: no record content is served over the API, and identifiers name segments and
+events, never their content.</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /audit/status</code></td>
+<td>Whether a writer is configured and running, records accepted and dropped per stream, write, sync and timeout failures, the last write, the active segment, sealed bytes, the retention policy and the retention it projects, and the previous boot's management intents that never received a result</td>
+</tr>
+<tr>
+<td><code>GET /audit/policy</code></td>
+<td>The runtime-changeable policy: the limits that seal the active segment and the local retention target</td>
+</tr>
+<tr>
+<td><code>POST /audit/policy</code></td>
+<td>Replace that policy. The change is itself audited before it is applied.</td>
+</tr>
+<tr>
+<td><code>GET /audit/sink</code></td>
+<td>The remote syslog sink's configuration and session state</td>
+</tr>
+<tr>
+<td><code>POST /audit/sink</code></td>
+<td>Configure the remote syslog sink</td>
+</tr>
+<tr>
+<td><code>POST /audit/rotate</code></td>
+<td>Seal the active segment now and open the next; the audit record names both</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/audit/status<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{available, running, last_write, write_failures, orphaned_intents}'</span>
+</code></pre></div>
+<ul>
+<li><strong><code>available: false</code></strong> means the audit directory was unusable at start. Every audited management
+  call is refused, the remaining fields describe nothing, and the status read still answers so the
+  refused calls can be explained.</li>
+<li><strong>The reads are not audited.</strong> <code>GET /audit/status</code> and <code>GET /audit/policy</code> are designed to be
+  polled.</li>
+<li><strong>The policy has a floor.</strong> A value below the deployment profile's floor is refused for every
+  caller, the gateway administrator included, with <code>400</code> (not <code>403</code>: the caller was authorized and
+  the values were not acceptable). Lowering a retention target never deletes segments already on
+  disk: they keep the terms they were sealed under, and only what is sealed afterwards is subject
+  to the shorter one. The audit root directory, the mandatory-audit mode, and the instance
+  identity are startup-only and are not served or changeable here.</li>
+<li><strong><code>orphaned_intents</code></strong> counts management intents of the previous boot that had no result when
+  the writer started. Each one is a change whose outcome is unknown; <code>last_orphan_event_id</code> names
+  the most recent for the investigator to look up.</li>
+<li><strong>The remote sink always verifies the receiver.</strong> The receiver's certificate is verified against
+  the configured bundle (<code>ca_bundle_path</code>, required); there is no unverified mode. Certificate
+  material is named by path and never served. <code>submitted</code> is not a delivery count: the protocol
+  carries no acknowledgement.</li>
+<li><strong>Metrics.</strong> The trail exports <code>loxilb_audit_*</code> families (writer liveness, records written and
+  dropped by stream, write and sync failures, retention pruning); see the generated
+  <a href="../../reference/metrics/">Metrics reference</a>.</li>
+</ul>
+<p>Gateway audit trail files live in their own directory (default <code>/var/log/loxilb/audit/</code>), which
+the <code>loxilb*.log</code> filter of the <a href="../log-api/">log API</a> never matches, so the log API cannot read
+them.</p>
 <hr />
 <h2 id="read-logs-through-the-api">Read logs through the API<a class="headerlink" href="#read-logs-through-the-api" title="Permanent link">&para;</a></h2>
 <p>Operators can page current and rotated logs without receiving shell access to

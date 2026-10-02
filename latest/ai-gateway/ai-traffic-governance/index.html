@@ -16,7 +16,7 @@
         <link rel="prev" href="../llamacpp-integration/">
       
       
-        <link rel="next" href="../sse-quota-management/">
+        <link rel="next" href="../admission-flow-control/">
       
       
         
@@ -1194,6 +1194,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../admission-flow-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admission Flow Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -3147,6 +3175,10 @@ backend-owned <code>X-Api-Key</code>; explicit <code>disabled</code> strips it w
 It accounts for actual or estimated token use when the response completes.
 Bandwidth policies sit on a separate path and meter bytes rather than requests
 or tokens.</p>
+<p>These checks decide <strong>who</strong> may send a request. A separate control decides <strong>how many</strong> may
+execute on a model pool at once: the capacity admission gate runs after the checks above and
+before dispatch, and queues or refuses a request over a ceiling with <code>429</code>, <code>503</code>, or <code>504</code>. It is
+configured per rule and documented in <a href="../admission-flow-control/">Admission Flow Control</a>.</p>
 <table>
 <thead>
 <tr>
@@ -3222,6 +3254,12 @@ or tokens.</p>
 <td>LB rule or network port</td>
 <td>Megabits per second at the API</td>
 <td>Bound traffic rate or pace a fullproxy service</td>
+</tr>
+<tr>
+<td>Capacity admission gate</td>
+<td>One model pool</td>
+<td>Executing and waiting requests</td>
+<td>Protect the engines from overload; see <a href="../admission-flow-control/">Admission Flow Control</a></td>
 </tr>
 </tbody>
 </table>

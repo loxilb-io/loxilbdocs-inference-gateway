@@ -997,6 +997,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/admission-flow-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admission Flow Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/sse-quota-management/" class="md-nav__link">
         
   
@@ -2313,6 +2341,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#admission-gate-refusals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admission gate refusals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#sse-stream-cut-off" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3080,6 +3119,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#admission-gate-refusals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admission gate refusals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#sse-stream-cut-off" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3274,6 +3324,10 @@ succeed — always run the "verify it fired" step.</strong> Each section below i
 <tr>
 <td>API-key request unexpectedly succeeds or fails with 401/403/429</td>
 <td><a href="#api-key-and-quota-enforcement">API-key and quota enforcement</a></td>
+</tr>
+<tr>
+<td>Request refused <code>429 admission_capacity</code>, <code>504 admission_queue_timeout</code>, or <code>503 gateway_draining</code></td>
+<td><a href="#admission-gate-refusals">Admission gate refusals</a></td>
 </tr>
 <tr>
 <td>SSE stream cut off early</td>
@@ -3616,6 +3670,91 @@ is the no-bleed oracle. See
 <a href="../../ai-gateway/ai-traffic-governance/">AI Traffic Governance</a> for reservation,
 settlement, and status-code details.</p>
 <hr />
+<h2 id="admission-gate-refusals">Admission gate refusals<a class="headerlink" href="#admission-gate-refusals" title="Permanent link">&para;</a></h2>
+<p><strong>Symptom:</strong> inference requests are answered <code>429</code>, <code>503</code>, or <code>504</code> with an
+<code>X-Loxilb-Admission-*</code> header set, and a backend receipt count shows the request
+never reached an engine. The capacity gate is refusing on purpose; read what it holds
+before changing anything. See <a href="../../ai-gateway/admission-flow-control/">Admission Flow Control</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>429 admission_capacity</code>, <code>X-Loxilb-Admission-Inflight</code> equals <code>X-Loxilb-Admission-Limit</code></td>
+<td>The pool is at its ceiling with no queue, or the queue is at its depth</td>
+<td>Compare <code>fc_effective.inflight</code> with <code>max_outstanding</code>; raise <code>fc_max_outstanding</code> only if the engines have headroom, else add endpoints</td>
+</tr>
+<tr>
+<td><code>429 admission_capacity</code> although the pool limit is far from full</td>
+<td>An endpoint ceiling (<code>fc_ep_max_inflight</code>, <code>fc_prefill_max_inflight</code>, <code>fc_decode_max_inflight</code>) refused it</td>
+<td>Read <code>fc_effective</code> for the per-endpoint ceilings and their <code>source</code></td>
+</tr>
+<tr>
+<td><code>429 admission_tenant_share</code> while <code>inflight</code> is below the limit</td>
+<td>One tenant holds its <code>fc_tenant_max_share_pct</code> of the ceiling or queue; the rest is left for others</td>
+<td>Raise the share if one tenant should be allowed more of an idle pool, or confirm the tenant id the credential resolved to</td>
+</tr>
+<tr>
+<td><code>504 admission_queue_timeout</code></td>
+<td>The request waited the whole <code>fc_max_queue_wait_ms</code></td>
+<td>At this load the queue only delays a refusal: shorten the window or add capacity</td>
+</tr>
+<tr>
+<td><code>503 admission_no_capacity</code></td>
+<td>No healthy endpoint of the pool has capacity</td>
+<td>Check endpoint health and the per-endpoint ceilings; a warming endpoint has a reduced ceiling</td>
+</tr>
+<tr>
+<td><code>503 admission_drained</code> on requests that were waiting</td>
+<td>The pool was deleted, the gateway entered maintenance, or a replace changed more than the admission fields</td>
+<td>Change the gate on its own when requests may be waiting</td>
+</tr>
+<tr>
+<td><code>503 gateway_draining</code></td>
+<td>Maintenance is in effect and the pool is in <code>enforce</code> mode</td>
+<td>Leave maintenance with <code>enabled: false</code></td>
+</tr>
+<tr>
+<td>HTTP/2 client sees <code>429</code> but never queues</td>
+<td>HTTP/2 streams and P/D role legs are refused at a ceiling; only HTTP/1.1 requests wait</td>
+<td>Expected; size the ceilings for the HTTP/2 share of traffic</td>
+</tr>
+<tr>
+<td>Effective ceiling stays below the configured one</td>
+<td><code>fc_adaptive</code> is <code>on</code> and an endpoint reports waiting requests or a slow first token (<code>adapt_reason</code> <code>queued</code> or <code>ttft</code>)</td>
+<td>Add capacity; a <code>fc_ttft_target_ms</code> far below what the model can do keeps the ceiling at its floor</td>
+</tr>
+<tr>
+<td><code>adapt_state</code> is <code>frozen</code></td>
+<td>The engines' <code>/metrics</code> scrapes stopped while the ceiling was tightened; it holds and never widens on stale data</td>
+<td>Restore the engines' <code>/metrics</code>, or turn <code>fc_adaptive</code> off by a replace to return to the configured ceiling</td>
+</tr>
+<tr>
+<td>Warning about <code>fc_max_queue_depth</code> and half of the node's memory at rule apply</td>
+<td>Depth × 1 MiB exceeds half of the node's memory</td>
+<td>Lower the depth, or bound connections with <code>connectionLimit</code> or <code>LLB_PD_MAX_TOTAL_INFLIGHT</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_context_inflight</code> at <code>loxilb_proxy_accept_bound</code></td>
+<td>The process accept valve is at its bound; new connections wait in the listen backlog</td>
+<td>Raise <code>LLB_PD_MAX_TOTAL_INFLIGHT</code> if memory allows, else add gateway instances</td>
+</tr>
+</tbody>
+</table>
+<p>Read the state the gate holds, not a guess:</p>
+<!-- example-status-default: illustrative-only -->
+
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[] | select(.serviceArguments.port == 8080) | .serviceArguments.fc_effective'</span>
+</code></pre></div>
+<p><code>loxilb_ai_admission_anomalies_total</code> with <code>kind</code> <code>underflow</code> or <code>unknown_permit</code>
+above <code>0</code> is a bookkeeping defect, not load: report it with the gateway log.</p>
+<hr />
 <h2 id="sse-stream-cut-off">SSE stream cut off<a class="headerlink" href="#sse-stream-cut-off" title="Permanent link">&para;</a></h2>
 <p><strong>Symptom:</strong> a streaming (<code>text/event-stream</code>) response ends early, or a slow-drip stream is
 severed mid-flight.</p>
@@ -3646,10 +3785,10 @@ severed mid-flight.</p>
 </tbody>
 </table>
 <p><strong>Verify it fired</strong> — check the streaming knobs on the rule:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | select(.sse_mode==true)</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="s1">        | {port, sse_mode, max_stream_duration_sec, inactiveTimeOut}'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | select(.sse_mode==true)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="s1">        | {port, sse_mode, max_stream_duration_sec, inactiveTimeOut}'</span>
 </code></pre></div>
 <p>See <a href="../../ai-gateway/sse-quota-management/">SSE &amp; Quota Management</a> for the full lifecycle.</p>
 <hr />
@@ -3691,25 +3830,25 @@ the series you expect.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/metrics<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1"># Confirm the current setting</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/metrics<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/metrics<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># Confirm the current setting</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/config/metrics<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span>-H<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>loxicmd<span class="w"> </span><span class="nb">set</span><span class="w"> </span>metrics<span class="w"> </span>--enable
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># Confirm the current setting</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>metrics
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>loxicmd<span class="w"> </span><span class="nb">set</span><span class="w"> </span>metrics<span class="w"> </span>--enable
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># Confirm the current setting</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>metrics
 </code></pre></div>
 </div>
 </div>
 </div>
 <p><strong>Verify it fired:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># After enabling + one warm-up request, the scrape should return prometheus text</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/metrics<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^loxilb_pd_kv_blocks'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># After enabling + one warm-up request, the scrape should return prometheus text</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.10:11111/netlox/v1/metrics<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'^loxilb_pd_kv_blocks'</span>
 </code></pre></div>
 <p>See <a href="../monitoring/">Monitoring &amp; Metrics</a> for the full metric catalog.</p>
 <hr />
@@ -3747,10 +3886,10 @@ the series you expect.</p>
 </tbody>
 </table>
 <p><strong>Verify it fired</strong> — reproduce the scrape exactly as Prometheus would:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-w<span class="w"> </span><span class="s1">'%{http_code}\n'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span>http://192.0.2.10:11111/netlox/v1/metrics
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1"># Expect 200. 503 = export disabled; connection refused = port/firewall;</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># TLS error = scheme mismatch.</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span>-w<span class="w"> </span><span class="s1">'%{http_code}\n'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>http://192.0.2.10:11111/netlox/v1/metrics
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># Expect 200. 503 = export disabled; connection refused = port/firewall;</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># TLS error = scheme mismatch.</span>
 </code></pre></div>
 <p>A working scrape job points at <code>metrics_path: /netlox/v1/metrics</code>, the correct
 listener and scheme, and is restricted at the network boundary. A roughly
@@ -3870,11 +4009,11 @@ recovery procedures.</p>
 </tbody>
 </table>
 <p>Check the current values together:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nv">loxilb_proxy_cache_bytes</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nv">loxilb_proxy_cache_bytes_max_conn</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="nv">loxilb_proxy_cache_conns_queued</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="nv">loxilb_proxy_cache_backpressure_ratio</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_drain_partial_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nv">loxilb_proxy_cache_bytes</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nv">loxilb_proxy_cache_bytes_max_conn</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nv">loxilb_proxy_cache_conns_queued</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="nv">loxilb_proxy_cache_backpressure_ratio</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_drain_partial_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
 </code></pre></div>
 <p>Do not interpret aggregate cached bytes as a fixed-size cache setting. The cap
 is per connection, so aggregate memory grows with concurrency. See
@@ -3927,8 +4066,13 @@ is per connection, so aggregate memory grows with concurrency. See
 </tr>
 <tr>
 <td>Maintenance reports <code>refusing_new_inference: false</code></td>
-<td>Maintenance gates configuration writes, not inference admission</td>
+<td>No data path is attached to the management plane, so nothing refuses inference</td>
 <td>Drain traffic with the service/load-balancer procedure before disruptive work; maintenance timeout is informational</td>
+</tr>
+<tr>
+<td>Inference still succeeds during maintenance although <code>refusing_new_inference: true</code></td>
+<td>The service is not an AI-gateway service, or its <code>fc_mode</code> is <code>observe</code> or <code>off</code>: only enforcing pools refuse</td>
+<td>Read <code>fc_effective.mode</code>; drain such a service with the load-balancer procedure and prove it with a backend receipt count</td>
 </tr>
 <tr>
 <td>Appliance lifecycle exits <code>6</code></td>
@@ -4077,6 +4221,7 @@ can unregister a plugin or force the circuit breaker. See
 <li><a href="../../ai-gateway/sse-quota-management/">SSE &amp; Quota Management</a> — streaming lifecycle and caps</li>
 <li><a href="../../ai-gateway/api-key-management/">API Key Management</a> — key lifecycle and active enforcement</li>
 <li><a href="../../ai-gateway/ai-traffic-governance/">AI Traffic Governance</a> — RPS and TPM diagnosis</li>
+<li><a href="../../ai-gateway/admission-flow-control/">Admission Flow Control</a> — capacity ceilings, the bounded queue, adaptive ceiling, tenant share, and refusal codes</li>
 <li><a href="../ai-qos/">AI Quotas and QoS</a> — byte-rate control labs</li>
 <li><a href="../backup-restore/">Persistence, Backup, and Restore</a> — dry-run, commit, write-through, restart, quarantine, and lineage</li>
 <li><a href="../readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a> — interpret typed recovery state, optional-capability preflight, and configuration-write gating</li>

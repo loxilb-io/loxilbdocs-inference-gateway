@@ -997,6 +997,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/admission-flow-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admission Flow Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/sse-quota-management/" class="md-nav__link">
         
   
@@ -2797,6 +2825,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#admission-flow-control-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admission flow-control flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#rest-only-capability-matrix" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3280,6 +3319,17 @@
     <span class="md-ellipsis">
       
         Load-balancer contract flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#admission-flow-control-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admission flow-control flags
       
     </span>
   </a>
@@ -3934,6 +3984,95 @@ and <a href="../../operations/appliance-cli/">Appliance CLI</a>.</p>
 </tr>
 </tbody>
 </table>
+<h3 id="admission-flow-control-flags">Admission flow-control flags<a class="headerlink" href="#admission-flow-control-flags" title="Permanent link">&para;</a></h3>
+<p><code>loxicmd create lb</code> carries the capacity admission gate's per-rule settings. The flags are on CLI
+main; they are <strong>not</strong> in <code>v0.9.8.9-rc.2</code>, so they need a matching CLI build and a Gateway build
+that carries the <code>fc_*</code> fields. On a replace of an existing rule an omitted flag keeps the rule's
+stored value, and <code>0</code> (or <code>inherit</code> for the string flags) returns the setting to the process
+default. See <a href="../../ai-gateway/admission-flow-control/">Admission Flow Control</a>.</p>
+<table>
+<thead>
+<tr>
+<th>CLI flag</th>
+<th>Sends</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--fc-mode</code></td>
+<td><code>fc_mode</code></td>
+<td><code>off</code>, <code>observe</code>, <code>enforce</code>, <code>inherit</code></td>
+</tr>
+<tr>
+<td><code>--fc-max-outstanding</code></td>
+<td><code>fc_max_outstanding</code></td>
+<td><code>0</code>–<code>100000</code></td>
+</tr>
+<tr>
+<td><code>--fc-ep-max-inflight</code></td>
+<td><code>fc_ep_max_inflight</code></td>
+<td><code>0</code>–<code>100000</code></td>
+</tr>
+<tr>
+<td><code>--fc-prefill-max-inflight</code></td>
+<td><code>fc_prefill_max_inflight</code></td>
+<td><code>0</code>–<code>100000</code></td>
+</tr>
+<tr>
+<td><code>--fc-decode-max-inflight</code></td>
+<td><code>fc_decode_max_inflight</code></td>
+<td><code>0</code>–<code>100000</code></td>
+</tr>
+<tr>
+<td><code>--fc-max-queue-depth</code></td>
+<td><code>fc_max_queue_depth</code></td>
+<td><code>0</code>–<code>65536</code>; needs a wait window</td>
+</tr>
+<tr>
+<td><code>--fc-max-queue-wait-ms</code></td>
+<td><code>fc_max_queue_wait_ms</code></td>
+<td><code>0</code>–<code>3600000</code>; non-zero whenever a depth is set</td>
+</tr>
+<tr>
+<td><code>--fc-adaptive</code></td>
+<td><code>fc_adaptive</code></td>
+<td><code>on</code>, <code>off</code>, <code>inherit</code></td>
+</tr>
+<tr>
+<td><code>--fc-ttft-target-ms</code></td>
+<td><code>fc_ttft_target_ms</code></td>
+<td><code>0</code>–<code>3600000</code></td>
+</tr>
+<tr>
+<td><code>--fc-telemetry-stale-ms</code></td>
+<td><code>fc_telemetry_stale_ms</code></td>
+<td><code>0</code>–<code>3600000</code></td>
+</tr>
+<tr>
+<td><code>--fc-warmup-ms</code></td>
+<td><code>fc_warmup_ms</code></td>
+<td><code>0</code>–<code>3600000</code></td>
+</tr>
+<tr>
+<td><code>--fc-tenant-max-share-pct</code></td>
+<td><code>fc_tenant_max_share_pct</code></td>
+<td><code>0</code>–<code>100</code></td>
+</tr>
+<tr>
+<td><code>--fc-expose-headers</code></td>
+<td><code>fc_expose_headers</code></td>
+<td><code>on</code>, <code>off</code>, <code>inherit</code></td>
+</tr>
+<tr>
+<td><code>--connection-limit</code></td>
+<td><code>connectionLimit</code></td>
+<td>uint32; enforced on DNAT-mode rules, not on <code>mode: 4</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>loxicmd get lb -o wide</code> shows the rule's admission settings beside the rest of the rule. The
+complete resolved state, <code>fc_effective</code>, is read from the REST <code>GET /config/loadbalancer/all</code>.</p>
 <h3 id="rest-only-capability-matrix">REST-only capability matrix<a class="headerlink" href="#rest-only-capability-matrix" title="Permanent link">&para;</a></h3>
 <p>The Gateway REST contract is larger than the current CLI surface. The entries
 below have no supported CLI equivalent; do not substitute a fabricated flag or

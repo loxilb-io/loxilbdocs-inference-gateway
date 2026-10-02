@@ -997,6 +997,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/admission-flow-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admission Flow Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/sse-quota-management/" class="md-nav__link">
         
   
@@ -2173,6 +2201,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#admission-gate-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admission gate metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#relay-cache-and-backpressure-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3069,6 +3108,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#admission-gate-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Admission gate metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#relay-cache-and-backpressure-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3713,6 +3763,131 @@ backend unavailability.</p>
 prove that a worker's reported values were fresh or that inference traffic
 reached that worker. Correlate them with worker-series freshness, endpoint
 health, and an independent backend receipt.</p>
+<h2 id="admission-gate-metrics">Admission gate metrics<a class="headerlink" href="#admission-gate-metrics" title="Permanent link">&para;</a></h2>
+<p>The capacity admission gate exports one series set per AI-gateway service and pool
+(<code>service="VIP:port"</code>, <code>pool</code> = the pool key) in every mode, so a scrape can tell an ungated AI
+pool from a non-AI service. The <a href="../../ai-gateway/admission-flow-control/">Admission Flow Control</a>
+page explains what each decision means; the generated <a href="../../reference/metrics/">Metrics reference</a>
+lists the families with their labels and evidence class.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loxilb_ai_admission_mode</code></td>
+<td>Gauge</td>
+<td><code>0</code> off, <code>1</code> observe, <code>2</code> enforce</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_inflight{role}</code></td>
+<td>Gauge</td>
+<td>Units held: <code>service</code> pool-wide, <code>normal</code>, <code>prefill</code>, <code>decode</code> summed over the endpoints</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_limit{role}</code></td>
+<td>Gauge</td>
+<td>The ceiling in force per role; <code>role="queue"</code> is the queue depth</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_queued</code></td>
+<td>Gauge</td>
+<td>Requests waiting right now</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_queue_wait_seconds</code></td>
+<td>Histogram</td>
+<td>How long resumed requests waited</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_decisions_total{reason}</code></td>
+<td>Counter</td>
+<td><code>admitted</code>, <code>capacity_shed</code>, <code>no_healthy_capacity</code>, <code>observe_would_shed</code>, <code>bypass_non_inference</code>, <code>queued</code>, <code>queue_full</code>, <code>queue_timeout</code>, <code>cancelled</code>, <code>drained</code>, <code>observe_would_queue</code>, <code>draining</code>, <code>tenant_share</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_effective_limit</code></td>
+<td>Gauge</td>
+<td>The service ceiling in force now: the adaptive one while the pool adapts, else the configured one</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_adapt_state{state}</code></td>
+<td>Gauge</td>
+<td>State set, <code>1</code> for the current one: <code>off</code>, <code>open</code>, <code>tightened</code>, <code>frozen</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_adapt_reason{reason}</code></td>
+<td>Gauge</td>
+<td>State set: <code>none</code>, <code>queued</code>, <code>ttft</code>, <code>clear</code>, <code>stale</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_adapt_moves_total{direction}</code></td>
+<td>Counter</td>
+<td>Steps of the adaptive ceiling, <code>down</code> and <code>up</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_warming_endpoints</code></td>
+<td>Gauge</td>
+<td>Endpoints inside their warm-up window</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_tenants_active</code></td>
+<td>Gauge</td>
+<td>Tenants holding a unit or waiting, while the pool has a tenant share</td>
+</tr>
+<tr>
+<td><code>loxilb_ai_admission_anomalies_total{kind}</code></td>
+<td>Counter</td>
+<td>Process-wide. <code>underflow</code> and <code>unknown_permit</code> are bookkeeping faults: any increase is a defect, not load. <code>tenant_table_full</code> counts requests whose tenant shared the overflow slot.</td>
+</tr>
+</tbody>
+</table>
+<p>The process accept valve (<code>LLB_PD_MAX_TOTAL_INFLIGHT</code>) bounds connection contexts, not requests,
+before any pool sees them:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loxilb_proxy_context_inflight</code></td>
+<td>Gauge</td>
+<td>Connection contexts held, client and backend legs alike; counted only while the valve is on, so <code>0</code> when unbounded</td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_accept_bound</code></td>
+<td>Gauge</td>
+<td>The bound; <code>0</code> when unbounded</td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_accept_blocked_total</code></td>
+<td>Counter</td>
+<td>Times the valve paused accepting at the bound: one per pause, not per connection</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Requests refused at the ceiling, per second, per service</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">sum</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="o">(</span><span class="nv">service</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_ai_admission_decisions_total</span><span class="p">{</span><span class="nl">reason</span><span class="o">=</span><span class="p">"</span><span class="s">capacity_shed</span><span class="p">"}[</span><span class="s">5m</span><span class="p">]</span><span class="o">))</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Queue fullness (1.0 means the next waiter is refused)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="nv">loxilb_ai_admission_queued</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="o">/</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="kr">clamp_min</span><span class="o">(</span><span class="nv">loxilb_ai_admission_limit</span><span class="p">{</span><span class="nl">role</span><span class="o">=</span><span class="p">"</span><span class="s">queue</span><span class="p">"},</span><span class="w"> </span><span class="mi">1</span><span class="o">)</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="c1"># A tightened ceiling: how far the adaptive limit sits below the configured one</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="nv">loxilb_ai_admission_limit</span><span class="p">{</span><span class="nl">role</span><span class="o">=</span><span class="p">"</span><span class="s">service</span><span class="p">"}</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">loxilb_ai_admission_effective_limit</span>
+</code></pre></div>
+<p>The shipped alert rules (<code>deploy/monitoring/prometheus/rules/loxilb-alerts.yml</code>, group
+<code>loxilb-ai-admission</code>) fire on sustained shedding, queue timeouts, a queue held near its depth, a
+frozen adaptive ceiling, the accept valve holding connections back, and any anomaly. Treat
+<code>loxilb_proxy_context_inflight</code> held at <code>loxilb_proxy_accept_bound</code> as a capacity alarm.</p>
 <h2 id="relay-cache-and-backpressure-metrics">Relay cache and backpressure metrics<a class="headerlink" href="#relay-cache-and-backpressure-metrics" title="Permanent link">&para;</a></h2>
 <p>The fullproxy relay cache is bounded per connection but not by one aggregate
 process-wide cap. Slow backends and many concurrent request bodies can therefore
@@ -3759,13 +3934,13 @@ raise total cached bytes even when no single connection reaches its watermark.</
 768 KiB. <code>loxilb_proxy_cache_bytes_max_conn</code> approaching the applicable value
 means one connection is near backpressure; rising aggregate bytes with a low
 maximum points to concurrency rather than a single oversized body.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Mean cached payload per queued connection</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nv">loxilb_proxy_cache_bytes</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="o">/</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="kr">clamp_min</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_conns_queued</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">)</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c1"># New high-water activations</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_high_water_events_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Mean cached payload per queued connection</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nv">loxilb_proxy_cache_bytes</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="o">/</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="kr">clamp_min</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_conns_queued</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1"># New high-water activations</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="kr">rate</span><span class="o">(</span><span class="nv">loxilb_proxy_cache_high_water_events_total</span><span class="p">[</span><span class="s">5m</span><span class="p">]</span><span class="o">)</span>
 </code></pre></div>
 <h2 id="configuration-recovery-metrics">Configuration recovery metrics<a class="headerlink" href="#configuration-recovery-metrics" title="Permanent link">&para;</a></h2>
 <table>
@@ -3919,11 +4094,11 @@ is expected. See <a href="../dpu-offload/">DPU Offload Observability</a>.</p>
 traffic path is used. Send one safe warm-up request before declaring a series
 missing.</p>
 <h2 id="verify-end-to-end">Verify end to end<a class="headerlink" href="#verify-end-to-end" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/metrics"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'^loxilb_(system_cpu|host_cpu|healthy_endpoints|lb_rules)'</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/metrics"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'^loxilb_(system_cpu|host_cpu|healthy_endpoints|lb_rules)'</span>
 </code></pre></div>
 <p>Then verify Prometheus:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nv">up</span><span class="p">{</span><span class="nl">job</span><span class="o">=</span><span class="p">"</span><span class="s">loxilb-inference-gateway</span><span class="p">"}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nv">up</span><span class="p">{</span><span class="nl">job</span><span class="o">=</span><span class="p">"</span><span class="s">loxilb-inference-gateway</span><span class="p">"}</span>
 </code></pre></div>
 <p>The result should be <code>1</code>. Open the provisioned dashboards and compare one
 panel with the raw series before relying on its units or aggregation.</p>
@@ -4020,13 +4195,14 @@ change default credentials, validate TLS, and apply retention appropriate for
 tenant activity metadata. Remove temporary header files after management calls:</p>
 <!-- example-status-default: illustrative-only -->
 
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN
 </code></pre></div>
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../observability-metrics-grafana/">Grafana Dashboards</a></li>
 <li><a href="../../ai-gateway/ai-traffic-governance/">AI Traffic Governance</a></li>
+<li><a href="../../ai-gateway/admission-flow-control/">Admission Flow Control</a></li>
 <li><a href="../ai-qos/">AI Quotas and QoS</a></li>
 <li><a href="../../security/data-plane-jwt-auth/">Data-Plane Authentication and JWT</a></li>
 <li><a href="../backup-restore/">Configuration Backup and Restore</a></li>

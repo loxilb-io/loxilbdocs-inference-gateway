@@ -997,6 +997,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../ai-gateway/admission-flow-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admission Flow Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../ai-gateway/sse-quota-management/" class="md-nav__link">
         
   
@@ -2998,7 +3026,7 @@ alone as runtime proof.</p>
 <li><code>GET /status/ready</code> answers whether configuration recovery is ready;</li>
 <li><code>GET /status/capabilities</code> reports optional features gated by the launch environment;</li>
 <li><code>GET /diagnostics</code> assembles bounded operational evidence;</li>
-<li><code>GET/PUT /maintenance</code> controls the operator-owned configuration write gate.</li>
+<li><code>GET/PUT /maintenance</code> controls the operator-owned configuration write gate and, on a gateway with its data path attached, refuses new inference on enforcing admission pools.</li>
 </ul>
 <p>These APIs are not present in Gateway <code>v0.9.8.9-rc.1</code>. The matching
 <code>loxicmd</code> readiness, diagnostics, and maintenance commands are present in CLI
@@ -3031,8 +3059,8 @@ Gateway release includes the API. Capability readiness is REST-only.</p>
 </tr>
 <tr>
 <td>Maintenance</td>
-<td>Is the operator refusing new <strong>configuration mutations</strong>, and what is the observed streaming-session count?</td>
-<td>A data-plane drain; current implementation reports <code>refusing_new_inference=false</code></td>
+<td>Is the operator refusing new <strong>configuration mutations</strong> and, on enforcing admission pools, new inference requests; and what are the observed streaming-session and executing-request counts?</td>
+<td>A drain of traffic the admission gate does not govern: only pools whose gate is in <code>enforce</code> mode refuse new inference during maintenance</td>
 </tr>
 </tbody>
 </table>
@@ -3188,9 +3216,8 @@ Sanitize the response before sharing it outside the operator boundary.</p>
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s1">  .command == "set.maintenance.on" and</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s1">  .success == true and</span>
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s1">  .data.maintenance.state == "maintenance" and</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s1">  .data.maintenance.refusing_new_config == true and</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s1">  .data.maintenance.refusing_new_inference == false</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="s1">'</span><span class="w"> </span>maintenance-on.json
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s1">  .data.maintenance.refusing_new_config == true</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s1">'</span><span class="w"> </span>maintenance-on.json
 </code></pre></div>
 <p>Read the observed state before acting:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>maintenance<span class="w"> </span><span class="se">\</span>
@@ -3208,10 +3235,17 @@ snapshot, restore, persist, and maintenance itself. Reads continue. The
 declared drain timeout is evidence only: exceeding it sets
 <code>drain_deadline_exceeded=true</code>; the Gateway does not leave maintenance
 automatically.</p>
-<p>The in-flight count covers current AI SSE streaming sessions. It does not
-estimate non-streaming requests. Because maintenance does not refuse new
-inference, use service/endpoint-specific traffic-drain mechanisms and an
-independent backend receipt oracle before disruptive work.</p>
+<p><code>refusing_new_inference</code> is <code>true</code> while maintenance is in effect on a gateway whose
+data path is attached. The <a href="../../ai-gateway/admission-flow-control/#maintenance-drain">capacity admission gate</a>
+then answers new inference requests <code>503 gateway_draining</code> with <code>Retry-After</code> on every pool whose
+mode is <code>enforce</code>, and ends the requests waiting in its queues with <code>503 admission_drained</code>.
+Executing requests finish on their own. A pool in <code>observe</code> or <code>off</code> mode, and any rule that is
+not an AI-gateway service, keeps admitting, so use service/endpoint-specific traffic-drain
+mechanisms and an independent backend receipt oracle before disruptive work.</p>
+<p><code>in_flight_streams</code> counts current AI SSE streaming sessions and does not estimate non-streaming
+requests. <code>in_flight_requests</code> is the executing count the admission gate holds, streaming and
+non-streaming alike, summed over every gated pool (<code>0</code> when none is gated). On a management
+plane with no data path attached <code>refusing_new_inference</code> stays <code>false</code>.</p>
 <p>Leave maintenance explicitly:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>loxicmd<span class="w"> </span><span class="nb">set</span><span class="w"> </span>maintenance<span class="w"> </span>off<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--token-file<span class="w"> </span>./gateway.token<span class="w"> </span><span class="se">\</span>

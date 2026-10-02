@@ -999,6 +999,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../admission-flow-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admission Flow Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../sse-quota-management/" class="md-nav__link">
         
   
@@ -1200,6 +1228,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="3. AI model routing, tracing &amp; streaming">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#capacity-admission-gate-fc_" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capacity admission gate (fc_*)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3067,6 +3112,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="3. AI model routing, tracing &amp; streaming">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#capacity-admission-gate-fc_" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capacity admission gate (fc_*)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3491,7 +3553,7 @@ apply to every rule, AI or not.</p>
 <td>uint32</td>
 <td><code>0</code> (unlimited)</td>
 <td>≥0</td>
-<td>Per-rule concurrent-connection ceiling (eBPF-CT enforced).</td>
+<td>Per-rule concurrent-connection ceiling, counted across all of the rule's endpoints. Enforced by the conntrack selector on DNAT-mode rules: at the ceiling, further SYNs are dropped without a reset, and a slot frees when a connection is torn down. A <code>mode: 4</code> fullproxy rule is <strong>not</strong> gated by this field, and HTTP/2 streams are not counted as connections; bound fullproxy connections with <code>LLB_PD_MAX_TOTAL_INFLIGHT</code> and see <a href="../admission-flow-control/">Admission Flow Control</a>. <code>POST</code> stores it, <code>PATCH</code> overlays it when present (an explicit <code>0</code> clears it), <code>null</code> is rejected.</td>
 </tr>
 <tr>
 <td><code>cb_enable</code></td>
@@ -3693,6 +3755,125 @@ or <code>apikey-or-jwt</code>. A required API-key policy uses the PostgreSQL sto
 <code>--aikey-db-*</code>; if it cannot evaluate the key, it fails closed with <code>503</code>. Prove missing or
 unknown key <code>401</code>, store failure <code>503</code>, and backend receipt delta <code>0</code> separately.</p>
 </div>
+<h3 id="capacity-admission-gate-fc_">Capacity admission gate (<code>fc_*</code>)<a class="headerlink" href="#capacity-admission-gate-fc_" title="Permanent link">&para;</a></h3>
+<p>These fields configure the capacity admission gate of an AI-gateway service (<code>mode: 4</code> with
+<code>sse_mode</code>, <code>pd_disagg_mode</code>, or an <code>api_key_auth</code> policy other than omitted or <code>disabled</code>). Every
+one is optional. <code>0</code> (or
+<code>inherit</code>) on a rule declares nothing, and the value then comes from the process environment
+variable in the last column, else the product default. Every field is changeable at runtime by a
+replace <code>POST</code>; explicit JSON <code>null</code> is refused. The full behavior is in
+<a href="../admission-flow-control/">Admission Flow Control</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Range / Enum</th>
+<th>Process default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fc_mode</code></td>
+<td>string</td>
+<td><code>off</code>, <code>observe</code>, <code>enforce</code>, <code>inherit</code></td>
+<td><code>LLB_FC_MODE</code></td>
+<td><code>enforce</code> refuses or queues a request over a ceiling; <code>observe</code> counts and admits; <code>off</code> bypasses the gate. Read back only when declared; the mode in force is <code>fc_effective.mode</code>.</td>
+</tr>
+<tr>
+<td><code>fc_max_outstanding</code></td>
+<td>int</td>
+<td><code>0</code>–<code>100000</code></td>
+<td><code>LLB_FC_MAX_OUTSTANDING</code></td>
+<td>Pool-wide ceiling on executing requests.</td>
+</tr>
+<tr>
+<td><code>fc_ep_max_inflight</code></td>
+<td>int</td>
+<td><code>0</code>–<code>100000</code></td>
+<td><code>LLB_FC_EP_MAX_INFLIGHT</code></td>
+<td>Per-endpoint ceiling, normal (non-P/D) role.</td>
+</tr>
+<tr>
+<td><code>fc_prefill_max_inflight</code></td>
+<td>int</td>
+<td><code>0</code>–<code>100000</code></td>
+<td><code>LLB_FC_PREFILL_MAX_INFLIGHT</code>, else <code>LLB_PD_MAX_INFLIGHT_PER_EP</code></td>
+<td>Per-endpoint ceiling on prefill legs.</td>
+</tr>
+<tr>
+<td><code>fc_decode_max_inflight</code></td>
+<td>int</td>
+<td><code>0</code>–<code>100000</code></td>
+<td><code>LLB_FC_DECODE_MAX_INFLIGHT</code></td>
+<td>Per-endpoint ceiling on decode legs.</td>
+</tr>
+<tr>
+<td><code>fc_max_queue_depth</code></td>
+<td>int</td>
+<td><code>0</code>–<code>65536</code></td>
+<td><code>LLB_FC_MAX_QUEUE_DEPTH</code></td>
+<td>Requests that may wait. Depth × 1 MiB is the memory bound when full. HTTP/2 streams never wait.</td>
+</tr>
+<tr>
+<td><code>fc_max_queue_wait_ms</code></td>
+<td>int</td>
+<td><code>0</code>–<code>3600000</code></td>
+<td><code>LLB_FC_MAX_QUEUE_WAIT_MS</code></td>
+<td>Longest wait before <code>504 admission_queue_timeout</code>. Required, greater than <code>0</code>, whenever a depth is set.</td>
+</tr>
+<tr>
+<td><code>fc_adaptive</code></td>
+<td>string</td>
+<td><code>on</code>, <code>off</code>, <code>inherit</code></td>
+<td><code>LLB_FC_ADAPTIVE</code></td>
+<td>Let the service ceiling tighten on engine backpressure and climb back on fresh, clear signals. Stale telemetry never widens it.</td>
+</tr>
+<tr>
+<td><code>fc_ttft_target_ms</code></td>
+<td>int</td>
+<td><code>0</code>–<code>3600000</code></td>
+<td><code>LLB_FC_TTFT_TARGET_MS</code></td>
+<td>With <code>fc_adaptive</code> <code>on</code>: a streamed time to first token above this is backpressure. <code>0</code> leaves it out.</td>
+</tr>
+<tr>
+<td><code>fc_telemetry_stale_ms</code></td>
+<td>int</td>
+<td><code>0</code>–<code>3600000</code></td>
+<td><code>LLB_FC_TELEMETRY_STALE_MS</code>, else <code>30000</code></td>
+<td>How long a scraped queue depth or first-token average is trusted.</td>
+</tr>
+<tr>
+<td><code>fc_warmup_ms</code></td>
+<td>int</td>
+<td><code>0</code>–<code>3600000</code></td>
+<td><code>LLB_FC_WARMUP_MS</code>, else no ramp</td>
+<td>An endpoint back in service ramps its per-endpoint ceilings from a quarter to all over this window.</td>
+</tr>
+<tr>
+<td><code>fc_tenant_max_share_pct</code></td>
+<td>int</td>
+<td><code>0</code>–<code>100</code></td>
+<td><code>LLB_FC_TENANT_MAX_SHARE_PCT</code>, else no share</td>
+<td>The most of the ceiling in force and of the queue one tenant may hold. <code>100</code> is no share. Inert without <code>fc_max_outstanding</code>.</td>
+</tr>
+<tr>
+<td><code>fc_expose_headers</code></td>
+<td>string</td>
+<td><code>on</code>, <code>off</code>, <code>inherit</code></td>
+<td><code>LLB_FC_EXPOSE_HEADERS</code></td>
+<td>Put the three <code>X-Loxilb-Admission-*</code> headers on admitted responses. Refused <code>400</code> with <code>sockMapMode</code> <code>both</code> or <code>response</code>.</td>
+</tr>
+<tr>
+<td><code>fc_effective</code></td>
+<td>object</td>
+<td>read-only</td>
+<td>—</td>
+<td>The gate's resolved state on the rule's pool: values in force, live <code>inflight</code> and <code>queued</code>, adaptive state, and <code>source</code> (<code>rule</code>, <code>env</code>, or <code>default</code>) per value. Present on <code>GET</code>; ignored on input.</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="4-kv-cache-exact-routing">4. KV-cache exact routing<a class="headerlink" href="#4-kv-cache-exact-routing" title="Permanent link">&para;</a></h2>
 <p>Tier 1.5 block-hash routing between the trie (Tier 1) and min-load (Tier 2) tiers. The KV-hash
