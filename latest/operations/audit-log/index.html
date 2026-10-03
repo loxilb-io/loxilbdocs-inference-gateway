@@ -424,6 +424,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/prepare-supported-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a Supported Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3277,6 +3305,18 @@ events, never their content.</p>
 <td><code>POST /audit/rotate</code></td>
 <td>Seal the active segment now and open the next; the audit record names both</td>
 </tr>
+<tr>
+<td><code>GET /audit/sinks/{name}</code></td>
+<td>One secondary sink: where it sends, what it selects from the trail, and how far it has got</td>
+</tr>
+<tr>
+<td><code>PUT /audit/sinks/{name}</code></td>
+<td>Create or replace a secondary sink. The name <code>compliance</code> is reserved.</td>
+</tr>
+<tr>
+<td><code>DELETE /audit/sinks/{name}</code></td>
+<td>Stop a secondary sink; its place in the trail and its export sequence are kept</td>
+</tr>
 </tbody>
 </table>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/audit/status<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{available, running, last_write, write_failures, orphaned_intents}'</span>
@@ -3300,6 +3340,16 @@ events, never their content.</p>
   the configured bundle (<code>ca_bundle_path</code>, required); there is no unverified mode. Certificate
   material is named by path and never served. <code>submitted</code> is not a delivery count: the protocol
   carries no acknowledgement.</li>
+<li><strong>Secondary sinks follow the trail beside the compliance sink.</strong> A secondary sink may select
+  records by stream (<code>mgmt</code>, <code>data</code>, <code>audit_system</code>), by service and by outcome (<code>ok</code>, <code>failed</code>),
+  and may keep one data record in <code>data_sample</code>; a field that is set narrows the selection, and a
+  field judges only the records that carry what it looks at. A secondary sink numbers what it sends,
+  and that export sequence travels beside each record under the configured private enterprise
+  number, so a configuration without <code>enterprise_number</code> is refused. The receiver's certificate is
+  always verified. Replacing or deleting a sink keeps its place in the trail and its export
+  sequence: a sink configured again under the same name continues both, and no export sequence
+  number is used twice. <code>GET /audit/status</code> lists every sink's progress in <code>sinks</code>, the compliance
+  sink first. Every change to a sink is audited like any other management mutation.</li>
 <li><strong>Metrics.</strong> The trail exports <code>loxilb_audit_*</code> families (writer liveness, records written and
   dropped by stream, write and sync failures, retention pruning); see the generated
   <a href="../../reference/metrics/">Metrics reference</a>.</li>

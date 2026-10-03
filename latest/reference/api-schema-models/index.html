@@ -424,6 +424,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/prepare-supported-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a Supported Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2910,8 +2938,8 @@ and <code>api/swagger-extras.yml</code>; a new or removed definition fails the d
 until its public relevance is reviewed here.</p>
 <ul>
 <li>Public schema baseline: <code>47803fb660ed54cd1f180b616db628461ad85d1a</code></li>
-<li>Reviewed Gateway <code>main</code>: <code>5c0915ffa57ade157351c9811b0931bb71db282f</code></li>
-<li>Added definitions: <strong>38</strong></li>
+<li>Reviewed Gateway <code>main</code>: <code>0d4193a7a43c05b13c5b5125d5c916a1179b2150</code></li>
+<li>Added definitions: <strong>43</strong></li>
 <li>Removed definitions: <strong>0</strong></li>
 <li>Evidence class: <strong>source/static contract only</strong></li>
 </ul>
@@ -2931,12 +2959,12 @@ deploy.</p>
 <tbody>
 <tr>
 <td><code>direct-operation</code></td>
-<td style="text-align: right;">21</td>
+<td style="text-align: right;">23</td>
 <td>Direct request, response, or operation envelope</td>
 </tr>
 <tr>
 <td><code>nested-component</code></td>
-<td style="text-align: right;">14</td>
+<td style="text-align: right;">17</td>
 <td>Public component nested in another operation model</td>
 </tr>
 <tr>
@@ -2954,7 +2982,7 @@ deploy.</p>
 <p>Field notation is <code>name:type</code>; <code>array&lt;Model&gt;</code> identifies an array of
 referenced objects, and braces identify a closed enum from Swagger.</p>
 <h2 id="apiswaggeryml"><code>api/swagger.yml</code><a class="headerlink" href="#apiswaggeryml" title="Permanent link">&para;</a></h2>
-<p><a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/5c0915ffa57ade157351c9811b0931bb71db282f/api/swagger.yml">Open the exact source</a>. Definition count changed from <strong>147</strong> to <strong>183</strong>; <strong>36</strong> definitions were added and <strong>0</strong> removed.</p>
+<p><a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/0d4193a7a43c05b13c5b5125d5c916a1179b2150/api/swagger.yml">Open the exact source</a>. Definition count changed from <strong>147</strong> to <strong>188</strong>; <strong>41</strong> definitions were added and <strong>0</strong> removed.</p>
 <table>
 <thead>
 <tr>
@@ -2989,6 +3017,14 @@ referenced objects, and braces identify a closed enum from Swagger.</p>
 <td>One dropped-record counter, by stream and reason, nested in the audit status.</td>
 <td>none</td>
 <td><code>count:integer(int64)</code>, <code>reason:string</code>, <code>stream:string</code></td>
+<td><a href="../../operations/audit-log/">Details</a></td>
+</tr>
+<tr>
+<td><code>AuditNamedSink</code></td>
+<td><code>direct-operation</code></td>
+<td>A secondary audit sink's configuration, selection filter and export state; certificate material is named by path only.</td>
+<td>none</td>
+<td><code>address:string</code>, <code>ca_bundle_path:string</code>, <code>client_cert_path:string</code>, <code>client_key_path:string</code>, <code>cursor:AuditSinkCursor</code>, <code>enterprise_number:integer(int64)</code>, <code>facility:integer(int64)</code>, <code>filter:AuditSinkFilter</code>, <code>filtered:integer(int64)</code>, <code>lag_drops:integer(int64)</code>, <code>last_error:string</code>, <code>max_frame_bytes:integer(int64)</code>, <code>name:string</code>, <code>poison:integer(int64)</code>, <code>resent:integer(int64)</code>, <code>server_name:string</code>, <code>state:string</code>, <code>submitted:integer(int64)</code>, <code>truncated:integer(int64)</code>, <code>write_errors:integer(int64)</code>, <code>xseq_epoch:integer(int64)</code>, <code>xseq_high:integer(int64)</code></td>
 <td><a href="../../operations/audit-log/">Details</a></td>
 </tr>
 <tr>
@@ -3040,11 +3076,35 @@ referenced objects, and braces identify a closed enum from Swagger.</p>
 <td><a href="../../operations/audit-log/">Details</a></td>
 </tr>
 <tr>
+<td><code>AuditSinkCursor</code></td>
+<td><code>nested-component</code></td>
+<td>A place in the audit trail, the last record a sink is past, nested in sink state.</td>
+<td>none</td>
+<td><code>segment_uuid:string</code>, <code>seq:integer(int64)</code></td>
+<td><a href="../../operations/audit-log/">Details</a></td>
+</tr>
+<tr>
+<td><code>AuditSinkFilter</code></td>
+<td><code>nested-component</code></td>
+<td>What a secondary sink selects from the trail: streams, services, outcome and a data sample rate.</td>
+<td>none</td>
+<td><code>data_sample:integer(int64)</code>, <code>outcome:string</code>, <code>services:array&lt;string&gt;</code>, <code>streams:array&lt;string&gt;</code></td>
+<td><a href="../../operations/audit-log/">Details</a></td>
+</tr>
+<tr>
+<td><code>AuditSinkStatus</code></td>
+<td><code>nested-component</code></td>
+<td>One sink's progress through the trail, listed in the audit status.</td>
+<td>none</td>
+<td><code>compliance:boolean</code>, <code>cursor:AuditSinkCursor</code>, <code>in_active_segment:boolean</code>, <code>lag_drops:integer(int64)</code>, <code>lag_records:integer(int64)</code>, <code>name:string</code>, <code>state:string</code></td>
+<td><a href="../../operations/audit-log/">Details</a></td>
+</tr>
+<tr>
 <td><code>AuditStatus</code></td>
 <td><code>direct-operation</code></td>
 <td>State of the management audit trail: writer liveness, counters, active segment, retention, and orphaned intents.</td>
 <td>none</td>
-<td><code>accepted:object</code>, <code>available:boolean</code>, <code>boot_id:string</code>, <code>compress_failed:integer(int64)</code>, <code>compress_skipped:integer(int64)</code>, <code>delegation_lookups:integer(int64)</code>, <code>dropped:array&lt;AuditDropCount&gt;</code>, <code>heartbeats:integer(int64)</code>, <code>last_orphan_event_id:string</code>, <code>last_write:string</code>, <code>mgmt_timeouts:integer(int64)</code>, <code>originator_dropped:integer(int64)</code>, <code>orphaned_intents:integer(int64)</code>, <code>panics:integer(int64)</code>, <code>path_sanitized:integer(int64)</code>, <code>perm_repaired:integer(int64)</code>, <code>producers:array&lt;AuditProducerStatus&gt;</code>, <code>projected_retention_days:number(double)</code>, <code>pruned:integer(int64)</code>, <code>queue_depth:object</code>, <code>queue_hwm:object</code>, <code>reserve_breached:boolean</code>, <code>reserve_breaches:integer(int64)</code>, <code>restarts:integer(int64)</code>, <code>result_drops:integer(int64)</code>, <code>retention:AuditRetentionPolicy</code>, <code>rotation_failed:integer(int64)</code>, <code>rotations:integer(int64)</code>, <code>running:boolean</code>, <code>sealed_bytes:integer(int64)</code>, <code>segment:AuditSegmentStatus</code>, <code>seq_high:integer(int64)</code>, <code>sync_failures:integer(int64)</code>, <code>unattributed:integer(int64)</code>, <code>write_failures:integer(int64)</code></td>
+<td><code>accepted:object</code>, <code>available:boolean</code>, <code>boot_id:string</code>, <code>compliance_sink:boolean</code>, <code>compress_failed:integer(int64)</code>, <code>compress_skipped:integer(int64)</code>, <code>delegation_lookups:integer(int64)</code>, <code>dropped:array&lt;AuditDropCount&gt;</code>, <code>heartbeats:integer(int64)</code>, <code>last_orphan_event_id:string</code>, <code>last_write:string</code>, <code>mgmt_timeouts:integer(int64)</code>, <code>originator_dropped:integer(int64)</code>, <code>orphaned_intents:integer(int64)</code>, <code>panics:integer(int64)</code>, <code>path_sanitized:integer(int64)</code>, <code>perm_repaired:integer(int64)</code>, <code>producers:array&lt;AuditProducerStatus&gt;</code>, <code>projected_retention_days:number(double)</code>, <code>pruned:integer(int64)</code>, <code>queue_depth:object</code>, <code>queue_hwm:object</code>, <code>reserve_breached:boolean</code>, <code>reserve_breaches:integer(int64)</code>, <code>restarts:integer(int64)</code>, <code>result_drops:integer(int64)</code>, <code>retention:AuditRetentionPolicy</code>, <code>rotation_failed:integer(int64)</code>, <code>rotations:integer(int64)</code>, <code>running:boolean</code>, <code>sealed_bytes:integer(int64)</code>, <code>segment:AuditSegmentStatus</code>, <code>seq_high:integer(int64)</code>, <code>sinks:array&lt;AuditSinkStatus&gt;</code>, <code>sync_failures:integer(int64)</code>, <code>unattributed:integer(int64)</code>, <code>write_failures:integer(int64)</code></td>
 <td><a href="../../operations/audit-log/">Details</a></td>
 </tr>
 <tr>
@@ -3126,6 +3186,14 @@ referenced objects, and braces identify a closed enum from Swagger.</p>
 <td>none</td>
 <td><code>filesystemAttr:array&lt;FileSystemInfoEntry&gt;</code></td>
 <td><a href="../api/">Details</a></td>
+</tr>
+<tr>
+<td><code>HalfCloseConfig</code></td>
+<td><code>direct-operation</code></td>
+<td>The process-wide half-close hold settings: whether new holds may be taken and the idle bound on a hold.</td>
+<td>none</td>
+<td><code>allow:boolean</code>, <code>capSeconds:integer(int32)</code></td>
+<td><a href="../../ai-gateway/configuration-reference/#half-close-hold-half_close_mode">Details</a></td>
 </tr>
 <tr>
 <td><code>JWTAuthProfileEntry</code></td>
@@ -3258,7 +3326,7 @@ referenced objects, and braces identify a closed enum from Swagger.</p>
 </tbody>
 </table>
 <h2 id="apiswagger-extrasyml"><code>api/swagger-extras.yml</code><a class="headerlink" href="#apiswagger-extrasyml" title="Permanent link">&para;</a></h2>
-<p><a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/5c0915ffa57ade157351c9811b0931bb71db282f/api/swagger-extras.yml">Open the exact source</a>. Definition count changed from <strong>2</strong> to <strong>4</strong>; <strong>2</strong> definitions were added and <strong>0</strong> removed.</p>
+<p><a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/0d4193a7a43c05b13c5b5125d5c916a1179b2150/api/swagger-extras.yml">Open the exact source</a>. Definition count changed from <strong>2</strong> to <strong>4</strong>; <strong>2</strong> definitions were added and <strong>0</strong> removed.</p>
 <table>
 <thead>
 <tr>

@@ -424,6 +424,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/prepare-supported-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a Supported Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2911,17 +2939,17 @@ revision. It does <strong>not</strong> prove that every family is present in a p
 deployment: feature activation, traffic, build tags, hardware, and runtime
 configuration still determine whether a series is emitted.</p>
 <ul>
-<li>Gateway source commit: <code>5c0915ffa57ade157351c9811b0931bb71db282f</code></li>
-<li>Gateway main eBPF submodule commit: <code>fefb09b09f9d8f90f1f6b3e98f354249e0802c32</code></li>
+<li>Gateway source commit: <code>0d4193a7a43c05b13c5b5125d5c916a1179b2150</code></li>
+<li>Gateway main eBPF submodule commit: <code>3aa7b2f2b9c401134244964b88ca01a5e3d40552</code></li>
 <li>Comparison release: <code>v0.9.8.9-rc.1</code> at <code>f08b18beda587217265c9ba6419159119914795c</code></li>
 <li>Comparison release eBPF submodule commit: <code>5536a2117ad2ad1128900a0d808ad7dec2eee2b5</code></li>
 <li>Release manifest availability: <strong>absent</strong></li>
 <li>Manifest path: <code>deploy/monitoring/manifest/metric-manifest.json</code></li>
-<li>Manifest SHA-256: <code>f3c031d6c5a81e5c1361046e1f6bc481a32cf07ccaebc18376e94cc82a6cccbc</code></li>
-<li>Embedded manifest source revision: <code>2fd81e1b6baebbf718e55494c0e46627108e712c</code></li>
-<li>Embedded manifest generation time: <code>2026-09-29T14:28:52+00:00</code></li>
+<li>Manifest SHA-256: <code>637423b40f6fca290bdcca3036a505fccb007c9f90b81cc7a126fde2616db70d</code></li>
+<li>Embedded manifest source revision: <code>5a44fdd44f4a93bee3b7975550ab328d6ec9f13b</code></li>
+<li>Embedded manifest generation time: <code>2026-10-02T14:39:41+00:00</code></li>
 <li>Manifest schema version: <code>1</code></li>
-<li>Release-scope families: <strong>231</strong></li>
+<li>Release-scope families: <strong>257</strong></li>
 <li>Raw writer paths and evidence prose are intentionally not copied into this public catalog.</li>
 </ul>
 <p>The table below is therefore a current-main source catalog, not a claim
@@ -2938,11 +2966,11 @@ Release packaging and runtime emission require separate qualification.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>verified-runtime</code> (51)</td>
+<td><code>verified-runtime</code> (67)</td>
 <td>writer plus recorded runtime evidence in the upstream manifest</td>
 </tr>
 <tr>
-<td><code>verified-static</code> (47)</td>
+<td><code>verified-static</code> (57)</td>
 <td>writer verified by static or unit evidence; no runtime claim</td>
 </tr>
 <tr>
@@ -3598,6 +3626,14 @@ lanes separate.</p>
 <td><code>verified-static</code></td>
 </tr>
 <tr>
+<td><code>loxilb_audit_records_lost_to_retention_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
 <td><code>loxilb_audit_records_unattributed_total</code></td>
 <td><code>counter</code></td>
 <td>none</td>
@@ -3641,6 +3677,62 @@ lanes separate.</p>
 <td><code>loxilb_audit_segments_pruned_total</code></td>
 <td><code>counter</code></td>
 <td>none</td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_sink_connected</code></td>
+<td><code>gauge</code></td>
+<td><code>sink</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_sink_cursor_lag_bytes</code></td>
+<td><code>gauge</code></td>
+<td><code>sink</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_sink_cursor_lag_seconds</code></td>
+<td><code>gauge</code></td>
+<td><code>sink</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_sink_export_failures_total</code></td>
+<td><code>counter</code></td>
+<td><code>sink</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_sink_lag_drops_total</code></td>
+<td><code>counter</code></td>
+<td><code>sink</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_sink_poison_total</code></td>
+<td><code>counter</code></td>
+<td><code>sink</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_audit_sink_records_exported_total</code></td>
+<td><code>counter</code></td>
+<td><code>sink</code></td>
 <td><code>C</code></td>
 <td><code>gateway-default</code></td>
 <td><code>verified-static</code></td>
@@ -4438,6 +4530,14 @@ lanes separate.</p>
 <td><code>writer-mapped</code></td>
 </tr>
 <tr>
+<td><code>loxilb_proxy_client_reset_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
 <td><code>loxilb_proxy_context_inflight</code></td>
 <td><code>gauge</code></td>
 <td>none</td>
@@ -4484,6 +4584,126 @@ lanes separate.</p>
 <td><code>E</code></td>
 <td><code>gateway-default</code></td>
 <td><code>writer-mapped</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_accel_early_fin_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_accel_skipped_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_fin_gap_seconds</code></td>
+<td><code>histogram</code></td>
+<td><code>entry</code>, <code>stream</code></td>
+<td><code>P</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_fin_total</code></td>
+<td><code>counter</code></td>
+<td><code>entry</code>, <code>outcome</code></td>
+<td><code>P</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_held</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_held_oldest_seconds</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_hold_allowed</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_hold_cap_seconds</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_hold_ended_total</code></td>
+<td><code>counter</code></td>
+<td><code>reason</code></td>
+<td><code>P</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_hold_expired_total</code></td>
+<td><code>counter</code></td>
+<td><code>answer_started</code>, <code>stream</code></td>
+<td><code>P</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_hold_refused_total</code></td>
+<td><code>counter</code></td>
+<td><code>reason</code></td>
+<td><code>P</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_hold_spurious_wakeups_total</code></td>
+<td><code>counter</code></td>
+<td><code>kind</code></td>
+<td><code>P</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_hold_total</code></td>
+<td><code>counter</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_tls_fin_total</code></td>
+<td><code>counter</code></td>
+<td><code>path</code>, <code>early_owed</code></td>
+<td><code>P</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_user_agent_total</code></td>
+<td><code>counter</code></td>
+<td><code>family</code></td>
+<td><code>P</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
 </tr>
 <tr>
 <td><code>loxilb_proxy_header_deadline_drops_total</code></td>
@@ -4610,6 +4830,22 @@ lanes separate.</p>
 <td><code>gauge</code></td>
 <td><code>vip</code>, <code>port</code>, <code>proto</code>, <code>direction</code></td>
 <td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_response_first_write_gap_seconds</code></td>
+<td><code>histogram</code></td>
+<td><code>stream</code></td>
+<td><code>P</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_response_max_write_gap_seconds</code></td>
+<td><code>histogram</code></td>
+<td><code>stream</code></td>
+<td><code>P</code></td>
 <td><code>gateway-default</code></td>
 <td><code>verified-runtime</code></td>
 </tr>

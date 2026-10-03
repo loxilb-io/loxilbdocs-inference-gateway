@@ -424,6 +424,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/prepare-supported-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a Supported Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1237,6 +1265,17 @@
     <span class="md-ellipsis">
       
         Capacity admission gate (fc_*)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#half-close-hold-half_close_mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Half-close hold (half_close_mode)
       
     </span>
   </a>
@@ -3126,6 +3165,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#half-close-hold-half_close_mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Half-close hold (half_close_mode)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3874,6 +3924,55 @@ replace <code>POST</code>; explicit JSON <code>null</code> is refused. The full 
 </tr>
 </tbody>
 </table>
+<h3 id="half-close-hold-half_close_mode">Half-close hold (<code>half_close_mode</code>)<a class="headerlink" href="#half-close-hold-half_close_mode" title="Permanent link">&para;</a></h3>
+<p>What a FullProxy service does with a client that half-closes (shuts down its write side) after
+sending its request.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>half_close_mode</code></td>
+<td>string</td>
+<td><code>off</code>, <code>hold</code>, <code>hold+parked</code>, <code>inherit</code></td>
+<td><code>inherit</code> (process default <code>off</code>)</td>
+<td><code>off</code> cuts the client at its FIN. <code>hold</code> keeps it open until the answer is out, where the gateway relays the answer itself (a plaintext connection the kernel was never given to carry); the client is then closed once its answers are written, once the backend ends the answer's connection, when no answer byte has reached it for the hold bound, or on release. With <code>sockMapMode</code> other than <code>off</code>, a client whose FIN arrives before its connection is accelerated is not accelerated, so it can be held. <code>hold+parked</code> is refused <code>400</code> until it is available. <code>hold</code> is refused <code>400</code> unless the service is <code>mode: 4</code> fullproxy, without TLS (<code>security</code> 1 or 2 are never held) and without <code>pd_disagg_mode</code>. Read back only when declared.</td>
+</tr>
+</tbody>
+</table>
+<p>The process-wide hold settings apply to every service whose mode is <code>hold</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /config/halfclose</code></td>
+<td><code>allow</code> (whether new holds may be taken) and <code>capSeconds</code> (the idle bound on a hold, <code>1</code>–<code>3600</code>). Until set, the defaults are in force: allowed, <code>240</code> seconds.</td>
+</tr>
+<tr>
+<td><code>POST /config/halfclose</code></td>
+<td>Set either field; an omitted field keeps its value, and a body with neither or with an unknown field is refused <code>400</code>. <code>allow: false</code> blocks new holds only: clients already held stay held until their answers are out or the bound ends them. A new bound applies to every hold, those already held included. Kept across a restart and in a configuration snapshot.</td>
+</tr>
+<tr>
+<td><code>POST /config/halfclose/release</code></td>
+<td>Close every held client on every service within a second, as it would have been closed without the hold. An answer still on its way is lost. Nothing is stored: block new holds first to stop them.</td>
+</tr>
+</tbody>
+</table>
+<p>The bound's clock starts once the request has reached the backend and restarts with every write of
+the answer. The <code>loxilb_proxy_halfclose_*</code> families report held clients, refused and expired holds
+and the settings in force; see the generated <a href="../../reference/metrics/">Metrics reference</a>.</p>
 <hr />
 <h2 id="4-kv-cache-exact-routing">4. KV-cache exact routing<a class="headerlink" href="#4-kv-cache-exact-routing" title="Permanent link">&para;</a></h2>
 <p>Tier 1.5 block-hash routing between the trie (Tier 1) and min-load (Tier 2) tiers. The KV-hash
