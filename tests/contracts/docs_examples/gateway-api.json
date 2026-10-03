@@ -3501,7 +3501,7 @@
     ]
   },
   "source": {
-    "commit": "0d4193a7a43c05b13c5b5125d5c916a1179b2150",
+    "commit": "ba7dc4b95281a3b4d5a0f6eb4450ce7ad141fa79",
     "ebpf_submodule_commit": "3aa7b2f2b9c401134244964b88ca01a5e3d40552",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",

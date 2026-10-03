@@ -6,7 +6,7 @@ and `api/swagger-extras.yml`; a new or removed definition fails the docs gate
 until its public relevance is reviewed here.
 
 - Public schema baseline: `47803fb660ed54cd1f180b616db628461ad85d1a`
-- Reviewed Gateway `main`: `0d4193a7a43c05b13c5b5125d5c916a1179b2150`
+- Reviewed Gateway `main`: `ba7dc4b95281a3b4d5a0f6eb4450ce7ad141fa79`
 - Added definitions: **43**
 - Removed definitions: **0**
 - Evidence class: **source/static contract only**
@@ -30,7 +30,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 
 ## `api/swagger.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/0d4193a7a43c05b13c5b5125d5c916a1179b2150/api/swagger.yml). Definition count changed from **147** to **188**; **41** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/ba7dc4b95281a3b4d5a0f6eb4450ce7ad141fa79/api/swagger.yml). Definition count changed from **147** to **188**; **41** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |
@@ -78,7 +78,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 
 ## `api/swagger-extras.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/0d4193a7a43c05b13c5b5125d5c916a1179b2150/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/ba7dc4b95281a3b4d5a0f6eb4450ce7ad141fa79/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |
