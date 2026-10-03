@@ -1896,7 +1896,7 @@
     },
     {
       "evidence": "non-standalone-mutation-fragment",
-      "id": "29c6a39ffcc11c6344f8",
+      "id": "1069ba2c8b93364ae0e7",
       "language": "bash",
       "line": 178,
       "mutation_contract": {
@@ -1908,7 +1908,7 @@
         "mode": "illustrative-fragment",
         "negative_no_mutation": true,
         "operations": [
-          "DELETE /config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/8080/protocol/tcp"
+          "DELETE /config/loadbalancer/externalipaddress/192.0.2.10/port/8080/protocol/tcp"
         ],
         "workflow": "/getting-started/quickstart/"
       },
@@ -1921,7 +1921,7 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "a7f732ddc50be8f72dc88fb3b81280a08ff93086ee115e792d47dde3b2378c5b",
+      "sha256": "89042d6cabc714f93e4c25d54059a8cf429deaa0edb9738a47db2e001af1b166",
       "status": "illustrative-only"
     },
     {
@@ -5444,7 +5444,7 @@
     },
     {
       "evidence": "non-standalone-mutation-fragment",
-      "id": "66aa68cf0464b38287a5",
+      "id": "7a713307f3364f0258ec",
       "language": "bash",
       "line": 199,
       "mutation_contract": {
@@ -5456,7 +5456,7 @@
         "mode": "illustrative-fragment",
         "negative_no_mutation": true,
         "operations": [
-          "DELETE /config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/8080/protocol/tcp"
+          "DELETE /config/loadbalancer/externalipaddress/192.0.2.10/port/8080/protocol/tcp"
         ],
         "workflow": "/getting-started/quickstart/"
       },
@@ -5469,7 +5469,7 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "515c35b1eef2934343f0ca0897198a1b3c3e5cd4e3d9e6f57732810a492ad8b6",
+      "sha256": "cfd3d61390a6ef0286ebbc6834023d22da4c2b3305771c6da0c8e6a6a77d9a83",
       "status": "illustrative-only"
     },
     {
