@@ -198,7 +198,7 @@ scenario source but does not rerun it, qualify a vendor kernel, or publish a per
 ```bash
 curl --fail-with-body --silent --show-error \
   --request DELETE --header @control-plane.headers \
-  "$CONTROL_API/config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/8080/protocol/tcp"
+  "$CONTROL_API/config/loadbalancer/externalipaddress/192.0.2.10/port/8080/protocol/tcp"
 
 rm -f ./control-plane.headers
 unset CONTROL_PLANE_TOKEN CONTROL_API

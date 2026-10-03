@@ -177,7 +177,7 @@ real-engine support remains limited to the immutable tuples marked `validated` i
 ```bash
 curl --fail-with-body --silent --show-error \
   --request DELETE --header @control-plane.headers \
-  "$CONTROL_API/config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/8080/protocol/tcp?model_name=Qwen%2FQwen3-0.6B"
+  "$CONTROL_API/config/loadbalancer/externalipaddress/192.0.2.10/port/8080/protocol/tcp?model_name=Qwen%2FQwen3-0.6B"
 
 rm -f ./control-plane.headers ./model-profiles.json ./kv-status.json
 unset CONTROL_PLANE_TOKEN CONTROL_API
