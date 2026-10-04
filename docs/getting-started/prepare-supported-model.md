@@ -187,7 +187,11 @@ curl --fail-with-body --silent --show-error http://<engine-host>:8000/v1/models
 
 Continue on [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md): create the
 rule with `kvModelProfile`, `kvEngineType`, `kvBlockSize: 16` and the `kvExactMode` of your topology, then read
-`kvexactstatus` until `enforcedState` is `READY`. Before `READY`, `reasonCodes` names what is missing:
+`kvexactstatus` until `enforcedState` is `READY`. The example on that page is a single pool. For P/D, the rule
+also sets `pd_disagg_mode: true` and tags every endpoint with `ep_role` (`1` prefill, `2` decode) and
+`nixl_port`; the rule body is in
+[Deploy: Prefill/Decode Disaggregation](../use-cases/deploy-pd-disaggregation.md#52-the-lb-rules-four-modes-to-compare).
+Before `READY`, `reasonCodes` names what is missing:
 
 | Reason code | Usual cause on a fresh setup |
 |---|---|
