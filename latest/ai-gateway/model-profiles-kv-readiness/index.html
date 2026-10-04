@@ -3116,6 +3116,13 @@ a valid legacy-mode discovery response, not readiness for a strict rule. A detai
 <p>The example is a single-pool vLLM shape. Replace <code>example-profile</code> with an ID returned by
 discovery and make the block/hash settings match the deployed engine. For vLLM, first require
 <code>kv_exact_vllm.ready=true</code> from <code>GET /status/capabilities</code>.</p>
+<p>A prefill/decode rule uses <code>kvExactMode: 1</code> and the same profile fields, plus <code>pd_disagg_mode: true</code> and an
+<code>ep_role</code> (<code>1</code> prefill, <code>2</code> decode) and <code>nixl_port</code> on every endpoint. See
+<a href="../../use-cases/deploy-pd-disaggregation/#52-the-lb-rules-four-modes-to-compare">Deploy: Prefill/Decode Disaggregation</a>
+for that rule body.</p>
+<p>For SGLang, set <code>kvEngineType: sglang</code> and leave <code>kvHashAlgo</code> out: the rule then takes the engine's default,
+<code>sha256_sglang</code>. <code>sha256_cbor</code> is the vLLM algorithm, and a rule that combines it with <code>kvEngineType: sglang</code> is
+rejected with HTTP 400 and no rule is created.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>

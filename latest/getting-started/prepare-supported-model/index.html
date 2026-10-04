@@ -3235,7 +3235,11 @@ of their own.</p>
 <h2 id="6-bind-the-rule-and-wait-for-ready">6. Bind the rule and wait for READY<a class="headerlink" href="#6-bind-the-rule-and-wait-for-ready" title="Permanent link">&para;</a></h2>
 <p>Continue on <a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a>: create the
 rule with <code>kvModelProfile</code>, <code>kvEngineType</code>, <code>kvBlockSize: 16</code> and the <code>kvExactMode</code> of your topology, then read
-<code>kvexactstatus</code> until <code>enforcedState</code> is <code>READY</code>. Before <code>READY</code>, <code>reasonCodes</code> names what is missing:</p>
+<code>kvexactstatus</code> until <code>enforcedState</code> is <code>READY</code>. The example on that page is a single pool. For P/D, the rule
+also sets <code>pd_disagg_mode: true</code> and tags every endpoint with <code>ep_role</code> (<code>1</code> prefill, <code>2</code> decode) and
+<code>nixl_port</code>; the rule body is in
+<a href="../../use-cases/deploy-pd-disaggregation/#52-the-lb-rules-four-modes-to-compare">Deploy: Prefill/Decode Disaggregation</a>.
+Before <code>READY</code>, <code>reasonCodes</code> names what is missing:</p>
 <table>
 <thead>
 <tr>
