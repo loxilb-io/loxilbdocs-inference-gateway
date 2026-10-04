@@ -1851,7 +1851,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "7a49a9c606e4d84550f5",
       "language": "bash",
-      "line": 75,
+      "line": 80,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -1881,7 +1881,7 @@
       "evidence": "swagger-union-static",
       "id": "ca3f2cbb615276bb893c",
       "language": "bash",
-      "line": 111,
+      "line": 116,
       "path": "docs/ai-gateway/model-profiles-kv-readiness.md",
       "quality_contract": {
         "cleanup": true,
@@ -1898,7 +1898,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "1069ba2c8b93364ae0e7",
       "language": "bash",
-      "line": 178,
+      "line": 183,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
