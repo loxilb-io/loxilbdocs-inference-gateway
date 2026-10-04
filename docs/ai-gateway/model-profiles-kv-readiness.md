@@ -76,6 +76,10 @@ A prefill/decode rule uses `kvExactMode: 1` and the same profile fields, plus `p
 [Deploy: Prefill/Decode Disaggregation](../use-cases/deploy-pd-disaggregation.md#52-the-lb-rules-four-modes-to-compare)
 for that rule body.
 
+For SGLang, set `kvEngineType: sglang` and leave `kvHashAlgo` out: the rule then takes the engine's default,
+`sha256_sglang`. `sha256_cbor` is the vLLM algorithm, and a rule that combines it with `kvEngineType: sglang` is
+rejected with HTTP 400 and no rule is created.
+
 ```bash
 curl --fail-with-body --silent --show-error \
   --request POST "$CONTROL_API/config/loadbalancer" \
