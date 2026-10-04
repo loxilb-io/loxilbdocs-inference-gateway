@@ -71,6 +71,15 @@ The example is a single-pool vLLM shape. Replace `example-profile` with an ID re
 discovery and make the block/hash settings match the deployed engine. For vLLM, first require
 `kv_exact_vllm.ready=true` from `GET /status/capabilities`.
 
+A prefill/decode rule uses `kvExactMode: 1` and the same profile fields, plus `pd_disagg_mode: true` and an
+`ep_role` (`1` prefill, `2` decode) and `nixl_port` on every endpoint. See
+[Deploy: Prefill/Decode Disaggregation](../use-cases/deploy-pd-disaggregation.md#52-the-lb-rules-four-modes-to-compare)
+for that rule body.
+
+For SGLang, set `kvEngineType: sglang` and leave `kvHashAlgo` out: the rule then takes the engine's default,
+`sha256_sglang`. `sha256_cbor` is the vLLM algorithm, and a rule that combines it with `kvEngineType: sglang` is
+rejected with HTTP 400 and no rule is created.
+
 ```bash
 curl --fail-with-body --silent --show-error \
   --request POST "$CONTROL_API/config/loadbalancer" \
