@@ -87,6 +87,7 @@ For KV-exact mode, the tokenizer, model identity, block/page size, hash contract
 | `pd_disagg_mode` | `false` | Enable the engine-specific P/D orchestrator. |
 | `pd_cache_aware_mode` | `false` | Add radix-trie prefix affinity to the P/D ladder. Session stickiness and load fallback do not depend on this flag. Requires P/D. |
 | `pd_session_ttl_sec` | `0` in the API | Session lifetime in seconds. The data path converts `0` to its 300-second runtime default. |
+| `pd_prefill_timeout_sec` | `0` | Longest wait in seconds for the prefill stage before `504 pd_prefill_timeout`, `0`–`3600`. `0` uses the process default (30 seconds, or `LLB_PD_PREFILL_TIMEOUT_SEC`). Requires P/D. |
 | `pd_cache_threshold` | `20` | Minimum prefix-trie match percentage. |
 | `pd_balance_abs_threshold` | `3` | Active-connection spread that bypasses the optional radix-trie choice and uses load fallback. |
 | `kvExactMode` | `0` | `1` adds P/D KV-exact selection; `3` is invalid with P/D. |

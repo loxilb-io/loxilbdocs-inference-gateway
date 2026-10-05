@@ -7,17 +7,17 @@ revision. It does **not** prove that every family is present in a particular
 deployment: feature activation, traffic, build tags, hardware, and runtime
 configuration still determine whether a series is emitted.
 
-- Gateway source commit: `cd118cd8b919e812f84faea44657d11f0dcda847`
-- Gateway main eBPF submodule commit: `3aa7b2f2b9c401134244964b88ca01a5e3d40552`
+- Gateway source commit: `080d8b1b76b7f380d083e19ffb3bc32eb29754fc`
+- Gateway main eBPF submodule commit: `3d376b01870c290b7c61e20d59d59e6a2dc5999b`
 - Comparison release: `v0.9.8.9-rc.1` at `f08b18beda587217265c9ba6419159119914795c`
 - Comparison release eBPF submodule commit: `5536a2117ad2ad1128900a0d808ad7dec2eee2b5`
 - Release manifest availability: **absent**
 - Manifest path: `deploy/monitoring/manifest/metric-manifest.json`
-- Manifest SHA-256: `637423b40f6fca290bdcca3036a505fccb007c9f90b81cc7a126fde2616db70d`
-- Embedded manifest source revision: `5a44fdd44f4a93bee3b7975550ab328d6ec9f13b`
-- Embedded manifest generation time: `2026-10-02T14:39:41+00:00`
+- Manifest SHA-256: `c04c2822ff3ef304a9a3edbc597b5eb5dd9578ce5bf4a3d69245db8c01f63f4f`
+- Embedded manifest source revision: `81495fb6909c2e86de3798a582b0d56641632ab1`
+- Embedded manifest generation time: `2026-10-05T07:35:43+00:00`
 - Manifest schema version: `1`
-- Release-scope families: **257**
+- Release-scope families: **258**
 - Raw writer paths and evidence prose are intentionally not copied into this public catalog.
 
 The table below is therefore a current-main source catalog, not a claim
@@ -29,7 +29,7 @@ Release packaging and runtime emission require separate qualification.
 
 | Status | Meaning |
 | --- | --- |
-| `verified-runtime` (67) | writer plus recorded runtime evidence in the upstream manifest |
+| `verified-runtime` (68) | writer plus recorded runtime evidence in the upstream manifest |
 | `verified-static` (57) | writer verified by static or unit evidence; no runtime claim |
 | `conditional-with-proven-writer` (69) | writer exists but the family appears only when its feature path is active |
 | `writer-mapped` (64) | writer source is mapped; runtime emission was not verified |
@@ -261,6 +261,7 @@ Combined codes such as `D+V` require both conditions.
 | `loxilb_proxy_halfclose_held_oldest_seconds` | `gauge` | none | `E` | `gateway-default` | `verified-runtime` |
 | `loxilb_proxy_halfclose_hold_allowed` | `gauge` | none | `E` | `gateway-default` | `verified-runtime` |
 | `loxilb_proxy_halfclose_hold_cap_seconds` | `gauge` | none | `E` | `gateway-default` | `verified-runtime` |
+| `loxilb_proxy_halfclose_hold_default_mode` | `gauge` | none | `E` | `gateway-default` | `verified-runtime` |
 | `loxilb_proxy_halfclose_hold_ended_total` | `counter` | `reason` | `P` | `gateway-default` | `verified-runtime` |
 | `loxilb_proxy_halfclose_hold_expired_total` | `counter` | `answer_started`, `stream` | `P` | `gateway-default` | `verified-runtime` |
 | `loxilb_proxy_halfclose_hold_refused_total` | `counter` | `reason` | `P` | `gateway-default` | `verified-static` |

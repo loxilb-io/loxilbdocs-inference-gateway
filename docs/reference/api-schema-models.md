@@ -6,7 +6,7 @@ and `api/swagger-extras.yml`; a new or removed definition fails the docs gate
 until its public relevance is reviewed here.
 
 - Public schema baseline: `47803fb660ed54cd1f180b616db628461ad85d1a`
-- Reviewed Gateway `main`: `cd118cd8b919e812f84faea44657d11f0dcda847`
+- Reviewed Gateway `main`: `080d8b1b76b7f380d083e19ffb3bc32eb29754fc`
 - Added definitions: **43**
 - Removed definitions: **0**
 - Evidence class: **source/static contract only**
@@ -30,7 +30,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 
 ## `api/swagger.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/cd118cd8b919e812f84faea44657d11f0dcda847/api/swagger.yml). Definition count changed from **147** to **188**; **41** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/080d8b1b76b7f380d083e19ffb3bc32eb29754fc/api/swagger.yml). Definition count changed from **147** to **188**; **41** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |
@@ -58,7 +58,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 | `EbpfAttachmentStatus` | `nested-component` | One observable eBPF hook attachment fact nested in readiness or diagnostics. | `name:string`, `mode:string{tc/xdp}`, `attached:boolean` | none | [Details](../operations/readiness-diagnostics-maintenance.md) |
 | `ExternalDependencyStatus` | `nested-component` | Credential-free identity and disposition of one external recovery dependency. | none | `digest:string`, `generation:string`, `id:string`, `required:boolean`, `status:string{ready/configured/verified/warning/failed/declared}`, `type:string` | [Details](../operations/backup-restore.md) |
 | `FilesystemStatus` | `direct-operation` | Formal schema for the existing filesystem-status response. | none | `filesystemAttr:array<FileSystemInfoEntry>` | [Details](api.md) |
-| `HalfCloseConfig` | `direct-operation` | The process-wide half-close hold settings: whether new holds may be taken and the idle bound on a hold. | none | `allow:boolean`, `capSeconds:integer(int32)` | [Details](../ai-gateway/configuration-reference.md#half-close-hold-half_close_mode) |
+| `HalfCloseConfig` | `direct-operation` | The process-wide half-close hold settings: whether new holds may be taken and the idle bound on a hold. | none | `allow:boolean`, `capSeconds:integer(int32)`, `defaultMode:string` | [Details](../ai-gateway/configuration-reference.md#half-close-hold-half_close_mode) |
 | `JWTAuthProfileEntry` | `direct-operation` | Named data-plane JWT issuer, JWKS, claim mapping, algorithm, and forwarding policy. | `name:string`, `issuer:string` | `algs:array<string>`, `audiences:array<string>`, `authorization_passthrough:boolean`, `default_tenant:string`, `forward_identity:boolean`, `jwks_url:string`, `leeway_sec:integer(int64)`, `model_authz:string{claims-required/allow-all}`, `model_role_prefix:string`, `models_claim:string`, `refresh_sec:integer(int64)`, `roles_claim:string`, `tenant_claim:string`, `user_claim:string`, `username_claim:string` | [Details](../security/data-plane-jwt-auth.md) |
 | `KvExactEnforcement` | `nested-component` | Desired versus acknowledged KV-exact enforcement and migration-fence state. | `desired:string`, `enforced:string` | `fault:string`, `goFenced:boolean`, `lastAckAt:string` | [Details](../ai-gateway/model-profiles-kv-readiness.md) |
 | `KvExactStatusEntry` | `direct-operation` | Resolved rule, profile, engine-contract, binding, and enforcement readiness status. | `ruleIdentity:string`, `modelName:string`, `engineFamily:string`, `apiMode:string`, `desiredState:string`, `enforcedState:string`, `reasonCodes:array<string>` | `bindingDigest:string`, `bindingGen:integer(uint32)`, `enforcement:KvExactEnforcement`, `engineContractGen:integer(uint64)`, `engineContractId:string`, `hashContractId:string`, `modelProfileGen:integer(uint64)`, `modelProfileId:string`, `pdDialectId:string`, `requiredEvidenceLevel:string`, `wireSchemaId:string` | [Details](../ai-gateway/model-profiles-kv-readiness.md) |
@@ -78,7 +78,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 
 ## `api/swagger-extras.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/cd118cd8b919e812f84faea44657d11f0dcda847/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/080d8b1b76b7f380d083e19ffb3bc32eb29754fc/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |

@@ -594,7 +594,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "0f8ba8345a9fa4e3fcf4",
       "language": "bash",
-      "line": 408,
+      "line": 409,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -624,7 +624,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "469ff84d884af3db8b8a",
       "language": "bash",
-      "line": 439,
+      "line": 440,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -654,7 +654,7 @@
       "evidence": "syntax-only",
       "id": "97719106288800271ea8",
       "language": "json",
-      "line": 447,
+      "line": 448,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -671,7 +671,7 @@
       "evidence": "swagger-union-static",
       "id": "0c9409d1f0ea6ac8f193",
       "language": "bash",
-      "line": 466,
+      "line": 467,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -688,7 +688,7 @@
       "evidence": "cli-contract-static",
       "id": "14b64cf9f36bfc739c2b",
       "language": "bash",
-      "line": 474,
+      "line": 475,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -2030,7 +2030,7 @@
       "evidence": "unexecuted-example",
       "id": "2381cc906b11aa307a2f",
       "language": "text",
-      "line": 112,
+      "line": 113,
       "path": "docs/ai-gateway/pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -7057,7 +7057,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "0a27b50ca660c6d5fdd6",
       "language": "bash",
-      "line": 98,
+      "line": 99,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -7087,7 +7087,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "c8e22afccf873e844e2e",
       "language": "bash",
-      "line": 118,
+      "line": 119,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -7117,7 +7117,7 @@
       "evidence": "shell-syntax-only",
       "id": "d5026f91c72fed43c0bf",
       "language": "bash",
-      "line": 206,
+      "line": 207,
       "path": "docs/use-cases/configuration-tuning.md",
       "quality_contract": {
         "cleanup": false,
@@ -7134,7 +7134,7 @@
       "evidence": "shell-syntax-only",
       "id": "07804b89edfb3216aae6",
       "language": "bash",
-      "line": 289,
+      "line": 290,
       "path": "docs/use-cases/configuration-tuning.md",
       "quality_contract": {
         "cleanup": false,

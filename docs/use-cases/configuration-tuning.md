@@ -53,6 +53,7 @@ Endpoint: `POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer`.
 | `sse_mode` | bool | false | — | Marks an SSE/streaming service (suppresses idle timeouts mid-stream). Set explicitly — `pd_disagg_mode` does **not** turn it on |
 | `pd_disagg_mode` | bool | false | — | Enables P/D disaggregation and the full tier ladder |
 | `pd_session_ttl_sec` | int32 | 0 | ≥0 | Tier-0 pin TTL. The data path converts 0 to its 300-second runtime default |
+| `pd_prefill_timeout_sec` | int32 | 0 | 0–3600 | Prefill-stage wait bound for this rule, in seconds. 0 uses the process default (`LLB_PD_PREFILL_TIMEOUT_SEC`, else 30) |
 | `pd_cache_aware_mode` | bool | false | — | Enables Tier 1 (radix-trie affinity); requires `pd_disagg_mode` |
 | `pd_cache_threshold` | int32 | 20 | 0–100 | Tier-1 minimum prefix match-rate. A submitted 0 is converted to 20, so 0 cannot disable this check |
 | `pd_balance_abs_threshold` | int32 | 3 | 0–255 | Tier-1 load-imbalance bypass. A submitted 0 becomes 3; the data path stores the value as unsigned 8-bit |
@@ -146,7 +147,7 @@ Set with `docker run -e …`; all read once at startup.
 | `LLB_KV_NONE_HASH_SEED` | Required for vLLM KV-exact; otherwise unset | 1–23 bytes for vLLM KV-exact | **Must equal vLLM's `PYTHONHASHSEED`**. Current Gateway main refuses vLLM `kvExactMode` rule creation with HTTP `412` when the value is unset, empty, or too long. |
 | `LLB_KV_HASH_DEBUG` | off | `1` | Per-block hash forensic logging (testbed only) |
 | `LLB_KV_LOADGUARD` | off | non-`0` | Hard load-imbalance pre-guard before Tier 1.5 |
-| `LLB_PD_PREFILL_TIMEOUT_SEC` | 30 | int | Prefill-leg timeout. **Raise to ≥180 for long-context (32k) fleets** — the 30 s default times out most requests under load |
+| `LLB_PD_PREFILL_TIMEOUT_SEC` | 30 | int | Prefill-leg timeout. **Raise to ≥180 for long-context (32k) fleets** — the 30 s default times out most requests under load. Process-wide; a rule can override it with `pd_prefill_timeout_sec` |
 | `LLB_PD_MAX_INFLIGHT_PER_EP` | 0 (off) | 0<n<100000 | Admission: per-endpoint in-flight prefill cap |
 | `LLB_PD_QUEUE_DEPTH_PER_EP` | 0 (off) | n>0 (clamped 64) | Admission: park queue depth (hold-don't-drop) |
 | `LLB_PD_MAX_PARK_SEC` | 0 (→ prefill timeout) | 0<n<100000 | Admission: parked-request reap deadline |
@@ -238,7 +239,7 @@ above for the full list); the ones below are the parity/preflight-critical subse
 
 | Var | Default | Set to | Why |
 |---|---|---|---|
-| `LLB_PD_PREFILL_TIMEOUT_SEC` | 30 | **180** for long-context (≈32k) fleets | The 30 s default returns `504 pd_prefill_timeout` on most long-context requests under load |
+| `LLB_PD_PREFILL_TIMEOUT_SEC` | 30 | **180** for long-context (≈32k) fleets | The 30 s default returns `504 pd_prefill_timeout` on most long-context requests under load. To raise it for one service only, set `pd_prefill_timeout_sec` on that rule |
 | `LOXILB_KV_LB_MODE` | (unset → `hard`) | `off` \| `hard` \| `soft` \| `adaptive` \| `adaptive-soft` | Set **explicitly** for reproducible measurements; leaving it implicit hides which law is active |
 | `LLB_PD_MAX_INFLIGHT_PER_EP` | 0 (off) | per-EP in-flight cap | Admission gate — opt-in |
 | `LLB_PD_QUEUE_DEPTH_PER_EP` | 0 (off) | park-queue depth | Admission gate — opt-in |
