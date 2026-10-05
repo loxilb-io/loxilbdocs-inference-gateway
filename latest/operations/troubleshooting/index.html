@@ -3615,7 +3615,7 @@ side-channel. It is sensitive to GPU block-count agreement and to mesh restart d
 <tr>
 <td>Client gets <code>504 pd_prefill_timeout</code> on long contexts</td>
 <td>Prefill exceeded the timeout (default <strong>30s</strong>, tripped around ~32k-token contexts).</td>
-<td>Raise <code>LLB_PD_PREFILL_TIMEOUT_SEC</code> on loxilb (e.g. <code>180</code> for long-context workloads).</td>
+<td>Raise the bound for the affected service with <code>pd_prefill_timeout_sec</code> on its rule (e.g. <code>180</code> for long-context workloads), or for every P/D service with <code>LLB_PD_PREFILL_TIMEOUT_SEC</code> on loxilb.</td>
 </tr>
 </tbody>
 </table>

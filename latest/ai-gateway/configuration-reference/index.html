@@ -4218,6 +4218,13 @@ rejected when P/D is enabled. See <a href="../pd-disaggregation/">P/D Disaggrega
 <td>Tier-0 P/D session-stickiness TTL (seconds). Runtime <code>0</code> selects the 300-second default; it does not disable expiry. This applies to P/D session lookup independently of <code>pd_cache_aware_mode</code>; that field controls the optional radix-trie tier.</td>
 </tr>
 <tr>
+<td><code>pd_prefill_timeout_sec</code></td>
+<td>int32</td>
+<td><code>0</code></td>
+<td><code>0</code>–<code>3600</code></td>
+<td>Longest wait (seconds) for the prefill stage of a P/D request before the Gateway answers <code>504 pd_prefill_timeout</code>. <code>0</code> uses the process default: 30 seconds, or <code>LLB_PD_PREFILL_TIMEOUT_SEC</code> when set. A positive value overrides the default for this rule only and can be changed on a live rule by a replace POST. A nonzero value requires <code>pd_disagg_mode: true</code>; JSON <code>null</code> is rejected and PATCH does not accept the field.</td>
+</tr>
+<tr>
 <td><code>pd_cache_threshold</code></td>
 <td>int32</td>
 <td><code>20</code></td>

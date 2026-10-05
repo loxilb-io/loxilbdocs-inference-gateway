@@ -3257,6 +3257,11 @@ contracts on this page; do not generalize a passing HTTP/2 auth test into engine
 <td>Session lifetime in seconds. The data path converts <code>0</code> to its 300-second runtime default.</td>
 </tr>
 <tr>
+<td><code>pd_prefill_timeout_sec</code></td>
+<td style="text-align: right;"><code>0</code></td>
+<td>Longest wait in seconds for the prefill stage before <code>504 pd_prefill_timeout</code>, <code>0</code>–<code>3600</code>. <code>0</code> uses the process default (30 seconds, or <code>LLB_PD_PREFILL_TIMEOUT_SEC</code>). Requires P/D.</td>
+</tr>
+<tr>
 <td><code>pd_cache_threshold</code></td>
 <td style="text-align: right;"><code>20</code></td>
 <td>Minimum prefix-trie match percentage.</td>

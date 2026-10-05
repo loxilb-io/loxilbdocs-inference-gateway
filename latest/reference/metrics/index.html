@@ -2939,17 +2939,17 @@ revision. It does <strong>not</strong> prove that every family is present in a p
 deployment: feature activation, traffic, build tags, hardware, and runtime
 configuration still determine whether a series is emitted.</p>
 <ul>
-<li>Gateway source commit: <code>cd118cd8b919e812f84faea44657d11f0dcda847</code></li>
-<li>Gateway main eBPF submodule commit: <code>3aa7b2f2b9c401134244964b88ca01a5e3d40552</code></li>
+<li>Gateway source commit: <code>080d8b1b76b7f380d083e19ffb3bc32eb29754fc</code></li>
+<li>Gateway main eBPF submodule commit: <code>3d376b01870c290b7c61e20d59d59e6a2dc5999b</code></li>
 <li>Comparison release: <code>v0.9.8.9-rc.1</code> at <code>f08b18beda587217265c9ba6419159119914795c</code></li>
 <li>Comparison release eBPF submodule commit: <code>5536a2117ad2ad1128900a0d808ad7dec2eee2b5</code></li>
 <li>Release manifest availability: <strong>absent</strong></li>
 <li>Manifest path: <code>deploy/monitoring/manifest/metric-manifest.json</code></li>
-<li>Manifest SHA-256: <code>637423b40f6fca290bdcca3036a505fccb007c9f90b81cc7a126fde2616db70d</code></li>
-<li>Embedded manifest source revision: <code>5a44fdd44f4a93bee3b7975550ab328d6ec9f13b</code></li>
-<li>Embedded manifest generation time: <code>2026-10-02T14:39:41+00:00</code></li>
+<li>Manifest SHA-256: <code>c04c2822ff3ef304a9a3edbc597b5eb5dd9578ce5bf4a3d69245db8c01f63f4f</code></li>
+<li>Embedded manifest source revision: <code>81495fb6909c2e86de3798a582b0d56641632ab1</code></li>
+<li>Embedded manifest generation time: <code>2026-10-05T07:35:43+00:00</code></li>
 <li>Manifest schema version: <code>1</code></li>
-<li>Release-scope families: <strong>257</strong></li>
+<li>Release-scope families: <strong>258</strong></li>
 <li>Raw writer paths and evidence prose are intentionally not copied into this public catalog.</li>
 </ul>
 <p>The table below is therefore a current-main source catalog, not a claim
@@ -2966,7 +2966,7 @@ Release packaging and runtime emission require separate qualification.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>verified-runtime</code> (67)</td>
+<td><code>verified-runtime</code> (68)</td>
 <td>writer plus recorded runtime evidence in the upstream manifest</td>
 </tr>
 <tr>
@@ -4643,6 +4643,14 @@ lanes separate.</p>
 </tr>
 <tr>
 <td><code>loxilb_proxy_halfclose_hold_cap_seconds</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-runtime</code></td>
+</tr>
+<tr>
+<td><code>loxilb_proxy_halfclose_hold_default_mode</code></td>
 <td><code>gauge</code></td>
 <td>none</td>
 <td><code>E</code></td>

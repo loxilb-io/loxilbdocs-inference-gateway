@@ -3643,6 +3643,13 @@ just never engages.</p>
 <td>Tier-0 pin TTL. The data path converts 0 to its 300-second runtime default</td>
 </tr>
 <tr>
+<td><code>pd_prefill_timeout_sec</code></td>
+<td>int32</td>
+<td>0</td>
+<td>0–3600</td>
+<td>Prefill-stage wait bound for this rule, in seconds. 0 uses the process default (<code>LLB_PD_PREFILL_TIMEOUT_SEC</code>, else 30)</td>
+</tr>
+<tr>
 <td><code>pd_cache_aware_mode</code></td>
 <td>bool</td>
 <td>false</td>
@@ -3960,7 +3967,7 @@ TLS-protected management endpoint and keep authorization values out of command a
 <td><code>LLB_PD_PREFILL_TIMEOUT_SEC</code></td>
 <td>30</td>
 <td>int</td>
-<td>Prefill-leg timeout. <strong>Raise to ≥180 for long-context (32k) fleets</strong> — the 30 s default times out most requests under load</td>
+<td>Prefill-leg timeout. <strong>Raise to ≥180 for long-context (32k) fleets</strong> — the 30 s default times out most requests under load. Process-wide; a rule can override it with <code>pd_prefill_timeout_sec</code></td>
 </tr>
 <tr>
 <td><code>LLB_PD_MAX_INFLIGHT_PER_EP</code></td>
@@ -4115,7 +4122,7 @@ above for the full list); the ones below are the parity/preflight-critical subse
 <td><code>LLB_PD_PREFILL_TIMEOUT_SEC</code></td>
 <td>30</td>
 <td><strong>180</strong> for long-context (≈32k) fleets</td>
-<td>The 30 s default returns <code>504 pd_prefill_timeout</code> on most long-context requests under load</td>
+<td>The 30 s default returns <code>504 pd_prefill_timeout</code> on most long-context requests under load. To raise it for one service only, set <code>pd_prefill_timeout_sec</code> on that rule</td>
 </tr>
 <tr>
 <td><code>LOXILB_KV_LB_MODE</code></td>
