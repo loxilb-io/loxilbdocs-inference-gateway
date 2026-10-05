@@ -262,6 +262,7 @@ rejected when P/D is enabled. See [P/D Disaggregation](pd-disaggregation.md).
 | `pd_disagg_mode` | boolean | `false` | `true`/`false` | Enable prefill/decode disaggregation (the two-phase flow). |
 | `pd_cache_aware_mode` | boolean | `false` | `true`/`false` | Cache-aware endpoint selection (session stickiness + radix-trie prefix match + min-load). **Requires `pd_disagg_mode: true`.** |
 | `pd_session_ttl_sec` | int32 | `0` | ≥0 | Tier-0 P/D session-stickiness TTL (seconds). Runtime `0` selects the 300-second default; it does not disable expiry. This applies to P/D session lookup independently of `pd_cache_aware_mode`; that field controls the optional radix-trie tier. |
+| `pd_prefill_timeout_sec` | int32 | `0` | `0`–`3600` | Longest wait (seconds) for the prefill stage of a P/D request before the Gateway answers `504 pd_prefill_timeout`. `0` uses the process default: 30 seconds, or `LLB_PD_PREFILL_TIMEOUT_SEC` when set. A positive value overrides the default for this rule only and can be changed on a live rule by a replace POST. A nonzero value requires `pd_disagg_mode: true`; JSON `null` is rejected and PATCH does not accept the field. |
 | `pd_cache_threshold` | int32 | `20` | `0`–`100` | Cache-match threshold. Runtime `0` selects `20`; lower nonzero values are more aggressive. |
 | `pd_balance_abs_threshold` | int32 | `3` | `0`–`255` effective | Load-imbalance threshold. Runtime `0` selects `3`; the value is passed through an 8-bit field. If (max−min) active connections exceeds it, cache affinity is bypassed. |
 

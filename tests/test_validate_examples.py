@@ -178,19 +178,19 @@ class DocumentationExampleTests(unittest.TestCase):
             family for family in manifest["families"]
             if family["release_scope"] == "release"
         ]
-        self.assertEqual(257, len(families))
-        self.assertEqual(257, len(manifest["families"]))
+        self.assertEqual(258, len(families))
+        self.assertEqual(258, len(manifest["families"]))
         self.assertTrue(all(family["writer_present"] for family in families))
         self.assertTrue(all(family["evidence_present"] for family in families))
 
     def test_gateway_main_and_release_sources_are_exactly_frozen(self) -> None:
         contract = self.validator.gateway_contract
         self.assertEqual(
-            "cd118cd8b919e812f84faea44657d11f0dcda847",
+            "080d8b1b76b7f380d083e19ffb3bc32eb29754fc",
             contract["source"]["commit"],
         )
         self.assertEqual(
-            "3aa7b2f2b9c401134244964b88ca01a5e3d40552",
+            "3d376b01870c290b7c61e20d59d59e6a2dc5999b",
             contract["source"]["ebpf_submodule_commit"],
         )
         self.assertEqual("v0.9.8.9-rc.1", contract["source"]["release_tag"])

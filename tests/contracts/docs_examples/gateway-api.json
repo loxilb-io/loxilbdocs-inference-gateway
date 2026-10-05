@@ -121,11 +121,11 @@
   "contract_version": 1,
   "metric_manifest": {
     "coverage": {
-      "default_families": 257,
+      "default_families": 258,
       "default_referenced": 169,
-      "default_unreferenced": 67,
+      "default_unreferenced": 68,
       "default_waived": 21,
-      "writer_classified": 257,
+      "writer_classified": 258,
       "writer_unclassified": 0,
       "writer_unverified": 64
     },
@@ -2602,6 +2602,17 @@
         "writer_present": true
       },
       {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [],
+        "name": "loxilb_proxy_halfclose_hold_default_mode",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
         "activation": "P",
         "evidence_present": true,
         "implementation_status": "verified-runtime",
@@ -3386,11 +3397,11 @@
       }
     },
     "provenance": {
-      "generated_at": "2026-10-02T14:39:41+00:00",
-      "source_revision": "5a44fdd44f4a93bee3b7975550ab328d6ec9f13b"
+      "generated_at": "2026-10-05T07:35:43+00:00",
+      "source_revision": "81495fb6909c2e86de3798a582b0d56641632ab1"
     },
     "schema_version": 1,
-    "sha256": "637423b40f6fca290bdcca3036a505fccb007c9f90b81cc7a126fde2616db70d",
+    "sha256": "c04c2822ff3ef304a9a3edbc597b5eb5dd9578ce5bf4a3d69245db8c01f63f4f",
     "source_path": "deploy/monitoring/manifest/metric-manifest.json"
   },
   "release_snapshot": {
@@ -3423,7 +3434,7 @@
         "path": "cicd/sockmap-fullproxy"
       },
       {
-        "object_id": "99b226a0bee23ba791a878bb9e8cece07915f74e",
+        "object_id": "8ade23f20c7f6cf945127e577e0b8751d21a3239",
         "path": "cicd/vllm-kvcache-routing-cpu"
       },
       {
@@ -3501,8 +3512,8 @@
     ]
   },
   "source": {
-    "commit": "cd118cd8b919e812f84faea44657d11f0dcda847",
-    "ebpf_submodule_commit": "3aa7b2f2b9c401134244964b88ca01a5e3d40552",
+    "commit": "080d8b1b76b7f380d083e19ffb3bc32eb29754fc",
+    "ebpf_submodule_commit": "3d376b01870c290b7c61e20d59d59e6a2dc5999b",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
     "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",
@@ -5520,6 +5531,9 @@
               "maximum": 3600,
               "minimum": 1,
               "type": "integer"
+            },
+            "defaultMode": {
+              "type": "string"
             }
           },
           "type": "object"
@@ -7707,6 +7721,29 @@
                   "minimum": 0,
                   "type": "integer"
                 },
+                "half_close_effective": {
+                  "properties": {
+                    "mode": {
+                      "enum": [
+                        "off",
+                        "hold"
+                      ],
+                      "type": "string"
+                    },
+                    "not_applied": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "enum": [
+                        "rule",
+                        "default",
+                        "blocked"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
                 "half_close_mode": {
                   "enum": [
                     "off",
@@ -7922,6 +7959,12 @@
                 },
                 "pd_disagg_mode": {
                   "type": "boolean"
+                },
+                "pd_prefill_timeout_sec": {
+                  "format": "int32",
+                  "maximum": 3600,
+                  "minimum": 0,
+                  "type": "integer"
                 },
                 "pd_session_ttl_sec": {
                   "format": "int32",
@@ -12021,7 +12064,7 @@
           }
         }
       },
-      "sha256": "7cf9cc2b36a6a7852111c0897c9f32716a6e33d5a1898f4cd71410fcc5af5a79",
+      "sha256": "1b39ef451e69672755124b15f5e3f07ab0a81dfbf9931b1665e3aada46929c46",
       "source_path": "api/swagger.yml"
     },
     {
