@@ -19,7 +19,7 @@ GATEWAY_PUBLIC_SCHEMA_BASELINE_REF = "47803fb660ed54cd1f180b616db628461ad85d1a"
 GATEWAY_RELEASE_TAG = "v0.9.8.9-rc.1"
 GATEWAY_RELEASE_TAG_OBJECT = "db28353e50f7031157187fdd2250d1098c97963a"
 GATEWAY_RELEASE_REF = "f08b18beda587217265c9ba6419159119914795c"
-CLI_MAIN_REF = "1b39a7e3944d3e5808870b8bd072205c878aeaa2"
+CLI_MAIN_REF = "d8cbabbbc131d18d36cc26a14ef5a6121a9de7dd"
 CLI_RELEASE_REF = "5dd978c25c967b8192c5fe9cd448783e1e74be7c"
 CLI_RELEASE_TAG = "v0.9.8.9-rc.2"
 CLI_RELEASE_TAG_OBJECT = "2dd7dbe215982859c2ee5cfc836fe34ac4e54a37"
@@ -132,6 +132,7 @@ CLI_FUNCTIONS = {
     "appliance update plan": "_loxicmd_appliance_update_plan",
     "appliance update status": "_loxicmd_appliance_update_status",
     "create apikey": "_loxicmd_create_apikey",
+    "create cert": "_loxicmd_create_cert",
     "create lb": "_loxicmd_create_lb",
     "create persist": "_loxicmd_create_persist",
     "create restore": "_loxicmd_create_restore",

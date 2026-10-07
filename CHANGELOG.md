@@ -10,6 +10,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Backend TLS Verification and Client Certificates page: certificate registry
+  entries by usage (`ca`, `client`), `mtls_backend.verify_server_cert`,
+  `backend_ca_cert_id`, `backend_client_cert_id`, `backend_tls_server_name`,
+  the read-only `backend_tls_effective` state, the `backend_tls_verify`
+  capability, in-place policy changes, certificate rotation, and the upgrade
+  notes for the retired `mtls_backend` path and inline-material arguments.
+  The frontend mTLS page, configuration reference, running modes, CLI
+  reference and troubleshooting no longer describe backend verification as
+  not wired.
 - Admission Flow Control guide: the per-rule capacity admission gate
   (`fc_mode`, ceilings, bounded queue, adaptive ceiling, warm-up, tenant fair
   share, admission headers), its refusal codes, configuration examples for

@@ -89,9 +89,10 @@ terminates the client connection and creates a separate TLS connection to the ba
 
 !!! warning "Verify backend certificates"
     Re-encryption without backend certificate verification does not authenticate the backend.
-    For production, enable `mtls_backend.verify_server_cert` and configure a trusted CA as
-    described in [mTLS for AI Backends](../security/mtls.md). Values outside `0`, `1`, and `2`
-    are rejected.
+    For production, enable `mtls_backend.verify_server_cert` and name a registered CA with
+    `backend_ca_cert_id`, as described in
+    [Backend TLS Verification and Client Certificates](../security/backend-tls.md). Values
+    outside `0`, `1`, and `2` are rejected.
 
 ## Backend protocol and ALPN
 

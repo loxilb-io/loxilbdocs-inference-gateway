@@ -7,12 +7,15 @@ a FullProxy service. Configure it through the `mtls_frontend` object nested in
 `serviceArguments`; there is no standalone `/config/mtls` endpoint.
 
 !!! warning "Current implementation boundary"
-    The OpenAPI model also declares backend-mTLS and inline certificate-data
-    fields. The current data-plane wiring applies only the frontend file-path
-    fields documented below. Do not depend on `mtls_backend`,
-    `client_ca_cert_data`, `client_cert_data`, or `client_key_data` for
-    enforcement. API acceptance or read-back does not prove those fields are
-    active.
+    The OpenAPI model also declares an inline certificate-data field for the
+    frontend. The data-plane wiring applies only the frontend file-path fields
+    documented below. Do not depend on `client_ca_cert_data` for enforcement.
+    API acceptance or read-back does not prove that field is active.
+
+This page covers the client-facing side. Verification of backend certificates
+and the client certificate the gateway presents to backends are configured by
+certificate ID and are described in
+[Backend TLS Verification and Client Certificates](backend-tls.md).
 
 No runnable AI-specific CICD scenario currently qualifies this path. Validate
 the exact immutable build with a real TLS client and backend before production.
@@ -33,8 +36,8 @@ flowchart LR
 Frontend mTLS requires `mode: 4` and `security: 1` or `security: 2`. Security
 mode `1` terminates frontend TLS and uses HTTP to the backend; mode `2`
 re-originates a separate backend TLS connection. The frontend certificate
-check does not prove backend-server identity under mode `2`, because the
-declared backend verification configuration is not currently wired.
+check does not prove backend-server identity under mode `2`: that needs
+backend verification on the rule, see [Backend TLS](backend-tls.md).
 
 ## Active frontend fields
 
@@ -86,8 +89,8 @@ curl --fail-with-body --silent --show-error \
 ```
 
 The addresses are RFC 5737 documentation ranges; replace them with staging
-addresses. Use `security: 1` here so the recipe tests only the currently wired
-frontend control and does not imply backend certificate verification.
+addresses. Use `security: 1` here so the recipe tests only the frontend
+control and does not imply backend certificate verification.
 
 ## Verify enforcement
 
@@ -127,18 +130,20 @@ unredacted certificates in public evidence.
 | Every client is rejected | Verify the CA chain, client intermediates, file permissions, validity period, and clock |
 | CN check rejects a valid certificate | Confirm `require_client_cn` and the exact certificate CN/pattern; SAN matching is not a substitute for this specific check |
 | Revoked client is admitted | Confirm `client_crl_path` is readable and contains a current PEM CRL covering the leaf certificate |
-| Backend certificate is not verified | Expected current limitation; `mtls_backend` is declared but not wired into the active data path |
+| Backend certificate is not verified | Frontend mTLS does not verify backends. Name a CA on the rule as described in [Backend TLS](backend-tls.md) |
 
 ## Release qualification boundary
 
 Production qualification requires frontend positive/negative handshake tests,
 certificate rotation, CRL refresh, restart, resource-load, and rollback tests
-on the exact image. Backend mTLS and inline certificate data remain
-documentation/API-contract surfaces until implementation and end-to-end tests
-prove enforcement.
+on the exact image. Inline frontend certificate data remains an API-contract
+surface until implementation and end-to-end tests prove enforcement. Backend
+verification and the backend client certificate are qualified separately; see
+[Backend TLS](backend-tls.md).
 
 ## See also
 
+- [Backend TLS Verification and Client Certificates](backend-tls.md)
 - [Configuration reference](../ai-gateway/configuration-reference.md)
 - [Management API Authentication](management-api-authentication.md)
 - [OPA L4 Policy](opa-l4.md)

@@ -132,7 +132,7 @@ the Swagger document.
 | Authentication and users | `POST /auth/login`, `POST /auth/logout`, `GET/POST /auth/users`, `PUT/DELETE /auth/users/{id}`, `POST /auth/token/upgrade` | User login/logout, exact-role user administration, and manual-token update |
 | Load balancers | `POST /config/loadbalancer`, `GET/DELETE /config/loadbalancer/all`, and `GET/PATCH/DELETE` id/name/VIP/host-key variants | Core L4/L7 and AI service rules, status, and statistics |
 | L7 policy | `GET/POST /config/l7policy`, `GET/DELETE /config/l7policy/id/{id}` | L7 policy lifecycle |
-| Certificates and SNI | `POST /config/cert`, `GET/PUT/DELETE /config/cert/{certId}`, `GET/POST/DELETE /sni/certificates` | TLS certificate and SNI mapping lifecycle |
+| Certificates and SNI | `POST /config/cert`, `GET/PUT/DELETE /config/cert/{certId}`, `GET/POST/DELETE /sni/certificates` | TLS certificate and SNI mapping lifecycle. A certificate entry has a `usage` (`server`, `ca`, `client`); `ca` and `client` entries serve the backend leg, see [Backend TLS](../security/backend-tls.md) |
 | HTTP tracing | `POST /config/trace/enable`, `POST /config/trace/disable`, `GET /config/trace/status`, `GET/POST /config/trace/otlp`, catalog/parser paths | Trace control, OTLP exporter, and parser assignment; `GET /config/trace/catalogs` is **not implemented** |
 | L4 tracing | `POST /config/l4trace/enable`, `POST /config/l4trace/disable`, `GET /config/l4trace/status`, `PUT /config/l4trace/sampling`, `POST /config/l4trace/stats/reset` | L4 event tracing and sampling control |
 | Connection and routing state | `GET /config/conntrack/all`, `GET /config/port/all`, `GET/POST/DELETE /config/route...` | Conntrack, interfaces, and static routes |

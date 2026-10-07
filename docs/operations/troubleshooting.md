@@ -28,6 +28,7 @@ prefill/decode handoff stalls, streaming cut-offs, and metrics gaps.
 | Sockmap is rejected, bypassed, or configured but not accelerating | [Sockmap Acceleration](sockmap-acceleration.md#verify-engagement) |
 | API-key request unexpectedly succeeds or fails with 401/403/429 | [API-key and quota enforcement](#api-key-and-quota-enforcement) |
 | Request refused `429 admission_capacity`, `504 admission_queue_timeout`, or `503 gateway_draining` | [Admission gate refusals](#admission-gate-refusals) |
+| An `e2ehttps` service answers `502`/`503` or closes connections after backend verification or an upgrade | [Backend TLS failures](#backend-tls-failures) |
 | SSE stream cut off early | [SSE stream cut off](#sse-stream-cut-off) |
 | `/metrics` returns `503`, is empty, or lacks a series | [Metrics endpoint disabled or incomplete](#metrics-endpoint-disabled-or-incomplete) |
 | Prometheus target shows DOWN | [Prometheus scrape down](#prometheus-scrape-down) |
@@ -266,6 +267,26 @@ Read the state the gate holds, not a guess:
 above `0` is a bookkeeping defect, not load: report it with the gateway log.
 
 ---
+
+## Backend TLS failures
+
+**Symptom:** a FullProxy service with `security: 2` stops serving after backend verification
+was enabled, after a certificate rotation, or after an upgrade; or a rule that names backend
+certificates is refused.
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| Rule refused with `400` naming `backend_ca_cert_id` or `backend_client_cert_id` | The ID is not registered, or the entry has another `usage` | Register the entry with the right usage (`ca` or `client`), then post the rule again |
+| Rule refused with `400` naming another rule | The listener already carries a rule with a different `security` mode or backend TLS policy | Every rule on one address, port and protocol must ask for the same policy |
+| Rule refused with `412` and `BACKEND_TLS_NOT_BUILT` | The gateway build has no client-certificate support | Check `backend_tls_verify` in `GET /status/capabilities`; use a build that has it |
+| Rule refused with `400` naming `backend_ca_path`, `client_cert_path`, `client_key_path`, `client_cert_data` or `client_key_data` | The retired `mtls_backend` arguments are still sent | Remove them; register the material under `/config/cert` and name it by ID |
+| HTTP/1.1 clients receive `502`, HTTP/2 clients `503`, on every request | No endpoint passes verification: wrong CA, expired certificate, or a certificate that does not name the endpoint | Without `backend_tls_server_name` the certificate needs the endpoint IP as an IP subject alternative name; with it, that DNS name |
+| Connections are closed without an HTTP response | The endpoints require a client certificate and the rule names none, or names one they do not trust | Name a `usage: client` entry with `backend_client_cert_id`. After an upgrade this is the most likely cause: the listener certificate is no longer presented to backends |
+| `backend_tls_effective.status` reads `failed` | The listener could not load a rotated certificate and still runs the earlier one | Write the certificate again with valid material (`PUT /config/cert/{certId}`) |
+| A policy change does not reach long-lived client connections | A rule that relays bytes without inspecting requests keeps a client connection on its backend connection | Delete and re-create the rule to cut them over at once |
+
+Details and the verification procedure are in
+[Backend TLS Verification and Client Certificates](../security/backend-tls.md).
 
 ## SSE stream cut off
 

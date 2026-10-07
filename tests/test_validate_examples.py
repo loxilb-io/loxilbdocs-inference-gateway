@@ -186,11 +186,11 @@ class DocumentationExampleTests(unittest.TestCase):
     def test_gateway_main_and_release_sources_are_exactly_frozen(self) -> None:
         contract = self.validator.gateway_contract
         self.assertEqual(
-            "080d8b1b76b7f380d083e19ffb3bc32eb29754fc",
+            "64540feb8fda7f295de7a78a74cc754a223362ab",
             contract["source"]["commit"],
         )
         self.assertEqual(
-            "3d376b01870c290b7c61e20d59d59e6a2dc5999b",
+            "7c85a4d21cc58d2924b6461ab63772912ff18087",
             contract["source"]["ebpf_submodule_commit"],
         )
         self.assertEqual("v0.9.8.9-rc.1", contract["source"]["release_tag"])
@@ -207,7 +207,7 @@ class DocumentationExampleTests(unittest.TestCase):
     def test_cli_main_and_release_sources_are_exactly_frozen(self) -> None:
         source = self.validator.cli_contract["source"]
         self.assertEqual(
-            "1b39a7e3944d3e5808870b8bd072205c878aeaa2",
+            "d8cbabbbc131d18d36cc26a14ef5a6121a9de7dd",
             source["main_commit"],
         )
         self.assertEqual("v0.9.8.9-rc.2", source["release_tag"])
@@ -437,7 +437,11 @@ class DocumentationExampleTests(unittest.TestCase):
         flags = set(self.validator.cli_contract["commands"]["create lb"]["main"]["flags"])
         self.assertNotIn("--kv-exact-api-mode", flags)
         self.assertNotIn("--kv-model-profile", flags)
-        self.assertNotIn("--jwt-auth-profile", flags)
+
+    def test_jwt_profile_binding_flag_is_cli_main_only(self) -> None:
+        contract = self.validator.cli_contract["commands"]["create lb"]
+        self.assertIn("--jwt-auth-profile", contract["main"]["flags"])
+        self.assertNotIn("--jwt-auth-profile", contract["release"]["flags"])
 
     def test_pd_bootstrap_port_is_supported_by_cli_main_and_release(self) -> None:
         contract = self.validator.cli_contract["commands"]["create lb"]

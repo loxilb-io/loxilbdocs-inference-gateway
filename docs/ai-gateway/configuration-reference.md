@@ -290,9 +290,10 @@ gateway falls back to IP-based persistence.
 
 ## 8. TLS / mTLS
 
-`security` sets the TLS posture; `mtls_frontend` and `mtls_backend` are inline sub-objects for
-client-cert verification and backend re-encryption. Additional TLS-tuning fields follow. See
-[mTLS for AI Backends](../security/mtls.md).
+`security` sets the TLS posture; `mtls_frontend` is the inline sub-object for client-certificate
+verification, and the backend leg is verified and authenticated by certificate ID. Additional
+TLS-tuning fields follow. See [Frontend mTLS](../security/mtls.md) and
+[Backend TLS Verification and Client Certificates](../security/backend-tls.md).
 
 ### `security` enum (default `0`)
 
@@ -305,7 +306,7 @@ client-cert verification and backend re-encryption. Additional TLS-tuning fields
 !!! danger "Mode 2 is not TLS passthrough"
     The gateway terminates and re-encrypts TLS, so it can inspect HTTP traffic. Values outside
     `0`, `1`, and `2` fail request validation and the rule is not created. For production backend TLS, set
-    `mtls_backend.verify_server_cert: true` and provide a trusted CA rather than accepting any
+    `mtls_backend.verify_server_cert: true` together with `backend_ca_cert_id` rather than accepting any
     backend certificate.
 
 ### `mtls_frontend` (object)
@@ -321,19 +322,25 @@ Client-certificate verification. Only valid with `security: 1` or `security: 2` 
 | `client_cn_pattern` | string | — | e.g. `client.example.test` | Required CN pattern (wildcards supported). Only used if `require_client_cn: true`. |
 | `client_crl_path` | string | — | filesystem path (PEM) | Absolute path to a mounted static CRL; a revoked client leaf certificate is rejected. Keep it current. |
 
-### `mtls_backend` (object)
+### `mtls_backend` (object) and backend TLS by certificate ID
 
-Backend server verification and loxilb client-cert presentation. Only valid with `security: 2`
-**and** `mode: 4`.
+Backend server verification and the client certificate the gateway presents. Only valid with
+`security: 2` **and** `mode: 4`, on a gateway whose `backend_tls_verify` capability is ready;
+otherwise the rule is refused (`400`, or `412` when the build lacks client-certificate support).
+Certificate material is uploaded to `/config/cert` and named by ID. See
+[Backend TLS Verification and Client Certificates](../security/backend-tls.md).
 
 | Field | Type | Default | Allowed / Enum | Notes |
 |---|---|---|---|---|
-| `verify_server_cert` | boolean | `false` | `true`/`false` | `true`=`SSL_VERIFY_PEER`; `false`=`SSL_VERIFY_NONE` (no backend verification, compat default). **Set `true` in production** — the default accepts any backend certificate. |
-| `backend_ca_path` | string | — | filesystem path (PEM) | Backend CA bundle. Empty uses the system CA store (`/etc/ssl/certs/`). |
-| `client_cert_path` | string | — | filesystem path (PEM) | loxilb's client cert for backend mTLS. |
-| `client_key_path` | string | — | filesystem path (PEM) | Gateway private key for backend mTLS. Mount read-only with access limited to the gateway process. |
-| `client_cert_data` | string | — | base64 PEM | Inline client cert — alternative to `client_cert_path`. |
-| `client_key_data` | string | — | base64 PEM | Inline client key — alternative to `client_key_path`. |
+| `mtls_backend.verify_server_cert` | boolean | `false` | `true`/`false` | `true` verifies every endpoint's certificate against `backend_ca_cert_id` and requires the certificate to name the endpoint. Refused without `backend_ca_cert_id`. `false` accepts any backend certificate. **Set `true` in production.** |
+| `backend_ca_cert_id` | string | — | certId of a `usage: ca` entry | The CA bundle endpoint certificates must chain to. Required with `verify_server_cert: true` and refused without it. There is no default trust store. |
+| `backend_client_cert_id` | string | — | certId of a `usage: client` entry | The certificate and key the gateway presents to endpoints. Empty = no client certificate is presented. |
+| `backend_tls_server_name` | string | — | DNS host name | Sent as SNI to every endpoint; with verification on, required among the DNS names of the endpoint's certificate. Empty = no SNI, and the endpoint's IP address must be in its certificate. An address is refused. |
+| `backend_tls_effective` | object | — | read-only | The policy the listener has installed, read from the data plane on `GET`: `status` (`applied`, `pending`, `failed`, `unsupported`), `verify`, `ca`, `client_cert`, `client_cert_id`, `server_name`, `generation`. Ignored on input. |
+
+`mtls_backend.backend_ca_path`, `client_cert_path`, `client_key_path`, `client_cert_data` and
+`client_key_data` are retired: a request that carries one is refused with `400`, and no read
+returns them.
 
 ### Additional TLS-tuning fields
 
@@ -345,8 +352,6 @@ Backend server verification and loxilb client-cert presentation. Only valid with
 | `hsts_max_age` | uint32 | `0` | ≥0 | Strict-Transport-Security max-age (seconds), injected on HTTPS listeners. `0` = no HSTS. |
 | `hsts_include_subdomains` | boolean | `false` | `true`/`false` | Append `; includeSubDomains`. Only meaningful when `hsts_max_age > 0`. |
 | `hsts_preload` | boolean | `false` | `true`/`false` | Append `; preload`. Only meaningful when `hsts_max_age > 0`. |
-| `backend_ca_cert_id` | string | — | certId | Backend re-encryption CA bundle by certId. Empty = system default. |
-| `backend_client_cert_id` | string | — | certId | loxilb's backend client cert+key by certId. Empty = no backend client cert. |
 
 ---
 
@@ -486,4 +491,5 @@ Confirm the rule landed and inspect its state:
 - [KV-Cache Routing](kv-caching.md) — the hash-contract triad and SGLang.
 - [P/D Disaggregation](pd-disaggregation.md) — prefill/decode flow and `ep_role`.
 - [SSE & Quota](sse-quota-management.md) — streaming lifecycle knobs.
-- [mTLS for AI Backends](../security/mtls.md) — `mtls_frontend` / `mtls_backend` in practice.
+- [Frontend mTLS](../security/mtls.md) — `mtls_frontend` in practice.
+- [Backend TLS Verification and Client Certificates](../security/backend-tls.md) — verifying backends and presenting a client certificate.

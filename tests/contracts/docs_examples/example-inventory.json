@@ -594,7 +594,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "0f8ba8345a9fa4e3fcf4",
       "language": "bash",
-      "line": 409,
+      "line": 414,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -624,7 +624,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "469ff84d884af3db8b8a",
       "language": "bash",
-      "line": 440,
+      "line": 445,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -654,7 +654,7 @@
       "evidence": "syntax-only",
       "id": "97719106288800271ea8",
       "language": "json",
-      "line": 448,
+      "line": 453,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -671,7 +671,7 @@
       "evidence": "swagger-union-static",
       "id": "0c9409d1f0ea6ac8f193",
       "language": "bash",
-      "line": 467,
+      "line": 472,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -688,7 +688,7 @@
       "evidence": "cli-contract-static",
       "id": "14b64cf9f36bfc739c2b",
       "language": "bash",
-      "line": 475,
+      "line": 480,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -5674,7 +5674,7 @@
       "evidence": "shell-syntax-only",
       "id": "f5be8718d9c5780f0b57",
       "language": "bash",
-      "line": 49,
+      "line": 50,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5691,7 +5691,7 @@
       "evidence": "swagger-union-static",
       "id": "0e4c8d724dd43ab5e34f",
       "language": "bash",
-      "line": 69,
+      "line": 70,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5708,7 +5708,7 @@
       "evidence": "swagger-union-static",
       "id": "bffd8415b750cbc1ed61",
       "language": "bash",
-      "line": 95,
+      "line": 96,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5725,7 +5725,7 @@
       "evidence": "swagger-union-static",
       "id": "bc1fd6c2ae3911ff75b2",
       "language": "bash",
-      "line": 154,
+      "line": 155,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5742,7 +5742,7 @@
       "evidence": "swagger-union-static",
       "id": "61af48e7a0c8693a6205",
       "language": "bash",
-      "line": 199,
+      "line": 200,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5759,7 +5759,7 @@
       "evidence": "swagger-union-static",
       "id": "195abedb19edd82100ed",
       "language": "bash",
-      "line": 284,
+      "line": 305,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5776,7 +5776,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "e75b06d27f87644a2976",
       "language": "bash",
-      "line": 311,
+      "line": 332,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -5806,7 +5806,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "5f5662a8dd7f7b31b8b6",
       "language": "bash",
-      "line": 321,
+      "line": 342,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -5836,7 +5836,7 @@
       "evidence": "swagger-union-static",
       "id": "b1ac16407876c036e62f",
       "language": "bash",
-      "line": 329,
+      "line": 350,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5853,7 +5853,7 @@
       "evidence": "swagger-union-static",
       "id": "bfc1f9e0926d3b27ec1e",
       "language": "bash",
-      "line": 352,
+      "line": 373,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5870,7 +5870,7 @@
       "evidence": "metric-manifest-static",
       "id": "df576ccf745b93ac5fb7",
       "language": "promql",
-      "line": 407,
+      "line": 428,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -6190,7 +6190,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "57bbcc926e64460ceedd",
       "language": "bash",
-      "line": 442,
+      "line": 452,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -6220,7 +6220,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "64bc3786b2aab9373b0f",
       "language": "bash",
-      "line": 451,
+      "line": 461,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -6250,7 +6250,7 @@
       "evidence": "unexecuted-example",
       "id": "80592ae0930887826ccc",
       "language": "plain",
-      "line": 456,
+      "line": 466,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -6267,7 +6267,7 @@
       "evidence": "unexecuted-example",
       "id": "f8d21b9b36397543d29b",
       "language": "plain",
-      "line": 461,
+      "line": 471,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -6623,6 +6623,243 @@
       "status": "illustrative-only"
     },
     {
+      "evidence": "swagger-union-static",
+      "id": "f79f0547049bd9833c15",
+      "language": "bash",
+      "line": 19,
+      "path": "docs/security/backend-tls.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "71a78af1d648af90d6e3437f95a4614cf757918bc1f4847e9e551275833c0987",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "visual-explanation",
+      "id": "a212ad1d67da917253bb",
+      "language": "mermaid",
+      "line": 28,
+      "path": "docs/security/backend-tls.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": false,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "5bed2dbd5c5689c650075d5582cb7b3acdad5184aa17ec0aebce4064043fa579",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "39f5b4aadb30c932faaf",
+      "language": "bash",
+      "line": 52,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/cert",
+          "POST /config/cert"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/security/backend-tls.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "d87f4e1df8aaf0ff9112d438bd099b99048a61fd1eda8d8f61a92e77ad1ed940",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "88ad033de57ef3eca3ca",
+      "language": "bash",
+      "line": 73,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create cert",
+          "loxicmd create cert"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/security/backend-tls.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "0f32d0bfcc6b507f31ab9609b1d5722c5438aa8ad95d0f0f8516a7a88e551ee2",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "dac483a6727ff0c6c759",
+      "language": "bash",
+      "line": 100,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/security/backend-tls.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "d3fd82d6b3251168490b740a647132c6bb26564abbc91fbe26bcc5d9fb95ffe4",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "e4ba2dcc184672e7400b",
+      "language": "bash",
+      "line": 123,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "loxicmd create lb"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/security/backend-tls.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "92e8b4ec92c1fb5a71baab4db810824b8bcf8d145433cc8d85c29d567a42e343",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "swagger-union-static",
+      "id": "6a6e7c739fa91c0623cb",
+      "language": "bash",
+      "line": 170,
+      "path": "docs/security/backend-tls.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "d5e3eae24c95d6f0b0d3246e2f812f016fc17b1daf39d69a3f474ef110c68519",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "cli-contract-static",
+      "id": "e5254db397e8fa17dc2f",
+      "language": "bash",
+      "line": 176,
+      "path": "docs/security/backend-tls.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "2552b0ab610eedfbe3468f6a56f01740dedfb8d3ca59f80f4a5b1d8472b5534e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "syntax-only",
+      "id": "7f3a3d2563c0184c5193",
+      "language": "json",
+      "line": 181,
+      "path": "docs/security/backend-tls.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "c98b7566ee3ff7c47a71c7d9a779732abf523083b8aa785473ac081c6b512c73",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "2ea6dcbbe77ac724add0",
+      "language": "bash",
+      "line": 251,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "PUT /config/cert/backend-ca"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/security/backend-tls.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "8e4208924d3a9bff1daa571697c4ee770a899fdf2de3b0d4c735f9147b163859",
+      "status": "illustrative-only"
+    },
+    {
       "evidence": "visual-explanation",
       "id": "6f6a2f841cb94efb9193",
       "language": "mermaid",
@@ -6814,7 +7051,7 @@
       "evidence": "visual-explanation",
       "id": "056e758d74cfe5121602",
       "language": "mermaid",
-      "line": 23,
+      "line": 26,
       "path": "docs/security/mtls.md",
       "quality_contract": {
         "cleanup": false,
@@ -6831,7 +7068,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "54da8c66fbc924bb78ec",
       "language": "bash",
-      "line": 59,
+      "line": 62,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -6861,7 +7098,7 @@
       "evidence": "swagger-union-static",
       "id": "204ce89aee33f522114f",
       "language": "bash",
-      "line": 97,
+      "line": 100,
       "path": "docs/security/mtls.md",
       "quality_contract": {
         "cleanup": false,
@@ -6878,7 +7115,7 @@
       "evidence": "shell-syntax-only",
       "id": "ca4f2ac49a0f37247d2e",
       "language": "bash",
-      "line": 105,
+      "line": 108,
       "path": "docs/security/mtls.md",
       "quality_contract": {
         "cleanup": false,
