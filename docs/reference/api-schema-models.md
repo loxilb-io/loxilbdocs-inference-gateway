@@ -6,8 +6,8 @@ and `api/swagger-extras.yml`; a new or removed definition fails the docs gate
 until its public relevance is reviewed here.
 
 - Public schema baseline: `47803fb660ed54cd1f180b616db628461ad85d1a`
-- Reviewed Gateway `main`: `e5fece25f94f8782adf977e5a573eb6e1f5dc15d`
-- Added definitions: **43**
+- Reviewed Gateway `main`: `79c77f0275e655eaee4bb6a732c2d67f1a94198c`
+- Added definitions: **44**
 - Removed definitions: **0**
 - Evidence class: **source/static contract only**
 
@@ -20,7 +20,7 @@ deploy.
 
 | Class | Count | Meaning |
 | --- | ---: | --- |
-| `direct-operation` | 23 | Direct request, response, or operation envelope |
+| `direct-operation` | 24 | Direct request, response, or operation envelope |
 | `nested-component` | 17 | Public component nested in another operation model |
 | `shared-envelope` | 1 | Shared public wire envelope used by multiple operations |
 | `companion-error` | 2 | Public error contract in the companion raw-handler specification |
@@ -30,7 +30,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 
 ## `api/swagger.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/e5fece25f94f8782adf977e5a573eb6e1f5dc15d/api/swagger.yml). Definition count changed from **147** to **188**; **41** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/79c77f0275e655eaee4bb6a732c2d67f1a94198c/api/swagger.yml). Definition count changed from **147** to **189**; **42** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |
@@ -52,6 +52,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 | `BootStatus` | `nested-component` | Boot replay, quarantine, legacy fallback, and degraded-state evidence. | `snapshot_found:boolean`, `succeeded:boolean`, `legacy_fallback:boolean`, `degraded:boolean` | `generation:integer(uint64)`, `profile:string`, `quarantine_path:string`, `reasons:array<string>` | [Details](../operations/backup-restore.md) |
 | `CapabilityStatus` | `nested-component` | One optional capability verdict with a stable reason code and operator-facing reason. | `name:string`, `ready:boolean` | `in_use:integer(int64)`, `limit:integer(int64)`, `reason:string`, `reason_code:string` | [Details](../operations/readiness-diagnostics-maintenance.md) |
 | `CapabilityStatusList` | `direct-operation` | Envelope returned by the optional capability readiness endpoint. | `capabilities:array<CapabilityStatus>` | none | [Details](../operations/readiness-diagnostics-maintenance.md) |
+| `CertCreated` | `direct-operation` | Answer to a certificate create: the certId the entry is stored under, named by the request or minted by the gateway. | `certId:string` | none | [Details](../security/backend-tls.md) |
 | `ConfigOpRecord` | `nested-component` | Generation, checksum, mode, and time identity for the last successful persist or restore. | none | `at:string(date-time)`, `checksum:string`, `generation:integer(uint64)`, `mode:string` | [Details](../operations/backup-restore.md) |
 | `DependencyDiagnostic` | `nested-component` | Sanitized dependency type, requirement, status, and latency class in diagnostics. | `type:string`, `required:boolean`, `status:string{ready/failed}`, `latency_class:string{fast/slow/failed}` | none | [Details](../operations/readiness-diagnostics-maintenance.md) |
 | `DiagnosticsStatus` | `direct-operation` | Bounded diagnostic response covering build, readiness, maintenance, datapath, and dependencies. | `version:string`, `uptime_seconds:integer(int64)`, `ready:boolean`, `maintenance_state:string{active/maintenance}` | `api_version:string`, `auto_persist:AutoPersistStatus`, `boot:BootStatus`, `build_info:string`, `ebpf_attachments:array<EbpfAttachmentStatus>`, `external_dependencies:array<DependencyDiagnostic>`, `last_persist:ConfigOpRecord`, `last_restore:ConfigOpRecord`, `maps:array<MapUtilization>`, `product:string`, `ready_reasons:array<string>` | [Details](../operations/readiness-diagnostics-maintenance.md) |
@@ -78,7 +79,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 
 ## `api/swagger-extras.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/e5fece25f94f8782adf977e5a573eb6e1f5dc15d/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/79c77f0275e655eaee4bb6a732c2d67f1a94198c/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |

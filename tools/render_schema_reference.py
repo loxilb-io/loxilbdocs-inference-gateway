@@ -105,6 +105,11 @@ MODEL_NOTES = {
         "Envelope returned by the optional capability readiness endpoint.",
         "../operations/readiness-diagnostics-maintenance.md",
     ),
+    "CertCreated": (
+        "direct-operation",
+        "Answer to a certificate create: the certId the entry is stored under, named by the request or minted by the gateway.",
+        "../security/backend-tls.md",
+    ),
     "ConfigOpRecord": (
         "nested-component",
         "Generation, checksum, mode, and time identity for the last successful persist or restore.",

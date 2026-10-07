@@ -186,11 +186,11 @@ class DocumentationExampleTests(unittest.TestCase):
     def test_gateway_main_and_release_sources_are_exactly_frozen(self) -> None:
         contract = self.validator.gateway_contract
         self.assertEqual(
-            "e5fece25f94f8782adf977e5a573eb6e1f5dc15d",
+            "79c77f0275e655eaee4bb6a732c2d67f1a94198c",
             contract["source"]["commit"],
         )
         self.assertEqual(
-            "de3112ac038e4de141673d86d66a9031c6569d5f",
+            "58716b6e3c9168f8e79d6f8d1488692c3c4bc47c",
             contract["source"]["ebpf_submodule_commit"],
         )
         self.assertEqual("v0.9.8.9-rc.1", contract["source"]["release_tag"])
