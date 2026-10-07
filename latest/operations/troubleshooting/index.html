@@ -1640,6 +1640,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/backend-tls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend TLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2373,6 +2401,17 @@
     <span class="md-ellipsis">
       
         Admission gate refusals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backend-tls-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend TLS failures
       
     </span>
   </a>
@@ -3158,6 +3197,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#backend-tls-failures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend TLS failures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#sse-stream-cut-off" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3356,6 +3406,10 @@ succeed — always run the "verify it fired" step.</strong> Each section below i
 <tr>
 <td>Request refused <code>429 admission_capacity</code>, <code>504 admission_queue_timeout</code>, or <code>503 gateway_draining</code></td>
 <td><a href="#admission-gate-refusals">Admission gate refusals</a></td>
+</tr>
+<tr>
+<td>An <code>e2ehttps</code> service answers <code>502</code>/<code>503</code> or closes connections after backend verification or an upgrade</td>
+<td><a href="#backend-tls-failures">Backend TLS failures</a></td>
 </tr>
 <tr>
 <td>SSE stream cut off early</td>
@@ -3783,6 +3837,63 @@ before changing anything. See <a href="../../ai-gateway/admission-flow-control/"
 <p><code>loxilb_ai_admission_anomalies_total</code> with <code>kind</code> <code>underflow</code> or <code>unknown_permit</code>
 above <code>0</code> is a bookkeeping defect, not load: report it with the gateway log.</p>
 <hr />
+<h2 id="backend-tls-failures">Backend TLS failures<a class="headerlink" href="#backend-tls-failures" title="Permanent link">&para;</a></h2>
+<p><strong>Symptom:</strong> a FullProxy service with <code>security: 2</code> stops serving after backend verification
+was enabled, after a certificate rotation, or after an upgrade; or a rule that names backend
+certificates is refused.</p>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rule refused with <code>400</code> naming <code>backend_ca_cert_id</code> or <code>backend_client_cert_id</code></td>
+<td>The ID is not registered, or the entry has another <code>usage</code></td>
+<td>Register the entry with the right usage (<code>ca</code> or <code>client</code>), then post the rule again</td>
+</tr>
+<tr>
+<td>Rule refused with <code>400</code> naming another rule</td>
+<td>The listener already carries a rule with a different <code>security</code> mode or backend TLS policy</td>
+<td>Every rule on one address, port and protocol must ask for the same policy</td>
+</tr>
+<tr>
+<td>Rule refused with <code>412</code> and <code>BACKEND_TLS_NOT_BUILT</code></td>
+<td>The gateway build has no client-certificate support</td>
+<td>Check <code>backend_tls_verify</code> in <code>GET /status/capabilities</code>; use a build that has it</td>
+</tr>
+<tr>
+<td>Rule refused with <code>400</code> naming <code>backend_ca_path</code>, <code>client_cert_path</code>, <code>client_key_path</code>, <code>client_cert_data</code> or <code>client_key_data</code></td>
+<td>The retired <code>mtls_backend</code> arguments are still sent</td>
+<td>Remove them; register the material under <code>/config/cert</code> and name it by ID</td>
+</tr>
+<tr>
+<td>HTTP/1.1 clients receive <code>502</code>, HTTP/2 clients <code>503</code>, on every request</td>
+<td>No endpoint passes verification: wrong CA, expired certificate, or a certificate that does not name the endpoint</td>
+<td>Without <code>backend_tls_server_name</code> the certificate needs the endpoint IP as an IP subject alternative name; with it, that DNS name</td>
+</tr>
+<tr>
+<td>Connections are closed without an HTTP response</td>
+<td>The endpoints require a client certificate and the rule names none, or names one they do not trust</td>
+<td>Name a <code>usage: client</code> entry with <code>backend_client_cert_id</code>. After an upgrade this is the most likely cause: the listener certificate is no longer presented to backends</td>
+</tr>
+<tr>
+<td><code>backend_tls_effective.status</code> reads <code>failed</code></td>
+<td>The listener could not load a rotated certificate and still runs the earlier one</td>
+<td>Write the certificate again with valid material (<code>PUT /config/cert/{certId}</code>)</td>
+</tr>
+<tr>
+<td>A policy change does not reach long-lived client connections</td>
+<td>A rule that relays bytes without inspecting requests keeps a client connection on its backend connection</td>
+<td>Delete and re-create the rule to cut them over at once</td>
+</tr>
+</tbody>
+</table>
+<p>Details and the verification procedure are in
+<a href="../../security/backend-tls/">Backend TLS Verification and Client Certificates</a>.</p>
 <h2 id="sse-stream-cut-off">SSE stream cut off<a class="headerlink" href="#sse-stream-cut-off" title="Permanent link">&para;</a></h2>
 <p><strong>Symptom:</strong> a streaming (<code>text/event-stream</code>) response ends early, or a slow-drip stream is
 severed mid-flight.</p>

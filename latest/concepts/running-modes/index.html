@@ -1744,6 +1744,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/backend-tls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend TLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3102,9 +3130,10 @@ terminates the client connection and creates a separate TLS connection to the ba
 <div class="admonition warning">
 <p class="admonition-title">Verify backend certificates</p>
 <p>Re-encryption without backend certificate verification does not authenticate the backend.
-For production, enable <code>mtls_backend.verify_server_cert</code> and configure a trusted CA as
-described in <a href="../../security/mtls/">mTLS for AI Backends</a>. Values outside <code>0</code>, <code>1</code>, and <code>2</code>
-are rejected.</p>
+For production, enable <code>mtls_backend.verify_server_cert</code> and name a registered CA with
+<code>backend_ca_cert_id</code>, as described in
+<a href="../../security/backend-tls/">Backend TLS Verification and Client Certificates</a>. Values
+outside <code>0</code>, <code>1</code>, and <code>2</code> are rejected.</p>
 </div>
 <h2 id="backend-protocol-and-alpn">Backend protocol and ALPN<a class="headerlink" href="#backend-protocol-and-alpn" title="Permanent link">&para;</a></h2>
 <p><code>backend_protocol</code> declares the HTTP capability the gateway advertises to the backend during

@@ -16,7 +16,7 @@
         <link rel="prev" href="../opa-l4/">
       
       
-        <link rel="next" href="../../management/overview/">
+        <link rel="next" href="../backend-tls/">
       
       
         
@@ -1766,6 +1766,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backend-tls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend TLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3010,13 +3038,15 @@ a FullProxy service. Configure it through the <code>mtls_frontend</code> object 
 <code>serviceArguments</code>; there is no standalone <code>/config/mtls</code> endpoint.</p>
 <div class="admonition warning">
 <p class="admonition-title">Current implementation boundary</p>
-<p>The OpenAPI model also declares backend-mTLS and inline certificate-data
-fields. The current data-plane wiring applies only the frontend file-path
-fields documented below. Do not depend on <code>mtls_backend</code>,
-<code>client_ca_cert_data</code>, <code>client_cert_data</code>, or <code>client_key_data</code> for
-enforcement. API acceptance or read-back does not prove those fields are
-active.</p>
+<p>The OpenAPI model also declares an inline certificate-data field for the
+frontend. The data-plane wiring applies only the frontend file-path fields
+documented below. Do not depend on <code>client_ca_cert_data</code> for enforcement.
+API acceptance or read-back does not prove that field is active.</p>
 </div>
+<p>This page covers the client-facing side. Verification of backend certificates
+and the client certificate the gateway presents to backends are configured by
+certificate ID and are described in
+<a href="../backend-tls/">Backend TLS Verification and Client Certificates</a>.</p>
 <p>No runnable AI-specific CICD scenario currently qualifies this path. Validate
 the exact immutable build with a real TLS client and backend before production.</p>
 <h2 id="request-flow">Request flow<a class="headerlink" href="#request-flow" title="Permanent link">&para;</a></h2>
@@ -3031,8 +3061,8 @@ the exact immutable build with a real TLS client and backend before production.<
 <p>Frontend mTLS requires <code>mode: 4</code> and <code>security: 1</code> or <code>security: 2</code>. Security
 mode <code>1</code> terminates frontend TLS and uses HTTP to the backend; mode <code>2</code>
 re-originates a separate backend TLS connection. The frontend certificate
-check does not prove backend-server identity under mode <code>2</code>, because the
-declared backend verification configuration is not currently wired.</p>
+check does not prove backend-server identity under mode <code>2</code>: that needs
+backend verification on the rule, see <a href="../backend-tls/">Backend TLS</a>.</p>
 <h2 id="active-frontend-fields">Active frontend fields<a class="headerlink" href="#active-frontend-fields" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -3105,8 +3135,8 @@ send PEM or private-key material in REST payloads.</p>
 <a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$GATEWAY_API</span><span class="s2">/netlox/v1/config/loadbalancer"</span>
 </code></pre></div>
 <p>The addresses are RFC 5737 documentation ranges; replace them with staging
-addresses. Use <code>security: 1</code> here so the recipe tests only the currently wired
-frontend control and does not imply backend certificate verification.</p>
+addresses. Use <code>security: 1</code> here so the recipe tests only the frontend
+control and does not imply backend certificate verification.</p>
 <h2 id="verify-enforcement">Verify enforcement<a class="headerlink" href="#verify-enforcement" title="Permanent link">&para;</a></h2>
 <p>Read-back confirms the control-plane object, not the TLS behavior:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
@@ -3156,18 +3186,20 @@ unredacted certificates in public evidence.</p>
 </tr>
 <tr>
 <td>Backend certificate is not verified</td>
-<td>Expected current limitation; <code>mtls_backend</code> is declared but not wired into the active data path</td>
+<td>Frontend mTLS does not verify backends. Name a CA on the rule as described in <a href="../backend-tls/">Backend TLS</a></td>
 </tr>
 </tbody>
 </table>
 <h2 id="release-qualification-boundary">Release qualification boundary<a class="headerlink" href="#release-qualification-boundary" title="Permanent link">&para;</a></h2>
 <p>Production qualification requires frontend positive/negative handshake tests,
 certificate rotation, CRL refresh, restart, resource-load, and rollback tests
-on the exact image. Backend mTLS and inline certificate data remain
-documentation/API-contract surfaces until implementation and end-to-end tests
-prove enforcement.</p>
+on the exact image. Inline frontend certificate data remains an API-contract
+surface until implementation and end-to-end tests prove enforcement. Backend
+verification and the backend client certificate are qualified separately; see
+<a href="../backend-tls/">Backend TLS</a>.</p>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
+<li><a href="../backend-tls/">Backend TLS Verification and Client Certificates</a></li>
 <li><a href="../../ai-gateway/configuration-reference/">Configuration reference</a></li>
 <li><a href="../management-api-authentication/">Management API Authentication</a></li>
 <li><a href="../opa-l4/">OPA L4 Policy</a></li>

@@ -1788,6 +1788,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backend-tls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend TLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3144,10 +3172,10 @@ inference VIP as a substitute for a data-plane credential.</p>
 service back preserves omission versus an explicit value. When replacing a
 service, omitting <code>api_key_auth</code> preserves the existing declaration; use
 <code>disabled</code> explicitly to turn off enforcement and keep header stripping.</p>
-<p><code>loxicmd create lb --api-key-auth</code> currently accepts only <code>disabled</code> and
-<code>required</code>. The <code>jwt</code> and <code>apikey-or-jwt</code> values and the
-<code>jwt_auth_profile</code> association are REST-only. There is no supported
-<code>--jwt-auth-profile</code> CLI flag.</p>
+<p>The released <code>loxicmd create lb --api-key-auth</code> accepts only <code>disabled</code> and
+<code>required</code>, and has no <code>--jwt-auth-profile</code> flag. CLI main also accepts <code>jwt</code>
+and <code>apikey-or-jwt</code> together with <code>--jwt-auth-profile=&lt;name&gt;</code>, which names an
+existing profile. Creating, listing and deleting a JWT profile is REST-only.</p>
 <h2 id="create-a-jwt-profile">Create a JWT profile<a class="headerlink" href="#create-a-jwt-profile" title="Permanent link">&para;</a></h2>
 <p>Use a protected file for the management credential so it is not repeated in
 <code>curl</code> arguments or command logs:</p>

@@ -1383,10 +1383,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mtls_backend-object" class="md-nav__link">
+  <a href="#mtls_backend-object-and-backend-tls-by-certificate-id" class="md-nav__link">
     <span class="md-ellipsis">
       
-        mtls_backend (object)
+        mtls_backend (object) and backend TLS by certificate ID
       
     </span>
   </a>
@@ -1942,6 +1942,34 @@
     
   
     Frontend mTLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/backend-tls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend TLS
   
 
     
@@ -3277,10 +3305,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mtls_backend-object" class="md-nav__link">
+  <a href="#mtls_backend-object-and-backend-tls-by-certificate-id" class="md-nav__link">
     <span class="md-ellipsis">
       
-        mtls_backend (object)
+        mtls_backend (object) and backend TLS by certificate ID
       
     </span>
   </a>
@@ -4296,9 +4324,10 @@ gateway falls back to IP-based persistence.</p>
 </table>
 <hr />
 <h2 id="8-tls-mtls">8. TLS / mTLS<a class="headerlink" href="#8-tls-mtls" title="Permanent link">&para;</a></h2>
-<p><code>security</code> sets the TLS posture; <code>mtls_frontend</code> and <code>mtls_backend</code> are inline sub-objects for
-client-cert verification and backend re-encryption. Additional TLS-tuning fields follow. See
-<a href="../../security/mtls/">mTLS for AI Backends</a>.</p>
+<p><code>security</code> sets the TLS posture; <code>mtls_frontend</code> is the inline sub-object for client-certificate
+verification, and the backend leg is verified and authenticated by certificate ID. Additional
+TLS-tuning fields follow. See <a href="../../security/mtls/">Frontend mTLS</a> and
+<a href="../../security/backend-tls/">Backend TLS Verification and Client Certificates</a>.</p>
 <h3 id="security-enum-default-0"><code>security</code> enum (default <code>0</code>)<a class="headerlink" href="#security-enum-default-0" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4330,7 +4359,7 @@ client-cert verification and backend re-encryption. Additional TLS-tuning fields
 <p class="admonition-title">Mode 2 is not TLS passthrough</p>
 <p>The gateway terminates and re-encrypts TLS, so it can inspect HTTP traffic. Values outside
 <code>0</code>, <code>1</code>, and <code>2</code> fail request validation and the rule is not created. For production backend TLS, set
-<code>mtls_backend.verify_server_cert: true</code> and provide a trusted CA rather than accepting any
+<code>mtls_backend.verify_server_cert: true</code> together with <code>backend_ca_cert_id</code> rather than accepting any
 backend certificate.</p>
 </div>
 <h3 id="mtls_frontend-object"><code>mtls_frontend</code> (object)<a class="headerlink" href="#mtls_frontend-object" title="Permanent link">&para;</a></h3>
@@ -4390,9 +4419,12 @@ backend certificate.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="mtls_backend-object"><code>mtls_backend</code> (object)<a class="headerlink" href="#mtls_backend-object" title="Permanent link">&para;</a></h3>
-<p>Backend server verification and loxilb client-cert presentation. Only valid with <code>security: 2</code>
-<strong>and</strong> <code>mode: 4</code>.</p>
+<h3 id="mtls_backend-object-and-backend-tls-by-certificate-id"><code>mtls_backend</code> (object) and backend TLS by certificate ID<a class="headerlink" href="#mtls_backend-object-and-backend-tls-by-certificate-id" title="Permanent link">&para;</a></h3>
+<p>Backend server verification and the client certificate the gateway presents. Only valid with
+<code>security: 2</code> <strong>and</strong> <code>mode: 4</code>, on a gateway whose <code>backend_tls_verify</code> capability is ready;
+otherwise the rule is refused (<code>400</code>, or <code>412</code> when the build lacks client-certificate support).
+Certificate material is uploaded to <code>/config/cert</code> and named by ID. See
+<a href="../../security/backend-tls/">Backend TLS Verification and Client Certificates</a>.</p>
 <table>
 <thead>
 <tr>
@@ -4405,49 +4437,45 @@ backend certificate.</p>
 </thead>
 <tbody>
 <tr>
-<td><code>verify_server_cert</code></td>
+<td><code>mtls_backend.verify_server_cert</code></td>
 <td>boolean</td>
 <td><code>false</code></td>
 <td><code>true</code>/<code>false</code></td>
-<td><code>true</code>=<code>SSL_VERIFY_PEER</code>; <code>false</code>=<code>SSL_VERIFY_NONE</code> (no backend verification, compat default). <strong>Set <code>true</code> in production</strong> — the default accepts any backend certificate.</td>
+<td><code>true</code> verifies every endpoint's certificate against <code>backend_ca_cert_id</code> and requires the certificate to name the endpoint. Refused without <code>backend_ca_cert_id</code>. <code>false</code> accepts any backend certificate. <strong>Set <code>true</code> in production.</strong></td>
 </tr>
 <tr>
-<td><code>backend_ca_path</code></td>
+<td><code>backend_ca_cert_id</code></td>
 <td>string</td>
 <td>—</td>
-<td>filesystem path (PEM)</td>
-<td>Backend CA bundle. Empty uses the system CA store (<code>/etc/ssl/certs/</code>).</td>
+<td>certId of a <code>usage: ca</code> entry</td>
+<td>The CA bundle endpoint certificates must chain to. Required with <code>verify_server_cert: true</code> and refused without it. There is no default trust store.</td>
 </tr>
 <tr>
-<td><code>client_cert_path</code></td>
+<td><code>backend_client_cert_id</code></td>
 <td>string</td>
 <td>—</td>
-<td>filesystem path (PEM)</td>
-<td>loxilb's client cert for backend mTLS.</td>
+<td>certId of a <code>usage: client</code> entry</td>
+<td>The certificate and key the gateway presents to endpoints. Empty = no client certificate is presented.</td>
 </tr>
 <tr>
-<td><code>client_key_path</code></td>
+<td><code>backend_tls_server_name</code></td>
 <td>string</td>
 <td>—</td>
-<td>filesystem path (PEM)</td>
-<td>Gateway private key for backend mTLS. Mount read-only with access limited to the gateway process.</td>
+<td>DNS host name</td>
+<td>Sent as SNI to every endpoint; with verification on, required among the DNS names of the endpoint's certificate. Empty = no SNI, and the endpoint's IP address must be in its certificate. An address is refused.</td>
 </tr>
 <tr>
-<td><code>client_cert_data</code></td>
-<td>string</td>
+<td><code>backend_tls_effective</code></td>
+<td>object</td>
 <td>—</td>
-<td>base64 PEM</td>
-<td>Inline client cert — alternative to <code>client_cert_path</code>.</td>
-</tr>
-<tr>
-<td><code>client_key_data</code></td>
-<td>string</td>
-<td>—</td>
-<td>base64 PEM</td>
-<td>Inline client key — alternative to <code>client_key_path</code>.</td>
+<td>read-only</td>
+<td>The policy the listener has installed, read from the data plane on <code>GET</code>: <code>status</code> (<code>applied</code>, <code>pending</code>, <code>failed</code>, <code>unsupported</code>), <code>verify</code>, <code>ca</code>, <code>client_cert</code>, <code>client_cert_id</code>, <code>server_name</code>, <code>generation</code>. Ignored on input.</td>
 </tr>
 </tbody>
 </table>
+<p><code>mtls_backend.backend_ca_path</code>, <code>client_cert_path</code>, <code>client_key_path</code>, <code>client_cert_data</code> and
+<code>client_key_data</code> are retired: a request that carries one is refused with <code>400</code>, and no read
+returns them.</p>
 <h3 id="additional-tls-tuning-fields">Additional TLS-tuning fields<a class="headerlink" href="#additional-tls-tuning-fields" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -4501,20 +4529,6 @@ backend certificate.</p>
 <td><code>false</code></td>
 <td><code>true</code>/<code>false</code></td>
 <td>Append <code>; preload</code>. Only meaningful when <code>hsts_max_age &gt; 0</code>.</td>
-</tr>
-<tr>
-<td><code>backend_ca_cert_id</code></td>
-<td>string</td>
-<td>—</td>
-<td>certId</td>
-<td>Backend re-encryption CA bundle by certId. Empty = system default.</td>
-</tr>
-<tr>
-<td><code>backend_client_cert_id</code></td>
-<td>string</td>
-<td>—</td>
-<td>certId</td>
-<td>loxilb's backend client cert+key by certId. Empty = no backend client cert.</td>
 </tr>
 </tbody>
 </table>
@@ -4818,7 +4832,8 @@ described in section 5; adding stored <code>chwbl_*</code> fields does not chang
 <li><a href="../kv-caching/">KV-Cache Routing</a> — the hash-contract triad and SGLang.</li>
 <li><a href="../pd-disaggregation/">P/D Disaggregation</a> — prefill/decode flow and <code>ep_role</code>.</li>
 <li><a href="../sse-quota-management/">SSE &amp; Quota</a> — streaming lifecycle knobs.</li>
-<li><a href="../../security/mtls/">mTLS for AI Backends</a> — <code>mtls_frontend</code> / <code>mtls_backend</code> in practice.</li>
+<li><a href="../../security/mtls/">Frontend mTLS</a> — <code>mtls_frontend</code> in practice.</li>
+<li><a href="../../security/backend-tls/">Backend TLS Verification and Client Certificates</a> — verifying backends and presenting a client certificate.</li>
 </ul>
 
 

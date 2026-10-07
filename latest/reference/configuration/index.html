@@ -1640,6 +1640,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/backend-tls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend TLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2999,9 +3027,14 @@ worked example.</p>
 <td><a href="../../ai-gateway/configuration-reference/#7-session-affinity">Configuration Reference §7</a></td>
 </tr>
 <tr>
-<td><code>mtls_frontend</code>, <code>mtls_backend</code>, <code>alpn_protocols</code>, <code>tls_ciphers</code>, <code>tls_versions</code>, <code>hsts_*</code></td>
-<td>TLS / mTLS sub-objects</td>
-<td><a href="../../ai-gateway/configuration-reference/#8-tls-mtls">Configuration Reference §8</a> · <a href="../../security/mtls/">mTLS</a></td>
+<td><code>mtls_frontend</code>, <code>alpn_protocols</code>, <code>tls_ciphers</code>, <code>tls_versions</code>, <code>hsts_*</code></td>
+<td>Frontend TLS / mTLS</td>
+<td><a href="../../ai-gateway/configuration-reference/#8-tls-mtls">Configuration Reference §8</a> · <a href="../../security/mtls/">Frontend mTLS</a></td>
+</tr>
+<tr>
+<td><code>mtls_backend.verify_server_cert</code>, <code>backend_ca_cert_id</code>, <code>backend_client_cert_id</code>, <code>backend_tls_server_name</code>, <code>backend_tls_effective</code> (read-only)</td>
+<td>Backend TLS verification and client certificate (<code>security: 2</code>)</td>
+<td><a href="../../ai-gateway/configuration-reference/#8-tls-mtls">Configuration Reference §8</a> · <a href="../../security/backend-tls/">Backend TLS</a></td>
 </tr>
 <tr>
 <td><code>endpointIP</code>, <code>weight</code>, <code>targetPort</code>, <code>ep_role</code>, <code>nixl_port</code>, <code>backup</code></td>

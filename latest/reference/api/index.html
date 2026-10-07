@@ -1640,6 +1640,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/backend-tls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend TLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3441,7 +3469,7 @@ the Swagger document.</p>
 <tr>
 <td>Certificates and SNI</td>
 <td><code>POST /config/cert</code>, <code>GET/PUT/DELETE /config/cert/{certId}</code>, <code>GET/POST/DELETE /sni/certificates</code></td>
-<td>TLS certificate and SNI mapping lifecycle</td>
+<td>TLS certificate and SNI mapping lifecycle. A certificate entry has a <code>usage</code> (<code>server</code>, <code>ca</code>, <code>client</code>); <code>ca</code> and <code>client</code> entries serve the backend leg, see <a href="../../security/backend-tls/">Backend TLS</a></td>
 </tr>
 <tr>
 <td>HTTP tracing</td>

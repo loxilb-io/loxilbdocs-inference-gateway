@@ -10,13 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/security/opa-l4/">
+        <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/security/backend-tls/">
       
       
-        <link rel="prev" href="../ai-safety/">
+        <link rel="prev" href="../mtls/">
       
       
-        <link rel="next" href="../mtls/">
+        <link rel="next" href="../../management/overview/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>OPA L4 Policy - LoxiLB Inference Gateway</title>
+        <title>Backend TLS - LoxiLB Inference Gateway</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opa-l4-policy-watcher" class="md-skip">
+        <a href="#backend-tls-verification-and-client-certificates" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              OPA L4 Policy
+              Backend TLS
             
           </span>
         </div>
@@ -1590,37 +1590,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    OPA L4 Policy
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../opa-l4/" class="md-nav__link">
         
   
   
@@ -1636,136 +1609,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#current-production-boundary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Current production boundary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-synchronization-works" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How synchronization works
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#required-opa-response" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Required OPA response
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#validate-an-opa-document-separately" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Validate an OPA document separately
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#url-and-transport-restrictions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        URL and transport restrictions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configure-the-watcher-in-isolated-staging" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configure the watcher in isolated staging
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#status-and-circuit-breaker" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Status and circuit breaker
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stop-the-watcher" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Stop the watcher
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#release-gates" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Release gates
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#see-also" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        See also
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1803,10 +1646,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../backend-tls/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend TLS
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1822,6 +1692,164 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-fits-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it fits together
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-register-the-material" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Register the material
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-refer-to-it-from-the-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Refer to it from the rule
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Refer to it from the rule">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rules-that-share-a-listener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rules that share a listener
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-what-a-verified-endpoint-must-present" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. What a verified endpoint must present
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-read-what-is-installed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Read what is installed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-verify-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Verify enforcement
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-change-the-policy-of-a-serving-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Change the policy of a serving rule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-rotate-a-certificate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Rotate a certificate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-upgrading-from-an-earlier-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Upgrading from an earlier release
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        See also
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2965,10 +2993,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#current-production-boundary" class="md-nav__link">
+  <a href="#how-it-fits-together" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Current production boundary
+        How it fits together
       
     </span>
   </a>
@@ -2976,10 +3004,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-synchronization-works" class="md-nav__link">
+  <a href="#1-register-the-material" class="md-nav__link">
     <span class="md-ellipsis">
       
-        How synchronization works
+        1. Register the material
       
     </span>
   </a>
@@ -2987,10 +3015,38 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#required-opa-response" class="md-nav__link">
+  <a href="#2-refer-to-it-from-the-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Required OPA response
+        2. Refer to it from the rule
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Refer to it from the rule">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rules-that-share-a-listener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rules that share a listener
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-what-a-verified-endpoint-must-present" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. What a verified endpoint must present
       
     </span>
   </a>
@@ -2998,10 +3054,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#validate-an-opa-document-separately" class="md-nav__link">
+  <a href="#4-read-what-is-installed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Validate an OPA document separately
+        4. Read what is installed
       
     </span>
   </a>
@@ -3009,10 +3065,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#url-and-transport-restrictions" class="md-nav__link">
+  <a href="#5-verify-enforcement" class="md-nav__link">
     <span class="md-ellipsis">
       
-        URL and transport restrictions
+        5. Verify enforcement
       
     </span>
   </a>
@@ -3020,10 +3076,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configure-the-watcher-in-isolated-staging" class="md-nav__link">
+  <a href="#6-change-the-policy-of-a-serving-rule" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Configure the watcher in isolated staging
+        6. Change the policy of a serving rule
       
     </span>
   </a>
@@ -3031,10 +3087,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#status-and-circuit-breaker" class="md-nav__link">
+  <a href="#7-rotate-a-certificate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Status and circuit breaker
+        7. Rotate a certificate
       
     </span>
   </a>
@@ -3042,10 +3098,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#stop-the-watcher" class="md-nav__link">
+  <a href="#8-upgrading-from-an-earlier-release" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Stop the watcher
+        8. Upgrading from an earlier release
       
     </span>
   </a>
@@ -3053,10 +3109,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#release-gates" class="md-nav__link">
+  <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Release gates
+        Troubleshooting
       
     </span>
   </a>
@@ -3091,7 +3147,7 @@
 
 
 
-<h1 id="opa-l4-policy-watcher">OPA L4 Policy Watcher<a class="headerlink" href="#opa-l4-policy-watcher" title="Permanent link">&para;</a></h1>
+<h1 id="backend-tls-verification-and-client-certificates">Backend TLS Verification and Client Certificates<a class="headerlink" href="#backend-tls-verification-and-client-certificates" title="Permanent link">&para;</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Illustrative mutation fragments</p>
 <p>The management mutations on this page are non-standalone fragments. Before
@@ -3099,269 +3155,411 @@ adapting them, follow this site's <strong>Example Quality Contract</strong> and 
 <strong>Quickstart</strong> lifecycle. Do not treat HTTP success or management readback
 alone as runtime proof.</p>
 </div>
-<p>The OPA L4 watcher polls an Open Policy Agent (OPA) data document, converts its
-desired rules into Gateway firewall rules, diffs them against a local cache,
-and applies additions and deletions through the Gateway REST API. It is a
-desired-state synchronizer, not a per-connection OPA authorization call.</p>
-<h2 id="current-production-boundary">Current production boundary<a class="headerlink" href="#current-production-boundary" title="Permanent link">&para;</a></h2>
-<div class="admonition danger">
-<p class="admonition-title">Experimental integration — do not use as a production enforcement boundary</p>
-<p>The current watcher applies rules to the local HTTP management API without
-an authorization header. When Gateway management authentication is enabled,
-those internal apply requests are rejected. Disabling management
-authentication to make the watcher work would expose a larger control-plane
-risk. Until an authenticated internal apply path is implemented and tested,
-qualify this feature only in an isolated staging environment.</p>
+<p>A FullProxy service with <code>security: 2</code> (<code>e2ehttps</code>) terminates the client's TLS connection and
+opens a separate TLS connection to each endpoint. This page describes how a rule makes the gateway
+verify the endpoints it connects to, and how it makes the gateway present a client certificate to
+endpoints that require one.</p>
+<div class="admonition warning">
+<p class="admonition-title">The default backend leg is not authenticated</p>
+<p>Without the arguments on this page, the backend leg of an <code>e2ehttps</code> rule is encrypted but
+the gateway accepts any certificate an endpoint presents, and presents none itself. Name a CA
+on every production rule.</p>
 </div>
-<p>Other current limitations are also security-relevant:</p>
-<ul>
-<li><code>fail_open</code> is stored and reported but does not change outage behavior;</li>
-<li>a fetch failure preserves the rules currently applied, for either
-  <code>fail_open</code> value;</li>
-<li>a well-formed OPA response with a missing/empty rule list is desired empty
-  state and can delete all OPA-managed rules;</li>
-<li>invalid individual rules are logged and skipped, not rejected as one atomic
-  policy document; a previously applied rule that is now skipped can be
-  treated as removed by the diff;</li>
-<li>stopping the watcher does not remove firewall rules it already applied;</li>
-<li>its cached rule-state file is written with mode <code>0644</code> under
-  <code>/var/lib/loxilb</code> by default;</li>
-<li>the OPA client sends no authentication header and offers no custom CA option.</li>
-</ul>
-<p>The OpenAPI route and unit tests prove code presence, not safe multi-process or
-production behavior.</p>
-<h2 id="how-synchronization-works">How synchronization works<a class="headerlink" href="#how-synchronization-works" title="Permanent link">&para;</a></h2>
+<p>Both features need <code>mode: 4</code>, <code>security: 2</code>, and a gateway built with client-certificate support.
+Check the build before offering the arguments:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/status/capabilities<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.capabilities[] | select(.name == "backend_tls_verify")'</span>
+</code></pre></div>
+<p>When <code>ready</code> is false, its <code>reason_code</code> is <code>BACKEND_TLS_NOT_BUILT</code>, and a rule that asks for
+verification, a certificate ID, or a server name is refused with <code>412</code>.</p>
+<h2 id="how-it-fits-together">How it fits together<a class="headerlink" href="#how-it-fits-together" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart LR
-    O["OPA data API&lt;br/&gt;GET /v1/data/{policy_path}"] --&gt; F["Fetch and parse"]
-    F --&gt; N["Normalize valid rules&lt;br/&gt;skip invalid rules"]
-    N --&gt; D["Diff against local cache"]
-    D --&gt; A["DELETE removed rules&lt;br/&gt;POST added rules"]
-    A --&gt; G["Local Gateway firewall API"]
-    A --&gt; C["Persist successful operations&lt;br/&gt;in rule cache"]
+    R["Certificate registry&lt;br/&gt;/config/cert"] --&gt;|"usage ca"| G
+    R --&gt;|"usage client"| G
+    C["Client"] --&gt;|"TLS"| G["Gateway FullProxy&lt;br/&gt;security 2"]
+    G --&gt;|"TLS: verifies the endpoint,&lt;br/&gt;presents the client certificate"| E["TLS endpoint"]
 
-    F --&gt;|failure| K["Keep currently applied rules"]
-
-    style K fill:#fff9c4,stroke:#f9a825
-    style G fill:#e1f5fe,stroke:#0288d1</code></pre>
-<p>The default policy path is <code>loxilb/l4</code>, poll interval is 30 seconds, initial
-poll delay is 10 seconds, OPA request timeout is 5 seconds, and each local rule
-apply request has a 10-second timeout.</p>
-<h2 id="required-opa-response">Required OPA response<a class="headerlink" href="#required-opa-response" title="Permanent link">&para;</a></h2>
-<p>The watcher performs an HTTP <code>GET</code> with <code>Accept: application/json</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>{opa_url}/v1/data/{policy_path}
-</code></pre></div>
-<p>For the default path, OPA must return this shape:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">"l4"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="nt">"firewall_access_rules"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="p">{</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">          </span><span class="nt">"sourceIP"</span><span class="p">:</span><span class="w"> </span><span class="s2">"198.51.100.0/24"</span><span class="p">,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">          </span><span class="nt">"destinationIP"</span><span class="p">:</span><span class="w"> </span><span class="s2">"203.0.113.10/32"</span><span class="p">,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">          </span><span class="nt">"protocol"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">          </span><span class="nt">"minSourcePort"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">          </span><span class="nt">"maxSourcePort"</span><span class="p">:</span><span class="w"> </span><span class="mi">65535</span><span class="p">,</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">          </span><span class="nt">"minDestinationPort"</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">          </span><span class="nt">"maxDestinationPort"</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">          </span><span class="nt">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"allow"</span><span class="p">,</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">          </span><span class="nt">"preference"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">      </span><span class="p">]</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="p">}</span>
-</code></pre></div>
+    style G fill:#e8f5e9,stroke:#43a047
+    style E fill:#fff3e0,stroke:#f57c00
+    style R fill:#e3f2fd,stroke:#1e88e5</code></pre>
+<p>Certificates are uploaded to the certificate registry once and a rule refers to them by ID. A rule
+never carries a file path or PEM data.</p>
+<h2 id="1-register-the-material">1. Register the material<a class="headerlink" href="#1-register-the-material" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Field</th>
-<th>Accepted values</th>
+<th><code>usage</code></th>
+<th>What it holds</th>
+<th>Request body</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>sourceIP</code>, <code>destinationIP</code></td>
-<td>IPv4 or IPv6 CIDR; empty is normalized to <code>0.0.0.0/0</code></td>
+<td><code>ca</code></td>
+<td>The CA bundle that endpoint certificates must chain to</td>
+<td><code>certPem</code> with one or more CA certificates. <code>keyPem</code> is sent as the empty string.</td>
 </tr>
 <tr>
-<td><code>protocol</code></td>
-<td><code>0</code> any, <code>6</code> TCP, <code>17</code> UDP, <code>132</code> SCTP</td>
+<td><code>client</code></td>
+<td>The certificate and key the gateway presents to endpoints</td>
+<td><code>certPem</code>, <code>keyPem</code>, optional <code>chainPem</code>. The pair must match.</td>
 </tr>
 <tr>
-<td>source/destination port range</td>
-<td>Minimum must not exceed maximum; <code>0</code>–<code>65535</code> is normalized to no port filter</td>
-</tr>
-<tr>
-<td><code>action</code></td>
-<td><code>allow</code> or <code>deny</code></td>
-</tr>
-<tr>
-<td><code>preference</code></td>
-<td>Integer used in the firewall rule key</td>
+<td><code>server</code> (default)</td>
+<td>A listener certificate, selected by SNI</td>
+<td>Not used for the backend leg.</td>
 </tr>
 </tbody>
 </table>
-<p>The document is not applied atomically. A failed add/delete is retried during a
-later diff, but successful changes from the same cycle remain applied. Review
-<code>last_error</code> for <code>partial apply failure</code> and compare actual firewall rules.</p>
-<h2 id="validate-an-opa-document-separately">Validate an OPA document separately<a class="headerlink" href="#validate-an-opa-document-separately" title="Permanent link">&para;</a></h2>
-<p>Select and pin an OPA release approved by your organization; do not use a
-mutable image tag:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">OPA_IMAGE</span><span class="o">=</span><span class="s2">"openpolicyagent/opa:&lt;PINNED_VERSION&gt;"</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>pull<span class="w"> </span><span class="s2">"</span><span class="nv">$OPA_IMAGE</span><span class="s2">"</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>docker<span class="w"> </span>image<span class="w"> </span>inspect<span class="w"> </span><span class="s2">"</span><span class="nv">$OPA_IMAGE</span><span class="s2">"</span><span class="w"> </span>--format<span class="w"> </span><span class="s1">'{{index .RepoDigests 0}}'</span>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/cert<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="s1">    "certId": "backend-ca",</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s1">    "usage": "ca",</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">    "certPem": "&lt;PEM text of the CA bundle&gt;",</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">    "keyPem": ""</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">  }'</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/cert<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="s1">    "certId": "backend-client",</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="s1">    "usage": "client",</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="s1">    "certPem": "&lt;PEM text of the client certificate&gt;",</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="s1">    "keyPem": "&lt;PEM text of its private key&gt;"</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="s1">  }'</span>
 </code></pre></div>
-<p>Before connecting a Gateway, query the exact policy path directly and validate
-the response shape:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>https://opa.example.com/v1/data/loxilb/l4<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s1">      .result.l4.firewall_access_rules | type == "array" and</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s1">      all(.[];</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s1">        (.action == "allow" or .action == "deny") and</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s1">        (.protocol == 0 or .protocol == 6 or</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s1">         .protocol == 17 or .protocol == 132))</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s1">    '</span>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># CLI availability: main-only</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>cert<span class="w"> </span>--usage<span class="o">=</span>ca<span class="w"> </span>--cert-id<span class="o">=</span>backend-ca<span class="w"> </span>--cert-file<span class="o">=</span>./backend-ca.pem
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>cert<span class="w"> </span>--usage<span class="o">=</span>client<span class="w"> </span>--cert-id<span class="o">=</span>backend-client<span class="w"> </span>--cert-file<span class="o">=</span>./gateway-client.pem<span class="w"> </span>--key-file<span class="o">=</span>./gateway-client.key
 </code></pre></div>
-<p>Use synthetic test ranges and validate empty, malformed, duplicate, and invalid
-rules. Specifically prove that an unintended empty document cannot reach the
-watcher.</p>
-<h2 id="url-and-transport-restrictions">URL and transport restrictions<a class="headerlink" href="#url-and-transport-restrictions" title="Permanent link">&para;</a></h2>
-<p><code>POST /config/opa/watcher</code> resolves the configured hostname and rejects these
-IPv4 ranges:</p>
+</div>
+</div>
+</div>
 <ul>
-<li><code>127.0.0.0/8</code> loopback;</li>
-<li><code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, and <code>192.168.0.0/16</code> RFC 1918;</li>
-<li><code>169.254.0.0/16</code> link-local and common metadata range.</li>
+<li>The usage of an ID is fixed when the entry is created. <code>PUT /config/cert/{certId}</code> rotates the
+  material and cannot change the usage.</li>
+<li><code>GET</code> returns the usage and never returns a private key.</li>
+<li>Only <code>server</code> entries are offered to clients. A <code>ca</code> or <code>client</code> entry is never used as a
+  listener certificate.</li>
+<li>An entry that a rule refers to cannot be deleted: the request is refused with <code>400</code> and names
+  the rule. Remove the ID from the rule first.</li>
+<li>A CA entry with a key, and a client entry without one, are refused.</li>
+<li><code>certPem</code> and <code>keyPem</code> are JSON strings: newlines in the PEM text are written as <code>\n</code>. Build the
+  body with a JSON tool rather than by hand, and do not leave a private key in shell history.</li>
 </ul>
-<p>This guard is not a complete reserved-address or IPv6 SSRF policy, and DNS can
-change after validation. The watcher also cannot attach OPA authentication
-headers. Treat the destination as administrator-controlled, enforce egress and
-DNS policy outside the process, use HTTPS with a publicly trusted certificate,
-and do not expose an unauthenticated OPA data API to an untrusted network.</p>
-<p>These constraints are another reason the current integration is not a
-recommended production enforcement path.</p>
-<h2 id="configure-the-watcher-in-isolated-staging">Configure the watcher in isolated staging<a class="headerlink" href="#configure-the-watcher-in-isolated-staging" title="Permanent link">&para;</a></h2>
-<p>The management route itself is protected when Gateway management auth is
-configured:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">    "opa_url": "https://opa.example.com",</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s1">    "policy_path": "loxilb/l4",</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s1">    "poll_interval_sec": 30,</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s1">    "fail_open": false</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s1">  }'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/opa/watcher"</span>
-</code></pre></div>
-<p>This starts/replaces the watcher, but under the current implementation its
-subsequent local firewall apply calls do not carry the management credential.
-Expect them to fail when management auth is active; do not work around the
-failure by exposing an unauthenticated production management listener.</p>
-<h2 id="status-and-circuit-breaker">Status and circuit breaker<a class="headerlink" href="#status-and-circuit-breaker" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/opa/watcher"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
-</code></pre></div>
+<h2 id="2-refer-to-it-from-the-rule">2. Refer to it from the rule<a class="headerlink" href="#2-refer-to-it-from-the-rule" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Field</th>
-<th>Interpretation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>status</code></td>
-<td><code>not_configured</code>, <code>running</code>, or <code>stopped</code></td>
-</tr>
-<tr>
-<td><code>last_sync_at</code></td>
-<td>Time the latest fetch/normalize/apply cycle completed, including a partial apply; it is not proof that every rule succeeded</td>
-</tr>
-<tr>
-<td><code>rules_count</code></td>
-<td>Successfully applied rules tracked in the watcher cache</td>
-</tr>
-<tr>
-<td><code>last_error</code></td>
-<td>Latest fetch, normalization, or partial-apply error</td>
-</tr>
-<tr>
-<td><code>circuit_breaker_state</code></td>
-<td><code>0</code> closed, <code>1</code> open, <code>2</code> half-open</td>
-</tr>
-</tbody>
-</table>
-<p>Five consecutive OPA fetch failures open the circuit for 60 seconds. After the
-timeout it enters half-open; two successful OPA fetches close it. A
-normalization error records a failure, but the next successful fetch resets the
-closed-state failure count before normalization, so repeated
-normalization-only errors do not reliably open the circuit. Apply errors do not
-open it. Alert on <code>last_error</code> and failed syncs rather than relying only on the
-circuit state. While the circuit is open, polling does not change existing
-rules.</p>
-<p>Prometheus metrics:</p>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
+<th>Rule argument</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>loxilb_opa_watcher_syncs_total{status}</code></td>
-<td>Sync cycles by <code>success</code> or <code>failure</code></td>
+<td><code>mtls_backend.verify_server_cert</code></td>
+<td><code>true</code> verifies the certificate of every endpoint. Requires <code>backend_ca_cert_id</code>.</td>
 </tr>
 <tr>
-<td><code>loxilb_opa_sync_duration_seconds</code></td>
-<td>Duration of all sync attempts</td>
+<td><code>backend_ca_cert_id</code></td>
+<td>A registry entry with usage <code>ca</code>. There is no default trust store.</td>
 </tr>
 <tr>
-<td><code>loxilb_opa_firewall_rules</code></td>
-<td>Successfully applied rules tracked in cache</td>
+<td><code>backend_client_cert_id</code></td>
+<td>A registry entry with usage <code>client</code>. Without it the gateway presents no certificate.</td>
 </tr>
 <tr>
-<td><code>loxilb_opa_circuit_breaker_state</code></td>
-<td><code>0</code> closed, <code>1</code> open, <code>2</code> half-open</td>
+<td><code>backend_tls_server_name</code></td>
+<td>A DNS host name sent as SNI to every endpoint and, when verification is on, required among the DNS names of the endpoint's certificate.</td>
 </tr>
 </tbody>
 </table>
-<p>Alert on failed sync rate, open circuit, stale <code>last_sync_at</code>, partial apply,
-and unexpected rule-count changes. Always corroborate with the Gateway firewall
-read API.</p>
-<h2 id="stop-the-watcher">Stop the watcher<a class="headerlink" href="#stop-the-watcher" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/opa/watcher"</span>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s1">    "serviceArguments": {</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s1">      "externalIP": "192.0.2.10",</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s1">      "port": 443,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s1">      "protocol": "tcp",</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s1">      "mode": 4,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s1">      "security": 2,</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="s1">      "host": "192.0.2.10",</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="s1">      "mtls_backend": {"verify_server_cert": true},</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="s1">      "backend_ca_cert_id": "backend-ca",</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="s1">      "backend_client_cert_id": "backend-client"</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="s1">    },</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="s1">    "endpoints": [</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="s1">      {"endpointIP": "198.51.100.11", "targetPort": 8443, "weight": 1},</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="s1">      {"endpointIP": "198.51.100.12", "targetPort": 8443, "weight": 1}</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="s1">    ]</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="s1">  }'</span>
 </code></pre></div>
-<p>Deleting the watcher stops polling but leaves its applied firewall rules and
-state file. Inventory and remove rules through an approved firewall change
-procedure; do not assume <code>DELETE /config/opa/watcher</code> is a policy rollback.</p>
-<h2 id="release-gates">Release gates<a class="headerlink" href="#release-gates" title="Permanent link">&para;</a></h2>
-<p>Before this integration can be treated as production-ready, require at least:</p>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># CLI availability: main-only</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.10<span class="w"> </span>--tcp<span class="o">=</span><span class="m">443</span>:8443<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">198</span>.51.100.11:1,198.51.100.12:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--security<span class="o">=</span>e2ehttps<span class="w"> </span>--host<span class="o">=</span><span class="m">192</span>.0.2.10<span class="w"> </span>--backend-ca-cert-id<span class="o">=</span>backend-ca<span class="w"> </span>--backend-client-cert-id<span class="o">=</span>backend-client
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>With <code>loxicmd</code>, naming a CA is what asks for verification: <code>--backend-ca-cert-id</code> sends
+<code>mtls_backend.verify_server_cert: true</code> together with the ID.</p>
+<p>The request is refused with <code>400</code>, naming the argument, before anything is changed, when:</p>
 <ul>
-<li>an authenticated internal apply path compatible with management auth;</li>
-<li>authenticated OPA transport with configurable trust;</li>
-<li>fail-open/fail-closed behavior implemented and tested;</li>
-<li>document-level validation or atomic rejection of invalid/empty policy;</li>
-<li>restrictive cache-file permissions and lifecycle cleanup;</li>
-<li>IPv4/IPv6 SSRF and DNS-rebinding controls;</li>
-<li>restart, rollback, and two-node behavior tested on the release image.</li>
+<li>verification is requested without <code>backend_ca_cert_id</code>, or a CA ID is sent without verification;</li>
+<li>an ID has nothing registered under it, or names an entry of the wrong usage;</li>
+<li>the server name is an address or is not a DNS host name;</li>
+<li>the rule's address, port and protocol already carry a rule with a different <code>security</code> mode or
+  a different backend TLS policy. The answer names the rule that is already there and the
+  arguments that differ.</li>
 </ul>
+<h3 id="rules-that-share-a-listener">Rules that share a listener<a class="headerlink" href="#rules-that-share-a-listener" title="Permanent link">&para;</a></h3>
+<p>Rules that differ only in host, path or model share one listener, and a listener has one security
+mode and one backend TLS policy. Every rule on it must ask for the same. To change the policy of a
+listener that carries several rules, delete all but one, change that one, and create the others
+again with the new policy.</p>
+<h2 id="3-what-a-verified-endpoint-must-present">3. What a verified endpoint must present<a class="headerlink" href="#3-what-a-verified-endpoint-must-present" title="Permanent link">&para;</a></h2>
+<p>A chain that ends in the rule's CA is not enough. The certificate must also name the endpoint the
+gateway dialled:</p>
+<ul>
+<li>with <code>backend_tls_server_name</code>: the name must be a DNS subject alternative name of the
+  certificate. A name that appears only in the certificate subject is not accepted.</li>
+<li>without it: the endpoint's IP address must be an IP subject alternative name. No SNI is sent.</li>
+</ul>
+<p>The name is never taken from the VIP or from a request's <code>Host</code> header. The gateway does not
+connect to an endpoint that fails the check; the request fails as it does for an endpoint that is
+down.</p>
+<h2 id="4-read-what-is-installed">4. Read what is installed<a class="headerlink" href="#4-read-what-is-installed" title="Permanent link">&para;</a></h2>
+<p><code>GET</code> of a rule returns two different things. Only one of them describes the data plane:</p>
+<ul>
+<li><code>mtls_backend.verify_server_cert</code>, <code>backend_ca_cert_id</code>, <code>backend_client_cert_id</code> and
+  <code>backend_tls_server_name</code> are what the rule asks for.</li>
+<li><code>backend_tls_effective</code> is what the listener has installed. It is read from the data plane on
+  every <code>GET</code>, is present on <code>mode: 4</code> rules with <code>security: 2</code>, and is ignored on input.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">curl</label><label for="__tabbed_3_2">loxicmd</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/loadbalancer/all<span class="w"> </span><span class="p">|</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>jq<span class="w"> </span><span class="s1">'.lbAttr[].serviceArguments | {externalIP, port, backend_tls_effective}'</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># CLI availability: main-only</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>loxicmd<span class="w"> </span>get<span class="w"> </span>lb<span class="w"> </span>-o<span class="w"> </span>wide
+</code></pre></div>
+</div>
+</div>
+</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"applied"</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">"verify"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">"ca"</span><span class="p">:</span><span class="w"> </span><span class="s2">"backend-ca"</span><span class="p">,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">"client_cert"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">  </span><span class="nt">"client_cert_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"backend-client"</span><span class="p">,</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">  </span><span class="nt">"generation"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="p">}</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th><code>status</code></th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>applied</code></td>
+<td>The listener runs what the rule asks for.</td>
+</tr>
+<tr>
+<td><code>pending</code></td>
+<td>The rule has no listener in the data plane yet. Nothing is installed.</td>
+</tr>
+<tr>
+<td><code>failed</code></td>
+<td>The listener runs something other than what the rule asks for; the other members say what. A rule whose listener could not load a rotated certificate reads this way.</td>
+</tr>
+<tr>
+<td><code>unsupported</code></td>
+<td>The gateway was built without client-certificate support. The leg is TLS without verification or a client certificate.</td>
+</tr>
+</tbody>
+</table>
+<p>Every member except <code>status</code> describes the installed policy. <code>ca</code> is a certificate ID or <code>none</code>.
+<code>generation</code> counts the in-place replacements of the listener's backend TLS context since the
+listener was created. In <code>loxicmd get lb -o wide</code> the same state is the <code>Backend TLS</code> column, for
+example <code>applied: verify, client, name</code>; the certificate IDs are in <code>-o json</code>.</p>
+<p>The object says which policy new backend connections are made under. It does not say that any
+particular connection was verified: prove that with a request, as in the next section.</p>
+<h2 id="5-verify-enforcement">5. Verify enforcement<a class="headerlink" href="#5-verify-enforcement" title="Permanent link">&para;</a></h2>
+<p>Read-back confirms the control plane only. Prove the behavior on staging with endpoints you
+control:</p>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Expected result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Endpoints present certificates signed by the rule's CA and naming their address (or the configured server name)</td>
+<td>Requests are served.</td>
+</tr>
+<tr>
+<td>One endpoint presents a certificate from another CA, an expired certificate, or one that does not name the endpoint</td>
+<td>The gateway does not connect to that endpoint. With no acceptable endpoint left, HTTP/1.1 clients receive <code>502</code> and HTTP/2 clients receive <code>503</code>.</td>
+</tr>
+<tr>
+<td>Endpoints require a client certificate and the rule names one signed by the CA they trust</td>
+<td>Requests are served.</td>
+</tr>
+<tr>
+<td>Endpoints require a client certificate and the rule names none</td>
+<td>Requests fail. An endpoint that rejects the gateway only after the TLS handshake has completed closes the connection, and the client's connection is then closed without an HTTP response.</td>
+</tr>
+</tbody>
+</table>
+<p>Keep a receipt counter on each test endpoint and require that a refused request does not increase
+it. A timeout is not evidence of a refusal.</p>
+<h2 id="6-change-the-policy-of-a-serving-rule">6. Change the policy of a serving rule<a class="headerlink" href="#6-change-the-policy-of-a-serving-rule" title="Permanent link">&para;</a></h2>
+<p>Post the rule again with the changed arguments. The gateway builds the new backend TLS context
+first and puts it in service only when that succeeds. The listener is not re-created and client
+connections are not dropped.</p>
+<ul>
+<li>Backend connections already established keep the context they were made with. A request or an
+  HTTP/2 stream in flight finishes on its connection.</li>
+<li>No new work starts on a backend connection made under the replaced policy. On a rule that
+  inspects requests (AI gateway routing), the next keep-alive request gets a new backend
+  connection. A new HTTP/2 stream is never added to a backend connection made under the replaced
+  policy.</li>
+<li>A client connection on a rule that relays bytes without inspecting requests stays bound to its
+  backend connection until the client closes it. To cut those connections over at once, delete
+  and re-create the rule.</li>
+</ul>
+<p>The request waits for the data plane. When the new context cannot be built, the answer is <code>400</code>,
+the rule keeps the policy it had, and the listener goes on serving with it. A new rule that the
+data plane cannot install is also answered with <code>400</code> and is not kept.</p>
+<p><code>PATCH</code> cannot set a backend TLS argument.</p>
+<h2 id="7-rotate-a-certificate">7. Rotate a certificate<a class="headerlink" href="#7-rotate-a-certificate" title="Permanent link">&para;</a></h2>
+<p><code>PUT /config/cert/{certId}</code> replaces the material under the same ID. For a <code>ca</code> or <code>client</code> entry
+the gateway then updates every rule that refers to the ID and waits for the data plane: each
+listener builds a new backend TLS context from the new material and puts it in service as in
+the previous section.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/cert/backend-ca<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s1">    "certId": "backend-ca",</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s1">    "usage": "ca",</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s1">    "certPem": "&lt;PEM text of the new CA bundle&gt;",</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="s1">    "keyPem": ""</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="s1">  }'</span>
+</code></pre></div>
+<p>When a listener cannot load the new material, the answer is <code>400</code> and names the rules concerned.
+The material is stored all the same, and those rules read <code>failed</code> in <code>backend_tls_effective</code> and
+keep the context they had until the certificate is written again.</p>
+<h2 id="8-upgrading-from-an-earlier-release">8. Upgrading from an earlier release<a class="headerlink" href="#8-upgrading-from-an-earlier-release" title="Permanent link">&para;</a></h2>
+<p>Earlier releases accepted backend TLS arguments that had no effect on traffic. They are now either
+honoured or refused:</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Earlier releases</th>
+<th>Now</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mtls_backend.backend_ca_path</code>, <code>client_cert_path</code>, <code>client_key_path</code>, <code>client_cert_data</code>, <code>client_key_data</code></td>
+<td>Accepted and stored</td>
+<td>Refused with <code>400</code>; never returned on any read and never persisted</td>
+</tr>
+<tr>
+<td><code>mtls_backend.verify_server_cert: true</code></td>
+<td>Accepted, without effect</td>
+<td>Honoured; needs <code>backend_ca_cert_id</code></td>
+</tr>
+<tr>
+<td><code>backend_ca_cert_id</code>, <code>backend_client_cert_id</code></td>
+<td>Accepted, without effect</td>
+<td>Honoured; each must name a registry entry of the right usage</td>
+</tr>
+<tr>
+<td><code>loxicmd create lb --mtls-backend-ca-path</code>, <code>--mtls-backend-cert-path</code>, <code>--mtls-backend-key-path</code>, <code>--mtls-backend-verify-server</code></td>
+<td>Sent the arguments above</td>
+<td>Refused by the CLI, which names the replacement</td>
+</tr>
+</tbody>
+</table>
+<p>One thing changes for traffic. A backend that <strong>requires</strong> a client certificate used to be handed
+the listener's default certificate. It no longer is: the gateway presents a client certificate
+only when the rule names one with <code>backend_client_cert_id</code>. Register the certificate and name it on
+the rule after the upgrade, or those backends refuse the gateway.</p>
+<p>A persisted configuration written by an earlier release still loads. For each rule that carries a
+retired argument the gateway logs one warning that names the rule, drops the argument, and applies
+the rule; <code>verify_server_cert: true</code> without a CA ID is reset to <code>false</code>, with a warning. Run
+<code>POST /config/persist</code> once after the upgrade so the stored configuration no longer contains the
+retired arguments. Treat any older exported snapshot that may hold <code>client_key_data</code> as a file
+that holds a private key.</p>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>400</code> naming <code>backend_ca_cert_id</code> or <code>backend_client_cert_id</code></td>
+<td>The ID is not registered, or the entry has another usage. List it with <code>GET /config/cert/{certId}</code>.</td>
+</tr>
+<tr>
+<td><code>400</code> naming another rule</td>
+<td>The listener already carries a rule with a different <code>security</code> mode or backend TLS policy. See <a href="#rules-that-share-a-listener">Rules that share a listener</a>.</td>
+</tr>
+<tr>
+<td><code>412</code> with <code>BACKEND_TLS_NOT_BUILT</code></td>
+<td>The gateway build has no client-certificate support. Check <code>GET /status/capabilities</code>.</td>
+</tr>
+<tr>
+<td>Every request fails after verification is enabled</td>
+<td>The endpoint certificates do not name what the gateway dials. Without <code>backend_tls_server_name</code> they need the endpoint IP as an IP subject alternative name.</td>
+</tr>
+<tr>
+<td>Requests fail after an upgrade, and the endpoint log shows a missing client certificate</td>
+<td>The rule does not name a client certificate. See <a href="#8-upgrading-from-an-earlier-release">Upgrading from an earlier release</a>.</td>
+</tr>
+<tr>
+<td><code>backend_tls_effective.status</code> is <code>failed</code></td>
+<td>The listener runs an earlier policy. Write the certificate again with valid material, or post the rule again.</td>
+</tr>
+<tr>
+<td><code>backend_tls_effective.status</code> is <code>pending</code></td>
+<td>The rule has no listener yet. Check that the rule was applied and the gateway is ready.</td>
+</tr>
+<tr>
+<td>A certificate cannot be deleted</td>
+<td>A rule still refers to it. The <code>400</code> names the rule.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../management-api-authentication/">Management API Authentication</a></li>
-<li><a href="../../operations/monitoring/">Monitoring and Metrics</a></li>
-<li><a href="../../operations/audit-log/">Audit Log</a></li>
+<li><a href="../mtls/">Frontend mTLS</a></li>
+<li><a href="../../ai-gateway/configuration-reference/#8-tls-mtls">Configuration reference</a></li>
+<li><a href="../../concepts/running-modes/">Running modes</a></li>
+<li><a href="../../reference/cli/">CLI reference</a></li>
 </ul>
 
 

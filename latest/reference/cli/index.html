@@ -1640,6 +1640,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/backend-tls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend TLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3986,6 +4014,26 @@ and <a href="../../operations/appliance-cli/">Appliance CLI</a>.</p>
 <td>Sends <code>security: 2</code>; the gateway terminates and re-encrypts TLS. This is not passthrough.</td>
 </tr>
 <tr>
+<td>Backend verification</td>
+<td><code>--backend-ca-cert-id=&lt;certId&gt;</code></td>
+<td>Sends <code>backend_ca_cert_id</code> and <code>mtls_backend.verify_server_cert: true</code>. Naming a CA is what asks for verification. Requires <code>--security=e2ehttps</code>. CLI main only.</td>
+</tr>
+<tr>
+<td>Backend client certificate</td>
+<td><code>--backend-client-cert-id=&lt;certId&gt;</code></td>
+<td>Sends <code>backend_client_cert_id</code>; the gateway presents that certificate to endpoints. Requires <code>--security=e2ehttps</code>. CLI main only.</td>
+</tr>
+<tr>
+<td>Backend server name</td>
+<td><code>--backend-tls-server-name=&lt;dns-name&gt;</code></td>
+<td>Sends <code>backend_tls_server_name</code>: the SNI sent to endpoints and the name verified in their certificates. CLI main only.</td>
+</tr>
+<tr>
+<td>Backend certificate entry</td>
+<td><code>loxicmd create cert --usage=ca\|client --cert-id=&lt;certId&gt; --cert-file=&lt;pem&gt; [--key-file=&lt;pem&gt;]</code></td>
+<td>Registers a CA bundle (no key) or a client certificate (key required) under <code>/config/cert</code>. CLI main only.</td>
+</tr>
+<tr>
 <td>Typed engine</td>
 <td><code>--kv-engine-type=&lt;engine&gt;</code></td>
 <td>Sends <code>kvEngineType</code>; the server accepts <code>vllm</code>, <code>sglang</code>, <code>trtllm</code>, or <code>llamacpp</code> and applies engine-specific guards.</td>
@@ -4008,10 +4056,15 @@ and <a href="../../operations/appliance-cli/">Appliance CLI</a>.</p>
 <tr>
 <td>API-key policy</td>
 <td><code>--api-key-auth=disabled|required</code></td>
-<td>CLI supports exactly these two values. Omission and explicit <code>disabled</code> are different contracts.</td>
+<td>The released CLI supports exactly these two values; CLI main adds <code>jwt</code> and <code>apikey-or-jwt</code>, which need <code>--jwt-auth-profile=&lt;name&gt;</code>. Omission and explicit <code>disabled</code> are different contracts.</td>
 </tr>
 </tbody>
 </table>
+<p>The earlier <code>--mtls-backend-ca-path</code>, <code>--mtls-backend-cert-path</code>, <code>--mtls-backend-key-path</code> and
+<code>--mtls-backend-verify-server</code> flags are retired on CLI main: the command is refused and names the
+replacement. <code>loxicmd get lb -o wide</code> shows the backend TLS policy the listener has installed in
+the <code>Backend TLS</code> column, and <code>-o json</code> carries <code>backend_tls_effective</code>. See
+<a href="../../security/backend-tls/">Backend TLS Verification and Client Certificates</a>.</p>
 <h3 id="admission-flow-control-flags">Admission flow-control flags<a class="headerlink" href="#admission-flow-control-flags" title="Permanent link">&para;</a></h3>
 <p><code>loxicmd create lb</code> carries the capacity admission gate's per-rule settings. The flags are on CLI
 main; they are <strong>not</strong> in <code>v0.9.8.9-rc.2</code>, so they need a matching CLI build and a Gateway build
@@ -4118,7 +4171,7 @@ command.</p>
 <td><code>/config/ai/jwtauthprofile</code> and <code>/config/ai/jwtauthprofile/{name}</code></td>
 </tr>
 <tr>
-<td>JWT-capable service binding</td>
+<td>JWT-capable service binding (released CLI; CLI main has <code>--api-key-auth=jwt\|apikey-or-jwt</code> with <code>--jwt-auth-profile</code>)</td>
 <td><code>api_key_auth: jwt|apikey-or-jwt</code> plus <code>jwt_auth_profile</code></td>
 </tr>
 <tr>
