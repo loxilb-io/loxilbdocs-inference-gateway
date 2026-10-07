@@ -28,6 +28,7 @@ prefill/decode handoff stalls, streaming cut-offs, and metrics gaps.
 | Sockmap is rejected, bypassed, or configured but not accelerating | [Sockmap Acceleration](sockmap-acceleration.md#verify-engagement) |
 | API-key request unexpectedly succeeds or fails with 401/403/429 | [API-key and quota enforcement](#api-key-and-quota-enforcement) |
 | Request refused `429 admission_capacity`, `504 admission_queue_timeout`, or `503 gateway_draining` | [Admission gate refusals](#admission-gate-refusals) |
+| Rule create or replace answered `400` naming `externalIP` or `tls_ciphers`, `409 lbrule-exists`, or `412 LB_DATAPLANE_INSTALL_FAILED` | [Refusals of a create or a replace](../reference/api.md#refusals-of-a-create-or-a-replace) |
 | An `e2ehttps` service answers `502`/`503` or closes connections after backend verification or an upgrade | [Backend TLS failures](#backend-tls-failures) |
 | SSE stream cut off early | [SSE stream cut off](#sse-stream-cut-off) |
 | `/metrics` returns `503`, is empty, or lacks a series | [Metrics endpoint disabled or incomplete](#metrics-endpoint-disabled-or-incomplete) |
