@@ -3408,6 +3408,10 @@ succeed — always run the "verify it fired" step.</strong> Each section below i
 <td><a href="#admission-gate-refusals">Admission gate refusals</a></td>
 </tr>
 <tr>
+<td>Rule create or replace answered <code>400</code> naming <code>externalIP</code> or <code>tls_ciphers</code>, <code>409 lbrule-exists</code>, or <code>412 LB_DATAPLANE_INSTALL_FAILED</code></td>
+<td><a href="../../reference/api/#refusals-of-a-create-or-a-replace">Refusals of a create or a replace</a></td>
+</tr>
+<tr>
 <td>An <code>e2ehttps</code> service answers <code>502</code>/<code>503</code> or closes connections after backend verification or an upgrade</td>
 <td><a href="#backend-tls-failures">Backend TLS failures</a></td>
 </tr>
@@ -3876,8 +3880,8 @@ certificates is refused.</p>
 <td>Without <code>backend_tls_server_name</code> the certificate needs the endpoint IP as an IP subject alternative name; with it, that DNS name</td>
 </tr>
 <tr>
-<td>HTTP/1.1 clients receive <code>502</code>, HTTP/2 clients <code>503</code>, and the data plane log has <code>ssl-read &lt;address&gt;:&lt;port&gt;(failed after handshake, before any response)</code></td>
-<td>The endpoints require a client certificate and the rule names none, or names one they do not accept. The TLS alert in the log line says which</td>
+<td>HTTP/1.1 clients receive <code>502</code>, HTTP/2 clients <code>503</code>, and the data plane log has <code>ssl-read</code>, <code>ssl-write</code> or <code>ssl-setup &lt;address&gt;:&lt;port&gt;(failed after handshake, before any response)</code></td>
+<td>The endpoints require a client certificate and the rule names none, or names one they do not accept. The TLS alert in an <code>ssl-read</code> line says which; <code>ssl-write</code> and <code>ssl-setup</code> mean the endpoint's reset reached the gateway before its request was on the way, and carry no alert</td>
 <td>Name a <code>usage: client</code> entry with <code>backend_client_cert_id</code>. After an upgrade this is the most likely cause: the listener certificate is no longer presented to backends</td>
 </tr>
 <tr>

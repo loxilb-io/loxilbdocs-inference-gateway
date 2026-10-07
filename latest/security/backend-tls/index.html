@@ -3425,7 +3425,7 @@ control:</p>
 </tr>
 <tr>
 <td>Endpoints require a client certificate and the rule names none, or names one they do not accept</td>
-<td>The same answer: HTTP/1.1 clients receive <code>502</code> and HTTP/2 clients receive <code>503</code>, both with the body <code>backend_unreachable</code>. An endpoint that uses TLS 1.3 turns the gateway away only after the handshake has completed; the data plane log then names it: <code>ssl-read &lt;address&gt;:&lt;port&gt;(failed after handshake, before any response)</code>, followed by the TLS alert when the endpoint sent one.</td>
+<td>The same answer: HTTP/1.1 clients receive <code>502</code> and HTTP/2 clients receive <code>503</code>, both with the body <code>backend_unreachable</code>. An endpoint that uses TLS 1.3 turns the gateway away only after the handshake has completed; the data plane log then names it: <code>ssl-read &lt;address&gt;:&lt;port&gt;(failed after handshake, before any response)</code>, followed by the TLS alert when the endpoint sent one. An endpoint that closes with a reset can be met earlier, on the write of the request or before it; the line then starts with <code>ssl-write</code> or <code>ssl-setup</code> and carries no alert. An HTTP/1.1 client gets the same answer in all three.</td>
 </tr>
 </tbody>
 </table>

@@ -4499,8 +4499,8 @@ returns them.</p>
 <td><code>tls_ciphers</code></td>
 <td>string</td>
 <td>—</td>
-<td>OpenSSL cipher string</td>
-<td>Applied to both TLS1.2 cipher list and TLS1.3 ciphersuites. Empty = hardcoded defaults.</td>
+<td>OpenSSL cipher string, at most 255 bytes</td>
+<td>The one string is applied to both the TLS 1.3 ciphersuites and the TLS 1.2 cipher list, and both must take it: name at least one of each, for example <code>TLS_AES_256_GCM_SHA384:ECDHE-RSA-AES256-GCM-SHA384</code>. A string the TLS library does not take is refused with <code>400</code> naming <code>tls_ciphers</code>, on a FullProxy rule with <code>security</code> 1 or 2. Empty = built-in defaults.</td>
 </tr>
 <tr>
 <td><code>tls_versions</code></td>
@@ -4532,6 +4532,9 @@ returns them.</p>
 </tr>
 </tbody>
 </table>
+<p>A rule read (<code>GET</code>) reports these fields, the member timeouts (<code>timeoutMemberConnect</code>,
+<code>timeoutMemberData</code>, <code>timeoutTcpInspect</code>) and <code>mtls_frontend.client_crl_path</code> as the rule stores
+them, so a rule that is read and posted back keeps them.</p>
 <hr />
 <h2 id="9-endpoints-endpoints">9. Endpoints (<code>endpoints[]</code>)<a class="headerlink" href="#9-endpoints-endpoints" title="Permanent link">&para;</a></h2>
 <p>The backend pool. <code>endpointIP</code>, <code>weight</code>, and <code>targetPort</code> are <strong>required</strong>; the rest are

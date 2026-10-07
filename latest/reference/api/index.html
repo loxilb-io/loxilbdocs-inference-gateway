@@ -2638,6 +2638,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Load-balancer rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#replacing-a-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replacing a rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#refusals-of-a-create-or-a-replace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refusals of a create or a replace
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3129,6 +3157,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Load-balancer rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#replacing-a-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replacing a rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#refusals-of-a-create-or-a-replace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refusals of a create or a replace
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3469,7 +3525,7 @@ the Swagger document.</p>
 <tr>
 <td>Certificates and SNI</td>
 <td><code>POST /config/cert</code>, <code>GET/PUT/DELETE /config/cert/{certId}</code>, <code>GET/POST/DELETE /sni/certificates</code></td>
-<td>TLS certificate and SNI mapping lifecycle. A certificate entry has a <code>usage</code> (<code>server</code>, <code>ca</code>, <code>client</code>); <code>ca</code> and <code>client</code> entries serve the backend leg, see <a href="../../security/backend-tls/">Backend TLS</a></td>
+<td>TLS certificate and SNI mapping lifecycle. <code>POST /config/cert</code> answers <code>201</code> with the <code>certId</code> the certificate is stored under, including one the gateway minted because the request named none. A certificate entry has a <code>usage</code> (<code>server</code>, <code>ca</code>, <code>client</code>); <code>ca</code> and <code>client</code> entries serve the backend leg, see <a href="../../security/backend-tls/">Backend TLS</a></td>
 </tr>
 <tr>
 <td>HTTP tracing</td>
@@ -3789,7 +3845,7 @@ release-blocked.</p>
 <tr>
 <td><code>POST</code></td>
 <td><code>/config/loadbalancer</code></td>
-<td>Create a service from <code>serviceArguments</code>, <code>endpoints</code>, and optional <code>secondaryIPs</code></td>
+<td>Create a service from <code>serviceArguments</code>, <code>endpoints</code>, and optional <code>secondaryIPs</code>; for a rule that exists, replace it (see <a href="#replacing-a-rule">Replacing a rule</a>)</td>
 </tr>
 <tr>
 <td><code>GET</code></td>
@@ -3841,6 +3897,72 @@ release-blocked.</p>
 <p><code>model_name</code>, <code>path_prefix</code>, and <code>path_match_mode</code> can be part of the exact
 rule key. Omitting <code>model_name</code> matches only a model-less rule; it is not a
 wildcard deletion.</p>
+<h3 id="replacing-a-rule">Replacing a rule<a class="headerlink" href="#replacing-a-rule" title="Permanent link">&para;</a></h3>
+<p>A <code>POST</code> for a rule that exists replaces it. A request that changes nothing is answered
+<code>409 lbrule-exists</code>.</p>
+<p>A field the request omits takes its default, except the fields a replace keeps: <code>id</code>, the
+administrative state, <code>projectId</code>, annotations, the secondary VIPs, <code>api_key_auth</code>,
+<code>backend_protocol</code>, <code>half_close_mode</code>, the <code>fc_*</code> fields, <code>pd_cache_threshold</code> and
+<code>pd_balance_abs_threshold</code>.</p>
+<p>What a replace does to a FullProxy rule depends on what changed:</p>
+<table>
+<thead>
+<tr>
+<th>What changed</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fc_*</code>, <code>half_close_mode</code>, the backend TLS policy</td>
+<td>Applied in place</td>
+</tr>
+<tr>
+<td>Anything else, on a rule with a CHWBL selector</td>
+<td>Applied in place</td>
+</tr>
+<tr>
+<td>Anything else, on other rules</td>
+<td>The listening socket is kept. The rule's endpoint pool is built again: requests waiting in its capacity queue are ended, and session and conversation affinity and the rule's counts start over</td>
+</tr>
+</tbody>
+</table>
+<p>A replace the gateway refuses leaves the rule as it was: it reads back with the values it had
+and keeps serving.</p>
+<h3 id="refusals-of-a-create-or-a-replace">Refusals of a create or a replace<a class="headerlink" href="#refusals-of-a-create-or-a-replace" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>400</code> naming <code>externalIP</code></td>
+<td>The VIP of a FullProxy rule is not an address of the gateway host and is in no subnet the gateway can claim, so the listener has nothing to bind</td>
+<td>Use an address the host holds, or one in a subnet of the gateway that it holds as cluster master</td>
+</tr>
+<tr>
+<td><code>400</code> naming <code>tls_ciphers</code></td>
+<td>The TLS library does not take the cipher string</td>
+<td>Name at least one TLS 1.3 ciphersuite and one TLS 1.2 cipher; see the <a href="../../ai-gateway/configuration-reference/">configuration reference</a></td>
+</tr>
+<tr>
+<td><code>409 lbrule-exists</code></td>
+<td>The rule exists and the request changes nothing</td>
+<td>Nothing to do; a rename that would change the rule's cluster instance or VIP handling is also answered <code>409</code></td>
+</tr>
+<tr>
+<td><code>412</code> with reason <code>LB_DATAPLANE_INSTALL_FAILED</code></td>
+<td>The data plane did not install the rule for a reason no request body changes, for example certificate or CRL material on the host that cannot be loaded</td>
+<td>Read the data plane log of the gateway, correct the host-side cause, and send the request again</td>
+</tr>
+</tbody>
+</table>
+<p>A FullProxy rule on a gateway that is the cluster standby is not refused when its VIP is with
+the master: it is stored, and its listener comes up when the gateway takes the VIP over.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/loadbalancer"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
