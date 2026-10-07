@@ -594,7 +594,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "0f8ba8345a9fa4e3fcf4",
       "language": "bash",
-      "line": 414,
+      "line": 418,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -624,7 +624,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "469ff84d884af3db8b8a",
       "language": "bash",
-      "line": 445,
+      "line": 449,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -654,7 +654,7 @@
       "evidence": "syntax-only",
       "id": "97719106288800271ea8",
       "language": "json",
-      "line": 453,
+      "line": 457,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -671,7 +671,7 @@
       "evidence": "swagger-union-static",
       "id": "0c9409d1f0ea6ac8f193",
       "language": "bash",
-      "line": 472,
+      "line": 476,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -688,7 +688,7 @@
       "evidence": "cli-contract-static",
       "id": "14b64cf9f36bfc739c2b",
       "language": "bash",
-      "line": 480,
+      "line": 484,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -5708,7 +5708,7 @@
       "evidence": "shell-syntax-only",
       "id": "f5be8718d9c5780f0b57",
       "language": "bash",
-      "line": 50,
+      "line": 51,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5725,7 +5725,7 @@
       "evidence": "swagger-union-static",
       "id": "0e4c8d724dd43ab5e34f",
       "language": "bash",
-      "line": 70,
+      "line": 71,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5742,7 +5742,7 @@
       "evidence": "swagger-union-static",
       "id": "bffd8415b750cbc1ed61",
       "language": "bash",
-      "line": 96,
+      "line": 97,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5759,7 +5759,7 @@
       "evidence": "swagger-union-static",
       "id": "bc1fd6c2ae3911ff75b2",
       "language": "bash",
-      "line": 155,
+      "line": 156,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5776,7 +5776,7 @@
       "evidence": "swagger-union-static",
       "id": "61af48e7a0c8693a6205",
       "language": "bash",
-      "line": 200,
+      "line": 201,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5793,7 +5793,7 @@
       "evidence": "swagger-union-static",
       "id": "195abedb19edd82100ed",
       "language": "bash",
-      "line": 305,
+      "line": 306,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5810,7 +5810,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "e75b06d27f87644a2976",
       "language": "bash",
-      "line": 332,
+      "line": 333,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -5840,7 +5840,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "5f5662a8dd7f7b31b8b6",
       "language": "bash",
-      "line": 342,
+      "line": 343,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -5870,7 +5870,7 @@
       "evidence": "swagger-union-static",
       "id": "b1ac16407876c036e62f",
       "language": "bash",
-      "line": 350,
+      "line": 351,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5887,7 +5887,7 @@
       "evidence": "swagger-union-static",
       "id": "bfc1f9e0926d3b27ec1e",
       "language": "bash",
-      "line": 373,
+      "line": 374,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5904,7 +5904,7 @@
       "evidence": "metric-manifest-static",
       "id": "df576ccf745b93ac5fb7",
       "language": "promql",
-      "line": 428,
+      "line": 429,
       "path": "docs/operations/troubleshooting.md",
       "quality_contract": {
         "cleanup": false,
@@ -5998,7 +5998,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "adc043d2427d3edd11d6",
       "language": "bash",
-      "line": 292,
+      "line": 325,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -6028,7 +6028,7 @@
       "evidence": "swagger-union-static",
       "id": "37e9243f2d0518097a5c",
       "language": "bash",
-      "line": 404,
+      "line": 437,
       "path": "docs/reference/api.md",
       "quality_contract": {
         "cleanup": true,

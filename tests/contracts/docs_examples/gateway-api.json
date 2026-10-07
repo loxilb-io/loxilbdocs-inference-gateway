@@ -14,7 +14,7 @@
         ],
         "claim": "jwt-policy-and-token-accounting",
         "matching_workflow_objects": {
-          ".github/workflows/ai-gateway-sanity.yml": "a6878f967027db1c9208247e5d87f2feec72efff"
+          ".github/workflows/ai-gateway-sanity.yml": "de47592f32add3ef6bab6277f8c44945c29f33ba"
         },
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
@@ -24,7 +24,7 @@
         "validation_object_id": "8484fadfc6e4e72a6c39fa7e8aee34204629368d",
         "validation_path": "cicd/ai-jwtauth/validation.sh",
         "workflow_membership": "wired",
-        "workflow_object_id": "a6878f967027db1c9208247e5d87f2feec72efff",
+        "workflow_object_id": "de47592f32add3ef6bab6277f8c44945c29f33ba",
         "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
       },
       {
@@ -65,7 +65,7 @@
         ],
         "claim": "pd-and-worker-scrape-metrics",
         "matching_workflow_objects": {
-          ".github/workflows/ai-gateway-sanity.yml": "a6878f967027db1c9208247e5d87f2feec72efff"
+          ".github/workflows/ai-gateway-sanity.yml": "de47592f32add3ef6bab6277f8c44945c29f33ba"
         },
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
@@ -75,7 +75,7 @@
         "validation_object_id": "732dba079be92270c1ae0dd0ee635f8ca423adc3",
         "validation_path": "cicd/vllm-pd-disagg/validation.sh",
         "workflow_membership": "wired",
-        "workflow_object_id": "a6878f967027db1c9208247e5d87f2feec72efff",
+        "workflow_object_id": "de47592f32add3ef6bab6277f8c44945c29f33ba",
         "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
       },
       {
@@ -3397,11 +3397,11 @@
       }
     },
     "provenance": {
-      "generated_at": "2026-10-06T12:58:03+00:00",
-      "source_revision": "ec345d593504e24d49d23a5e504af3bdcfc50f3f"
+      "generated_at": "2026-10-07T20:11:42+00:00",
+      "source_revision": "cfa8b0010d72981394d4e02b6efc4b30c8614803"
     },
     "schema_version": 1,
-    "sha256": "e4bf2b9c296607d3d9e16de37bd74acd85d40e7e77272247a2ba03fb25647603",
+    "sha256": "5c3201c06e796b730f11827547a4ead5904d711cfea618a386e9e54ba716dba6",
     "source_path": "deploy/monitoring/manifest/metric-manifest.json"
   },
   "release_snapshot": {
@@ -3470,6 +3470,7 @@
           "BootStatus",
           "CapabilityStatus",
           "CapabilityStatusList",
+          "CertCreated",
           "ConfigOpRecord",
           "DependencyDiagnostic",
           "DiagnosticsStatus",
@@ -3495,7 +3496,7 @@
           "UserSummary"
         ],
         "baseline_definition_count": 147,
-        "candidate_definition_count": 188,
+        "candidate_definition_count": 189,
         "removed_definitions": [],
         "source_path": "api/swagger.yml"
       },
@@ -3512,8 +3513,8 @@
     ]
   },
   "source": {
-    "commit": "e5fece25f94f8782adf977e5a573eb6e1f5dc15d",
-    "ebpf_submodule_commit": "de3112ac038e4de141673d86d66a9031c6569d5f",
+    "commit": "79c77f0275e655eaee4bb6a732c2d67f1a94198c",
+    "ebpf_submodule_commit": "58716b6e3c9168f8e79d6f8d1488692c3c4bc47c",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
     "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",
@@ -4793,6 +4794,17 @@
           "required": [
             "certPem",
             "keyPem"
+          ],
+          "type": "object"
+        },
+        "CertCreated": {
+          "properties": {
+            "certId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "certId"
           ],
           "type": "object"
         },
@@ -12108,7 +12120,7 @@
           }
         }
       },
-      "sha256": "0ecf7e0407e510ea4eee77d9480a18b13e9b00b38a9c3bcdbf9a1ab145496df8",
+      "sha256": "9932ef4a04644b5631c47102bc4bdce519c1a4fa4acedde542812aeb51aad0d5",
       "source_path": "api/swagger.yml"
     },
     {

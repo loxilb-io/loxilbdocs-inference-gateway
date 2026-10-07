@@ -347,11 +347,15 @@ returns them.
 | Field | Type | Default | Allowed / Enum | Notes |
 |---|---|---|---|---|
 | `alpn_protocols` | array[string] | — | e.g. `["h2","http/1.1"]` | ALPN list advertised on listener + pool. Maps to `backend_protocol`. Empty preserves the `backend_protocol`-driven value. |
-| `tls_ciphers` | string | — | OpenSSL cipher string | Applied to both TLS1.2 cipher list and TLS1.3 ciphersuites. Empty = hardcoded defaults. |
+| `tls_ciphers` | string | — | OpenSSL cipher string, at most 255 bytes | The one string is applied to both the TLS 1.3 ciphersuites and the TLS 1.2 cipher list, and both must take it: name at least one of each, for example `TLS_AES_256_GCM_SHA384:ECDHE-RSA-AES256-GCM-SHA384`. A string the TLS library does not take is refused with `400` naming `tls_ciphers`, on a FullProxy rule with `security` 1 or 2. Empty = built-in defaults. |
 | `tls_versions` | array[string] | — | e.g. `["TLSv1.2","TLSv1.3"]` | Collapsed to a min/max version range. Empty = TLS1.2–1.3. |
 | `hsts_max_age` | uint32 | `0` | ≥0 | Strict-Transport-Security max-age (seconds), injected on HTTPS listeners. `0` = no HSTS. |
 | `hsts_include_subdomains` | boolean | `false` | `true`/`false` | Append `; includeSubDomains`. Only meaningful when `hsts_max_age > 0`. |
 | `hsts_preload` | boolean | `false` | `true`/`false` | Append `; preload`. Only meaningful when `hsts_max_age > 0`. |
+
+A rule read (`GET`) reports these fields, the member timeouts (`timeoutMemberConnect`,
+`timeoutMemberData`, `timeoutTcpInspect`) and `mtls_frontend.client_crl_path` as the rule stores
+them, so a rule that is read and posted back keeps them.
 
 ---
 

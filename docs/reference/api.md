@@ -132,7 +132,7 @@ the Swagger document.
 | Authentication and users | `POST /auth/login`, `POST /auth/logout`, `GET/POST /auth/users`, `PUT/DELETE /auth/users/{id}`, `POST /auth/token/upgrade` | User login/logout, exact-role user administration, and manual-token update |
 | Load balancers | `POST /config/loadbalancer`, `GET/DELETE /config/loadbalancer/all`, and `GET/PATCH/DELETE` id/name/VIP/host-key variants | Core L4/L7 and AI service rules, status, and statistics |
 | L7 policy | `GET/POST /config/l7policy`, `GET/DELETE /config/l7policy/id/{id}` | L7 policy lifecycle |
-| Certificates and SNI | `POST /config/cert`, `GET/PUT/DELETE /config/cert/{certId}`, `GET/POST/DELETE /sni/certificates` | TLS certificate and SNI mapping lifecycle. A certificate entry has a `usage` (`server`, `ca`, `client`); `ca` and `client` entries serve the backend leg, see [Backend TLS](../security/backend-tls.md) |
+| Certificates and SNI | `POST /config/cert`, `GET/PUT/DELETE /config/cert/{certId}`, `GET/POST/DELETE /sni/certificates` | TLS certificate and SNI mapping lifecycle. `POST /config/cert` answers `201` with the `certId` the certificate is stored under, including one the gateway minted because the request named none. A certificate entry has a `usage` (`server`, `ca`, `client`); `ca` and `client` entries serve the backend leg, see [Backend TLS](../security/backend-tls.md) |
 | HTTP tracing | `POST /config/trace/enable`, `POST /config/trace/disable`, `GET /config/trace/status`, `GET/POST /config/trace/otlp`, catalog/parser paths | Trace control, OTLP exporter, and parser assignment; `GET /config/trace/catalogs` is **not implemented** |
 | L4 tracing | `POST /config/l4trace/enable`, `POST /config/l4trace/disable`, `GET /config/l4trace/status`, `PUT /config/l4trace/sampling`, `POST /config/l4trace/stats/reset` | L4 event tracing and sampling control |
 | Connection and routing state | `GET /config/conntrack/all`, `GET /config/port/all`, `GET/POST/DELETE /config/route...` | Conntrack, interfaces, and static routes |
@@ -273,7 +273,7 @@ Every AI routing feature is expressed through a load-balancer rule.
 
 | Method | Path | Important behavior |
 |---|---|---|
-| `POST` | `/config/loadbalancer` | Create a service from `serviceArguments`, `endpoints`, and optional `secondaryIPs` |
+| `POST` | `/config/loadbalancer` | Create a service from `serviceArguments`, `endpoints`, and optional `secondaryIPs`; for a rule that exists, replace it (see [Replacing a rule](#replacing-a-rule)) |
 | `GET` | `/config/loadbalancer/all` | List services; optional `projectId` filtering is not an authorization boundary |
 | `DELETE` | `/config/loadbalancer/all` | Deletes all rules; avoid on shared gateways |
 | `GET` | `/config/loadbalancer/id/{id}` | Read one rule by opaque ID |
@@ -287,6 +287,39 @@ Every AI routing feature is expressed through a load-balancer rule.
 `model_name`, `path_prefix`, and `path_match_mode` can be part of the exact
 rule key. Omitting `model_name` matches only a model-less rule; it is not a
 wildcard deletion.
+
+### Replacing a rule
+
+A `POST` for a rule that exists replaces it. A request that changes nothing is answered
+`409 lbrule-exists`.
+
+A field the request omits takes its default, except the fields a replace keeps: `id`, the
+administrative state, `projectId`, annotations, the secondary VIPs, `api_key_auth`,
+`backend_protocol`, `half_close_mode`, the `fc_*` fields, `pd_cache_threshold` and
+`pd_balance_abs_threshold`.
+
+What a replace does to a FullProxy rule depends on what changed:
+
+| What changed | Effect |
+|---|---|
+| `fc_*`, `half_close_mode`, the backend TLS policy | Applied in place |
+| Anything else, on a rule with a CHWBL selector | Applied in place |
+| Anything else, on other rules | The listening socket is kept. The rule's endpoint pool is built again: requests waiting in its capacity queue are ended, and session and conversation affinity and the rule's counts start over |
+
+A replace the gateway refuses leaves the rule as it was: it reads back with the values it had
+and keeps serving.
+
+### Refusals of a create or a replace
+
+| Status | Meaning | What to do |
+|---|---|---|
+| `400` naming `externalIP` | The VIP of a FullProxy rule is not an address of the gateway host and is in no subnet the gateway can claim, so the listener has nothing to bind | Use an address the host holds, or one in a subnet of the gateway that it holds as cluster master |
+| `400` naming `tls_ciphers` | The TLS library does not take the cipher string | Name at least one TLS 1.3 ciphersuite and one TLS 1.2 cipher; see the [configuration reference](../ai-gateway/configuration-reference.md) |
+| `409 lbrule-exists` | The rule exists and the request changes nothing | Nothing to do; a rename that would change the rule's cluster instance or VIP handling is also answered `409` |
+| `412` with reason `LB_DATAPLANE_INSTALL_FAILED` | The data plane did not install the rule for a reason no request body changes, for example certificate or CRL material on the host that cannot be loaded | Read the data plane log of the gateway, correct the host-side cause, and send the request again |
+
+A FullProxy rule on a gateway that is the cluster standby is not refused when its VIP is with
+the master: it is stored, and its listener comes up when the gateway takes the VIP over.
 
 ```bash
 curl --fail-with-body --silent --show-error \

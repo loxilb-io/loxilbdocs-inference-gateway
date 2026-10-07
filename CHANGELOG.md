@@ -41,6 +41,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Load-balancer rules: what a `POST` for an existing rule does (which omitted
+  fields a replace keeps, what is applied in place, what restarts), and the
+  refusals of a create or a replace (`400` naming `externalIP` or
+  `tls_ciphers`, `409 lbrule-exists`, `412 LB_DATAPLANE_INSTALL_FAILED`).
+  `tls_ciphers` states that the one string must serve TLS 1.3 and TLS 1.2.
+  `POST /config/cert` answers with the `certId`. A rule read reports the
+  member timeouts, the TLS-tuning fields and `mtls_frontend.client_crl_path`.
+
 - Prepare a Supported Model: TensorRT-LLM as a single pool. The installer's
   `--engine trtllm`, the per-engine probe sets, the engine options file and
   launch line, block size 32, and the readiness causes specific to that
