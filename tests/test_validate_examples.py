@@ -186,7 +186,7 @@ class DocumentationExampleTests(unittest.TestCase):
     def test_gateway_main_and_release_sources_are_exactly_frozen(self) -> None:
         contract = self.validator.gateway_contract
         self.assertEqual(
-            "747272ea56d00fce7b61aefc097d49002d0d7535",
+            "e5fece25f94f8782adf977e5a573eb6e1f5dc15d",
             contract["source"]["commit"],
         )
         self.assertEqual(
