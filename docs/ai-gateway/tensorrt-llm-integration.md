@@ -36,6 +36,24 @@ flowchart LR
 !!! warning "Exactly one event consumer"
     `POST /kv_cache_events` drains buffered events. The Gateway must be the sole consumer for each endpoint. Do not use that endpoint as a health probe or monitoring scrape target, and do not attach a second cache-aware router.
 
+!!! info "Scrape `/prometheus/metrics`, not `/metrics`"
+    On TensorRT-LLM `1.3.0rc24` (PyTorch backend), `GET /metrics` is a JSON queue of iteration statistics that a
+    read empties. The engine's Prometheus text is at `/prometheus/metrics` and needs `return_perf_metrics: true`
+    in the engine options.
+
+## Strict rule with a model profile
+
+!!! info "Current-main contract"
+    Model profiles and `kvModelProfile` are on Gateway `main`; they are absent from Gateway `v0.9.8.9-rc.1`.
+
+A single-pool rule that also names a `kvModelProfile` is attested before it routes by cache content. For
+`kvEngineType: "trtllm"` the Gateway uses the profile's TensorRT-LLM probe set
+(`probefixtures/<profile-id>/trtllm`) and the engine manifest staged with
+`scripts/models/install-models.sh --engine trtllm`; without them the rule stays below `READY` with
+`probe_fixtures_missing` or `manifest_missing`. The TensorRT-LLM rows of the supported-models list are single
+pool, chat API. Host preparation, the engine launch and the rule fields are on
+[Prepare a Supported Model](../getting-started/prepare-supported-model.md).
+
 ## Sequential P/D lifecycle
 
 ```mermaid
@@ -155,6 +173,7 @@ For converged workers, remove `pd_disagg_mode` and all `ep_role` fields, keep `k
 | Rule rejects `kvDpRankCount` | The current poller does not expose client-visible rank fan-out | Remove the field or use the default value. |
 | P/D request never reaches generation | Context finished early or generation is unavailable | Inspect `loxilb_pd_trt_ctx_early_exit_total`, endpoint health, and engine logs. |
 | KV hits remain zero | Block size, tokenizer, or event ownership is wrong | Correct parity, then warm the pool again before measuring. |
+| Engine exits with `Address already in use` right after a restart | `trtllm-serve` binds its port before it loads the model, without address reuse, while connections of the previous process are still closing | Stop the engine, wait until no socket holds the serving port (`ss -Htan 'sport = :8355'` prints nothing), then start it. Do not use `docker restart`. |
 
 ## Cleanup
 
@@ -171,7 +190,7 @@ Remove `control-plane.headers` after the workflow and unset `CONTROL_PLANE_TOKEN
 
 - Restrict `/server_info` and `/kv_cache_events` to the Gateway and trusted operators; they are operational control surfaces, not public application APIs.
 - Protect the management API and backend network. Do not embed model registry credentials in rule payloads.
-- The repository validates admission, event ingestion, P/D rewriting, early exit, and failure behavior with mocks. Real engine compatibility and performance must be verified against the deployed TensorRT-LLM build and GPU topology.
+- The repository validates admission, event ingestion, P/D rewriting, early exit, and failure behavior with mocks. On Gateway `main`, the single-pool shape with a model profile also has a live scenario against TensorRT-LLM `1.3.0rc24` (`cicd/kv-model-ab-perf`); it does not drive P/D. Real engine compatibility and performance must be verified against the deployed TensorRT-LLM build and GPU topology.
 
 ## See also
 

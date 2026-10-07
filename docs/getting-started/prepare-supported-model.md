@@ -40,6 +40,8 @@ Pick the topology with [Choose an Inference Engine](choose-your-engine.md):
 With one engine in a single pool, or one prefill engine in P/D, there is no choice to make and exact routing
 gives the same placement as round-robin.
 
+The TensorRT-LLM rows are single pool only, on the chat API: the list has no P/D evidence for that engine.
+
 ## 2. Stage the profile registry on the gateway host
 
 From a checkout of the gateway repository at the release you run:
@@ -58,12 +60,13 @@ then stages:
 |---|---|
 | `/etc/loxilb/kvprofiles/<profile-id>.yaml` | the profile |
 | `/etc/loxilb/kvprofiles/manifests/<profile-id>.yaml` | the engine identity the gateway checks |
-| `/etc/loxilb/kvprofiles/probefixtures/<profile-id>/` | the token probes the engine must answer exactly |
+| `/etc/loxilb/kvprofiles/probefixtures/<profile-id>/` | the token probes the engine must answer exactly; the SGLang and TensorRT-LLM sets are in its `sglang/` and `trtllm/` sub-directories |
 | `/etc/loxilb/kvprofiles/artifacts/sha256/` | the tokenizer and template, content-addressed |
 | `/etc/loxilb/tokenizers/<org>__<name>/tokenizer.json` | the tokenizer |
 
-- `--engine` selects which engine's manifest is staged. A registry holds one engine manifest per profile, so
-  stage with `--engine sglang` for an SGLang pool.
+- `--engine` is `vllm`, `sglang` or `trtllm` and selects which engine's manifest is staged. A registry holds
+  one engine manifest per profile, so stage with `--engine sglang` for an SGLang pool and `--engine trtllm` for
+  a TensorRT-LLM pool.
 - Gated models need an access token in a file of mode `0600`. The token is sent as a request header only; it is
   never taken from the command line.
 - `--dry-run` prints what would be downloaded and staged, and writes nothing.
@@ -99,6 +102,9 @@ sudo scripts/models/install-models.sh --engine vllm --models <profile-id> \
 `--weights-dir` downloads the pinned snapshot into `/models/<org>__<name>/<revision>/` and verifies every file
 against the committed weights index; `--pull-image` pulls the engine image by digest. To check a snapshot that
 is already on the host, use `scripts/models/modelctl.py verify-weights <profile-id> <dir>`.
+
+TensorRT-LLM has no registry image: with `--engine trtllm`, `--pull-image` prints `SKIP_NO_PULLABLE_IMAGE` and
+pulls nothing. Build the image from the engine's release wheel at the version of the row.
 
 ## 5. Start the engines
 
@@ -158,12 +164,48 @@ on one GPU). Engines whose chat template prints the date must run in UTC: no `TZ
     the pinned one. Where the row says so, mount the fixed `serving_tokenize.py` from the gateway repository's
     `cicd/kv-model-compat-pd/sglang-tokenize-fix/`.
 
+=== "TensorRT-LLM"
+
+    Single pool only, PyTorch backend. The engine options go in a file:
+
+    ```yaml
+    # /etc/trtllm/kv.yaml
+    kv_cache_config:
+      enable_block_reuse: true        # the prefix cache
+      event_buffer_max_size: 4096     # the KV events the gateway drains; 0 turns them off
+    return_perf_metrics: true         # Prometheus text at /prometheus/metrics
+    ```
+
+    ```bash
+    IMAGE="<your image of the row's TensorRT-LLM version>"
+    SNAP="/models/<org>__<name>/<revision>"
+    MODEL="<org>/<name>"
+    docker run -d --name trtllm --gpus all --network host --ipc=host --shm-size 16g \
+      -e HF_HUB_OFFLINE=1 -v /models:/models -v /etc/trtllm/kv.yaml:/cfg/kv.yaml:ro \
+      "$IMAGE" \
+      trtllm-serve "$SNAP" --served_model_name "$MODEL" --host 0.0.0.0 --port 8000 --backend pytorch \
+      --extra_llm_api_options /cfg/kv.yaml
+    ```
+
+    There is no role argument and no event port: the gateway drains the KV events from
+    `POST /kv_cache_events` on the serving port, and it must be the only reader of that endpoint
+    ([TensorRT-LLM Integration](../ai-gateway/tensorrt-llm-integration.md)). The engine reports 32 tokens per
+    block in `GET /server_info`; the rule's `kvBlockSize` must be that number. The engine is ready when
+    `/v1/models` lists the model and `/health` answers, which is minutes after the container starts. The launch
+    line the gateway's own scenario uses, with the library path its locally built image needs, is in the gateway
+    repository's `cicd/kv-model-compat-pd/engine.sh`.
+
+    To restart an engine, stop it, wait until no socket holds the port, then start it: `trtllm-serve` binds the
+    port before it loads the model and exits with `Address already in use` while connections of the previous
+    process are still closing.
+
 The values that must agree across the whole pool and the rule:
 
 | Value | Engine side | Rule side |
 |---|---|---|
 | Served model name | `--served-model-name <org>/<name>` | `model_name` |
 | Block size | vLLM `--block-size 16`, SGLang `--page-size 16` | `kvBlockSize: 16` |
+| Block size (TensorRT-LLM) | `tokens_per_block` in `/server_info`, 32 | `kvBlockSize: 32` |
 | Engine | the row's image digest | `kvEngineType` |
 | Hash seed (vLLM) | `PYTHONHASHSEED=0` | gateway `LLB_KV_NONE_HASH_SEED=0` |
 
@@ -173,7 +215,7 @@ of their own.
 | Port | Used for |
 |---|---|
 | `8000` | OpenAI-compatible API, identity and token probes |
-| `5557` | KV cache events from single-pool and prefill engines |
+| `5557` | KV cache events from single-pool and prefill engines (vLLM, SGLang; TensorRT-LLM sends them on `8000`) |
 | `5600` (vLLM P/D), `8998` (SGLang P/D) | engine-to-engine KV transfer side channel |
 
 Wait until every engine lists the served model:
@@ -186,7 +228,7 @@ curl --fail-with-body --silent --show-error http://<engine-host>:8000/v1/models
 ## 6. Bind the rule and wait for READY
 
 Continue on [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md): create the
-rule with `kvModelProfile`, `kvEngineType`, `kvBlockSize: 16` and the `kvExactMode` of your topology, then read
+rule with `kvModelProfile`, `kvEngineType`, `kvBlockSize: 16` (`32` for TensorRT-LLM) and the `kvExactMode` of your topology, then read
 `kvexactstatus` until `enforcedState` is `READY`. The example on that page is a single pool. For P/D, the rule
 also sets `pd_disagg_mode: true` and tags every endpoint with `ep_role` (`1` prefill, `2` decode) and
 `nixl_port`; the rule body is in
@@ -195,9 +237,9 @@ Before `READY`, `reasonCodes` names what is missing:
 
 | Reason code | Usual cause on a fresh setup |
 |---|---|
-| `identity_mismatch` | engine version (vLLM) or reported revision (SGLang) differs from the row |
+| `identity_mismatch` | engine version (vLLM) or reported revision (SGLang) differs from the row; a TensorRT-LLM engine whose `/server_info` does not describe its KV events (older than the row's version), or that does not serve the model name |
 | `token_mismatch` | wrong revision, tokenizer or template on the engine, or a launch argument from step 5 missing |
-| `challenge_failed`, `challenge_timeout` | KV events not reaching the gateway (port `5557`, `--kv-events-config`), the hash-seed pair missing, or a block size that differs from `kvBlockSize` |
+| `challenge_failed`, `challenge_timeout` | KV events not reaching the gateway (port `5557`, `--kv-events-config`; on TensorRT-LLM an event buffer of 0 or a second reader of `/kv_cache_events`), the hash-seed pair missing, or a block size that differs from `kvBlockSize` |
 | `endpoint_unreachable` | the gateway cannot reach the engine's API port |
 | `manifest_missing`, `probe_fixtures_missing`, `profile_registry_unavailable` | the registry was staged for another engine, or the gateway was not restarted after staging |
 
