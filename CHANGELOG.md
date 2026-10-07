@@ -41,6 +41,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Prepare a Supported Model: TensorRT-LLM as a single pool. The installer's
+  `--engine trtllm`, the per-engine probe sets, the engine options file and
+  launch line, block size 32, and the readiness causes specific to that
+  engine. TensorRT-LLM Integration: a strict rule with a model profile, the
+  engine's Prometheus path (`/prometheus/metrics`; `/metrics` is a queue a
+  read empties), and the restart that exits with `Address already in use`.
+
 - Backend TLS page and troubleshooting: a rule whose endpoints turn the
   gateway away after the TLS handshake (no client certificate named, or one
   they do not accept) now answers `502` (HTTP/1.1) or `503` (HTTP/2)
