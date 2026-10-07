@@ -213,7 +213,10 @@ control:
 | Endpoints present certificates signed by the rule's CA and naming their address (or the configured server name) | Requests are served. |
 | One endpoint presents a certificate from another CA, an expired certificate, or one that does not name the endpoint | The gateway does not connect to that endpoint. With no acceptable endpoint left, HTTP/1.1 clients receive `502` and HTTP/2 clients receive `503`. |
 | Endpoints require a client certificate and the rule names one signed by the CA they trust | Requests are served. |
-| Endpoints require a client certificate and the rule names none | Requests fail. An endpoint that rejects the gateway only after the TLS handshake has completed closes the connection, and the client's connection is then closed without an HTTP response. |
+| Endpoints require a client certificate and the rule names none, or names one they do not accept | The same answer: HTTP/1.1 clients receive `502` and HTTP/2 clients receive `503`, both with the body `backend_unreachable`. An endpoint that uses TLS 1.3 turns the gateway away only after the handshake has completed; the data plane log then names it: `ssl-read <address>:<port>(failed after handshake, before any response)`, followed by the TLS alert when the endpoint sent one. |
+
+The answer the gateway writes is a complete response: the HTTP/1.1 `502` carries `Content-Length`
+and `Connection: close`, and a TLS client is sent a close_notify before the connection is closed.
 
 Keep a receipt counter on each test endpoint and require that a refused request does not increase
 it. A timeout is not evidence of a refusal.
@@ -221,8 +224,7 @@ it. A timeout is not evidence of a refusal.
 ## 6. Change the policy of a serving rule
 
 Post the rule again with the changed arguments. The gateway builds the new backend TLS context
-first and puts it in service only when that succeeds. The listener is not re-created and client
-connections are not dropped.
+first and puts it in service only when that succeeds. The listener is not re-created.
 
 - Backend connections already established keep the context they were made with. A request or an
   HTTP/2 stream in flight finishes on its connection.
@@ -230,9 +232,21 @@ connections are not dropped.
   inspects requests (AI gateway routing), the next keep-alive request gets a new backend
   connection. A new HTTP/2 stream is never added to a backend connection made under the replaced
   policy.
-- A client connection on a rule that relays bytes without inspecting requests stays bound to its
-  backend connection until the client closes it. To cut those connections over at once, delete
-  and re-create the rule.
+- An HTTP/1.1 client connection on a rule that relays bytes without inspecting requests keeps the
+  backend connection it has, so the gateway ends the client connection instead. It does so within
+  about a second when every request the client sent has been answered: an idle keep-alive
+  connection is closed, the client connects again, and the new connection is made under the new
+  policy. A request in flight is answered first. A connection that still has an answer owed 30
+  seconds after the change is closed then. Each such close is one line in the data plane log:
+  `<address>:<port> backend TLS policy replaced: closing client fd=<n>, its backend connection
+  was made under an earlier policy`, followed by `(no answer owed)` or `(an answer still owed
+  after the bound)`.
+- HTTP/2 client connections and rules that inspect requests are not closed: they move the next
+  stream or request to a new backend connection, as above.
+
+A client that sends a request at the moment its idle connection is closed sees that request
+fail, as it does when any server closes an idle keep-alive connection; HTTP clients retry it on
+a new connection.
 
 The request waits for the data plane. When the new context cannot be built, the answer is `400`,
 the rule keeps the policy it had, and the listener goes on serving with it. A new rule that the

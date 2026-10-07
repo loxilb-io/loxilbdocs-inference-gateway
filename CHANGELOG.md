@@ -41,6 +41,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Backend TLS page and troubleshooting: a rule whose endpoints turn the
+  gateway away after the TLS handshake (no client certificate named, or one
+  they do not accept) now answers `502` (HTTP/1.1) or `503` (HTTP/2)
+  `backend_unreachable` with a complete response and a data plane log line,
+  where the connection was closed without an answer; and a backend TLS policy
+  change or certificate rotation now closes kept-alive HTTP/1.1 client
+  connections of a relaying rule once nothing is owed on them (at the latest
+  after 30 seconds), where re-creating the rule was advised.
 - Documentation hardening ahead of the public release: placeholder
   credentials in examples, production TLS-verification guidance, OPA server
   hardening notes, checksum guidance for third-party downloads, and corrected

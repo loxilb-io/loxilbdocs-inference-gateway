@@ -14,7 +14,7 @@
         ],
         "claim": "jwt-policy-and-token-accounting",
         "matching_workflow_objects": {
-          ".github/workflows/ai-gateway-sanity.yml": "73cf4e065eed092744d4e59483938884acf2213f"
+          ".github/workflows/ai-gateway-sanity.yml": "a6878f967027db1c9208247e5d87f2feec72efff"
         },
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
@@ -24,7 +24,7 @@
         "validation_object_id": "8484fadfc6e4e72a6c39fa7e8aee34204629368d",
         "validation_path": "cicd/ai-jwtauth/validation.sh",
         "workflow_membership": "wired",
-        "workflow_object_id": "73cf4e065eed092744d4e59483938884acf2213f",
+        "workflow_object_id": "a6878f967027db1c9208247e5d87f2feec72efff",
         "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
       },
       {
@@ -65,7 +65,7 @@
         ],
         "claim": "pd-and-worker-scrape-metrics",
         "matching_workflow_objects": {
-          ".github/workflows/ai-gateway-sanity.yml": "73cf4e065eed092744d4e59483938884acf2213f"
+          ".github/workflows/ai-gateway-sanity.yml": "a6878f967027db1c9208247e5d87f2feec72efff"
         },
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
@@ -75,7 +75,7 @@
         "validation_object_id": "732dba079be92270c1ae0dd0ee635f8ca423adc3",
         "validation_path": "cicd/vllm-pd-disagg/validation.sh",
         "workflow_membership": "wired",
-        "workflow_object_id": "73cf4e065eed092744d4e59483938884acf2213f",
+        "workflow_object_id": "a6878f967027db1c9208247e5d87f2feec72efff",
         "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
       },
       {
@@ -89,7 +89,7 @@
         "claim": "sockmap-observability",
         "matching_workflow_objects": {},
         "matching_workflows": [],
-        "scenario_object_id": "f9ff307b797fb29f06a33fc78657a3583038499e",
+        "scenario_object_id": "0317fb6f6da9125abb0aa77121d6aca5e31cbee6",
         "scenario_path": "cicd/sockmap-fullproxy",
         "validation_object_id": "78b125dae6b883fa9ef2960e0ef90d47dae5677b",
         "validation_path": "cicd/sockmap-fullproxy/validation_observability.sh",
@@ -3430,7 +3430,7 @@
         "path": "cicd/kv-sglang-attest"
       },
       {
-        "object_id": "f9ff307b797fb29f06a33fc78657a3583038499e",
+        "object_id": "0317fb6f6da9125abb0aa77121d6aca5e31cbee6",
         "path": "cicd/sockmap-fullproxy"
       },
       {
@@ -3512,8 +3512,8 @@
     ]
   },
   "source": {
-    "commit": "4008973f0b4af3b67e04ff42ad88bb35795315e3",
-    "ebpf_submodule_commit": "7c85a4d21cc58d2924b6461ab63772912ff18087",
+    "commit": "28b3c8fbbd6e6c150c88edce15a4fc2133025282",
+    "ebpf_submodule_commit": "e6142e9c63714dfb982032356540bb45c7e89887",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
     "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",
