@@ -3876,8 +3876,8 @@ certificates is refused.</p>
 <td>Without <code>backend_tls_server_name</code> the certificate needs the endpoint IP as an IP subject alternative name; with it, that DNS name</td>
 </tr>
 <tr>
-<td>Connections are closed without an HTTP response</td>
-<td>The endpoints require a client certificate and the rule names none, or names one they do not trust</td>
+<td>HTTP/1.1 clients receive <code>502</code>, HTTP/2 clients <code>503</code>, and the data plane log has <code>ssl-read &lt;address&gt;:&lt;port&gt;(failed after handshake, before any response)</code></td>
+<td>The endpoints require a client certificate and the rule names none, or names one they do not accept. The TLS alert in the log line says which</td>
 <td>Name a <code>usage: client</code> entry with <code>backend_client_cert_id</code>. After an upgrade this is the most likely cause: the listener certificate is no longer presented to backends</td>
 </tr>
 <tr>
@@ -3886,9 +3886,9 @@ certificates is refused.</p>
 <td>Write the certificate again with valid material (<code>PUT /config/cert/{certId}</code>)</td>
 </tr>
 <tr>
-<td>A policy change does not reach long-lived client connections</td>
-<td>A rule that relays bytes without inspecting requests keeps a client connection on its backend connection</td>
-<td>Delete and re-create the rule to cut them over at once</td>
+<td>A keep-alive HTTP/1.1 client is disconnected after a backend TLS policy change or a certificate rotation</td>
+<td>Expected on a rule that relays bytes without inspecting requests: the client connection is closed once nothing is owed on it, at the latest 30 seconds after the change, so that its next connection is made under the new policy. The data plane log has <code>backend TLS policy replaced: closing client</code></td>
+<td>None: the client reconnects. A request that was still unanswered after 30 seconds is cut; retry it</td>
 </tr>
 </tbody>
 </table>
