@@ -3513,7 +3513,7 @@
     ]
   },
   "source": {
-    "commit": "79c77f0275e655eaee4bb6a732c2d67f1a94198c",
+    "commit": "9ba994194810c648ef87c891c2938969fa39af17",
     "ebpf_submodule_commit": "58716b6e3c9168f8e79d6f8d1488692c3c4bc47c",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
@@ -12120,7 +12120,7 @@
           }
         }
       },
-      "sha256": "9932ef4a04644b5631c47102bc4bdce519c1a4fa4acedde542812aeb51aad0d5",
+      "sha256": "eb702bffe4aeacc00810a9729a96440e054c97f05d70158a2d87e1a80b8d5635",
       "source_path": "api/swagger.yml"
     },
     {
