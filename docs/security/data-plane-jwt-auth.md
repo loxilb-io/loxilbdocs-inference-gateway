@@ -51,10 +51,10 @@ service back preserves omission versus an explicit value. When replacing a
 service, omitting `api_key_auth` preserves the existing declaration; use
 `disabled` explicitly to turn off enforcement and keep header stripping.
 
-`loxicmd create lb --api-key-auth` currently accepts only `disabled` and
-`required`. The `jwt` and `apikey-or-jwt` values and the
-`jwt_auth_profile` association are REST-only. There is no supported
-`--jwt-auth-profile` CLI flag.
+The released `loxicmd create lb --api-key-auth` accepts only `disabled` and
+`required`, and has no `--jwt-auth-profile` flag. CLI main also accepts `jwt`
+and `apikey-or-jwt` together with `--jwt-auth-profile=<name>`, which names an
+existing profile. Creating, listing and deleting a JWT profile is REST-only.
 
 ## Create a JWT profile
 

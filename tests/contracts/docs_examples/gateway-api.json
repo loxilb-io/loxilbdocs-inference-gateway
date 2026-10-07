@@ -89,7 +89,7 @@
         "claim": "sockmap-observability",
         "matching_workflow_objects": {},
         "matching_workflows": [],
-        "scenario_object_id": "b83d11d6a134f70336c72d1271778223806fc8d7",
+        "scenario_object_id": "f9ff307b797fb29f06a33fc78657a3583038499e",
         "scenario_path": "cicd/sockmap-fullproxy",
         "validation_object_id": "78b125dae6b883fa9ef2960e0ef90d47dae5677b",
         "validation_path": "cicd/sockmap-fullproxy/validation_observability.sh",
@@ -108,7 +108,7 @@
           ".github/workflows/monitoring-drill.yml",
           ".github/workflows/monitoring-e2e.yml"
         ],
-        "scenario_object_id": "1c5ef406139492ab02b6e5b20becbfdf7c785c7c",
+        "scenario_object_id": "e87eb2a2266c768788654adc41815460f0bb59b2",
         "scenario_path": "cicd/monitoring",
         "validation_object_id": "a17e250316c008e96b7cfd75a1e5731f17ae8ba7",
         "validation_path": "cicd/monitoring/validation.sh",
@@ -122,8 +122,8 @@
   "metric_manifest": {
     "coverage": {
       "default_families": 258,
-      "default_referenced": 169,
-      "default_unreferenced": 68,
+      "default_referenced": 182,
+      "default_unreferenced": 55,
       "default_waived": 21,
       "writer_classified": 258,
       "writer_unclassified": 0,
@@ -3397,11 +3397,11 @@
       }
     },
     "provenance": {
-      "generated_at": "2026-10-05T07:35:43+00:00",
-      "source_revision": "81495fb6909c2e86de3798a582b0d56641632ab1"
+      "generated_at": "2026-10-06T12:58:03+00:00",
+      "source_revision": "ec345d593504e24d49d23a5e504af3bdcfc50f3f"
     },
     "schema_version": 1,
-    "sha256": "c04c2822ff3ef304a9a3edbc597b5eb5dd9578ce5bf4a3d69245db8c01f63f4f",
+    "sha256": "e4bf2b9c296607d3d9e16de37bd74acd85d40e7e77272247a2ba03fb25647603",
     "source_path": "deploy/monitoring/manifest/metric-manifest.json"
   },
   "release_snapshot": {
@@ -3430,7 +3430,7 @@
         "path": "cicd/kv-sglang-attest"
       },
       {
-        "object_id": "b83d11d6a134f70336c72d1271778223806fc8d7",
+        "object_id": "f9ff307b797fb29f06a33fc78657a3583038499e",
         "path": "cicd/sockmap-fullproxy"
       },
       {
@@ -3512,8 +3512,8 @@
     ]
   },
   "source": {
-    "commit": "080d8b1b76b7f380d083e19ffb3bc32eb29754fc",
-    "ebpf_submodule_commit": "3d376b01870c290b7c61e20d59d59e6a2dc5999b",
+    "commit": "64540feb8fda7f295de7a78a74cc754a223362ab",
+    "ebpf_submodule_commit": "7c85a4d21cc58d2924b6461ab63772912ff18087",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
     "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",
@@ -4779,6 +4779,14 @@
               "type": "array"
             },
             "keyPem": {
+              "type": "string"
+            },
+            "usage": {
+              "enum": [
+                "server",
+                "ca",
+                "client"
+              ],
               "type": "string"
             }
           },
@@ -7374,6 +7382,42 @@
                     "http2",
                     "both"
                   ],
+                  "type": "string"
+                },
+                "backend_tls_effective": {
+                  "properties": {
+                    "ca": {
+                      "type": "string"
+                    },
+                    "client_cert": {
+                      "type": "boolean"
+                    },
+                    "client_cert_id": {
+                      "type": "string"
+                    },
+                    "generation": {
+                      "type": "integer"
+                    },
+                    "server_name": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "enum": [
+                        "applied",
+                        "pending",
+                        "failed",
+                        "unsupported"
+                      ],
+                      "type": "string"
+                    },
+                    "verify": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                },
+                "backend_tls_server_name": {
+                  "maxLength": 253,
                   "type": "string"
                 },
                 "bgp": {
@@ -12064,7 +12108,7 @@
           }
         }
       },
-      "sha256": "1b39ef451e69672755124b15f5e3f07ab0a81dfbf9931b1665e3aada46929c46",
+      "sha256": "fdf763fa8ed8a6524db34806354b4bdd090f441e21ee68f6354bac78c460e2cd",
       "source_path": "api/swagger.yml"
     },
     {

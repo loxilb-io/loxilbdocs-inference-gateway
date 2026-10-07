@@ -363,11 +363,21 @@ The current CLI maps these flags to the Gateway API contract:
 |---|---|---|
 | Frontend TLS termination | `--security=https` | Sends `security: 1`; backend traffic is HTTP. |
 | Frontend and backend TLS | `--security=e2ehttps` | Sends `security: 2`; the gateway terminates and re-encrypts TLS. This is not passthrough. |
+| Backend verification | `--backend-ca-cert-id=<certId>` | Sends `backend_ca_cert_id` and `mtls_backend.verify_server_cert: true`. Naming a CA is what asks for verification. Requires `--security=e2ehttps`. CLI main only. |
+| Backend client certificate | `--backend-client-cert-id=<certId>` | Sends `backend_client_cert_id`; the gateway presents that certificate to endpoints. Requires `--security=e2ehttps`. CLI main only. |
+| Backend server name | `--backend-tls-server-name=<dns-name>` | Sends `backend_tls_server_name`: the SNI sent to endpoints and the name verified in their certificates. CLI main only. |
+| Backend certificate entry | `loxicmd create cert --usage=ca\|client --cert-id=<certId> --cert-file=<pem> [--key-file=<pem>]` | Registers a CA bundle (no key) or a client certificate (key required) under `/config/cert`. CLI main only. |
 | Typed engine | `--kv-engine-type=<engine>` | Sends `kvEngineType`; the server accepts `vllm`, `sglang`, `trtllm`, or `llamacpp` and applies engine-specific guards. |
 | Hash contract | `--kv-hash-algo=<algorithm>` | Sends an explicit hash algorithm. Prefer omission so the server derives the coherent engine default. |
 | Sockmap direction | `--sockmap-mode=off|request|response|both` | Sends `sockMapMode`; a non-`off` value still requires Gateway `--sockmapsupport`, an eligible plain HTTP/1.1 service, and a compatible Gateway main build. |
 | Model-keyed create/delete | `--model-name=<model>` | Repeats the model component of the L7 rule key. |
-| API-key policy | `--api-key-auth=disabled|required` | CLI supports exactly these two values. Omission and explicit `disabled` are different contracts. |
+| API-key policy | `--api-key-auth=disabled|required` | The released CLI supports exactly these two values; CLI main adds `jwt` and `apikey-or-jwt`, which need `--jwt-auth-profile=<name>`. Omission and explicit `disabled` are different contracts. |
+
+The earlier `--mtls-backend-ca-path`, `--mtls-backend-cert-path`, `--mtls-backend-key-path` and
+`--mtls-backend-verify-server` flags are retired on CLI main: the command is refused and names the
+replacement. `loxicmd get lb -o wide` shows the backend TLS policy the listener has installed in
+the `Backend TLS` column, and `-o json` carries `backend_tls_effective`. See
+[Backend TLS Verification and Client Certificates](../security/backend-tls.md).
 
 ### Admission flow-control flags
 
@@ -406,7 +416,7 @@ command.
 | REST-only surface | REST contract |
 |---|---|
 | JWT profile create/list/delete | `/config/ai/jwtauthprofile` and `/config/ai/jwtauthprofile/{name}` |
-| JWT-capable service binding | `api_key_auth: jwt|apikey-or-jwt` plus `jwt_auth_profile` |
+| JWT-capable service binding (released CLI; CLI main has `--api-key-auth=jwt\|apikey-or-jwt` with `--jwt-auth-profile`) | `api_key_auth: jwt|apikey-or-jwt` plus `jwt_auth_profile` |
 | Global and rule-default QoS | `/config/ai/ratelimit/defaults...` |
 | User and user-model QoS | `/config/ai/user/ratelimit...` |
 | Model-profile discovery | `/config/ai/model-profiles[/{profile_id}]` |
