@@ -179,12 +179,24 @@ class ModelEngineEvidenceTests(unittest.TestCase):
         self.assertFalse(allowed(path, "api_key: " + "a" * 40))
         self.assertFalse(allowed(path, "tokenizerRevision: not-a-model-revision"))
         self.assertFalse(allowed("docs/internal/example.yaml", "tokenizerRevision: " + "a" * 40))
+        published = path.replace("docs/", "latest/", 1)
+        self.assertTrue(allowed(published, '"tokenizerRevision": "' + "a" * 40 + '"'))
+        self.assertTrue(allowed(published, '"tokenizerSha256": "' + "a" * 64 + '"'))
+        self.assertFalse(allowed(published, '"api_key": "' + "a" * 40 + '"'))
+        self.assertFalse(allowed(published, "tokenizerRevision: not-a-model-revision"))
+        self.assertFalse(allowed("latest/assets/unrelated.yaml", "tokenizerRevision: " + "a" * 40))
         allow = rule["allowlists"][1]
         catalog = "docs/assets/model-engine-standard/catalog-registration.json"
         self.assertTrue(allowed(catalog, 'tokenizerSha256": "' + "a" * 64 + '"'))
         self.assertFalse(allowed(catalog, "api_key: " + "a" * 64))
         self.assertFalse(allowed(catalog, "tokenizerSha256: not-a-content-hash"))
         self.assertFalse(allowed("docs/internal/catalog-registration.json", "tokenizerSha256: " + "a" * 64))
+        published = catalog.replace("docs/", "latest/", 1)
+        self.assertTrue(allowed(published, '"tokenizerSha256": "' + "a" * 64 + '"'))
+        self.assertFalse(allowed(published, '"api_key": "' + "a" * 64 + '"'))
+        self.assertFalse(allowed(published, "tokenizerSha256: not-a-content-hash"))
+        self.assertFalse(allowed("latest/assets/other.json", "tokenizerSha256: " + "a" * 64))
+
 
 
 
