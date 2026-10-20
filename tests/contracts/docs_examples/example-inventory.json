@@ -594,7 +594,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "0f8ba8345a9fa4e3fcf4",
       "language": "bash",
-      "line": 418,
+      "line": 413,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -624,7 +624,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "469ff84d884af3db8b8a",
       "language": "bash",
-      "line": 449,
+      "line": 444,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -654,7 +654,7 @@
       "evidence": "syntax-only",
       "id": "97719106288800271ea8",
       "language": "json",
-      "line": 457,
+      "line": 452,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -671,7 +671,7 @@
       "evidence": "swagger-union-static",
       "id": "0c9409d1f0ea6ac8f193",
       "language": "bash",
-      "line": 476,
+      "line": 471,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -688,7 +688,7 @@
       "evidence": "cli-contract-static",
       "id": "14b64cf9f36bfc739c2b",
       "language": "bash",
-      "line": 484,
+      "line": 479,
       "path": "docs/ai-gateway/configuration-reference.md",
       "quality_contract": {
         "cleanup": false,
@@ -702,225 +702,54 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "visual-explanation",
-      "id": "a732c18733f66f1f4a94",
-      "language": "mermaid",
-      "line": 141,
-      "path": "docs/ai-gateway/kv-caching.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": false,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "a9c877cbbbd68c2df1d904220920cff0ff85b0139dd860d2e52d41ce69f7cbe7",
-      "status": "illustrative-only"
-    },
-    {
       "evidence": "unexecuted-example",
-      "id": "b6a70b2f7c456e735dc9",
-      "language": "plain",
-      "line": 179,
-      "path": "docs/ai-gateway/kv-caching.md",
+      "id": "453dbf33c660adeaa1ac",
+      "language": "text",
+      "line": 135,
+      "path": "docs/ai-gateway/engine-contracts.md",
       "quality_contract": {
         "cleanup": false,
-        "diagnosis": true,
+        "diagnosis": false,
         "exact_command": false,
         "expected_result": false,
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "496ac90e859a309c2dade3ea2305c0984a4ff801c358f848423ce83ff2112d86",
+      "sha256": "659c3b59210fb28041976ebd5c531b4c5440a272d4619cf69d6d8cf13bbc707d",
       "status": "illustrative-only"
     },
     {
       "evidence": "shell-syntax-only",
-      "id": "5b54e110aef9cc0ae494",
+      "id": "eb023fadb7b5492824a4",
       "language": "bash",
-      "line": 190,
-      "path": "docs/ai-gateway/kv-caching.md",
+      "line": 145,
+      "path": "docs/ai-gateway/engine-contracts.md",
       "quality_contract": {
         "cleanup": false,
-        "diagnosis": true,
+        "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "1d2d707d1f7ee7822e20e8eb8e68d4e5e5491f33c130053e4cf0b6415d2b15ab",
+      "sha256": "2e76a8ecad408482686fe4f1bc59541dff269587b56fc8ddecf3f168c244866d",
       "status": "illustrative-only"
     },
     {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "3f29a179dc5776f1d40e",
-      "language": "bash",
-      "line": 219,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "POST /config/loadbalancer"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
+      "evidence": "visual-explanation",
+      "id": "a732c18733f66f1f4a94",
+      "language": "mermaid",
+      "line": 30,
       "path": "docs/ai-gateway/kv-caching.md",
       "quality_contract": {
         "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
+        "diagnosis": false,
+        "exact_command": false,
         "expected_result": false,
         "prerequisites": false,
-        "validation": true
+        "validation": false
       },
-      "sha256": "61f3735395b08ce5826b67a3a20792c2d7764f07a7592c7abf5f8b64fa2804b0",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "fd7c6a1e5c1e16cd1df7",
-      "language": "bash",
-      "line": 247,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "loxicmd create lb"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/ai-gateway/kv-caching.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "3b88e3a4fd1274d07ecef4b68143584a0e3915ee6f8a2767577a2c4e1ca969ea",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "e3fd95d0d76f93b3b5cc",
-      "language": "bash",
-      "line": 258,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "POST /config/loadbalancer"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/ai-gateway/kv-caching.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "14e50fdd05526ff0061754471feeae747c27a3be26056720ae9fb16d9732989f",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "a88be2a86665e33aae1c",
-      "language": "bash",
-      "line": 283,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "loxicmd create lb"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/ai-gateway/kv-caching.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "0acef46406ad6db6edbb997ab206487487482e4c3bdaf79723341c1fbcc74fe2",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "swagger-union-static",
-      "id": "3a4163d6759088da4d30",
-      "language": "bash",
-      "line": 308,
-      "path": "docs/ai-gateway/kv-caching.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "4a4f4565bcf88a82744003bc824e1ef8a2469a4b0ae5ed99810e7aa1a761b3d8",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "swagger-union-static",
-      "id": "079ef0c94aeac151e6a6",
-      "language": "bash",
-      "line": 324,
-      "path": "docs/ai-gateway/kv-caching.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "066c25edf7bc39fe0459ccfd2ddb4398f28614b32b6792dae5e360c286c0d576",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "syntax-only",
-      "id": "68f66fcb52fb2e453c7a",
-      "language": "json",
-      "line": 328,
-      "path": "docs/ai-gateway/kv-caching.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "3ca8cf83dced1ae8b594baaf4d1ab09c94d4f61242385b49a37f95215afec625",
+      "sha256": "a9c877cbbbd68c2df1d904220920cff0ff85b0139dd860d2e52d41ce69f7cbe7",
       "status": "illustrative-only"
     },
     {
@@ -2027,23 +1856,6 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "unexecuted-example",
-      "id": "2381cc906b11aa307a2f",
-      "language": "text",
-      "line": 113,
-      "path": "docs/ai-gateway/pd-disaggregation.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": false,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": false
-      },
-      "sha256": "0af1c36fba00cf620f189b33d91cd410de57c3bf8ed5c903d7f6d9862f3a8c73",
-      "status": "illustrative-only"
-    },
-    {
       "evidence": "visual-explanation",
       "id": "eb40b646c9adedf815d2",
       "language": "mermaid",
@@ -2432,87 +2244,10 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "shell-syntax-only",
-      "id": "e4f446001b0d405b1257",
-      "language": "bash",
-      "line": 39,
-      "path": "docs/ai-gateway/vllm-integration.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "b8fa856465b16ac44e16d3e1b18fafee53976ec9dbb6c8da10dc987a601a9a9c",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "92c2a18d2463c78dde0c",
-      "language": "bash",
-      "line": 83,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "POST /config/loadbalancer"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/ai-gateway/vllm-integration.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "1bc619fddb03e9ce8c2a8dd209a3b73f4e0ca92a7335a72315e8414b2d81f7f6",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "fa0f0b04c72eef8cf080",
-      "language": "bash",
-      "line": 110,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "loxicmd create lb"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/ai-gateway/vllm-integration.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "ded26addb34363fa562fd104d5c3e94c3d14f74736c0d79c77537a271c6a518e",
-      "status": "illustrative-only"
-    },
-    {
       "evidence": "visual-explanation",
       "id": "1f6b19e61d78c3ef8226",
       "language": "mermaid",
-      "line": 145,
+      "line": 76,
       "path": "docs/ai-gateway/vllm-integration.md",
       "quality_contract": {
         "cleanup": false,
@@ -2527,9 +2262,9 @@
     },
     {
       "evidence": "swagger-union-static",
-      "id": "15ca03e7c1ca1e259393",
+      "id": "234158e3a60682f63362",
       "language": "bash",
-      "line": 184,
+      "line": 115,
       "path": "docs/ai-gateway/vllm-integration.md",
       "quality_contract": {
         "cleanup": false,
@@ -2539,14 +2274,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "e76ebfdca3896ba75df84a8338b35bd5a3eb2223707c7f38d67758534e723e55",
+      "sha256": "4ebc592a33821f55f71e57f12fae2f0ac79bac1e25dc80f7e6427b11d77f573d",
       "status": "illustrative-only"
     },
     {
       "evidence": "swagger-union-static",
-      "id": "561ea4d824249fb82766",
+      "id": "546536ccaf6ce9f4d846",
       "language": "bash",
-      "line": 202,
+      "line": 133,
       "path": "docs/ai-gateway/vllm-integration.md",
       "quality_contract": {
         "cleanup": false,
@@ -2556,14 +2291,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "3ecfda1a6482158b3920b8dbe494ce1a2579b1ae2e207cbeeea431881840db9c",
+      "sha256": "dc9e58ecd8878b07bd32751ca663ed28c40d81668799a16c6f05c656c0c1dbe8",
       "status": "illustrative-only"
     },
     {
       "evidence": "swagger-union-static",
-      "id": "6253c02e9b10eeb944dc",
+      "id": "9947a1e61fa342d9a050",
       "language": "bash",
-      "line": 208,
+      "line": 139,
       "path": "docs/ai-gateway/vllm-integration.md",
       "quality_contract": {
         "cleanup": false,
@@ -2573,7 +2308,7 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "f81d41d3595521cfcfc56c2c1c302524dc96a7db262f5dec74eb9438bf8c38be",
+      "sha256": "bc7cfc5d361a5a87ff0d290e6ed67abe07e5438d83238af869c37098a28536fb",
       "status": "illustrative-only"
     },
     {
@@ -2808,6 +2543,40 @@
     },
     {
       "evidence": "visual-explanation",
+      "id": "a1d870927a99fb33e997",
+      "language": "mermaid",
+      "line": 22,
+      "path": "docs/concepts/inference-topologies.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": false,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "d5422a541d0bec5f0d53f003c07884120805161145a530561dcfd5226a46ef3a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "visual-explanation",
+      "id": "40205594900066c00a9a",
+      "language": "mermaid",
+      "line": 94,
+      "path": "docs/concepts/inference-topologies.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": false,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "ccfaf6c0543dab3ad2ac6160fffc7f93b081faca9fe3cea5c81367a9f999a4e7",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "visual-explanation",
       "id": "3b64a1f2877c09de29ec",
       "language": "mermaid",
       "line": 82,
@@ -3038,23 +2807,6 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "visual-explanation",
-      "id": "36d264d5106dbfa44664",
-      "language": "mermaid",
-      "line": 16,
-      "path": "docs/getting-started/choose-your-engine.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": false,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": false
-      },
-      "sha256": "6e8c013584a3f9241aeb2762c17d73d7205793d4955515041453cf5c989602b4",
-      "status": "illustrative-only"
-    },
-    {
       "evidence": "shell-syntax-only",
       "id": "38eba055b0d2a55bcaa5",
       "language": "bash",
@@ -3158,7 +2910,7 @@
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "7bebda4bdfec0160e700",
+      "id": "d5f0609ff63884b2c8d2",
       "language": "bash",
       "line": 81,
       "path": "docs/getting-started/prepare-supported-model.md",
@@ -3170,7 +2922,7 @@
         "prerequisites": false,
         "validation": false
       },
-      "sha256": "2abeaa83f89f99edc76d32c24bf3de91071354be70240b8b8ca0c65a5fe79eed",
+      "sha256": "4292165df136c9b832ab6aeb6503950a886574394fdd03894dbc42ea67ecce81",
       "status": "illustrative-only"
     },
     {
@@ -4652,6 +4404,74 @@
         "validation": false
       },
       "sha256": "6e4f620cd5b2ad31f57b1fde3739694058dee60b738836eb3f38c059b63827c8",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "swagger-union-static",
+      "id": "43850fdce0535c1392a1",
+      "language": "bash",
+      "line": 54,
+      "path": "docs/operations/kv-routing-verification.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "416547b444baa1bb65a1b043048e439a755db939dad6867651a29f681dff7e72",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "shell-syntax-only",
+      "id": "3f51c5a5d786877dbf5f",
+      "language": "bash",
+      "line": 78,
+      "path": "docs/operations/kv-routing-verification.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "6e87727828fca843248abe76c67e153799549d841bbbccc65a39a57fe4cf48e7",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "swagger-union-static",
+      "id": "8db9731de107196145a5",
+      "language": "bash",
+      "line": 94,
+      "path": "docs/operations/kv-routing-verification.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "64bd68edb0844194cce801fd75a28cd172eec9cc1f223015aef64365c90479a8",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "cli-contract-static",
+      "id": "88c3d6b48982ca4b553a",
+      "language": "bash",
+      "line": 99,
+      "path": "docs/operations/kv-routing-verification.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "f8b8badf357eee5bdf32537adc44c2b4ae9550df0043ee1491d1e60f22788503",
       "status": "illustrative-only"
     },
     {
@@ -9501,70 +9321,27 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "0a27b50ca660c6d5fdd6",
-      "language": "bash",
-      "line": 99,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "POST /config/loadbalancer"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/configuration-tuning.md",
+      "evidence": "syntax-only",
+      "id": "12f2fd3e5a08de324f09",
+      "language": "yaml",
+      "line": 21,
+      "path": "docs/use-cases/advanced-cache-integrations.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
         "prerequisites": false,
-        "validation": true
+        "validation": false
       },
-      "sha256": "eb075cf6763968dc4d2fd626c45e0f8dee51f5658a125bf1da91afaf2838fd11",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "c8e22afccf873e844e2e",
-      "language": "bash",
-      "line": 119,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "loxicmd create lb"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/configuration-tuning.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "b6bf4a0688530242739e0fc9618ed1e3a5851678849e67ecf13354cfe710777c",
+      "sha256": "d0d2aaf2852d64c4c425405e0096fb2721959407d1254d87064965e16b791251",
       "status": "illustrative-only"
     },
     {
       "evidence": "shell-syntax-only",
-      "id": "d5026f91c72fed43c0bf",
+      "id": "e701d5335f5618f97534",
       "language": "bash",
-      "line": 207,
+      "line": 151,
       "path": "docs/use-cases/configuration-tuning.md",
       "quality_contract": {
         "cleanup": false,
@@ -9574,31 +9351,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "fe429b257e227be6309f74b0ad06195c75e549a6b48dc2afcf9dbb90453511c6",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "shell-syntax-only",
-      "id": "07804b89edfb3216aae6",
-      "language": "bash",
-      "line": 290,
-      "path": "docs/use-cases/configuration-tuning.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "b0456b5321f0c390ebae9f6805165877275b97af99cd311abd4338237d29cb5c",
+      "sha256": "463db225e7d5d711602259f9b8c14925ed9ac3d69fc4c637f34aa19b0b59fad7",
       "status": "illustrative-only"
     },
     {
       "evidence": "unexecuted-example",
       "id": "cabb50c259a349ffd3e4",
       "language": "plain",
-      "line": 21,
+      "line": 32,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -9612,15 +9372,15 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "shell-syntax-only",
-      "id": "fd9726a3646bd1597046",
-      "language": "bash",
-      "line": 83,
+      "evidence": "unexecuted-example",
+      "id": "282c082856bbc2dcc4fb",
+      "language": "text",
+      "line": 94,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
-        "exact_command": true,
+        "exact_command": false,
         "expected_result": false,
         "prerequisites": false,
         "validation": true
@@ -9629,15 +9389,15 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "shell-syntax-only",
-      "id": "404e01116a5154bf79de",
-      "language": "bash",
-      "line": 123,
+      "evidence": "unexecuted-example",
+      "id": "6f6c1d3da58749aa63f6",
+      "language": "text",
+      "line": 136,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
-        "exact_command": true,
+        "exact_command": false,
         "expected_result": false,
         "prerequisites": false,
         "validation": true
@@ -9646,15 +9406,15 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "shell-syntax-only",
-      "id": "a3b1644722370713dab9",
-      "language": "bash",
-      "line": 141,
+      "evidence": "unexecuted-example",
+      "id": "ce189c9844df4aef9396",
+      "language": "text",
+      "line": 154,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
-        "exact_command": true,
+        "exact_command": false,
         "expected_result": false,
         "prerequisites": false,
         "validation": true
@@ -9664,9 +9424,9 @@
     },
     {
       "evidence": "shell-syntax-only",
-      "id": "e731d2b31f65e8f75a7a",
+      "id": "8e1d3db3c7a34efc954b",
       "language": "bash",
-      "line": 181,
+      "line": 194,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -9676,14 +9436,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "c3952f0b317877729d191a345ea03e3836b2f3915a5ff6395cbf57e8d91deee5",
+      "sha256": "58e077b1895f7f5b4f904f6250b0a9181124fd9fb3ec635260185ef2a3705775",
       "status": "illustrative-only"
     },
     {
       "evidence": "shell-syntax-only",
       "id": "497e0a66cc6619cac3de",
       "language": "bash",
-      "line": 212,
+      "line": 225,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -9698,9 +9458,9 @@
     },
     {
       "evidence": "non-standalone-mutation-fragment",
-      "id": "31ca27b0dddb9b5406ac",
+      "id": "4881f2ee23765642c9b1",
       "language": "bash",
-      "line": 248,
+      "line": 261,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -9723,14 +9483,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "8dd6766ac84b693cd1d4068f5ff75d8194bb3f0f39ccada7051eacf24eac0d2a",
+      "sha256": "5849073c86e676f2ef203178c73d395684282e56288a2d97d0e25fab91205a80",
       "status": "illustrative-only"
     },
     {
       "evidence": "non-standalone-mutation-fragment",
-      "id": "1dd868bdb7de8d00fbfb",
+      "id": "f93ef7ae91107a723ccd",
       "language": "bash",
-      "line": 265,
+      "line": 278,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -9753,14 +9513,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "17abacce4616e40154bf2da026644770fa497145fc1c7d0a3ea7b7a8a7d028a1",
+      "sha256": "df0e54e6e0c98fd09527d071e4d13c56d8eb47bdf6e26c27e572863d9be1d83e",
       "status": "illustrative-only"
     },
     {
       "evidence": "shell-syntax-only",
       "id": "e8468970b2f3a535edaf",
       "language": "bash",
-      "line": 314,
+      "line": 327,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -9777,7 +9537,7 @@
       "evidence": "unexecuted-example",
       "id": "b20c566b0ae92ac36101",
       "language": "plain",
-      "line": 342,
+      "line": 355,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -9792,9 +9552,9 @@
     },
     {
       "evidence": "shell-syntax-only",
-      "id": "a274788f20b3bf711379",
+      "id": "11c00f31bddd8c52abfc",
       "language": "bash",
-      "line": 368,
+      "line": 381,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -9804,14 +9564,14 @@
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "8c333958f335af3f7869e27ec5b28f526d61c4bc4871fc626dee912c24b18fa9",
+      "sha256": "ffbd39eef5028b58562b32a1fc118e87db66691eeb94f68e779c4b248514e03d",
       "status": "illustrative-only"
     },
     {
       "evidence": "visual-explanation",
       "id": "64b689e3cc6396ea2bd0",
       "language": "mermaid",
-      "line": 418,
+      "line": 414,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -9825,44 +9585,10 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "swagger-union-static",
-      "id": "cbd24246c987e7efe4ef",
-      "language": "bash",
-      "line": 456,
-      "path": "docs/use-cases/deploy-pd-disaggregation.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "3c1bd1c08c32fb470b484d48c607318f9ee7685439c67af626e34c834f3dc74f",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "unexecuted-example",
-      "id": "8aab1d1643fc160d0b31",
-      "language": "plain",
-      "line": 469,
-      "path": "docs/use-cases/deploy-pd-disaggregation.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": false,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "1f6cfb86b10dac46846e17469f3ad4aee4e7d0691efeeeff374823661243fd06",
-      "status": "illustrative-only"
-    },
-    {
       "evidence": "unexecuted-example",
       "id": "c8a654c5712b8983324b",
       "language": "plain",
-      "line": 555,
+      "line": 486,
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "quality_contract": {
         "cleanup": false,
@@ -9876,44 +9602,146 @@
       "status": "illustrative-only"
     },
     {
-      "evidence": "visual-explanation",
-      "id": "f0a087d675c728a344f9",
-      "language": "mermaid",
-      "line": 21,
-      "path": "docs/use-cases/kv-cache-aware-routing.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": false,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "80505d267d9b8c04add23e1bcb2f2c8e9be846a5b812b868d05d3242f14b32af",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "shell-syntax-only",
-      "id": "23d881cf83f0b40fb5a5",
+      "evidence": "explicit-public-classification",
+      "id": "61dd5f7e80763e264896",
       "language": "bash",
-      "line": 179,
-      "path": "docs/use-cases/kv-cache-aware-routing.md",
+      "line": 74,
+      "path": "docs/use-cases/model-engine-standard/catalog-installer.md",
       "quality_contract": {
         "cleanup": false,
-        "diagnosis": true,
+        "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "4475417ea38b126893b20bc46c5de4376712a32d574f22abac188195e29edea1",
+      "sha256": "3e77a693c68a9ca5b2fe21e582390d39e43d09aaadffa6ebb791b325b63b5b8a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "3194b0658e7d00a5536a",
+      "language": "bash",
+      "line": 94,
+      "path": "docs/use-cases/model-engine-standard/catalog-installer.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "26e39b6f21cd55072015cf26a2855b6e4e0bb6131fa7d4d487efbe4a8c77bd3c",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "7301d89af206b015c9b2",
+      "language": "bash",
+      "line": 32,
+      "path": "docs/use-cases/model-engine-standard/configure.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "fd87ef03aede1a5c9c450718e67287134fc290448dec1dce60db32fb7a5b8adb",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "086237605a74b4ed7fee",
+      "language": "bash",
+      "line": 57,
+      "path": "docs/use-cases/model-engine-standard/configure.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "5cb3078f741b80b6b46341aa22ca1c85d7137f3198a2f8236202ce0d29a58459",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "bca12c9ecae870380ec8",
+      "language": "bash",
+      "line": 68,
+      "path": "docs/use-cases/model-engine-standard/configure.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "c2dff04c5cda98dd103534235281a829e6b75b9cbf6f80a8cada5b78dd8602d4",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "5d48045e6de6c665ef17",
+      "language": "bash",
+      "line": 89,
+      "path": "docs/use-cases/model-engine-standard/configure.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "2cc0cc04190c6b72f85c77ab9c59532fd0212b531d8e9b3a049810e48aed9d3f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "4b2e2f638f4e0071c4f5",
+      "language": "bash",
+      "line": 103,
+      "path": "docs/use-cases/model-engine-standard/configure.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "11a261ae2b201ab3ed2c1aa83615f119bf9c44d277a69f0c27325ab6813c2b9e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "c0151c1791e9f7626d85",
+      "language": "bash",
+      "line": 124,
+      "path": "docs/use-cases/model-engine-standard/configure.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d7e766c780bf5b5a4df11d0d4656792fa23447eb196272eaa021e14383bca6e1",
       "status": "illustrative-only"
     },
     {
       "evidence": "non-standalone-mutation-fragment",
-      "id": "dcd4e3882a75e0f21c2d",
+      "id": "98f77a67fed25ba93d53",
       "language": "bash",
-      "line": 276,
+      "line": 155,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -9927,250 +9755,67 @@
         ],
         "workflow": "/getting-started/quickstart/"
       },
-      "path": "docs/use-cases/kv-cache-aware-routing.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "3a2a10d98833f6a3a031aa740d3a29d9617f44881179e10105f6812371097f9f",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "6941f0949b3bb690451d",
-      "language": "bash",
-      "line": 299,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "loxicmd create lb"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/kv-cache-aware-routing.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "ac323e271a82bd574c10b4dfb06065bece909144b4f14adc6f07b22f876abf62",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "shell-syntax-only",
-      "id": "b392ee81f7bbefcee83f",
-      "language": "bash",
-      "line": 328,
-      "path": "docs/use-cases/kv-cache-aware-routing.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "737accc29f98c424d64277b5b492688edde7cd74e65f8665ecc648f53253af6d",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "swagger-union-static",
-      "id": "78eb26a2cfe03b843d4f",
-      "language": "bash",
-      "line": 365,
-      "path": "docs/use-cases/kv-cache-aware-routing.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "416547b444baa1bb65a1b043048e439a755db939dad6867651a29f681dff7e72",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "swagger-union-static",
-      "id": "c8e4e2adc4bae1860e42",
-      "language": "bash",
-      "line": 386,
-      "path": "docs/use-cases/kv-cache-aware-routing.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "8b7379c2df0b2d3ec5f73502a8ea5f813a06b3a92361bfd454a1a15d7d30b439",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "cli-contract-static",
-      "id": "5e356affb990624d4e7f",
-      "language": "bash",
-      "line": 390,
-      "path": "docs/use-cases/kv-cache-aware-routing.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "4972af30f4acfc8307c6d3e0727e5ee2d47c2eaa3ae90644f7962681a66ff56b",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "shell-syntax-only",
-      "id": "79e85eec2e8c094e6f3b",
-      "language": "bash",
-      "line": 402,
-      "path": "docs/use-cases/kv-cache-aware-routing.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "6e87727828fca843248abe76c67e153799549d841bbbccc65a39a57fe4cf48e7",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "swagger-union-static",
-      "id": "22bdab59ef23fe1475e7",
-      "language": "bash",
-      "line": 417,
-      "path": "docs/use-cases/kv-cache-aware-routing.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "64bd68edb0844194cce801fd75a28cd172eec9cc1f223015aef64365c90479a8",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "cli-contract-static",
-      "id": "2f5d43f9d96ad3de994d",
-      "language": "bash",
-      "line": 422,
-      "path": "docs/use-cases/kv-cache-aware-routing.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "f8b8badf357eee5bdf32537adc44c2b4ae9550df0043ee1491d1e60f22788503",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "syntax-only",
-      "id": "1d6dff12a5641d53efd9",
-      "language": "yaml",
-      "line": 511,
-      "path": "docs/use-cases/kv-cache-aware-routing.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "d0d2aaf2852d64c4c425405e0096fb2721959407d1254d87064965e16b791251",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "d2f51da0a421b139abef",
-      "language": "bash",
-      "line": 14,
-      "path": "docs/use-cases/model-engine-standard/deployment.md",
+      "path": "docs/use-cases/model-engine-standard/configure.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
-        "prerequisites": false,
+        "prerequisites": true,
         "validation": true
       },
-      "sha256": "889dfef10f17a72e36e2db729281097a88c5bafe9b5e78577fe0cd34abaae537",
+      "sha256": "f76b7a4c892bcd1fb4cb8579e87c574a340d975cceb6813da88d49a13d88ade0",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "277667c26b12125a4ca4",
+      "id": "74c4d4c1d83ec68d5342",
       "language": "bash",
-      "line": 51,
-      "path": "docs/use-cases/model-engine-standard/deployment.md",
+      "line": 173,
+      "path": "docs/use-cases/model-engine-standard/configure.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
-        "prerequisites": false,
+        "prerequisites": true,
         "validation": true
       },
-      "sha256": "56fb57433e22692fc829fed5b09b76da0d76ed20e0ff6a5939ef0fb0e8a5bc28",
+      "sha256": "0ae73e24c3c384a46b657a701db18d20daf40f216c399e11637ba084d0c0ea8c",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "827c6de2b5af0a37fa83",
+      "id": "c245343b60a168d1b49b",
       "language": "bash",
-      "line": 93,
-      "path": "docs/use-cases/model-engine-standard/deployment.md",
+      "line": 184,
+      "path": "docs/use-cases/model-engine-standard/configure.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
-        "prerequisites": false,
+        "prerequisites": true,
         "validation": true
       },
-      "sha256": "5fd6d57a0598b870dfd17beb9cf041c638b30f76b61584a982510c11472543ce",
+      "sha256": "599b0572fb4adeb072fc2658f5029e0bf1cfa07009c40a57a49e6cb111e77d71",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "9d087a929862804a856c",
+      "id": "79c6933bda08f44c7f49",
       "language": "bash",
-      "line": 43,
-      "path": "docs/use-cases/model-engine-standard/exaone35.md",
+      "line": 206,
+      "path": "docs/use-cases/model-engine-standard/configure.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
-        "prerequisites": false,
-        "validation": false
+        "prerequisites": true,
+        "validation": true
       },
-      "sha256": "4d9932ac44f2d7da07f7d8e5215291b88856a4e6e66eaccbe582eb9c1d9e112d",
+      "sha256": "da39351cb667b54945559692152aca72e9b1f114c0036985cbd46152cfd262f2",
       "status": "illustrative-only"
     },
     {
@@ -10192,179 +9837,145 @@
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "589e7913fd681e6b7ae7",
+      "id": "07bf411cb7fc9d0f91df",
       "language": "bash",
-      "line": 43,
-      "path": "docs/use-cases/model-engine-standard/gemma2.md",
+      "line": 33,
+      "path": "docs/use-cases/model-engine-standard/launch.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
         "prerequisites": false,
-        "validation": false
-      },
-      "sha256": "0a1a2ab53987c51b720afdfe571ddd4bd8c55cc372c653b38b827f57e3b89bbc",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "811a9c0b5f7178ffc08c",
-      "language": "bash",
-      "line": 41,
-      "path": "docs/use-cases/model-engine-standard/llama31.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": false
-      },
-      "sha256": "9f759857afccea32cc7fd5ffd59874d47f220401b4fa4d6e4d0a2f49447bba1d",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "e54762c1420b7d556b47",
-      "language": "bash",
-      "line": 47,
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": true,
-        "prerequisites": false,
-        "validation": false
-      },
-      "sha256": "33de09c031773c695ea10f717c9490bacb563a14ea30a3368c3a9c20d89fc8f3",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "928a9d014d45deb5200e",
-      "language": "bash",
-      "line": 67,
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": true,
-        "prerequisites": false,
-        "validation": false
-      },
-      "sha256": "778d715cba36f98cc9dfd39ece06da66e14978b843286da6419de70b3e84547d",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "770a55427a5fc8bc6e56",
-      "language": "bash",
-      "line": 92,
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": true,
-        "prerequisites": false,
-        "validation": false
-      },
-      "sha256": "1234f228d8565cdb77b9680e46211d9fcb23242a5717b6291a4594cb9bdbb8d3",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "fe0105f7fc3895b43ae9",
-      "language": "bash",
-      "line": 115,
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": true,
-        "prerequisites": false,
-        "validation": false
-      },
-      "sha256": "032ab2d4d4e57fa37f115a4f7eb730098ff9873b3aab10b58153acbd08e7443f",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "eb48129b8c5e8ed29ec2",
-      "language": "bash",
-      "line": 175,
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": true,
-        "prerequisites": false,
-        "validation": false
+        "validation": true
       },
       "sha256": "4972a1fc00829139b493e78e79960eb54067713f750b85ae93c90bd1dde09672",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "cb2e4e8f1a58e29e432e",
+      "id": "6363b80d07fe2ca9f435",
       "language": "bash",
-      "line": 191,
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "line": 49,
+      "path": "docs/use-cases/model-engine-standard/launch.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
-        "expected_result": true,
+        "expected_result": false,
         "prerequisites": false,
-        "validation": false
+        "validation": true
       },
       "sha256": "136d62d9210c1720ea3683297ccd8c678e9a8eaccde779c921a1de30f26edc33",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "4036f5752e64549d3799",
+      "id": "ef32c7386157cf79d0e2",
       "language": "bash",
-      "line": 208,
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "line": 66,
+      "path": "docs/use-cases/model-engine-standard/launch.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
-        "expected_result": true,
+        "expected_result": false,
         "prerequisites": false,
-        "validation": false
+        "validation": true
       },
       "sha256": "24fb3dc9014fcb61f6bcc66de247d7424f6a66dd407f9a3cf0d6d64b66c51b5f",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "ec456cf32d4f1c69e983",
+      "id": "abcb6af9c7a4518365d0",
       "language": "bash",
-      "line": 247,
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "line": 104,
+      "path": "docs/use-cases/model-engine-standard/launch.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
-        "expected_result": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "0dd318a41be86bd09d6fccd159e4d4a4e81f3ee30ee355077d6e98f0fa7f9213",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "2d46addecf9335382337",
+      "language": "bash",
+      "line": 138,
+      "path": "docs/use-cases/model-engine-standard/launch.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "df8a427b641ad90e21575b55dcabd286fadde2e6122549855ea6172f13e997d7",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "2d55ea89aab2ec2170d7",
+      "language": "bash",
+      "line": 17,
+      "path": "docs/use-cases/model-engine-standard/lifecycle.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
         "prerequisites": false,
         "validation": false
       },
-      "sha256": "e9fab2ae6de64434cd213eaf79c8d9824b13a5512c52a58254e0e240bf3a2319",
+      "sha256": "67fc1979aa9b555a248a26c7429bd55cb893377536bb45a7098a42ff03df3028",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "2e89cc7f5697c9c89266",
+      "language": "bash",
+      "line": 41,
+      "path": "docs/use-cases/model-engine-standard/lifecycle.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "34e55f93cf0c32d4a2f75f140c2f6d514b39b74326492af8244493fdb8339c5c",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "a5a4b73fcace0eca38d1",
+      "language": "bash",
+      "line": 62,
+      "path": "docs/use-cases/model-engine-standard/lifecycle.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "fdcd724cb04d0ffe7eac0590027633e03328a6653c94d237a03c7ccadcf0ffe1",
       "status": "illustrative-only"
     },
     {
       "evidence": "non-standalone-mutation-fragment",
-      "id": "5d5fa73d6e99ace2808a",
+      "id": "e2865cca3f096702313e",
       "language": "bash",
-      "line": 271,
+      "line": 74,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -10378,87 +9989,23 @@
         ],
         "workflow": "/getting-started/quickstart/"
       },
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "path": "docs/use-cases/model-engine-standard/lifecycle.md",
       "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": true,
-        "prerequisites": false,
-        "validation": false
-      },
-      "sha256": "7554971151f8c056b62768a7a1476873a045e90badd6b6a2edbb0b464bf5b583",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "002f59ebc832a9a9ee82",
-      "language": "bash",
-      "line": 293,
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": true,
-        "prerequisites": false,
-        "validation": false
-      },
-      "sha256": "dfe0de94610c9fcae5b9b4f3054930ad23de6cf4af5dff6893084233ad05cf19",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "c9d06abd8d74c9fd7a3c",
-      "language": "bash",
-      "line": 317,
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": true,
-        "prerequisites": false,
-        "validation": false
-      },
-      "sha256": "afe94af349e08d141201bac886b855daa5129b7673c479344a7fce82384369ec",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "6343e00bf733b73718a6",
-      "language": "bash",
-      "line": 349,
-      "mutation_contract": {
-        "active_path": true,
         "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "POST /config/loadbalancer"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
-      "quality_contract": {
-        "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
-        "expected_result": true,
+        "expected_result": false,
         "prerequisites": false,
         "validation": false
       },
-      "sha256": "82c5188de6ebd0ddaed0e09bb20326a490debd529cd7820da445aefc2174757a",
+      "sha256": "11caf59b0c6d2d408920a267e2c174c4591b8ddc763109cf24366e8e3c8b1a27",
       "status": "illustrative-only"
     },
     {
       "evidence": "non-standalone-mutation-fragment",
-      "id": "c60d37200d63f2653098",
+      "id": "480d58e3c600869407bb",
       "language": "bash",
-      "line": 397,
+      "line": 104,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -10472,249 +10019,125 @@
         ],
         "workflow": "/getting-started/quickstart/"
       },
-      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "path": "docs/use-cases/model-engine-standard/lifecycle.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "fc92601ee663d69e1a40fe9a872b98eda3a7eb971e6888af40201cb9f2eb06b4",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "561db0fa1ad061207505",
+      "language": "bash",
+      "line": 126,
+      "path": "docs/use-cases/model-engine-standard/lifecycle.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "a90859e1f3681dacf53f6a8d0aeaa7ad38f5df0c863200c09472bfc6e11e811a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "c2265ba9abe6baee74b3",
+      "language": "bash",
+      "line": 155,
+      "path": "docs/use-cases/model-engine-standard/lifecycle.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "95911a37bb9ca1c329f3bf2826c856953566ee6b98756a50425b351ff6cf1c95",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "3e3d97295b52ed635bf8",
+      "language": "bash",
+      "line": 18,
+      "path": "docs/use-cases/model-engine-standard/prepare.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
-        "expected_result": true,
+        "expected_result": false,
         "prerequisites": false,
-        "validation": false
+        "validation": true
       },
-      "sha256": "33ee633e8d383a6f63ad66e274e5537a29384a1b95ef641afcab1e154cf5732f",
+      "sha256": "106df674a90084f427e63ad20aeeee0dcb8a72b668ba5ec88b72720687cc226b",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "c5306db5e7ea4cc351f6",
+      "id": "5c36ef3c1fc721a7aa02",
       "language": "bash",
-      "line": 22,
-      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "line": 46,
+      "path": "docs/use-cases/model-engine-standard/prepare.md",
       "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
+        "cleanup": false,
+        "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
-        "prerequisites": true,
+        "prerequisites": false,
         "validation": true
       },
-      "sha256": "2b3a66c2e200da05f376d0f3ae2c8c81ba054f7e99ab770a311939b545063bc1",
+      "sha256": "b00f05dd70c60c824948c7b21e02e4dc03bceb6fc3c73b967052b80898514ce9",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "f4f80fd754e5abd6343a",
+      "id": "4001a24f8e69e6bbcb3b",
       "language": "bash",
-      "line": 83,
-      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "line": 67,
+      "path": "docs/use-cases/model-engine-standard/prepare.md",
       "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
+        "cleanup": false,
+        "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
-        "prerequisites": true,
+        "prerequisites": false,
         "validation": true
       },
-      "sha256": "38d32b8d450124b6605e5a647866f04c9cc42ef9de812fa011f7d7d4fa888c97",
+      "sha256": "fb665ac39c3fcda311ae91b2b38f56c353ddf69a8d739ce75db883fad4cc0f9b",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "c881bd9af1128f397070",
+      "id": "494f0a4f3ecfc0a35286",
       "language": "bash",
-      "line": 103,
-      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "line": 84,
+      "path": "docs/use-cases/model-engine-standard/prepare.md",
       "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
+        "cleanup": false,
+        "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
-        "prerequisites": true,
+        "prerequisites": false,
         "validation": true
       },
-      "sha256": "2aa35e61b7c09a6a0a614f7536ffb3ca9f8806f4576f1c6f46934cec0ffc34a3",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "07ff76205a12ea3160d4",
-      "language": "bash",
-      "line": 115,
-      "path": "docs/use-cases/model-engine-standard/operations.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "a9799d57071253008a75bcc721e8004cf9642d84d9022dedecdea0d6ac893859",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "4e1b70f64b1880f5a2f1",
-      "language": "bash",
-      "line": 161,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "POST /config/loadbalancer"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/model-engine-standard/operations.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "ec99221a6efeb93d063b22454bf8e1f3dbc138aca5808b397c666178cad1ab00",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "3d09d9b41b660d2ded6f",
-      "language": "bash",
-      "line": 182,
-      "path": "docs/use-cases/model-engine-standard/operations.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "453e7c2a4211a7981205ab3a7476b342c4c90b595e568fe7d5a1707b0c1feea8",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "524c4cb92c2ce2f7d3c5",
-      "language": "bash",
-      "line": 206,
-      "path": "docs/use-cases/model-engine-standard/operations.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "33a91ab23864c600cfaddc6afcb2ef589ba40faee55fc0000d85b2366b4ffa03",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "cc808e593ba173f67fb9",
-      "language": "bash",
-      "line": 259,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "POST /config/loadbalancer"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/model-engine-standard/operations.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "5f8476bc067be98083d9ea654ec6ef4a3669860c101d2f59266fdca5a93e0bca",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "f91a8af72e4cc9e6a9e5",
-      "language": "bash",
-      "line": 295,
-      "path": "docs/use-cases/model-engine-standard/operations.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "726a6cf4c5c2839aa65045ddb7df53e60ca3f6d59e0d51a9a3059f7b7eb304bf",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "f5e8f0917a8a587e3094",
-      "language": "bash",
-      "line": 320,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "DELETE /config/loadbalancer/hosturl/$VIP/externalipaddress/$VIP/port/$PORT/protocol/tcp"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/model-engine-standard/operations.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "0be520e552a3c6f63471e76e5f7647cfd27ef197742e866e159b5fa2064a71e8",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "eb584c7adeca8be5db3a",
-      "language": "bash",
-      "line": 342,
-      "path": "docs/use-cases/model-engine-standard/operations.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "c7a7b94d675b40611ddea5e81dd222259312c581224993318eb7534c9400112d",
+      "sha256": "a5e53bb4e3dc8cccff6fdde112822c9c59181192d4665645ee4195bf6a069f6d",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
       "id": "0ea32bf933a22c215145",
       "language": "bash",
-      "line": 143,
+      "line": 148,
       "path": "docs/use-cases/model-engine-standard/profiles.md",
       "quality_contract": {
         "cleanup": false,
@@ -10731,7 +10154,7 @@
       "evidence": "explicit-public-classification",
       "id": "dbd9ea7d89a00d79d306",
       "language": "bash",
-      "line": 163,
+      "line": 168,
       "path": "docs/use-cases/model-engine-standard/profiles.md",
       "quality_contract": {
         "cleanup": false,
@@ -10748,7 +10171,7 @@
       "evidence": "explicit-public-classification",
       "id": "74c55b15a66e7565669b",
       "language": "bash",
-      "line": 182,
+      "line": 188,
       "path": "docs/use-cases/model-engine-standard/profiles.md",
       "quality_contract": {
         "cleanup": false,
@@ -10763,315 +10186,226 @@
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "2c38c3d266c33b575268",
+      "id": "0e1eea3b9b36961c40fb",
       "language": "bash",
-      "line": 41,
-      "path": "docs/use-cases/model-engine-standard/qwen25.md",
+      "line": 88,
+      "path": "docs/use-cases/model-engine-standard/select.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
-        "prerequisites": false,
-        "validation": false
+        "prerequisites": true,
+        "validation": true
       },
-      "sha256": "aef2cd1a8d2d6c74c27318c0f4f4dec789a6838c5de99c9e43877ba86ba90fb9",
+      "sha256": "33de09c031773c695ea10f717c9490bacb563a14ea30a3368c3a9c20d89fc8f3",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "df09ab801648c309e6ea",
+      "id": "3f97ec1f67cb59090ba6",
       "language": "bash",
-      "line": 41,
-      "path": "docs/use-cases/model-engine-standard/r1.md",
+      "line": 109,
+      "path": "docs/use-cases/model-engine-standard/select.md",
       "quality_contract": {
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
         "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "6e5be776153fc5a79601e6fe2d823b0efe2f04911128bd2ae50e238705de8397",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "a1c6e9ca6d14c900ff04",
+      "language": "bash",
+      "line": 146,
+      "path": "docs/use-cases/model-engine-standard/select.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "930fb76e687c6c88bf19b77a1e8ffadad105ba5044a079d3c2c1af6b899ef10f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f77e31bb0921230b98c0",
+      "language": "bash",
+      "line": 159,
+      "path": "docs/use-cases/model-engine-standard/select.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "a4a594c389e5a47aec6e9b9bbc5b0b6299704a09c90da967be78aa2e10ccb9cb",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "5d7e5e410e203da62d39",
+      "language": "bash",
+      "line": 175,
+      "path": "docs/use-cases/model-engine-standard/select.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "47a0dd6e8a06a4d857b135eb467a986392b9e819c05280879ed0ef09b6d9ef24",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "69441166e84dab276e99",
+      "language": "bash",
+      "line": 12,
+      "path": "docs/use-cases/model-engine-standard/verify.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
         "prerequisites": false,
-        "validation": false
-      },
-      "sha256": "a60cf46ffd81417c682dad46efb1ad3398b816045f1fdd5a069bfa53fce42349",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "936c130aae961d089657",
-      "language": "bash",
-      "line": 61,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
         "validation": true
       },
-      "sha256": "2a8f790ac79a33bf7a6845bc7e9b591c1a6de7e5d8b7179c1c8e954a0feba594",
+      "sha256": "c0e0ad8f83b4ba25348f9be7ef0e7daac26e219d6120fadb2608a582300da592",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "184d377f65db270b56c7",
+      "id": "eb0fab615dbeeeef61be",
       "language": "bash",
-      "line": 67,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "line": 33,
+      "path": "docs/use-cases/model-engine-standard/verify.md",
       "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
+        "cleanup": false,
+        "diagnosis": true,
         "exact_command": true,
         "expected_result": false,
-        "prerequisites": true,
+        "prerequisites": false,
         "validation": true
       },
-      "sha256": "51816dfe85ce80741d4ed81ca8f2da9dfad0d2db969709f61f16d8f5f19056b8",
+      "sha256": "6d1d5899c3500720b9428f04689d21ef61124e775cd4532af2a95b96d69e8871",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "58c67f5b20622a45aa79",
+      "id": "004a29aa7e9385989eea",
       "language": "bash",
-      "line": 73,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "line": 77,
+      "path": "docs/use-cases/model-engine-standard/verify.md",
       "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
+        "cleanup": false,
+        "diagnosis": true,
         "exact_command": true,
         "expected_result": false,
-        "prerequisites": true,
+        "prerequisites": false,
         "validation": true
       },
-      "sha256": "930ec209625edef6a2bfcc05dfedda94fa602425c365da9962ae4ff31f872c8d",
+      "sha256": "aa8e63e482c09bcf50f7fa79caf3b97c104f0cb72a000552d7015a667d99a171",
       "status": "illustrative-only"
     },
     {
       "evidence": "explicit-public-classification",
-      "id": "fe42dd1de3a46776b18d",
-      "language": "bash",
-      "line": 81,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "fdcd724cb04d0ffe7eac0590027633e03328a6653c94d237a03c7ccadcf0ffe1",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "7479270615e892cff38d",
+      "id": "72f8244658d77028a275",
       "language": "bash",
       "line": 87,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "path": "docs/use-cases/model-engine-standard/verify.md",
       "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
+        "cleanup": false,
+        "diagnosis": true,
         "exact_command": true,
         "expected_result": false,
-        "prerequisites": true,
+        "prerequisites": false,
         "validation": true
       },
-      "sha256": "39c3ddf169ab9811ade1c48526675eb86882f43260b3140c4986581c0729df9f",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "9a6bcdc7f24da4aae085",
-      "language": "bash",
-      "line": 93,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "3ba5b87380096c0c06bcdcd38d7d52612641e511f63198568812d091cc8c7204",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "f8517045577a7302216d",
-      "language": "bash",
-      "line": 120,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "1784aae331e0d3bafe4269eb0c7fa55ef956c9ed679520912938f3f7c0753fd5",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "9177dbd83e3161f2d533",
-      "language": "bash",
-      "line": 135,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "42ed1d96b88c5d156ccb128ad39e978b2fd82f5a2116471737fc127144417574",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "e97ccc1ad8b351963c0c",
-      "language": "bash",
-      "line": 196,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "aa6c9f17bddf8adeb685d6f811c4aec93764a31aebdf020589d70ae38c6b3dec",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "ed9badc72e45e48931b2",
-      "language": "bash",
-      "line": 212,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "06900ae73bcbe233c8db05699462446b366cc7637210a8a9d9795a08367fe6a3",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "60fd596b8b99a7b7694f",
-      "language": "bash",
-      "line": 262,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "08a667862eca3837379822c3f8a3bbd4750aae00339d3ff20a2b53d06792642d",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "1b079fa6e0b7bf65728a",
-      "language": "bash",
-      "line": 274,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "7736d44d1eb93979a3633ad293f510fb10068544616bf00738d8c87c79e8f7e2",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "fa086c06ea815e8e390f",
-      "language": "bash",
-      "line": 288,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "d999ab936b24f25078b21c93d64c059c5948fdc248beec9d92c7ee4eeb7ddde6",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "b88a9ad484b6c551673e",
-      "language": "bash",
-      "line": 308,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "0bbc8effea0c03fd70a08d962e403044d9c05489a20894da3e30395fa3d898c6",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "1d7e0803f39a8aa764fc",
-      "language": "bash",
-      "line": 333,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "6b6c718636959fad9148916991311baf9472b2da8d5904800ba47a15b02fae19",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "6c8af1514e0346cf8a4e",
-      "language": "bash",
-      "line": 354,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "f9c3bd8b409d1c293de9b3b7d967b2ffbb23616b735392c5d21e2d8b5dd2843e",
+      "sha256": "d276d9bcef1c760fb20c1f0810f68524266dcba9d61ff5d8226d1d9b0170d713",
       "status": "illustrative-only"
     },
     {
       "evidence": "non-standalone-mutation-fragment",
-      "id": "662a950a0e3a514dfaf8",
+      "id": "53ee9508d18900d0f5e2",
       "language": "bash",
-      "line": 383,
+      "line": 98,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/metrics"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/use-cases/model-engine-standard/verify.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "bcb0c95d236bb206669a979b329b33e5edeea184643435ad9de1916bda53b00b",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "3335b4e80b420381e301",
+      "language": "bash",
+      "line": 123,
+      "path": "docs/use-cases/model-engine-standard/verify.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "8b3177266fe391324298e2971b48a263650fdf0d9b29c2b58c6f15c641e74e5e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "c474559a1bf76a625e9f",
+      "language": "bash",
+      "line": 137,
+      "path": "docs/use-cases/model-engine-standard/verify.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "e33fc315e4ac025abe29c0960c230f75cdf051b18cb6781866599d38ea69602c",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "b8ba8114020bc85e5c40",
+      "language": "bash",
+      "line": 156,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -11085,67 +10419,16 @@
         ],
         "workflow": "/getting-started/quickstart/"
       },
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "path": "docs/use-cases/model-engine-standard/verify.md",
       "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
+        "cleanup": false,
+        "diagnosis": true,
         "exact_command": true,
         "expected_result": false,
-        "prerequisites": true,
+        "prerequisites": false,
         "validation": true
       },
-      "sha256": "fe204d1046dab5cfc94a0cf056faf17030f60040a5dd13fefc70a602951bb924",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "21a1191e61200e76a8db",
-      "language": "bash",
-      "line": 413,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "d686af452ffe26f023b712719c8c5e548e5afcceaeae6e8d8147cd652ea825eb",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "635f193586beca55a394",
-      "language": "bash",
-      "line": 437,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "77cc345b5d8302e8dda66fef902b4767c09bcc650548dfef3001f897dfd953b9",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "explicit-public-classification",
-      "id": "93f610137ab04923f261",
-      "language": "bash",
-      "line": 464,
-      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": true,
-        "validation": true
-      },
-      "sha256": "f6d7a564f4c633b5896ed7838963ab034b2f6c7924629ac776b73f8f45f6073b",
+      "sha256": "0840bc93d001a79447fb8170037a3494866fce8c738add9a5803f0a47766c49b",
       "status": "illustrative-only"
     },
     {
@@ -11158,7 +10441,7 @@
         "cleanup": false,
         "diagnosis": false,
         "exact_command": false,
-        "expected_result": false,
+        "expected_result": true,
         "prerequisites": false,
         "validation": true
       },
@@ -11175,7 +10458,7 @@
         "cleanup": false,
         "diagnosis": false,
         "exact_command": false,
-        "expected_result": false,
+        "expected_result": true,
         "prerequisites": false,
         "validation": true
       },
@@ -11184,7 +10467,7 @@
     },
     {
       "evidence": "shell-syntax-only",
-      "id": "b8ab643e06db2e88b48b",
+      "id": "9b31aba3e03816b398aa",
       "language": "bash",
       "line": 96,
       "path": "docs/use-cases/performance-methodology.md",
@@ -11192,11 +10475,11 @@
         "cleanup": false,
         "diagnosis": false,
         "exact_command": true,
-        "expected_result": false,
+        "expected_result": true,
         "prerequisites": false,
         "validation": true
       },
-      "sha256": "8e69692a29d112ba41a34a519abd8d0216fa15d3ff025e2c2370a70537a4c599",
+      "sha256": "85c3ed415d7fc56510e20a505a165e17095ac428ffad4625a4f8c8f04c25fe68",
       "status": "illustrative-only"
     },
     {
@@ -11265,369 +10548,6 @@
         "validation": true
       },
       "sha256": "bd7b0b1065b934476d36e457aec96cf2c94b03d5ab5e51d4bb1250f0f533970d",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "b31f64db67852ee86b9a",
-      "language": "bash",
-      "line": 316,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "POST /config/loadbalancer"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/routing-hierarchy.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "c338a9e0510939307e85c7319b1ee3b7f56ce3a2c94312f6076bc7a2ba397379",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "37c0416a5334a29746c8",
-      "language": "bash",
-      "line": 343,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "POST /config/loadbalancer"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/routing-hierarchy.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "9ebb54ed060129dee8a81482f1463781f8125071c2418d7b210bf2298a3f5ce0",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "d40a1f811495047afb68",
-      "language": "bash",
-      "line": 365,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "loxicmd create lb"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/routing-hierarchy.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "295469c28bf483a4d47140e9b1cacde4abdc19089fad68e4173d786b55f34727",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "18d21bd54b0e3bf07024",
-      "language": "bash",
-      "line": 373,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "loxicmd create lb"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/routing-hierarchy.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "709cb5dd3f2f9d1b31f85eed91f0957151df4f24061bc34ea84f21631f247346",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "visual-explanation",
-      "id": "74b501d84e062509db05",
-      "language": "mermaid",
-      "line": 8,
-      "path": "docs/use-cases/sglang-configuration-tuning.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": false,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "114bc1850c23156b4fc2f18b66a52d398c18f5c628e8fb86bd4ec5acc9069848",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "unexecuted-example",
-      "id": "bb73095b0cca8260ce6d",
-      "language": "text",
-      "line": 50,
-      "path": "docs/use-cases/sglang-configuration-tuning.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": false,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "659c3b59210fb28041976ebd5c531b4c5440a272d4619cf69d6d8cf13bbc707d",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "shell-syntax-only",
-      "id": "f6d3170426fc1a7c73a9",
-      "language": "bash",
-      "line": 70,
-      "path": "docs/use-cases/sglang-configuration-tuning.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "2e76a8ecad408482686fe4f1bc59541dff269587b56fc8ddecf3f168c244866d",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "swagger-union-static",
-      "id": "e5033d2d51f591ce14f1",
-      "language": "bash",
-      "line": 86,
-      "path": "docs/use-cases/sglang-configuration-tuning.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "61c2acbea1ce43bd81949be766baca2d3ee73afb1d9dba2aca2abe9e7a3bcda8",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "visual-explanation",
-      "id": "90f16b24d71de094ff90",
-      "language": "mermaid",
-      "line": 15,
-      "path": "docs/use-cases/sglang-routing.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": false,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "ac0cac5cec135f0f7eb2d994e58b36fdbfb08d756317e980f584c41936c8218b",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "visual-explanation",
-      "id": "b6705e1e7d497c0f053d",
-      "language": "mermaid",
-      "line": 38,
-      "path": "docs/use-cases/sglang-routing.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": false,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "ed6a3675a5b3b3b41266f2748a5a0833eea7e3f46ebc33db7bf21deffe0e9713",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "ec73c4e1de74fde31373",
-      "language": "bash",
-      "line": 80,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "POST /config/loadbalancer"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/sglang-routing.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "db3b3c0c7d01c49760705c51df76359a42fa5e868952e9660bf17852142c4056",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "7c5a7fe819c36f6838f5",
-      "language": "bash",
-      "line": 113,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "loxicmd create lb"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/sglang-routing.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "8b022f701bcd09ee614f7a4c4fdf5582ce961d573a6335aa0b06ab3bdd59bcac",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "swagger-union-static",
-      "id": "00ecd53d2f3d05c41475",
-      "language": "bash",
-      "line": 143,
-      "path": "docs/use-cases/sglang-routing.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "d261a99b04fdcb6fbcfe29132ac282f56adc6bf2b3a5e2d68182ce5313cff425",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "non-standalone-mutation-fragment",
-      "id": "3e68bdbc46841aeea1c2",
-      "language": "bash",
-      "line": 168,
-      "mutation_contract": {
-        "active_path": true,
-        "cleanup": true,
-        "cleanup_verification": true,
-        "detected": true,
-        "independent_oracle": true,
-        "mode": "illustrative-fragment",
-        "negative_no_mutation": true,
-        "operations": [
-          "DELETE /config/loadbalancer/externalipaddress/192.0.2.10/port/2090/protocol/tcp"
-        ],
-        "workflow": "/getting-started/quickstart/"
-      },
-      "path": "docs/use-cases/sglang-routing.md",
-      "quality_contract": {
-        "cleanup": true,
-        "diagnosis": true,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "32508b225a881871b53efb075463be801bf14cc7c8665921c4429a3fab70f024",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "visual-explanation",
-      "id": "7dc807bd5cc8abfc9cdd",
-      "language": "mermaid",
-      "line": 17,
-      "path": "docs/use-cases/vllm-vs-sglang.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": false,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "ccfaf6c0543dab3ad2ac6160fffc7f93b081faca9fe3cea5c81367a9f999a4e7",
-      "status": "illustrative-only"
-    },
-    {
-      "evidence": "swagger-union-static",
-      "id": "615ac9544127862741fb",
-      "language": "bash",
-      "line": 125,
-      "path": "docs/use-cases/vllm-vs-sglang.md",
-      "quality_contract": {
-        "cleanup": false,
-        "diagnosis": false,
-        "exact_command": true,
-        "expected_result": false,
-        "prerequisites": false,
-        "validation": true
-      },
-      "sha256": "e93837156e49a7fe99f037b2a4d630df5cdfcf870f316cbe527d75bb0b0ec24f",
       "status": "illustrative-only"
     },
     {

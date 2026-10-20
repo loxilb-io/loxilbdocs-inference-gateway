@@ -2,36 +2,59 @@
 
 <!-- example-status-default: illustrative-only -->
 
-Every unverified RR or Exact selection in [model and engine selection](index.md)
+Every unverified RR or Exact selection in [model and engine selection](matrix-manual.md)
 is a **qualification task to complete**. Providing both modes is a documentation
 deliverable; proving them on the actual model/engine/Gateway tuple is a separate
 runtime deliverable. This public checklist states the current gaps, prerequisites
 and acceptance evidence so operators know what remains before adoption.
 
-**Review in progress, 2026-10-20.** Use the [five-model operator manual](matrix-manual.ko.md)
-for current paired RR/Exact inputs. The five QA definitions and fixtures are now
-supplied separately from the unchanged upstream catalog.
+**Reviewed 2026-10-20.** The original five-model campaign now has separate
+runtime verdicts for all 30 mode cases. See the [operator manual and result table](results.md#matrix-results)
+and [sanitized evidence summary](../../assets/model-engine-standard/matrix-results.json).
+The results distinguish bounded functional PASS from native architecture blockers;
+none closes production/release or load/fault qualification.
 
-## Original five cards: 30 mode cases
+## Original five cards: completed functional checks and open gates
 
-The current evaluation versions are vLLM 0.31.0, **SGLang 0.5.19** and TRT rc29/PyTorch.
-vLLM completed the five-model functional pairs. TRT completed Qwen/Llama/R1 pairs;
-its Gemma2/EXAONE native PyTorch architectures are blocked. All five SGLang models
-are being re-executed on the stock tagged-array 0.5.19 image with explicit
-engine-specific QA profiles. Earlier 0.5.18 results are retained separately.
+The current evaluation profiles/manifests/fixtures are supplied separately from
+the upstream catalog. The earlier “publish missing profile” prerequisite is now
+resolved for this QA package; it is not a catalog promotion. The matrix uses
+vLLM 0.31.0, SGLang 0.5.19 and TRT rc29/PyTorch. Each RR/Exact result remains
+independent. Historical recommendation/reference classes are retained separately.
 
-The 0.5.21 tagged-map trial is a [separate development request](sglang-compatibility.md).
-The 0.5.18 EXAONE tokenize API overflow is addressed in upstream stock 0.5.19;
-R1's observed native BOS policy is recorded in its SGLang profile. Neither an
-old PASS nor an upstream source inspection substitutes for the current runtime gates.
-Remaining full qualification includes capacity, cancellation/resource return,
-worker loss/recovery, clean replay, release image and host data plane.
-Historical Gemma load RED stays open.
+For every functional PASS, remaining work includes:
+
+- Capacity, long-output/concurrent traffic and application SLO on the intended GPU.
+- Owned worker loss, survivor receipts, immediate/later recovery and redistribution.
+- Cancellation, resource return and long-running leak/handle observations.
+- Fault-injected RR→Exact→RR switching, retained-state rollback and repeatable clean replay; the recorded fault-free mode checks remain bounded PASS.
+- Approved release image, actual host data plane and HA qualification where applicable.
+- Independent rerun and formal release-catalog promotion by the product owners.
+
+For TRT Gemma2 and EXAONE3.5, the pinned PyTorch executor rejects the native
+architecture before loading weights. Close this blocker only with a separately
+supported backend/image/checkpoint tuple and fresh native **and** Gateway RR/Exact
+evidence. Changing a profile name or bypassing strict mode cannot fix a native
+loader. Other TRT backends are unqualified here, not declared universally unsupported.
+
+Gemma's original normal-completion load RED remains open. Preserve failed raw
+runs and successful-subset accounting; low-concurrency functional PASS does not
+resolve its capacity/root-cause question. Product findings are handed to the
+internal development team; QA does not patch engine or Gateway code to pass.
+
+## Separate development request: SGLang tagged-map events
+
+The [SGLang compatibility note](sglang-compatibility.md) records the preserved
+0.5.21 wire/Exact failure and development acceptance criteria. The current
+operator baseline is the verified **0.5.19 tagged-array** tuple.
+A future tagged-map implementation requires its own product candidate and fresh
+QA; it is not a prerequisite for following the compatible-version manual.
 
 ## Separate public-catalog example: six additional cases
 
-[Choose RR or Exact](routing-choice.md) supplies both modes for R1 **1.5B**, not
-the 7B row above. Candidate source status is unchanged by adding examples.
+The [R1 1.5B evidence archive](routing-choice.md) retains separately scoped
+results and old paired inputs, not the current setup procedure for the 7B row above.
+Candidate source status is unchanged by retaining these examples.
 
 | Framework | RR case | Exact case |
 |---|---|---|
@@ -102,3 +125,21 @@ The [machine-readable matrix](../../assets/model-engine-standard/qualification-m
 in the configuration ZIP tracks all **36 mode cases**, current prerequisites and
 required evidence. It records this documentation edition's state, not a live test
 service or a claim that the work has been executed.
+
+## Required core integration: catalog and installer
+
+[Catalog and Installer Alignment](catalog-installer.md) records the five-profile
+registration proposal: 13 candidate tuples and two TRT architecture-blocked
+tuples. Preserve old profiles/version evidence and the SGLang 0.5.19 guide baseline.
+The metadata proposal passes Python modelctl render/check; it is not ready for
+core integration until these reproduced gates close:
+
+- engine-version-contract: update core-owned version selectors and regenerate/check Go/C trust artifacts.
+- selected-tuple-image: image pulls must follow selected tuples, including old/new version coexistence.
+- blocked-selection-side-effects: blocked-only selections must perform no image pull or registry writes.
+- manifest-identity-validation: refuse wrong engine version/digest/revision before modifying install roots.
+
+After the core team provides a fixed immutable candidate, repeat isolated
+installation, rejected/no-mutation cases, discovery/READY and complete RR/Exact
+traffic using the newly installed registry. Current Linux staging checks and
+prior GPU functional PASS do not close this new installed-candidate gate.

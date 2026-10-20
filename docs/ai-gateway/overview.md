@@ -281,3 +281,8 @@ Each rule in the response should show `mode: 4` and the `model_name` you configu
 | Manage tenant keys and limits | [API Key Management](api-key-management.md) |
 | See every config field | [Configuration Reference](configuration-reference.md) |
 | Accelerate an eligible non-rewriting HTTP/1.1 relay | [Sockmap Acceleration](../operations/sockmap-acceleration.md) |
+
+## Deploy an inference service
+
+Use the [LLM integration reading path](../use-cases/llm-integration.md) for concepts,
+ordered converged/P/D guides, engine contracts, tuning and evidence limits.

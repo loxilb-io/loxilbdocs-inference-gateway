@@ -51,7 +51,7 @@ Load-balancer rule features use the management API on port **11111** under
 [API Reference](reference/api.md), and [Configuration Reference](ai-gateway/configuration-reference.md)
 before automating these operations.
 
-For a model-specific installation path, use [Model & Engine Standard Setup](use-cases/model-engine-standard/index.md): five model cards, three engine choices, editable configurations and service lifecycle checks.
+Start with the [LLM integration reading path](use-cases/llm-integration.md), then use the [five-model RR / KV-Exact manual](use-cases/model-engine-standard/matrix-manual.md) for vLLM 0.31.0, SGLang 0.5.19 and TRT 1.3.0rc29/PyTorch. It records 26 bounded functional passes and four native architecture blockers across 30 cases, with editable configurations and lifecycle checks. See [model selection and prerequisites](use-cases/model-engine-standard/matrix-manual.md) before installation.
 
 ## Choose a starting path
 
@@ -122,7 +122,7 @@ runtime constants; stored `chwbl_*` tuning fields do not change them yet.
 - **[Getting Started → Installation](getting-started/installation.md)** — run the gateway.
 - **[Getting Started → Quickstart](getting-started/quickstart.md)** — a working model-routing
   rule end to end.
-- **[Getting Started → Choose an Inference Engine](getting-started/choose-your-engine.md)** — select an engine and supported topology before adding advanced controls.
+- **[Getting Started → Choose an Inference Engine](concepts/inference-topologies.md)** — select an engine and supported topology before adding advanced controls.
 - **[Concepts → Engine Capability Matrix](concepts/engine-capability-matrix.md)** — compare engine-specific KV-event and P/D support.
 - **[Concepts → Architecture](concepts/architecture.md)** — how the gateway sits in an LLM
   serving stack.
@@ -130,7 +130,7 @@ runtime constants; stored `chwbl_*` tuning fields do not change them yet.
   prerequisite for every AI feature.
 - **[AI Gateway](ai-gateway/overview.md)** — model routing, KV-cache routing, P/D, SSE, MCP.
 - **[AI Traffic Governance](ai-gateway/ai-traffic-governance.md)** — configure and verify API keys, model authorization, RPS, and token quotas.
-- **[LLM Integration Use-Cases](use-cases/kv-cache-aware-routing.md)** — flagship, end-to-end
+- **[LLM Integration Use-Cases](concepts/kv-routing.md)** — flagship, end-to-end
   routing walkthroughs for vLLM and SGLang.
 - **[Management & UI](management/overview.md)** — the web dashboard ([LoxiLB UI](management/loxilb-ui.md)),
   the fleet management API ([LoxiLB OAM](management/loxilb-oam.md)), and how to deploy them

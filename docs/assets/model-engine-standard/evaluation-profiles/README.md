@@ -21,3 +21,7 @@ R1/SGLang records `completionsBos: true` for the existing contract because nativ
 SGLang restores the model's BOS policy; raw Transformers v5 encoding alone omits
 it. Official tokenizer/template bytes and independent probe fixtures are unchanged.
 A declared API in a profile is not a complete end-user API qualification.
+
+Unicode parity fixtures intentionally contain multiple languages. Their request
+bytes and expected token IDs are preserved as verification inputs; they are not
+operator documentation and must not be translated.

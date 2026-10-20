@@ -1,5 +1,5 @@
 {
-  "scope": "Qualification to-do with bounded R1 1.5B vLLM 0.31 GPU QA; open gates retained",
+  "scope": "Thirty five-model runtime verdicts plus six separate candidate example cases; full qualification gates remain open",
   "standardCardModeCases": 30,
   "candidateExampleModeCases": 6,
   "entries": [
@@ -11,8 +11,8 @@
       "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "limited",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -24,7 +24,14 @@
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
       ],
-      "engineVersion": "0.31.0"
+      "engineVersion": "0.31.0",
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ]
     },
     {
       "modelKey": "gemma2",
@@ -34,11 +41,9 @@
       "mode": "exact",
       "scope": "standard-card",
       "historicalEvidence": "limited",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
       "completionEvidence": [
         "immutable-identity",
         "effective-configuration",
@@ -49,7 +54,14 @@
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
       ],
-      "engineVersion": "0.31.0"
+      "engineVersion": "0.31.0",
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ]
     },
     {
       "modelKey": "gemma2",
@@ -59,8 +71,8 @@
       "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -71,7 +83,15 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "0.5.19"
     },
     {
       "modelKey": "gemma2",
@@ -81,11 +101,9 @@
       "mode": "exact",
       "scope": "standard-card",
       "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
       "completionEvidence": [
         "immutable-identity",
         "effective-configuration",
@@ -95,7 +113,15 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "0.5.19"
     },
     {
       "modelKey": "gemma2",
@@ -105,10 +131,10 @@
       "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "not-provided",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "no-procedure",
+      "currentPublicTupleRuntime": "BLOCKED_NATIVE_ARCHITECTURE",
+      "readinessToExecute": "blocked-native-architecture",
       "blockers": [
-        "no-pinned-backend-procedure"
+        "stock-pytorch-native-architecture-unsupported"
       ],
       "completionEvidence": [
         "immutable-identity",
@@ -119,7 +145,15 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "1.3.0rc29"
     },
     {
       "modelKey": "gemma2",
@@ -129,10 +163,10 @@
       "mode": "exact",
       "scope": "standard-card",
       "historicalEvidence": "not-provided",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "no-procedure",
+      "currentPublicTupleRuntime": "BLOCKED_NATIVE_ARCHITECTURE",
+      "readinessToExecute": "blocked-native-architecture",
       "blockers": [
-        "no-pinned-backend-procedure"
+        "stock-pytorch-native-architecture-unsupported"
       ],
       "completionEvidence": [
         "immutable-identity",
@@ -143,7 +177,15 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "1.3.0rc29"
     },
     {
       "modelKey": "qwen25",
@@ -153,8 +195,8 @@
       "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "historical-recommended",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -166,7 +208,14 @@
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
       ],
-      "engineVersion": "0.31.0"
+      "engineVersion": "0.31.0",
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ]
     },
     {
       "modelKey": "qwen25",
@@ -176,11 +225,9 @@
       "mode": "exact",
       "scope": "standard-card",
       "historicalEvidence": "historical-recommended",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
       "completionEvidence": [
         "immutable-identity",
         "effective-configuration",
@@ -191,7 +238,14 @@
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
       ],
-      "engineVersion": "0.31.0"
+      "engineVersion": "0.31.0",
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ]
     },
     {
       "modelKey": "qwen25",
@@ -201,8 +255,8 @@
       "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -213,7 +267,15 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "0.5.19"
     },
     {
       "modelKey": "qwen25",
@@ -223,11 +285,9 @@
       "mode": "exact",
       "scope": "standard-card",
       "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
       "completionEvidence": [
         "immutable-identity",
         "effective-configuration",
@@ -237,7 +297,15 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "0.5.19"
     },
     {
       "modelKey": "qwen25",
@@ -247,8 +315,8 @@
       "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -259,7 +327,15 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "1.3.0rc29"
     },
     {
       "modelKey": "qwen25",
@@ -269,11 +345,9 @@
       "mode": "exact",
       "scope": "standard-card",
       "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
       "completionEvidence": [
         "immutable-identity",
         "effective-configuration",
@@ -283,7 +357,15 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "1.3.0rc29"
     },
     {
       "modelKey": "llama31",
@@ -293,8 +375,8 @@
       "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "historical-recommended",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -306,7 +388,14 @@
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
       ],
-      "engineVersion": "0.31.0"
+      "engineVersion": "0.31.0",
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ]
     },
     {
       "modelKey": "llama31",
@@ -316,33 +405,8 @@
       "mode": "exact",
       "scope": "standard-card",
       "historicalEvidence": "historical-recommended",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
-      "completionEvidence": [
-        "immutable-identity",
-        "effective-configuration",
-        "direct-engine-chat",
-        "gateway-chat-and-complete-sse",
-        "backend-owned-receipts",
-        "mode-specific-routing-evidence",
-        "negative-and-recovery",
-        "scoped-cleanup-and-clean-replay"
-      ],
-      "engineVersion": "0.31.0"
-    },
-    {
-      "modelKey": "llama31",
-      "model": "meta-llama/Llama-3.1-8B-Instruct",
-      "modelRevision": "07eb05b21d191a58c577b4a45982fe0c049d0693",
-      "engine": "sglang",
-      "mode": "rr",
-      "scope": "standard-card",
-      "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -353,6 +417,14 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
+      ],
+      "engineVersion": "0.31.0",
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
       ]
     },
     {
@@ -360,35 +432,11 @@
       "model": "meta-llama/Llama-3.1-8B-Instruct",
       "modelRevision": "07eb05b21d191a58c577b4a45982fe0c049d0693",
       "engine": "sglang",
-      "mode": "exact",
-      "scope": "standard-card",
-      "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
-      "completionEvidence": [
-        "immutable-identity",
-        "effective-configuration",
-        "direct-engine-chat",
-        "gateway-chat-and-complete-sse",
-        "backend-owned-receipts",
-        "mode-specific-routing-evidence",
-        "negative-and-recovery",
-        "scoped-cleanup-and-clean-replay"
-      ]
-    },
-    {
-      "modelKey": "llama31",
-      "model": "meta-llama/Llama-3.1-8B-Instruct",
-      "modelRevision": "07eb05b21d191a58c577b4a45982fe0c049d0693",
-      "engine": "trtllm",
       "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -399,21 +447,27 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "0.5.19"
     },
     {
       "modelKey": "llama31",
       "model": "meta-llama/Llama-3.1-8B-Instruct",
       "modelRevision": "07eb05b21d191a58c577b4a45982fe0c049d0693",
-      "engine": "trtllm",
+      "engine": "sglang",
       "mode": "exact",
       "scope": "standard-card",
       "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
       "completionEvidence": [
         "immutable-identity",
         "effective-configuration",
@@ -423,7 +477,75 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "0.5.19"
+    },
+    {
+      "modelKey": "llama31",
+      "model": "meta-llama/Llama-3.1-8B-Instruct",
+      "modelRevision": "07eb05b21d191a58c577b4a45982fe0c049d0693",
+      "engine": "trtllm",
+      "mode": "rr",
+      "scope": "standard-card",
+      "historicalEvidence": "reference",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
+      "completionEvidence": [
+        "immutable-identity",
+        "effective-configuration",
+        "direct-engine-chat",
+        "gateway-chat-and-complete-sse",
+        "backend-owned-receipts",
+        "mode-specific-routing-evidence",
+        "negative-and-recovery",
+        "scoped-cleanup-and-clean-replay"
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "1.3.0rc29"
+    },
+    {
+      "modelKey": "llama31",
+      "model": "meta-llama/Llama-3.1-8B-Instruct",
+      "modelRevision": "07eb05b21d191a58c577b4a45982fe0c049d0693",
+      "engine": "trtllm",
+      "mode": "exact",
+      "scope": "standard-card",
+      "historicalEvidence": "reference",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
+      "completionEvidence": [
+        "immutable-identity",
+        "effective-configuration",
+        "direct-engine-chat",
+        "gateway-chat-and-complete-sse",
+        "backend-owned-receipts",
+        "mode-specific-routing-evidence",
+        "negative-and-recovery",
+        "scoped-cleanup-and-clean-replay"
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "1.3.0rc29"
     },
     {
       "modelKey": "r1",
@@ -433,8 +555,8 @@
       "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "historical-recommended",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -446,7 +568,14 @@
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
       ],
-      "engineVersion": "0.31.0"
+      "engineVersion": "0.31.0",
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ]
     },
     {
       "modelKey": "r1",
@@ -456,33 +585,8 @@
       "mode": "exact",
       "scope": "standard-card",
       "historicalEvidence": "historical-recommended",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
-      "completionEvidence": [
-        "immutable-identity",
-        "effective-configuration",
-        "direct-engine-chat",
-        "gateway-chat-and-complete-sse",
-        "backend-owned-receipts",
-        "mode-specific-routing-evidence",
-        "negative-and-recovery",
-        "scoped-cleanup-and-clean-replay"
-      ],
-      "engineVersion": "0.31.0"
-    },
-    {
-      "modelKey": "r1",
-      "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
-      "modelRevision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
-      "engine": "sglang",
-      "mode": "rr",
-      "scope": "standard-card",
-      "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -493,6 +597,14 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
+      ],
+      "engineVersion": "0.31.0",
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
       ]
     },
     {
@@ -500,35 +612,11 @@
       "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
       "modelRevision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
       "engine": "sglang",
-      "mode": "exact",
-      "scope": "standard-card",
-      "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
-      "completionEvidence": [
-        "immutable-identity",
-        "effective-configuration",
-        "direct-engine-chat",
-        "gateway-chat-and-complete-sse",
-        "backend-owned-receipts",
-        "mode-specific-routing-evidence",
-        "negative-and-recovery",
-        "scoped-cleanup-and-clean-replay"
-      ]
-    },
-    {
-      "modelKey": "r1",
-      "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
-      "modelRevision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
-      "engine": "trtllm",
       "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -539,21 +627,27 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "0.5.19"
     },
     {
       "modelKey": "r1",
       "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
       "modelRevision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
-      "engine": "trtllm",
+      "engine": "sglang",
       "mode": "exact",
       "scope": "standard-card",
       "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
       "completionEvidence": [
         "immutable-identity",
         "effective-configuration",
@@ -563,7 +657,75 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "0.5.19"
+    },
+    {
+      "modelKey": "r1",
+      "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+      "modelRevision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "engine": "trtllm",
+      "mode": "rr",
+      "scope": "standard-card",
+      "historicalEvidence": "reference",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
+      "completionEvidence": [
+        "immutable-identity",
+        "effective-configuration",
+        "direct-engine-chat",
+        "gateway-chat-and-complete-sse",
+        "backend-owned-receipts",
+        "mode-specific-routing-evidence",
+        "negative-and-recovery",
+        "scoped-cleanup-and-clean-replay"
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "1.3.0rc29"
+    },
+    {
+      "modelKey": "r1",
+      "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+      "modelRevision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "engine": "trtllm",
+      "mode": "exact",
+      "scope": "standard-card",
+      "historicalEvidence": "reference",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
+      "completionEvidence": [
+        "immutable-identity",
+        "effective-configuration",
+        "direct-engine-chat",
+        "gateway-chat-and-complete-sse",
+        "backend-owned-receipts",
+        "mode-specific-routing-evidence",
+        "negative-and-recovery",
+        "scoped-cleanup-and-clean-replay"
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "1.3.0rc29"
     },
     {
       "modelKey": "exaone35",
@@ -573,8 +735,8 @@
       "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "historical-recommended",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -586,7 +748,14 @@
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
       ],
-      "engineVersion": "0.31.0"
+      "engineVersion": "0.31.0",
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ]
     },
     {
       "modelKey": "exaone35",
@@ -596,33 +765,8 @@
       "mode": "exact",
       "scope": "standard-card",
       "historicalEvidence": "historical-recommended",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
-      "completionEvidence": [
-        "immutable-identity",
-        "effective-configuration",
-        "direct-engine-chat",
-        "gateway-chat-and-complete-sse",
-        "backend-owned-receipts",
-        "mode-specific-routing-evidence",
-        "negative-and-recovery",
-        "scoped-cleanup-and-clean-replay"
-      ],
-      "engineVersion": "0.31.0"
-    },
-    {
-      "modelKey": "exaone35",
-      "model": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
-      "modelRevision": "553ea250b9a5317231459279d5847d6cf955b9aa",
-      "engine": "sglang",
-      "mode": "rr",
-      "scope": "standard-card",
-      "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "not-run",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
       "blockers": [],
       "completionEvidence": [
         "immutable-identity",
@@ -633,6 +777,14 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
+      ],
+      "engineVersion": "0.31.0",
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
       ]
     },
     {
@@ -640,14 +792,12 @@
       "model": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
       "modelRevision": "553ea250b9a5317231459279d5847d6cf955b9aa",
       "engine": "sglang",
-      "mode": "exact",
+      "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "reference",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "blocked-profile-not-published",
-      "blockers": [
-        "matching-model-profile-engine-manifest-and-fixtures-not-published"
-      ],
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
       "completionEvidence": [
         "immutable-identity",
         "effective-configuration",
@@ -657,7 +807,45 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "0.5.19"
+    },
+    {
+      "modelKey": "exaone35",
+      "model": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+      "modelRevision": "553ea250b9a5317231459279d5847d6cf955b9aa",
+      "engine": "sglang",
+      "mode": "exact",
+      "scope": "standard-card",
+      "historicalEvidence": "reference",
+      "currentPublicTupleRuntime": "PASS_BOUNDED_FUNCTIONAL",
+      "readinessToExecute": "bounded-functional-complete",
+      "blockers": [],
+      "completionEvidence": [
+        "immutable-identity",
+        "effective-configuration",
+        "direct-engine-chat",
+        "gateway-chat-and-complete-sse",
+        "backend-owned-receipts",
+        "mode-specific-routing-evidence",
+        "negative-and-recovery",
+        "scoped-cleanup-and-clean-replay"
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "0.5.19"
     },
     {
       "modelKey": "exaone35",
@@ -667,10 +855,10 @@
       "mode": "rr",
       "scope": "standard-card",
       "historicalEvidence": "not-provided",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "no-procedure",
+      "currentPublicTupleRuntime": "BLOCKED_NATIVE_ARCHITECTURE",
+      "readinessToExecute": "blocked-native-architecture",
       "blockers": [
-        "no-pinned-backend-procedure"
+        "stock-pytorch-native-architecture-unsupported"
       ],
       "completionEvidence": [
         "immutable-identity",
@@ -681,7 +869,15 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "1.3.0rc29"
     },
     {
       "modelKey": "exaone35",
@@ -691,10 +887,10 @@
       "mode": "exact",
       "scope": "standard-card",
       "historicalEvidence": "not-provided",
-      "currentPublicTupleRuntime": "not-run",
-      "readinessToExecute": "no-procedure",
+      "currentPublicTupleRuntime": "BLOCKED_NATIVE_ARCHITECTURE",
+      "readinessToExecute": "blocked-native-architecture",
       "blockers": [
-        "no-pinned-backend-procedure"
+        "stock-pytorch-native-architecture-unsupported"
       ],
       "completionEvidence": [
         "immutable-identity",
@@ -705,7 +901,15 @@
         "mode-specific-routing-evidence",
         "negative-and-recovery",
         "scoped-cleanup-and-clean-replay"
-      ]
+      ],
+      "evidenceSummary": "matrix-results.json",
+      "remainingGates": [
+        "release-image-and-host-dataplane",
+        "capacity-and-application-SLO",
+        "worker-loss-recovery-and-cancellation",
+        "clean-replay-and-long-running-resource-return"
+      ],
+      "engineVersion": "1.3.0rc29"
     },
     {
       "modelKey": "r1-15b",
@@ -860,7 +1064,7 @@
   ],
   "runtimeEvidencePublication": {
     "scope": "standard-card",
-    "status": "pending",
+    "status": "published",
     "summary": "matrix-results.json",
     "requestLedger": "matrix-request-ledger.json",
     "meaning": "The thirty standard-card runtime results and correlated request ledger are not published in this edition. not-run remains unqualified; separate candidate-example evidence is unchanged."

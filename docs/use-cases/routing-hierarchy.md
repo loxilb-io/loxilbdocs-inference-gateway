@@ -28,7 +28,7 @@ and terminal availability gates can return `429` or `503`; the ladder does not g
 !!! tip "See also"
     The Tier 1.5 block-hash contract, ZMQ inventory plane, and per-model onboarding live in
     [KV-Cache Routing](../ai-gateway/kv-caching.md) and
-    [KV-Cache-Aware Routing](kv-cache-aware-routing.md).
+    [KV-Cache-Aware Routing](../concepts/kv-routing.md).
 
 ## Terminology: "tiers" and "layers"
 
@@ -274,8 +274,9 @@ Use `loxilb_pd_kv_tier15_spills_total` and
 
 ## The single-pool (non-disaggregated) hierarchy
 
-For a plain fullproxy pool (no `pd_disagg_mode`), the request path selects via the rule's
-**selector algorithm** before the P/D gate. The cache-aware members of that family:
+For converged fullproxy without P/D, Exact mode 3 first attempts inventory-aware
+placement. On a miss it falls back to the rule's selector. With Exact disabled,
+the rule uses its selector directly. The cache-aware members of that family:
 
 | REST `sel` | Selector | Mechanism |
 |---|---|---|
@@ -295,94 +296,26 @@ Same-prefix requests hash to the same ring point and land on the same endpoint *
 under its bounded-load cap*. The current proxy uses a fixed factor of 175 (1.75× mean) and 256
 virtual nodes; submitted CHWBL factor and replication fields do not currently change those values.
 
-!!! note "What single-pool does not give you"
+!!! note "Content-affinity selectors versus Exact mode 3"
     `prefix_hash` is one hash of one extracted prefix — it cannot measure *partial* overlap,
     cannot see vLLM's evictions, and matches only byte-identical prefixes. In exchange it needs
-    no vLLM-side config at all (no ZMQ events, no tokenizer staging, no hash-contract parity).
+    no engine event feed, tokenizer staging or hash-contract parity. Exact mode 3
+    adds those contracts and can observe block overlap in a converged pool.
 
-## Configuration
+## Configure and verify the selected shape
 
-Both shapes are created with `POST /netlox/v1/config/loadbalancer` on port `11111`.
+Use the [converged RR/Exact guide](model-engine-standard/matrix-manual.md) for mode 3,
+or [P/D deployment](pd-deployment.md) for mode 1. Field meanings and tuning inputs
+are maintained in [Configuration and Arguments](configuration-tuning.md), with
+[KV-specific fields](../ai-gateway/kv-caching.md) and
+[engine contracts](../ai-gateway/engine-contracts.md) as separate references.
+Verify effective binding and independent delivery with
+[KV routing observability](../operations/kv-routing-verification.md).
 
-!!! warning "Protect the management API"
-    The `curl` examples use plain HTTP for an isolated lab. In production, use an authenticated,
-    TLS-protected management endpoint and read its authorization header from a
-    permission-restricted file.
+<a id="configuration"></a>
 
-=== "curl"
-    P/D-disaggregated rule with Tier 1.5 KV-exact:
+[Current reference](routing-hierarchy.md).
 
-    ```bash
-    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
-      -H "Content-Type: application/json" \
-      -d '{
-      "serviceArguments": {
-        "externalIP": "192.0.2.254",
-        "port": 2020,
-        "protocol": "tcp",
-        "sel": 0,
-        "mode": 4,
-        "host": "192.0.2.254",
-        "pd_disagg_mode": true,
-        "pd_cache_aware_mode": true,
-        "kvExactMode": 1,
-        "kvZmqPort": 5557,
-        "kvHashAlgo": "sha256_cbor",
-        "kvBlockSize": 16
-      },
-      "endpoints": [
-        { "endpointIP": "192.0.2.1", "targetPort": 8100, "weight": 1, "ep_role": 1, "nixl_port": 5600 },
-        { "endpointIP": "198.51.100.1", "targetPort": 8200, "weight": 1, "ep_role": 2, "nixl_port": 5600 }
-      ]
-    }'
-    ```
+<a id="verify"></a>
 
-    Single-pool CHWBL rule (`sel:8`) — cache affinity without P/D:
-
-    ```bash
-    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
-      -H "Content-Type: application/json" \
-      -d '{
-      "serviceArguments": {
-        "externalIP": "192.0.2.254",
-        "port": 2021,
-        "protocol": "tcp",
-        "sel": 8,
-        "mode": 4,
-        "host": "192.0.2.254"
-      },
-      "endpoints": [
-        { "endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1 },
-        { "endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 1 }
-      ]
-    }'
-    ```
-
-=== "loxicmd"
-    P/D-disaggregated rule with Tier 1.5 KV-exact:
-
-    ```bash
-    # NOTE: loxicmd applies one --tcp target port to every endpoint; the decode EP's
-    # targetPort 8200 (curl) cannot be set per-endpoint — post it via REST if it differs.
-    loxicmd create lb 192.0.2.254 --tcp=2020:8100 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=rr --host=192.0.2.254 --pd-disagg --pd-cache-aware --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --ep-role=prefill,decode --nixl-port=5600,5600
-    ```
-
-    Single-pool CHWBL rule (`sel:8`) — cache affinity without P/D:
-
-    ```bash
-    loxicmd create lb 192.0.2.254 --tcp=2021:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --host=192.0.2.254
-    ```
-
-## Verify
-
-Confirm the rule and watch the ladder engage on the metrics endpoint
-(`GET http://192.0.2.254:11111/netlox/v1/metrics`):
-
-- `loxilb_ai_pd_requests_total` advances for a P/D rule.
-- `loxilb_pd_kv_tier15_hits_total{ep_idx}` advances after inventory is nonzero and repeated
-  prefixes produce overlap. `kvWarmupSec` does not gate readiness because its timer is inert.
-- For single-pool CHWBL, repeated same-prefix requests land on one backend; spread resumes past
-  the load cap.
-
-Field-by-field defaults, the full tuning playbook, and the observability reference are on the
-[Configuration & Tuning](configuration-tuning.md) page.
+[Current reference](routing-hierarchy.md).

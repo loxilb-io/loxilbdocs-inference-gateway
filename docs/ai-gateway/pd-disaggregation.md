@@ -80,54 +80,14 @@ P/D itself does not require `kvExactMode`.
 
 For KV-exact mode, the tokenizer, model identity, block/page size, hash contract, and event transport must match the engine. A rule can continue serving through fallback routing even when this parity is broken, so verify metrics explicitly.
 
-## Shared configuration fields
+## Configuration and execution
 
-| Field | Default | Meaning |
-|---|---:|---|
-| `pd_disagg_mode` | `false` | Enable the engine-specific P/D orchestrator. |
-| `pd_cache_aware_mode` | `false` | Add radix-trie prefix affinity to the P/D ladder. Session stickiness and load fallback do not depend on this flag. Requires P/D. |
-| `pd_session_ttl_sec` | `0` in the API | Session lifetime in seconds. The data path converts `0` to its 300-second runtime default. |
-| `pd_prefill_timeout_sec` | `0` | Longest wait in seconds for the prefill stage before `504 pd_prefill_timeout`, `0`–`3600`. `0` uses the process default (30 seconds, or `LLB_PD_PREFILL_TIMEOUT_SEC`). Requires P/D. |
-| `pd_cache_threshold` | `20` | Minimum prefix-trie match percentage. |
-| `pd_balance_abs_threshold` | `3` | Active-connection spread that bypasses the optional radix-trie choice and uses load fallback. |
-| `kvExactMode` | `0` | `1` adds P/D KV-exact selection; `3` is invalid with P/D. |
-| `ep_role` | `0` | Endpoint role: `1` prefill/CONTEXT, `2` decode/GENERATION. |
-| `nixl_port` | `0` | vLLM transfer side channel; `0` uses the target port. |
-| `pdBootstrapPort` | `0` | SGLang prefill bootstrap port; `0` means `8998`. |
-
-See the [Configuration Reference](configuration-reference.md) before copying these fields into a rule.
-
-## Minimal validation workflow
-
-1. Start every backend and wait for model readiness, not only process readiness.
-2. Prove ordinary fullproxy routing with health probes.
-3. Create one P/D rule with one endpoint of each role and without KV-exact mode.
-4. Test a non-streaming request and an SSE request.
-5. Confirm both roles handled the request using engine logs and Gateway metrics.
-6. Add more endpoints and exercise one endpoint failure at a time.
-7. Add cache-aware selection only after the base P/D flow is reliable.
-
-Useful Gateway metric families include:
-
-```text
-loxilb_ai_pd_requests_total
-loxilb_ai_pd_prefill_duration_seconds
-loxilb_ai_pd_decode_ttft_seconds
-loxilb_ai_pd_kv_params_found_total
-loxilb_ai_pd_kv_params_missing_total
-loxilb_ai_pd_session_hits_total
-loxilb_ai_pd_tier_selected_total
-loxilb_pd_kv_tier15_hits_total
-loxilb_pd_kv_blocks
-loxilb_kv_subscriber_connected
-loxilb_pd_admission_shed_total
-loxilb_pd_admission_queued_total
-loxilb_pd_admission_overflow_shed_total
-loxilb_pd_sg_room_retry_total
-loxilb_pd_trt_ctx_early_exit_total
-```
-
-Metric availability depends on the configured engine and optional routing layers.
+Use [Configuration and Arguments](../use-cases/configuration-tuning.md) for shared
+P/D fields and timeout precedence. Follow the
+[P/D deployment path](../use-cases/pd-deployment.md) for engine-specific commands,
+readback, completed traffic, faults and cleanup. Common cache contract and
+observability are maintained in [Engine Contracts](engine-contracts.md) and
+[KV Routing Verification](../operations/kv-routing-verification.md).
 
 ### Lifecycle outcome contract
 
@@ -197,3 +157,11 @@ Repository validation proves configuration guards and deterministic mock request
 - [TensorRT-LLM Integration](tensorrt-llm-integration.md)
 - [vLLM Integration](vllm-integration.md)
 - [Engine Capability Matrix](../concepts/engine-capability-matrix.md)
+
+<a id="shared-configuration-fields"></a>
+
+[Current reference](../use-cases/pd-deployment.md).
+
+<a id="minimal-validation-workflow"></a>
+
+[Current reference](../use-cases/pd-deployment.md).

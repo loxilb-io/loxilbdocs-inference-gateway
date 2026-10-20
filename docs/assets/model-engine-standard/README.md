@@ -4,22 +4,25 @@ These files accompany the Model & Engine Standard Setup use case. Extract the
 ZIP into a new working directory and run commands individually from the guide.
 There is no automatic deployment script. All examples require site adaptation.
 
-**Runtime evidence publication is pending for the thirty standard-card cases.**
-Their `currentPublicTupleRuntime` values remain `not-run`. This edition includes
-configuration inputs and required evidence, but no `matrix-results.json` or
-`matrix-request-ledger.json`. Missing results do not establish a pass, a native
-architecture verdict or support promotion. The separate R1 1.5B candidate
-example's bounded vLLM summary retains its own scope and open gates.
+**Current baseline: vLLM 0.31.0, SGLang 0.5.19 and TRT 1.3.0rc29/PyTorch.**
+The thirty runtime verdicts in `matrix-results.json` are 26 bounded functional
+PASS and four native architecture BLOCKED. Start with `matrix-configurations/`
+and the five-model manual; `rules/` and the older R1 inputs are archives.
+`matrix-request-ledger.json` reconciles completed requests with independent backend
+receipts. Functional PASS is bounded to the recorded image/profile/topology; native
+architecture blockers have no inference PASS. Remaining release/load/fault gates
+stay open. The separate R1 1.5B candidate example retains its own scope.
 
 - `models/`: five official model revisions, dtype and model-specific arguments.
 - `engines/`: three current evaluation engine references, pinned by digest.
-- `rules/`: 13 original-card RR startup shapes for local evaluation.
+- `rules/`: 13 archived original-card RR shapes; superseded by `matrix-configurations/`.
 - `routing-choice/`: six paired RR/Exact JSON files for the public-catalog R1
-  1.5B evaluation on vLLM 0.31/SGLang/TRT, with engine settings and requests.
+  1.5B evaluation on vLLM0.31 and archived SGLang0.5.18/TRT rc24 inputs.
+  Current SGLang0.5.19/TRT rc29 setup uses matrix-configurations and the five-model manual.
   vLLM includes a separate 0.31 Exact evaluation manifest and a sanitized bounded
   GPU QA summary; old 0.28 catalog qualification is not inherited.
-  TRT needs a separately provisioned matching rc24 image; none is fetched by
-  the public installer. These remain evaluations with explicit open qualification gates.
+  Archived TRT rc24 inputs have no runtime PASS here. Use the current manual
+  for provisioning; do not pull a global installer default for a selected older tuple.
 - `sglang-version-selection.json`: compatible tagged-array baseline and separate tagged-map development request.
 - `qualification-matrix.json`: all 30 original-card mode cases and six separate
   candidate-example mode cases, prerequisites and required closure evidence.
@@ -38,7 +41,8 @@ example's bounded vLLM summary retains its own scope and open gates.
 
 Replace documentation VIP/host `192.0.2.10` and worker addresses
 `192.0.2.20`, `192.0.2.21`, `192.0.2.22` with allocated reachable addresses.
-The example ports are service `28180`, engine/probe `8000`, vLLM events `5557`.
+The current matrix service port is `28185`, engine/probe `8000`, vLLM/SGLang
+events `5557`; archived bodies retain their original service ports.
 Keep `host` and `externalIP` consistent with the guide's IP-hosted service.
 
 Current five-model evaluation inputs:
@@ -70,3 +74,10 @@ Follow the guide for readiness, deployment, readback, completed chat/SSE,
 negative cases, owned-resource cleanup and rollback. Commands remain illustrative
 until independently qualified on your deployment. Do not source files from an
 untrusted origin or run them without reviewing their contents.
+
+Catalog/installer integration:
+
+- `catalog-registration.json`: proposed five-profile source-catalog registration,
+  official guide baseline SGLang0.5.19, 13 Linux staging passes/two expected blocked,
+  and four preserved core integration findings. It is metadata, not an installer
+  or an already applied source catalog. See Catalog & Installer Alignment.

@@ -14,15 +14,23 @@ regexes = [
 
 # Public model revisions and tokenizer content hashes are artifact identities.
 # Keep the exception bound to these fields AND the evaluation-definition paths;
-# credentials in the same YAML files must still be scanned.
+# Published-site history uses latest/assets instead of docs/assets.
+# Credentials in the same YAML files must still be scanned.
 [[rules]]
 id = "generic-api-key"
   [[rules.allowlists]]
   description = "Public tokenizer revision and SHA-256 in evaluation definitions"
   condition = "AND"
   regexTarget = "match"
-  paths = ['''(^|/)docs/assets/model-engine-standard/evaluation-profiles/definitions(-vllm|-sglang|-trtllm)?/[^/]+\.yaml$''']
+  paths = ['''(^|/)(docs|latest)/assets/model-engine-standard/evaluation-profiles/definitions(-vllm|-sglang|-trtllm)?/[^/]+\.yaml$''']
   regexes = [
     '''^"?tokenizerRevision"?:[ \t]*"?[0-9a-f]{40}"?[ \t]*$''',
     '''^"?tokenizerSha256"?:[ \t]*"?[0-9a-f]{64}"?[ \t]*$''',
   ]
+
+  [[rules.allowlists]]
+  description = "Public tokenizer SHA-256 in catalog registration metadata"
+  condition = "AND"
+  regexTarget = "match"
+  paths = ['''(^|/)(docs|latest)/assets/model-engine-standard/catalog-registration\.json$''']
+  regexes = ['''^"?tokenizerSha256"?:[ \t]*"?[0-9a-f]{64}"?[ \t]*$''']

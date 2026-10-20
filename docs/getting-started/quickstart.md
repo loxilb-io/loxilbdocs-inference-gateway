@@ -123,3 +123,8 @@ canonical compatibility matrix.
   evidence limits for every metric family.
 - [Verification Status](../reference/verification-status.md) explains why
   source/static, CI, Linux runtime, GPU, HA, and release evidence are separate.
+
+## Continue with model-serving engines
+
+After this basic lifecycle, follow the [LLM integration reading path](../use-cases/llm-integration.md)
+for engine/topology concepts and the complete converged or P/D guide.

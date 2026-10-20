@@ -2,9 +2,8 @@
 
 <!-- example-status-default: illustrative-only -->
 
-The [five model cards](index.md#1-select-a-model-and-engine) now include paired
-RR/Exact evaluation configurations and separately supplied QA profiles. Their
-older recommendation labels are historical installation baselines. The Gateway's strict KV-exact profile catalog is a
+The [model reference](models.md) identifies the five models with paired
+RR/Exact evaluation configurations and separately supplied QA profiles. Earlier recommendation labels are historical installation baselines. The Gateway's strict KV-exact profile catalog is a
 separate list. A model name, a profile in a source checkout, a supported engine
 row, a published runtime profile and a ready rule answer different questions.
 
@@ -13,7 +12,7 @@ row, a published runtime profile and a ready rule answer different questions.
 | List or surface | What it tells you | What it does not prove |
 |---|---|---|
 | Engine support catalog / capability matrix | Engine event/hash/probe contract and exact engine identity promotion | A model-profile row is validated or a newer card engine is interchangeable |
-| Five standard model cards | Historical model/engine settings and operating limitations | Installed release support or registry membership |
+| Five standard model cards | Current vLLM 0.31 / SGLang 0.5.19 / TRT rc29 settings, paired RR/Exact results and retained operating limitations | Installed release support or registry membership |
 | Release `docs/SUPPORTED-MODELS.md` / `install-models.sh --list` | Profile IDs, exact revisions, engine tuples, qualification state and required launch arguments | The profile is installed on this Gateway |
 | `GET /config/ai/model-profiles` | Profiles currently published in the running registry generation | A discovered profile's source tuple has been promoted to supported |
 | Profile detail | Model/alias policy, API surfaces, tokenizer/template identity | Rule admission or enforced Exact readiness |
@@ -31,7 +30,7 @@ A model profile (for example `r1-distill-qwen-15b-v1`) pins the model's tokenize
 chat template and model identity. The former can be validated while a particular
 model-engine tuple in the latter catalog is still candidate. An **engine**
 `validated` label must not be used to promote a **model** row. See
-[framework capability versus card verification](index.md#does-startup-reference-mean-the-framework-cannot-run-exact).
+[framework capability versus card verification](results.md#matrix-results).
 
 ## Historical card profiles are not public catalog rows
 
@@ -66,14 +65,20 @@ any tuple. Even seeing a historically named profile in an independently supplied
 runtime registry would prove only discovery; support requires a matching release
 catalog tuple and its qualification state.
 
-Use the [five-model manual](matrix-manual.ko.md) for the separately supplied
+Use the [five-model manual](matrix-manual.md) for the separately supplied
 `evaluation-profiles/` definitions, pinned manifests, independent token fixtures
 and both routing modes. These assets are not installed by `--include-candidates`
-and do not alter the catalog snapshot. The [result table](matrix-manual.ko.md#matrix-results)
+and do not alter the catalog snapshot. The [result table](results.md#matrix-results)
 distinguishes functional evidence from native architecture blockers. The separate
 [R1 1.5B guide](routing-choice.md) remains a different evaluation tuple.
 Supported Exact still requires a matching validated release tuple; this catalog
 snapshot offers none. `READY` and profile discovery do not promote support.
+
+The [core-team registration proposal](catalog-installer.md) adds five profiles
+and 15 engine tuples (13 candidate, two TRT blocked), with SGLang **0.5.19** as
+the current guide baseline. Installer positive checks passed for those 13
+candidate tuples, but core version-selector and installer negative gates remain
+open. The proposal is separate from the historical source snapshot below.
 
 ## Additional source-catalog profiles
 
@@ -157,7 +162,7 @@ there is no new profile-generation script in this package.
 ## Discover what this Gateway has published
 
 On the controller, use `CONTROL_API`, `RUN` and the protected management header
-from [Gateway prerequisites](operations.md#prerequisites):
+from [Gateway prerequisites](configure.md#prerequisites):
 
 ```bash
 curl -fsS --max-time 10 --header @control-plane.headers \
@@ -171,7 +176,8 @@ jq '{registryGeneration,setDigest,profiles:[.profiles[] | {
 Expected: the published generation and zero or more entries. Generation `0` with
 an empty array means no published registry, not a ready strict model. A populated
 array is only runtime discovery. Match an entry to a **validated release tuple**
-before calling it supported. The five historical card profile IDs may be absent;
+before calling it supported. The five current QA profile IDs are absent from the reviewed source catalog;
+they appear in live discovery only after their separate evaluation registry is published;
 never substitute an unrelated profile just because its model has a similar name.
 
 Choose an exact ID returned by that list. The following example ID is usable
@@ -190,7 +196,7 @@ Expected: detail matches the selected published profile; an absent profile retur
 404. Use `profileId`, not repository name, in `kvModelProfile`. Confirm that
 `model_name` is admitted by `baseModel`/alias policy, `chat` is in `supportedApis`,
 the engine tuple and tokenizer/template are exact matches, and the final
-[rule binding](operations.md#enable-conditional-vllm-exact) reaches `READY` with
+[rule binding](prepare.md#matrix-registry-preparation) reaches `READY` with
 the matching generation and unfenced enforcement. Retain `setDigest` and
 `bindingDigest` separately: one identifies the published set, the other the rule's
 binding. Never replay discovery or status JSON as a create body.

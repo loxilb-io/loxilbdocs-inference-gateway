@@ -1,0 +1,410 @@
+{
+  "schemaVersion": "docs.catalog-registration-plan.v1",
+  "sourceBaseline": "1d51393773e4974b5e356377496c9d677dba9f9c",
+  "status": "proposed-pending-core-team-integration",
+  "canUsePublicInstallerNow": false,
+  "officialGuideBaseline": {
+    "sglang": "0.5.19",
+    "vllm": "0.31.0",
+    "trtllm": "1.3.0rc29/PyTorch"
+  },
+  "sourceSnapshotUnchanged": {
+    "profiles": 13,
+    "tuples": 39,
+    "candidate": 31,
+    "blocked": 8,
+    "validated": 0
+  },
+  "proposedNew": {
+    "profiles": 5,
+    "tuples": 15,
+    "candidate": 13,
+    "blocked": 2,
+    "validated": 0
+  },
+  "models": [
+    {
+      "profileId": "gemma2-9b-it-v1",
+      "model": "google/gemma-2-9b-it",
+      "revision": "11c9b309abf73637e4b6f9a3fa1e92e615547819",
+      "tokenizerSha256": "3f289bc05132635a8bc7aca7aa21255efd5e18f3710f43e3cdb96bcd41be4922",
+      "templateSha256": "ecd6ae513fe103f0eb62e8ab5bfa8d0fe45c1074fa398b089c93a7e70c15cfd6",
+      "gated": true,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "0.31.0",
+          "image": "vllm/vllm-openai@sha256:a4a4c0437bf7240089da5f08aa370c4aee17ae5290f7a3b468825ee26c4c3a6b",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "0.5.19",
+          "image": "lmsysorg/sglang@sha256:37bbbd3444732a464bbc68dee4fb0164e0ce9e18e2f027f3fc967f1152d3c262",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc29",
+          "image": "nvcr.io/nvidia/tensorrt-llm/release@sha256:e9dab9fccc550dcc04356962ff152908d692e0e47ba143f57402a24a4ad64b77",
+          "state": "blocked",
+          "reason": "architecture_unsupported",
+          "modes": [],
+          "apis": [],
+          "formalGates": {},
+          "validatedPromotion": false
+        }
+      ]
+    },
+    {
+      "profileId": "qwen25-7b-instruct-v1",
+      "model": "Qwen/Qwen2.5-7B-Instruct",
+      "revision": "a09a35458c702b33eeacc393d103063234e8bc28",
+      "tokenizerSha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "templateSha256": "cd8e9439f0570856fd70470bf8889ebd8b5d1107207f67a5efb46e342330527f",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "0.31.0",
+          "image": "vllm/vllm-openai@sha256:a4a4c0437bf7240089da5f08aa370c4aee17ae5290f7a3b468825ee26c4c3a6b",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "0.5.19",
+          "image": "lmsysorg/sglang@sha256:37bbbd3444732a464bbc68dee4fb0164e0ce9e18e2f027f3fc967f1152d3c262",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc29",
+          "image": "nvcr.io/nvidia/tensorrt-llm/release@sha256:e9dab9fccc550dcc04356962ff152908d692e0e47ba143f57402a24a4ad64b77",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        }
+      ]
+    },
+    {
+      "profileId": "llama31-8b-instruct-v1",
+      "model": "meta-llama/Llama-3.1-8B-Instruct",
+      "revision": "07eb05b21d191a58c577b4a45982fe0c049d0693",
+      "tokenizerSha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4",
+      "templateSha256": "b48c47f6443892716176eb200bf4ef108f64e06ca26ed0fa8ebc0a4b3992fcb2",
+      "gated": true,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "0.31.0",
+          "image": "vllm/vllm-openai@sha256:a4a4c0437bf7240089da5f08aa370c4aee17ae5290f7a3b468825ee26c4c3a6b",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "0.5.19",
+          "image": "lmsysorg/sglang@sha256:37bbbd3444732a464bbc68dee4fb0164e0ce9e18e2f027f3fc967f1152d3c262",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc29",
+          "image": "nvcr.io/nvidia/tensorrt-llm/release@sha256:e9dab9fccc550dcc04356962ff152908d692e0e47ba143f57402a24a4ad64b77",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        }
+      ]
+    },
+    {
+      "profileId": "r1-distill-qwen-7b-v1",
+      "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+      "revision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "tokenizerSha256": "88145e3c3249adc2546ede277e9819d6e405e19072456e4b521cbc724bd60773",
+      "templateSha256": "56a1447ad31926fdc21fb07e56e5642bd9c850c4f52d8c8af7bbe5f079a84f5f",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "0.31.0",
+          "image": "vllm/vllm-openai@sha256:a4a4c0437bf7240089da5f08aa370c4aee17ae5290f7a3b468825ee26c4c3a6b",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "0.5.19",
+          "image": "lmsysorg/sglang@sha256:37bbbd3444732a464bbc68dee4fb0164e0ce9e18e2f027f3fc967f1152d3c262",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc29",
+          "image": "nvcr.io/nvidia/tensorrt-llm/release@sha256:e9dab9fccc550dcc04356962ff152908d692e0e47ba143f57402a24a4ad64b77",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        }
+      ]
+    },
+    {
+      "profileId": "exaone35-78b-instruct-v1",
+      "model": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+      "revision": "553ea250b9a5317231459279d5847d6cf955b9aa",
+      "tokenizerSha256": "7c7507fef57dd4daa4c37103fa656a793748e4cbceb03f808ef292d0324aab10",
+      "templateSha256": "627e212836e41c6231988b4ae595a16ddfd7814d2c39fd7bf3105651f8bbeebd",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "0.31.0",
+          "image": "vllm/vllm-openai@sha256:a4a4c0437bf7240089da5f08aa370c4aee17ae5290f7a3b468825ee26c4c3a6b",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "0.5.19",
+          "image": "lmsysorg/sglang@sha256:37bbbd3444732a464bbc68dee4fb0164e0ce9e18e2f027f3fc967f1152d3c262",
+          "state": "candidate",
+          "reason": null,
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ],
+          "formalGates": {
+            "renderDifferential": "not_run",
+            "pdChat": "not_run",
+            "pdCompletions": "not_run",
+            "abPerf": "not_run"
+          },
+          "validatedPromotion": false
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc29",
+          "image": "nvcr.io/nvidia/tensorrt-llm/release@sha256:e9dab9fccc550dcc04356962ff152908d692e0e47ba143f57402a24a4ad64b77",
+          "state": "blocked",
+          "reason": "architecture_unsupported",
+          "modes": [],
+          "apis": [],
+          "formalGates": {},
+          "validatedPromotion": false
+        }
+      ]
+    }
+  ],
+  "runtimeEvidence": "matrix-results.json",
+  "installerValidation": {
+    "method": "Unmodified stock installer processes on Linux; loopback artifact server serves previously SHA-verified official tokenizer bytes",
+    "liveHuggingFaceAuthenticationTested": false,
+    "gpuInferenceRerunForThisInstallerPackage": false,
+    "successfulInstalls": 13,
+    "expectedBlocked": 2,
+    "candidateSkipsWithoutOptIn": 13,
+    "dryRunsWithoutWrites": 13,
+    "offlineReplays": 13,
+    "newTupleImagePlansPassed": 13,
+    "corruptTokenizerRefusedWithoutWrites": true,
+    "unknownModelRefusedWithoutWrites": true,
+    "metadataDriftCheck": "PASS",
+    "fullCoreIntegration": "BLOCKED_PENDING_CORE_FIXES",
+    "productCodeModified": false
+  },
+  "integrationFindings": [
+    {
+      "id": "engine-version-contract",
+      "scope": "core-contract-catalog",
+      "result": "RED_REPRODUCED",
+      "summary": "The unchanged core Go schema rejects all three new versions as outside their contract selectors. Core-owned selector review and generated Go/C trust-artifact regeneration are required."
+    },
+    {
+      "id": "selected-tuple-image",
+      "scope": "stock-installer",
+      "result": "RED_REPRODUCED",
+      "summary": "With old and new engine rows, --pull-image can choose the latest global image instead of the selected model tuple image."
+    },
+    {
+      "id": "blocked-selection-side-effects",
+      "scope": "stock-installer",
+      "result": "RED_REPRODUCED",
+      "summary": "A blocked-only selection still schedules an image pull. Reproduced with --dry-run; no image pulled."
+    },
+    {
+      "id": "manifest-identity-validation",
+      "scope": "stock-installer",
+      "result": "RED_REPRODUCED",
+      "summary": "The installer stages wrong-version, wrong-digest or wrong-revision engine manifests even though modelctl check rejects the same drift."
+    }
+  ],
+  "commonR1Profile": "Existing SGLang-specific completionsBos=true metadata is retained in the shared profile installed for every engine; vLLM/TRT semantics require that key to remain SGLang-scoped.",
+  "remainingGates": [
+    "Core contract selectors and regenerated trust artifacts",
+    "Tuple-specific image selection and blocked no-pull behavior",
+    "Installer rejects mismatched version/digest/revision before writes",
+    "Clean installation and Gateway discovery/READY/traffic on the core-owned candidate",
+    "Remaining render/P-D/performance/release promotion gates"
+  ]
+}

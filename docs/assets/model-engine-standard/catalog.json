@@ -159,10 +159,16 @@
     "trtllmImage": "requires-separately-provisioned-matching-rc24-artifact",
     "vllmTargetVersion": "0.31.0",
     "vllmTupleStatus": "new-version-evaluation-not-qualified-by-archived-0.28-catalog",
-    "vllmRuntimeEvidence": "bounded-three-worker-gpu-qa-full-qualification-open"
+    "vllmRuntimeEvidence": "bounded-three-worker-gpu-qa-full-qualification-open",
+    "archivedEngineExamples": [
+      "sglang-0.5.18",
+      "trtllm-1.3.0rc24"
+    ],
+    "currentSglangGuideBaseline": "0.5.19",
+    "currentFiveModelManual": "matrix-manual.md"
   },
   "matrixEvaluation": {
-    "manual": "matrix-manual.ko.md",
+    "manual": "matrix-manual.md",
     "caseCount": 30,
     "catalogPromotion": false,
     "gatewaySource": "1d51393773e4974b5e356377496c9d677dba9f9c"

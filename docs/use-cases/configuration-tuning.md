@@ -1,14 +1,14 @@
-# Configuration & Tuning
+# Configuration and Arguments
 
 --8<-- "snippets/common/mutation-fragment-notice.md"
 
 Every operator-facing knob for LoxiLB's AI routing hierarchy — REST rule fields, LoxiLB
-environment variables, the vLLM-side matching contract — plus a tuning playbook and the
-observability needed to verify each layer engaged.
+environment variables, the vLLM-side matching contract — plus a tuning playbook. KV-specific field definitions and engine parity are
+linked from their single reference pages; observability has its own verification guide.
 
-Read [Routing Hierarchy](routing-hierarchy.md) first for what each layer does, and
-[KV-Cache Routing](../ai-gateway/kv-caching.md) for Tier-1.5 onboarding (tokenizer staging,
-per-model runbook).
+Read [Routing Hierarchy](routing-hierarchy.md) first. Use the
+[converged guide](model-engine-standard/matrix-manual.md) for actual onboarding
+and [KV-Exact fields](../ai-gateway/kv-caching.md) for the strict binding controls.
 
 ## Configuration surface at a glance
 
@@ -43,81 +43,22 @@ Endpoint: `POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer`.
 
 ### Service-level (`serviceArguments`)
 
-| Field | Type | Default | Values | Meaning |
-|---|---|---|---|---|
-| `mode` | int | 0 | 0–5 | NAT mode. **4 = fullproxy is required** for every L7/AI feature (0 DNAT, 1 onearm, 2 fullnat, 3 dsr, 5 hostonearm) |
-| `sel` | int | 0 | 0–10 | Selector. Single-pool cache affinity: **8 = chwbl, 9 = gpuaware, 10 = wrr-hash**. The P/D selector-9 capacity arm exists but its activation is release-blocked. |
-| `security` | int | 0 | 0–2 | 0 plaintext; 1 frontend TLS termination with an HTTP backend; 2 frontend TLS termination plus backend TLS re-encryption |
-| `host` | string | — | — | Host key for L7/HTTPS rules; HTTPS rules are keyed by it — deletion must repeat `--host` |
-| `backend_protocol` | string | `http1` | `http1`\|`http2`\|`both` | Backend ALPN / protocol |
-| `sse_mode` | bool | false | — | Marks an SSE/streaming service (suppresses idle timeouts mid-stream). Set explicitly — `pd_disagg_mode` does **not** turn it on |
-| `pd_disagg_mode` | bool | false | — | Enables P/D disaggregation and the full tier ladder |
-| `pd_session_ttl_sec` | int32 | 0 | ≥0 | Tier-0 pin TTL. The data path converts 0 to its 300-second runtime default |
-| `pd_prefill_timeout_sec` | int32 | 0 | 0–3600 | Prefill-stage wait bound for this rule, in seconds. 0 uses the process default (`LLB_PD_PREFILL_TIMEOUT_SEC`, else 30) |
-| `pd_cache_aware_mode` | bool | false | — | Enables Tier 1 (radix-trie affinity); requires `pd_disagg_mode` |
-| `pd_cache_threshold` | int32 | 20 | 0–100 | Tier-1 minimum prefix match-rate. A submitted 0 is converted to 20, so 0 cannot disable this check |
-| `pd_balance_abs_threshold` | int32 | 3 | 0–255 | Tier-1 load-imbalance bypass. A submitted 0 becomes 3; the data path stores the value as unsigned 8-bit |
-| `kvEngineType` | string | `vllm` | `vllm`\|`sglang`\|`trtllm`\|`llamacpp` | Selects one engine contract for the rule; immutable after creation |
-| `kvExactMode` | int64 | 0 | 0, 1, 3 | Tier 1.5 topology: 0 off; 1 optional KV-exact selection in a P/D role-partitioned pool; 3 single role-less pool without P/D. Mode 2 is reserved. |
-| `kvBlockSize` | int64 | 16 | ≥1 | Must match the engine's block or page size when that engine uses KV events |
-| `kvHashAlgo` | string | engine-derived | engine-compatible value | Prefer omission so the Gateway selects the coherent vLLM, SGLang, or TensorRT-LLM hash contract; llama.cpp rejects KV hashing |
-| `kvZmqPort` | int64 | 5557 | 1–65535 | Base KV-event port for vLLM or SGLang; TensorRT-LLM polls each endpoint's serving port and llama.cpp has no KV event plane |
-| `kvWarmupSec` | int64 | 30 | ≥0 | Accepted and stored, but currently inert because the production path never arms the warmup start timestamp |
-| `LLB_KV_MIN_MATCH_TOKENS` | env | 16 | 0–4096 | Minimum token count before KV-exact scoring; 0 disables the guard |
-| `chwbl_prefix_hash_level` | int | 1 | 1–3 | Stored/read back; runtime derives the prefix scope from request content |
-| `chwbl_prefix_hash_flags` | int | 0 | 0–255 | Stored/read back; runtime programs flags 0 |
-| `chwbl_mean_load_factor` | int | schema varies | 100–300 | Stored/read back; runtime uses fixed factor 175 (1.75× mean) |
-| `chwbl_replication` | int | 100 | 1–1024 | Stored/read back; runtime uses 256 virtual nodes |
-| `chwbl_enable_cache_salt` | bool | false | — | Intended salt guard; currently not propagated and not a tenant-isolation control |
-| `model_name` | string | "" (wildcard) | — | Pool-selection key for model-routed multi-pool setups |
-
-!!! warning "CHWBL fields are not propagated yet"
-    The proxy currently uses factor 175, replication 256, flags 0, and salt enforcement off even
-    when the REST rule stores other values. Validate a released artifact before tuning, and use
-    authorization plus separate pools for tenant isolation.
+Use the single [REST field reference](../ai-gateway/configuration-reference.md)
+for types, defaults, allowed values and immutable controls. It owns
+[core service fields](../ai-gateway/configuration-reference.md#1-core-service-fields),
+[KV fields](../ai-gateway/configuration-reference.md#4-kv-cache-exact-routing),
+[CHWBL controls](../ai-gateway/configuration-reference.md#5-chwbl-wrr-hash-tuning-knobs)
+and [P/D fields](../ai-gateway/configuration-reference.md#6-prefill-decode-pd-disaggregation).
+The tuning sections below explain trade-offs; they do not define a second schema.
 
 ### Endpoint-level (`endpoints[]`)
 
-| Field | Type | Default | Meaning |
-|---|---|---|---|
-| `endpointIP` | string | — | Backend IP |
-| `targetPort` | int | — | Backend port (prefill and decode typically differ, e.g. 8100 / 8200) |
-| `weight` | int | 1 | Endpoint weight (WRR / ring weighting) |
-| `ep_role` | int32 | 0 | 0 normal, **1 prefill, 2 decode** (only meaningful with `pd_disagg_mode`) |
-| `nixl_port` | int32 | 0 | vLLM NIXL side-channel port (0 = `targetPort`); required for the P/D KV handoff, conventionally 5600 |
-
-The current CLI exposes the main P/D and KV fields used in the examples below. REST remains the
-complete contract and the best read-back oracle; use `GET /netlox/v1/config/loadbalancer/all` to
-confirm the stored shape, especially for fields that a particular CLI build does not expose.
-
-!!! warning "Protect the management API"
-    The `curl` examples use plain HTTP for an isolated lab. In production, use an authenticated,
-    TLS-protected management endpoint and keep authorization values out of command arguments.
-
-=== "curl"
-    ```bash
-    curl -s -X POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer \
-      -H "Content-Type: application/json" \
-      -d '{
-      "serviceArguments": {
-        "externalIP": "192.0.2.254",
-        "port": 2022,
-        "protocol": "tcp",
-        "sel": 8,
-        "mode": 4,
-        "host": "192.0.2.254"
-      },
-      "endpoints": [
-        { "endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1 },
-        { "endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 1 }
-      ]
-    }'
-    ```
-
-=== "loxicmd"
-    ```bash
-    loxicmd create lb 192.0.2.254 --tcp=2022:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --host=192.0.2.254
-    ```
+Use [endpoint fields](../ai-gateway/configuration-reference.md#9-endpoints-endpoints)
+and [health/probe fields](../ai-gateway/configuration-reference.md#10-health-probe-fields)
+for the complete definitions. Match target ports and probe ports to the actual
+engine listener. Role-tagged endpoints belong only to P/D; a converged Exact
+pool has no prefill/decode roles. Preserve the exact model/host/VIP/port identity
+when replacing or deleting a rule.
 
 ## LoxiLB process environment variables
 
@@ -153,77 +94,16 @@ Set with `docker run -e …`; all read once at startup.
 | `LLB_PD_MAX_PARK_SEC` | 0 (→ prefill timeout) | 0<n<100000 | Admission: parked-request reap deadline |
 | `LLB_PD_MAX_TOTAL_INFLIGHT` | 0 (off) | n>0 | Admission: global valve — refuse new connections beyond this |
 | `LLB_PD_ORIGIN_ERR_THRESHOLD` | 3 | int ≥0; `0` disables | Consecutive origin 5xx responses that open an enabled endpoint breaker. A 4xx neither advances nor resets this streak. |
+| `LLB_KV_MIN_MATCH_TOKENS` | `16` | `0`–`4096`; `0` disables | Skip Exact scoring for shorter prompts |
 
-### vLLM side — the parity triad
+## Engine parity and effective identity
 
-If **any** leg mismatches, Tier 1.5 silently degrades to Tier 2 (hash overlap is 0%):
-
-| vLLM setting | Must match |
-|---|---|
-| `PYTHONHASHSEED=0` (env) | LoxiLB `LLB_KV_NONE_HASH_SEED=0` |
-| `--block-size 16` | rule `kvBlockSize: 16` |
-| `--prefix-caching-hash-algo sha256_cbor` | rule `kvHashAlgo: "sha256_cbor"` (vLLM's default pickle-`sha256` is **not** portable — always set `*_cbor`) |
-| `--kv-events-config '{"enable_kv_cache_events":true,"publisher":"zmq","endpoint":"tcp://*:5557"}'` | rule `kvZmqPort: 5557`; prefill endpoints only; `*` binds PUB mode (`127.0.0.1` silently publishes nothing) |
-
-Plus tokenizer staging on the LoxiLB host: the served model's `tokenizer.json` at
-`/etc/loxilb/tokenizers/<model-slug>/tokenizer.json`, slug = model id with `/` → `__`
-(e.g. `Qwen__Qwen2.5-7B-Instruct`). A missing tokenizer causes silent fall-through.
-
-!!! note "Controller loop is optional and advanced"
-    An external controller can retune per-endpoint routing weights from fleet-wide vLLM metrics.
-    It is default-off: absent `LOXILB_AI_CTRL_ADDR`, the data plane behaves byte-identically to a
-    controller-less deployment, and on controller staleness its influence decays back to neutral.
-    Enabling it is out of scope for this page.
-
-## Environment parity & preflight
-
-Tier 1.5 is a byte-exact hash contract between the engine and LoxiLB. Most "cache
-routing doesn't work" reports are not bugs — they are a parity leg that drifted, and
-the failure is **silent**: LoxiLB keeps serving, but mode 1 degrades to P/D minimum load
-(round-robin only breaks ties), while mode 3 degrades to its configured selector
-instead of cache-matching. Run the preflight below *before* trusting any hit-rate
-number.
-
-### The parity triad
-
-All three must agree, or you are measuring round-robin (0% hash overlap):
-
-| Leg | Engine side | LoxiLB side |
-|---|---|---|
-| Hash seed | `PYTHONHASHSEED=0` (engine container env) | `LLB_KV_NONE_HASH_SEED=0` (LoxiLB env) |
-| Block / page size | vLLM `--block-size 16` (or SGLang effective page size) | rule `kvBlockSize` |
-| Hash algorithm | vLLM `--prefix-caching-hash-algo sha256_cbor` | rule `kvHashAlgo: "sha256_cbor"` |
-
-The seed and block-size legs live in *process environment and launch flags*, which a
-redeploy or an image bump can silently change. Treat the triad as a single unit — never
-change one leg without re-checking the other two.
-
-### Read-only preflight (inspect the running container)
-
-You do not need to trust what a deploy script *intended* to launch — read what the
-container is *actually* running. These commands are read-only and safe on a live host:
-
-```bash
-# The full launch command line (untruncated) for every running container
-docker ps --no-trunc
-
-# The effective environment of a specific engine container —
-# confirm PYTHONHASHSEED and any VLLM_* flags actually took
-docker inspect --format '{{range .Config.Env}}{{println .}}{{end}}' <engine-container>
-
-# Same for the LoxiLB container — confirm LLB_KV_NONE_HASH_SEED and LOXILB_KV_* are set
-docker inspect --format '{{range .Config.Env}}{{println .}}{{end}}' <loxilb-container>
-```
-
-Cross-check the three triad legs across both outputs, then confirm `kvBlockSize` /
-`kvHashAlgo` on the live rule with `GET /netlox/v1/config/loadbalancer/all`. If the
-engine's launch line shows no `--kv-events-config` (vLLM) the publisher never bound and
-the inventory will stay empty regardless of parity.
-
-!!! tip "Turn on hash forensics only when hunting a mismatch"
-    Set `LLB_KV_HASH_DEBUG=1` on the LoxiLB container to surface per-block hash
-    decisions in the log — this makes a drifted seed or block size obvious. It is
-    verbose; keep it off in steady state (testbed-only).
+KV-specific field defaults and immutable binding are maintained in
+[KV-Exact Configuration Reference](../ai-gateway/kv-caching.md#configuration-fields).
+Use [Engine Contracts](../ai-gateway/engine-contracts.md) for seed, hash, geometry,
+rank ports and image coherence. SGLang has no vLLM seed contract; do not apply the
+vLLM parity triad to another engine. Check actual arguments, relevant environment,
+image digest and rule readback before each comparison.
 
 ### Tested-artifact rule
 
@@ -231,25 +111,6 @@ Do not derive a public support matrix from example host versions. Record the imm
 and engine image identities plus OS, kernel, GPU, and driver used by your own acceptance run.
 Promote only that tested tuple and retest after any member changes. Keep `--max-model-len`
 identical across a pool.
-
-### LoxiLB runtime environment (parity- and admission-relevant)
-
-These process-environment knobs are read once at container start (see the env tables
-above for the full list); the ones below are the parity/preflight-critical subset:
-
-| Var | Default | Set to | Why |
-|---|---|---|---|
-| `LLB_PD_PREFILL_TIMEOUT_SEC` | 30 | **180** for long-context (≈32k) fleets | The 30 s default returns `504 pd_prefill_timeout` on most long-context requests under load. To raise it for one service only, set `pd_prefill_timeout_sec` on that rule |
-| `LOXILB_KV_LB_MODE` | (unset → `hard`) | `off` \| `hard` \| `soft` \| `adaptive` \| `adaptive-soft` | Set **explicitly** for reproducible measurements; leaving it implicit hides which law is active |
-| `LLB_PD_MAX_INFLIGHT_PER_EP` | 0 (off) | per-EP in-flight cap | Admission gate — opt-in |
-| `LLB_PD_QUEUE_DEPTH_PER_EP` | 0 (off) | park-queue depth | Admission gate — opt-in |
-| `LLB_PD_MAX_PARK_SEC` | 0 (off) | parked-request reap deadline | Admission gate — opt-in |
-| `LLB_PD_MAX_TOTAL_INFLIGHT` | 0 (off) | global valve | Admission gate — opt-in |
-| `LLB_KV_HASH_DEBUG` | 0 (off) | `1` while debugging | Per-block hash decisions in the log (verbose) |
-
-The four admission knobs are **default-off** — the data plane behaves identically to a
-gate-less deployment until you set them. Enable them only with a latency SLO to protect
-(see [Admission](#admission-opt-in-protection-not-throughput) in the tuning playbook).
 
 ## Capacity contrast for heterogeneous fleets
 
@@ -288,7 +149,7 @@ mapped cleanly:
 
 ```bash
 # Per endpoint: the number of GPU KV blocks vLLM allocated
-curl -s http://<endpoint-ip>:8100/metrics | grep 'vllm:cache_config_info'
+curl -s "http://<endpoint-ip>:8100/metrics" | grep 'vllm:cache_config_info'
 ```
 
 `vllm:cache_config_info` carries `num_gpu_blocks` as a label. Confirm
@@ -361,22 +222,11 @@ nonzero means an endpoint's publisher outran the cap and overlap scoring for it 
 
 ## Observability quick reference
 
-LoxiLB metrics: `GET http://192.0.2.254:11111/netlox/v1/metrics`. Inventory snapshot:
-`GET /netlox/v1/config/ai/kv/inventory`.
-
-**Routing-decision set:** `loxilb_pd_kv_tier15_hits_total{ep_idx}` ·
-`loxilb_pd_kv_tier15_miss_reason_total{reason}` (reasons: `mode_off, warmup, text_empty,
-model_empty, tokenize, hashes, no_worker, excluded, shallow`) · `loxilb_pd_kv_tier15_fallthrough_total` ·
-`loxilb_pd_kv_tier15_spills_total` · `loxilb_pd_kv_tier15_cold_seeds_total` ·
-`loxilb_pd_ep_info` (joins `ep_idx` → IP).
-
-**Inventory-plane health:** `loxilb_pd_kv_blocks{service,ep_idx}` · `loxilb_kv_subscriber_connected`
-· `loxilb_kv_subscriber_reconnect_total` · `loxilb_kv_subscriber_recv_error_total` ·
-`loxilb_kv_inv_cap_evictions_total`.
-
-**P/D serving:** `loxilb_ai_pd_requests_total` · `loxilb_ai_pd_prefill_duration_seconds` ·
-`loxilb_ai_pd_decode_ttft_seconds` · `loxilb_ai_pd_session_hits_total` ·
-`loxilb_pd_admission_shed_total` / `loxilb_pd_admission_queued_total`.
+Use [KV Routing Verification](../operations/kv-routing-verification.md) for the
+single engagement gate, inventory/subscriber diagnostics, metric meanings and
+independent receipt checks. [P/D lifecycle outcomes](../ai-gateway/pd-disaggregation.md#lifecycle-outcome-contract)
+are separate from cache-hit decisions. Tuning values require effective-state
+and completed-traffic evidence before performance interpretation.
 
 ### Three silent-degradation patterns to alert on
 
@@ -404,3 +254,27 @@ model_empty, tokenize, hashes, no_worker, excluded, shallow`) · `loxilb_pd_kv_t
 
 For the conceptual ladder and the selection-law math, see [Routing Hierarchy](routing-hierarchy.md);
 for the KV block-hash contract, see [KV-Cache Routing](../ai-gateway/kv-caching.md).
+
+<a id="configuration-tuning"></a>
+
+[Current reference](../ai-gateway/engine-contracts.md).
+
+<a id="vllm-side-the-parity-triad"></a>
+
+[Current reference](../ai-gateway/engine-contracts.md).
+
+<a id="environment-parity-preflight"></a>
+
+[Current reference](../ai-gateway/engine-contracts.md).
+
+<a id="the-parity-triad"></a>
+
+[Current reference](../ai-gateway/engine-contracts.md).
+
+<a id="read-only-preflight-inspect-the-running-container"></a>
+
+[Current reference](../ai-gateway/engine-contracts.md).
+
+<a id="loxilb-runtime-environment-parity-and-admission-relevant"></a>
+
+[Current reference](../ai-gateway/engine-contracts.md).
