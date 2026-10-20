@@ -25,94 +25,25 @@ flowchart LR
 
 ## Launch Flags That Matter
 
-Most vLLM launch flags are independent of loxilb. These few must be consistent with the gateway rule, because the gateway and vLLM independently compute or exchange values that only match when the parameters agree.
+Use [Engine Contracts](engine-contracts.md#vllm-parity-triad) for the single
+seed/hash/block/event contract. For the current vLLM 0.31.0 converged launch,
+follow [Step 3](../use-cases/model-engine-standard/launch.md#matrix-engine-launch).
+The separate [P/D reference](../use-cases/deploy-pd-disaggregation.md) has its
+own connector and version qualification requirements.
 
-| vLLM flag / env | Gateway field | Why it must match |
-|---|---|---|
-| `--block-size 16` | `kvBlockSize` (default `16`) | Block-hash routing hashes fixed-size token blocks. A different block size on either side yields non-overlapping hashes and zero cache-hit routing. |
-| `--prefix-caching-hash-algo sha256_cbor` | `kvHashAlgo` (default `sha256_cbor`) | The block-hash algorithm must be identical end to end. vLLM's own default is not CBOR-based, so set this explicitly. |
-| KV-events publisher `tcp://*:5557` | `kvZmqPort` (default `5557`) | vLLM publishes KV-cache events on a ZMQ PUB socket; loxilb subscribes on `kvZmqPort`. The ports must line up. |
-| `VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES=1` | — | Emits integer block hashes in the KV-event stream, the form loxilb consumes for its per-block inventory. |
-| `--enable-request-id-headers` | — | Optional: exposes request IDs in vLLM response headers for client-side diagnostics. Gateway-internal request correlation does not require this flag. |
-
-```bash
-docker run -d --gpus all --network host \
-  -e VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES=1 \
-  vllm/vllm-openai:v0.17.0 \
-    --model Qwen/Qwen3-0.6B \
-    --port 8000 \
-    --block-size 16 \
-    --prefix-caching-hash-algo sha256_cbor \
-    --enable-request-id-headers \
-    --kv-events-config '{"enable_kv_cache_events":true,"publisher":"zmq","endpoint":"tcp://*:5557"}'
-```
-
-The tag above is a reproducible example, not a floating compatibility promise. For production,
-pin the exact vLLM image you tested and validate its block-hash and KV-event output against the
-gateway before promotion.
-
-!!! note "KV-cache routing has its own page"
-    The block-size, hash-algo, and KV-events flags above only matter when you enable block-hash
-    KV-exact routing (`kvExactMode`). The full end-to-end parity contract — including hash-seed
-    alignment — is covered in [KV-Cache Routing](kv-caching.md). For plain CHWBL,
-    selector-9 affinity, or round-robin load balancing, none of these flags are required.
-
----
+`--enable-request-id-headers` is an optional engine diagnostic that exposes
+request IDs in response headers; Gateway-internal correlation does not require
+it. Client response IDs alone are not independent backend receipt evidence.
 
 ## Health Probing
 
-!!! warning "Protect the management API"
-    The `curl` examples use plain HTTP for an isolated lab. In production, use an authenticated,
-    TLS-protected management endpoint and read its authorization header from a
-    permission-restricted file.
-
-loxilb can actively health-check each vLLM backend and take failing endpoints out of rotation. vLLM exposes an OpenAI-style `/health` endpoint, which pairs naturally with an HTTP probe.
-
-| Field | Type | Notes |
-|---|---|---|
-| `monitor` | bool | Enable active health probing for the service. |
-| `probetype` | string | One of `tcp`, `udp`, `sctp`, `http`, `https`, `ping`, `none`. Use `http` for vLLM `/health`. |
-| `probeport` | int | Probe port (the vLLM serving port, e.g. `8000`). |
-| `probereq` | string | Probe request — the URL path for `http`/`https` probes (e.g. `/health`). |
-| `proberesp` | string | Expected response string to match (optional). |
-| `probeTimeout` | int | Per-probe timeout in seconds. |
-| `probeRetries` | int | Retries before marking an endpoint inactive. |
-
-=== "curl"
-    ```bash
-    curl -s -X POST http://<loxilb>:11111/netlox/v1/config/loadbalancer \
-      -H 'Content-Type: application/json' \
-      -d '{
-        "serviceArguments": {
-          "externalIP": "192.0.2.254",
-          "port": 8080,
-          "protocol": "tcp",
-          "sel": 0,
-          "mode": 4,
-          "security": 0,
-          "backend_protocol": "http1",
-          "monitor": true,
-          "probetype": "http",
-          "probeport": 8000,
-          "probereq": "/health",
-          "probeTimeout": 5,
-          "probeRetries": 2
-        },
-        "endpoints": [
-          {"endpointIP": "192.0.2.1", "targetPort": 8000, "weight": 1},
-          {"endpointIP": "198.51.100.1", "targetPort": 8000, "weight": 1}
-        ]
-      }'
-    ```
-
-=== "loxicmd"
-    ```bash
-    loxicmd create lb 192.0.2.254 --tcp=8080:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --backend-protocol=http1 --monitor --probetype=http --probeport=8000 --probereq=/health --probetimeout=5 --proberetries=2
-    ```
-
-A backend that fails its probe is reported with `"inActiveEP": true` in `GET /config/loadbalancer/all` and is skipped by endpoint selection until it recovers.
-
----
+vLLM exposes `/health`. Configure the allocated engine port and health path using
+[shared probe fields](../use-cases/configuration-tuning.md#service-level-servicearguments).
+HTTP health checks test the route; TCP probes establish only listener reachability.
+Neither proves complete inference, successful P/D transfer or Exact readiness.
+Use [Step 3](../use-cases/model-engine-standard/launch.md#verify-direct-engine-responses)
+for direct model/chat checks and [Step 5](../use-cases/model-engine-standard/verify.md)
+for completion and independent receipt verification.
 
 ## Backend Protocol and ALPN
 
@@ -181,7 +112,7 @@ flowchart TD
 **GPU monitoring status** — `GET /config/gpu/status` reports the worker-metrics control surface:
 
 ```bash
-curl -s http://<loxilb>:11111/netlox/v1/config/gpu/status
+curl -s "http://<loxilb>:11111/netlox/v1/config/gpu/status"
 # {
 #   "enabled": true,
 #   "routing_mode": "gpu_aware",
@@ -199,13 +130,13 @@ least-loaded endpoint.
 list stored on that separate surface:
 
 ```bash
-curl -s http://<loxilb>:11111/netlox/v1/config/worker/metrics
+curl -s "http://<loxilb>:11111/netlox/v1/config/worker/metrics"
 ```
 
 **Selection algorithm** — confirm the service shows `sel: 9`:
 
 ```bash
-curl -s http://<loxilb>:11111/netlox/v1/config/loadbalancer/all \
+curl -s "http://<loxilb>:11111/netlox/v1/config/loadbalancer/all" \
   | jq '.lbAttr[].serviceArguments | {externalIP, port, sel}'
 ```
 

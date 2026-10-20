@@ -23,8 +23,9 @@ and the Gateway's own counters do not replace this independent comparison.
 `upstreamComplete` proves transport read completion; separately parse chat/SSE
 content, finish reason and DONE count. When published, the public ledger must
 contain sanitized hashes/counts and worker aliases, never the collector's private
-raw files. The thirty-case result summary and ledger are pending in this edition;
-the collector's inclusion does not establish that any case has passed.
+raw files. The thirty-case result summary and sanitized ledger are published as
+`matrix-results.json` and `matrix-request-ledger.json` in the package root.
+The collector alone does not establish that a new deployment has passed.
 
 After deleting the owned rule and draining traffic, stop this exact foreground
 process with Ctrl-C. Use the ordinary native 8000 configuration for the normal

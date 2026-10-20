@@ -30,7 +30,7 @@ A row is supported only in the state `validated`. A `candidate` row has qualific
 supported; the installer skips it unless `--include-candidates` is given. Use exactly the engine version and
 image digest of the row: the gateway checks the engine's identity before it routes.
 
-Pick the topology with [Choose an Inference Engine](choose-your-engine.md):
+Pick the topology with [Choose an Inference Engine](../concepts/inference-topologies.md):
 
 | Topology | Endpoints | `kvExactMode` |
 |---|---|---|
@@ -82,7 +82,7 @@ docker run -d --name loxilb --privileged --net host \
   -e LLB_KV_NONE_HASH_SEED=0 \
   -v /etc/loxilb/kvprofiles:/etc/loxilb/kvprofiles:ro \
   -v /etc/loxilb/tokenizers:/etc/loxilb/tokenizers:ro \
-  <gateway-image>
+  "<gateway-image>"
 ```
 
 

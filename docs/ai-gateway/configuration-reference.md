@@ -181,9 +181,11 @@ and the settings in force; see the generated [Metrics reference](../reference/me
 
 ## 4. KV-cache exact routing
 
-Tier 1.5 block-hash routing between the trie (Tier 1) and min-load (Tier 2) tiers. The KV-hash
-contract is **all-or-nothing**: every knob below must match the serving engine exactly or hash
-overlap silently drops to zero. See [KV-Cache Routing](kv-caching.md).
+Mode 1 scores prefill endpoints inside P/D; mode 3 scores all converged endpoints.
+Cache geometry, tokenization, template/API rendering, hash policy and events must
+match the selected engine. Strict validation/attestation can reject a mismatch;
+legacy fallback can serve without Exact. See [Engine Contracts](engine-contracts.md)
+and [KV load safety](kv-caching.md) for the mechanism and operating requirements.
 
 | Field | Type | Default | Allowed / Enum | Notes |
 |---|---|---|---|---|
@@ -206,27 +208,20 @@ overlap silently drops to zero. See [KV-Cache Routing](kv-caching.md).
 
 ### Engine and field coherence
 
-| Engine | Supported routing shapes | Event transport | Required coherence / rejected fields |
-|---|---|---|---|
-| `vllm` | Plain L7 LB; single-role mode 3; sequential P/D with optional mode 1 | ZMQ | Use a vLLM hash algorithm and match block size and hash seed. `pdBootstrapPort` is rejected. |
-| `sglang` | Plain L7 LB; single-role mode 3; concurrent P/D; optional P/D-coupled mode 1 | ZMQ, including per-rank ports | Omit `kvHashAlgo` or use only `sha256_sglang`. `pdBootstrapPort` is valid only for SGLang P/D. |
-| `trtllm` | Plain L7 LB; single-role mode 3; sequential P/D with mode 1 | HTTP polling on each endpoint's serving port | The gateway must be the sole consumer of `/kv_cache_events`. Meaningful ZMQ and rank settings are rejected; match `kvBlockSize` to `tokens_per_block`. |
-| `llamacpp` | Plain L7 LB with CHWBL or session affinity | None | KV-exact and P/D are unsupported. Explicit hash settings and meaningful KV transport, rank, or block-size overrides are rejected. |
+Use the [engine contract reference](engine-contracts.md) for request dialect,
+event transport, hash policy, DP-rank layout and TensorRT-LLM consumer ownership.
+The fields above enforce that coherence; engine capability is not model/release
+qualification. See the [current functional results](../use-cases/model-engine-standard/results.md).
 
 !!! warning "Fail closed on incoherent engine settings"
     Treat a create-time rejection as a configuration defect; do not work around it by changing the
     engine name or disabling certificate verification. The validation prevents accepted-but-unused
     fields and silent hash mismatches.
 
-!!! warning "vLLM hash-contract triad"
-    All three legs must match the vLLM launch flags or hash overlap is 0%: NONE_HASH seed
-    (`PYTHONHASHSEED` == `LLB_KV_NONE_HASH_SEED`), hash algo (set vLLM
-    `--prefix-caching-hash-algo=sha256_cbor` — its default `sha256` is non-portable), and block
-    size (`--block-size` == `kvBlockSize`). vLLM must also set
-    `VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES=1`. Current Gateway main also requires a nonempty
-    Gateway seed of at most 23 bytes and returns HTTP `412` before mutation otherwise. Query the
-    REST-only `GET /status/capabilities` surface and require `kv_exact_vllm.ready=true` before
-    presenting or submitting the rule.
+For vLLM seed/hash/block alignment, capability preconditions and integer events,
+follow the [vLLM contract](engine-contracts.md#vllm-parity-triad). Require
+`kv_exact_vllm.ready=true` before a strict rule, then prove the rule binding and
+actual routing separately. A capability flag alone is not Exact acceptance.
 
 ---
 

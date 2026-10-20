@@ -187,6 +187,6 @@ The Gateway configuration, dual-dispatch behavior, guardrails, error coupling, m
 ## See also
 
 - [P/D Disaggregation](pd-disaggregation.md)
-- [SGLang Routing](../use-cases/sglang-routing.md)
-- [SGLang Configuration and Tuning](../use-cases/sglang-configuration-tuning.md)
+- [SGLang Routing](engine-contracts.md)
+- [SGLang Configuration and Tuning](engine-contracts.md)
 - [Engine Capability Matrix](../concepts/engine-capability-matrix.md)

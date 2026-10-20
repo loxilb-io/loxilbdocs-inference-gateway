@@ -21,7 +21,7 @@ The Gateway accepts **vLLM**, **SGLang**, **TensorRT-LLM**, and **llama.cpp** ru
 their advanced capabilities differ. vLLM, SGLang, and TensorRT-LLM support KV-exact routing
 and engine-specific P/D paths. llama.cpp supports fullproxy load balancing, CHWBL, and session
 affinity, but not the Gateway's KV-event or P/D controls. Start with
-[Choose an Inference Engine](../getting-started/choose-your-engine.md) and verify the exact
+[Choose an Inference Engine](../concepts/inference-topologies.md) and verify the exact
 combination in the [Engine Capability Matrix](../concepts/engine-capability-matrix.md).
 
 ## Do I need a GPU to run the gateway?
@@ -71,7 +71,7 @@ Almost always a broken parity leg — the block/page size, hash algorithm, hash 
 tokenizer directory does not match between the engine and the gateway, so routing **silently** falls
 back to round-robin. Run the "verify it fired" recipe: `loxilb_pd_kv_tier15_hits_total` must advance
 after the first request. See [Troubleshooting](../operations/troubleshooting.md) and the
-[KV-cache-aware routing guide](../use-cases/kv-cache-aware-routing.md).
+[KV-cache-aware routing guide](../concepts/kv-routing.md).
 
 ## What license is it under?
 

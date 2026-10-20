@@ -107,7 +107,7 @@ For prefill/decode disaggregation, the coordination and state-transfer contract 
 engine. Do not copy vLLM settings into an SGLang or TensorRT-LLM rule. See the engine chooser
 and deployment guides:
 
-- [Choose an Inference Engine](../getting-started/choose-your-engine.md) — select a supported engine and topology
+- [Choose an Inference Engine](../concepts/inference-topologies.md) — select a supported engine and topology
 - [P/D Disaggregation](../ai-gateway/pd-disaggregation.md) — compare the engine-specific request paths
 - [Deploy P/D disaggregation](../use-cases/deploy-pd-disaggregation.md) — provisioning the prefill/decode fleet and NIXL mesh
 - [Configuration & tuning](../use-cases/configuration-tuning.md) — parity requirements, block/page-size, hash-algo, and verification

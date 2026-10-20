@@ -175,7 +175,7 @@ inventory. Informational miss reasons live in
 `loxilb_pd_kv_tier15_fallthrough_total` and
 `loxilb_pd_kv_tier15_miss_reason_total{reason=...}`.
 
-For full setup and tuning, see [KV-Cache-Aware Routing](../use-cases/kv-cache-aware-routing.md).
+For full setup and tuning, see [KV-Cache-Aware Routing](../concepts/kv-routing.md).
 
 ---
 
@@ -511,7 +511,7 @@ Do not treat single-node validation or green CI as failover proof. See
 
 ## Related pages
 
-- [KV-Cache-Aware Routing](../use-cases/kv-cache-aware-routing.md) — setup, the parity triad, and the full "prove it fired" recipe
+- [KV-Cache-Aware Routing](../concepts/kv-routing.md) — setup, the parity triad, and the full "prove it fired" recipe
 - [Deploy P/D Disaggregation](../use-cases/deploy-pd-disaggregation.md) — NIXL launch flags, block-count override, full-mesh redeploy
 - [Model Load Balancing](../ai-gateway/model-load-balancing.md) — the `X-Model` → `model` → wildcard hierarchy
 - [SSE & Quota Management](../ai-gateway/sse-quota-management.md) — streaming lifecycle and caps

@@ -1,12 +1,23 @@
-# Deploy: Prefill/Decode Disaggregation
+# vLLM P/D Deployment Reference
 
 --8<-- "snippets/common/mutation-fragment-notice.md"
+
+!!! warning "Separate P/D reference tuple"
+    This is an advanced vLLM-specific P/D reference, not the five-model converged
+    qualification. Its connector flags, topology and engine artifacts require
+    independent validation on the chosen release. Retained launch examples below
+    use the historical vLLM 0.17.0 image; they do not establish vLLM 0.31 P/D
+    acceptance or inherit the converged guide's image/manifest contract. Do not carry the 26 functional
+    PASS verdicts into P/D or infer full fail-over acceptance. Start with the
+    [P/D deployment overview](pd-deployment.md) and preserve historical failure limits.
+
+
 
 A hands-on, cloud-agnostic deploy and debug guide for running KV-cache-aware routing on a
 real GPU fleet with **prefill/decode (P/D) disaggregation** — bring-your-own hardware, any
 GPU instance. This page is the operational companion to the mechanism reference in
 [P/D Disaggregation](../ai-gateway/pd-disaggregation.md) and
-[KV-Cache-Aware Routing](kv-cache-aware-routing.md); read those for the block-hash contract and
+[KV-Cache-Aware Routing](../concepts/kv-routing.md); read those for the block-hash contract and
 selection internals, and read this page for the wire, launch flags, and debugging playbook.
 
 ---
@@ -79,7 +90,7 @@ broken KV-transfer plane fails requests outright (503/timeout).
 
 ### 4.1 Prefill node (kv_producer + KV-event publish)
 
-```bash
+```text
 docker run -d --name vllm --gpus all --network host \
   -e VLLM_NIXL_SIDE_CHANNEL_HOST=<this-node-ip> \          # MUST be the node IP, NOT 0.0.0.0
   -e VLLM_NIXL_SIDE_CHANNEL_PORT=5600 \
@@ -112,14 +123,16 @@ Identical to the prefill launch, except: `--port 8200`, `"kv_role":"kv_consumer"
 | `--block-size 16` | Must equal the rule's `kvBlockSize`. | Hashes computed over different token spans → no match. |
 | `--kv-events-config endpoint tcp://*:5557` | `*` binds PUB mode; `127.0.0.1` puts ZMQ in connect mode and **nothing is published**. | `loxilb_pd_kv_blocks` stays 0 forever. |
 
-### 4.4 Copy-paste launch reference — prefill and decode
+### 4.4 Historical launch layouts — prefill and decode { #44-copy-paste-launch-reference-prefill-and-decode }
 
 The two launches below are the full, exact commands with every load-bearing flag spelled out.
 Prefill **publishes** KV events; decode does **not**. Substitute `<MODEL>`, the node IPs, and the
-memory fraction for your hardware. Both use `vllm/vllm-openai:v0.17.0`.
+memory fraction for your hardware. Both archived layouts use `vllm/vllm-openai:v0.17.0`. The annotated text
+blocks explain the old contract; obtain a separately qualified complete launch
+for the selected artifact rather than executing these annotated layouts.
 
 === "Prefill node (kv_producer, publishes)"
-    ```bash
+    ```text
     docker run -d --name vllm-prefill --gpus all --network host \
       -e VLLM_NIXL_SIDE_CHANNEL_HOST=<prefill-node-ip> \   # routable IP, NEVER 0.0.0.0
       -e VLLM_NIXL_SIDE_CHANNEL_PORT=5600 \                # == the endpoint's nixl_port in the rule
@@ -137,7 +150,7 @@ memory fraction for your hardware. Both use `vllm/vllm-openai:v0.17.0`.
         --kv-events-config '{"enable_kv_cache_events":true,"publisher":"zmq","endpoint":"tcp://*:5557","topic":""}'
     ```
 === "Decode node (kv_consumer, no publish)"
-    ```bash
+    ```text
     docker run -d --name vllm-decode --gpus all --network host \
       -e VLLM_NIXL_SIDE_CHANNEL_HOST=<decode-node-ip> \    # routable IP, NEVER 0.0.0.0
       -e VLLM_NIXL_SIDE_CHANNEL_PORT=5600 \
@@ -178,7 +191,7 @@ Fix it on the **decode** side, one of two ways:
 Read the effective count back from each engine before trusting the mesh:
 
 ```bash
-curl -s http://<node-ip>:8100/metrics | grep 'vllm:cache_config_info'
+curl -s "http://<node-ip>:8100/metrics" | grep 'vllm:cache_config_info'
 # reconcile the num_gpu_blocks label across every prefill and decode engine
 ```
 
@@ -245,7 +258,7 @@ The KV-exact rule body (`:9003`), posted to `http://<VIP>:11111/netlox/v1/config
 
 === "curl"
     ```bash
-    curl -s -X POST http://<VIP>:11111/netlox/v1/config/loadbalancer \
+    curl -s -X POST "http://<VIP>:11111/netlox/v1/config/loadbalancer" \
       -H 'Content-Type: application/json' -d '{
       "serviceArguments": {
         "externalIP": "<VIP>", "port": 9003, "protocol": "tcp",
@@ -264,7 +277,7 @@ The KV-exact rule body (`:9003`), posted to `http://<VIP>:11111/netlox/v1/config
     ```bash
     # NOTE: loxicmd applies one --tcp target port to every endpoint; the decode EP's
     # targetPort 8200 (curl) cannot be set per-endpoint — post it via REST if it differs.
-    loxicmd create lb <VIP> --tcp=9003:8100 --endpoints=<prefill-1-ip>:1,<prefill-2-ip>:1,<decode-1-ip>:1 --mode=fullproxy --select=rr --host=<VIP> --pd-disagg --proberetries=1 --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-warmup=60 --kv-block-size=16 --ep-role=prefill,prefill,decode --nixl-port=5600,5600,5600
+    loxicmd create lb "<VIP>" --tcp=9003:8100 --endpoints="<prefill-1-ip>:1,<prefill-2-ip>:1,<decode-1-ip>:1" --mode=fullproxy --select=rr --host="<VIP>" --pd-disagg --proberetries=1 --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-warmup=60 --kv-block-size=16 --ep-role=prefill,prefill,decode --nixl-port=5600,5600,5600
     ```
 
 !!! warning "Field-casing trap"
@@ -365,7 +378,7 @@ Use at least a **≥ 4× spread** for a future capacity-aware experiment. Verify
 actually got before running that post-fix test:
 
 ```bash
-for ip in <prefill-1-ip> <prefill-2-ip> <prefill-3-ip>; do
+for ip in "<prefill-1-ip>" "<prefill-2-ip>" "<prefill-3-ip>"; do
   echo -n "$ip "; curl -s http://$ip:8100/metrics | grep 'vllm:cache_config_info'
 done
 # compare the num_gpu_blocks labels — max should be >= 4x min
@@ -382,33 +395,16 @@ the **same** backends — two VIPs, identical endpoint lists, different selector
 | `:9000` | **RR baseline** | `mode:4`, `pd_disagg_mode:true`, `pd_cache_aware_mode:false`, `pd_session_ttl_sec` |
 
 Drive identical traffic at both VIPs and compare. See §5.2 for the full four-way rule table and the
-KV-exact rule body, and [KV-Cache-Aware Routing](kv-cache-aware-routing.md) for reading the result.
+KV-exact rule body, and [KV-Cache-Aware Routing](../concepts/kv-routing.md) for reading the result.
 
 ---
 
-## 6. The block-hash parity contract (why routing silently degrades to RR)
+## 6. Verify the engine contract
 
-For loxilb to match a prompt against a prefill endpoint's inventory, **loxilb and vLLM must compute
-the identical block hash for the identical token span.** Three load-bearing knobs — the **parity
-triad** — must agree on both sides:
-
-| Leg | vLLM | loxilb |
-|-----|------|--------|
-| NONE_HASH seed | `PYTHONHASHSEED=0` | `LLB_KV_NONE_HASH_SEED=0` |
-| hash algorithm | `--prefix-caching-hash-algo sha256_cbor` | `kvHashAlgo: "sha256_cbor"` |
-| block size | `--block-size 16` | `kvBlockSize: 16` |
-
-Plus loxilb needs the **same tokenizer** staged at
-`/etc/loxilb/tokenizers/<model-slug>/tokenizer.json`, where `<model-slug>` is the model id with `/`
-rewritten to `__` (e.g. `Qwen/Qwen2.5-7B-Instruct` → `Qwen__Qwen2.5-7B-Instruct`). A
-missing/mismatched tokenizer produces different token ids → different hashes → no matches.
-
-!!! warning "If any leg disagrees, there is no error"
-    Every request takes the topology-specific fallback. For this mode-1 P/D recipe, that means
-    minimum-load selection with round-robin only as a tie-break. This is the single most common
-    "it's not working" cause. Detection is in §9.
-
----
+Use [Engine Contracts](../ai-gateway/engine-contracts.md) for the canonical vLLM
+seed/hash/block-size contract and [profile readiness](../ai-gateway/model-profiles-kv-readiness.md)
+for strict binding. Legacy profile-less examples here are not a validated strict
+model installation. Complete effective-state and event/receipt checks before A/B.
 
 ## 7. End-to-end request sequence (client → response)
 
@@ -448,79 +444,14 @@ sequenceDiagram
 
 ---
 
-## 8. Observability — the metrics that exist (and a Prometheus gotcha)
+## 8. Observe serving and cache engagement
 
-Scrape on the loxilb host (the metrics port need not be exposed off-box):
-
-```bash
-curl -s http://localhost:11111/netlox/v1/metrics | grep -E 'loxilb_(pd_kv|kv_|pd_)'
-```
-
-!!! warning "Prometheus lazy-emission gotcha"
-    **Labelled counters are not emitted until their first non-zero observation.** On a freshly
-    deployed, zero-traffic system, `loxilb_pd_kv_tier15_hits_total` and several others are **simply
-    absent** from `/metrics` — that does **not** mean they don't exist. Drive a few requests first,
-    then scrape. Also note the **`loxilb_` prefix**: a scraper looking for bare
-    `pd_kv_tier15_hits_total` will never match; the real name is `loxilb_pd_kv_tier15_hits_total`.
-
-### 8.1 The KV / P/D metric set
-
-```
-# --- routing decisions ---
-loxilb_pd_kv_tier15_hits_total{ep_idx="N"}        COUNTER  KV-exact HITS, per prefill EP index (1-based)
-loxilb_pd_kv_tier15_spills_total{ep_idx="N"}      COUNTER  load-aware moves off the overlap winner
-loxilb_pd_kv_tier15_cold_seeds_total{ep_idx="N"}  COUNTER  bounded requests diverted to cold endpoints
-loxilb_pd_kv_tier15_fallthrough_total                COUNTER  requests that skipped KV-exact → P/D min-load
-loxilb_pd_kv_tier15_miss_reason_total{reason="..."}  COUNTER  misses by guard reason:
-                                                           mode_off, warmup, text_empty, model_empty,
-                                                           tokenize, hashes, no_worker, excluded, shallow
-loxilb_pd_fallback_to_normal_total                COUNTER  P/D selection failed → fell back to normal LB
-loxilb_pd_cb_flips_total                          COUNTER  per-EP circuit-breaker state flips
-# --- inventory / subscriber health ---
-loxilb_pd_kv_blocks{service="<svc>",ep_idx="<ep_idx>"} GAUGE blocks held per prefill EP
-loxilb_kv_subscriber_connected{service,ep}             GAUGE  1 = loxilb's ZMQ SUB is connected to that prefill EP
-loxilb_kv_agent_up                                     GAUGE  KV agent liveness
-# --- P/D serving + capacity ---
-loxilb_ai_pd_requests_total                       COUNTER  total P/D requests
-loxilb_ai_pd_kv_params_found_total                COUNTER  requests carrying kv_transfer_params
-loxilb_ai_pd_prefill_duration_seconds             HISTO    prefill-leg latency
-loxilb_ai_pd_decode_ttft_seconds                  HISTO    decode TTFT
-loxilb_pd_sessions_active / loxilb_pd_trie_nodes  GAUGE    session-affinity + prefix-trie size
-proxy_pd_kv_params_overflow_total                 COUNTER  kv_params buffer overflow (should stay 0)
-loxilb_proxy_cache_bytes                          GAUGE    relay payload cached across proxy connections
-loxilb_proxy_cache_bytes_max_conn                 GAUGE    largest relay cache on one connection
-loxilb_proxy_cache_conns_queued                   GAUGE    connections currently holding relay payload
-```
-
-The `loxilb_proxy_cache_*` gauges describe fullproxy relay memory, not GPU KV-cache
-inventory. Rising relay memory usually points to slow peers or large in-flight bodies.
-
-The inventory gauge identifies the service and endpoint with separate `service` and `ep_idx`
-labels; `tier15_hits_total` uses `ep_idx="N"` for the same endpoint index.
-
-### 8.2 "Is KV-exact routing engaged?" — the three checks
-
-1. `loxilb_kv_subscriber_connected{...} == 1` for **every** prefill EP (ZMQ plane healthy), AND
-2. `loxilb_pd_kv_blocks > 0` on prefill EPs (inventory ingested ⇒ ZMQ **and** parity OK), AND
-3. under same-prefix load, `loxilb_pd_kv_tier15_hits_total` **advances** while
-   `tier15_fallthrough_total` stays flat (the only expected miss is the first request to a *cold*
-   prefix).
-
-When correct, hits pin to a single `ep_idx` under a shared prefix — that is the affinity signature.
-
-### 8.3 Quick "did it fire?" checks for a fresh BYO fleet
-
-Three fast signals that the KV plane came up on a newly provisioned fleet (full recipe in §8.2 and
-[KV-Cache-Aware Routing](kv-cache-aware-routing.md)):
-
-1. **`loxilb_pd_kv_tier15_hits_total` advances** after the first warm same-prefix request. A flat
-   delta means broken parity — you are silently on P/D minimum-load selection, so abort and fix §6.
-2. **`loxilb_kv_subscriber_connected` climbs by N** — one per prefill EP — after posting an
-   N-prefill rule.
-3. **Publishers are actually listening** — on each prefill host, `ss -tln | grep 5557` shows at
-   least one listener. Missing ⇒ the prefill's `--kv-events-config` never took.
-
----
+Use [KV Routing Verification](../operations/kv-routing-verification.md) for
+inventory, subscribers, hit/miss signals and independent delivery proof. P/D
+requires both roles, transfer readiness and complete SSE. The
+[P/D lifecycle outcome contract](../ai-gateway/pd-disaggregation.md#lifecycle-outcome-contract)
+explains terminal phase/status counters. A metrics-only decision is not backend
+receipt evidence; a healthy decode socket is not transfer recovery proof.
 
 ## 9. Debugging playbook
 
@@ -566,7 +497,31 @@ Any other shape points back to the parity triad (§6) or the ZMQ inventory plane
 
 - [P/D Disaggregation](../ai-gateway/pd-disaggregation.md) — mechanism reference: selection
   internals, the `pd_*` service arguments, and endpoint roles.
-- [KV-Cache-Aware Routing](kv-cache-aware-routing.md) — the block-hash contract, guard ladder, and
+- [KV-Cache-Aware Routing](../concepts/kv-routing.md) — the block-hash contract, guard ladder, and
   the cache-aware routing model.
 - [Configuration Reference](../ai-gateway/configuration-reference.md) — every `serviceArguments`
   field, default, and enum.
+
+<a id="deploy-prefilldecode-disaggregation"></a>
+
+[Current reference](../ai-gateway/engine-contracts.md).
+
+<a id="6-the-block-hash-parity-contract-why-routing-silently-degrades-to-rr"></a>
+
+[Current reference](../ai-gateway/engine-contracts.md).
+
+<a id="8-observability-the-metrics-that-exist-and-a-prometheus-gotcha"></a>
+
+[Current reference](../ai-gateway/engine-contracts.md).
+
+<a id="81-the-kv-pd-metric-set"></a>
+
+[Current reference](../ai-gateway/engine-contracts.md).
+
+<a id="82-is-kv-exact-routing-engaged-the-three-checks"></a>
+
+[Current reference](../ai-gateway/engine-contracts.md).
+
+<a id="83-quick-did-it-fire-checks-for-a-fresh-byo-fleet"></a>
+
+[Current reference](../ai-gateway/engine-contracts.md).

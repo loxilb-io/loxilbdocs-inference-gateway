@@ -174,7 +174,7 @@ representative environment before production use.
 
 ## See also
 
-- [Choose an Inference Engine](../getting-started/choose-your-engine.md)
+- [Choose an Inference Engine](inference-topologies.md)
 - [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md)
 - [P/D Disaggregation](../ai-gateway/pd-disaggregation.md)
 - [SGLang P/D Disaggregation](../ai-gateway/sglang-pd-disaggregation.md)

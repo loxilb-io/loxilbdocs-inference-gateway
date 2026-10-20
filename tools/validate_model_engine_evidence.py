@@ -149,6 +149,62 @@ def validate_runtime_evidence(matrix: dict, summary: dict | None,
                     f'{row["caseId"]}: independent worker distribution mismatch')
 
 
+def validate_registration_plan(assets: Path, plan: dict, summary: dict | None) -> None:
+    """A proposed catalog is distinct from the source catalog and a supported release."""
+    require(summary is not None, "registration plan requires the recorded runtime summary")
+    require(plan["status"] == "proposed-pending-core-team-integration"
+            and plan["canUsePublicInstallerNow"] is False,
+            "pending core proposal cannot claim installer availability")
+    selected = json.loads((assets / "sglang-version-selection.json").read_text())
+    require(plan["officialGuideBaseline"]["sglang"] == selected["selectedVersion"],
+            "SGLang guide baseline drift")
+    models = json.loads((assets / "catalog.json").read_text())["models"]
+    expected = {m["PROFILE"]: m for m in models}
+    rows = plan["models"]
+    require(len(rows) == len(expected) and {m["profileId"] for m in rows} == set(expected),
+            "registration profiles do not match the five-model guide")
+    states = []
+    for row in rows:
+        model = expected[row["profileId"]]
+        require(row["model"] == model["MODEL"] and row["revision"] == model["REV"],
+                "registration model/revision drift")
+        require(len(row["tuples"]) == 3 and {t["engine"] for t in row["tuples"]}
+                == {"vllm", "sglang", "trtllm"}, "registration engine coverage drift")
+        for t in row["tuples"]:
+            cases = [c for c in summary["cases"] if c["modelKey"] == model["key"]
+                     and c["engine"] == t["engine"]]
+            require(len(cases) == 2, "registration tuple lacks separate RR/Exact evidence")
+            blocked = all(c["result"] == "BLOCKED_NATIVE_ARCHITECTURE" for c in cases)
+            require(t["state"] == ("blocked" if blocked else "candidate")
+                    and t["validatedPromotion"] is False, "registration state exceeds QA evidence")
+            require(all(c["engineVersion"] == t["engineVersion"]
+                        and t["image"].endswith("@" + c["engineImageDigest"]) for c in cases),
+                    "registration engine identity drift")
+            if not blocked:
+                require(all(c["result"] == "PASS_BOUNDED_FUNCTIONAL" for c in cases),
+                        "candidate lacks bounded functional evidence")
+                require(t["modes"] == ["converged"] and t["apis"] == ["chat"]
+                        and set(t["formalGates"].values()) == {"not_run"},
+                        "registration invents formal or untested surface qualification")
+            states.append(t["state"])
+    counts = Counter(states)
+    require(plan["proposedNew"] == {"profiles":len(rows), "tuples":len(states),
+            "candidate":counts["candidate"], "blocked":counts["blocked"], "validated":0},
+            "registration counts do not reconcile")
+    checks = plan["installerValidation"]
+    for k in ("successfulInstalls", "candidateSkipsWithoutOptIn", "dryRunsWithoutWrites", "offlineReplays", "newTupleImagePlansPassed"):
+        require(checks[k] == counts["candidate"], "installer candidate counts do not reconcile")
+    require(checks["expectedBlocked"] == counts["blocked"]
+            and checks["liveHuggingFaceAuthenticationTested"] is False
+            and checks["gpuInferenceRerunForThisInstallerPackage"] is False,
+            "installer scope/counts exceed the evidence")
+    require(checks["fullCoreIntegration"] == "BLOCKED_PENDING_CORE_FIXES"
+            and {f["id"] for f in plan["integrationFindings"]}
+                == {"engine-version-contract", "selected-tuple-image", "blocked-selection-side-effects", "manifest-identity-validation"}
+            and all(f["result"] == "RED_REPRODUCED" for f in plan["integrationFindings"]),
+            "pending core integration findings must remain visible")
+
+
 def validate_package(assets: Path) -> tuple[dict, dict | None, dict | None]:
     matrix = json.loads((assets / "qualification-matrix.json").read_text())
     summary_path = assets / "matrix-results.json"
@@ -159,6 +215,9 @@ def validate_package(assets: Path) -> tuple[dict, dict | None, dict | None]:
     if summary is not None:
         for row in summary["cases"]:
             require((assets / row["configuration"]).is_file(), "missing case configuration")
+    registration = assets / "catalog-registration.json"
+    if registration.exists():
+        validate_registration_plan(assets, json.loads(registration.read_text()), summary)
     return matrix, summary, ledger
 
 

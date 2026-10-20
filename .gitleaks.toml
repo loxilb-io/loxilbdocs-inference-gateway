@@ -26,3 +26,10 @@ id = "generic-api-key"
     '''^"?tokenizerRevision"?:[ \t]*"?[0-9a-f]{40}"?[ \t]*$''',
     '''^"?tokenizerSha256"?:[ \t]*"?[0-9a-f]{64}"?[ \t]*$''',
   ]
+
+  [[rules.allowlists]]
+  description = "Public tokenizer SHA-256 in catalog registration metadata"
+  condition = "AND"
+  regexTarget = "match"
+  paths = ['''(^|/)docs/assets/model-engine-standard/catalog-registration\.json$''']
+  regexes = ['''^"?tokenizerSha256"?:[ \t]*"?[0-9a-f]{64}"?[ \t]*$''']

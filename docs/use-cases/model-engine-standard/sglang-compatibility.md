@@ -2,9 +2,9 @@
 
 <!-- example-status-default: illustrative-only -->
 
-The current five-model guide selects **stock SGLang v0.5.19**, pinned to
+The official reference baseline for this five-model guide is **stock SGLang v0.5.19**, pinned to
 `lmsysorg/sglang@sha256:37bbbd3444732a464bbc68dee4fb0164e0ce9e18e2f027f3fc967f1152d3c262`.
-Use the [current case results](matrix-manual.ko.md#matrix-results) for actual
+Use the [current case results](results.md#matrix-results) for actual
 model/mode acceptance. Source inspection and an old version's PASS are not new
 GPU evidence.
 
@@ -56,3 +56,6 @@ and rejected fixtures, preserved tagged-array compatibility, and fresh GPU
 native/RR/Exact proof. Changing only the mode/profile or claiming SGLang uses the
 vLLM contract does not resolve the wire mismatch. The failed 0.5.21 observations
 are retained separately from the compatible-version operator guide.
+
+The [catalog and installer integration page](catalog-installer.md) tracks the core-team
+registration proposal, successful staging checks and unresolved integration findings.

@@ -3,7 +3,7 @@
 <!-- example-status-default: illustrative-only -->
 
 Use this page to decide **which failure stage an argument controls**, choose a
-bounded starting configuration, and verify recovery. The [standard cards](index.md)
+bounded starting configuration, and verify recovery. The [standard cards](matrix-manual.md)
 use a converged pool. P/D settings below apply only to a separately prepared
 prefill/decode service; they must not be added wholesale to a converged rule.
 
@@ -14,7 +14,7 @@ fail-over trials with two prefill workers, two decode workers, CPU KV buffers an
 UCX/TCP transfer, plus read-only source/API contract checks. The recorded
 Gateway candidates and engine variants were not a GA release. No new P/D fault
 injection or performance qualification is claimed by this page. The separate
-[five-model campaign](matrix-manual.ko.md) covers converged functional checks;
+[five-model campaign](matrix-manual.md) covers converged functional checks;
 it does not close these fail-over gates.
 
 Historical trials retained these limitations: incomplete SSE on some failures,
@@ -177,12 +177,12 @@ complete startup command; these fragments do not redefine that workflow.
 6. If the condition fails, restore the previous **rule + ENV + image + engine
    configuration tuple**, then repeat healthy direct/pair/Gateway chat and SSE.
    Retain the failed run. Delete only owned test rules/containers using the
-   [cleanup procedure](operations.md#cleanup-and-restart), adapted to the exact
+   [cleanup procedure](lifecycle.md#cleanup-and-restart), adapted to the exact
    P/D host/model/port identity.
 
 A tuning result closes only the measured behavior on that tuple. It does not
 prove active-stream continuation, pair canary support, engine terminal-error
 correctness, memory-leak freedom or GA fail-over acceptance. See the
-[QA evidence criteria](validation.md#failure-recovery-and-cleanup-gate) and
+[QA evidence criteria](verify.md#negative-and-recovery-checks) and
 [configuration reference](../../ai-gateway/configuration-reference.md) for the
 public fields; check the served schema of the installed build before applying.

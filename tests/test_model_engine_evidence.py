@@ -9,7 +9,7 @@ import tomllib
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from validate_model_engine_evidence import validate_runtime_evidence
+from validate_model_engine_evidence import validate_runtime_evidence, validate_registration_plan
 from package_model_engine_examples import package
 
 
@@ -179,6 +179,46 @@ class ModelEngineEvidenceTests(unittest.TestCase):
         self.assertFalse(allowed(path, "api_key: " + "a" * 40))
         self.assertFalse(allowed(path, "tokenizerRevision: not-a-model-revision"))
         self.assertFalse(allowed("docs/internal/example.yaml", "tokenizerRevision: " + "a" * 40))
+        allow = rule["allowlists"][1]
+        catalog = "docs/assets/model-engine-standard/catalog-registration.json"
+        self.assertTrue(allowed(catalog, 'tokenizerSha256": "' + "a" * 64 + '"'))
+        self.assertFalse(allowed(catalog, "api_key: " + "a" * 64))
+        self.assertFalse(allowed(catalog, "tokenizerSha256: not-a-content-hash"))
+        self.assertFalse(allowed("docs/internal/catalog-registration.json", "tokenizerSha256: " + "a" * 64))
+
+
+
+class CatalogRegistrationTests(unittest.TestCase):
+    def setUp(self):
+        self.assets = Path(__file__).resolve().parents[1] / "docs/assets/model-engine-standard"
+        self.plan = json.loads((self.assets / "catalog-registration.json").read_text())
+        self.summary = json.loads((self.assets / "matrix-results.json").read_text())
+
+    def test_registration_matches_current_models_versions_and_limits(self):
+        validate_registration_plan(self.assets, self.plan, self.summary)
+
+    def test_proposal_cannot_silently_promote_or_become_installable(self):
+        for change in ("state", "availability"):
+            plan = copy.deepcopy(self.plan)
+            if change == "state":
+                next(t for m in plan["models"] for t in m["tuples"]
+                     if t["state"] == "candidate")["state"] = "validated"
+            else:
+                plan["canUsePublicInstallerNow"] = True
+            with self.assertRaises(ValueError):
+                validate_registration_plan(self.assets, plan, self.summary)
+
+    def test_identity_drift_and_successful_subset_are_rejected(self):
+        for change in ("version", "counts", "finding"):
+            plan = copy.deepcopy(self.plan)
+            if change == "version":
+                plan["models"][0]["tuples"][0]["engineVersion"] = "0.28.0"
+            elif change == "counts":
+                plan["installerValidation"]["successfulInstalls"] -= 1
+            else:
+                plan["integrationFindings"].pop()
+            with self.assertRaises(ValueError):
+                validate_registration_plan(self.assets, plan, self.summary)
 
 
 if __name__ == "__main__":
