@@ -1,0 +1,4 @@
+{
+  "rate_limit_rps": 1,
+  "burst_size": 1
+}

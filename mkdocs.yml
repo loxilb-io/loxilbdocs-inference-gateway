@@ -111,6 +111,19 @@ nav:
       - Capacity, SSE & Drain: use-cases/admission-flow-control/capacity.md
       - TLS Errors & Resource Return: use-cases/admission-flow-control/tls-failures.md
       - Cleanup & Diagnosis: use-cases/admission-flow-control/cleanup.md
+  - Edge Cloud Security Use-Cases:
+      - Lab & Reading Path: use-cases/edge-cloud-security/index.md
+      - Download Lab Inputs: use-cases/edge-cloud-security/downloads.md
+      - Prepare the Single-host Lab: use-cases/edge-cloud-security/setup.md
+      - Common Evidence & Rollback: use-cases/edge-cloud-security/common.md
+      - XDP Source Protection: use-cases/edge-cloud-security/source-protection.md
+      - TC & Shared VIP Boundary: use-cases/edge-cloud-security/network-boundary.md
+      - Connections & Header Deadlines: use-cases/edge-cloud-security/connections.md
+      - Keys & Tenant Request Budgets: use-cases/edge-cloud-security/request-protection.md
+      - KV, H2, SSE & All-on: use-cases/edge-cloud-security/coexistence.md
+      - Snapshot & Store Recovery: use-cases/edge-cloud-security/recovery.md
+      - Cleanup & Diagnosis: use-cases/edge-cloud-security/cleanup.md
+      - Advanced Qualification Limits: use-cases/edge-cloud-security/advanced.md
   - LLM Integration Use-Cases:
       - Overview & Reading Path: use-cases/llm-integration.md
       - Concepts & Architecture:

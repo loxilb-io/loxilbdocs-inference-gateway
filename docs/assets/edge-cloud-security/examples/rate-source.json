@@ -1,0 +1,10 @@
+{
+  "synEnabled": true,
+  "synThreshold": 10,
+  "cookieThreshold": 5,
+  "connRateEnabled": true,
+  "ratePerSec": 5,
+  "udpEnabled": true,
+  "udpPktThreshold": 100,
+  "udpBandwidthMB": 100
+}

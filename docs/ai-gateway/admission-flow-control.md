@@ -221,8 +221,9 @@ memory the full queue may park ≈ fc_max_queue_depth × 1 MiB
 
 `65536` is about 64 GiB. The gateway applies any depth up to the ceiling and logs one `WARNING` at
 rule apply when the bound exceeds half of the node's memory. Bound the connections themselves
-with the per-rule `connectionLimit` (SYN-time, DNAT rules) or the process valve
-`LLB_PD_MAX_TOTAL_INFLIGHT` (accept-time, every proxied connection). Size the depth from the
+with `connectionLimit` (DNAT SYN-time gate or fullproxy client TCP ceiling) and, separately,
+the process valve `LLB_PD_MAX_TOTAL_INFLIGHT` (checked-out client and backend proxy contexts).
+See [connection scope](configuration-reference.md#1-core-service-fields). Size the depth from the
 memory you can spend, and read `fc_effective.queue_memory_bound_mib` to see the bound in force.
 
 ## Adaptive ceiling
