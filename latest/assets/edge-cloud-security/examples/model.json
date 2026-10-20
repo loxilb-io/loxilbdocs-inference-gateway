@@ -1,0 +1,20 @@
+{
+  "serviceArguments": {
+    "externalIP": "192.0.2.10",
+    "port": 8080,
+    "protocol": "tcp",
+    "mode": 4,
+    "host": "192.0.2.10",
+    "model_name": "Qwen/Qwen3-0.6B",
+    "inactiveTimeOut": 60,
+    "connectionLimit": 4,
+    "api_key_auth": "required"
+  },
+  "endpoints": [
+    {
+      "endpointIP": "192.0.2.21",
+      "targetPort": 80,
+      "weight": 1
+    }
+  ]
+}

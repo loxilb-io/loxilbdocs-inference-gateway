@@ -1,0 +1,22 @@
+{
+  "serviceArguments": {
+    "externalIP": "192.0.2.10",
+    "port": 8088,
+    "protocol": "tcp",
+    "mode": 4,
+    "host": "192.0.2.10",
+    "model_name": "Qwen/Qwen3-0.6B",
+    "api_key_auth": "required",
+    "sse_mode": true,
+    "fc_mode": "enforce",
+    "fc_max_outstanding": 4,
+    "fc_tenant_max_share_pct": 50
+  },
+  "endpoints": [
+    {
+      "endpointIP": "192.0.2.21",
+      "targetPort": 8088,
+      "weight": 1
+    }
+  ]
+}

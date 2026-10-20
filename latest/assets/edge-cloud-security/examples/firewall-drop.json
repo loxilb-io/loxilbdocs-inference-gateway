@@ -1,0 +1,13 @@
+{
+  "ruleArguments": {
+    "sourceIP": "192.0.2.53/32",
+    "destinationIP": "192.0.2.10/32",
+    "minDestinationPort": 8080,
+    "maxDestinationPort": 8080,
+    "protocol": 6,
+    "preference": 65010
+  },
+  "opts": {
+    "drop": true
+  }
+}

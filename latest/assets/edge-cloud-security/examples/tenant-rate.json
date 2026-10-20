@@ -1,0 +1,6 @@
+{
+  "tenant_id": "edge-team",
+  "rps": 1,
+  "tokens_per_min": 100000,
+  "burst_pct": 0
+}

@@ -73,6 +73,10 @@
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/assets/edge-cloud-security/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/assets/model-engine-standard/</loc>
          <lastmod>2026-10-20</lastmod>
     </url>
@@ -370,6 +374,54 @@
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/admission-flow-control/tls/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/edge-cloud-security/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/edge-cloud-security/advanced/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/edge-cloud-security/cleanup/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/edge-cloud-security/coexistence/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/edge-cloud-security/common/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/edge-cloud-security/connections/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/edge-cloud-security/downloads/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/edge-cloud-security/network-boundary/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/edge-cloud-security/recovery/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/edge-cloud-security/request-protection/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/edge-cloud-security/setup/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/edge-cloud-security/source-protection/</loc>
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
