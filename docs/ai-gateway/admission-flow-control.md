@@ -512,3 +512,6 @@ capacity alarm.
 - [Configuration Reference](configuration-reference.md) for every `serviceArguments` field.
 - [AI Quotas & QoS](../operations/ai-qos.md) for quota and byte-rate policy.
 - [Monitoring & Metrics](../operations/monitoring.md) for scraping and alerting.
+
+For the integrated configure, readback, traffic, receipt and rollback sequence, see the
+[Admission Control, Flow Control and QoS lab](../use-cases/admission-flow-control/index.md).

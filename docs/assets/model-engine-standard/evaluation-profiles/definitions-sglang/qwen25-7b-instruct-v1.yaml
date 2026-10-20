@@ -1,0 +1,16 @@
+profileId: qwen25-7b-instruct-v1
+baseModel: Qwen/Qwen2.5-7B-Instruct
+modelType: qwen2
+tokenizerRevision: a09a35458c702b33eeacc393d103063234e8bc28
+tokenizerArtifact: sha256/c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539
+tokenizerSha256: c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539
+templateArtifact: sha256/cd8e9439f0570856fd70470bf8889ebd8b5d1107207f67a5efb46e342330527f
+templateSha256: cd8e9439f0570856fd70470bf8889ebd8b5d1107207f67a5efb46e342330527f
+templateContentFormat: string
+renderPolicy:
+  addGenerationPrompt: true
+  eosToken: "<|im_end|>"
+supportedApis:
+  - completions
+  - chat
+aliasPolicy: base_model_only

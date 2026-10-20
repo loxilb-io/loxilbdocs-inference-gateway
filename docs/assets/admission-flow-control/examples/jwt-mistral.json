@@ -1,0 +1,23 @@
+{
+  "serviceArguments": {
+    "externalIP": "192.0.2.254",
+    "port": 2040,
+    "protocol": "tcp",
+    "sel": 0,
+    "mode": 4,
+    "host": "192.0.2.254",
+    "path_prefix": "/",
+    "path_match_mode": "prefix",
+    "model_name": "mistral-7b",
+    "api_key_auth": "jwt",
+    "jwt_auth_profile": "kc",
+    "inactiveTimeOut": 30
+  },
+  "endpoints": [
+    {
+      "endpointIP": "203.0.113.1",
+      "targetPort": 8080,
+      "weight": 1
+    }
+  ]
+}

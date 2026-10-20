@@ -1,0 +1,56 @@
+{
+  "selectedVersion": "0.5.19",
+  "image": "lmsysorg/sglang@sha256:37bbbd3444732a464bbc68dee4fb0164e0ce9e18e2f027f3fc967f1152d3c262",
+  "historicalSourceRevision": "71de97b264b04dcd514cf904003028aefe9775c8",
+  "gatewaySource": "1d51393773e4974b5e356377496c9d677dba9f9c",
+  "contract": "sglang-kv-rank-v1",
+  "wire": "sglang-kv-tagged-array-rank-v1",
+  "historyScope": "Prior engine-contract live converged/P-D integration, not five-model promotion",
+  "newFiveModelEvidence": null,
+  "separateDevelopmentRequest": {
+    "version": "0.5.21",
+    "imageDigest": "sha256:2dbe4c7f53230b09aaa8fa41891c13c51d9d2e253f486a70822aaf08783fff75",
+    "nativeWire": "outer positional batch with tagged-map events",
+    "observedExactReason": "challenge_timeout",
+    "verifiedModels": [
+      "qwen25",
+      "llama31"
+    ],
+    "exactResult": "FAIL_ATTESTATION",
+    "actualPacketSha256": "87b60b55753aa6d297f42b228e85a9addfcd5d15539ea638be5db870fdfbc2aa",
+    "status": "development-request-recorded; no product-code patch"
+  },
+  "catalogPromotion": false,
+  "newFiveModelEvidencePublication": "pending",
+  "plannedFiveModelEvidence": "matrix-results.json",
+  "historicalVersion": "0.5.18",
+  "historicalLiveWireObservation": {
+    "event": "BlockStored",
+    "outerBatch": "array",
+    "eventEncoding": "tagged-array",
+    "rank": 0,
+    "payloadSha256": "952793fc887d548dfbac94fccf1e2aaea6c2938ad8ec543b549dd15cfc4f8877",
+    "scope": "Actual native GPU event observation; model/mode verdicts remain separate",
+    "version": "0.5.18"
+  },
+  "nativeApiHistory": {
+    "version": "0.5.18",
+    "model": "exaone35",
+    "observed": "/v1/tokenize HTTP500: Integer exceeds64-bit range",
+    "strictReason": "probe_schema_mismatch",
+    "stockSuccessorWithContextLengthFallback": "0.5.19"
+  },
+  "officialSourceEvidence": {
+    "wire": "https://github.com/sgl-project/sglang/blob/v0.5.19/python/sglang/srt/disaggregation/kv_events.py",
+    "tokenize": "https://github.com/sgl-project/sglang/blob/v0.5.19/python/sglang/srt/entrypoints/openai/serving_tokenize.py"
+  },
+  "liveWireObservation": {
+    "version": "0.5.19",
+    "event": "BlockStored",
+    "outerBatch": "array",
+    "eventEncoding": "tagged-array",
+    "rank": 0,
+    "payloadSha256": "dd260b052f805abb812ae736306b7e5e1cb76ff707aa2359e7e66bad2b993515",
+    "scope": "Actual native GPU event observation; model/mode verdicts are separate"
+  }
+}

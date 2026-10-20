@@ -74,7 +74,7 @@ Prepare a management header file:
 | `POST` | `/config/ai/apikey` | Create a key; raw value is returned once |
 | `GET` | `/config/ai/apikey?tenant_id=...` | List key summaries, optionally by tenant |
 | `GET` | `/config/ai/apikey/{key_id}` | Read one key summary |
-| `PATCH` | `/config/ai/apikey/{key_id}` | Update `allowed_models`, `enabled`, `rate_limit_rps`, `burst_size`, and/or `tokens_per_min`; raw-middleware route |
+| `PATCH` | `/config/ai/apikey/{key_id}` | Update model access, enabled state, RPS/burst/TPM, and priority/objective fields; raw-middleware route |
 | `DELETE` | `/config/ai/apikey/{key_id}` | Permanently delete a key |
 | `POST` | `/config/ai/tenant/ratelimit` | Set tenant RPS and token quotas |
 | `GET` | `/config/ai/tenant/ratelimit/{tenant_id}` | Read tenant limits |
@@ -100,6 +100,14 @@ directly into your secret manager, then securely remove the temporary file.
 | `tokens_per_min` | Integer | The implementation charges a per-key TPM bucket and denies the next request after debt; primary Swagger text is stale, so published support remains pending contract convergence |
 | `expires_at` | RFC 3339 timestamp | Optional key expiry |
 | `enabled` | Boolean | Defaults to enabled when omitted |
+| `priority_class` | String | Source contract class: standard, critical or sheddable |
+| `allowed_objectives` | String array | Source contract objective allow-list |
+| `default_objective` | String | Source contract default objective name |
+
+The companion PATCH schema accepts `priority_class`, `allowed_objectives` and
+`default_objective` as well as the model, enabled and quota fields. These source
+contracts are described in [network identity and objective API contracts](ai-traffic-governance.md#network-identity-and-objective-api-contracts);
+they are not a statement of GAIE/llm-d deployment qualification.
 
 An empty model list records no model restriction. Prefer an explicit list when
 the workload should use only known models.

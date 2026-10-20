@@ -147,3 +147,6 @@ verification and the backend client certificate are qualified separately; see
 - [Configuration reference](../ai-gateway/configuration-reference.md)
 - [Management API Authentication](management-api-authentication.md)
 - [OPA L4 Policy](opa-l4.md)
+
+For the integrated configure, readback, traffic, receipt and rollback sequence, see the
+[Admission Control, Flow Control and QoS lab](../use-cases/admission-flow-control/index.md).

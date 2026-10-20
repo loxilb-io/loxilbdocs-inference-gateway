@@ -466,7 +466,7 @@
       "evidence": "swagger-union-static",
       "id": "8d97eee43b0ff630f88d",
       "language": "bash",
-      "line": 128,
+      "line": 136,
       "path": "docs/ai-gateway/api-key-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -483,7 +483,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "a3b5a3e75abb94c4156e",
       "language": "bash",
-      "line": 148,
+      "line": 156,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -513,7 +513,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "0f719d81c4053749b91c",
       "language": "bash",
-      "line": 167,
+      "line": 175,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -543,7 +543,7 @@
       "evidence": "shell-syntax-only",
       "id": "6994f5f1e6f2d4f47675",
       "language": "bash",
-      "line": 190,
+      "line": 198,
       "path": "docs/ai-gateway/api-key-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -560,7 +560,7 @@
       "evidence": "shell-syntax-only",
       "id": "b85689404c48a129dab4",
       "language": "bash",
-      "line": 233,
+      "line": 241,
       "path": "docs/ai-gateway/api-key-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -2578,6 +2578,23 @@
     },
     {
       "evidence": "shell-syntax-only",
+      "id": "3a100d83467352d04081",
+      "language": "bash",
+      "line": 13,
+      "path": "docs/assets/model-engine-standard/verification/README.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "06f1ca1cb4b4b35d42de86498f56f599c86884e87caec60114dff51cff8838d2",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "shell-syntax-only",
       "id": "a6b26330ccb74a268916",
       "language": "bash",
       "line": 22,
@@ -3279,7 +3296,7 @@
       "evidence": "visual-explanation",
       "id": "7d58a51b3c491ac77923",
       "language": "mermaid",
-      "line": 57,
+      "line": 59,
       "path": "docs/index.md",
       "quality_contract": {
         "cleanup": false,
@@ -3296,7 +3313,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "1727cc0095bc2d8c1821",
       "language": "bash",
-      "line": 95,
+      "line": 97,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -3326,7 +3343,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "bd8cdcbcbd06abb87224",
       "language": "bash",
-      "line": 110,
+      "line": 112,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -7325,6 +7342,2165 @@
       "status": "illustrative-only"
     },
     {
+      "evidence": "explicit-public-classification",
+      "id": "7308ce563cb3e70b9da5",
+      "language": "bash",
+      "line": 29,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "1fc2132eb617e8966735174935f3d490fe58113a7f4c1d9003f2cd072ce2c982",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "cc68a4ac86bfc288fcd0",
+      "language": "bash",
+      "line": 33,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "18fd0cfa31f7d302f1e2c3d90bcb9085203bb74fd4ac6ce7071ace9a105df209",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "089300704045081ff426",
+      "language": "json",
+      "line": 37,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "fece06755a75cf8cdd7e9bf6a15c568c1afff78cdab3fdcc47f85be4b7569c91",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "e04c75225389bfb45445",
+      "language": "bash",
+      "line": 69,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "faecf711d530b122f36f0cef71e9f1958073dacba7dea7a8a85d10c8f4336e0d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ed582630b09ff7fcb6c1",
+      "language": "bash",
+      "line": 85,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "9bef90416dd1da3ea8e4ed41edf2a8506dbbdf234f47dcbbfbd115b985335d4b",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "1bea867404872bd1f4b0",
+      "language": "bash",
+      "line": 93,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "0b1f7c2904454ad2206c4f6581b09cd2d489bc29b5a6b9ee626a3ec85aea6a10",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9b2427b814a1b672e854",
+      "language": "bash",
+      "line": 100,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "9d0884acbcb418b926209b6be320fe10fa456e8e664d81b7ee209e26e775d30b",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "5262904168e883230e6c",
+      "language": "bash",
+      "line": 107,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "7da14fffb0001b016d6bd5a48f8ae2c3c1dea35d1d2e52b418d4ffc2b13946ee",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9f342482d7103504884b",
+      "language": "bash",
+      "line": 123,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "7229af98b8c095e89222fc2a4fc2c3bf096051c46b6910ae38e37bfadf696419",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "dfd78f372f6c3300ab4d",
+      "language": "json",
+      "line": 137,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d8aeb441a29479ac2a379fd675ae587ddbbcb2d84481640f8afccc990d985352",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "280592aab4cbfa43e634",
+      "language": "bash",
+      "line": 167,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "67362ac5820eb0013b2083e3b647fa890acda7d885ca6be85385de6fe1a9caaa",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "705effb8a7570f3ff440",
+      "language": "bash",
+      "line": 185,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "feeef6cb06cd2a780bb5958cd2386309e7e2caac3870dd86322252f5d941ed59",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "a793865c29ff4699bd91",
+      "language": "bash",
+      "line": 198,
+      "path": "docs/use-cases/admission-flow-control/capacity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "316936ae08fb47d177c6b20cd12fb524342b042722fedecf13fdefaecbefeeea",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ae6505f4f828174317d2",
+      "language": "bash",
+      "line": 22,
+      "path": "docs/use-cases/admission-flow-control/cleanup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "844482fe4721ce3aee7900001b4e1b172c4917f8048dc263e4f6feed6e365ec4",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "52d2a3f5d35e2460e130",
+      "language": "bash",
+      "line": 29,
+      "path": "docs/use-cases/admission-flow-control/cleanup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "85fdd4330f2c882dd0b9a05b3c9b7028b6db9839add5675a5d246688a51bf65a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "4c68a5c92b6d849ebcee",
+      "language": "bash",
+      "line": 75,
+      "path": "docs/use-cases/admission-flow-control/cleanup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d56194edcab333abf238c90f4c97a8618b728859cd87a3582dea9ec61efea504",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "0571f73ca8966d55eaf0",
+      "language": "bash",
+      "line": 86,
+      "path": "docs/use-cases/admission-flow-control/cleanup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "e05df466a9557b9ef4ec1936cd2698a640b50775035597cfcbb1915d7fe556d9",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "3a4b9d61cbb5a389fc1d",
+      "language": "bash",
+      "line": 98,
+      "path": "docs/use-cases/admission-flow-control/cleanup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "04be337528a72973b6d4d0b2846d78a40dbae0a8bac7b8beae7a3686a4c3d561",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9eb62ad15b41c04eb02d",
+      "language": "bash",
+      "line": 31,
+      "path": "docs/use-cases/admission-flow-control/defaults.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "b5707188c45e81463149d00b7df5984a509447e2d593c602a8adaf6cd77776a5",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "2ca8a7419f0cfa031c4a",
+      "language": "bash",
+      "line": 52,
+      "path": "docs/use-cases/admission-flow-control/defaults.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "b085bb67e5c3edb26c35f0c2f4fc118bdf0078c5e8812d57dfcfcf7f045c24cd",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "a5afbbaea6f5a156a41c",
+      "language": "bash",
+      "line": 81,
+      "path": "docs/use-cases/admission-flow-control/defaults.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "346aaf92ff372a5d92cc32a50f9be566504373322d0811e7116cbf6118e19ed9",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "aa73a0aa232c80a97642",
+      "language": "bash",
+      "line": 93,
+      "path": "docs/use-cases/admission-flow-control/defaults.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d745b4fc6e0fd2e9cddeb8d06c717f09d32f884cb379db838a75c8e3df30927e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "4acdccac46dab8f83b47",
+      "language": "bash",
+      "line": 102,
+      "path": "docs/use-cases/admission-flow-control/defaults.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "ba198a39f2eea7d071407fbc1a38531cd0637e5f827375c94bf7b1d83bea783d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "df77737073c0ecb1aa26",
+      "language": "bash",
+      "line": 108,
+      "path": "docs/use-cases/admission-flow-control/defaults.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "2e3cd8cbce96d8aa8849db3c89c555f207b5bd246438a9b42dec4223c6113906",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "4d8d91df140dd21f6806",
+      "language": "bash",
+      "line": 115,
+      "path": "docs/use-cases/admission-flow-control/defaults.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "f9b7defefcc107966741c7478ce52b3280f09c89c631ef9aafe023d86c9fc9b5",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "41188a27ee59e5cf29b2",
+      "language": "bash",
+      "line": 30,
+      "path": "docs/use-cases/admission-flow-control/identity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "a5950295b18a435a26c59b10ab0372eac8d1158f48a8f1ed0a77f75d568bae0d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "a86328f63e02b01f4f74",
+      "language": "json",
+      "line": 45,
+      "path": "docs/use-cases/admission-flow-control/identity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "334287e6d37cd666fb7a1377a353707b2fd9d8ab27a64f9c642ce9802d98767b",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "902091661d6dbeaff99e",
+      "language": "bash",
+      "line": 71,
+      "path": "docs/use-cases/admission-flow-control/identity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "2f332eedecde8f1ecc799fd7ed1eb708eb68dff9ca5fe249f45ed39e1526468d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "0894c2aa28733bd19d71",
+      "language": "bash",
+      "line": 86,
+      "path": "docs/use-cases/admission-flow-control/identity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "3a5a0057ce19a155ac2ea257585013d3b292994710125d672f0df1fa80a9159a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "b613a37b2c66b934335e",
+      "language": "bash",
+      "line": 105,
+      "path": "docs/use-cases/admission-flow-control/identity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "aba24efe86623d9bb6fd75a78fc0a524708e8b90e90cc057c80c20c871004ffa",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "cf9d515cb0ed0addf502",
+      "language": "bash",
+      "line": 114,
+      "path": "docs/use-cases/admission-flow-control/identity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "748d1f1b0a2cd0c1d9589f6a7f7073be14c72147b61b8805909bb0edc9b0cf69",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "6d9aacba06b2628a3b0d",
+      "language": "bash",
+      "line": 128,
+      "path": "docs/use-cases/admission-flow-control/identity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "0639eb9aa30f96776a8eea255c25dd5d6b96e02d759a98032c2689f25ddad556",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "30c45ea94593decb2fbc",
+      "language": "bash",
+      "line": 146,
+      "path": "docs/use-cases/admission-flow-control/identity.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "a6c137db49761b6fe8aa831ae9bdc1e1491bb461b87553151d0df4fa1f0d92c8",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "visual-explanation",
+      "id": "09f73264ce2b74701acb",
+      "language": "mermaid",
+      "line": 26,
+      "path": "docs/use-cases/admission-flow-control/index.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": false,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "cf0995186a88759f6dc70a21f742d7777922dcaf6d893e2d0cab70c19e0e0067",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "e7e5db64adbdf3b26ff3",
+      "language": "bash",
+      "line": 20,
+      "path": "docs/use-cases/admission-flow-control/outages.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "efdc82e0b8412ef9e417975670e62e466bc64b1c99976bc1f075760a3e14723f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "7932c1c659b9872969be",
+      "language": "bash",
+      "line": 31,
+      "path": "docs/use-cases/admission-flow-control/outages.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "94e19b57a654df1f766abeefdf28b7d63c6a3b4933d91420c5e497204205f224",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "47c317c4c5b4344a2cf1",
+      "language": "bash",
+      "line": 56,
+      "path": "docs/use-cases/admission-flow-control/outages.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "01ce55ee2cce3e980cde7a63f0522a873d7ae65c6008641f372378934fe310c1",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "6351c7ca3da4fb9593e5",
+      "language": "bash",
+      "line": 66,
+      "path": "docs/use-cases/admission-flow-control/outages.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "6e8ba0cd1a22304051c34d962607d30d2ad3568d708d5468bbc4a722d6e135e5",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "37143fb1bcd17e63ba1a",
+      "language": "bash",
+      "line": 75,
+      "path": "docs/use-cases/admission-flow-control/outages.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "5a0153a65fa37b2687b18fd3329b63e99229b5e805346c3ba178e3cd581129de",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "966f8aae4a5c6f2485ce",
+      "language": "bash",
+      "line": 107,
+      "path": "docs/use-cases/admission-flow-control/outages.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "a7709baa3a90277ec43ee68989da15cb563c4354ef68cf062cbe753c19a99f60",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "33642b1ce0a5152d4c6c",
+      "language": "bash",
+      "line": 20,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "6ab36b4d2dc4565a11125566094e2fefac15b2be47bada67d6700e616ed30673",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ac2cd13fd78a3b2173c0",
+      "language": "bash",
+      "line": 42,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d5c2889c210199fe2930e7b7560bb160504c141d1ae76f4918d83b49a1c543a2",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "a5e7a9f2f4f4a4d58f30",
+      "language": "bash",
+      "line": 49,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "b826ce97d1e30336e2572b7746ec284ff8ee7bded57f22dbdc3a3a520bc836c3",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "7ee37396ef6dce1ea184",
+      "language": "bash",
+      "line": 66,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "4bb3c4e306339a07170698b9aeb06ab40aa611f1db5676f1e8d86a77e9619cb0",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "7e571e00c82471192909",
+      "language": "bash",
+      "line": 93,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "9dfd8d0136953a6daf5422a567c8f719c99715022760b2e95afe84a6dff34042",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ed90fb50e3be32a54872",
+      "language": "bash",
+      "line": 111,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "8fccfcca85822cb0afabd06c514d99872225f967efc9024fcfc62715cce93b57",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "d83b9cfbefaa680ca0f7",
+      "language": "bash",
+      "line": 121,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "84e426936000e7e61ffa2cac6a03cee3108396777ed3c07c36a4568a77fcc58a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "fdbd017b580157943108",
+      "language": "bash",
+      "line": 139,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "a7611007f84149cc10e3e54184d7225b552d41066a9580c5202ac0879eb9d10e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "a73e49e1fd7be828962a",
+      "language": "bash",
+      "line": 149,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "e3774a653b1d3e2fb493e2e41f64dfce1224d9a782b1a1e258542d04bf98e9f4",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "5aa4c19059ef870c91ac",
+      "language": "bash",
+      "line": 157,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "16b0145310095ebb3272ed0b8420300e85367d210038e79c43fd5d3ab6ff938a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "45f8729b293026f17d5c",
+      "language": "bash",
+      "line": 164,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "959b88097b9e80261e168625a3b8505e017fabbc64fdbd81a3066cd80843c7ac",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "bdc720ffed2a04650aa9",
+      "language": "bash",
+      "line": 169,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "15c50c19e8400d8bb361dff19ef2602e59f715278f5608d2276dada324d653d0",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "b446b05933185e8d64a1",
+      "language": "bash",
+      "line": 179,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "13f9902015fa575d5fd124f58d277b716498ac9350595dd58da8997bbdf5f0cf",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f1fb257edac19afac073",
+      "language": "bash",
+      "line": 192,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "7ec05912f4329f62569890ca9ce33b3c6d447bef2e621f2ce37c4d4a1c6eef87",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "0cbac44d7aa413258af8",
+      "language": "bash",
+      "line": 207,
+      "path": "docs/use-cases/admission-flow-control/quotas.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "2144a926a4e5682b210f0d4bb1c69c2ba3e75bd06e7532792d623f7dcb338f76",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "05ff55a668f4f96ae946",
+      "language": "bash",
+      "line": 16,
+      "path": "docs/use-cases/admission-flow-control/setup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d6988f6ed2b2d48fc8c79655ad2f89530e0d91c228762093ff82e66192aab628",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "296a7a6ffcc30d6f2334",
+      "language": "bash",
+      "line": 31,
+      "path": "docs/use-cases/admission-flow-control/setup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "283b9854205336a808e9c5ec94212345e5476a7fdc395bb4ebf4f0feb449e145",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "3dee0f28eea4faf10faa",
+      "language": "bash",
+      "line": 52,
+      "path": "docs/use-cases/admission-flow-control/setup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "b89ad758730f842a816af8bc01d883f6016c2ec135f3fa846ae5bf6c4e787c45",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "086400aed0a251bdab6a",
+      "language": "bash",
+      "line": 82,
+      "path": "docs/use-cases/admission-flow-control/setup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "e03bd6d24c1ddb2cc21f14aa2c65f514ba8fda4d95dec24a6e3344cc640f6cbd",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "c8600a9b97233f3664d5",
+      "language": "bash",
+      "line": 112,
+      "path": "docs/use-cases/admission-flow-control/setup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "7889deb651704aa0d6ed9b6ab1b483f3eb52fbbd63ec102cd4e3e07b4531eae2",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9e72c0bffa01047e77f2",
+      "language": "bash",
+      "line": 132,
+      "path": "docs/use-cases/admission-flow-control/setup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "21544ea7af1a4aae2d78f3aee497aad35f7e92516d9056fc08cdd984dd05e12b",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "46a2f348b9fcc2d664bf",
+      "language": "bash",
+      "line": 20,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "7aaeb87f899be8509cf81fae703e5db62629e080c018339425579be9cf793baf",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "705cfe7ea1738a4f2ceb",
+      "language": "bash",
+      "line": 30,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "97e16bc57f4bc32b8759eea850415969d15eb4301ccc70d25442fd42e9c965c2",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "2ad2ca343f99044b4847",
+      "language": "bash",
+      "line": 34,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "a9dbadb3c1b21934592c2fc90bfac35b7f13202bd55852ec302dc57f24e958cc",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "fa1ef434f0dee2712cf1",
+      "language": "bash",
+      "line": 40,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "769b75c062f1add5bb784b9e762f1267e62edd92ed4a44c3da081bc05db23f2a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "bb0a65e972ba22fe5b99",
+      "language": "bash",
+      "line": 51,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "f95a6a75b3af2f76c8fe0d3c120f359846e1940c501c7ac6753f00c87997f4ea",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ef209e66bd00249804bd",
+      "language": "bash",
+      "line": 72,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "f6e605b9fd5fdde5ae041f6bdea10aae86b084ed97cb8efb1c95e01b9e1b1705",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "a249d4af0b33f44db0fd",
+      "language": "bash",
+      "line": 81,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "3a2b63e527004143ea290d8ae87222819919fe8d55be29b26b756a8d5b737f29",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ac1580c60c6c615ab250",
+      "language": "bash",
+      "line": 95,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "6be46e0ea02ad5843c1859411d456213ff20af5a50f353e74a36403fd4f8662d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "d974e82b83f522cb37dd",
+      "language": "bash",
+      "line": 119,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "91eccbae84fbf99e56cb843d2a9328ed8a050927217bd22f66ff20521bb59867",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "7a264e818723912986ba",
+      "language": "bash",
+      "line": 139,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "66349a2703afb53484a97e0b5ca648b3ad6986172ff3f8a773f4da6c4946d363",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "1afd5a4494ad0b1075f1",
+      "language": "bash",
+      "line": 156,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "130e683ae995bb62db2096a527468d8801da8d64c585608066dbe6b7cf27a213",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "473f263230eef579208d",
+      "language": "bash",
+      "line": 166,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "5c14e41e7233f83f9cbdafdbd1c1529055789ab9c61a6ca58c53c4c8904a92bc",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f367c41afe70dac0cea8",
+      "language": "bash",
+      "line": 175,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "e05c91a3c2ed340f4051067752da8e4538b2d6009da11b5e685b35d09ba91dfb",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "1017e1606a8dbed4aae5",
+      "language": "bash",
+      "line": 190,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "2023e86ce89937a0185b3b08396a1a802dd52e4680d122ba519bad7b7d6a42ff",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "57d41ec2ac9ae9d60f32",
+      "language": "bash",
+      "line": 206,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "c8fef9883da97e93b0388b45da9f2d5141dc4eba2751bee9486cf278e4c00182",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9cf702ed32c1c09059d1",
+      "language": "bash",
+      "line": 219,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "467c18d09450cb9fb10cbddb5e9a1d21b5ab88229b567bed1768f6cddee9082a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "c20da3b9f6145adc7a06",
+      "language": "bash",
+      "line": 228,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "17be97ffddcf9439aea46e6552ef9fc029e51c9c4c561b479a1942d86eb447ab",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "7a579cb6dd0867c3b811",
+      "language": "bash",
+      "line": 241,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "181ddd7c3c32c0ba8d4f4ae0d7646acfb28cf57bb1dadcdf31ff6d5c2cb24e93",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "25f2106f20b1e8a849c6",
+      "language": "bash",
+      "line": 250,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "ada02979b16614831738bef866178a94f28a51086cbfb3f34f42b3a8249a4a84",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "611c44490924dcd44032",
+      "language": "bash",
+      "line": 267,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "19f1c863d486fbe506b9c9480f8c7e37f798c72d1712a131459e597d2b68bafd",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "59e36d48b91f50067234",
+      "language": "bash",
+      "line": 284,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "4a31464836f7d53fb15259dcda66b5cb58d61d0a97fffe6c4517542836156d4a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "5335c8fb91aefe947e80",
+      "language": "bash",
+      "line": 288,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "ebf7aa504375708027891c11d0ab34beaf928df227f9d0a34d5a5078eba1fa77",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "a73c67096df4400372a0",
+      "language": "bash",
+      "line": 308,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "292447cc3f432522c5796b7691035bcc0378c766efd4771c0f7a3282b8989bda",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "051a51029d9087568af5",
+      "language": "bash",
+      "line": 325,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "5777d756d68e0b94d4410f76c1ff83f96e760d848ddbf5ef50b31a36beb0cd4b",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9cca676f9bdee2bcaac9",
+      "language": "bash",
+      "line": 339,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "2d46d084e08b6d5b054d45d2572552e469be1c69f86c882a3a1ee5aab922079e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "7457e8cd7b57ec1442f6",
+      "language": "bash",
+      "line": 358,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "6986085d36aad2cb01ba1505ceb38dc5d0c4dd7534fbef1360bc990d3459554e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "8876dc6aa1a74044a924",
+      "language": "bash",
+      "line": 368,
+      "path": "docs/use-cases/admission-flow-control/tls-failures.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "380bed72bc558e6698837abf6ff90f377815f94c38d49838786a4529192917d4",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "309689ae96c597f4d208",
+      "language": "bash",
+      "line": 36,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "2dfd15284bfdd596e1a3ae4f32bf3e406378b236ed16f5990b5159271a7ff917",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "c98066a89518d4b8f790",
+      "language": "bash",
+      "line": 55,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "771299b478ead5ae2e462165827dc1d0d1f19aec1ef0b6ad263d0acb77916d17",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "8e0dad559e3ea947e4c5",
+      "language": "bash",
+      "line": 61,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "3133256480c3ae121dafdec7a324ffaa0be35ede7de808dea0c7f460057d70ef",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "e661408bbe4fd2e4a500",
+      "language": "bash",
+      "line": 67,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "29df7b479ececf2463c41d7bae9d7d9f0090c223a7795378aca26fb5063a4e4c",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "7110bda3bf7e6cf1ff06",
+      "language": "bash",
+      "line": 73,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "cab9442d965c52f142c9b5d9d27866971f4b98a77bc803471e5efe710ce2dab1",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "2a3819c907056d1af5c2",
+      "language": "bash",
+      "line": 79,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "f58e719e11178132734ad7c69fb65c62191b4649bb532a1efbbbcd89409cbffc",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9822ee31d304c2eef53a",
+      "language": "bash",
+      "line": 85,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "3ec21e8cfe5b3bec555967da11036afb18b04fd0ede42dc5e040d325025d6e93",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "6014f1ec9f08393b4ff3",
+      "language": "bash",
+      "line": 91,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "659c71295f3014a6522370d41859e5a8794b401f3972ecb7a67cf3ef9f7eff63",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "94b2bf512a7866abfa8c",
+      "language": "bash",
+      "line": 108,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d5c64998cd660261e204996bcffc711ad8715d53b0cfe02505ae44c0dd0f6bd5",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "3d143560db4cdf354fe4",
+      "language": "bash",
+      "line": 133,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "dd5e4633f831bfd52027b2aaae508614576e8653e61379844d629b2cba30d950",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "612faf9bf17ffc5a4661",
+      "language": "json",
+      "line": 143,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "8fc42910779c62a6f149da1ac1750877714fd1a7ed9fcee041252db26f74dfde",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "72d6a5898b74a499245b",
+      "language": "bash",
+      "line": 170,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "c2e5117cf49023c0689f02bbd8d18b2e4b9ba3fc94972a7b50b489a4507aeb56",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "4450831393beba91a376",
+      "language": "bash",
+      "line": 183,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "3c2bb0a0b28a0062c628f5c45b112fce9c87df6b46c49450b61b409fc83bcbec",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "cd78f16979faded98b83",
+      "language": "bash",
+      "line": 197,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "ae1bef29d9a1f29dc3d75dc99c61e80720b95b15a4ea67e73879fe4faca0a722",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "92740791e3e19a263187",
+      "language": "bash",
+      "line": 217,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "05e89b7f64ebbf93099a6850f9c766a9852474edb495c1559393e7eaf2112940",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "6c7506fab909d3c1de99",
+      "language": "bash",
+      "line": 237,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "4e28cb0ab6eac2d9f1d0c2bed76999017c2466da360afbece9c458a5686c8f6e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "17a8c9a4159b6d12a6fd",
+      "language": "bash",
+      "line": 264,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "228213389b0c5d58e04c83a47eb5849c14ea1bb12f3fb49cfdcb4a1d0d5b1a54",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ddfa3f3524fe48184fcc",
+      "language": "bash",
+      "line": 290,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "a5efc2d12a3c102863947dd61cafb5b18c8d4a4dedff315a3a339502cc4733ca",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "cb53009572fe2b6b74f3",
+      "language": "json",
+      "line": 318,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "c927847a7f05a29f4bc00820d955d5cef68e4bd224ca2c9dd5359d2639b9f189",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "0195c08dda0c5355d1c3",
+      "language": "bash",
+      "line": 349,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "03abb8e19ecbe8d0727600e255b2d687ccb69b857a3bf78f6f74032e9faae8f9",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f28ee63542574e22f32d",
+      "language": "bash",
+      "line": 364,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d80bf95f4dda5c15c4737f8c45201d3b4cfacaeaf504a45d55a7aa498097217d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "4abe55b29a6341aa20c6",
+      "language": "bash",
+      "line": 377,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "c9dc1875cf5ba89b05b44b9957405c34c641d18192e8140e299a74e3e628d13a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "0779580a0cfda38f2c50",
+      "language": "bash",
+      "line": 389,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "63ddc4794beb46ed4bbab561e084831952625e4507bc9d08fff96803cd46d28a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "d4baf47d4e0b267908a7",
+      "language": "bash",
+      "line": 409,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d1aab736d0346a4811a1fe4bb5085c276d557f64d18a1b6970e94efa281930c1",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "072bc133c4c84d92d0a6",
+      "language": "bash",
+      "line": 436,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "6bc405ebeffb19363dab136ee7f83f6f4dfdebe283ebfb44b2fe489013ec25ce",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "2f1cc90c62940b00309c",
+      "language": "bash",
+      "line": 455,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "8788dbf7c8b26da61495ec3bbbc5a1c40563fb9fde2a26a30d18b563aca7ddea",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "027a151456db9e65ebeb",
+      "language": "bash",
+      "line": 481,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "887892c8342529bf5f7f4a5e4e620782141aba9d0f242629ba4eb3fa35bb34a0",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "19d9d41576ca2f3b486c",
+      "language": "bash",
+      "line": 496,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "86411b719c9a92d1404ba7e2016d70b9ab0c35ce67a8635ff12f37ca4112ae76",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "5adb7c05f285ca49268b",
+      "language": "bash",
+      "line": 515,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "0555cfc75229f29c912f91a998b6788b26b3586fb04d4b137522166c8f202b9b",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "3f1cede96784b10c7bbc",
+      "language": "bash",
+      "line": 530,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "54a92139af8570aa3688a5786f99752a65da425723f44b9759069e7ccaf931e7",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "79fa4ef7bd5768e1d3f9",
+      "language": "bash",
+      "line": 546,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "6ebcae33fbf4faed5863289719ebfc87c572bddbc7a5ae3dcfbe2bf26f1aa666",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "7702b1784b450e7141d9",
+      "language": "json",
+      "line": 566,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "5aa80d7d711f210013ccce14e00df6b9f47e2784dc0a45b0addaa0c7dfb26249",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "e806811e7fa62f56132c",
+      "language": "bash",
+      "line": 601,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "9beeff376b9e5f8b1f7f410c294ab00d0c606c88864f975a8760fdd50b654705",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "4f4cc59436438c62f102",
+      "language": "json",
+      "line": 619,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "4d5d13b1a873eb706adef94bf6776156fb5f5126bdcfe61ab8bb1e52ccd0d1f6",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "b7bda91b66ed30884326",
+      "language": "bash",
+      "line": 655,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "8c3040646ac7351999d33e220be96230fc20ef5098cea5881168661036ff22b6",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "cc10713af0e0b010dbeb",
+      "language": "bash",
+      "line": 679,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "0143a407cbb8d87756fc4fcde4004cafdb914c00ee6b9c8891899e317674648d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "2fd7519eb30a114f57bb",
+      "language": "bash",
+      "line": 692,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "a5b0ffb7795fb91a462cfaabf0eb6869bc5eeb6e014269a831b0b9024c184a8d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "c6d91f5c909d45e123c4",
+      "language": "bash",
+      "line": 697,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "079e3b8d0f2bed75d074277bf81e599508284b50671d7a8e12e5ce3909e79116",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "0a407f21122336ad8ff0",
+      "language": "bash",
+      "line": 723,
+      "path": "docs/use-cases/admission-flow-control/tls.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "99e380bd502dd87ab273f563720b73117e260b97ec53e220f820f7c8be3c57d2",
+      "status": "illustrative-only"
+    },
+    {
       "evidence": "non-standalone-mutation-fragment",
       "id": "0a27b50ca660c6d5fdd6",
       "language": "bash",
@@ -7927,6 +10103,1049 @@
         "validation": true
       },
       "sha256": "d0d2aaf2852d64c4c425405e0096fb2721959407d1254d87064965e16b791251",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "d2f51da0a421b139abef",
+      "language": "bash",
+      "line": 14,
+      "path": "docs/use-cases/model-engine-standard/deployment.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "889dfef10f17a72e36e2db729281097a88c5bafe9b5e78577fe0cd34abaae537",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "277667c26b12125a4ca4",
+      "language": "bash",
+      "line": 51,
+      "path": "docs/use-cases/model-engine-standard/deployment.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "56fb57433e22692fc829fed5b09b76da0d76ed20e0ff6a5939ef0fb0e8a5bc28",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "827c6de2b5af0a37fa83",
+      "language": "bash",
+      "line": 93,
+      "path": "docs/use-cases/model-engine-standard/deployment.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "5fd6d57a0598b870dfd17beb9cf041c638b30f76b61584a982510c11472543ce",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9d087a929862804a856c",
+      "language": "bash",
+      "line": 43,
+      "path": "docs/use-cases/model-engine-standard/exaone35.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "4d9932ac44f2d7da07f7d8e5215291b88856a4e6e66eaccbe582eb9c1d9e112d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "47746142e7d199eb9797",
+      "language": "bash",
+      "line": 143,
+      "path": "docs/use-cases/model-engine-standard/failover-tuning.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "39d1dba0bbd708ac6fad70612fff8f3af67b350d4e2f4f133d155bb96bd5b3c0",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "589e7913fd681e6b7ae7",
+      "language": "bash",
+      "line": 43,
+      "path": "docs/use-cases/model-engine-standard/gemma2.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "0a1a2ab53987c51b720afdfe571ddd4bd8c55cc372c653b38b827f57e3b89bbc",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "811a9c0b5f7178ffc08c",
+      "language": "bash",
+      "line": 41,
+      "path": "docs/use-cases/model-engine-standard/llama31.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "9f759857afccea32cc7fd5ffd59874d47f220401b4fa4d6e4d0a2f49447bba1d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "e54762c1420b7d556b47",
+      "language": "bash",
+      "line": 47,
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "33de09c031773c695ea10f717c9490bacb563a14ea30a3368c3a9c20d89fc8f3",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "928a9d014d45deb5200e",
+      "language": "bash",
+      "line": 67,
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "778d715cba36f98cc9dfd39ece06da66e14978b843286da6419de70b3e84547d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "770a55427a5fc8bc6e56",
+      "language": "bash",
+      "line": 92,
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "1234f228d8565cdb77b9680e46211d9fcb23242a5717b6291a4594cb9bdbb8d3",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "fe0105f7fc3895b43ae9",
+      "language": "bash",
+      "line": 115,
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "032ab2d4d4e57fa37f115a4f7eb730098ff9873b3aab10b58153acbd08e7443f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "eb48129b8c5e8ed29ec2",
+      "language": "bash",
+      "line": 175,
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "4972a1fc00829139b493e78e79960eb54067713f750b85ae93c90bd1dde09672",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "cb2e4e8f1a58e29e432e",
+      "language": "bash",
+      "line": 191,
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "136d62d9210c1720ea3683297ccd8c678e9a8eaccde779c921a1de30f26edc33",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "4036f5752e64549d3799",
+      "language": "bash",
+      "line": 208,
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "24fb3dc9014fcb61f6bcc66de247d7424f6a66dd407f9a3cf0d6d64b66c51b5f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ec456cf32d4f1c69e983",
+      "language": "bash",
+      "line": 247,
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "e9fab2ae6de64434cd213eaf79c8d9824b13a5512c52a58254e0e240bf3a2319",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "5d5fa73d6e99ace2808a",
+      "language": "bash",
+      "line": 271,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "7554971151f8c056b62768a7a1476873a045e90badd6b6a2edbb0b464bf5b583",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "002f59ebc832a9a9ee82",
+      "language": "bash",
+      "line": 293,
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "dfe0de94610c9fcae5b9b4f3054930ad23de6cf4af5dff6893084233ad05cf19",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "c9d06abd8d74c9fd7a3c",
+      "language": "bash",
+      "line": 317,
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "afe94af349e08d141201bac886b855daa5129b7673c479344a7fce82384369ec",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "6343e00bf733b73718a6",
+      "language": "bash",
+      "line": 349,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "82c5188de6ebd0ddaed0e09bb20326a490debd529cd7820da445aefc2174757a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "c60d37200d63f2653098",
+      "language": "bash",
+      "line": 397,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/loadbalancer/hosturl/$VIP/externalipaddress/$VIP/port/$PORT/protocol/tcp"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/use-cases/model-engine-standard/matrix-manual.ko.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "33ee633e8d383a6f63ad66e274e5537a29384a1b95ef641afcab1e154cf5732f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "c5306db5e7ea4cc351f6",
+      "language": "bash",
+      "line": 22,
+      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "2b3a66c2e200da05f376d0f3ae2c8c81ba054f7e99ab770a311939b545063bc1",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f4f80fd754e5abd6343a",
+      "language": "bash",
+      "line": 83,
+      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "38d32b8d450124b6605e5a647866f04c9cc42ef9de812fa011f7d7d4fa888c97",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "c881bd9af1128f397070",
+      "language": "bash",
+      "line": 103,
+      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "2aa35e61b7c09a6a0a614f7536ffb3ca9f8806f4576f1c6f46934cec0ffc34a3",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "07ff76205a12ea3160d4",
+      "language": "bash",
+      "line": 115,
+      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "a9799d57071253008a75bcc721e8004cf9642d84d9022dedecdea0d6ac893859",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "4e1b70f64b1880f5a2f1",
+      "language": "bash",
+      "line": 161,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "ec99221a6efeb93d063b22454bf8e1f3dbc138aca5808b397c666178cad1ab00",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "3d09d9b41b660d2ded6f",
+      "language": "bash",
+      "line": 182,
+      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "453e7c2a4211a7981205ab3a7476b342c4c90b595e568fe7d5a1707b0c1feea8",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "524c4cb92c2ce2f7d3c5",
+      "language": "bash",
+      "line": 206,
+      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "33a91ab23864c600cfaddc6afcb2ef589ba40faee55fc0000d85b2366b4ffa03",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "cc808e593ba173f67fb9",
+      "language": "bash",
+      "line": 259,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "5f8476bc067be98083d9ea654ec6ef4a3669860c101d2f59266fdca5a93e0bca",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f91a8af72e4cc9e6a9e5",
+      "language": "bash",
+      "line": 295,
+      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "726a6cf4c5c2839aa65045ddb7df53e60ca3f6d59e0d51a9a3059f7b7eb304bf",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "f5e8f0917a8a587e3094",
+      "language": "bash",
+      "line": 320,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "DELETE /config/loadbalancer/hosturl/$VIP/externalipaddress/$VIP/port/$PORT/protocol/tcp"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "0be520e552a3c6f63471e76e5f7647cfd27ef197742e866e159b5fa2064a71e8",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "eb584c7adeca8be5db3a",
+      "language": "bash",
+      "line": 342,
+      "path": "docs/use-cases/model-engine-standard/operations.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "c7a7b94d675b40611ddea5e81dd222259312c581224993318eb7534c9400112d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "0ea32bf933a22c215145",
+      "language": "bash",
+      "line": 143,
+      "path": "docs/use-cases/model-engine-standard/profiles.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "67acab8754f97f6e1d4d2176addbee503afbc04490b53f707566cb0a82407ba6",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "dbd9ea7d89a00d79d306",
+      "language": "bash",
+      "line": 163,
+      "path": "docs/use-cases/model-engine-standard/profiles.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "0cdee42cb0f6c40f5dd103b036fd4eab924abcd608f93fc9661cd40fa0847ba8",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "74c55b15a66e7565669b",
+      "language": "bash",
+      "line": 182,
+      "path": "docs/use-cases/model-engine-standard/profiles.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "cf239825820fc6e1bbc442a7ad1ef81915a6351e12cadf80001c213628d0e383",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "2c38c3d266c33b575268",
+      "language": "bash",
+      "line": 41,
+      "path": "docs/use-cases/model-engine-standard/qwen25.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "aef2cd1a8d2d6c74c27318c0f4f4dec789a6838c5de99c9e43877ba86ba90fb9",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "df09ab801648c309e6ea",
+      "language": "bash",
+      "line": 41,
+      "path": "docs/use-cases/model-engine-standard/r1.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "a60cf46ffd81417c682dad46efb1ad3398b816045f1fdd5a069bfa53fce42349",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "936c130aae961d089657",
+      "language": "bash",
+      "line": 61,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "2a8f790ac79a33bf7a6845bc7e9b591c1a6de7e5d8b7179c1c8e954a0feba594",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "184d377f65db270b56c7",
+      "language": "bash",
+      "line": 67,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "51816dfe85ce80741d4ed81ca8f2da9dfad0d2db969709f61f16d8f5f19056b8",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "58c67f5b20622a45aa79",
+      "language": "bash",
+      "line": 73,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "930ec209625edef6a2bfcc05dfedda94fa602425c365da9962ae4ff31f872c8d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "fe42dd1de3a46776b18d",
+      "language": "bash",
+      "line": 81,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "fdcd724cb04d0ffe7eac0590027633e03328a6653c94d237a03c7ccadcf0ffe1",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "7479270615e892cff38d",
+      "language": "bash",
+      "line": 87,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "39c3ddf169ab9811ade1c48526675eb86882f43260b3140c4986581c0729df9f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9a6bcdc7f24da4aae085",
+      "language": "bash",
+      "line": 93,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "3ba5b87380096c0c06bcdcd38d7d52612641e511f63198568812d091cc8c7204",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f8517045577a7302216d",
+      "language": "bash",
+      "line": 120,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "1784aae331e0d3bafe4269eb0c7fa55ef956c9ed679520912938f3f7c0753fd5",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9177dbd83e3161f2d533",
+      "language": "bash",
+      "line": 135,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "42ed1d96b88c5d156ccb128ad39e978b2fd82f5a2116471737fc127144417574",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "e97ccc1ad8b351963c0c",
+      "language": "bash",
+      "line": 196,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "aa6c9f17bddf8adeb685d6f811c4aec93764a31aebdf020589d70ae38c6b3dec",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ed9badc72e45e48931b2",
+      "language": "bash",
+      "line": 212,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "06900ae73bcbe233c8db05699462446b366cc7637210a8a9d9795a08367fe6a3",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "60fd596b8b99a7b7694f",
+      "language": "bash",
+      "line": 262,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "08a667862eca3837379822c3f8a3bbd4750aae00339d3ff20a2b53d06792642d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "1b079fa6e0b7bf65728a",
+      "language": "bash",
+      "line": 274,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "7736d44d1eb93979a3633ad293f510fb10068544616bf00738d8c87c79e8f7e2",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "fa086c06ea815e8e390f",
+      "language": "bash",
+      "line": 288,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d999ab936b24f25078b21c93d64c059c5948fdc248beec9d92c7ee4eeb7ddde6",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "b88a9ad484b6c551673e",
+      "language": "bash",
+      "line": 308,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "0bbc8effea0c03fd70a08d962e403044d9c05489a20894da3e30395fa3d898c6",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "1d7e0803f39a8aa764fc",
+      "language": "bash",
+      "line": 333,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "6b6c718636959fad9148916991311baf9472b2da8d5904800ba47a15b02fae19",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "6c8af1514e0346cf8a4e",
+      "language": "bash",
+      "line": 354,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "f9c3bd8b409d1c293de9b3b7d967b2ffbb23616b735392c5d21e2d8b5dd2843e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "non-standalone-mutation-fragment",
+      "id": "662a950a0e3a514dfaf8",
+      "language": "bash",
+      "line": 383,
+      "mutation_contract": {
+        "active_path": true,
+        "cleanup": true,
+        "cleanup_verification": true,
+        "detected": true,
+        "independent_oracle": true,
+        "mode": "illustrative-fragment",
+        "negative_no_mutation": true,
+        "operations": [
+          "POST /config/loadbalancer"
+        ],
+        "workflow": "/getting-started/quickstart/"
+      },
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "fe204d1046dab5cfc94a0cf056faf17030f60040a5dd13fefc70a602951bb924",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "21a1191e61200e76a8db",
+      "language": "bash",
+      "line": 413,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d686af452ffe26f023b712719c8c5e548e5afcceaeae6e8d8147cd652ea825eb",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "635f193586beca55a394",
+      "language": "bash",
+      "line": 437,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "77cc345b5d8302e8dda66fef902b4767c09bcc650548dfef3001f897dfd953b9",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "93f610137ab04923f261",
+      "language": "bash",
+      "line": 464,
+      "path": "docs/use-cases/model-engine-standard/routing-choice.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "f6d7a564f4c633b5896ed7838963ab034b2f6c7924629ac776b73f8f45f6073b",
       "status": "illustrative-only"
     },
     {
@@ -9011,6 +12230,57 @@
       },
       "sha256": "d9d34e7bbe740aa27a5679b6df76c584ce532bbfbf870348b2ac2377865ff885",
       "status": "verified"
+    },
+    {
+      "evidence": "shell-syntax-only",
+      "id": "f0d3bd2a0d4ecfadfc27",
+      "language": "bash",
+      "line": 2,
+      "path": "snippets/model-engine-standard/select-sglang.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "0cf91146badd2e785ae6d8448696ec2cea51a41a28f671b434d7e7e95b95a412",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "shell-syntax-only",
+      "id": "736c184d8687c597f146",
+      "language": "bash",
+      "line": 2,
+      "path": "snippets/model-engine-standard/select-trtllm.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "229a6372c6f65e1060ea02a624a400553e8d7a712c9a9ff30c1bef63f1a3222b",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "shell-syntax-only",
+      "id": "924790102d2db7e70a6c",
+      "language": "bash",
+      "line": 2,
+      "path": "snippets/model-engine-standard/select-vllm.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": false
+      },
+      "sha256": "7938d3dc01f0a18b043fa87ad717c04672c25aa82b55cdf5e4d9133e74c09bde",
+      "status": "illustrative-only"
     }
   ],
   "mutation_policy": "/reference/example-quality-contract/",

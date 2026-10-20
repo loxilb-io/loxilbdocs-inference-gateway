@@ -1,0 +1,5 @@
+kv_cache_config:
+  enable_block_reuse: true
+  event_buffer_max_size: 4096
+  free_gpu_memory_fraction: 0.85
+return_perf_metrics: true

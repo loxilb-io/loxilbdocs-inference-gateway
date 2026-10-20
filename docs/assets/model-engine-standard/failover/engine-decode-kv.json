@@ -1,0 +1,12 @@
+{
+  "kv_connector": "NixlConnector",
+  "kv_role": "kv_consumer",
+  "kv_buffer_device": "cpu",
+  "kv_load_failure_policy": "fail",
+  "kv_connector_extra_config": {
+    "backends": [
+      "UCX"
+    ],
+    "kv_lease_duration": 30
+  }
+}

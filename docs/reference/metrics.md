@@ -7,17 +7,17 @@ revision. It does **not** prove that every family is present in a particular
 deployment: feature activation, traffic, build tags, hardware, and runtime
 configuration still determine whether a series is emitted.
 
-- Gateway source commit: `79c77f0275e655eaee4bb6a732c2d67f1a94198c`
-- Gateway main eBPF submodule commit: `58716b6e3c9168f8e79d6f8d1488692c3c4bc47c`
+- Gateway source commit: `1d51393773e4974b5e356377496c9d677dba9f9c`
+- Gateway main eBPF submodule commit: `2e428b0b34e23e2ba440e629c7e97722527f6684`
 - Comparison release: `v0.9.8.9-rc.1` at `f08b18beda587217265c9ba6419159119914795c`
 - Comparison release eBPF submodule commit: `5536a2117ad2ad1128900a0d808ad7dec2eee2b5`
 - Release manifest availability: **absent**
 - Manifest path: `deploy/monitoring/manifest/metric-manifest.json`
-- Manifest SHA-256: `5c3201c06e796b730f11827547a4ead5904d711cfea618a386e9e54ba716dba6`
-- Embedded manifest source revision: `cfa8b0010d72981394d4e02b6efc4b30c8614803`
-- Embedded manifest generation time: `2026-10-07T20:11:42+00:00`
+- Manifest SHA-256: `4208e6c65b73eb936e2ad5d6ad4f87eb2aec9e557b0847dfaa2158d8b3943499`
+- Embedded manifest source revision: `0b4273446012c5a5307de50d1a6ca3e33e999ed3`
+- Embedded manifest generation time: `2026-10-14T10:59:43+00:00`
 - Manifest schema version: `1`
-- Release-scope families: **258**
+- Release-scope families: **276**
 - Raw writer paths and evidence prose are intentionally not copied into this public catalog.
 
 The table below is therefore a current-main source catalog, not a claim
@@ -30,9 +30,9 @@ Release packaging and runtime emission require separate qualification.
 | Status | Meaning |
 | --- | --- |
 | `verified-runtime` (68) | writer plus recorded runtime evidence in the upstream manifest |
-| `verified-static` (57) | writer verified by static or unit evidence; no runtime claim |
+| `verified-static` (64) | writer verified by static or unit evidence; no runtime claim |
 | `conditional-with-proven-writer` (69) | writer exists but the family appears only when its feature path is active |
-| `writer-mapped` (64) | writer source is mapped; runtime emission was not verified |
+| `writer-mapped` (75) | writer source is mapped; runtime emission was not verified |
 
 A writer or registration point is source evidence, not deployment evidence.
 `verified-runtime` records upstream runtime evidence for that family, but this
@@ -80,7 +80,9 @@ Combined codes such as `D+V` require both conditions.
 | `loxilb_ai_admission_queued` | `gauge` | `service`, `pool` | `C` | `gateway-default` | `verified-static` |
 | `loxilb_ai_admission_tenants_active` | `gauge` | `service`, `pool` | `C` | `gateway-default` | `verified-static` |
 | `loxilb_ai_admission_warming_endpoints` | `gauge` | `service`, `pool` | `C` | `gateway-default` | `verified-static` |
+| `loxilb_ai_class_config_lkg_intervals_total` | `counter` | none | `C` | `gateway-default` | `verified-static` |
 | `loxilb_ai_engine_info` | `gauge` | `service`, `engine` | `V` | `gateway-default` | `conditional-with-proven-writer` |
+| `loxilb_ai_fc_tenant_slots` | `gauge` | `service`, `kind` | `C` | `gateway-default` | `verified-static` |
 | `loxilb_ai_jwks_keys` | `gauge` | `profile` | `E` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ai_jwks_last_success_timestamp_seconds` | `gauge` | `profile` | `E` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ai_jwks_refresh_total` | `counter` | `profile`, `outcome` | `E` | `gateway-default` | `conditional-with-proven-writer` |
@@ -97,6 +99,8 @@ Combined codes such as `D+V` require both conditions.
 | `loxilb_ai_kv_trtllm_drain_ownership_heal_total` | `counter` | none | `E` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ai_llamacpp_probe_warnings_total` | `counter` | `service`, `kind` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ai_model_not_allowed_total` | `counter` | `model`, `tenant` | `V` | `gateway-default` | `verified-runtime` |
+| `loxilb_ai_netid_requests_total` | `counter` | `binding`, `tenant`, `outcome` | `V` | `gateway-default` | `verified-static` |
+| `loxilb_ai_netid_resolver_faults_total` | `counter` | `service` | `V` | `gateway-default` | `verified-static` |
 | `loxilb_ai_normal_session_hits_total` | `counter` | `model` | `V` | `gateway-default` | `verified-runtime` |
 | `loxilb_ai_pd_decode_ttft_seconds` | `histogram` | `model` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ai_pd_kv_params_found_total` | `counter` | `model` | `V` | `gateway-default` | `conditional-with-proven-writer` |
@@ -109,6 +113,8 @@ Combined codes such as `D+V` require both conditions.
 | `loxilb_ai_rate_limit_hits_total` | `counter` | `tenant`, `reason` | `V` | `gateway-default` | `verified-runtime` |
 | `loxilb_ai_request_duration_seconds` | `histogram` | `model`, `tenant` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ai_requests_total` | `counter` | `model`, `tenant`, `status`, `outcome` | `V` | `gateway-default` | `conditional-with-proven-writer` |
+| `loxilb_ai_reservation_clamped_total` | `counter` | `service`, `reason` | `V` | `gateway-default` | `verified-static` |
+| `loxilb_ai_stream_early_bytes_closed_total` | `counter` | `service` | `V` | `gateway-default` | `verified-static` |
 | `loxilb_ai_token_quota_cold_open_total` | `counter` | none | `E` | `gateway-default` | `verified-runtime` |
 | `loxilb_ai_token_quota_denied_total` | `counter` | `tenant` | `V` | `gateway-default` | `verified-runtime` |
 | `loxilb_ai_token_quota_limit_tokens` | `gauge` | `tenant` | `Q` | `gateway-default` | `verified-runtime` |
@@ -175,6 +181,9 @@ Combined codes such as `D+V` require both conditions.
 | `loxilb_ipfilter_rules` | `gauge` | `type` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ipfilter_whitelist_bytes_total` | `counter` | `cidr`, `priority`, `zone` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ipfilter_whitelist_packets_total` | `counter` | `cidr`, `priority`, `zone` | `V` | `gateway-default` | `conditional-with-proven-writer` |
+| `loxilb_kv_exact_overlap_blocks` | `histogram` | none | `P` | `gateway-default` | `writer-mapped` |
+| `loxilb_kv_exact_prompt_blocks` | `histogram` | none | `P` | `gateway-default` | `writer-mapped` |
+| `loxilb_kv_exact_stage_seconds` | `histogram` | `stage`, `outcome` | `P` | `gateway-default` | `writer-mapped` |
 | `loxilb_kv_inv_cap_evictions_total` | `counter` | `service`, `ep` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_kv_inventory_fresh` | `gauge` | `service`, `ep` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_kv_subscriber_connected` | `gauge` | `service`, `ep` | `V` | `gateway-default` | `conditional-with-proven-writer` |
@@ -188,6 +197,7 @@ Combined codes such as `D+V` require both conditions.
 | `loxilb_lb_rule_interaction_packets_total` | `counter` | `service`, `sip`, `dip` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_lb_rules` | `gauge` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_lb_select_failure_shutdown_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
+| `loxilb_log_lines_dropped_total` | `counter` | `level` | `C` | `gateway-default` | `verified-static` |
 | `loxilb_new_flows` | `gauge` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_opa_circuit_breaker_state` | `gauge` | none | `E` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_opa_firewall_rules` | `gauge` | none | `E` | `gateway-default` | `conditional-with-proven-writer` |
@@ -287,19 +297,27 @@ Combined codes such as `D+V` require both conditions.
 | `loxilb_proxy_qos_tokens_bytes` | `gauge` | `vip`, `port`, `proto`, `direction` | `C` | `gateway-default` | `verified-runtime` |
 | `loxilb_proxy_response_first_write_gap_seconds` | `histogram` | `stream` | `P` | `gateway-default` | `verified-runtime` |
 | `loxilb_proxy_response_max_write_gap_seconds` | `histogram` | `stream` | `P` | `gateway-default` | `verified-runtime` |
+| `loxilb_proxy_sse_stall_abort_seconds` | `gauge` | none | `P` | `gateway-default` | `writer-mapped` |
+| `loxilb_proxy_stream_abandon_age_seconds` | `histogram` | `reason` | `P` | `gateway-default` | `writer-mapped` |
+| `loxilb_proxy_stream_abandoned_total` | `counter` | `reason` | `P` | `gateway-default` | `writer-mapped` |
 | `loxilb_requests_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_restore_duration_seconds` | `histogram` | none | `E` | `gateway-default` | `verified-static` |
 | `loxilb_restore_total` | `counter` | `mode`, `result` | `P` | `gateway-default` | `verified-static` |
+| `loxilb_security_aggregate_conn_blocked_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
+| `loxilb_security_aggregate_syn_blocked_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
+| `loxilb_security_aggregate_udp_blocked_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_security_conn_blocked_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_security_conn_passed_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_security_syn_blocked_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_security_syn_cookies_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_security_syn_passed_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
+| `loxilb_security_tracking_failures_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_security_udp_blocked_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_security_udp_bytes_blocked_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_security_udp_bytes_passed_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_security_udp_passed_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_security_unique_ips` | `gauge` | none | `E` | `gateway-default` | `writer-mapped` |
+| `loxilb_security_unsupported_packet_blocked_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
 | `loxilb_service_errors_total` | `counter` | `service` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_service_requests_total` | `counter` | `service` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_service_traffic_bytes_total` | `counter` | `service` | `V` | `gateway-default` | `conditional-with-proven-writer` |

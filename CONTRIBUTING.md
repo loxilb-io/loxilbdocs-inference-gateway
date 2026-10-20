@@ -38,6 +38,21 @@ implement — if a capability is partial or roadmap, say so with a status admoni
    ```
 4. Open a pull request. Fill in the PR template and link any related issue.
 
+For changes to the model/engine download, validate its evidence publication state
+and rebuild both integrity artifacts from the same source directory:
+
+```bash
+python3 tools/validate_model_engine_evidence.py
+python3 tools/package_model_engine_examples.py
+python3 tools/package_model_engine_examples.py --check
+python3 -m unittest discover -s tests -p 'test_model_engine*.py' -v
+```
+
+Pending publication keeps unrun cases unqualified. Publishing results requires
+both the case summary and the independent request ledger; never fill missing
+evidence with fabricated PASS rows or receipt hashes. Package integrity does not
+establish runtime qualification.
+
 ## Commit messages
 
 Use [Conventional Commits](https://www.conventionalcommits.org/), e.g.:
