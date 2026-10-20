@@ -15,6 +15,11 @@ from typing import Any
 # delta. render() fails closed when the Gateway adds or removes a definition so
 # every new model receives an explicit public relevance decision.
 MODEL_NOTES = {
+    "AIObjectiveEntry": (
+        "direct-operation",
+        "A named objective that maps requests to critical, standard, or sheddable class; same-class numeric order is not retained.",
+        "../ai-gateway/ai-traffic-governance.md#network-identity-and-objective-api-contracts",
+    ),
     "AiModelProfileEntry": (
         "direct-operation",
         "One published model profile returned by detail lookup and nested in the registry list.",
@@ -24,6 +29,11 @@ MODEL_NOTES = {
         "direct-operation",
         "Read-only registry generation, set digest, and published profile list.",
         "../ai-gateway/model-profiles-kv-readiness.md",
+    ),
+    "NetIdentityEntry": (
+        "direct-operation",
+        "A node-local network-to-tenant attribution binding, with service/model scope and credential handling; network attribution is not authentication.",
+        "../ai-gateway/ai-traffic-governance.md#network-identity-and-objective-api-contracts",
     ),
     "AuditDropCount": (
         "nested-component",

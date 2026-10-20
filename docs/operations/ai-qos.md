@@ -446,3 +446,6 @@ pair.
 They validate attachment behavior, directional enforcement, detach recovery,
 and metric units on one Gateway. They do not establish a production service
 level, two-node failover behavior, or seamless rolling upgrades.
+
+For the integrated configure, readback, traffic, receipt and rollback sequence, see the
+[Admission Control, Flow Control and QoS lab](../use-cases/admission-flow-control/index.md).

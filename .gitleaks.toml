@@ -11,3 +11,18 @@ regexes = [
   '''<[A-Za-z0-9_-]+>''',   # angle-bracket placeholders like <ADMIN_PASSWORD>, <key_id>
   '''CHANGE_ME''',
 ]
+
+# Public model revisions and tokenizer content hashes are artifact identities.
+# Keep the exception bound to these fields AND the evaluation-definition paths;
+# credentials in the same YAML files must still be scanned.
+[[rules]]
+id = "generic-api-key"
+  [[rules.allowlists]]
+  description = "Public tokenizer revision and SHA-256 in evaluation definitions"
+  condition = "AND"
+  regexTarget = "match"
+  paths = ['''(^|/)docs/assets/model-engine-standard/evaluation-profiles/definitions(-vllm|-sglang|-trtllm)?/[^/]+\.yaml$''']
+  regexes = [
+    '''^"?tokenizerRevision"?:[ \t]*"?[0-9a-f]{40}"?[ \t]*$''',
+    '''^"?tokenizerSha256"?:[ \t]*"?[0-9a-f]{64}"?[ \t]*$''',
+  ]

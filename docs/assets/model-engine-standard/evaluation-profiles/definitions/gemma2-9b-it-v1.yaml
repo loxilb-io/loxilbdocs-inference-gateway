@@ -1,0 +1,21 @@
+{
+  "profileId": "gemma2-9b-it-v1",
+  "baseModel": "google/gemma-2-9b-it",
+  "modelType": "gemma2",
+  "tokenizerRevision": "11c9b309abf73637e4b6f9a3fa1e92e615547819",
+  "tokenizerArtifact": "sha256/3f289bc05132635a8bc7aca7aa21255efd5e18f3710f43e3cdb96bcd41be4922",
+  "tokenizerSha256": "3f289bc05132635a8bc7aca7aa21255efd5e18f3710f43e3cdb96bcd41be4922",
+  "templateArtifact": "sha256/ecd6ae513fe103f0eb62e8ab5bfa8d0fe45c1074fa398b089c93a7e70c15cfd6",
+  "templateSha256": "ecd6ae513fe103f0eb62e8ab5bfa8d0fe45c1074fa398b089c93a7e70c15cfd6",
+  "templateContentFormat": "string",
+  "renderPolicy": {
+    "addGenerationPrompt": true,
+    "bosToken": "<bos>",
+    "eosToken": "<eos>"
+  },
+  "supportedApis": [
+    "completions",
+    "chat"
+  ],
+  "aliasPolicy": "base_model_only"
+}

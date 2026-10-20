@@ -19,6 +19,7 @@ from urllib.parse import urlsplit
 
 import yaml
 from jsonschema import Draft4Validator, FormatChecker
+from mkdocs.config.config_options import PathSpec as MkDocsPathSpec
 
 
 MAIN_ONLY_MARKER = "CLI availability: main-only"
@@ -71,7 +72,18 @@ PLACEHOLDER_VALUES = {
     "decode-1-ip": "198.51.100.21",
     "gpu": "example-gpu",
 }
+# File-backed examples are checked against public representative bodies. The
+# package tests validate every model/engine variant independently.
+_MODEL_ENGINE_RR = json.loads(
+    (Path(__file__).resolve().parents[1] /
+     "docs/assets/model-engine-standard/rules/qwen25-vllm-rr.json").read_text()
+)
+_MODEL_ENGINE_INVALID = json.loads(json.dumps(_MODEL_ENGINE_RR))
+_MODEL_ENGINE_INVALID["serviceArguments"]["kvExactMode"] = 2
+
 REFERENCED_BODY_FIXTURES = {
+    "model-engine-gateway.json": _MODEL_ENGINE_RR,
+    "invalid-model-engine-rule.json": _MODEL_ENGINE_INVALID,
     "gateway-snapshot.json": {},
     "initial-gateway-user.json": {
         "username": "docs-admin",
@@ -144,7 +156,19 @@ def markdown_blocks(path: Path) -> Iterable[Block]:
 
 
 def public_markdown_paths(root: Path) -> list[Path]:
-    paths = list((root / "docs").rglob("*.md"))
+    # BaseLoader reads configuration values without constructing the Python
+    # objects used by custom Markdown fences in mkdocs.yml.
+    config_path = root / "mkdocs.yml"
+    config = (
+        yaml.load(config_path.read_text(), Loader=yaml.BaseLoader) or {}
+        if config_path.exists() else {}
+    )
+    docs = root / config.get("docs_dir", "docs")
+    excluded = MkDocsPathSpec().run_validation(config.get("exclude_docs", ""))
+    paths = [
+        path for path in docs.rglob("*.md")
+        if not excluded.match_file(path.relative_to(docs).as_posix())
+    ]
     snippets = root / "snippets"
     if snippets.exists():
         paths.extend(snippets.rglob("*.md"))
@@ -430,6 +454,7 @@ class ExampleValidator:
             patchable = {
                 "allowed_models", "enabled", "rate_limit_rps",
                 "burst_size", "tokens_per_min",
+                "priority_class", "default_objective", "allowed_objectives",
             }
             if not any(field in body and body[field] is not None for field in patchable):
                 errors.append("API-key PATCH must name at least one non-null patchable field")

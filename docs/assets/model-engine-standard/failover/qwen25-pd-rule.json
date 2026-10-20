@@ -1,0 +1,54 @@
+{
+  "serviceArguments": {
+    "externalIP": "192.0.2.10",
+    "host": "192.0.2.10",
+    "port": 28182,
+    "protocol": "tcp",
+    "sel": 0,
+    "mode": 4,
+    "model_name": "Qwen/Qwen2.5-7B-Instruct",
+    "sse_mode": true,
+    "pd_disagg_mode": true,
+    "pd_cache_aware_mode": false,
+    "kvExactMode": 0,
+    "kvEngineType": "vllm",
+    "monitor": true,
+    "probetype": "http",
+    "probeport": 8000,
+    "probereq": "/health",
+    "probeTimeout": 1,
+    "probeRetries": 1,
+    "pd_prefill_timeout_sec": 15,
+    "cb_enable": true
+  },
+  "endpoints": [
+    {
+      "endpointIP": "192.0.2.20",
+      "targetPort": 8000,
+      "weight": 1,
+      "ep_role": 1,
+      "nixl_port": 5600
+    },
+    {
+      "endpointIP": "192.0.2.21",
+      "targetPort": 8000,
+      "weight": 1,
+      "ep_role": 1,
+      "nixl_port": 5600
+    },
+    {
+      "endpointIP": "192.0.2.30",
+      "targetPort": 8000,
+      "weight": 1,
+      "ep_role": 2,
+      "nixl_port": 5600
+    },
+    {
+      "endpointIP": "192.0.2.31",
+      "targetPort": 8000,
+      "weight": 1,
+      "ep_role": 2,
+      "nixl_port": 5600
+    }
+  ]
+}

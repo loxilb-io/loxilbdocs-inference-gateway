@@ -14,17 +14,17 @@
         ],
         "claim": "jwt-policy-and-token-accounting",
         "matching_workflow_objects": {
-          ".github/workflows/ai-gateway-sanity.yml": "de47592f32add3ef6bab6277f8c44945c29f33ba"
+          ".github/workflows/ai-gateway-sanity.yml": "2dd932f6eac7ca465ca7ba6eea4523a8c27ca909"
         },
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
         ],
-        "scenario_object_id": "309fe109e6a4589ee6c7ab4129846c5f2a3a407b",
+        "scenario_object_id": "cb4e94344422583837142f52c1fd728a2d19f8d3",
         "scenario_path": "cicd/ai-jwtauth",
-        "validation_object_id": "8484fadfc6e4e72a6c39fa7e8aee34204629368d",
+        "validation_object_id": "5aefa05f5e5ff2337a03eee219118ec928547da3",
         "validation_path": "cicd/ai-jwtauth/validation.sh",
         "workflow_membership": "wired",
-        "workflow_object_id": "de47592f32add3ef6bab6277f8c44945c29f33ba",
+        "workflow_object_id": "2dd932f6eac7ca465ca7ba6eea4523a8c27ca909",
         "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
       },
       {
@@ -65,17 +65,17 @@
         ],
         "claim": "pd-and-worker-scrape-metrics",
         "matching_workflow_objects": {
-          ".github/workflows/ai-gateway-sanity.yml": "de47592f32add3ef6bab6277f8c44945c29f33ba"
+          ".github/workflows/ai-gateway-sanity.yml": "2dd932f6eac7ca465ca7ba6eea4523a8c27ca909"
         },
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
         ],
-        "scenario_object_id": "5c06fcf0b5139f93fc5515ede5bf825a7867750f",
+        "scenario_object_id": "416a806ca3d12a708c6cde3246ca636f40480f02",
         "scenario_path": "cicd/vllm-pd-disagg",
-        "validation_object_id": "732dba079be92270c1ae0dd0ee635f8ca423adc3",
+        "validation_object_id": "4beaa11b794f25b89417a53049b1eecad43869ee",
         "validation_path": "cicd/vllm-pd-disagg/validation.sh",
         "workflow_membership": "wired",
-        "workflow_object_id": "de47592f32add3ef6bab6277f8c44945c29f33ba",
+        "workflow_object_id": "2dd932f6eac7ca465ca7ba6eea4523a8c27ca909",
         "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
       },
       {
@@ -108,7 +108,7 @@
           ".github/workflows/monitoring-drill.yml",
           ".github/workflows/monitoring-e2e.yml"
         ],
-        "scenario_object_id": "e87eb2a2266c768788654adc41815460f0bb59b2",
+        "scenario_object_id": "0c21001a80e24c584d41fb92dc07136a16b6cc5b",
         "scenario_path": "cicd/monitoring",
         "validation_object_id": "a17e250316c008e96b7cfd75a1e5731f17ae8ba7",
         "validation_path": "cicd/monitoring/validation.sh",
@@ -121,13 +121,13 @@
   "contract_version": 1,
   "metric_manifest": {
     "coverage": {
-      "default_families": 258,
+      "default_families": 278,
       "default_referenced": 182,
-      "default_unreferenced": 55,
+      "default_unreferenced": 75,
       "default_waived": 21,
-      "writer_classified": 258,
+      "writer_classified": 278,
       "writer_unclassified": 0,
-      "writer_unverified": 64
+      "writer_unverified": 77
     },
     "families": [
       {
@@ -375,6 +375,17 @@
         "writer_present": true
       },
       {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_ai_class_config_lkg_intervals_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
         "activation": "V",
         "evidence_present": true,
         "implementation_status": "conditional-with-proven-writer",
@@ -383,6 +394,20 @@
           "engine"
         ],
         "name": "loxilb_ai_engine_info",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "kind"
+        ],
+        "name": "loxilb_ai_fc_tenant_slots",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "gauge",
@@ -600,6 +625,34 @@
       {
         "activation": "V",
         "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "binding",
+          "tenant",
+          "outcome"
+        ],
+        "name": "loxilb_ai_netid_requests_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service"
+        ],
+        "name": "loxilb_ai_netid_resolver_faults_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
         "implementation_status": "verified-runtime",
         "labels": [
           "model"
@@ -754,6 +807,33 @@
           "outcome"
         ],
         "name": "loxilb_ai_requests_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
+          "reason"
+        ],
+        "name": "loxilb_ai_reservation_clamped_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service"
+        ],
+        "name": "loxilb_ai_stream_early_bytes_closed_total",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "counter",
@@ -1585,6 +1665,42 @@
         "writer_present": true
       },
       {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_kv_exact_overlap_blocks",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_kv_exact_prompt_blocks",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [
+          "stage",
+          "outcome"
+        ],
+        "name": "loxilb_kv_exact_stage_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
         "activation": "V",
         "evidence_present": true,
         "implementation_status": "conditional-with-proven-writer",
@@ -1755,6 +1871,19 @@
         "implementation_status": "writer-mapped",
         "labels": [],
         "name": "loxilb_lb_select_failure_shutdown_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "level"
+        ],
+        "name": "loxilb_log_lines_dropped_total",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "counter",
@@ -2794,6 +2923,28 @@
         "writer_present": true
       },
       {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_pools_freed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_pools_live",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
         "activation": "C",
         "evidence_present": true,
         "implementation_status": "verified-runtime",
@@ -2948,6 +3099,43 @@
         "writer_present": true
       },
       {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_sse_stall_abort_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [
+          "reason"
+        ],
+        "name": "loxilb_proxy_stream_abandon_age_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [
+          "reason"
+        ],
+        "name": "loxilb_proxy_stream_abandoned_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
         "activation": "E",
         "evidence_present": true,
         "implementation_status": "writer-mapped",
@@ -2978,6 +3166,39 @@
           "result"
         ],
         "name": "loxilb_restore_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_aggregate_conn_blocked_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_aggregate_syn_blocked_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_aggregate_udp_blocked_total",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "counter",
@@ -3043,6 +3264,17 @@
         "evidence_present": true,
         "implementation_status": "writer-mapped",
         "labels": [],
+        "name": "loxilb_security_tracking_failures_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
         "name": "loxilb_security_udp_blocked_total",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
@@ -3091,6 +3323,17 @@
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_security_unsupported_packet_blocked_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
         "writer_present": true
       },
       {
@@ -3397,11 +3640,11 @@
       }
     },
     "provenance": {
-      "generated_at": "2026-10-07T20:11:42+00:00",
-      "source_revision": "cfa8b0010d72981394d4e02b6efc4b30c8614803"
+      "generated_at": "2026-10-19T21:47:55+00:00",
+      "source_revision": "350428416e5848a30936aea0cb872e52db34e77b"
     },
     "schema_version": 1,
-    "sha256": "5c3201c06e796b730f11827547a4ead5904d711cfea618a386e9e54ba716dba6",
+    "sha256": "f9a1b01c3317b5898e04668196f95ac29496bc5c4e693afc21afb7169dbd2752",
     "source_path": "deploy/monitoring/manifest/metric-manifest.json"
   },
   "release_snapshot": {
@@ -3434,7 +3677,7 @@
         "path": "cicd/sockmap-fullproxy"
       },
       {
-        "object_id": "8ade23f20c7f6cf945127e577e0b8751d21a3239",
+        "object_id": "dbefb5dfad69e786b677727c73adc5d2b195b478",
         "path": "cicd/vllm-kvcache-routing-cpu"
       },
       {
@@ -3452,6 +3695,7 @@
     "specs": [
       {
         "added_definitions": [
+          "AIObjectiveEntry",
           "AiModelProfileEntry",
           "AiModelProfileRegistry",
           "AuditDropCount",
@@ -3484,6 +3728,7 @@
           "MaintenanceRequest",
           "MaintenanceStatus",
           "MapUtilization",
+          "NetIdentityEntry",
           "OperationResult",
           "ProcessStatus",
           "RateLimitDefaultsEntry",
@@ -3496,7 +3741,7 @@
           "UserSummary"
         ],
         "baseline_definition_count": 147,
-        "candidate_definition_count": 189,
+        "candidate_definition_count": 191,
         "removed_definitions": [],
         "source_path": "api/swagger.yml"
       },
@@ -3513,8 +3758,8 @@
     ]
   },
   "source": {
-    "commit": "79c77f0275e655eaee4bb6a732c2d67f1a94198c",
-    "ebpf_submodule_commit": "58716b6e3c9168f8e79d6f8d1488692c3c4bc47c",
+    "commit": "0f78cc3329e23934be4924069b137bfbe557e8f2",
+    "ebpf_submodule_commit": "5fc365574fda283879d0a5512ef1da039211c5b4",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
     "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",
@@ -3524,6 +3769,31 @@
     {
       "basePath": "/netlox/v1",
       "definitions": {
+        "AIObjectiveEntry": {
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "priority": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "services": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "updated_at": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object"
+        },
         "AiModelProfileEntry": {
           "properties": {
             "aliasPolicy": {
@@ -3632,12 +3902,21 @@
               },
               "type": "array"
             },
+            "allowed_objectives": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
             "api_key": {
               "type": "string"
             },
             "burst_size": {
               "format": "int64",
               "type": "integer"
+            },
+            "default_objective": {
+              "type": "string"
             },
             "enabled": {
               "type": "boolean"
@@ -3647,6 +3926,14 @@
               "type": "string"
             },
             "name": {
+              "type": "string"
+            },
+            "priority_class": {
+              "enum": [
+                "standard",
+                "critical",
+                "sheddable"
+              ],
               "type": "string"
             },
             "rate_limit_rps": {
@@ -3689,12 +3976,21 @@
               },
               "type": "array"
             },
+            "allowed_objectives": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
             "burst_size": {
               "format": "int64",
               "type": "integer"
             },
             "created_at": {
               "format": "date-time",
+              "type": "string"
+            },
+            "default_objective": {
               "type": "string"
             },
             "enabled": {
@@ -3708,6 +4004,14 @@
               "type": "string"
             },
             "name": {
+              "type": "string"
+            },
+            "priority_class": {
+              "enum": [
+                "standard",
+                "critical",
+                "sheddable"
+              ],
               "type": "string"
             },
             "rate_limit_rps": {
@@ -5192,9 +5496,22 @@
         "EndPointHostState": {
           "properties": {
             "epPort": {
+              "maximum": 65535,
+              "minimum": 0,
               "type": "integer"
             },
             "epProto": {
+              "enum": [
+                "",
+                "tcp",
+                "udp",
+                "sctp",
+                "http",
+                "https",
+                "ping",
+                "tls-hello",
+                "none"
+              ],
               "type": "string"
             },
             "hostName": {
@@ -6448,6 +6765,14 @@
             "name": {
               "type": "string"
             },
+            "priority_class": {
+              "enum": [
+                "standard",
+                "critical",
+                "sheddable"
+              ],
+              "type": "string"
+            },
             "refresh_sec": {
               "format": "int64",
               "type": "integer"
@@ -7356,6 +7681,23 @@
                 "adminStateUp": {
                   "type": "boolean"
                 },
+                "ai_default_max_tokens": {
+                  "format": "int32",
+                  "maximum": 100000000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "ai_default_reservation": {
+                  "enum": [
+                    "on",
+                    "off",
+                    "inherit"
+                  ],
+                  "type": "string"
+                },
+                "ai_objective_strict": {
+                  "type": "boolean"
+                },
                 "alpn_protocols": {
                   "items": {
                     "type": "string"
@@ -7520,9 +7862,28 @@
                       ],
                       "type": "string"
                     },
+                    "config_source": {
+                      "enum": [
+                        "store",
+                        "lkg",
+                        "none"
+                      ],
+                      "type": "string"
+                    },
                     "decode_max_inflight": {
                       "format": "int32",
                       "type": "integer"
+                    },
+                    "default_max_tokens": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "default_reservation": {
+                      "enum": [
+                        "on",
+                        "off"
+                      ],
+                      "type": "string"
                     },
                     "effective_max_outstanding": {
                       "format": "int32",
@@ -7570,6 +7931,51 @@
                       "format": "int32",
                       "type": "integer"
                     },
+                    "reservation_clamped_budget": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "reservation_clamped_burst": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "reservation_epoch": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "reservation_held": {
+                      "items": {
+                        "properties": {
+                          "bucket": {
+                            "type": "string"
+                          },
+                          "kind": {
+                            "enum": [
+                              "tenant",
+                              "tenant_model",
+                              "user",
+                              "user_model",
+                              "key",
+                              "service"
+                            ],
+                            "type": "string"
+                          },
+                          "tokens": {
+                            "format": "int64",
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "reservation_held_claims": {
+                      "format": "int64",
+                      "type": "integer"
+                    },
+                    "reservation_held_truncated": {
+                      "type": "boolean"
+                    },
                     "source": {
                       "properties": {
                         "adaptive": {
@@ -7581,6 +7987,22 @@
                           "type": "string"
                         },
                         "decode_max_inflight": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "default_max_tokens": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "default_reservation": {
                           "enum": [
                             "rule",
                             "env",
@@ -7679,11 +8101,22 @@
                       },
                       "type": "object"
                     },
+                    "store_last_read": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "store_reachable": {
+                      "type": "boolean"
+                    },
                     "telemetry_stale_ms": {
                       "format": "int32",
                       "type": "integer"
                     },
                     "tenant_max_share_pct": {
+                      "format": "int32",
+                      "type": "integer"
+                    },
+                    "tenant_slots": {
                       "format": "int32",
                       "type": "integer"
                     },
@@ -7899,6 +8332,13 @@
                   "format": "int32",
                   "minimum": 0,
                   "type": "integer"
+                },
+                "mcp_protocol_version": {
+                  "enum": [
+                    "",
+                    "2026-07-28"
+                  ],
+                  "type": "string"
                 },
                 "mode": {
                   "enum": [
@@ -8527,6 +8967,93 @@
             "dev",
             "ipAddress",
             "macAddress"
+          ],
+          "type": "object"
+        },
+        "NetIdentityEntry": {
+          "properties": {
+            "allowed_models": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "credential": {
+              "enum": [
+                "none",
+                "network"
+              ],
+              "type": "string"
+            },
+            "enforce": {
+              "enum": [
+                "advisory",
+                "strict"
+              ],
+              "type": "string"
+            },
+            "fail_mode": {
+              "enum": [
+                "neutral",
+                "closed"
+              ],
+              "type": "string"
+            },
+            "forward_identity": {
+              "type": "boolean"
+            },
+            "match": {
+              "properties": {
+                "cidr": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "ingress_if": {
+                  "type": "string"
+                },
+                "ipsec_tunnel": {
+                  "type": "string"
+                },
+                "vlan": {
+                  "maximum": 4094,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "vni": {
+                  "maximum": 16777215,
+                  "minimum": 1,
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            },
+            "name": {
+              "type": "string"
+            },
+            "priority_class": {
+              "enum": [
+                "standard",
+                "critical",
+                "sheddable"
+              ],
+              "type": "string"
+            },
+            "services": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "tenant": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "match",
+            "tenant"
           ],
           "type": "object"
         },
@@ -9585,6 +10112,30 @@
         },
         "SecurityRateConfigMod": {
           "properties": {
+            "aggregateConnRatePerSec": {
+              "format": "int64",
+              "maximum": 16777216,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "aggregateSynThreshold": {
+              "format": "int64",
+              "maximum": 16777216,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "aggregateUdpBandwidthMB": {
+              "format": "int64",
+              "maximum": 4095,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "aggregateUdpPktThreshold": {
+              "format": "int64",
+              "maximum": 16777216,
+              "minimum": 0,
+              "type": "integer"
+            },
             "connRateEnabled": {
               "type": "boolean"
             },
@@ -9635,6 +10186,42 @@
         },
         "SecurityRateEntry": {
           "properties": {
+            "aggregateConnBlocked": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "aggregateConnRatePerSec": {
+              "format": "int64",
+              "maximum": 16777216,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "aggregateSynBlocked": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "aggregateSynThreshold": {
+              "format": "int64",
+              "maximum": 16777216,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "aggregateUdpBandwidthMB": {
+              "format": "int64",
+              "maximum": 4095,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "aggregateUdpBlocked": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "aggregateUdpPktThreshold": {
+              "format": "int64",
+              "maximum": 16777216,
+              "minimum": 0,
+              "type": "integer"
+            },
             "connBlocked": {
               "format": "int64",
               "type": "integer"
@@ -9673,6 +10260,10 @@
               "format": "int64",
               "type": "integer"
             },
+            "trackingFailures": {
+              "format": "int64",
+              "type": "integer"
+            },
             "udpBandwidthMB": {
               "format": "int64",
               "type": "integer"
@@ -9701,6 +10292,10 @@
               "type": "integer"
             },
             "uniqueIps": {
+              "format": "int64",
+              "type": "integer"
+            },
+            "unsupportedPacketBlocked": {
               "format": "int64",
               "type": "integer"
             },
@@ -9815,15 +10410,27 @@
         },
         "TenantRateLimitEntry": {
           "properties": {
+            "allowed_objectives": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
             "burst_pct": {
               "format": "int64",
               "type": "integer"
+            },
+            "default_objective": {
+              "type": "string"
             },
             "model_limits": {
               "items": {
                 "$ref": "#/definitions/TenantModelRateLimit"
               },
               "type": "array"
+            },
+            "priority_class": {
+              "type": "string"
             },
             "rps": {
               "format": "int64",
@@ -9848,15 +10455,27 @@
         },
         "TenantRateLimitMod": {
           "properties": {
+            "allowed_objectives": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
             "burst_pct": {
               "format": "int64",
               "type": "integer"
+            },
+            "default_objective": {
+              "type": "string"
             },
             "model_limits": {
               "items": {
                 "$ref": "#/definitions/TenantModelRateLimit"
               },
               "type": "array"
+            },
+            "priority_class": {
+              "type": "string"
             },
             "rps": {
               "format": "int64",
@@ -10508,6 +11127,50 @@
         },
         "/config/ai/model-profiles/{profile_id}": {
           "get": {
+            "parameters": []
+          }
+        },
+        "/config/ai/netidentity": {
+          "get": {
+            "parameters": []
+          },
+          "post": {
+            "parameters": [
+              {
+                "in": "body",
+                "name": "attr",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/NetIdentityEntry"
+                }
+              }
+            ]
+          }
+        },
+        "/config/ai/netidentity/{name}": {
+          "delete": {
+            "parameters": []
+          }
+        },
+        "/config/ai/objective": {
+          "get": {
+            "parameters": []
+          },
+          "post": {
+            "parameters": [
+              {
+                "in": "body",
+                "name": "attr",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/AIObjectiveEntry"
+                }
+              }
+            ]
+          }
+        },
+        "/config/ai/objective/{name}": {
+          "delete": {
             "parameters": []
           }
         },
@@ -12120,7 +12783,7 @@
           }
         }
       },
-      "sha256": "9932ef4a04644b5631c47102bc4bdce519c1a4fa4acedde542812aeb51aad0d5",
+      "sha256": "342682e0c0354fb394123ef7a2a1783c62baa5418da640bacc7caac653acae38",
       "source_path": "api/swagger.yml"
     },
     {
@@ -12364,11 +13027,29 @@
                       },
                       "type": "array"
                     },
+                    "allowed_objectives": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
                     "burst_size": {
                       "type": "integer"
                     },
+                    "default_objective": {
+                      "type": "string"
+                    },
                     "enabled": {
                       "type": "boolean"
+                    },
+                    "priority_class": {
+                      "enum": [
+                        "",
+                        "standard",
+                        "critical",
+                        "sheddable"
+                      ],
+                      "type": "string"
                     },
                     "rate_limit_rps": {
                       "type": "integer"
@@ -12470,7 +13151,7 @@
           }
         }
       },
-      "sha256": "5e36fc44f7bcae7588611893ef158e68e0f26c2a0e67d0a9fc719ab3c026c3bc",
+      "sha256": "7d7d336f949d574ff8d71502def05c4b1cd4a8d53e8716dbcc6f878d3a19c132",
       "source_path": "api/swagger-extras.yml"
     }
   ],

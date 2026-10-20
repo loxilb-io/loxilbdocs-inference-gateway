@@ -319,3 +319,6 @@ that holds a private key.
 - [Configuration reference](../ai-gateway/configuration-reference.md#8-tls-mtls)
 - [Running modes](../concepts/running-modes.md)
 - [CLI reference](../reference/cli.md)
+
+For the integrated configure, readback, traffic, receipt and rollback sequence, see the
+[Admission Control, Flow Control and QoS lab](../use-cases/admission-flow-control/index.md).

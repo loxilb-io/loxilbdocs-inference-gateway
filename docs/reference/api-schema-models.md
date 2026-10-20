@@ -6,8 +6,8 @@ and `api/swagger-extras.yml`; a new or removed definition fails the docs gate
 until its public relevance is reviewed here.
 
 - Public schema baseline: `47803fb660ed54cd1f180b616db628461ad85d1a`
-- Reviewed Gateway `main`: `79c77f0275e655eaee4bb6a732c2d67f1a94198c`
-- Added definitions: **44**
+- Reviewed Gateway `main`: `0f78cc3329e23934be4924069b137bfbe557e8f2`
+- Added definitions: **46**
 - Removed definitions: **0**
 - Evidence class: **source/static contract only**
 
@@ -20,7 +20,7 @@ deploy.
 
 | Class | Count | Meaning |
 | --- | ---: | --- |
-| `direct-operation` | 24 | Direct request, response, or operation envelope |
+| `direct-operation` | 26 | Direct request, response, or operation envelope |
 | `nested-component` | 17 | Public component nested in another operation model |
 | `shared-envelope` | 1 | Shared public wire envelope used by multiple operations |
 | `companion-error` | 2 | Public error contract in the companion raw-handler specification |
@@ -30,10 +30,11 @@ referenced objects, and braces identify a closed enum from Swagger.
 
 ## `api/swagger.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/79c77f0275e655eaee4bb6a732c2d67f1a94198c/api/swagger.yml). Definition count changed from **147** to **189**; **42** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/0f78cc3329e23934be4924069b137bfbe557e8f2/api/swagger.yml). Definition count changed from **147** to **191**; **44** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |
+| `AIObjectiveEntry` | `direct-operation` | A named objective that maps requests to critical, standard, or sheddable class; same-class numeric order is not retained. | `name:string` | `priority:integer(int32)`, `services:array<string>`, `updated_at:string(date-time)` | [Details](../ai-gateway/ai-traffic-governance.md#network-identity-and-objective-api-contracts) |
 | `AiModelProfileEntry` | `direct-operation` | One published model profile returned by detail lookup and nested in the registry list. | `profileId:string`, `gen:integer(uint64)`, `baseModel:string`, `aliasPolicy:string{base_model_only/list}`, `supportedApis:array<string>`, `tokenizerSha256:string` | `allowedAliases:array<string>`, `excludedFeatures:array<string>`, `oracleEngine:string`, `oracleVersion:string`, `rendererEngine:string`, `rendererVersion:string`, `supportedFeatures:array<string>`, `templateContentFormat:string`, `templateSha256:string`, `tokenizerRevision:string` | [Details](../ai-gateway/model-profiles-kv-readiness.md) |
 | `AiModelProfileRegistry` | `direct-operation` | Read-only registry generation, set digest, and published profile list. | `registryGeneration:integer(uint64)`, `profiles:array<AiModelProfileEntry>` | `setDigest:string` | [Details](../ai-gateway/model-profiles-kv-readiness.md) |
 | `AuditDropCount` | `nested-component` | One dropped-record counter, by stream and reason, nested in the audit status. | none | `count:integer(int64)`, `reason:string`, `stream:string` | [Details](../operations/audit-log.md) |
@@ -60,12 +61,13 @@ referenced objects, and braces identify a closed enum from Swagger.
 | `ExternalDependencyStatus` | `nested-component` | Credential-free identity and disposition of one external recovery dependency. | none | `digest:string`, `generation:string`, `id:string`, `required:boolean`, `status:string{ready/configured/verified/warning/failed/declared}`, `type:string` | [Details](../operations/backup-restore.md) |
 | `FilesystemStatus` | `direct-operation` | Formal schema for the existing filesystem-status response. | none | `filesystemAttr:array<FileSystemInfoEntry>` | [Details](api.md) |
 | `HalfCloseConfig` | `direct-operation` | The process-wide half-close hold settings: whether new holds may be taken and the idle bound on a hold. | none | `allow:boolean`, `capSeconds:integer(int32)`, `defaultMode:string` | [Details](../ai-gateway/configuration-reference.md#half-close-hold-half_close_mode) |
-| `JWTAuthProfileEntry` | `direct-operation` | Named data-plane JWT issuer, JWKS, claim mapping, algorithm, and forwarding policy. | `name:string`, `issuer:string` | `algs:array<string>`, `audiences:array<string>`, `authorization_passthrough:boolean`, `default_tenant:string`, `forward_identity:boolean`, `jwks_url:string`, `leeway_sec:integer(int64)`, `model_authz:string{claims-required/allow-all}`, `model_role_prefix:string`, `models_claim:string`, `refresh_sec:integer(int64)`, `roles_claim:string`, `tenant_claim:string`, `user_claim:string`, `username_claim:string` | [Details](../security/data-plane-jwt-auth.md) |
+| `JWTAuthProfileEntry` | `direct-operation` | Named data-plane JWT issuer, JWKS, claim mapping, algorithm, and forwarding policy. | `name:string`, `issuer:string` | `algs:array<string>`, `audiences:array<string>`, `authorization_passthrough:boolean`, `default_tenant:string`, `forward_identity:boolean`, `jwks_url:string`, `leeway_sec:integer(int64)`, `model_authz:string{claims-required/allow-all}`, `model_role_prefix:string`, `models_claim:string`, `priority_class:string{standard/critical/sheddable}`, `refresh_sec:integer(int64)`, `roles_claim:string`, `tenant_claim:string`, `user_claim:string`, `username_claim:string` | [Details](../security/data-plane-jwt-auth.md) |
 | `KvExactEnforcement` | `nested-component` | Desired versus acknowledged KV-exact enforcement and migration-fence state. | `desired:string`, `enforced:string` | `fault:string`, `goFenced:boolean`, `lastAckAt:string` | [Details](../ai-gateway/model-profiles-kv-readiness.md) |
 | `KvExactStatusEntry` | `direct-operation` | Resolved rule, profile, engine-contract, binding, and enforcement readiness status. | `ruleIdentity:string`, `modelName:string`, `engineFamily:string`, `apiMode:string`, `desiredState:string`, `enforcedState:string`, `reasonCodes:array<string>` | `bindingDigest:string`, `bindingGen:integer(uint32)`, `enforcement:KvExactEnforcement`, `engineContractGen:integer(uint64)`, `engineContractId:string`, `hashContractId:string`, `modelProfileGen:integer(uint64)`, `modelProfileId:string`, `pdDialectId:string`, `requiredEvidenceLevel:string`, `wireSchemaId:string` | [Details](../ai-gateway/model-profiles-kv-readiness.md) |
 | `MaintenanceRequest` | `direct-operation` | Requested maintenance state and optional drain timeout. | `enabled:boolean` | `drain_timeout_seconds:integer(uint32)` | [Details](../operations/readiness-diagnostics-maintenance.md) |
 | `MaintenanceStatus` | `direct-operation` | Observed maintenance, refusal, in-flight stream, deadline, and cancellation state. | `state:string{active/maintenance}`, `refusing_new_config:boolean`, `refusing_new_inference:boolean`, `cancellable:boolean`, `in_flight_streams:integer(int64)`, `elapsed_seconds:integer(int64)`, `drain_deadline_exceeded:boolean` | `drain_timeout_seconds:integer(uint32)`, `entered_at:string(date-time)`, `in_flight_requests:integer(int64)`, `operation_id:string` | [Details](../operations/readiness-diagnostics-maintenance.md) |
 | `MapUtilization` | `nested-component` | Bounded datapath-map count and capacity without exposing entry contents. | `name:string`, `count:integer(int64)`, `capacity:integer(int64)` | none | [Details](../operations/readiness-diagnostics-maintenance.md) |
+| `NetIdentityEntry` | `direct-operation` | A node-local network-to-tenant attribution binding, with service/model scope and credential handling; network attribution is not authentication. | `name:string`, `match:object`, `tenant:string` | `allowed_models:array<string>`, `credential:string{none/network}`, `enforce:string{advisory/strict}`, `fail_mode:string{neutral/closed}`, `forward_identity:boolean`, `priority_class:string{standard/critical/sheddable}`, `services:array<string>` | [Details](../ai-gateway/ai-traffic-governance.md#network-identity-and-objective-api-contracts) |
 | `OperationResult` | `shared-envelope` | Common informational result body returned by successful configuration mutations. | none | `result:string` | [Details](api.md) |
 | `ProcessStatus` | `direct-operation` | Formal schema for the existing per-process CPU status response. | none | `processAttr:array<ProcessInfoEntry>` | [Details](api.md) |
 | `RateLimitDefaultsEntry` | `direct-operation` | Stored global or rule-scoped QoS defaults with update metadata. | `scope:string{global/rule}` | `default_tenant_rps:integer(int64)`, `default_tenant_tpm:integer(int64)`, `default_user_rps:integer(int64)`, `default_user_tpm:integer(int64)`, `rule_ident:string`, `updated_at:string(date-time)`, `vip_shared_rps:integer(int64)`, `vip_shared_tpm:integer(int64)` | [Details](../operations/ai-qos.md) |
@@ -79,7 +81,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 
 ## `api/swagger-extras.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/79c77f0275e655eaee4bb6a732c2d67f1a94198c/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/0f78cc3329e23934be4924069b137bfbe557e8f2/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |

@@ -1,0 +1,30 @@
+{
+  "serviceArguments": {
+    "externalIP": "192.0.2.254",
+    "port": 2216,
+    "protocol": "tcp",
+    "sel": 0,
+    "mode": 4,
+    "host": "192.0.2.254",
+    "path_prefix": "/",
+    "path_match_mode": "prefix",
+    "model_name": "llama-70b",
+    "api_key_auth": "jwt",
+    "jwt_auth_profile": "kc",
+    "inactiveTimeOut": 30,
+    "security": 2,
+    "mtls_backend": {
+      "verify_server_cert": true
+    },
+    "backend_ca_cert_id": "manual-backend-ca",
+    "fc_mode": "enforce",
+    "fc_max_outstanding": 1
+  },
+  "endpoints": [
+    {
+      "endpointIP": "198.51.100.1",
+      "targetPort": 9445,
+      "weight": 1
+    }
+  ]
+}

@@ -28,6 +28,51 @@ class DocumentationExampleTests(unittest.TestCase):
         report = self.validator.validate_repository()
         self.assertEqual([], report.errors, "\n".join(report.errors))
 
+    def test_public_scan_honors_mkdocs_exclusions_and_negations(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "mkdocs.yml").write_text(
+                "docs_dir: public\nexclude_docs: |\n"
+                "  internal/\n  **/CLAUDE.md\n  drafts/\n  !drafts/released.md\n"
+                "markdown_extensions:\n"
+                "  - custom: !!python/name:unavailable.module.function\n"
+            )
+            names = (
+                "public/index.md", "public/internal/private.md",
+                "public/internal/nested/private.md", "public/CLAUDE.md",
+                "public/nested/CLAUDE.md", "public/drafts/private.md",
+                "public/drafts/released.md", "snippets/common/visible.md",
+            )
+            for name in names:
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("# Fixture\n\n```bash\nprintf 'example\\n'\n```\n")
+            expected = {
+                "public/index.md", "public/drafts/released.md",
+                "snippets/common/visible.md",
+            }
+            self.assertEqual(
+                {path.relative_to(root).as_posix() for path in MODULE.public_markdown_paths(root)},
+                expected,
+            )
+            self.assertEqual(
+                {block.path.as_posix() for _, block, _ in MODULE.collect_public_blocks(root)},
+                expected,
+            )
+
+    def test_excluding_internal_docs_does_not_hide_public_address_errors(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "mkdocs.yml").write_text("exclude_docs: |\n  internal/\n")
+            for name in ("docs/internal/private.md", "docs/public.md"):
+                path = root / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("Example address: " + "10." + "0.0.7\n")
+            report = ExampleValidator(root, contract_dir=ROOT / "tests/contracts/docs_examples").validate_repository()
+            address_errors = [error for error in report.errors if "RFC1918 host address" in error]
+            self.assertEqual(len(address_errors), 1)
+            self.assertTrue(address_errors[0].startswith("docs/public.md:"))
+
     def test_red_twin_unclassified_example_is_killed(self) -> None:
         inventory = json.loads(
             (ROOT / "tests/contracts/docs_examples/example-inventory.json").read_text()
@@ -178,19 +223,19 @@ class DocumentationExampleTests(unittest.TestCase):
             family for family in manifest["families"]
             if family["release_scope"] == "release"
         ]
-        self.assertEqual(258, len(families))
-        self.assertEqual(258, len(manifest["families"]))
+        self.assertEqual(278, len(families))
+        self.assertEqual(278, len(manifest["families"]))
         self.assertTrue(all(family["writer_present"] for family in families))
         self.assertTrue(all(family["evidence_present"] for family in families))
 
     def test_gateway_main_and_release_sources_are_exactly_frozen(self) -> None:
         contract = self.validator.gateway_contract
         self.assertEqual(
-            "79c77f0275e655eaee4bb6a732c2d67f1a94198c",
+            "0f78cc3329e23934be4924069b137bfbe557e8f2",
             contract["source"]["commit"],
         )
         self.assertEqual(
-            "58716b6e3c9168f8e79d6f8d1488692c3c4bc47c",
+            "5fc365574fda283879d0a5512ef1da039211c5b4",
             contract["source"]["ebpf_submodule_commit"],
         )
         self.assertEqual("v0.9.8.9-rc.1", contract["source"]["release_tag"])
@@ -601,9 +646,28 @@ class DocumentationExampleTests(unittest.TestCase):
             {
                 "allowed_models", "enabled", "rate_limit_rps",
                 "burst_size", "tokens_per_min",
+                "priority_class", "default_objective", "allowed_objectives",
             },
             body_property_sets,
         )
+
+    def test_objective_only_apikey_patches_are_valid(self) -> None:
+        for body in (
+            {"priority_class": "standard"},
+            {"default_objective": "interactive"},
+            {"allowed_objectives": []},
+        ):
+            with self.subTest(body=body):
+                self.assertEqual([], self.validator.validate_json_body(
+                    "PATCH", "/config/ai/apikey/example-key-id", body
+                ))
+
+    def test_invalid_or_null_only_objective_patch_is_rejected(self) -> None:
+        for body in ({"priority_class": "highest"}, {"default_objective": None}):
+            with self.subTest(body=body):
+                self.assertTrue(self.validator.validate_json_body(
+                    "PATCH", "/config/ai/apikey/example-key-id", body
+                ))
 
     def test_red_twin_empty_apikey_patch_is_killed(self) -> None:
         errors = self.validator.validate_json_body(

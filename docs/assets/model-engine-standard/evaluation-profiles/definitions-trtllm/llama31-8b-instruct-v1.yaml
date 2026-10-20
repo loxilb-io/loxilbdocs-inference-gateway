@@ -1,0 +1,21 @@
+{
+  "profileId": "llama31-8b-instruct-v1",
+  "baseModel": "meta-llama/Llama-3.1-8B-Instruct",
+  "modelType": "llama",
+  "tokenizerRevision": "07eb05b21d191a58c577b4a45982fe0c049d0693",
+  "tokenizerArtifact": "sha256/79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4",
+  "tokenizerSha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4",
+  "templateArtifact": "sha256/b48c47f6443892716176eb200bf4ef108f64e06ca26ed0fa8ebc0a4b3992fcb2",
+  "templateSha256": "b48c47f6443892716176eb200bf4ef108f64e06ca26ed0fa8ebc0a4b3992fcb2",
+  "templateContentFormat": "string",
+  "renderPolicy": {
+    "addGenerationPrompt": true,
+    "bosToken": "<|begin_of_text|>",
+    "eosToken": "<|eot_id|>"
+  },
+  "supportedApis": [
+    "completions",
+    "chat"
+  ],
+  "aliasPolicy": "base_model_only"
+}

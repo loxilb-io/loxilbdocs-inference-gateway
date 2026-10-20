@@ -1,0 +1,1 @@
+{"model":"llama-70b","messages":[{"role":"user","content":"hi"}],"stream":true,"max_tokens":20}

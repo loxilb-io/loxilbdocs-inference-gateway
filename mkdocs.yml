@@ -106,7 +106,36 @@ nav:
       - API Key Management: ai-gateway/api-key-management.md
       - MCP Gateway: ai-gateway/mcp-gateway.md
       - Configuration Reference: ai-gateway/configuration-reference.md
+  - Traffic Governance Use-Cases:
+      - Admission, Flow Control & QoS: use-cases/admission-flow-control/index.md
+      - Prepare the Lab: use-cases/admission-flow-control/setup.md
+      - Download Lab Inputs: use-cases/admission-flow-control/downloads.md
+      - Common API & Rollback: use-cases/admission-flow-control/common.md
+      - JWT & Model Permissions: use-cases/admission-flow-control/identity.md
+      - TLS & mTLS: use-cases/admission-flow-control/tls.md
+      - RPS, TPM & Reservations: use-cases/admission-flow-control/quotas.md
+      - Defaults & VIP Budgets: use-cases/admission-flow-control/defaults.md
+      - Policy Faults & Recovery: use-cases/admission-flow-control/outages.md
+      - Capacity, SSE & Drain: use-cases/admission-flow-control/capacity.md
+      - TLS Errors & Resource Return: use-cases/admission-flow-control/tls-failures.md
+      - Cleanup & Diagnosis: use-cases/admission-flow-control/cleanup.md
   - LLM Integration Use-Cases:
+      - Model & Engine Standard Setup:
+          - Overview & Selection: use-cases/model-engine-standard/index.md
+          - Choose RR or Exact: use-cases/model-engine-standard/routing-choice.md
+          - Five-Model RR & Exact Manual: use-cases/model-engine-standard/matrix-manual.ko.md
+          - SGLang Wire Compatibility: use-cases/model-engine-standard/sglang-compatibility.md
+          - Model Profile Catalog: use-cases/model-engine-standard/profiles.md
+          - Prepare & Launch Workers: use-cases/model-engine-standard/deployment.md
+          - Qwen2.5 7B: use-cases/model-engine-standard/qwen25.md
+          - Llama3.1 8B: use-cases/model-engine-standard/llama31.md
+          - R1 Distill Qwen 7B: use-cases/model-engine-standard/r1.md
+          - EXAONE3.5 7.8B: use-cases/model-engine-standard/exaone35.md
+          - Gemma2 9B: use-cases/model-engine-standard/gemma2.md
+          - Gateway Operations: use-cases/model-engine-standard/operations.md
+          - Fail-over Arguments & Tuning: use-cases/model-engine-standard/failover-tuning.md
+          - Verification To-do: use-cases/model-engine-standard/qualification-todo.md
+          - QA & Evidence Limits: use-cases/model-engine-standard/validation.md
       - KV-Cache-Aware Routing: use-cases/kv-cache-aware-routing.md
       - Routing Hierarchy: use-cases/routing-hierarchy.md
       - Configuration & Tuning: use-cases/configuration-tuning.md

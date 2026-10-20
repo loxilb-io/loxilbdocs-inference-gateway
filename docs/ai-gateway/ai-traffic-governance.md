@@ -333,3 +333,70 @@ in-flight requests. See [HA and Upgrade Limitations](../operations/ha-limitation
 - [Management API Authentication](../security/management-api-authentication.md)
 - [Data-Plane Authentication and JWT](../security/data-plane-jwt-auth.md)
 - [Monitoring and Metrics](../operations/monitoring.md)
+
+For the integrated configure, readback, traffic, receipt and rollback sequence, see the
+[Admission Control, Flow Control and QoS lab](../use-cases/admission-flow-control/index.md).
+
+## Network identity and objective API contracts
+
+The schema reference includes network attribution and named objective APIs in
+addition to credential and quota policy. Check the deployed Swagger before
+using these operations. Their presence in the source contract does not establish
+GAIE/llm-d integration, request-ordering behavior or deployment qualification.
+The [admission lab](../use-cases/admission-flow-control/index.md) does not qualify
+these controls.
+
+| Resource | Operations under `/netlox/v1` | Contract and ownership |
+|---|---|---|
+| Network identity | POST/GET `/config/ai/netidentity`; DELETE `/config/ai/netidentity/{name}` | Named node-local network-to-tenant binding. POST replaces the same name. Configuration is not replicated to an HA peer. |
+| Objective | POST/GET `/config/ai/objective`; DELETE `/config/ai/objective/{name}` | Named priority stored in the AI key store. Store-backed changes apply immediately on the writing Gateway and within the refresh interval on other Gateways sharing that store (default 10 seconds). |
+
+`AIObjectiveEntry` requires `name`. It accepts an optional `services` list of
+VIP:port strings and a signed integer `priority`. Empty services means all
+services; positive priority maps to critical, zero to standard, and negative to
+sheddable. Different numeric priorities within the same class do not retain a
+relative order. Names are case-sensitive, 1–63 characters of letters, digits,
+`-`, `_` or `.`, and cannot start with `tier:`. `updated_at` is read-only.
+Objective writes require an available AI key store; an unconfigured or
+unavailable store returns 503 without changing the objective.
+
+`NetIdentityEntry` requires `name`, `match` and `tenant`. Exactly one match kind
+is accepted: `cidr`, `ingress_if`, `vlan`, `vni` or `ipsec_tunnel`. An interface
+match takes precedence over a CIDR match; CIDR matches use the longest prefix;
+a service-specific binding takes precedence over an otherwise equally specific
+binding without a service list. Equal-specificity conflicting tenant bindings
+are refused with 409.
+
+| Binding input | Default and effect |
+|---|---|
+| `services` | Empty/omitted applies to every AI service; a non-empty list scopes the binding to named VIP:port values. |
+| `allowed_models` | Empty/omitted allows any model within the binding's policy. |
+| `enforce` | `advisory` lets a presented credential decide identity. `strict` also requires its tenant to match the binding and its model to pass the binding's list; a tenant mismatch returns 403 `network_tenant_mismatch`. |
+| `credential` | `none` does not replace a required credential. `network` can admit a request without one only with an interface-based match; CIDR matching is refused for this mode. This makes the interface trust boundary part of admission policy. |
+| `forward_identity` | Default false. True requires an explicit service list and forwards attributed identity while removing client-supplied X-Auth headers on those services. Chunked HTTP/1.1 identity injection is excluded. Incompatible non-AI request/both sockmap rules are refused. |
+| `priority_class` | Default standard; caps the attributed tenant's permitted class. A binding cannot raise the tenant's allowance. |
+| `fail_mode` | Default `neutral` decides requests without the binding if lookup fails, so a strict binding is not enforced during that fault. `closed` refuses affected service requests with 503 `netid_unavailable`. Any closed binding makes its service fail closed for every source. |
+
+A source network identifies where traffic arrived, not the person or workload
+that sent it. Any sender able to use that network can receive its attribution.
+Use the default credential behavior unless an independently validated interface
+boundary is explicitly intended to stand in for credentials. Matching interface
+names can be stored before the interface exists, with a warning; they match no
+traffic until the interface is available.
+
+API-key and tenant policy schemas also contain `priority_class`,
+`allowed_objectives` and `default_objective`; JWT profiles contain a
+`priority_class` cap. Inspect their complete schema and preserve the intended
+policy when replacing a row. A priority class is separate from RPS, TPM,
+endpoint weights and a capacity ceiling.
+
+The load-balancer contract additionally exposes `ai_objective_strict` and
+`ai_default_reservation` / `ai_default_max_tokens`. Default reservation is
+`on`, `off` or `inherit`, with a built-in fallback of off; when enabled, the
+completion default falls back to the process setting or 512 tokens. Numeric
+zero restores the process default, omission on replace retains the stored
+value, and explicit null is refused. Read effective reservation values from
+`fc_effective`; a default reservation is an estimate, not backend usage.
+See the [generated schema reference](../reference/api-schema-models.md) for the
+complete request and response fields. Match the served API and inspect traffic
+and accounting before treating any configuration as effective runtime policy.

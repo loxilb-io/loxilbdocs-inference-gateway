@@ -1,0 +1,170 @@
+{
+  "scope": "Five-model paired RR/Exact QA evaluation and retained historical classifications; no release support promotion",
+  "models": [
+    {
+      "key": "gemma2",
+      "name": "Gemma2 9B",
+      "MODEL": "google/gemma-2-9b-it",
+      "REV": "11c9b309abf73637e4b6f9a3fa1e92e615547819",
+      "PROFILE": "gemma2-9b-it-v1",
+      "combinations": {
+        "vllm": "limited",
+        "sglang": "reference",
+        "trtllm": "not-provided"
+      },
+      "publicCatalogMembership": "absent",
+      "exactAvailability": "separate-qa-evaluation-profiles-supplied",
+      "historicalChoices": {
+        "vllm": "limited-sequential-rr-evaluation",
+        "sglang": "rr-local-evaluation",
+        "trtllm": "not-provided"
+      },
+      "choices": {
+        "vllm": "paired-rr-exact-evaluation",
+        "sglang": "paired-rr-exact-evaluation",
+        "trtllm": "blocked-native-architecture"
+      },
+      "configurationDirectory": "matrix-configurations",
+      "profileDirectory": "evaluation-profiles"
+    },
+    {
+      "key": "qwen25",
+      "name": "Qwen2.5 7B",
+      "MODEL": "Qwen/Qwen2.5-7B-Instruct",
+      "REV": "a09a35458c702b33eeacc393d103063234e8bc28",
+      "PROFILE": "qwen25-7b-instruct-v1",
+      "combinations": {
+        "vllm": "historical-recommended",
+        "sglang": "reference",
+        "trtllm": "reference"
+      },
+      "publicCatalogMembership": "absent",
+      "exactAvailability": "separate-qa-evaluation-profiles-supplied",
+      "historicalChoices": {
+        "vllm": "rr-local-evaluation",
+        "sglang": "rr-local-evaluation",
+        "trtllm": "rr-local-evaluation"
+      },
+      "choices": {
+        "vllm": "paired-rr-exact-evaluation",
+        "sglang": "paired-rr-exact-evaluation",
+        "trtllm": "paired-rr-exact-evaluation"
+      },
+      "configurationDirectory": "matrix-configurations",
+      "profileDirectory": "evaluation-profiles"
+    },
+    {
+      "key": "llama31",
+      "name": "Llama3.1 8B",
+      "MODEL": "meta-llama/Llama-3.1-8B-Instruct",
+      "REV": "07eb05b21d191a58c577b4a45982fe0c049d0693",
+      "PROFILE": "llama31-8b-instruct-v1",
+      "combinations": {
+        "vllm": "historical-recommended",
+        "sglang": "reference",
+        "trtllm": "reference"
+      },
+      "publicCatalogMembership": "absent",
+      "exactAvailability": "separate-qa-evaluation-profiles-supplied",
+      "historicalChoices": {
+        "vllm": "rr-local-evaluation",
+        "sglang": "rr-local-evaluation",
+        "trtllm": "rr-local-evaluation"
+      },
+      "choices": {
+        "vllm": "paired-rr-exact-evaluation",
+        "sglang": "paired-rr-exact-evaluation",
+        "trtllm": "paired-rr-exact-evaluation"
+      },
+      "configurationDirectory": "matrix-configurations",
+      "profileDirectory": "evaluation-profiles"
+    },
+    {
+      "key": "r1",
+      "name": "R1 Distill Qwen 7B",
+      "MODEL": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+      "REV": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+      "PROFILE": "r1-distill-qwen-7b-v1",
+      "combinations": {
+        "vllm": "historical-recommended",
+        "sglang": "reference",
+        "trtllm": "reference"
+      },
+      "publicCatalogMembership": "absent",
+      "exactAvailability": "separate-qa-evaluation-profiles-supplied",
+      "historicalChoices": {
+        "vllm": "rr-local-evaluation",
+        "sglang": "rr-local-evaluation",
+        "trtllm": "rr-local-evaluation"
+      },
+      "choices": {
+        "vllm": "paired-rr-exact-evaluation",
+        "sglang": "paired-rr-exact-evaluation",
+        "trtllm": "paired-rr-exact-evaluation"
+      },
+      "configurationDirectory": "matrix-configurations",
+      "profileDirectory": "evaluation-profiles"
+    },
+    {
+      "key": "exaone35",
+      "name": "EXAONE3.5 7.8B",
+      "MODEL": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+      "REV": "553ea250b9a5317231459279d5847d6cf955b9aa",
+      "PROFILE": "exaone35-78b-instruct-v1",
+      "combinations": {
+        "vllm": "historical-recommended",
+        "sglang": "reference",
+        "trtllm": "not-provided"
+      },
+      "publicCatalogMembership": "absent",
+      "exactAvailability": "separate-qa-evaluation-profiles-supplied",
+      "historicalChoices": {
+        "vllm": "rr-local-evaluation",
+        "sglang": "rr-local-evaluation",
+        "trtllm": "not-provided"
+      },
+      "choices": {
+        "vllm": "paired-rr-exact-evaluation",
+        "sglang": "paired-rr-exact-evaluation",
+        "trtllm": "blocked-native-architecture"
+      },
+      "configurationDirectory": "matrix-configurations",
+      "profileDirectory": "evaluation-profiles"
+    }
+  ],
+  "selectionPolicy": {
+    "defaultPath": "five-model-matrix-select-rr-or-exact",
+    "productionQualification": "not-established-by-this-package",
+    "standardCardExact": "separate-qa-evaluation-profiles-supplied",
+    "publicCatalogSourceCommit": "1d51393773e4974b5e356377496c9d677dba9f9c",
+    "publicCatalogValidatedTuples": 0,
+    "candidateOptIn": "only-for-candidate-tuples-present-in-the-public-catalog"
+  },
+  "routingChoiceExample": {
+    "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+    "revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+    "profileId": "r1-distill-qwen-15b-v1",
+    "publicCatalogState": "candidate",
+    "modes": [
+      "rr",
+      "exact"
+    ],
+    "engines": [
+      "vllm",
+      "sglang",
+      "trtllm"
+    ],
+    "directory": "routing-choice",
+    "newRuntimeQualification": false,
+    "trtllmImage": "requires-separately-provisioned-matching-rc24-artifact",
+    "vllmTargetVersion": "0.31.0",
+    "vllmTupleStatus": "new-version-evaluation-not-qualified-by-archived-0.28-catalog",
+    "vllmRuntimeEvidence": "bounded-three-worker-gpu-qa-full-qualification-open"
+  },
+  "matrixEvaluation": {
+    "manual": "matrix-manual.ko.md",
+    "caseCount": 30,
+    "catalogPromotion": false,
+    "gatewaySource": "1d51393773e4974b5e356377496c9d677dba9f9c"
+  }
+}

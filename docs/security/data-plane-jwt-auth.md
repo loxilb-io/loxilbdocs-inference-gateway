@@ -230,3 +230,6 @@ one service still references the profile.
 - [AI Quotas and QoS](../operations/ai-qos.md)
 - [Monitoring and Metrics](../operations/monitoring.md)
 - [HA and Upgrade Limitations](../operations/ha-limitations.md)
+
+For the integrated configure, readback, traffic, receipt and rollback sequence, see the
+[Admission Control, Flow Control and QoS lab](../use-cases/admission-flow-control/index.md).

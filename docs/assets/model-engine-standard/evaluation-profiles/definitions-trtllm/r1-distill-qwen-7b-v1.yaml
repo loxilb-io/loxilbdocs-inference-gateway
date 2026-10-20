@@ -1,0 +1,21 @@
+{
+  "profileId": "r1-distill-qwen-7b-v1",
+  "baseModel": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+  "modelType": "qwen2",
+  "tokenizerRevision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+  "tokenizerArtifact": "sha256/88145e3c3249adc2546ede277e9819d6e405e19072456e4b521cbc724bd60773",
+  "tokenizerSha256": "88145e3c3249adc2546ede277e9819d6e405e19072456e4b521cbc724bd60773",
+  "templateArtifact": "sha256/56a1447ad31926fdc21fb07e56e5642bd9c850c4f52d8c8af7bbe5f079a84f5f",
+  "templateSha256": "56a1447ad31926fdc21fb07e56e5642bd9c850c4f52d8c8af7bbe5f079a84f5f",
+  "templateContentFormat": "string",
+  "renderPolicy": {
+    "addGenerationPrompt": true,
+    "bosToken": "<\uff5cbegin\u2581of\u2581sentence\uff5c>",
+    "eosToken": "<\uff5cend\u2581of\u2581sentence\uff5c>"
+  },
+  "supportedApis": [
+    "completions",
+    "chat"
+  ],
+  "aliasPolicy": "base_model_only"
+}

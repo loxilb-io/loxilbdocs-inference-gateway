@@ -51,6 +51,8 @@ Load-balancer rule features use the management API on port **11111** under
 [API Reference](reference/api.md), and [Configuration Reference](ai-gateway/configuration-reference.md)
 before automating these operations.
 
+For a model-specific installation path, use [Model & Engine Standard Setup](use-cases/model-engine-standard/index.md): five model cards, three engine choices, editable configurations and service lifecycle checks.
+
 ## Choose a starting path
 
 ```mermaid

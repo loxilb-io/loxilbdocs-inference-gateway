@@ -199,3 +199,6 @@ unset CONTROL_PLANE_TOKEN INFERENCE_API_KEY
 - [AI Quotas and QoS](../operations/ai-qos.md)
 - [AI Key Store Operations](../operations/ai-key-store.md)
 - [Monitoring and Metrics](../operations/monitoring.md)
+
+For the integrated configure, readback, traffic, receipt and rollback sequence, see the
+[Admission Control, Flow Control and QoS lab](../use-cases/admission-flow-control/index.md).
