@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "gateway_commit": "0f78cc3329e23934be4924069b137bfbe557e8f2",
+  "ebpf_commit": "5fc365574fda283879d0a5512ef1da039211c5b4",
+  "address_prefix": "192.0.2.",
+  "scope": "single-host synthetic security tutorial; runtime results are separate",
+  "examples": {
+    "blacklist.json": {
+      "method": "POST",
+      "route": "/config/ipfilter"
+    },
+    "firewall-drop.json": {
+      "method": "POST",
+      "route": "/config/firewall"
+    },
+    "key-control-create.json": {
+      "method": "POST",
+      "route": "/config/ai/apikey"
+    },
+    "key-create.json": {
+      "method": "POST",
+      "route": "/config/ai/apikey"
+    },
+    "key-rate.json": {
+      "method": "PATCH",
+      "route": "/config/ai/apikey/{key_id}"
+    },
+    "key-second-create.json": {
+      "method": "POST",
+      "route": "/config/ai/apikey"
+    },
+    "key-unlimited.json": {
+      "method": "PATCH",
+      "route": "/config/ai/apikey/{key_id}"
+    },
+    "lb-allowed-sources.json": {
+      "method": "POST",
+      "route": "/config/loadbalancer"
+    },
+    "lb-coexistence.json": {
+      "method": "POST",
+      "route": "/config/loadbalancer"
+    },
+    "model.json": {
+      "method": "POST",
+      "route": "/config/loadbalancer"
+    },
+    "rate-aggregate.json": {
+      "method": "POST",
+      "route": "/config/securityrate"
+    },
+    "rate-source.json": {
+      "method": "POST",
+      "route": "/config/securityrate"
+    },
+    "tenant-rate.json": {
+      "method": "POST",
+      "route": "/config/ai/tenant/ratelimit"
+    },
+    "tenant-unlimited.json": {
+      "method": "POST",
+      "route": "/config/ai/tenant/ratelimit"
+    },
+    "fairness-rule.json": {
+      "method": "POST",
+      "route": "/config/loadbalancer"
+    }
+  }
+}

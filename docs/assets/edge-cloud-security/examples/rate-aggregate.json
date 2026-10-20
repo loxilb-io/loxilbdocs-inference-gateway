@@ -1,0 +1,15 @@
+{
+  "synEnabled": false,
+  "synThreshold": 100,
+  "cookieThreshold": 50,
+  "connRateEnabled": false,
+  "ratePerSec": 100,
+  "udpEnabled": false,
+  "udpPktThreshold": 100,
+  "udpBandwidthMB": 100,
+  "whitelistIps": [],
+  "aggregateSynThreshold": 120,
+  "aggregateConnRatePerSec": 0,
+  "aggregateUdpPktThreshold": 120,
+  "aggregateUdpBandwidthMB": 0
+}

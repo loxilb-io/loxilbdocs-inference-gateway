@@ -1,0 +1,11 @@
+{
+  "tenant_id": "edge-team",
+  "name": "edge-second",
+  "allowed_models": [
+    "Qwen/Qwen3-0.6B"
+  ],
+  "rate_limit_rps": 0,
+  "burst_size": 0,
+  "tokens_per_min": 100000,
+  "enabled": true
+}

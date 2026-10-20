@@ -1,0 +1,6 @@
+{
+  "filterType": "blacklist",
+  "cidr": "192.0.2.51/32",
+  "action": "drop",
+  "priority": 210
+}

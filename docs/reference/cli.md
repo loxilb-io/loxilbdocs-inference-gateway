@@ -402,7 +402,7 @@ default. See [Admission Flow Control](../ai-gateway/admission-flow-control.md).
 | `--fc-warmup-ms` | `fc_warmup_ms` | `0`–`3600000` |
 | `--fc-tenant-max-share-pct` | `fc_tenant_max_share_pct` | `0`–`100` |
 | `--fc-expose-headers` | `fc_expose_headers` | `on`, `off`, `inherit` |
-| `--connection-limit` | `connectionLimit` | uint32; enforced on DNAT-mode rules, not on `mode: 4` |
+| `--connection-limit` | `connectionLimit` | uint32; DNAT SYN-time ceiling and fullproxy accepted-client TCP ceiling; see [connection scope](../ai-gateway/configuration-reference.md#1-core-service-fields) |
 
 `loxicmd get lb -o wide` shows the rule's admission settings beside the rest of the rule. The
 complete resolved state, `fc_effective`, is read from the REST `GET /config/loadbalancer/all`.

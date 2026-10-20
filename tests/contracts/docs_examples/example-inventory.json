@@ -158,7 +158,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "2aea3ed650be6e45682b",
       "language": "bash",
-      "line": 261,
+      "line": 262,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -188,7 +188,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "2cc913a0412d1204e999",
       "language": "bash",
-      "line": 287,
+      "line": 288,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -218,7 +218,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "76d775f0da0e4583f62d",
       "language": "bash",
-      "line": 333,
+      "line": 334,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -248,7 +248,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "f4a5c131e75d59d8473e",
       "language": "bash",
-      "line": 358,
+      "line": 359,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -278,7 +278,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "16f751db4affd9e00aaa",
       "language": "bash",
-      "line": 399,
+      "line": 400,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -308,7 +308,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "2a970757b6acf4aa560d",
       "language": "bash",
-      "line": 420,
+      "line": 421,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -9599,6 +9599,686 @@
         "validation": true
       },
       "sha256": "b5772246eae8b6d9f49d4eacdb2ff093b9651a9f321b271a926531220a6061fc",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9380f1a6c0c39ff8799b",
+      "language": "bash",
+      "line": 26,
+      "path": "docs/use-cases/edge-cloud-security/cleanup.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "e0753f076eb99aee7a2e3d1b5e180f9351e73ae5f8f13ff0c59c97e02e283698",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "c54ad340ba6e1dfe49d7",
+      "language": "bash",
+      "line": 59,
+      "path": "docs/use-cases/edge-cloud-security/cleanup.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "cb3c4b5d807eb5ee048379db95beed81781baf6f2bbcc7a5cc9b72bb8cf82130",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "2670a21fcfe8082782db",
+      "language": "bash",
+      "line": 87,
+      "path": "docs/use-cases/edge-cloud-security/cleanup.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "dd353e45355cefae423f5a4ad670352e3043f719eb85feccd1cf532113c99e00",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "d89645f299e75e422bad",
+      "language": "bash",
+      "line": 32,
+      "path": "docs/use-cases/edge-cloud-security/coexistence.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "aea7388ffa1e0542f5d4205a9260a5f6e9d8dce462df2ba1c8a2378a1578f34e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ff8c844afddf88706ce2",
+      "language": "bash",
+      "line": 107,
+      "path": "docs/use-cases/edge-cloud-security/coexistence.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "ec69e4dffc175a065e77f8fa7a498275083adebacfd5976fce9ba78a44612c58",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "0ddb022eb30e79fe055d",
+      "language": "bash",
+      "line": 143,
+      "path": "docs/use-cases/edge-cloud-security/coexistence.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "952ed45ee319812082973c687c6006bc95adceb92fa1794e177929db7f3a8aa1",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "254e8115561f28d105af",
+      "language": "bash",
+      "line": 178,
+      "path": "docs/use-cases/edge-cloud-security/coexistence.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "c708a9c60efbb08383e5299830f208073e3d5db8a03d2fb95c915e122f5aa79f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "499aca7064b99bf55300",
+      "language": "bash",
+      "line": 25,
+      "path": "docs/use-cases/edge-cloud-security/connections.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "407ffeb1f3cf1494c326ddc15215bbec0c19ee0518db9445ef9485282741d2e8",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "b06dfe35102f8cc60786",
+      "language": "bash",
+      "line": 36,
+      "path": "docs/use-cases/edge-cloud-security/connections.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "c851dd2633c973ec9051f4ddaead17f80c976976b5dd597fba14b4fb276a9fff",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "e586ced9a311c5901fd8",
+      "language": "bash",
+      "line": 64,
+      "path": "docs/use-cases/edge-cloud-security/connections.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "c0c4a4f4fc664ad337d7f65d670cc722fb58d261a368eb4b84704db3dd173d59",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ecf99cb53974e2f6c128",
+      "language": "bash",
+      "line": 87,
+      "path": "docs/use-cases/edge-cloud-security/connections.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "7abcec585fb439f84bb9027af06cc5e29f762883ca547be2b08aae532ecab764",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "visual-explanation",
+      "id": "bbaa9ce59fb4f15d7eea",
+      "language": "mermaid",
+      "line": 24,
+      "path": "docs/use-cases/edge-cloud-security/index.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": false,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "3408a9a3db8d1dc4ed413a9c5eef63d95726b07a23fd8b3193241f579966bad5",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "42e32ea280321dde3730",
+      "language": "bash",
+      "line": 19,
+      "path": "docs/use-cases/edge-cloud-security/network-boundary.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "f13430dfd379274d6187855f75aae9bd7f9293977623031197de07f9e1e65b58",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "1a50a4d275caf8cbe336",
+      "language": "bash",
+      "line": 79,
+      "path": "docs/use-cases/edge-cloud-security/network-boundary.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "b8abad30001a5e14be27f0c58d7071b88870c481e9b720f1c890b62f908a8f64",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "d0c3319fa95eb3e5d4c0",
+      "language": "bash",
+      "line": 145,
+      "path": "docs/use-cases/edge-cloud-security/network-boundary.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "c0cafb529d612944d3ee9aa692eddcb319da8fdc55323822811a57110ff294b8",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "390bf285c9d004232335",
+      "language": "bash",
+      "line": 25,
+      "path": "docs/use-cases/edge-cloud-security/recovery.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "0384cc94c55d6d1c03fb4de0fb042a82988aef3f267fbf8d7155c87e1d9abdec",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "5f3e594c8f1349552ac8",
+      "language": "bash",
+      "line": 48,
+      "path": "docs/use-cases/edge-cloud-security/recovery.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "4e37b04c81d9c1cef204576b398547baf9611a493035678d5d5f933853a6c029",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "e7a99364e09dc8ead345",
+      "language": "bash",
+      "line": 82,
+      "path": "docs/use-cases/edge-cloud-security/recovery.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "8d835f47a3941d6410d99470fc859d5488793a69193821e82dfa6dc98f2059e0",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "5b1afb80c702f9307663",
+      "language": "bash",
+      "line": 18,
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "8f80573076d91ce5a72ecc0ff48b1912e1ec1531a5eafc4f88aa4b355e75e3e5",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "6e531cf1d51200929a38",
+      "language": "bash",
+      "line": 40,
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "b5ad84e76d256a016fff487ac867a4ca12873b75003db7559027ca4584387ff6",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "3dd6d9008d24d611da83",
+      "language": "bash",
+      "line": 73,
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "30d63ea430620b50d17dc3c6428f3b0d473f59e256adaa14ccedebc697952cf9",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "8f3e13e9f5e5837e916b",
+      "language": "bash",
+      "line": 93,
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "82eeadcf371aa06f609036b3f70b8256bd255e4b51ded9f1c54f7de3fc9f70cd",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "a68541d4ef9e5bb0a801",
+      "language": "bash",
+      "line": 103,
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "964fe77e462f092ce5c814d8dd18ea8253c87310e98aca11a4d1737e206367c3",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "349109b650d23df6070f",
+      "language": "bash",
+      "line": 123,
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "de601ffdd34413848ac58f4690ee11a4a665a95320f91f8833b8f191f88596fe",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "984d920db1d230d11c24",
+      "language": "bash",
+      "line": 143,
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "a67d0e69fbdc888b06897a06ff833b50e4d4670972c3d5ffef28b09462b5db4c",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "22215962a07deac43cb2",
+      "language": "bash",
+      "line": 196,
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "99a0b74f61b0e43fa910ac76db03fbb58e1ac1352910f9fbe06071360acf76a1",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "53df0924ab2566fb1129",
+      "language": "bash",
+      "line": 275,
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "5ce3579aadf3f0ea1b575704508e25bb9cde96331dc5a1797871ebda3f51144e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "a8a4637bc0f19f48126d",
+      "language": "bash",
+      "line": 22,
+      "path": "docs/use-cases/edge-cloud-security/setup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": false
+      },
+      "sha256": "42eb2aa82a42df265d1d3d6d7baa9d67046cd091ecfa1f429943a4c71e0b4186",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "8213fb17e10aad95ca83",
+      "language": "bash",
+      "line": 54,
+      "path": "docs/use-cases/edge-cloud-security/setup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": false
+      },
+      "sha256": "de94a1fa040a6137364ab7b3d2451e65e262bbde53439c59d725d0c706c68232",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "83f2c18639cca412c083",
+      "language": "mermaid",
+      "line": 93,
+      "path": "docs/use-cases/edge-cloud-security/setup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": false,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": false
+      },
+      "sha256": "5776bc83bc76a84254a527b7ff8d3bc0cbf6662fa53f7ca1dd493b5adc6c3283",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f60eef58ef3e35ee1e44",
+      "language": "bash",
+      "line": 115,
+      "path": "docs/use-cases/edge-cloud-security/setup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": false
+      },
+      "sha256": "90e7a8f9e23fd2a5f9fd18a572c0dce1cea148fc8d2f2251c1c7566bc8c015d6",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "2ecf7a4b7e47e437fe2e",
+      "language": "bash",
+      "line": 141,
+      "path": "docs/use-cases/edge-cloud-security/setup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": false
+      },
+      "sha256": "fb7d8de5f51d99a32b43e21b0b769e77c6eb4f2ecec0486cfc3a22daa37b9650",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "8981fa0a65c2894d4257",
+      "language": "bash",
+      "line": 165,
+      "path": "docs/use-cases/edge-cloud-security/setup.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": true,
+        "validation": false
+      },
+      "sha256": "c3cce9ffcce74d95b80b6b8d3af427e03686638737174e0c5509ad84ab8c1708",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "95bd369a8baf96fd8b03",
+      "language": "bash",
+      "line": 17,
+      "path": "docs/use-cases/edge-cloud-security/source-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "6172535ce9af5e98435434e63ab18d97e1384d64fee08a966737398e9abaa31e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "af5c3b84eb3c57a129a5",
+      "language": "bash",
+      "line": 32,
+      "path": "docs/use-cases/edge-cloud-security/source-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "99a2119a67c416e03cb39ae03f4b70371115468722c2ffe315726688148b9cc7",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "7f50c1792d05c455eebf",
+      "language": "bash",
+      "line": 70,
+      "path": "docs/use-cases/edge-cloud-security/source-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "ea6bc2837c7b06495293050446f763c384ad7862bf7238fd0099e45d6e18b667",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "825402a767ab76826cfa",
+      "language": "bash",
+      "line": 96,
+      "path": "docs/use-cases/edge-cloud-security/source-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "e771ec80f1f58804cbe3f5ad7f193cd567423f74b32a4461190eddb50721de0c",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "6cfae808fe0c8da8f393",
+      "language": "bash",
+      "line": 136,
+      "path": "docs/use-cases/edge-cloud-security/source-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "bf1c750a585f2094100bb3b4dd068f148600a6d32449ca4fe48f5912a43ed70c",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "d0af90d536a92d10f6e3",
+      "language": "bash",
+      "line": 175,
+      "path": "docs/use-cases/edge-cloud-security/source-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "fb06d42c2b4496dfa7423c9da115f9b7ae4e967dbcfd30f1756d308240ba2cb6",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "57bb7c30ddaa49fdf55f",
+      "language": "bash",
+      "line": 215,
+      "path": "docs/use-cases/edge-cloud-security/source-protection.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "5de2b4591af5bade7af6653b1d2c544b4bf03a3e143926c283103fe83b6b3b12",
       "status": "illustrative-only"
     },
     {
