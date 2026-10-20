@@ -1,0 +1,563 @@
+{
+  "scope": "Source catalog snapshot; not installed discovery or runtime qualification",
+  "sourceCommit": "1d51393773e4974b5e356377496c9d677dba9f9c",
+  "source": "https://github.com/loxilb-io/loxilb-inference-gateway/blob/1d51393773e4974b5e356377496c9d677dba9f9c/scripts/models/validated-models.yaml",
+  "engines": [
+    {
+      "engine": "vllm",
+      "version": "v0.28.0",
+      "contract": "vllm-kv-map-v2"
+    },
+    {
+      "engine": "sglang",
+      "version": "v0.5.18",
+      "contract": "sglang-kv-rank-v1"
+    },
+    {
+      "engine": "trtllm",
+      "version": "1.3.0rc24",
+      "contract": "trtllm-kv-http-preview-v1"
+    }
+  ],
+  "models": [
+    {
+      "profileId": "olmo2-0425-1b-v1",
+      "repo": "allenai/OLMo-2-0425-1B-Instruct",
+      "revision": "48d788eca847d4d7548f375ad03d3c9312f6139e",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "blocked",
+          "reason": "architecture_unsupported"
+        }
+      ]
+    },
+    {
+      "profileId": "r1-distill-qwen-15b-v1",
+      "repo": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+      "revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "candidate",
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "gemma3-1b-it-v1",
+      "repo": "google/gemma-3-1b-it",
+      "revision": "dcc83ea841ab6100d6b47a070329e1ba4cf78752",
+      "gated": true,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "candidate",
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "gemma4-e2b-it-v1",
+      "repo": "google/gemma-4-E2B-it",
+      "revision": "3e22461f65e89153144f8adb70e3b8c2cc9845a7",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "blocked",
+          "reason": "hardware_unsupported"
+        }
+      ]
+    },
+    {
+      "profileId": "llama32-1b-v1",
+      "repo": "meta-llama/Llama-3.2-1B-Instruct",
+      "revision": "9213176726f574b556790deb65791e0c5aa438b6",
+      "gated": true,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "candidate",
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "exaone4-12b-v1",
+      "repo": "LGAI-EXAONE/EXAONE-4.0-1.2B",
+      "revision": "3abf2810673c7c0778df64a73c2d52eab32d91c4",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "candidate",
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "phi4-mini-instruct-v1",
+      "repo": "microsoft/Phi-4-mini-instruct",
+      "revision": "cfbefacb99257ffa30c83adab238a50856ac3083",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "candidate",
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "granite42-3b-v1",
+      "repo": "ibm-granite/granite-4.2-3b",
+      "revision": "e459acceac81e5fe67c07d9cfc72329a332e7eb1",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "blocked",
+          "reason": "architecture_unsupported"
+        }
+      ]
+    },
+    {
+      "profileId": "ministral3-3b-v1",
+      "repo": "mistralai/Ministral-3-3B-Instruct-2512",
+      "revision": "b35d4dfe56c142746f54dbd64f579faab2744308",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "blocked",
+          "reason": "engine_renderer"
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "blocked",
+          "reason": "engine_renderer"
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "blocked",
+          "reason": "checkpoint_format"
+        }
+      ]
+    },
+    {
+      "profileId": "ax31-light-v1",
+      "repo": "skt/A.X-3.1-Light",
+      "revision": "9b41bb2406472634d8812c0b8931fa40fa9a6c3a",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "candidate",
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "qwen36-27b-fp8-v1",
+      "repo": "Qwen/Qwen3.6-27B-FP8",
+      "revision": "e89b16ebf1988b3d6befa7de50abc2d76f26eb09",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "candidate",
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "qwen38-27b-fp8-v1",
+      "repo": "Qwen/Qwen3.8-27B-FP8",
+      "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "candidate",
+          "modes": [
+            "converged"
+          ],
+          "apis": [
+            "chat"
+          ]
+        }
+      ]
+    },
+    {
+      "profileId": "gptoss-20b-v1",
+      "repo": "openai/gpt-oss-20b",
+      "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+      "gated": false,
+      "tuples": [
+        {
+          "engine": "vllm",
+          "engineVersion": "v0.28.0",
+          "state": "blocked",
+          "reason": "engine_renderer"
+        },
+        {
+          "engine": "sglang",
+          "engineVersion": "v0.5.18",
+          "state": "candidate",
+          "modes": [
+            "converged",
+            "pd"
+          ],
+          "apis": [
+            "completions",
+            "chat"
+          ]
+        },
+        {
+          "engine": "trtllm",
+          "engineVersion": "1.3.0rc24",
+          "state": "blocked",
+          "reason": "engine_renderer"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Explain prefix caching in one sentence."
+    }
+  ],
+  "temperature": 0,
+  "max_tokens": 32
+}

@@ -1,0 +1,21 @@
+{
+  "profileId": "exaone35-78b-instruct-v1",
+  "baseModel": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+  "modelType": "exaone",
+  "tokenizerRevision": "553ea250b9a5317231459279d5847d6cf955b9aa",
+  "tokenizerArtifact": "sha256/7c7507fef57dd4daa4c37103fa656a793748e4cbceb03f808ef292d0324aab10",
+  "tokenizerSha256": "7c7507fef57dd4daa4c37103fa656a793748e4cbceb03f808ef292d0324aab10",
+  "templateArtifact": "sha256/627e212836e41c6231988b4ae595a16ddfd7814d2c39fd7bf3105651f8bbeebd",
+  "templateSha256": "627e212836e41c6231988b4ae595a16ddfd7814d2c39fd7bf3105651f8bbeebd",
+  "templateContentFormat": "string",
+  "renderPolicy": {
+    "addGenerationPrompt": true,
+    "bosToken": "[BOS]",
+    "eosToken": "[|endofturn|]"
+  },
+  "supportedApis": [
+    "completions",
+    "chat"
+  ],
+  "aliasPolicy": "base_model_only"
+}
