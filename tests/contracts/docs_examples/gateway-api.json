@@ -70,9 +70,9 @@
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
         ],
-        "scenario_object_id": "5c06fcf0b5139f93fc5515ede5bf825a7867750f",
+        "scenario_object_id": "416a806ca3d12a708c6cde3246ca636f40480f02",
         "scenario_path": "cicd/vllm-pd-disagg",
-        "validation_object_id": "732dba079be92270c1ae0dd0ee635f8ca423adc3",
+        "validation_object_id": "4beaa11b794f25b89417a53049b1eecad43869ee",
         "validation_path": "cicd/vllm-pd-disagg/validation.sh",
         "workflow_membership": "wired",
         "workflow_object_id": "2dd932f6eac7ca465ca7ba6eea4523a8c27ca909",
@@ -121,13 +121,13 @@
   "contract_version": 1,
   "metric_manifest": {
     "coverage": {
-      "default_families": 276,
+      "default_families": 278,
       "default_referenced": 182,
-      "default_unreferenced": 73,
+      "default_unreferenced": 75,
       "default_waived": 21,
-      "writer_classified": 276,
+      "writer_classified": 278,
       "writer_unclassified": 0,
-      "writer_unverified": 75
+      "writer_unverified": 77
     },
     "families": [
       {
@@ -2923,6 +2923,28 @@
         "writer_present": true
       },
       {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_pools_freed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_pools_live",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
         "activation": "C",
         "evidence_present": true,
         "implementation_status": "verified-runtime",
@@ -3618,11 +3640,11 @@
       }
     },
     "provenance": {
-      "generated_at": "2026-10-14T10:59:43+00:00",
-      "source_revision": "0b4273446012c5a5307de50d1a6ca3e33e999ed3"
+      "generated_at": "2026-10-19T21:47:55+00:00",
+      "source_revision": "350428416e5848a30936aea0cb872e52db34e77b"
     },
     "schema_version": 1,
-    "sha256": "4208e6c65b73eb936e2ad5d6ad4f87eb2aec9e557b0847dfaa2158d8b3943499",
+    "sha256": "f9a1b01c3317b5898e04668196f95ac29496bc5c4e693afc21afb7169dbd2752",
     "source_path": "deploy/monitoring/manifest/metric-manifest.json"
   },
   "release_snapshot": {
@@ -3736,8 +3758,8 @@
     ]
   },
   "source": {
-    "commit": "1d51393773e4974b5e356377496c9d677dba9f9c",
-    "ebpf_submodule_commit": "2e428b0b34e23e2ba440e629c7e97722527f6684",
+    "commit": "0f78cc3329e23934be4924069b137bfbe557e8f2",
+    "ebpf_submodule_commit": "5fc365574fda283879d0a5512ef1da039211c5b4",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
     "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",
@@ -12761,7 +12783,7 @@
           }
         }
       },
-      "sha256": "bc857ad0380dd416823d2f49383e1bc247967e918592b54579ca37b868571339",
+      "sha256": "342682e0c0354fb394123ef7a2a1783c62baa5418da640bacc7caac653acae38",
       "source_path": "api/swagger.yml"
     },
     {

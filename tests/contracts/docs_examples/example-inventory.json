@@ -4381,7 +4381,7 @@
       "evidence": "visual-explanation",
       "id": "59bd6a0202cdcf80547f",
       "language": "mermaid",
-      "line": 52,
+      "line": 55,
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,
@@ -4398,7 +4398,7 @@
       "evidence": "shell-syntax-only",
       "id": "85acf637981d5f844b4a",
       "language": "bash",
-      "line": 93,
+      "line": 96,
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,
@@ -4415,7 +4415,7 @@
       "evidence": "swagger-union-static",
       "id": "493e66520da201aebdb0",
       "language": "bash",
-      "line": 103,
+      "line": 106,
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,
@@ -4432,7 +4432,7 @@
       "evidence": "cli-contract-static",
       "id": "65eeee8b4b51fcb884da",
       "language": "bash",
-      "line": 120,
+      "line": 123,
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,
@@ -4449,7 +4449,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "f32617a800c4f31a233c",
       "language": "bash",
-      "line": 146,
+      "line": 149,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -4479,7 +4479,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "600eec111e3e1d171301",
       "language": "bash",
-      "line": 181,
+      "line": 184,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -4509,7 +4509,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "d65d02d4e60e3bfc7679",
       "language": "bash",
-      "line": 213,
+      "line": 216,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -4539,7 +4539,7 @@
       "evidence": "cli-contract-static",
       "id": "ac03d17738e5fc4b60e7",
       "language": "bash",
-      "line": 239,
+      "line": 242,
       "path": "docs/operations/backup-restore.md",
       "quality_contract": {
         "cleanup": false,

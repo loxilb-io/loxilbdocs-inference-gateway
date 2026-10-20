@@ -12,7 +12,7 @@ database, or external identity and quota stores.
 
 | Surface | Immutable release status | Current-main status |
 |---|---|---|
-| Gateway `snapshot` / `restore` / `persist` | Gateway `v0.9.8.9-rc.1` exposes schema `1.0` | Gateway main exposes schema `1.6`, dependency manifests, lineage generations, write-through disposition, boot profiles, and readiness evidence |
+| Gateway `snapshot` / `restore` / `persist` | Gateway `v0.9.8.9-rc.1` exposes schema `1.0` | Gateway main exposes schema `1.12`, dependency manifests, lineage generations, write-through disposition, boot profiles, and readiness evidence |
 | `loxicmd get snapshot`, `create restore`, `create persist` | Present in CLI `v0.9.8.9-rc.2` | Present |
 | `ready`, `diagnostics`, `maintenance` Gateway APIs | Not present in Gateway `v0.9.8.9-rc.1` | Implemented on Gateway main |
 
@@ -23,11 +23,14 @@ and inspect `/version` before using the procedure.
 
 ## What a snapshot covers
 
-Current schema `1.6` records `included_domains`, `excluded_domains`, a checksum,
+Current schema `1.12` records `included_domains`, `excluded_domains`, a checksum,
 and recovery-dependency identities. Full current-main captures can include
-endpoint, JWT profile, load-balancer, KV-exact binding, L7 policy, firewall,
-policy, mirror, session, session-ULCL, IP filter, security-rate, BFD, BGP,
-IPsec, CORS, tracing, and certificate metadata domains.
+endpoint, JWT profile, half-close policy, network identity, load-balancer,
+KV-exact binding, L7 policy, firewall, policy, mirror, session, session-ULCL,
+IP filter, security-rate, BFD, BGP and BGP policy assignments, IPsec, CORS,
+tracing, audit-sink configuration, and certificate metadata domains. These are
+source-contract capabilities; inspect the deployed schema and actual
+`included_domains` before relying on them.
 
 Do not infer coverage from that list alone:
 

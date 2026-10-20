@@ -7,17 +7,17 @@ revision. It does **not** prove that every family is present in a particular
 deployment: feature activation, traffic, build tags, hardware, and runtime
 configuration still determine whether a series is emitted.
 
-- Gateway source commit: `1d51393773e4974b5e356377496c9d677dba9f9c`
-- Gateway main eBPF submodule commit: `2e428b0b34e23e2ba440e629c7e97722527f6684`
+- Gateway source commit: `0f78cc3329e23934be4924069b137bfbe557e8f2`
+- Gateway main eBPF submodule commit: `5fc365574fda283879d0a5512ef1da039211c5b4`
 - Comparison release: `v0.9.8.9-rc.1` at `f08b18beda587217265c9ba6419159119914795c`
 - Comparison release eBPF submodule commit: `5536a2117ad2ad1128900a0d808ad7dec2eee2b5`
 - Release manifest availability: **absent**
 - Manifest path: `deploy/monitoring/manifest/metric-manifest.json`
-- Manifest SHA-256: `4208e6c65b73eb936e2ad5d6ad4f87eb2aec9e557b0847dfaa2158d8b3943499`
-- Embedded manifest source revision: `0b4273446012c5a5307de50d1a6ca3e33e999ed3`
-- Embedded manifest generation time: `2026-10-14T10:59:43+00:00`
+- Manifest SHA-256: `f9a1b01c3317b5898e04668196f95ac29496bc5c4e693afc21afb7169dbd2752`
+- Embedded manifest source revision: `350428416e5848a30936aea0cb872e52db34e77b`
+- Embedded manifest generation time: `2026-10-19T21:47:55+00:00`
 - Manifest schema version: `1`
-- Release-scope families: **276**
+- Release-scope families: **278**
 - Raw writer paths and evidence prose are intentionally not copied into this public catalog.
 
 The table below is therefore a current-main source catalog, not a claim
@@ -32,7 +32,7 @@ Release packaging and runtime emission require separate qualification.
 | `verified-runtime` (68) | writer plus recorded runtime evidence in the upstream manifest |
 | `verified-static` (64) | writer verified by static or unit evidence; no runtime claim |
 | `conditional-with-proven-writer` (69) | writer exists but the family appears only when its feature path is active |
-| `writer-mapped` (75) | writer source is mapped; runtime emission was not verified |
+| `writer-mapped` (77) | writer source is mapped; runtime emission was not verified |
 
 A writer or registration point is source evidence, not deployment evidence.
 `verified-runtime` records upstream runtime evidence for that family, but this
@@ -287,6 +287,8 @@ Combined codes such as `D+V` require both conditions.
 | `loxilb_proxy_listen_drops_total` | `counter` | none | `E` | `gateway-default` | `verified-static` |
 | `loxilb_proxy_listen_overflows_total` | `counter` | none | `E` | `gateway-default` | `verified-static` |
 | `loxilb_proxy_pd_kv_params_overflow_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
+| `loxilb_proxy_pools_freed_total` | `counter` | none | `P` | `gateway-default` | `writer-mapped` |
+| `loxilb_proxy_pools_live` | `gauge` | none | `P` | `gateway-default` | `writer-mapped` |
 | `loxilb_proxy_qos_bytes_delayed_total` | `counter` | `vip`, `port`, `proto`, `direction` | `C` | `gateway-default` | `verified-runtime` |
 | `loxilb_proxy_qos_bytes_passed_total` | `counter` | `vip`, `port`, `proto`, `direction` | `C` | `gateway-default` | `verified-runtime` |
 | `loxilb_proxy_qos_cbs_bytes` | `gauge` | `vip`, `port`, `proto`, `direction` | `C` | `gateway-default` | `verified-runtime` |
