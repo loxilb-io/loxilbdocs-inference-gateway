@@ -35,7 +35,10 @@ sequenceDiagram
     Gateway-->>Client: Final chunks and close
 ```
 
-With `mode: 4` and `sse_mode: true`, the Gateway:
+For `mode: 4`, explicitly set `sse_mode: true` to opt in to event-stream detection and idle-timeout
+protection. A rule with `pd_disagg_mode` already enables that detection even when `sse_mode` is false.
+This flag does not establish whether a backend implements an OpenAI API. With streaming detection
+enabled, the Gateway:
 
 - suppresses ordinary inactivity reaping while an SSE response is active;
 - detects the OpenAI-compatible `data: [DONE]` terminator;
@@ -49,7 +52,7 @@ With `mode: 4` and `sse_mode: true`, the Gateway:
 
 | Field | Default | Meaning |
 |---|---:|---|
-| `sse_mode` | `false` | Enables event-stream lifecycle and AI Gateway request handling |
+| `sse_mode` | `false` | Opts in to event-stream detection and AI Gateway request handling; P/D rules already enable detection |
 | `max_stream_duration_sec` | `0` | Absolute limit in seconds; `0` uses the system ceiling of 86,400 seconds |
 | `backend_keepalive_interval_sec` | `0` | Backend TCP keepalive idle interval; `0` disables it |
 | `inactiveTimeOut` | Rule default | Normal inactivity timeout; suppressed while an SSE stream is active |
@@ -169,7 +172,7 @@ backend-generated slowness.
 
 | Symptom | Likely cause | Action |
 |---|---|---|
-| Stream ends during a quiet gap | SSE handling is off or response is not recognized as event-stream | Confirm `mode: 4`, `sse_mode: true`, and backend content type |
+| Stream ends during a quiet gap | SSE handling is off or response is not recognized as event-stream | Confirm `mode: 4`, detection via `sse_mode: true` or P/D mode, and backend content type |
 | Connection remains open | Backend omitted `[DONE]` or failed to close | Inspect sanitized backend output and keep a finite duration cap |
 | Long streams fail across a network idle period | Intermediary removed the backend flow | Configure and validate backend keepalive; also check external proxy timeouts |
 | Stream ends at a fixed duration | Absolute cap reached | Increase only after confirming legitimate generation time |

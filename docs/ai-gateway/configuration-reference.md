@@ -117,7 +117,7 @@ apply to every rule, AI or not.
 | `model_name` | string | — (`""`=wildcard) | any model id | Endpoint-pool selection key (e.g. `llama-70b`). Empty string = wildcard pool (matches any). |
 | `backend_protocol` | string | `http1` | `http1`, `http2`, `both` | ALPN negotiation. `http1`=HTTP/1.1 only (safest), `http2`=HTTP/2 only, `both`=either. |
 | `trace_type` | string | — | e.g. `v1`, `anthropic`, `default` | Tracing catalog for deep body inspection/parser invocation. Field only — no dedicated endpoint. |
-| `sse_mode` | boolean | `false` | `true`/`false` | Enable SSE streaming: suppresses idle-timeout while a `text/event-stream` response is active. Required for OpenAI-compatible streaming. |
+| `sse_mode` | boolean | `false` | `true`/`false` | Opt in to `text/event-stream` detection and streaming idle-timeout protection. A `pd_disagg_mode` rule enables this detection even when `sse_mode` is false. Active streams remain subject to their duration ceiling. |
 | `max_stream_duration_sec` | int32 | `0` | ≥0 | Absolute wall-clock cap (seconds) for an SSE stream. `0` = system hard cap of `86400` (24h). Set e.g. `300` to bound runaway streams. |
 | `backend_keepalive_interval_sec` | int32 | `0` | ≥0 | Sets `SO_KEEPALIVE`+`TCP_KEEPIDLE` on the backend socket (seconds). `0` = disabled. **Recommended `60`** to survive cloud NAT during long SSE streams. |
 

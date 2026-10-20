@@ -2038,7 +2038,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "c3db5551e52d66495ff7",
       "language": "bash",
-      "line": 71,
+      "line": 74,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -2068,7 +2068,7 @@
       "evidence": "shell-syntax-only",
       "id": "bd30168c808d06cef317",
       "language": "bash",
-      "line": 105,
+      "line": 108,
       "path": "docs/ai-gateway/sse-quota-management.md",
       "quality_contract": {
         "cleanup": true,
@@ -2085,7 +2085,7 @@
       "evidence": "shell-syntax-only",
       "id": "e203bc8c16868dac3459",
       "language": "bash",
-      "line": 191,
+      "line": 194,
       "path": "docs/ai-gateway/sse-quota-management.md",
       "quality_contract": {
         "cleanup": true,

@@ -7,8 +7,8 @@ revision. It does **not** prove that every family is present in a particular
 deployment: feature activation, traffic, build tags, hardware, and runtime
 configuration still determine whether a series is emitted.
 
-- Gateway source commit: `0f78cc3329e23934be4924069b137bfbe557e8f2`
-- Gateway main eBPF submodule commit: `5fc365574fda283879d0a5512ef1da039211c5b4`
+- Gateway source commit: `571213927ec0a4a2e1b94b92d77f9c82f80f39c0`
+- Gateway main eBPF submodule commit: `bc75f808d612d56078b78587e10d5b3c2019d004`
 - Comparison release: `v0.9.8.9-rc.1` at `f08b18beda587217265c9ba6419159119914795c`
 - Comparison release eBPF submodule commit: `5536a2117ad2ad1128900a0d808ad7dec2eee2b5`
 - Release manifest availability: **absent**
