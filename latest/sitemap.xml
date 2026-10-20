@@ -21,6 +21,10 @@
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/engine-contracts/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/kv-caching/</loc>
          <lastmod>2026-10-20</lastmod>
     </url>
@@ -105,6 +109,14 @@
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/concepts/inference-topologies/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/concepts/kv-routing/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/concepts/lb-algorithms/</loc>
          <lastmod>2026-10-20</lastmod>
     </url>
@@ -170,6 +182,10 @@
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/ha-limitations/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/kv-routing-verification/</loc>
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
@@ -265,6 +281,10 @@
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/advanced-cache-integrations/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/configuration-tuning/</loc>
          <lastmod>2026-10-20</lastmod>
     </url>
@@ -274,6 +294,14 @@
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/kv-cache-aware-routing/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/llm-integration/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/pd-deployment/</loc>
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
@@ -349,6 +377,14 @@
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/catalog-installer/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/configure/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/deployment/</loc>
          <lastmod>2026-10-20</lastmod>
     </url>
@@ -365,6 +401,14 @@
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/launch/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/lifecycle/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/llama31/</loc>
          <lastmod>2026-10-20</lastmod>
     </url>
@@ -373,7 +417,19 @@
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/matrix-manual/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/models/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/operations/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/prepare/</loc>
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
@@ -393,7 +449,15 @@
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/results/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/routing-choice/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/select/</loc>
          <lastmod>2026-10-20</lastmod>
     </url>
     <url>
@@ -402,6 +466,10 @@
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/validation/</loc>
+         <lastmod>2026-10-20</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/verify/</loc>
          <lastmod>2026-10-20</lastmod>
     </url>
 </urlset>

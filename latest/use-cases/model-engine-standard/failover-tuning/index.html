@@ -13,10 +13,10 @@
         <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/failover-tuning/">
       
       
-        <link rel="prev" href="../operations/">
+        <link rel="prev" href="../../../operations/kv-routing-verification/">
       
       
-        <link rel="next" href="../qualification-todo/">
+        <link rel="next" href="../../performance-methodology/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Fail-over Arguments & Tuning - LoxiLB Inference Gateway</title>
+        <title>Failure Detection, Retry & Recovery - LoxiLB Inference Gateway</title>
       
     
     
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Fail-over Arguments & Tuning
+              Failure Detection, Retry & Recovery
             
           </span>
         </div>
@@ -383,34 +383,6 @@
     
   
     Quickstart
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../getting-started/choose-your-engine/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Choose an Inference Engine
   
 
     
@@ -781,202 +753,6 @@
     
   
     LLM Routing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../ai-gateway/kv-caching/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    KV-Cache Routing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../ai-gateway/model-profiles-kv-readiness/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Model Profiles & KV Readiness
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../ai-gateway/pd-disaggregation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    P/D Disaggregation
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../ai-gateway/vllm-integration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    vLLM Integration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../ai-gateway/sglang-pd-disaggregation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    SGLang P/D Integration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../ai-gateway/tensorrt-llm-integration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    TensorRT-LLM Integration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../ai-gateway/llamacpp-integration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    llama.cpp Integration
   
 
     
@@ -1618,7 +1394,33 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../../llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
     
+  
+    Overview & Reading Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
@@ -1629,21 +1431,21 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2" >
         
           
-          <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
             
   
   
   <span class="md-ellipsis">
     
   
-    Model & Engine Standard Setup
+    Concepts & Architecture
   
 
     
@@ -1654,12 +1456,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_6_1">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_2">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Model & Engine Standard Setup
+    Concepts & Architecture
   
 
           </label>
@@ -1672,14 +1474,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../" class="md-nav__link">
+      <a href="../../../concepts/inference-topologies/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Overview & Selection
+    Engines & Deployment Topologies
   
 
     
@@ -1700,14 +1502,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../routing-choice/" class="md-nav__link">
+      <a href="../../../concepts/kv-routing/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Choose RR or Exact
+    RR, Content Affinity & KV-Exact
   
 
     
@@ -1728,14 +1530,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../matrix-manual.ko/" class="md-nav__link">
+      <a href="../../routing-hierarchy/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Five-Model RR & Exact Manual
+    Routing Hierarchy
   
 
     
@@ -1756,14 +1558,578 @@
   
   
     <li class="md-nav__item">
-      <a href="../sglang-compatibility/" class="md-nav__link">
+      <a href="../../../ai-gateway/pd-disaggregation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    SGLang Wire Compatibility
+    P/D Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hands-on Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_1" id="__nav_6_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Converged RR & KV-Exact
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Converged RR & KV-Exact
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../matrix-manual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../select/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Select Model & Prerequisites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prepare/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Prepare Models & Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../launch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Launch Engine Workers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Configure Gateway Routing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verify/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Verify Requests & Routing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Switch, Clean Up & Roll Back
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_2" id="__nav_6_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P/D Deployment
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    P/D Deployment
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pd-deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose a P/D Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vLLM P/D Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_4" id="__nav_6_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model & Engine Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Model & Engine Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Matrix & Notes
   
 
     
@@ -1791,7 +2157,7 @@
   <span class="md-ellipsis">
     
   
-    Model Profile Catalog
+    Profile Catalog & Discovery
   
 
     
@@ -1812,14 +2178,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../deployment/" class="md-nav__link">
+      <a href="../../../ai-gateway/model-profiles-kv-readiness/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Prepare & Launch Workers
+    Profile Binding & Readiness
   
 
     
@@ -1840,14 +2206,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../qwen25/" class="md-nav__link">
+      <a href="../../../ai-gateway/engine-contracts/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Qwen2.5 7B
+    Engine Contracts
   
 
     
@@ -1868,14 +2234,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../llama31/" class="md-nav__link">
+      <a href="../../../ai-gateway/vllm-integration/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Llama3.1 8B
+    vLLM Integration Details
   
 
     
@@ -1896,14 +2262,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../r1/" class="md-nav__link">
+      <a href="../../../ai-gateway/llamacpp-integration/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    R1 Distill Qwen 7B
+    llama.cpp Integration
   
 
     
@@ -1924,14 +2290,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../exaone35/" class="md-nav__link">
+      <a href="../../configuration-tuning/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    EXAONE3.5 7.8B
+    Configuration & Arguments
   
 
     
@@ -1952,14 +2318,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../gemma2/" class="md-nav__link">
+      <a href="../../../ai-gateway/kv-caching/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Gemma2 9B
+    KV-Exact Fields & Load Safety
   
 
     
@@ -1973,6 +2339,65 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_5" id="__nav_6_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations & Tuning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations & Tuning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
@@ -1980,14 +2405,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../operations/" class="md-nav__link">
+      <a href="../../../operations/kv-routing-verification/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Gateway Operations
+    KV Routing Verification
   
 
     
@@ -2024,7 +2449,7 @@
   <span class="md-ellipsis">
     
   
-    Fail-over Arguments & Tuning
+    Failure Detection, Retry & Recovery
   
 
     
@@ -2042,7 +2467,7 @@
   <span class="md-ellipsis">
     
   
-    Fail-over Arguments & Tuning
+    Failure Detection, Retry & Recovery
   
 
     
@@ -2177,14 +2602,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../qualification-todo/" class="md-nav__link">
+      <a href="../../performance-methodology/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Verification To-do
+    Performance Measurement
   
 
     
@@ -2205,14 +2630,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../validation/" class="md-nav__link">
+      <a href="../../advanced-cache-integrations/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    QA & Evidence Limits
+    Advanced Cache Integrations
   
 
     
@@ -2240,15 +2665,64 @@
   
   
   
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_6" id="__nav_6_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validation & Compatibility
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Validation & Compatibility
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
-      <a href="../../kv-cache-aware-routing/" class="md-nav__link">
+      <a href="../results/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    KV-Cache-Aware Routing
+    Functional Test Results
   
 
     
@@ -2269,14 +2743,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../routing-hierarchy/" class="md-nav__link">
+      <a href="../validation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Routing Hierarchy
+    Known Limits & Evidence Scope
   
 
     
@@ -2297,14 +2771,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../configuration-tuning/" class="md-nav__link">
+      <a href="../qualification-todo/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Configuration & Tuning
+    Open Qualification
   
 
     
@@ -2325,14 +2799,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../sglang-routing/" class="md-nav__link">
+      <a href="../sglang-compatibility/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    SGLang Routing
+    SGLang Wire Compatibility
   
 
     
@@ -2353,14 +2827,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../vllm-vs-sglang/" class="md-nav__link">
+      <a href="../catalog-installer/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    vLLM vs SGLang
+    Catalog & Installer Compatibility
   
 
     
@@ -2374,85 +2848,9 @@
 
               
             
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../sglang-configuration-tuning/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    SGLang Config & Tuning
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../deploy-pd-disaggregation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Deploy P/D Disaggregation
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../performance-methodology/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Performance Methodology
-  
-
-    
-  </span>
-  
-  
-
-      </a>
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -3937,7 +4335,7 @@
 <!-- example-status-default: illustrative-only -->
 
 <p>Use this page to decide <strong>which failure stage an argument controls</strong>, choose a
-bounded starting configuration, and verify recovery. The <a href="../">standard cards</a>
+bounded starting configuration, and verify recovery. The <a href="../matrix-manual/">standard cards</a>
 use a converged pool. P/D settings below apply only to a separately prepared
 prefill/decode service; they must not be added wholesale to a converged rule.</p>
 <h2 id="evidence-and-topology-boundary">Evidence and topology boundary<a class="headerlink" href="#evidence-and-topology-boundary" title="Permanent link">&para;</a></h2>
@@ -3946,7 +4344,7 @@ fail-over trials with two prefill workers, two decode workers, CPU KV buffers an
 UCX/TCP transfer, plus read-only source/API contract checks. The recorded
 Gateway candidates and engine variants were not a GA release. No new P/D fault
 injection or performance qualification is claimed by this page. The separate
-<a href="../matrix-manual.ko/">five-model campaign</a> covers converged functional checks;
+<a href="../matrix-manual/">five-model campaign</a> covers converged functional checks;
 it does not close these fail-over gates.</p>
 <p>Historical trials retained these limitations: incomplete SSE on some failures,
 a recovery window in which TCP health returned before successful pair transfer,
@@ -4250,13 +4648,13 @@ complete startup command; these fragments do not redefine that workflow.</p>
 <li>If the condition fails, restore the previous <strong>rule + ENV + image + engine
    configuration tuple</strong>, then repeat healthy direct/pair/Gateway chat and SSE.
    Retain the failed run. Delete only owned test rules/containers using the
-   <a href="../operations/#cleanup-and-restart">cleanup procedure</a>, adapted to the exact
+   <a href="../lifecycle/#cleanup-and-restart">cleanup procedure</a>, adapted to the exact
    P/D host/model/port identity.</li>
 </ol>
 <p>A tuning result closes only the measured behavior on that tuple. It does not
 prove active-stream continuation, pair canary support, engine terminal-error
 correctness, memory-leak freedom or GA fail-over acceptance. See the
-<a href="../validation/#failure-recovery-and-cleanup-gate">QA evidence criteria</a> and
+<a href="../verify/#negative-and-recovery-checks">QA evidence criteria</a> and
 <a href="../../../ai-gateway/configuration-reference/">configuration reference</a> for the
 public fields; check the served schema of the installed build before applying.</p>
 

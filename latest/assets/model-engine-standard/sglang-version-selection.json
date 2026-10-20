@@ -6,7 +6,7 @@
   "contract": "sglang-kv-rank-v1",
   "wire": "sglang-kv-tagged-array-rank-v1",
   "historyScope": "Prior engine-contract live converged/P-D integration, not five-model promotion",
-  "newFiveModelEvidence": null,
+  "newFiveModelEvidence": "matrix-results.json",
   "separateDevelopmentRequest": {
     "version": "0.5.21",
     "imageDigest": "sha256:2dbe4c7f53230b09aaa8fa41891c13c51d9d2e253f486a70822aaf08783fff75",
@@ -21,7 +21,7 @@
     "status": "development-request-recorded; no product-code patch"
   },
   "catalogPromotion": false,
-  "newFiveModelEvidencePublication": "pending",
+  "newFiveModelEvidencePublication": "published",
   "plannedFiveModelEvidence": "matrix-results.json",
   "historicalVersion": "0.5.18",
   "historicalLiveWireObservation": {

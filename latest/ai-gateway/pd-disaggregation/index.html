@@ -13,10 +13,10 @@
         <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/pd-disaggregation/">
       
       
-        <link rel="prev" href="../model-profiles-kv-readiness/">
+        <link rel="prev" href="../../use-cases/routing-hierarchy/">
       
       
-        <link rel="next" href="../vllm-integration/">
+        <link rel="next" href="../../use-cases/model-engine-standard/matrix-manual/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>P/D Disaggregation - LoxiLB Inference Gateway</title>
+        <title>P/D Concepts - LoxiLB Inference Gateway</title>
       
     
     
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              P/D Disaggregation
+              P/D Concepts
             
           </span>
         </div>
@@ -403,34 +403,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Choose an Inference Engine
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../getting-started/prepare-supported-model/" class="md-nav__link">
         
   
@@ -662,8 +634,6 @@
       
   
   
-    
-  
   
   
     
@@ -676,11 +646,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
@@ -701,7 +671,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -783,393 +753,6 @@
     
   
     LLM Routing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../kv-caching/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    KV-Cache Routing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../model-profiles-kv-readiness/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Model Profiles & KV Readiness
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    P/D Disaggregation
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    P/D Disaggregation
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#why-separate-prefill-and-decode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why separate prefill and decode?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#shared-topology" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Shared topology
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-request-flow-depends-on-the-engine" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The request flow depends on the engine
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-cache-aware-layers" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Optional cache-aware layers
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#shared-configuration-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Shared configuration fields
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#minimal-validation-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Minimal validation workflow
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Minimal validation workflow">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#lifecycle-outcome-contract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Lifecycle outcome contract
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#failure-diagnosis" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Failure diagnosis
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Failure diagnosis">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#circuit-breaker-behavior" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Circuit-breaker behavior
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#security-considerations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Security considerations
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#evidence-limits" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Evidence limits
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next steps
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../vllm-integration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    vLLM Integration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../sglang-pd-disaggregation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    SGLang P/D Integration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tensorrt-llm-integration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    TensorRT-LLM Integration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../llamacpp-integration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    llama.cpp Integration
   
 
     
@@ -1757,8 +1340,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -1769,11 +1354,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
           <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
@@ -1794,12 +1379,440 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
     LLM Integration Use-Cases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview & Reading Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts & Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concepts & Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/inference-topologies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engines & Deployment Topologies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/kv-routing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RR, Content Affinity & KV-Exact
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/routing-hierarchy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Routing Hierarchy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P/D Concepts
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P/D Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-separate-prefill-and-decode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why separate prefill and decode?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared topology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-request-flow-depends-on-the-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The request flow depends on the engine
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#optional-cache-aware-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional cache-aware layers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-and-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration and execution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration and execution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lifecycle-outcome-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle outcome contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failure-diagnosis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failure diagnosis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Failure diagnosis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#circuit-breaker-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circuit-breaker behavior
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security considerations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evidence-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evidence limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Next steps
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hands-on Guides
   
 
           </label>
@@ -1822,17 +1835,17 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_1" >
         
           
-          <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6_3_1" id="__nav_6_3_1_label" tabindex="0">
             
   
   
   <span class="md-ellipsis">
     
   
-    Model & Engine Standard Setup
+    Converged RR & KV-Exact
   
 
     
@@ -1843,12 +1856,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_1">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_1">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Model & Engine Standard Setup
+    Converged RR & KV-Exact
   
 
           </label>
@@ -1861,14 +1874,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/" class="md-nav__link">
+      <a href="../../use-cases/model-engine-standard/matrix-manual/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Overview & Selection
+    Guide Overview
   
 
     
@@ -1889,14 +1902,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/routing-choice/" class="md-nav__link">
+      <a href="../../use-cases/model-engine-standard/select/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Choose RR or Exact
+    1. Select Model & Prerequisites
   
 
     
@@ -1917,14 +1930,894 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/matrix-manual.ko/" class="md-nav__link">
+      <a href="../../use-cases/model-engine-standard/prepare/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Five-Model RR & Exact Manual
+    2. Prepare Models & Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/launch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Launch Engine Workers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/configure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Configure Gateway Routing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/verify/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Verify Requests & Routing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Switch, Clean Up & Roll Back
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_2" id="__nav_6_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P/D Deployment
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    P/D Deployment
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/pd-deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose a P/D Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/deploy-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vLLM P/D Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_4" id="__nav_6_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model & Engine Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Model & Engine Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Matrix & Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Catalog & Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Binding & Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vllm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vLLM Integration Details
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/configuration-tuning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration & Arguments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kv-caching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KV-Exact Fields & Load Safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_5" id="__nav_6_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations & Tuning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations & Tuning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/kv-routing-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KV Routing Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/failover-tuning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Failure Detection, Retry & Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/performance-methodology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Performance Measurement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/advanced-cache-integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Cache Integrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_6" id="__nav_6_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validation & Compatibility
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Validation & Compatibility
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional Test Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/validation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Known Limits & Evidence Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/qualification-todo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open Qualification
   
 
     
@@ -1973,294 +2866,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/profiles/" class="md-nav__link">
+      <a href="../../use-cases/model-engine-standard/catalog-installer/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Model Profile Catalog
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/deployment/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Prepare & Launch Workers
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/qwen25/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Qwen2.5 7B
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/llama31/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Llama3.1 8B
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/r1/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    R1 Distill Qwen 7B
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/exaone35/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    EXAONE3.5 7.8B
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/gemma2/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Gemma2 9B
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/operations/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Gateway Operations
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/failover-tuning/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Fail-over Arguments & Tuning
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/qualification-todo/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Verification To-do
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/validation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    QA & Evidence Limits
+    Catalog & Installer Compatibility
   
 
     
@@ -2277,230 +2890,6 @@
           </ul>
         </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/kv-cache-aware-routing/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    KV-Cache-Aware Routing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/routing-hierarchy/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Routing Hierarchy
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/configuration-tuning/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Configuration & Tuning
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/sglang-routing/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    SGLang Routing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/vllm-vs-sglang/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    vLLM vs SGLang
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/sglang-configuration-tuning/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    SGLang Config & Tuning
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/deploy-pd-disaggregation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Deploy P/D Disaggregation
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/performance-methodology/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Performance Methodology
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -3915,26 +4304,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#shared-configuration-fields" class="md-nav__link">
+  <a href="#configuration-and-execution" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Shared configuration fields
+        Configuration and execution
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#minimal-validation-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Minimal validation workflow
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Minimal validation workflow">
+    <nav class="md-nav" aria-label="Configuration and execution">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -4131,97 +4509,13 @@ contracts on this page; do not generalize a passing HTTP/2 auth test into engine
 <li><code>kvExactMode: 3</code> is not a P/D option; it is reserved for role-less single pools.</li>
 </ul>
 <p>For KV-exact mode, the tokenizer, model identity, block/page size, hash contract, and event transport must match the engine. A rule can continue serving through fallback routing even when this parity is broken, so verify metrics explicitly.</p>
-<h2 id="shared-configuration-fields">Shared configuration fields<a class="headerlink" href="#shared-configuration-fields" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th style="text-align: right;">Default</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>pd_disagg_mode</code></td>
-<td style="text-align: right;"><code>false</code></td>
-<td>Enable the engine-specific P/D orchestrator.</td>
-</tr>
-<tr>
-<td><code>pd_cache_aware_mode</code></td>
-<td style="text-align: right;"><code>false</code></td>
-<td>Add radix-trie prefix affinity to the P/D ladder. Session stickiness and load fallback do not depend on this flag. Requires P/D.</td>
-</tr>
-<tr>
-<td><code>pd_session_ttl_sec</code></td>
-<td style="text-align: right;"><code>0</code> in the API</td>
-<td>Session lifetime in seconds. The data path converts <code>0</code> to its 300-second runtime default.</td>
-</tr>
-<tr>
-<td><code>pd_prefill_timeout_sec</code></td>
-<td style="text-align: right;"><code>0</code></td>
-<td>Longest wait in seconds for the prefill stage before <code>504 pd_prefill_timeout</code>, <code>0</code>–<code>3600</code>. <code>0</code> uses the process default (30 seconds, or <code>LLB_PD_PREFILL_TIMEOUT_SEC</code>). Requires P/D.</td>
-</tr>
-<tr>
-<td><code>pd_cache_threshold</code></td>
-<td style="text-align: right;"><code>20</code></td>
-<td>Minimum prefix-trie match percentage.</td>
-</tr>
-<tr>
-<td><code>pd_balance_abs_threshold</code></td>
-<td style="text-align: right;"><code>3</code></td>
-<td>Active-connection spread that bypasses the optional radix-trie choice and uses load fallback.</td>
-</tr>
-<tr>
-<td><code>kvExactMode</code></td>
-<td style="text-align: right;"><code>0</code></td>
-<td><code>1</code> adds P/D KV-exact selection; <code>3</code> is invalid with P/D.</td>
-</tr>
-<tr>
-<td><code>ep_role</code></td>
-<td style="text-align: right;"><code>0</code></td>
-<td>Endpoint role: <code>1</code> prefill/CONTEXT, <code>2</code> decode/GENERATION.</td>
-</tr>
-<tr>
-<td><code>nixl_port</code></td>
-<td style="text-align: right;"><code>0</code></td>
-<td>vLLM transfer side channel; <code>0</code> uses the target port.</td>
-</tr>
-<tr>
-<td><code>pdBootstrapPort</code></td>
-<td style="text-align: right;"><code>0</code></td>
-<td>SGLang prefill bootstrap port; <code>0</code> means <code>8998</code>.</td>
-</tr>
-</tbody>
-</table>
-<p>See the <a href="../configuration-reference/">Configuration Reference</a> before copying these fields into a rule.</p>
-<h2 id="minimal-validation-workflow">Minimal validation workflow<a class="headerlink" href="#minimal-validation-workflow" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Start every backend and wait for model readiness, not only process readiness.</li>
-<li>Prove ordinary fullproxy routing with health probes.</li>
-<li>Create one P/D rule with one endpoint of each role and without KV-exact mode.</li>
-<li>Test a non-streaming request and an SSE request.</li>
-<li>Confirm both roles handled the request using engine logs and Gateway metrics.</li>
-<li>Add more endpoints and exercise one endpoint failure at a time.</li>
-<li>Add cache-aware selection only after the base P/D flow is reliable.</li>
-</ol>
-<p>Useful Gateway metric families include:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>loxilb_ai_pd_requests_total
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>loxilb_ai_pd_prefill_duration_seconds
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>loxilb_ai_pd_decode_ttft_seconds
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>loxilb_ai_pd_kv_params_found_total
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>loxilb_ai_pd_kv_params_missing_total
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>loxilb_ai_pd_session_hits_total
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>loxilb_ai_pd_tier_selected_total
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>loxilb_pd_kv_tier15_hits_total
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>loxilb_pd_kv_blocks
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>loxilb_kv_subscriber_connected
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>loxilb_pd_admission_shed_total
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>loxilb_pd_admission_queued_total
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>loxilb_pd_admission_overflow_shed_total
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>loxilb_pd_sg_room_retry_total
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>loxilb_pd_trt_ctx_early_exit_total
-</code></pre></div>
-<p>Metric availability depends on the configured engine and optional routing layers.</p>
+<h2 id="configuration-and-execution">Configuration and execution<a class="headerlink" href="#configuration-and-execution" title="Permanent link">&para;</a></h2>
+<p>Use <a href="../../use-cases/configuration-tuning/">Configuration and Arguments</a> for shared
+P/D fields and timeout precedence. Follow the
+<a href="../../use-cases/pd-deployment/">P/D deployment path</a> for engine-specific commands,
+readback, completed traffic, faults and cleanup. Common cache contract and
+observability are maintained in <a href="../engine-contracts/">Engine Contracts</a> and
+<a href="../../operations/kv-routing-verification/">KV Routing Verification</a>.</p>
 <h3 id="lifecycle-outcome-contract">Lifecycle outcome contract<a class="headerlink" href="#lifecycle-outcome-contract" title="Permanent link">&para;</a></h3>
 <p><code>loxilb_ai_pd_requests_total{model,phase,status}</code> records one terminal P/D lifecycle outcome. The
 current closed mappings are:</p>
@@ -4342,6 +4636,10 @@ failed request. A 4xx response neither advances nor resets the origin-5xx streak
 <li><a href="../vllm-integration/">vLLM Integration</a></li>
 <li><a href="../../concepts/engine-capability-matrix/">Engine Capability Matrix</a></li>
 </ul>
+<p><a id="shared-configuration-fields"></a></p>
+<p><a href="../../use-cases/pd-deployment/">Current reference</a>.</p>
+<p><a id="minimal-validation-workflow"></a></p>
+<p><a href="../../use-cases/pd-deployment/">Current reference</a>.</p>
 
 
 

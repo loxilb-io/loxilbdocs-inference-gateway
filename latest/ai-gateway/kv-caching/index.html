@@ -13,10 +13,10 @@
         <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/ai-gateway/kv-caching/">
       
       
-        <link rel="prev" href="../llm-routing/">
+        <link rel="prev" href="../../use-cases/configuration-tuning/">
       
       
-        <link rel="next" href="../model-profiles-kv-readiness/">
+        <link rel="next" href="../../operations/kv-routing-verification/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>KV-Cache Routing - LoxiLB Inference Gateway</title>
+        <title>KV-Exact Fields & Load Safety - LoxiLB Inference Gateway</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#kv-cache-aware-routing" class="md-skip">
+        <a href="#kv-exact-fields-and-load-safety" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              KV-Cache Routing
+              KV-Exact Fields & Load Safety
             
           </span>
         </div>
@@ -403,34 +403,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/choose-your-engine/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Choose an Inference Engine
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../getting-started/prepare-supported-model/" class="md-nav__link">
         
   
@@ -662,8 +634,6 @@
       
   
   
-    
-  
   
   
     
@@ -676,11 +646,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
@@ -701,7 +671,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -783,515 +753,6 @@
     
   
     LLM Routing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    KV-Cache Routing
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    KV-Cache Routing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#concept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Concept
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configuration fields
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-block-hash-parity-contract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The block-hash parity contract
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="The block-hash parity contract">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#vllm-parity-triad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        vLLM parity triad
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sglang-parity-triad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        SGLang parity triad
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#load-safety-and-cold-endpoint-recovery" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Load safety and cold-endpoint recovery
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tokenizer-staging" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tokenizer staging
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configuration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#vllm-kv-exact-rule-kvexactmode-1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        vLLM KV-exact rule (kvExactMode: 1)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sglang-kv-exact-rule-kvexactmode-3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        SGLang KV-exact rule (kvExactMode: 3)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verify
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshoot" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Troubleshoot
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Troubleshoot">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#0-cache-hits-a-mismatched-parity-leg" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        0% cache hits — a mismatched parity leg
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#inventory-stays-empty" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Inventory stays empty
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#tier-15-never-activates" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tier 1.5 never activates
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#high-miss-rate-on-repeated-prompts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        High miss rate on repeated prompts
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tiered-caching-with-lmcache-advanced" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tiered caching with LMCache (advanced)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Tiered caching with LMCache (advanced)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#what-it-is" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What it is
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#configuration-surface" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configuration surface
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#metrics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Metrics
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#hazards-read-before-enabling" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Hazards (read before enabling)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next steps
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../model-profiles-kv-readiness/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Model Profiles & KV Readiness
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../pd-disaggregation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    P/D Disaggregation
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../vllm-integration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    vLLM Integration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../sglang-pd-disaggregation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    SGLang P/D Integration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../tensorrt-llm-integration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    TensorRT-LLM Integration
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../llamacpp-integration/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    llama.cpp Integration
   
 
     
@@ -1879,8 +1340,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -1891,11 +1354,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
           <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
@@ -1916,7 +1379,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1926,6 +1389,34 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview & Reading Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1944,17 +1435,17 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2" >
         
           
-          <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
             
   
   
   <span class="md-ellipsis">
     
   
-    Model & Engine Standard Setup
+    Concepts & Architecture
   
 
     
@@ -1965,12 +1456,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_1">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_2">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Model & Engine Standard Setup
+    Concepts & Architecture
   
 
           </label>
@@ -1983,14 +1474,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/" class="md-nav__link">
+      <a href="../../concepts/inference-topologies/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Overview & Selection
+    Engines & Deployment Topologies
   
 
     
@@ -2011,414 +1502,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/routing-choice/" class="md-nav__link">
+      <a href="../../concepts/kv-routing/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Choose RR or Exact
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/matrix-manual.ko/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Five-Model RR & Exact Manual
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/sglang-compatibility/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    SGLang Wire Compatibility
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/profiles/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Model Profile Catalog
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/deployment/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Prepare & Launch Workers
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/qwen25/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Qwen2.5 7B
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/llama31/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Llama3.1 8B
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/r1/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    R1 Distill Qwen 7B
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/exaone35/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    EXAONE3.5 7.8B
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/gemma2/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Gemma2 9B
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/operations/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Gateway Operations
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/failover-tuning/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Fail-over Arguments & Tuning
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/qualification-todo/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Verification To-do
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/model-engine-standard/validation/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    QA & Evidence Limits
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../use-cases/kv-cache-aware-routing/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    KV-Cache-Aware Routing
+    RR, Content Affinity & KV-Exact
   
 
     
@@ -2467,14 +1558,148 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use-cases/configuration-tuning/" class="md-nav__link">
+      <a href="../pd-disaggregation/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Configuration & Tuning
+    P/D Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3" id="__nav_6_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hands-on Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_1" id="__nav_6_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Converged RR & KV-Exact
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Converged RR & KV-Exact
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/matrix-manual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide Overview
   
 
     
@@ -2495,14 +1720,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use-cases/sglang-routing/" class="md-nav__link">
+      <a href="../../use-cases/model-engine-standard/select/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    SGLang Routing
+    1. Select Model & Prerequisites
   
 
     
@@ -2523,14 +1748,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use-cases/vllm-vs-sglang/" class="md-nav__link">
+      <a href="../../use-cases/model-engine-standard/prepare/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    vLLM vs SGLang
+    2. Prepare Models & Profiles
   
 
     
@@ -2551,14 +1776,183 @@
   
   
     <li class="md-nav__item">
-      <a href="../../use-cases/sglang-configuration-tuning/" class="md-nav__link">
+      <a href="../../use-cases/model-engine-standard/launch/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    SGLang Config & Tuning
+    3. Launch Engine Workers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/configure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Configure Gateway Routing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/verify/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Verify Requests & Routing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Switch, Clean Up & Roll Back
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_3_2" id="__nav_6_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P/D Deployment
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    P/D Deployment
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/pd-deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose a P/D Runbook
   
 
     
@@ -2586,7 +1980,558 @@
   <span class="md-ellipsis">
     
   
-    Deploy P/D Disaggregation
+    vLLM P/D Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6_4" id="__nav_6_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model & Engine Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Model & Engine Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Matrix & Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Catalog & Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Binding & Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engine-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vllm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vLLM Integration Details
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/configuration-tuning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration & Arguments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KV-Exact Fields & Load Safety
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KV-Exact Fields & Load Safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration fields
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#load-safety-and-cold-endpoint-recovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Load safety and cold-endpoint recovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#profile-and-tokenizer-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Profile and tokenizer preparation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-integrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced integrations
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_5" id="__nav_6_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations & Tuning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations & Tuning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/kv-routing-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KV Routing Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/failover-tuning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Failure Detection, Retry & Recovery
   
 
     
@@ -2614,7 +2559,7 @@
   <span class="md-ellipsis">
     
   
-    Performance Methodology
+    Performance Measurement
   
 
     
@@ -2623,6 +2568,239 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/advanced-cache-integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Cache Integrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_6" id="__nav_6_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validation & Compatibility
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Validation & Compatibility
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional Test Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/validation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Known Limits & Evidence Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/qualification-todo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open Qualification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/sglang-compatibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang Wire Compatibility
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../use-cases/model-engine-standard/catalog-installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Catalog & Installer Compatibility
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -3993,17 +4171,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#concept" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Concept
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#configuration-fields" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4011,45 +4178,6 @@
       
     </span>
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-block-hash-parity-contract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The block-hash parity contract
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="The block-hash parity contract">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#vllm-parity-triad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        vLLM parity triad
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sglang-parity-triad" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        SGLang parity triad
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -4065,10 +4193,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tokenizer-staging" class="md-nav__link">
+  <a href="#profile-and-tokenizer-preparation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tokenizer staging
+        Profile and tokenizer preparation
       
     </span>
   </a>
@@ -4076,182 +4204,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
+  <a href="#advanced-integrations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Configuration
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Configuration">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#vllm-kv-exact-rule-kvexactmode-1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        vLLM KV-exact rule (kvExactMode: 1)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sglang-kv-exact-rule-kvexactmode-3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        SGLang KV-exact rule (kvExactMode: 3)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verify
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshoot" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Troubleshoot
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Troubleshoot">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#0-cache-hits-a-mismatched-parity-leg" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        0% cache hits — a mismatched parity leg
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#inventory-stays-empty" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Inventory stays empty
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#tier-15-never-activates" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tier 1.5 never activates
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#high-miss-rate-on-repeated-prompts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        High miss rate on repeated prompts
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tiered-caching-with-lmcache-advanced" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tiered caching with LMCache (advanced)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Tiered caching with LMCache (advanced)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#what-it-is" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What it is
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#configuration-surface" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configuration surface
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#metrics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Metrics
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#hazards-read-before-enabling" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Hazards (read before enabling)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next steps
+        Advanced integrations
       
     </span>
   </a>
@@ -4275,203 +4231,25 @@
 
 
 
-<h1 id="kv-cache-aware-routing">KV-Cache-Aware Routing<a class="headerlink" href="#kv-cache-aware-routing" title="Permanent link">&para;</a></h1>
-<div class="admonition note">
-<p class="admonition-title">Illustrative mutation fragments</p>
-<p>The management mutations on this page are non-standalone fragments. Before
-adapting them, follow this site's <strong>Example Quality Contract</strong> and complete
-<strong>Quickstart</strong> lifecycle. Do not treat HTTP success or management readback
-alone as runtime proof.</p>
-</div>
-<p>Route each inference request to the backend that already holds the matching
-prompt prefix in its GPU KV cache, so tokens are reused instead of recomputed.
-This is the <strong>Tier 1.5</strong> stage of the routing cascade.</p>
-<h2 id="concept">Concept<a class="headerlink" href="#concept" title="Permanent link">&para;</a></h2>
-<p>During inference an engine stores per-token key/value attention
-tensors in GPU memory — the <strong>KV cache</strong>. If a follow-up request lands on a
-backend that already cached the shared prefix (a system prompt, a running
-conversation, a repeated document), that backend can skip prefill for those
-tokens. If it lands anywhere else, the whole prefix is recomputed from scratch.
-KV-cache-aware routing exists to keep matching prefixes and matching backends
-together.</p>
-<p>loxilb does this with <strong>block-hash prefix routing</strong>, and the key property is
-that it moves <em>hashes, not tensors</em>:</p>
-<ul>
-<li>vLLM and SGLang publish <strong>KV-cache block events</strong> on ZMQ. TensorRT-LLM exposes
-  a destructive HTTP event drain on each serving port. loxilb consumes the
-  selected engine's event contract and builds a per-endpoint <strong>block inventory</strong>.
-  llama.cpp has no supported Gateway KV-event contract.</li>
-<li>vLLM and SGLang ultimately contribute 8-byte block keys. TensorRT-LLM sends
-  event envelopes with token sequences; the Gateway rehashes those tokens into
-  its internal keys. The multi-gigabyte KV tensors never leave the GPU. Inventory updates track evictions within one
-  message cycle, so routing reflects current GPU memory state.</li>
-<li>On each request loxilb tokenizes the prompt with a <strong>staged tokenizer</strong>,
-  groups token IDs into fixed-size blocks, hashes each block with the configured
-  algorithm, and picks the endpoint whose inventory overlaps the most prompt
-  blocks. No explicit conversation ID is required — the prompt content <em>is</em> the
-  key.</li>
-</ul>
-<p>On a P/D rule (<code>kvExactMode: 1</code>), Tier 1.5 runs after session/trie affinity and
-before the P/D load fallback. On a role-less single pool (<code>kvExactMode: 3</code>),
-there is no P/D session, trie, or admission ladder: a KV miss falls back to the
-rule's own <code>sel</code> algorithm. See <a href="../../use-cases/routing-hierarchy/">Routing Hierarchy</a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Prerequisite: fullproxy</p>
-<p>KV-cache-aware routing requires <code>mode: 4</code> (fullproxy). loxilb must terminate
-HTTP to read the prompt body before it can tokenize and hash it. Lower LB
-modes cannot inspect request bodies and so cannot drive Tier 1.5.</p>
-</div>
+<h1 id="kv-exact-fields-and-load-safety">KV-Exact Fields and Load Safety<a class="headerlink" href="#kv-exact-fields-and-load-safety" title="Permanent link">&para;</a></h1>
+<p>Use <a href="../../concepts/kv-routing/">routing concepts</a> for the mechanism,
+<a href="../engine-contracts/">Engine Contracts</a> for engine-specific parity, and the
+<a href="../../use-cases/model-engine-standard/matrix-manual/">converged guide</a> for commands.
+This reference owns KV-specific API fields and load-safety semantics. General
+routing, process and P/D settings are in <a href="../../use-cases/configuration-tuning/">Configuration and Arguments</a>.</p>
 <h2 id="configuration-fields">Configuration fields<a class="headerlink" href="#configuration-fields" title="Permanent link">&para;</a></h2>
-<p>All fields below are <code>serviceArguments</code> on the load-balancer rule (verbatim from
-the API schema — defaults and ranges are authoritative).</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Default</th>
-<th>Range / enum</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>kvExactMode</code></td>
-<td>int</td>
-<td><code>0</code></td>
-<td><code>0</code>–<code>3</code></td>
-<td><code>0</code>=off; <code>1</code>=P/D role-partitioned pool; <code>2</code>=reserved and not implemented; <code>3</code>=role-less single pool. Engine transport comes from <code>kvEngineType</code>.</td>
-</tr>
-<tr>
-<td><code>kvBlockSize</code></td>
-<td>int</td>
-<td><code>16</code></td>
-<td><code>≥ 1</code></td>
-<td>Tokens per hashed block. <strong>Must match</strong> the engine's block/page size.</td>
-</tr>
-<tr>
-<td><code>kvHashAlgo</code></td>
-<td>string</td>
-<td>engine-derived when omitted</td>
-<td><code>sha256_cbor</code>, <code>xxhash_cbor</code>, <code>sha256_sglang</code>, <code>blockhash_trtllm</code></td>
-<td>Prefer omission so the engine selects a coherent default. Explicit engine/algorithm mismatches are rejected.</td>
-</tr>
-<tr>
-<td><code>kvZmqPort</code></td>
-<td>int</td>
-<td><code>5557</code></td>
-<td><code>1</code>–<code>65535</code></td>
-<td>Base ZMQ port for vLLM/SGLang. Do not set a non-default value for TensorRT-LLM; it uses HTTP on the serving port.</td>
-</tr>
-<tr>
-<td><code>kvWarmupSec</code></td>
-<td>int</td>
-<td><code>30</code></td>
-<td><code>≥ 0</code></td>
-<td><strong>Accepted but currently inert</strong> — intended as a Tier 1.5 warmup delay after subscriber connect, but the timer is never armed; Tier 1.5 activates without waiting. Do not design procedures around it.</td>
-</tr>
-<tr>
-<td><code>kvEngineType</code></td>
-<td>string</td>
-<td><code>vllm</code></td>
-<td><code>vllm</code>, <code>sglang</code>, <code>trtllm</code>, <code>llamacpp</code></td>
-<td>Engine contract for the rule; <strong>immutable after create</strong>. llama.cpp accepts plain load balancing only and rejects KV-exact/P/D controls.</td>
-</tr>
-<tr>
-<td><code>kvDpRankCount</code></td>
-<td>int</td>
-<td><code>1</code></td>
-<td><code>1</code>–<code>8</code></td>
-<td>SGLang data-parallel rank count. Rank <em>N</em> publishes at <code>kvZmqPort + N</code>; all ranks union into one endpoint inventory. Keep <code>1</code> for other engines.</td>
-</tr>
-<tr>
-<td><code>kvExactApiMode</code></td>
-<td>string</td>
-<td>profile surfaces or legacy <code>both</code> when omitted</td>
-<td><code>completions</code>, <code>chat</code>, <code>both</code></td>
-<td>REST-only strict API-surface declaration. Requires KV-exact and is immutable.</td>
-</tr>
-<tr>
-<td><code>kvModelProfile</code></td>
-<td>string</td>
-<td>profile-less legacy mode when omitted</td>
-<td>published profile ID</td>
-<td>REST-only strict tokenizer/template binding. Requires KV-exact; discover it before create and verify <code>kvexactstatus</code> afterward.</td>
-</tr>
-<tr>
-<td><code>LLB_KV_MIN_MATCH_TOKENS</code></td>
-<td>environment</td>
-<td><code>16</code></td>
-<td><code>0</code>–<code>4096</code></td>
-<td>Skip KV-exact scoring for shorter prompts. <code>0</code> disables this guard.</td>
-</tr>
-</tbody>
-</table>
+<p>The single <a href="../configuration-reference/#4-kv-cache-exact-routing">REST KV field table</a>
+owns types, defaults, allowed values, engine coherence and binding mutability.
+Use <a href="../model-profiles-kv-readiness/">profile readiness</a> for strict admission and
+<code>kvexactstatus</code>. The process-only <code>LLB_KV_MIN_MATCH_TOKENS</code> control is documented
+with the <a href="../../use-cases/configuration-tuning/#c-data-plane-tier-15-parity-admission-timeouts">process environment</a>,
+not as a REST field.</p>
 <div class="admonition warning">
 <p class="admonition-title">One engine per VIP</p>
 <p><code>kvEngineType</code> is fixed at rule-create time. A single loxilb gateway can
 carry many engine rules side by side, but each
 VIP:port rule speaks exactly one engine's contract. To switch a VIP's engine,
 delete the rule and recreate it.</p>
-</div>
-<h2 id="the-block-hash-parity-contract">The block-hash parity contract<a class="headerlink" href="#the-block-hash-parity-contract" title="Permanent link">&para;</a></h2>
-<p>Cache-aware routing works <strong>only</strong> if loxilb reproduces the engine's block
-hashes bit-for-bit. This is an <strong>all-or-nothing</strong> contract: if any single leg is
-mismatched, hash overlap is <strong>0%</strong>, no backend ever "matches," and every request
-silently falls through to the load-based tier. There is no error — only a
-mysterious 0% hit rate. Get every leg right.</p>
-<h3 id="vllm-parity-triad">vLLM parity triad<a class="headerlink" href="#vllm-parity-triad" title="Permanent link">&para;</a></h3>
-<p>For <code>kvEngineType: "vllm"</code> (<code>kvExactMode: 1</code>), align these three legs between
-your vLLM launch and the loxilb rule:</p>
-<ol>
-<li><strong>Seed</strong> — vLLM <code>PYTHONHASHSEED</code> must equal loxilb's <code>LLB_KV_NONE_HASH_SEED</code>.
-   This seeds the "none hash" that anchors the first block of every chain. Current Gateway main
-   refuses vLLM KV-exact rule creation with HTTP <code>412</code> unless the Gateway seed is nonempty and at
-   most 23 bytes.</li>
-<li><strong>Hash algorithm</strong> — vLLM <code>--prefix-caching-hash-algo=sha256_cbor</code> must equal
-   the rule's <code>kvHashAlgo</code>. vLLM's <em>default</em> is a pickle-based <code>sha256</code> that is
-   not portable across processes — you must select the <code>*_cbor</code> variant on both
-   sides. Pairing: <code>sha256_cbor ↔ sha256_cbor</code>, <code>xxhash_cbor ↔ xxhash_cbor</code>.
-   The Gateway's internal implementation uses XXH3-128 before truncation; operators configure
-   the public <code>xxhash_cbor</code> contract, not an <code>xxhash128</code> value.</li>
-<li><strong>Block size</strong> — vLLM <code>--block-size</code> must equal <code>kvBlockSize</code> (both <code>16</code> in
-   the reference topology). CPU vLLM defaults to <code>128</code>, so this is easy to miss.</li>
-</ol>
-<p>Before presenting or submitting a vLLM KV-exact rule, query
-<code>GET /netlox/v1/status/capabilities</code> and require the <code>kv_exact_vllm</code> entry to report
-<code>ready=true</code>. <code>KV_EXACT_SEED_UNSET</code> and <code>KV_EXACT_SEED_TOO_LONG</code> are launch-environment
-preconditions; changing the rule body cannot satisfy them. The capability query is a REST-only,
-current-main surface and does not replace tokenizer, event-stream, inventory, or hit-counter
-verification. See <a href="../../operations/readiness-diagnostics-maintenance/">Readiness, Capabilities, Diagnostics, and Maintenance</a>.</p>
-<p>Under the hood the vLLM contract encodes each block as a canonical CBOR tuple
-<code>[parent_hash, [token_ids…], null]</code>, hashes it, and takes the <strong>last</strong> 8 digest
-bytes big-endian as the u64 key. The PUB socket binds <code>tcp://*:5557</code> and vLLM
-must run with <code>VLLM_KV_EVENTS_USE_INT_BLOCK_HASHES=1</code>.</p>
-<h3 id="sglang-parity-triad">SGLang parity triad<a class="headerlink" href="#sglang-parity-triad" title="Permanent link">&para;</a></h3>
-<p>For <code>kvEngineType: "sglang"</code> (<code>kvExactMode: 3</code>, single-role — all endpoints are
-KV candidates, no prefill/decode split), align these three legs instead:</p>
-<ol>
-<li><strong>Page size</strong> — SGLang <code>--page-size</code> must equal <code>kvBlockSize</code>. SGLang's page
-   size is model-dependent; read the running value from the server's
-   <code>/get_server_info</code> before setting the rule.</li>
-<li><strong>Tokenizer</strong> — the served model must match the staged <code>tokenizer.json</code> for
-   that model slug on the loxilb host (see below). Token IDs must be identical on
-   both sides or no block can ever match.</li>
-<li><strong>Engine identity</strong> — set <code>kvEngineType: "sglang"</code> and preferably omit
-   <code>kvHashAlgo</code>. Omission derives <code>sha256_sglang</code>. An explicit
-   <code>sha256_sglang</code> is accepted, while an incoherent engine/algorithm pair is
-   rejected at rule creation.</li>
-</ol>
-<p>The SGLang contract differs from vLLM on the wire: the u64 key is the <strong>first</strong>
-8 digest bytes big-endian (the inverse of vLLM), there is no CBOR envelope, and
-keys travel as <strong>signed int64</strong>. Block 0 has no parent. With data parallelism,
-set <code>kvDpRankCount = --dp-size</code>; rank <em>N</em> publishes at <code>kvZmqPort + N</code> and all
-ranks union into that endpoint's single inventory.</p>
-<div class="admonition tip">
-<p class="admonition-title">Deep dives</p>
-<p>For the full architecture, launch flags, and side-by-side hash walkthroughs
-see <a href="../../use-cases/kv-cache-aware-routing/">KV-Cache-Aware Routing (use-case)</a>
-and <a href="../../use-cases/sglang-routing/">SGLang Routing</a>.</p>
 </div>
 <h2 id="load-safety-and-cold-endpoint-recovery">Load safety and cold-endpoint recovery<a class="headerlink" href="#load-safety-and-cold-endpoint-recovery" title="Permanent link">&para;</a></h2>
 <p>KV affinity is bounded so one hot prefix does not permanently monopolize one
@@ -4506,391 +4284,58 @@ worker, and a restarted worker can re-enter a warm fleet.</p>
 <p>These knobs are process-wide. Change them only with a staged workload test,
 because a spill or seed deliberately trades one cache-local request for fleet
 health.</p>
-<h2 id="tokenizer-staging">Tokenizer staging<a class="headerlink" href="#tokenizer-staging" title="Permanent link">&para;</a></h2>
-<p>loxilb tokenizes prompts with the model's HuggingFace <code>tokenizer.json</code>, staged
-on the loxilb host at:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>/etc/loxilb/tokenizers/&lt;model-slug&gt;/tokenizer.json
-</code></pre></div>
-<p>The <strong>model slug</strong> is the served model name with every <code>/</code> replaced by <code>__</code>:</p>
-<table>
-<thead>
-<tr>
-<th>Served model name</th>
-<th>Model slug</th>
-<th>Path</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>Qwen/Qwen3-0.6B</code></td>
-<td><code>Qwen__Qwen3-0.6B</code></td>
-<td><code>/etc/loxilb/tokenizers/Qwen__Qwen3-0.6B/tokenizer.json</code></td>
-</tr>
-<tr>
-<td><code>meta-llama/Llama-3-8B</code></td>
-<td><code>meta-llama__Llama-3-8B</code></td>
-<td><code>/etc/loxilb/tokenizers/meta-llama__Llama-3-8B/tokenizer.json</code></td>
-</tr>
-</tbody>
-</table>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>/etc/loxilb/tokenizers/Qwen__Qwen3-0.6B/
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>wget<span class="w"> </span>-O<span class="w"> </span>/etc/loxilb/tokenizers/Qwen__Qwen3-0.6B/tokenizer.json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>https://huggingface.co/Qwen/Qwen3-0.6B/raw/main/tokenizer.json
-</code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Missing tokenizer = silent fall-through</p>
-<p>If the tokenizer file is missing, unreadable, or the slug does not match the
-served <code>model</code> name exactly (case-sensitive), Tier 1.5 is skipped and routing
-falls through to the load-based tier. There is no request error.</p>
-</div>
-<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
-<p>Configure a rule with <code>POST /netlox/v1/config/loadbalancer</code> on port <code>11111</code>.
-Both examples below mirror the reference topologies (VIP <code>192.0.2.254</code>, prefill
-endpoints <code>192.0.2.1 / 203.0.113.1 / 198.51.100.101</code>).</p>
-<div class="admonition warning">
-<p class="admonition-title">Protect the management API</p>
-<p>The <code>curl</code> examples use plain HTTP for an isolated lab. In production, use an authenticated,
-TLS-protected management endpoint and load its authorization header from a
-permission-restricted file.</p>
-</div>
-<h3 id="vllm-kv-exact-rule-kvexactmode-1">vLLM KV-exact rule (<code>kvExactMode: 1</code>)<a class="headerlink" href="#vllm-kv-exact-rule-kvexactmode-1" title="Permanent link">&para;</a></h3>
-<p>A fullproxy P/D service carrying <code>kvExactMode: 1</code>. Prefill endpoints
-(<code>ep_role: 1</code>) are the KV-selection candidates; decode endpoints (<code>ep_role: 2</code>)
-are never Tier-1.5 targets.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">curl</label><label for="__tabbed_1_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="s1">    "serviceArguments": {</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s1">      "externalIP": "192.0.2.254",</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s1">      "port": 8080,</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s1">      "protocol": "tcp",</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s1">      "sel": 0,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s1">      "mode": 4,</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s1">      "pd_disagg_mode": true,</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s1">      "kvExactMode": 1,</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s1">      "kvZmqPort": 5557,</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="s1">      "kvHashAlgo": "sha256_cbor",</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="s1">      "kvWarmupSec": 30,</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="s1">      "kvBlockSize": 16</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="s1">    },</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="s1">    "endpoints": [</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="s1">      {"endpointIP": "192.0.2.1", "targetPort": 8080, "weight": 1, "ep_role": 1},</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="s1">      {"endpointIP": "198.51.100.1", "targetPort": 8080, "weight": 1, "ep_role": 2},</span>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="s1">      {"endpointIP": "203.0.113.1", "targetPort": 8080, "weight": 1, "ep_role": 1},</span>
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="s1">      {"endpointIP": "192.0.2.101", "targetPort": 8080, "weight": 1, "ep_role": 2},</span>
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="s1">      {"endpointIP": "198.51.100.101", "targetPort": 8080, "weight": 1, "ep_role": 1},</span>
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="s1">      {"endpointIP": "203.0.113.101", "targetPort": 8080, "weight": 1, "ep_role": 2}</span>
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="s1">    ]</span>
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="s1">  }'</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">8080</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">192</span>.0.2.1:1,198.51.100.1:1,203.0.113.1:1,192.0.2.101:1,198.51.100.101:1,203.0.113.101:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--pd-disagg<span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5557</span><span class="w"> </span>--kv-hash-algo<span class="o">=</span>sha256_cbor<span class="w"> </span>--kv-warmup<span class="o">=</span><span class="m">30</span><span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,decode,prefill,decode,prefill,decode
-</code></pre></div>
-</div>
-</div>
-</div>
-<h3 id="sglang-kv-exact-rule-kvexactmode-3">SGLang KV-exact rule (<code>kvExactMode: 3</code>)<a class="headerlink" href="#sglang-kv-exact-rule-kvexactmode-3" title="Permanent link">&para;</a></h3>
-<p>A single-role service: <code>kvExactMode: 3</code>, <code>kvEngineType: "sglang"</code>, no <code>ep_role</code>
-on the endpoints (every endpoint is a KV candidate), <code>kvHashAlgo</code> <strong>omitted</strong>,
-and <code>kvDpRankCount</code> equal to the SGLang <code>--dp-size</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/loadbalancer<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="s1">    "serviceArguments": {</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="s1">      "externalIP": "192.0.2.254",</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="s1">      "port": 9090,</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="s1">      "protocol": "tcp",</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="s1">      "sel": 0,</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="s1">      "mode": 4,</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">      "kvExactMode": 3,</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s1">      "kvEngineType": "sglang",</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s1">      "kvDpRankCount": 3,</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s1">      "kvZmqPort": 5561,</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s1">      "kvWarmupSec": 30,</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="s1">      "kvBlockSize": 16</span>
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="s1">    },</span>
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="s1">    "endpoints": [</span>
-<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="s1">      {"endpointIP": "198.51.100.101", "targetPort": 8080, "weight": 1},</span>
-<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="s1">      {"endpointIP": "203.0.113.101", "targetPort": 8080, "weight": 1},</span>
-<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="s1">      {"endpointIP": "192.0.2.102", "targetPort": 8080, "weight": 1}</span>
-<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="s1">    ]</span>
-<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="s1">  }'</span>
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="m">192</span>.0.2.254<span class="w"> </span>--tcp<span class="o">=</span><span class="m">9090</span>:8080<span class="w"> </span>--endpoints<span class="o">=</span><span class="m">198</span>.51.100.101:1,203.0.113.101:1,192.0.2.102:1<span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">3</span><span class="w"> </span>--kv-engine-type<span class="o">=</span>sglang<span class="w"> </span>--kv-dp-ranks<span class="o">=</span><span class="m">3</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5561</span><span class="w"> </span>--kv-warmup<span class="o">=</span><span class="m">30</span><span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<p>With <code>kvDpRankCount: 3</code> and <code>kvZmqPort: 5561</code>, loxilb subscribes to ranks at
-<code>5561</code>, <code>5562</code>, and <code>5563</code> on each endpoint and unions them into one inventory
-per endpoint.</p>
-<h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
-<p>For a strict rule, first discover the profile and retain its registry generation and artifact
-digests. After create, <code>GET .../kvexactstatus</code> is the mandatory readiness check; a successful
-<code>POST</code>, load-balancer read-back, or nonempty inventory does not prove that the composed binding is
-enforced. See <a href="../model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a>.</p>
-<p>Confirm the rule is live and carries the KV fields you set:</p>
-<!-- example-status-default: illustrative-only -->
-
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/config/loadbalancer/all
-</code></pre></div>
-<p>Look for <code>kvExactMode</code>, <code>kvBlockSize</code>, <code>kvHashAlgo</code> (vLLM) or <code>kvEngineType</code> /
-<code>kvDpRankCount</code> (SGLang) on the rule. On a strict rule, also require the intended
-<code>kvModelProfile</code> and <code>kvExactApiMode</code>.</p>
-<p>Query the dedicated status read model for a strict rule:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">"http://192.0.2.254:11111/netlox/v1/config/loadbalancer/externalipaddress/192.0.2.254/port/8080/protocol/tcp/kvexactstatus"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'.kvExactStatusAttr[] | {</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="s1">    modelName, modelProfileId, modelProfileGen, apiMode,</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s1">    bindingDigest, desiredState, enforcedState, reasonCodes,</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="s1">    enforcement</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="s1">  }'</span>
-</code></pre></div>
-<p>Require <code>READY</code> for normal strict qualification. Keep <code>READY_FUNCTIONAL_ONLY</code> distinct, and treat
-unknown states as not ready/in transition. A legacy rule reports
-<code>LEGACY_ACTIVE_UNATTESTED</code>; it is active but not strict or attested.</p>
-<p>Then inspect the live per-endpoint block inventory with the raw-middleware
-endpoint:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">"http://192.0.2.254:11111/netlox/v1/config/ai/kv/inventory?service_id=0&amp;ep_idx=0"</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">{</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">"service_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">"ep_idx"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">"hash_algo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sha256_cbor"</span><span class="p">,</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="nt">"blocks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="p">{</span><span class="nt">"block_idx"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nt">"hash_uint64"</span><span class="p">:</span><span class="w"> </span><span class="mi">1234567890123456789</span><span class="p">}</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span><span class="p">],</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">  </span><span class="nt">"total"</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="p">}</span>
-</code></pre></div>
-<ul>
-<li><code>service_id</code> — numeric service identifier (uint32); <code>ep_idx</code> — the endpoint
-  index within the service. Both query parameters are required.</li>
-<li><code>total</code> — number of blocks currently tracked for that endpoint. A non-zero,
-  growing <code>total</code> on your KV-candidate endpoints (prefill EPs for <code>kvExactMode: 1</code>;
-  all EPs for <code>kvExactMode: 3</code>) is the proof the subscriber is connected and ingesting.</li>
-<li><code>block_idx</code> is a synthetic sequence index (map iteration order), not a semantic
-  block position. For SGLang, an endpoint's inventory is the <strong>union</strong> of all its
-  ranks.</li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Raw middleware — not in generated clients</p>
-<p><code>GET /config/ai/kv/inventory</code> is served by the API-server's global
-middleware and bypasses code generation, so it is <strong>absent from the generated
-API clients</strong>. Drive it with raw <code>curl</code>. See
-<a href="../../reference/swagger-extras/">swagger-extras</a>.</p>
-</div>
-<h2 id="troubleshoot">Troubleshoot<a class="headerlink" href="#troubleshoot" title="Permanent link">&para;</a></h2>
-<h3 id="0-cache-hits-a-mismatched-parity-leg">0% cache hits — a mismatched parity leg<a class="headerlink" href="#0-cache-hits-a-mismatched-parity-leg" title="Permanent link">&para;</a></h3>
-<p><strong>Symptom:</strong> the rule is live and inventories are populating, but no request is
-ever routed by cache match — everything falls through to the load-based tier.</p>
-<p><strong>Cause:</strong> the block-hash contract is all-or-nothing. A single mismatched leg
-makes loxilb's hashes disagree with the engine's, so overlap is 0% and Tier 1.5
-silently falls through. Walk the triad for your engine:</p>
-<ul>
-<li><strong>vLLM</strong> — confirm all three legs: <code>PYTHONHASHSEED</code> == <code>LLB_KV_NONE_HASH_SEED</code>;
-  vLLM <code>--prefix-caching-hash-algo</code> == rule <code>kvHashAlgo</code> (both a <code>*_cbor</code> value,
-  not vLLM's default <code>sha256</code>); vLLM <code>--block-size</code> == <code>kvBlockSize</code>.</li>
-<li><strong>SGLang</strong> — confirm: <code>--page-size</code> == <code>kvBlockSize</code>; served model == staged
-  tokenizer slug; <code>kvEngineType: "sglang"</code> with <code>kvHashAlgo</code> omitted or explicitly set only to
-  <code>sha256_sglang</code>. Any other explicit algorithm is rejected as incoherent.</li>
-</ul>
-<h3 id="inventory-stays-empty">Inventory stays empty<a class="headerlink" href="#inventory-stays-empty" title="Permanent link">&para;</a></h3>
-<p><strong>Symptom:</strong> <code>total</code> is <code>0</code> for every endpoint.</p>
-<p><strong>Check:</strong></p>
-<ol>
-<li><strong>Engine publishing</strong> — the backend must publish KV events (vLLM
-   <code>--kv-events-config</code> on the ZMQ publisher; SGLang KV-event export enabled).</li>
-<li><strong>Port reachability</strong> — <code>kvZmqPort</code> (and <code>kvZmqPort+1..+N</code> for SGLang ranks)
-   must be reachable from loxilb to each endpoint over TCP. Test with
-   <code>nc -zv &lt;endpoint-ip&gt; 5557</code>.</li>
-<li><strong>Publisher liveness</strong> — the PUB socket only emits while the engine is
-   serving. loxilb's subscriber reconnects automatically after a restart, then
-   re-ingests.</li>
-</ol>
-<h3 id="tier-15-never-activates">Tier 1.5 never activates<a class="headerlink" href="#tier-15-never-activates" title="Permanent link">&para;</a></h3>
-<p><strong>Check:</strong></p>
-<ol>
-<li><strong>Mode</strong> — the rule must be <code>mode: 4</code> (fullproxy). Lower modes cannot read
-   the prompt body.</li>
-<li><strong>Inventory</strong> — give the ZMQ subscriber time to receive KV events and populate
-   the inventory before testing. (<code>kvWarmupSec</code> does <strong>not</strong> gate this — the field
-   is accepted but currently inert; Tier 1.5 activates as soon as inventory and
-   routing conditions are met.)</li>
-<li><strong>Tokenizer</strong> — verify <code>/etc/loxilb/tokenizers/&lt;slug&gt;/tokenizer.json</code> exists,
-   is readable by loxilb, and the slug (<code>/</code> → <code>__</code>) matches the served <code>model</code>
-   name exactly.</li>
-<li><strong>No match</strong> — if no endpoint holds any matching block for a prompt, Tier 1.5
-   correctly declines and routing falls through. This is expected for cold or
-   one-shot prompts; it is only a problem when <em>warm, repeated</em> prompts miss.</li>
-</ol>
-<h3 id="high-miss-rate-on-repeated-prompts">High miss rate on repeated prompts<a class="headerlink" href="#high-miss-rate-on-repeated-prompts" title="Permanent link">&para;</a></h3>
-<ol>
-<li><strong>Block/page size mismatch</strong> — <code>kvBlockSize</code> must equal the engine's block
-   (vLLM) or page (SGLang) size, or identical content hashes differently.</li>
-<li><strong>HA consistency</strong> — all loxilb instances in an HA pair must use the same
-   <code>kvHashAlgo</code> and <code>kvBlockSize</code>.</li>
-<li><strong>Workload fit</strong> — cache-aware routing helps most with shared prefixes
-   (system prompts, multi-turn conversations, repeated documents). For unique
-   one-shot queries in a plain pool, start with round-robin. Do not assume
-   plain-pool selector 9 consumes live GPU metrics; see the
-   <a href="../vllm-integration/">vLLM selector boundary</a>.</li>
-</ol>
-<h2 id="tiered-caching-with-lmcache-advanced">Tiered caching with LMCache (advanced)<a class="headerlink" href="#tiered-caching-with-lmcache-advanced" title="Permanent link">&para;</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Advanced — gate this before rollout</p>
-<p>LMCache adds a second KV cache tier <em>inside</em> the engine. It is powerful for
-prefill-heavy, high-reuse workloads, but it composes vLLM, LMCache, and NIXL — a
-stack with <strong>no official compatibility matrix</strong> — and several of its failure modes
-are silent. Validate it on a staging fleet and pin every component's version before
-you put it in front of traffic. Everything above (block-hash routing) works without
-LMCache; this is an optional add-on, not a prerequisite.</p>
-</div>
-<p>Everything earlier on this page moves <em>hashes, not tensors</em>: LoxiLB routes a request to
-the endpoint that already holds the prefix. LMCache is complementary and lives one layer
-down — it gives each engine a <strong>larger place to keep KV</strong> so a prefix survives eviction
-from the GPU cache. LoxiLB still does the routing; LMCache changes what "the endpoint
-already holds this" can mean.</p>
-<h3 id="what-it-is">What it is<a class="headerlink" href="#what-it-is" title="Permanent link">&para;</a></h3>
-<p>LMCache is wired into vLLM as a <strong>MultiConnector</strong> that composes two connectors:</p>
-<ul>
-<li><code>LMCacheConnectorV1</code> — the tiered KV store: a <strong>CPU</strong> KV tier (and, optionally, a
-  remote or peer-to-peer tier) layered <em>under</em> the GPU KV cache. When a prefix is
-  evicted from GPU memory, its KV can be retrieved from the CPU tier instead of
-  recomputed.</li>
-<li><code>NixlConnector</code> — the same P/D transfer connector used for prefill/decode KV handoff.</li>
-</ul>
-<p>Composing both lets one vLLM process both participate in P/D transfer <em>and</em> back its GPU
-cache with a CPU tier. LMCache runs on the <strong>prefill tier only</strong> — decode nodes are
-excluded from the connector config.</p>
-<h3 id="configuration-surface">Configuration surface<a class="headerlink" href="#configuration-surface" title="Permanent link">&para;</a></h3>
-<p>LMCache is configured entirely on the <strong>vLLM launch</strong>, not on the LoxiLB rule — LoxiLB's
-KV-exact contract is unchanged. The moving parts:</p>
-<table>
-<thead>
-<tr>
-<th>Setting</th>
-<th>Where</th>
-<th>Note</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>--kv-transfer-config</code></td>
-<td>vLLM flag</td>
-<td>MultiConnector JSON naming <code>LMCacheConnectorV1</code> + <code>NixlConnector</code></td>
-</tr>
-<tr>
-<td><code>LMCACHE_CONFIG_FILE</code></td>
-<td>env</td>
-<td>Path to <code>lmcache.yaml</code> (tier sizes, remote backend, chunk size)</td>
-</tr>
-<tr>
-<td><code>PROMETHEUS_MULTIPROC_DIR</code></td>
-<td>env</td>
-<td><strong>Must be identical across all vLLM and LMCache processes</strong> (see hazards)</td>
-</tr>
-<tr>
-<td>chunk size</td>
-<td><code>lmcache.yaml</code></td>
-<td>Default <strong>256 tokens</strong>; a prefix must exceed one chunk to be stored</td>
-</tr>
-<tr>
-<td>decode nodes</td>
-<td>topology</td>
-<td><strong>Excluded</strong> — LMCache is configured on prefill nodes only</td>
-</tr>
-</tbody>
-</table>
-<p>The <code>--kv-transfer-config</code> is a MultiConnector document (rather than a single
-<code>NixlConnector</code> object as in the plain P/D case). Keep the engine image tag pinned
-(e.g. <code>vllm/vllm-openai:v0.17.0</code>): LMCache and NIXL versions travel with the image and a
-bump can change the wire behavior.</p>
-<h3 id="metrics">Metrics<a class="headerlink" href="#metrics" title="Permanent link">&para;</a></h3>
-<p>LMCache exports its own <code>lmcache:*</code> Prometheus series. Read the <strong>hit counter</strong>, not the
-rate gauge:</p>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
-<th>Use</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>lmcache:num_hit_tokens</code></td>
-<td><strong>Authoritative</strong> hit counter — this is the number to trust</td>
-</tr>
-<tr>
-<td><code>lmcache:retrieve_hit_rate</code></td>
-<td><strong>STALE gauge</strong> — can read <code>1.0</code> with zero retrieves; informational only, never gate on it</td>
-</tr>
-<tr>
-<td><code>lmcache:local_cache_usage</code></td>
-<td>CPU-tier occupancy</td>
-</tr>
-<tr>
-<td><code>lmcache:remote_cache_usage</code></td>
-<td>Remote/P2P-tier occupancy (if configured)</td>
-</tr>
-<tr>
-<td><code>lmcache:time_to_retrieve</code></td>
-<td>Retrieval latency from a lower tier</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition warning">
-<p class="admonition-title"><code>lmcache:retrieve_hit_rate</code> is misleading</p>
-<p>The rate gauge is not reset/recomputed the way you would expect — it can sit at
-<code>1.0</code> even when no retrieval has happened. Judge effectiveness by the delta on
-<code>lmcache:num_hit_tokens</code> over a known workload, not by the rate.</p>
-</div>
-<h3 id="hazards-read-before-enabling">Hazards (read before enabling)<a class="headerlink" href="#hazards-read-before-enabling" title="Permanent link">&para;</a></h3>
-<ul>
-<li><strong>No official compat matrix.</strong> vLLM × LMCache × NIXL has no vendor-published
-  compatibility table. Pin all three (via the engine image tag) and validate the exact
-  combination you will run.</li>
-<li><strong>Nested NIXL layout.</strong> Because NIXL appears both as the P/D connector and under
-  LMCache, configure the <strong>HND cache layout</strong> required by the current engine integration.
-  A layout mismatch can produce invalid output without a clear transport error, so verify the
-  exact pinned engine image with known prompts before admitting production traffic.</li>
-<li><strong>Prefix caching hides retrievals.</strong> With vLLM prefix caching <strong>ON</strong>, an immediate
-  re-issue of the same prompt is served straight from the <strong>GPU</strong> cache, so LMCache
-  never retrieves and its counters stay flat — making it look broken. To exercise
-  LMCache, <strong>evict first</strong>: drive enough distinct traffic to exceed <code>num_gpu_blocks</code> so
-  the prefix leaves the GPU cache, <em>then</em> re-issue.</li>
-<li><strong><code>PROMETHEUS_MULTIPROC_DIR</code> must be set and shared.</strong> If it is unset or differs
-  between the vLLM and LMCache processes, <strong>all <code>lmcache:*</code> series vanish</strong> — you lose
-  every metric silently. Set it identically for every process in the deployment.</li>
-</ul>
-<div class="admonition tip">
-<p class="admonition-title">Parity triad still applies underneath</p>
-<p>LMCache changes the KV <em>storage tiers</em>, not the block-hash contract. LoxiLB's
-routing still depends on the parity triad — <code>PYTHONHASHSEED</code> / <code>LLB_KV_NONE_HASH_SEED</code>,
-<code>--block-size</code> / <code>kvBlockSize</code>, and <code>--prefix-caching-hash-algo</code> / <code>kvHashAlgo</code>.
-Before you attribute a hit-rate change to LMCache, run the read-only preflight in
-<a href="../../use-cases/configuration-tuning/#environment-parity-preflight">Configuration &amp; Tuning → Environment parity &amp; preflight</a>
-to confirm the triad and the version/platform matrix are still intact.</p>
-</div>
-<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="../../use-cases/kv-cache-aware-routing/">KV-Cache-Aware Routing (use-case)</a> — flagship deep dive: architecture and the vLLM hash contract in full.</li>
-<li><a href="../../use-cases/sglang-routing/">SGLang Routing</a> — SGLang architecture, launch flags, and the single-role contract.</li>
-<li><a href="../tensorrt-llm-integration/">TensorRT-LLM Integration</a> — destructive HTTP event ownership and context/generation P/D.</li>
-<li><a href="../model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a> — strict profile discovery and enforcement status.</li>
-<li><a href="../llamacpp-integration/">llama.cpp Integration</a> — the plain-pool alternative for an engine without a supported KV event plane.</li>
-<li><a href="../llm-routing/">LLM Routing</a> — the full routing-tier cascade.</li>
-<li><a href="../pd-disaggregation/">P/D Disaggregation</a> — combine KV routing with prefill/decode separation.</li>
-<li><a href="../configuration-reference/">Configuration Reference</a> — every <code>serviceArguments</code> field.</li>
-</ul>
+<h2 id="profile-and-tokenizer-preparation">Profile and tokenizer preparation<a class="headerlink" href="#profile-and-tokenizer-preparation" title="Permanent link">&para;</a></h2>
+<p>For strict Exact, follow <a href="../model-profiles-kv-readiness/">profile discovery and readiness</a>
+and <a href="../../use-cases/model-engine-standard/prepare/">Step 2</a>. Pin revision,
+tokenizer/template hashes, engine manifests and fixtures. A raw tokenizer file
+alone does not establish a strict model binding. Legacy profile-less shapes
+require their own compatibility/evidence boundary. Verify the effective rule and
+<a href="../../operations/kv-routing-verification/">actual cache engagement</a>.</p>
+<h2 id="advanced-integrations">Advanced integrations<a class="headerlink" href="#advanced-integrations" title="Permanent link">&para;</a></h2>
+<p><a href="../../use-cases/advanced-cache-integrations/">LMCache and the experimental controller</a>
+have separate version, layout, telemetry and qualification requirements.</p>
+<p><a id="kv-cache-aware-routing"></a></p>
+<p><a href="../engine-contracts/">Current reference</a>.</p>
+<p><a id="concept"></a></p>
+<p><a href="../../concepts/kv-routing/">Current reference</a>.</p>
+<p><a id="the-block-hash-parity-contract"></a></p>
+<p><a href="../engine-contracts/">Current reference</a>.</p>
+<p><a id="vllm-parity-triad"></a></p>
+<p><a href="../engine-contracts/">Current reference</a>.</p>
+<p><a id="sglang-parity-triad"></a></p>
+<p><a href="../engine-contracts/">Current reference</a>.</p>
+<p><a id="tokenizer-staging"></a></p>
+<p><a href="../engine-contracts/">Current reference</a>.</p>
+<p><a id="configuration"></a></p>
+<p><a href="../engine-contracts/">Current reference</a>.</p>
+<p><a id="vllm-kv-exact-rule-kvexactmode-1"></a></p>
+<p><a href="../engine-contracts/">Current reference</a>.</p>
+<p><a id="sglang-kv-exact-rule-kvexactmode-3"></a></p>
+<p><a href="../engine-contracts/">Current reference</a>.</p>
+<p><a id="verify"></a></p>
+<p><a href="../../operations/kv-routing-verification/">Current reference</a>.</p>
+<p><a id="troubleshoot"></a></p>
+<p><a href="../../operations/kv-routing-verification/">Current reference</a>.</p>
+<p><a id="0-cache-hits-a-mismatched-parity-leg"></a></p>
+<p><a href="../../operations/kv-routing-verification/">Current reference</a>.</p>
+<p><a id="inventory-stays-empty"></a></p>
+<p><a href="../../operations/kv-routing-verification/">Current reference</a>.</p>
+<p><a id="tier-15-never-activates"></a></p>
+<p><a href="../../operations/kv-routing-verification/">Current reference</a>.</p>
+<p><a id="high-miss-rate-on-repeated-prompts"></a></p>
+<p><a href="../../operations/kv-routing-verification/">Current reference</a>.</p>
+<p><a id="tiered-caching-with-lmcache-advanced"></a></p>
+<p><a href="../../use-cases/advanced-cache-integrations/">Current reference</a>.</p>
+<p><a id="what-it-is"></a></p>
+<p><a href="../../use-cases/advanced-cache-integrations/">Current reference</a>.</p>
+<p><a id="configuration-surface"></a></p>
+<p><a href="../../use-cases/advanced-cache-integrations/">Current reference</a>.</p>
+<p><a id="metrics"></a></p>
+<p><a href="../../use-cases/advanced-cache-integrations/">Current reference</a>.</p>
+<p><a id="hazards-read-before-enabling"></a></p>
+<p><a href="../../use-cases/advanced-cache-integrations/">Current reference</a>.</p>
+<p><a id="next-steps"></a></p>
+<p><a href="../engine-contracts/">Current reference</a>.</p>
 
 
 
