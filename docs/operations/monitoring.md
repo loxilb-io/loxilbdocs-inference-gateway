@@ -7,7 +7,7 @@ admission, token quotas, engine-specific routing, and fullproxy QoS. Use the
 metrics to distinguish Gateway pressure from host pressure and policy denials
 from backend failures.
 
-For the complete generated list of 197 release-scope families, exact labels,
+For the complete generated list of 283 release-scope families, exact labels,
 activation classes, and evidence status, see the
 [Metrics Reference](../reference/metrics.md). The catalog records source
 evidence; a raw scrape and controlled stimulus are still required for a
@@ -102,15 +102,41 @@ loxilb_host_cpu_utilization_percent
 
 | Metric | Type | Labels | Meaning |
 |---|---|---|---|
-| `loxilb_ai_requests_total` | Counter | `model`, `tenant`, `status`, `outcome` | Completed SSE inference streams use `outcome="completed"`; admission denials use `outcome="denied"`. Non-SSE successes are not counted here. |
-| `loxilb_ai_request_duration_seconds` | Histogram | `model`, `tenant` | Duration recorded when an SSE inference stream completes; non-SSE requests are not observed |
+| `loxilb_ai_requests_total` | Counter | `model`, `tenant`, `status`, `outcome`, `cause` | AI-rule request records: `completed` for a whole answer, `aborted` for an incomplete answer, `denied` for a refusal before backend selection. Includes non-SSE responses on AI rules. |
+| `loxilb_ai_request_duration_seconds` | Histogram | `model`, `tenant` | Completed-response duration when the recorder receives a positive latency sample; abort and denial latencies are excluded |
 | `loxilb_ai_active_streams` | Gauge | `model` | Active SSE streams |
 | `loxilb_ai_rate_limit_hits_total` | Counter | `tenant`, `reason` | RPS and token-quota denials |
 | `loxilb_ai_model_not_allowed_total` | Counter | `model`, `tenant` | Model authorization denials |
 
-Denials are recorded at the decision point. Do not assume a generic completed
-request query includes every pre-dispatch denial; use the dedicated denial
-counters when alerting on `403` and `429`.
+Read these counters on an AI-enabled rule; a plain fullproxy rule without
+SSE, P/D or an active credential policy is outside AI request accounting.
+`completed` includes whole non-SSE answers and does not require a `[DONE]`
+marker. `aborted` has `cause="client"`, `"engine"` or `"gateway"`; other
+outcomes have an empty cause. A request that ended before a status was sent
+uses `status="none"`. Admission denials are recorded once at the refusal point;
+dedicated authorization and rate-limit counters explain why they were refused
+and must not be added as extra requests.
+
+```promql
+# Served traffic, excluding pre-dispatch denials
+sum by (model, outcome) (rate(loxilb_ai_requests_total{outcome=~"completed|aborted"}[5m]))
+# Incomplete answers caused by an engine or the Gateway
+sum by (model, cause) (rate(loxilb_ai_requests_total{outcome="aborted",cause=~"engine|gateway"}[5m]))
+```
+
+The upstream recording rule `instance:loxilb_ai_error_ratio:rate5m` uses
+`(completed 5xx + engine/gateway aborts) / (completed + aborted)` per instance.
+Client cancels and stalls are traffic in the denominator, not errors in the
+numerator. The deprecated `instance:loxilb_ai_5xx_ratio:rate5m` retains its old
+completed-5xx/completed meaning and misses cut answers. Use the new rule when
+qualifying alerts against this source pair.
+
+Some request/P/D series are seeded at zero. Their presence or number of lines
+is not evidence that a request completed or failed: sum the sample values and
+compare before/after deltas with client results and independent backend
+receipts. A nonzero `loxilb_ai_reap_fallback_total` means a reaper ended a
+connection without its owner-worker request record; request totals may then
+be incomplete. Metric-source support does not establish a deployment result.
 
 ## JWT and policy-store metrics
 
@@ -230,9 +256,12 @@ refresh. A frozen series after detach is not the expected representation.
 |---|---|
 | `loxilb_ai_engine_info{service,engine}` | Engine identity currently emitted only for llama.cpp rules |
 | `loxilb_ai_llamacpp_probe_warnings_total{service,kind}` | llama.cpp `/props` findings such as model/build/slot mismatch, sleeping, or unanswered |
-| `loxilb_ai_pd_requests_total{model,phase,status}` | One terminal P/D outcome: complete/success; prefill timeout/error/rejected; decode timeout/error; or defensive unknown/error |
+| `loxilb_ai_pd_requests_total{model,phase,status}` | Terminal P/D outcome, using the exact phase/status pairs listed below |
 | `loxilb_ai_pd_prefill_duration_seconds{model}` | Observed prefill phase duration when known |
-| `loxilb_ai_pd_decode_ttft_seconds{model}` | Decode time to first token/byte when known |
+| `loxilb_ai_pd_decode_ttft_seconds{model}` | Decode dispatch to its first streamed event, when sampled; not the full decode duration |
+| `loxilb_ai_pd_decode_duration_seconds{model}` | Decode dispatch to response end, when sampled; a reaped request can lack a duration sample |
+| `loxilb_ai_pd_prefill_fallback_total{model,reason}` | Prefill recomputed on decode, by `origin_5xx`, `origin_408`, `origin_429`, `no_status`, `truncated`, or `other` |
+| `loxilb_ai_pd_terminator_synthesized_total` | Gateway wrote a `[DONE]` terminator the decode engine never sent; correlates with part of decode/truncated, not normal engine completion |
 | `loxilb_ai_pd_kv_params_found_total{model}` | A completed prefill response carried `kv_transfer_params` |
 | `loxilb_ai_pd_kv_params_missing_total{model}` | A prefill response was actually inspected but lacked `kv_transfer_params`; prefill failures do not increment it |
 | `loxilb_ai_pd_session_hits_total{model}` | Tier-0 P/D session-stickiness selections |
@@ -259,10 +288,38 @@ correlate circuit transitions and endpoint-death counters with
 `loxilb_proxy_http_responses_by_status_total`, endpoint health, logs, and the
 client-visible result.
 
-For `loxilb_ai_pd_requests_total`, alert on the typed `phase` and `status` pair rather than an
-HTTP-code guess. Reconcile `tier_selected` only against successfully selected P/D requests;
-parked and refused admission events belong to the three admission families and intentionally do
-not choose a routing tier.
+For `loxilb_ai_pd_requests_total`, use these source-declared `phase/status`
+pairs rather than guessing from an HTTP code:
+
+| Phase | Status | Meaning |
+| --- | --- | --- |
+| `complete` | `success` | P/D lifecycle completed |
+| `prefill` | `timeout`, `error`, `rejected` | Prefill timed out, failed, or relayed an origin refusal |
+| `decode` | `error`, `timeout`, `rejected` | Decode engine/transport failed, produced no response byte before its timeout, or relayed an origin refusal |
+| `decode` | `unknown` | Decode completed but its status line was not read |
+| `decode` | `truncated` | Gateway ended or cut an in-progress answer, including silence or a policy cap; distinct from engine death |
+| `aborted` | `client` | Client left or stopped reading at any lifecycle stage |
+| `unknown` | `error` | Defensive fallback for an unrecognized phase code |
+
+Fallback reasons follow the forcing status first (`origin_5xx`, `origin_408`,
+`origin_429`); `truncated` describes a fallback caused by a cut reply instead.
+Do not sum decode duration and TTFT as if they were separate requests. A
+synthesized terminator is not proof of normal engine completion: retain the
+client outcome, backend receipt and truncation counters.
+
+Reconcile `tier_selected` only against successfully selected P/D requests;
+parked and refused admission events belong to the three admission families and
+intentionally do not choose a routing tier. Series are pre-created for model
+labels, so test values and deltas rather than counting series lines.
+
+| Additional source metric | Interpretation |
+| --- | --- |
+| `loxilb_ai_route_host_missing_total` | Dispatch reached a model-routed listener without a usable Host; investigate routing context and client-visible outcomes |
+| `loxilb_proxy_pools_live` | Pools retained by active rules or by holders of deleted rules, including connections, HTTP/2 sessions and capacity permits |
+| `loxilb_proxy_pools_freed_total` | Pools freed after deletion and release of their last holder; deletion alone does not imply an immediate decrement of the live gauge |
+
+These additional families have source writer mappings, not qualification of
+pool cleanup or fault handling on a particular deployment.
 
 ### Worker scrape metrics
 

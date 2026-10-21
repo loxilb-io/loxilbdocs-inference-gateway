@@ -70,9 +70,9 @@
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
         ],
-        "scenario_object_id": "5c06fcf0b5139f93fc5515ede5bf825a7867750f",
+        "scenario_object_id": "15c22afcda13a5272ae7aebcbd43d7d97aed5067",
         "scenario_path": "cicd/vllm-pd-disagg",
-        "validation_object_id": "732dba079be92270c1ae0dd0ee635f8ca423adc3",
+        "validation_object_id": "ffd6bbbe102d34ef1cdfd851209496f0b7003bb3",
         "validation_path": "cicd/vllm-pd-disagg/validation.sh",
         "workflow_membership": "wired",
         "workflow_object_id": "2dd932f6eac7ca465ca7ba6eea4523a8c27ca909",
@@ -108,9 +108,9 @@
           ".github/workflows/monitoring-drill.yml",
           ".github/workflows/monitoring-e2e.yml"
         ],
-        "scenario_object_id": "0c21001a80e24c584d41fb92dc07136a16b6cc5b",
+        "scenario_object_id": "6f216e2014f182f32f729d70739dd65092538849",
         "scenario_path": "cicd/monitoring",
-        "validation_object_id": "a17e250316c008e96b7cfd75a1e5731f17ae8ba7",
+        "validation_object_id": "40ab6047276e486a7d1f4ccf7750c9621de44f54",
         "validation_path": "cicd/monitoring/validation.sh",
         "workflow_membership": "wired",
         "workflow_object_id": "dc6de4a712dd22930ccd6f212861e19b5cfb4628",
@@ -121,13 +121,13 @@
   "contract_version": 1,
   "metric_manifest": {
     "coverage": {
-      "default_families": 276,
-      "default_referenced": 182,
-      "default_unreferenced": 73,
+      "default_families": 283,
+      "default_referenced": 184,
+      "default_unreferenced": 78,
       "default_waived": 21,
-      "writer_classified": 276,
+      "writer_classified": 283,
       "writer_unclassified": 0,
-      "writer_unverified": 75
+      "writer_unverified": 77
     },
     "families": [
       {
@@ -670,6 +670,19 @@
         "labels": [
           "model"
         ],
+        "name": "loxilb_ai_pd_decode_duration_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "V",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "model"
+        ],
         "name": "loxilb_ai_pd_decode_ttft_seconds",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
@@ -716,7 +729,21 @@
         "writer_present": true
       },
       {
-        "activation": "V",
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [
+          "model",
+          "reason"
+        ],
+        "name": "loxilb_ai_pd_prefill_fallback_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
         "evidence_present": true,
         "implementation_status": "conditional-with-proven-writer",
         "labels": [
@@ -738,6 +765,17 @@
           "model"
         ],
         "name": "loxilb_ai_pd_session_hits_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [],
+        "name": "loxilb_ai_pd_terminator_synthesized_total",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "counter",
@@ -783,6 +821,17 @@
         "writer_present": true
       },
       {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [],
+        "name": "loxilb_ai_reap_fallback_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
         "activation": "V",
         "evidence_present": true,
         "implementation_status": "conditional-with-proven-writer",
@@ -804,7 +853,8 @@
           "model",
           "tenant",
           "status",
-          "outcome"
+          "outcome",
+          "cause"
         ],
         "name": "loxilb_ai_requests_total",
         "release_scope": "release",
@@ -821,6 +871,17 @@
           "reason"
         ],
         "name": "loxilb_ai_reservation_clamped_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "E",
+        "evidence_present": true,
+        "implementation_status": "conditional-with-proven-writer",
+        "labels": [],
+        "name": "loxilb_ai_route_host_missing_total",
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "counter",
@@ -2923,6 +2984,28 @@
         "writer_present": true
       },
       {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_pools_freed_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_proxy_pools_live",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
         "activation": "C",
         "evidence_present": true,
         "implementation_status": "verified-runtime",
@@ -3564,6 +3647,88 @@
         "writer_present": true
       }
     ],
+    "label_combinations": {
+      "loxilb_ai_pd_requests_total": {
+        "labels": [
+          "phase",
+          "status"
+        ],
+        "values": [
+          [
+            "aborted",
+            "client"
+          ],
+          [
+            "complete",
+            "success"
+          ],
+          [
+            "decode",
+            "error"
+          ],
+          [
+            "decode",
+            "rejected"
+          ],
+          [
+            "decode",
+            "timeout"
+          ],
+          [
+            "decode",
+            "truncated"
+          ],
+          [
+            "decode",
+            "unknown"
+          ],
+          [
+            "prefill",
+            "error"
+          ],
+          [
+            "prefill",
+            "rejected"
+          ],
+          [
+            "prefill",
+            "timeout"
+          ],
+          [
+            "unknown",
+            "error"
+          ]
+        ]
+      },
+      "loxilb_ai_requests_total": {
+        "labels": [
+          "outcome",
+          "cause"
+        ],
+        "values": [
+          [
+            "completed",
+            ""
+          ],
+          [
+            "denied",
+            ""
+          ],
+          [
+            "aborted",
+            "client"
+          ],
+          [
+            "aborted",
+            "engine"
+          ],
+          [
+            "aborted",
+            "gateway"
+          ]
+        ]
+      }
+    },
     "label_enums": {
       "loxilb_ai_jwks_refresh_total": {
         "outcome": [
@@ -3571,18 +3736,32 @@
           "failure"
         ]
       },
+      "loxilb_ai_pd_prefill_fallback_total": {
+        "reason": [
+          "no_status",
+          "origin_408",
+          "origin_429",
+          "origin_5xx",
+          "other",
+          "truncated"
+        ]
+      },
       "loxilb_ai_pd_requests_total": {
         "phase": [
+          "aborted",
           "complete",
-          "prefill",
           "decode",
+          "prefill",
           "unknown"
         ],
         "status": [
+          "client",
+          "error",
+          "rejected",
           "success",
           "timeout",
-          "error",
-          "rejected"
+          "truncated",
+          "unknown"
         ]
       },
       "loxilb_ai_pd_tier_selected_total": {
@@ -3594,9 +3773,16 @@
         ]
       },
       "loxilb_ai_requests_total": {
+        "cause": [
+          "",
+          "client",
+          "engine",
+          "gateway"
+        ],
         "outcome": [
           "completed",
-          "denied"
+          "denied",
+          "aborted"
         ]
       },
       "loxilb_ai_tokens_consumed_total": {
@@ -3617,12 +3803,16 @@
         ]
       }
     },
+    "label_source": {
+      "sha256": "2c62a559aa5fe519034ebb170850576851ea78df252e972426f13825f3a548b7",
+      "source_path": "api/prometheus/ai_metrics.go"
+    },
     "provenance": {
-      "generated_at": "2026-10-14T10:59:43+00:00",
-      "source_revision": "0b4273446012c5a5307de50d1a6ca3e33e999ed3"
+      "generated_at": "2026-10-20T12:30:29+00:00",
+      "source_revision": "0d05de6ce01e6e246713cc00b87ac72409191e3e"
     },
     "schema_version": 1,
-    "sha256": "4208e6c65b73eb936e2ad5d6ad4f87eb2aec9e557b0847dfaa2158d8b3943499",
+    "sha256": "3ef9eb36e9f03f9b208f331b5d3ce2e827dcd951a88bd8705919c6e2b5c5ade6",
     "source_path": "deploy/monitoring/manifest/metric-manifest.json"
   },
   "release_snapshot": {
@@ -3655,7 +3845,7 @@
         "path": "cicd/sockmap-fullproxy"
       },
       {
-        "object_id": "dbefb5dfad69e786b677727c73adc5d2b195b478",
+        "object_id": "41069bb77ccd0568a6a2c48c8f2b926d37bb77d0",
         "path": "cicd/vllm-kvcache-routing-cpu"
       },
       {
@@ -3736,8 +3926,8 @@
     ]
   },
   "source": {
-    "commit": "1d51393773e4974b5e356377496c9d677dba9f9c",
-    "ebpf_submodule_commit": "2e428b0b34e23e2ba440e629c7e97722527f6684",
+    "commit": "ecfc3c12376bad712c61f6781fe13a9e5fc3fd9e",
+    "ebpf_submodule_commit": "2cac6dac18de91b0eda80e814195c637cdf389e9",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
     "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",
@@ -5488,7 +5678,8 @@
             "epPort": {
               "maximum": 65535,
               "minimum": 0,
-              "type": "integer"
+              "type": "integer",
+              "x-nullable": false
             },
             "epProto": {
               "enum": [
@@ -24619,7 +24810,7 @@
           "type": "apiKey"
         }
       },
-      "sha256": "bc857ad0380dd416823d2f49383e1bc247967e918592b54579ca37b868571339",
+      "sha256": "032af9fc24b2fc53290ba4c9d1ba811e62c5dd141d3787881fabe7a2fd935359",
       "source_path": "api/swagger.yml"
     },
     {

@@ -40,18 +40,11 @@ ENGINE_CONTRACT_WORKFLOW = ".github/workflows/engine-contracts-ci.yml"
 COMPLETION_GOLDEN = "cmd/goldens/testdata/completion-bash.golden"
 
 METRIC_LABEL_ENUMS = {
-    "loxilb_ai_requests_total": {
-        "outcome": ["completed", "denied"],
-    },
     "loxilb_ai_tokens_consumed_total": {
         "kind": ["prompt", "completion"],
     },
     "loxilb_ai_jwks_refresh_total": {
         "outcome": ["success", "failure"],
-    },
-    "loxilb_ai_pd_requests_total": {
-        "phase": ["complete", "prefill", "decode", "unknown"],
-        "status": ["success", "timeout", "error", "rejected"],
     },
     "loxilb_ai_pd_tier_selected_total": {
         "tier": ["tier0", "tier1", "tier15", "tier2"],
@@ -388,6 +381,45 @@ def compact_metric_manifest(raw: bytes) -> dict[str, Any]:
     }
 
 
+def extract_ai_metric_labels(raw: bytes) -> dict[str, Any]:
+    """Read the bounded recorder declarations; fail if their Go shape changes."""
+    source = raw.decode()
+    constants = dict(re.findall(r'(?m)^\s*(AI(?:Outcome|Cause)\w+)\s*=\s*"([^"\n]+)"', source))
+    required = {"AIOutcomeCompleted", "AIOutcomeDenied", "AIOutcomeAborted",
+                "AICauseClient", "AICauseEngine", "AICauseGateway"}
+    if set(constants) != required:
+        raise ValueError("AI outcome/cause constants changed; review the recorder contract")
+    body = re.search(r'func pdPhaseLabels[^{}]+\{(.*?)^\}', source, re.S | re.M)
+    fallback = re.search(r'var pdFallbackReasons = map\[int\]string\{(.*?)^\}', source, re.S | re.M)
+    if body is None or fallback is None:
+        raise ValueError("P/D recorder declarations changed; review the label extractor")
+    pairs = re.findall(r'(?:case\s+\d+|default):\s*phase\s*=\s*"([^"\n]+)"\s*status\s*=\s*"([^"\n]+)"', body[1])
+    branches = re.findall(r'(?m)^\s*(?:case\s+\d+|default):', body[1])
+    reasons = re.findall(r'(?m)^\s*\d+:\s*"([^"\n]+)",?\s*$', fallback[1])
+    if (not pairs or len(pairs) != len(branches) or not reasons or "other" not in reasons
+            or len(reasons) != len(re.findall(r"(?m)^\s*\d+:", fallback[1]))):
+        raise ValueError("Incomplete P/D label extraction; review the recorder contract")
+    outcomes = [constants[name] for name in ("AIOutcomeCompleted", "AIOutcomeDenied", "AIOutcomeAborted")]
+    causes = [constants[name] for name in ("AICauseClient", "AICauseEngine", "AICauseGateway")]
+    request_pairs = [[outcomes[0], ""], [outcomes[1], ""]] + [[outcomes[2], cause] for cause in causes]
+    return {
+        "label_source": {"source_path": "api/prometheus/ai_metrics.go", "sha256": sha256(raw)},
+        "label_enums": {
+            **METRIC_LABEL_ENUMS,
+            "loxilb_ai_requests_total": {"outcome": outcomes, "cause": ["", *causes]},
+            "loxilb_ai_pd_requests_total": {
+                "phase": sorted({phase for phase, _ in pairs}),
+                "status": sorted({status for _, status in pairs}),
+            },
+            "loxilb_ai_pd_prefill_fallback_total": {"reason": sorted(set(reasons))},
+        },
+        "label_combinations": {
+            "loxilb_ai_requests_total": {"labels": ["outcome", "cause"], "values": request_pairs},
+            "loxilb_ai_pd_requests_total": {"labels": ["phase", "status"], "values": sorted(map(list, set(pairs)))},
+        },
+    }
+
+
 def build_claim_evidence(repo: Path, ref: str) -> dict[str, Any]:
     claims = []
     workflows = workflow_sources(repo, ref)
@@ -603,7 +635,10 @@ def build_gateway_contract(
         },
         "specs": specs,
         "support_catalog": compact_support_catalog(catalog_raw),
-        "metric_manifest": compact_metric_manifest(metric_manifest_raw),
+        "metric_manifest": {
+            **compact_metric_manifest(metric_manifest_raw),
+            **extract_ai_metric_labels(git_show(gateway_repo, resolved_ref, "api/prometheus/ai_metrics.go")),
+        },
         "claim_evidence": build_claim_evidence(gateway_repo, resolved_ref),
         "scenario_evidence": {
             "workflow": {

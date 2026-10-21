@@ -253,6 +253,9 @@ class ExampleValidator:
         self.metric_label_enums = self.gateway_contract.get(
             "metric_manifest", {}
         ).get("label_enums", {})
+        self.metric_label_combinations = self.gateway_contract.get(
+            "metric_manifest", {}
+        ).get("label_combinations", {})
         self.require_external_tools = require_external_tools
 
     def _metric_family(self, name: str) -> tuple[str, dict[str, Any] | None]:
@@ -299,6 +302,25 @@ class ExampleValidator:
                         f"invalid {family_name} label {label}={value!r}; "
                         f"expected one of {sorted(allowed_values)}"
                     )
+            combination = self.metric_label_combinations.get(family_name)
+            if combination:
+                constrained = [selector for selector in PROMQL_SELECTOR.finditer(selectors)
+                               if selector.group("label") in combination["labels"]]
+                def matches(values):
+                    labels = dict(zip(combination["labels"], values))
+                    for selector in constrained:
+                        actual = labels[selector.group("label")]
+                        operator, value = selector.group("operator"), selector.group("value")
+                        selected = (actual == value if operator in {"=", "!="}
+                                    else re.fullmatch(value, actual) is not None)
+                        if selected == (operator in {"!=", "!~"}):
+                            return False
+                    return True
+                try:
+                    if constrained and not any(matches(values) for values in combination["values"]):
+                        errors.append(f"no source-declared label combination matches {family_name} selector")
+                except re.error as error:
+                    errors.append(f"invalid closed-label selector regex: {error}")
         return errors
 
     def validate_cli_command(self, command: str, context: str = "") -> list[str]:

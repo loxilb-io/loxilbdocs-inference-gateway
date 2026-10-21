@@ -40,6 +40,7 @@ on:
       - 'tools/validate_response_contracts.py'
       - 'tests/test_followup_contracts.py'
       - 'tests/test_public_documentation_scope.py'
+      - 'tests/test_metric_contracts.py'
   push:
     branches: [main]
     paths:
@@ -63,6 +64,7 @@ on:
       - 'tools/validate_response_contracts.py'
       - 'tests/test_followup_contracts.py'
       - 'tests/test_public_documentation_scope.py'
+      - 'tests/test_metric_contracts.py'
 
 permissions:
   contents: read

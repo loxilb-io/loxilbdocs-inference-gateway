@@ -152,3 +152,12 @@ is partial or still on the roadmap, we say so with a status note rather than imp
 
 By participating you agree to the project's
 [Code of Conduct](https://github.com/loxilb-io/loxilbdocs-inference-gateway/blob/main/CODE_OF_CONDUCT.md).
+
+When updating the Gateway source baseline, regenerate both source contracts,
+metric/schema references and the example inventory/coverage ledger on the
+Linux runner. Review the recorder-derived label combinations and update the
+exact-source/count regression expectations with the reviewed tuple. Keep
+historical engine results and immutable comparison-release identities intact.
+Run `python -m unittest discover -s tests -p 'test_*.py' -v` on that runner;
+`tests/test_metric_contracts.py` includes negative enum/combination and source
+shape checks. Source consistency does not requalify older runtime evidence.

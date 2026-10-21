@@ -4663,9 +4663,26 @@
     },
     {
       "evidence": "metric-manifest-static",
+      "id": "37eadcad0c74aeb4d691",
+      "language": "promql",
+      "line": 121,
+      "path": "docs/operations/monitoring.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "c2b0db0c07bdf55d19f9b62659825ee4ba505e5d1c1cf0abdf730eec61a13067",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "metric-manifest-static",
       "id": "2b8d5fe28b772b34ad03",
       "language": "promql",
-      "line": 132,
+      "line": 158,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4682,7 +4699,7 @@
       "evidence": "metric-manifest-static",
       "id": "23f73f722fda21c39dc3",
       "language": "promql",
-      "line": 171,
+      "line": 197,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4699,7 +4716,7 @@
       "evidence": "metric-manifest-static",
       "id": "391dcb71eff01acf4482",
       "language": "promql",
-      "line": 207,
+      "line": 233,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4716,7 +4733,7 @@
       "evidence": "metric-manifest-static",
       "id": "f0b696ffdf75f41d9ede",
       "language": "promql",
-      "line": 276,
+      "line": 333,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4733,7 +4750,7 @@
       "evidence": "metric-manifest-static",
       "id": "f9513be93383f3e1991b",
       "language": "promql",
-      "line": 326,
+      "line": 383,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4750,7 +4767,7 @@
       "evidence": "metric-manifest-static",
       "id": "d3f0294a9bc2c26e83a2",
       "language": "promql",
-      "line": 365,
+      "line": 422,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4767,7 +4784,7 @@
       "evidence": "swagger-union-static",
       "id": "e739436aa71a69a27bb6",
       "language": "bash",
-      "line": 453,
+      "line": 510,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4784,7 +4801,7 @@
       "evidence": "metric-manifest-static",
       "id": "c0741d2b82929bdedab9",
       "language": "promql",
-      "line": 460,
+      "line": 517,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -5920,7 +5937,7 @@
       "evidence": "syntax-only",
       "id": "367450c2fa7c670e6b31",
       "language": "json",
-      "line": 260,
+      "line": 265,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -5937,7 +5954,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "83f9b3f1229f9b2911ea",
       "language": "bash",
-      "line": 282,
+      "line": 287,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -5967,7 +5984,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "e8b1fb0a3c8b4997ac95",
       "language": "bash",
-      "line": 297,
+      "line": 302,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -5997,7 +6014,7 @@
       "evidence": "syntax-only",
       "id": "3b7de19fe4c162c11684",
       "language": "json",
-      "line": 310,
+      "line": 315,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -6014,7 +6031,7 @@
       "evidence": "shell-syntax-only",
       "id": "bd273dff6ff1a86b35d3",
       "language": "bash",
-      "line": 323,
+      "line": 328,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -6031,7 +6048,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "57bbcc926e64460ceedd",
       "language": "bash",
-      "line": 454,
+      "line": 459,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -6061,7 +6078,7 @@
       "evidence": "non-standalone-mutation-fragment",
       "id": "64bc3786b2aab9373b0f",
       "language": "bash",
-      "line": 463,
+      "line": 468,
       "mutation_contract": {
         "active_path": true,
         "cleanup": true,
@@ -6091,7 +6108,7 @@
       "evidence": "unexecuted-example",
       "id": "80592ae0930887826ccc",
       "language": "plain",
-      "line": 468,
+      "line": 473,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,
@@ -6108,7 +6125,7 @@
       "evidence": "unexecuted-example",
       "id": "f8d21b9b36397543d29b",
       "language": "plain",
-      "line": 473,
+      "line": 478,
       "path": "docs/reference/cli.md",
       "quality_contract": {
         "cleanup": false,

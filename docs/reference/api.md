@@ -359,3 +359,27 @@ fields before applying configuration, especially across mixed versions.
 - [Log API Operations](../operations/log-api.md)
 - [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md)
 - [Sockmap Acceleration](../operations/sockmap-acceleration.md)
+
+## Selected-source contract notes
+
+The source pair in [Verification Status](verification-status.md) declares
+`EndPointHostState.epPort` as an integer from 0 to 65535 with explicit
+`x-nullable: false`; its Go field remains a value integer. That annotation
+alone is not a new runtime null-rejection test. Inspect the deployed binder
+and response before relying on an input-error contract.
+
+The current snapshot declaration uses schema `1.12`, including JWT profiles,
+network identity, half-close policy, BGP policy assignments and audit-sink
+configuration. See [Backup and Restore](../operations/backup-restore.md) for
+coverage and external-secret boundaries. The current BGP startup declaration
+reuses an identical running core and reconciles `SetNextHopSelf`; a running
+ASN/router-ID/listen-port change is refused with `400`. Review a scoped
+snapshot replacement instead of treating startup as a general replacement.
+These are source contracts, not installed-host recovery results.
+
+An L7 `FORWARD` target selects within the listener's base endpoint pool.
+Endpoint references restrict selection to those base-pool members, with
+round-robin or weighted round-robin selection and shared health/accounting;
+`poolId` does not resolve an independent pool. P/D rules enable event-stream
+detection even when `sse_mode` is false. Other rules use the explicit SSE
+opt-in described in [SSE and Quota Management](../ai-gateway/sse-quota-management.md).

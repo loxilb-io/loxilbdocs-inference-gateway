@@ -142,9 +142,24 @@ def render(contract: dict[str, Any]) -> str:
         for label, values in sorted(labels.items()):
             lines.append(
                 f"| `{family}` | `{label}` | "
-                + ", ".join(f"`{escape_cell(value)}`" for value in values)
+                + ", ".join(f"`{escape_cell(value or '(empty)')}`" for value in values)
                 + " |"
             )
+    combinations = manifest.get("label_combinations", {})
+    if combinations:
+        label_source = manifest["label_source"]
+        lines.extend([
+            "", "## Source-declared label combinations", "",
+            f"Request outcomes, causes, P/D phases and fallback reasons are extracted from `{label_source['source_path']}`",
+            f"at the Gateway commit above (source SHA-256: `{label_source['sha256']}`).",
+            "The validator also rejects selectors that match none of these combinations.",
+            "Other enums above are reviewed documentation constants. Empty cause is written as `(empty)`.",
+            "", "| Family | Labels | Allowed combinations |", "| --- | --- | --- |",
+        ])
+        for family, rule in sorted(combinations.items()):
+            values = "; ".join(" / ".join(f"`{escape_cell(value or '(empty)')}`" for value in row) for row in rule["values"])
+            labels = " / ".join(f"`{value}`" for value in rule["labels"])
+            lines.append(f"| `{family}` | {labels} | {values} |")
     lines.append("")
     return "\n".join(lines)
 

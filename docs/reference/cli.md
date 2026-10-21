@@ -169,10 +169,10 @@ plus the confirm-token flow.
 | `ai_ratelimit_set` | Create or update a tenant's AI rate limit: requests/s and LLM tokens/min. Set quotas to 0 to lift (there is no delete endpoint). |
 | `ai_ratelimit_get` | Get a tenant's rate-limit configuration. |
 | `ai_kv_inventory_get` | Dump the KV-cache block-hash inventory tracked for one endpoint of an AI service. |
-| `ai_traffic_report` | Composite traffic report: completed SSE-stream volume and duration by model/tenant, active streams, proxy TTFB, and rate-limit hits. Non-streaming successes are not counted by `loxilb_ai_requests_total`. |
+| `ai_traffic_report` | Composite traffic report: AI-rule request volume by outcome/cause, completed-response duration, active streams, proxy TTFB, and rate-limit hits. Non-SSE answers on AI rules are included; request totals and denials have different accounting roles. |
 
 !!! note "Request-duration data"
-    There is no `ai_request_duration` tool. Completed SSE-stream duration, proxy TTFB, and P/D TTFT
+    There is no `ai_request_duration` tool. Completed-response duration, proxy TTFB, and P/D TTFT
     are reported by `ai_traffic_report` and correlated by `diagnose_ai_latency`.
 
 ### GPU
@@ -209,11 +209,16 @@ plus the confirm-token flow.
     `loxilb_ai_pd_kv_params_found_total`, `loxilb_ai_pd_kv_params_missing_total`,
     `loxilb_ai_rate_limit_hits_total`, and `loxilb_ai_model_not_allowed_total`.
 
-!!! note "Completed-request counting"
-    `loxilb_ai_requests_total` increments only when an SSE stream completes at `data: [DONE]`;
-    non-streaming successes are not included. The corresponding duration starts when SSE handling
-    activates and ends at stream completion. Admission denials that stop before backend dispatch
-    are represented by dedicated authorization and rate-limit metric families instead.
+!!! note "Request outcomes and error ratios"
+    On the selected Gateway source, `loxilb_ai_requests_total` covers AI-rule
+    `completed`, `aborted` and `denied` records, including non-SSE responses.
+    An aborted request carries `cause="client"`, `"engine"` or `"gateway"`;
+    other outcomes use an empty cause. The traffic report's error ratio counts
+    completed 5xx and engine/Gateway aborts over completed plus aborted traffic.
+    Client aborts are traffic, not errors. Duration samples cover completed
+    responses with a reported latency; denial and abort latencies are excluded.
+    Older Gateways have different accounting: inspect the deployed metric labels
+    before comparing reports. See [Monitoring](../operations/monitoring.md#ai-access-and-request-metrics).
 
 ### Diagnostics
 

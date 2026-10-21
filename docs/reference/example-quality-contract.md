@@ -94,3 +94,13 @@ For candidate validation, provide both repositories and exact source refs to
 `tools/validate_gateway_docs.py --gateway-repo ... --gateway-ref ...
 --cli-repo ... --cli-ref ...`. The gate regenerates both candidates; a frozen CLI
 fixture is no longer substituted for the selected CLI source.
+
+Request outcome/cause, P/D phase/status and prefill-fallback reason enums are
+extracted from the selected Gateway's `api/prometheus/ai_metrics.go`. The
+contract records that file's hash and allowed outcome/cause and phase/status
+combinations. A changed declaration shape fails extraction for review.
+`validate_examples.py` rejects unknown exact closed values and selectors that
+match no source-declared combination, including regex and negative filters.
+This is a finite selector check, not a full PromQL parser or runtime scrape.
+The metric contract tests cover valid values, impossible pairs, and declaration
+mutations; refreshing the fixture cannot substitute for those checks.

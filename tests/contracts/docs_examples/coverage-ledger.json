@@ -2314,8 +2314,17 @@
     },
     {
       "commands": [],
+      "id": "37eadcad0c74aeb4d691",
+      "line": 121,
+      "operations": [],
+      "path": "docs/operations/monitoring.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "c2b0db0c07bdf55d19f9b62659825ee4ba505e5d1c1cf0abdf730eec61a13067"
+    },
+    {
+      "commands": [],
       "id": "2b8d5fe28b772b34ad03",
-      "line": 132,
+      "line": 158,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2324,7 +2333,7 @@
     {
       "commands": [],
       "id": "23f73f722fda21c39dc3",
-      "line": 171,
+      "line": 197,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2333,7 +2342,7 @@
     {
       "commands": [],
       "id": "391dcb71eff01acf4482",
-      "line": 207,
+      "line": 233,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2342,7 +2351,7 @@
     {
       "commands": [],
       "id": "f0b696ffdf75f41d9ede",
-      "line": 276,
+      "line": 333,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2351,7 +2360,7 @@
     {
       "commands": [],
       "id": "f9513be93383f3e1991b",
-      "line": 326,
+      "line": 383,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2360,7 +2369,7 @@
     {
       "commands": [],
       "id": "d3f0294a9bc2c26e83a2",
-      "line": 365,
+      "line": 422,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2369,7 +2378,7 @@
     {
       "commands": [],
       "id": "e739436aa71a69a27bb6",
-      "line": 453,
+      "line": 510,
       "operations": [
         "GET /metrics"
       ],
@@ -2380,7 +2389,7 @@
     {
       "commands": [],
       "id": "c0741d2b82929bdedab9",
-      "line": 460,
+      "line": 517,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2926,7 +2935,7 @@
     {
       "commands": [],
       "id": "367450c2fa7c670e6b31",
-      "line": 260,
+      "line": 265,
       "operations": [],
       "path": "docs/reference/cli.md",
       "runtime": "no-public-execution-attestation",
@@ -2935,7 +2944,7 @@
     {
       "commands": [],
       "id": "83f9b3f1229f9b2911ea",
-      "line": 282,
+      "line": 287,
       "operations": [
         "POST /config/loadbalancer"
       ],
@@ -2948,7 +2957,7 @@
         "create lb"
       ],
       "id": "e8b1fb0a3c8b4997ac95",
-      "line": 297,
+      "line": 302,
       "operations": [],
       "path": "docs/reference/cli.md",
       "runtime": "no-public-execution-attestation",
@@ -2957,7 +2966,7 @@
     {
       "commands": [],
       "id": "3b7de19fe4c162c11684",
-      "line": 310,
+      "line": 315,
       "operations": [],
       "path": "docs/reference/cli.md",
       "runtime": "no-public-execution-attestation",
@@ -2966,7 +2975,7 @@
     {
       "commands": [],
       "id": "bd273dff6ff1a86b35d3",
-      "line": 323,
+      "line": 328,
       "operations": [],
       "path": "docs/reference/cli.md",
       "runtime": "no-public-execution-attestation",
@@ -2977,7 +2986,7 @@
         "delete lb"
       ],
       "id": "57bbcc926e64460ceedd",
-      "line": 454,
+      "line": 459,
       "operations": [],
       "path": "docs/reference/cli.md",
       "runtime": "no-public-execution-attestation",
@@ -2988,7 +2997,7 @@
         "create apikey"
       ],
       "id": "64bc3786b2aab9373b0f",
-      "line": 463,
+      "line": 468,
       "operations": [],
       "path": "docs/reference/cli.md",
       "runtime": "no-public-execution-attestation",
@@ -2997,7 +3006,7 @@
     {
       "commands": [],
       "id": "80592ae0930887826ccc",
-      "line": 468,
+      "line": 473,
       "operations": [],
       "path": "docs/reference/cli.md",
       "runtime": "no-public-execution-attestation",
@@ -3006,7 +3015,7 @@
     {
       "commands": [],
       "id": "f8d21b9b36397543d29b",
-      "line": 473,
+      "line": 478,
       "operations": [],
       "path": "docs/reference/cli.md",
       "runtime": "no-public-execution-attestation",
@@ -5794,7 +5803,7 @@
       "sha256": "7938d3dc01f0a18b043fa87ad717c04672c25aa82b55cdf5e4d9133e74c09bde"
     }
   ],
-  "gateway_commit": "1d51393773e4974b5e356377496c9d677dba9f9c",
+  "gateway_commit": "ecfc3c12376bad712c61f6781fe13a9e5fc3fd9e",
   "operations": {
     "DELETE /audit/sinks/{name}": [],
     "DELETE /auth/users/{id}": [],
@@ -6272,7 +6281,7 @@
   "schema_version": 1,
   "scope": "Direct examples are static source mappings; missing examples are not implementation failures. Runtime and release qualification are separate.",
   "summary": {
-    "fences": 585,
+    "fences": 586,
     "operations": 244,
     "operations_with_direct_examples": 56,
     "operations_without_direct_examples": 188
