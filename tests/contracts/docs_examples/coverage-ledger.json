@@ -1132,6 +1132,24 @@
     },
     {
       "commands": [],
+      "id": "25deab5d19d9382fea23",
+      "line": 71,
+      "operations": [],
+      "path": "docs/assets/existing-profiles/README.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "b3e1ae49e79f30685db24236ae31806a3aa83602c07377e50609793676265236"
+    },
+    {
+      "commands": [],
+      "id": "41c6d1349f7fd5d24c22",
+      "line": 167,
+      "operations": [],
+      "path": "docs/assets/existing-profiles/README.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "59cc9a68ed55955b2dbb8ad99fdccb71405fecace9e4d8813f39c4fd0d1552ef"
+    },
+    {
+      "commands": [],
       "id": "3a100d83467352d04081",
       "line": 13,
       "operations": [],
@@ -5078,6 +5096,402 @@
     },
     {
       "commands": [],
+      "id": "daded69237f5df67efe5",
+      "line": 36,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "24ddac044095120306cb42c62c91444c7c6d27751ef93f107942a1171a41fe71"
+    },
+    {
+      "commands": [],
+      "id": "13f98c8a048fef1e889f",
+      "line": 84,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "245cc356a60fdd308a239f75a251ea8bd529a4024f01b18df2f351bf19ac7354"
+    },
+    {
+      "commands": [],
+      "id": "4acd9d2381b8e7b47397",
+      "line": 99,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d20431298000b07ab0aa104c66dbfa08d4d493f46953ccf2af3c0e920fbbcbab"
+    },
+    {
+      "commands": [],
+      "id": "edc310a342d39aea4dfe",
+      "line": 132,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "6eb1bd93febf4d8cebbcc33a582b8e3ead609c8e7a7ae15eb09224a530c7fdad"
+    },
+    {
+      "commands": [],
+      "id": "57ed27b5d72ca5f04d9d",
+      "line": 154,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "feb6bf289032c911751a9bfe1a2b8d8ae768665e685c3851df03269065accc97"
+    },
+    {
+      "commands": [],
+      "id": "48cc5b235fd54614f51d",
+      "line": 175,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "23dd58287bb05ecc33e6b38b579630819094ad571c74b5fe547794a733860974"
+    },
+    {
+      "commands": [],
+      "id": "98ed744811fb530b81dc",
+      "line": 190,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "be5340d92441d2552b13ab02b7f517242cf380d88893e6af41e5e0b9027b53ac"
+    },
+    {
+      "commands": [],
+      "id": "0f8a95930c99ba3378f8",
+      "line": 202,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "bee996e5be3a7f479b6a2a8b6b6e8310888ca218dc44a2422a97a5e87eb9ca5c"
+    },
+    {
+      "commands": [],
+      "id": "55aeae32c7b614b6547f",
+      "line": 221,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "cc8a754cb9075508b89e0f98908b56a52ebfbbaaff903ecfe2569bbbd04ab9a5"
+    },
+    {
+      "commands": [],
+      "id": "87a421620cd9a06c2071",
+      "line": 265,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a9d52e39b3f739f041ae94535ec2c9a2cc0a504b2d3eadc506527ee693f57b6d"
+    },
+    {
+      "commands": [],
+      "id": "3c193ccc6b61a696418a",
+      "line": 275,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ccc4bbdd05682306b3c01bbf6a57a85a850d9c38cc77cb44073de334afe903bc"
+    },
+    {
+      "commands": [],
+      "id": "fb182db2a6d6308e47e0",
+      "line": 284,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "f4c883d16bb06a8f37591a6547fd1c682af8f126a97e2f24865a2dd6dad1d20a"
+    },
+    {
+      "commands": [],
+      "id": "28119bf8cad45c896657",
+      "line": 302,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ae8fd02a841971ada51944790e03f40c8f4ec0ba4ead069c06b72bdcd174ce84"
+    },
+    {
+      "commands": [],
+      "id": "1caf9c2d31d805682109",
+      "line": 311,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "0b9dd85b3739aeee9a3bc391b1740477130831662db7ea4d09c833dbc493a38d"
+    },
+    {
+      "commands": [],
+      "id": "f99c8677c866f8c10771",
+      "line": 344,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d52a5f135594404baea767bff16139498150c8983e48a586777c77c7b36ee911"
+    },
+    {
+      "commands": [],
+      "id": "492e6c51652abab20e40",
+      "line": 354,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "129e4704d0ddc9bb1205ca67d170994873a19d1b52d1ecb09e0316f70e74941b"
+    },
+    {
+      "commands": [],
+      "id": "51cb4578f8a83b84d217",
+      "line": 370,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "c7f722751e9e7431798f653030d815aefd548a2b93e3d1600ae475f52a635d18"
+    },
+    {
+      "commands": [],
+      "id": "f4f02ee782d804faaff0",
+      "line": 390,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "5d3e1cbfc09e03e66f88e3e00211268d22f8028c54158df2b84fa984e0241b3f"
+    },
+    {
+      "commands": [],
+      "id": "b700960b3f08d6a0758e",
+      "line": 397,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a145af1f3b0dd582eb7b8dc09313092b15214cdb9352f2e72800b89ba323393c"
+    },
+    {
+      "commands": [],
+      "id": "e8ba0863400a02b2ee25",
+      "line": 405,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "0472cf47ceb511bdde58aa2ceaad365ce82dbd353781a9813810d1c0e4e8fc2b"
+    },
+    {
+      "commands": [],
+      "id": "24d894af65b6ed6d7cb0",
+      "line": 423,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a9eb04dff4ed0b7ae670d83f0b30715019d4fb9e29b318a1b29b275f4b392d98"
+    },
+    {
+      "commands": [],
+      "id": "c5886f1267f1d6e02760",
+      "line": 433,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "1e9d34179567a4e62a5d0bed3d876ef1bf68260bdd356eec417ddaf606d48bf0"
+    },
+    {
+      "commands": [],
+      "id": "ceb5162cfff05d5d3768",
+      "line": 32,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d5a0e7011745385451ed0154db0dd2e7c1a29cc5cad7a0d4db9e72a456d8a946"
+    },
+    {
+      "commands": [],
+      "id": "850a85ee63c2aba27a3d",
+      "line": 52,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "cffa3175da88da979eeaf5d6db58998c8cb0077db75750b96f47e5bb09fc0edb"
+    },
+    {
+      "commands": [],
+      "id": "577a0136ebf2cddd8e61",
+      "line": 81,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "c864dd08a9e6784e98dbb4d474074f51ddaeabd4969b6746babee9cb0c3aa32f"
+    },
+    {
+      "commands": [],
+      "id": "3ba3e1785453ac8b6b58",
+      "line": 91,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "1f84b3cb1a06f4e5dcf9d735bf746f97a9f2129bcd66177481bfc547f8a5509e"
+    },
+    {
+      "commands": [],
+      "id": "38ae088a3e354ccc52c4",
+      "line": 112,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "40c195c3e21d7ec7afe021795ad105d5cc39ab0462d5e0bceba5ba9b0992830e"
+    },
+    {
+      "commands": [],
+      "id": "1243ef606fdbc579be9c",
+      "line": 136,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "340c0b270ff9dfad1c0c19b47eca29ac50181cd3c679e04942cb2273b3fd2344"
+    },
+    {
+      "commands": [],
+      "id": "f3e08a4edbce307d6ac4",
+      "line": 146,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "293f50a50672b297c14a35b7c0b66e090f31dc26c0690b6e2961ed11a3015ce1"
+    },
+    {
+      "commands": [],
+      "id": "065d6ae5d3d52359850e",
+      "line": 164,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "f02be399ea5fff450514fdf1c3e5b0b2751fdfc4985ee65bf7492a45aa2125b8"
+    },
+    {
+      "commands": [],
+      "id": "6d627e79f77c884b2b34",
+      "line": 185,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a29eb2a288f60607fbff70b3a0a16017c6a865fc52bcc7cb9d6125cb9122a3b7"
+    },
+    {
+      "commands": [],
+      "id": "a5a8edcb02265a41a498",
+      "line": 196,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "6b2aef7b7ff4b8b12add41e47ae62ffad3e437706244344d46997790d3c2ad5d"
+    },
+    {
+      "commands": [],
+      "id": "62fbce538e4b4b69cff4",
+      "line": 209,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "876036b4c32d61d5cf7463f1161abae58d3e1133ec012c78712310e73e1645ee"
+    },
+    {
+      "commands": [],
+      "id": "1baeeabcb4212c568777",
+      "line": 231,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d274aae95020f09fece5de7afb68169404932e16e499a4090600fa60b28e136f"
+    },
+    {
+      "commands": [],
+      "id": "906c37f9e90040067ca6",
+      "line": 240,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ef2a800312d36e014d4f27430060e2fe3ed4bdadf1558d818c415d06de107b0c"
+    },
+    {
+      "commands": [],
+      "id": "09f13ede5fd0f1c56fc5",
+      "line": 248,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "6d86a3c7df13c464083e754d353dd13e56b4ce354efc823d971656e3e67bb12b"
+    },
+    {
+      "commands": [],
+      "id": "f09381dc270d8491ba54",
+      "line": 257,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "0821eda3749af435b707b12ed62a526e61acf60f22b2fe9b9f5ec9e7baa7a0a1"
+    },
+    {
+      "commands": [],
+      "id": "79b50d5775cebe649a3c",
+      "line": 301,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "58ea867410bee41b1e753689d567365564c65c84eccbf3f13562e39c61221edf"
+    },
+    {
+      "commands": [],
+      "id": "4a71b861e0a2db84e00a",
+      "line": 318,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "161193fb31501e570b55700100a62435646a2db3d77c4b3998575e6386895060"
+    },
+    {
+      "commands": [],
+      "id": "f7e05efdda640b439da3",
+      "line": 340,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "405abd3d471fb2f0460c313aab94a817441a1163895b2dcd1da566d3d376706c"
+    },
+    {
+      "commands": [],
+      "id": "60e895a10ffd9227ebeb",
+      "line": 358,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "7927db79204a917b2d8574fa3735778ccdddf056e15a9b6e84c0c26d1a69ad1f"
+    },
+    {
+      "commands": [],
+      "id": "fb705e0b3f9f6991dad0",
+      "line": 368,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "c4dde959d09e372967e8957fba3630965128969fa6bdf7ffa781f74770ab97cc"
+    },
+    {
+      "commands": [],
+      "id": "969c90e9eadefc99ef31",
+      "line": 376,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "3e1d3c75086fa8ab783a4ccd2186a8f4d3c9579a5718951e52bf8efeaa86d819"
+    },
+    {
+      "commands": [],
+      "id": "9017ffc4d8f12ee60952",
+      "line": 108,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-tuning.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "471059a07cea5569621d197b73b8ec545c5b84168f3f5339e1a938c185180d37"
+    },
+    {
+      "commands": [],
       "id": "47746142e7d199eb9797",
       "line": 143,
       "operations": [],
@@ -5803,7 +6217,7 @@
       "sha256": "7938d3dc01f0a18b043fa87ad717c04672c25aa82b55cdf5e4d9133e74c09bde"
     }
   ],
-  "gateway_commit": "9640fb6b682b429c7e70e7515f6f57c6d7f35b66",
+  "gateway_commit": "23e57a226a4803ed91699904453cc1bf147fbefa",
   "operations": {
     "DELETE /audit/sinks/{name}": [],
     "DELETE /auth/users/{id}": [],
@@ -6281,7 +6695,7 @@
   "schema_version": 1,
   "scope": "Direct examples are static source mappings; missing examples are not implementation failures. Runtime and release qualification are separate.",
   "summary": {
-    "fences": 586,
+    "fences": 632,
     "operations": 244,
     "operations_with_direct_examples": 56,
     "operations_without_direct_examples": 188

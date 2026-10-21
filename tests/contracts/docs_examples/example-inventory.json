@@ -2296,6 +2296,40 @@
     },
     {
       "evidence": "shell-syntax-only",
+      "id": "25deab5d19d9382fea23",
+      "language": "bash",
+      "line": 71,
+      "path": "docs/assets/existing-profiles/README.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "b3e1ae49e79f30685db24236ae31806a3aa83602c07377e50609793676265236",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "shell-syntax-only",
+      "id": "41c6d1349f7fd5d24c22",
+      "language": "bash",
+      "line": 167,
+      "path": "docs/assets/existing-profiles/README.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "59cc9a68ed55955b2dbb8ad99fdccb71405fecace9e4d8813f39c4fd0d1552ef",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "shell-syntax-only",
       "id": "3a100d83467352d04081",
       "language": "bash",
       "line": 13,
@@ -10085,6 +10119,754 @@
         "validation": true
       },
       "sha256": "da39351cb667b54945559692152aca72e9b1f114c0036985cbd46152cfd262f2",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "daded69237f5df67efe5",
+      "language": "bash",
+      "line": 36,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "24ddac044095120306cb42c62c91444c7c6d27751ef93f107942a1171a41fe71",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "13f98c8a048fef1e889f",
+      "language": "bash",
+      "line": 84,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "245cc356a60fdd308a239f75a251ea8bd529a4024f01b18df2f351bf19ac7354",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "4acd9d2381b8e7b47397",
+      "language": "bash",
+      "line": 99,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "d20431298000b07ab0aa104c66dbfa08d4d493f46953ccf2af3c0e920fbbcbab",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "edc310a342d39aea4dfe",
+      "language": "bash",
+      "line": 132,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "6eb1bd93febf4d8cebbcc33a582b8e3ead609c8e7a7ae15eb09224a530c7fdad",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "57ed27b5d72ca5f04d9d",
+      "language": "bash",
+      "line": 154,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "feb6bf289032c911751a9bfe1a2b8d8ae768665e685c3851df03269065accc97",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "48cc5b235fd54614f51d",
+      "language": "bash",
+      "line": 175,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "23dd58287bb05ecc33e6b38b579630819094ad571c74b5fe547794a733860974",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "98ed744811fb530b81dc",
+      "language": "bash",
+      "line": 190,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "be5340d92441d2552b13ab02b7f517242cf380d88893e6af41e5e0b9027b53ac",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "0f8a95930c99ba3378f8",
+      "language": "bash",
+      "line": 202,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "bee996e5be3a7f479b6a2a8b6b6e8310888ca218dc44a2422a97a5e87eb9ca5c",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "55aeae32c7b614b6547f",
+      "language": "bash",
+      "line": 221,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "cc8a754cb9075508b89e0f98908b56a52ebfbbaaff903ecfe2569bbbd04ab9a5",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "87a421620cd9a06c2071",
+      "language": "bash",
+      "line": 265,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "a9d52e39b3f739f041ae94535ec2c9a2cc0a504b2d3eadc506527ee693f57b6d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "3c193ccc6b61a696418a",
+      "language": "bash",
+      "line": 275,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "ccc4bbdd05682306b3c01bbf6a57a85a850d9c38cc77cb44073de334afe903bc",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "fb182db2a6d6308e47e0",
+      "language": "bash",
+      "line": 284,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "f4c883d16bb06a8f37591a6547fd1c682af8f126a97e2f24865a2dd6dad1d20a",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "28119bf8cad45c896657",
+      "language": "bash",
+      "line": 302,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "ae8fd02a841971ada51944790e03f40c8f4ec0ba4ead069c06b72bdcd174ce84",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "1caf9c2d31d805682109",
+      "language": "bash",
+      "line": 311,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "0b9dd85b3739aeee9a3bc391b1740477130831662db7ea4d09c833dbc493a38d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f99c8677c866f8c10771",
+      "language": "bash",
+      "line": 344,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "d52a5f135594404baea767bff16139498150c8983e48a586777c77c7b36ee911",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "492e6c51652abab20e40",
+      "language": "bash",
+      "line": 354,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "129e4704d0ddc9bb1205ca67d170994873a19d1b52d1ecb09e0316f70e74941b",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "51cb4578f8a83b84d217",
+      "language": "bash",
+      "line": 370,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "c7f722751e9e7431798f653030d815aefd548a2b93e3d1600ae475f52a635d18",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f4f02ee782d804faaff0",
+      "language": "bash",
+      "line": 390,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "5d3e1cbfc09e03e66f88e3e00211268d22f8028c54158df2b84fa984e0241b3f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "b700960b3f08d6a0758e",
+      "language": "bash",
+      "line": 397,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "a145af1f3b0dd582eb7b8dc09313092b15214cdb9352f2e72800b89ba323393c",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "e8ba0863400a02b2ee25",
+      "language": "bash",
+      "line": 405,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "0472cf47ceb511bdde58aa2ceaad365ce82dbd353781a9813810d1c0e4e8fc2b",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "24d894af65b6ed6d7cb0",
+      "language": "bash",
+      "line": 423,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "a9eb04dff4ed0b7ae670d83f0b30715019d4fb9e29b318a1b29b275f4b392d98",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "c5886f1267f1d6e02760",
+      "language": "bash",
+      "line": 433,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "1e9d34179567a4e62a5d0bed3d876ef1bf68260bdd356eec417ddaf606d48bf0",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "ceb5162cfff05d5d3768",
+      "language": "bash",
+      "line": 32,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d5a0e7011745385451ed0154db0dd2e7c1a29cc5cad7a0d4db9e72a456d8a946",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "850a85ee63c2aba27a3d",
+      "language": "bash",
+      "line": 52,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "cffa3175da88da979eeaf5d6db58998c8cb0077db75750b96f47e5bb09fc0edb",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "577a0136ebf2cddd8e61",
+      "language": "bash",
+      "line": 81,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "c864dd08a9e6784e98dbb4d474074f51ddaeabd4969b6746babee9cb0c3aa32f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "3ba3e1785453ac8b6b58",
+      "language": "bash",
+      "line": 91,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "1f84b3cb1a06f4e5dcf9d735bf746f97a9f2129bcd66177481bfc547f8a5509e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "38ae088a3e354ccc52c4",
+      "language": "bash",
+      "line": 112,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "40c195c3e21d7ec7afe021795ad105d5cc39ab0462d5e0bceba5ba9b0992830e",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "1243ef606fdbc579be9c",
+      "language": "bash",
+      "line": 136,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "340c0b270ff9dfad1c0c19b47eca29ac50181cd3c679e04942cb2273b3fd2344",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f3e08a4edbce307d6ac4",
+      "language": "bash",
+      "line": 146,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "293f50a50672b297c14a35b7c0b66e090f31dc26c0690b6e2961ed11a3015ce1",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "065d6ae5d3d52359850e",
+      "language": "bash",
+      "line": 164,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "f02be399ea5fff450514fdf1c3e5b0b2751fdfc4985ee65bf7492a45aa2125b8",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "6d627e79f77c884b2b34",
+      "language": "bash",
+      "line": 185,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "a29eb2a288f60607fbff70b3a0a16017c6a865fc52bcc7cb9d6125cb9122a3b7",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "a5a8edcb02265a41a498",
+      "language": "bash",
+      "line": 196,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "6b2aef7b7ff4b8b12add41e47ae62ffad3e437706244344d46997790d3c2ad5d",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "62fbce538e4b4b69cff4",
+      "language": "bash",
+      "line": 209,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "876036b4c32d61d5cf7463f1161abae58d3e1133ec012c78712310e73e1645ee",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "1baeeabcb4212c568777",
+      "language": "bash",
+      "line": 231,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "d274aae95020f09fece5de7afb68169404932e16e499a4090600fa60b28e136f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "906c37f9e90040067ca6",
+      "language": "bash",
+      "line": 240,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "ef2a800312d36e014d4f27430060e2fe3ed4bdadf1558d818c415d06de107b0c",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "09f13ede5fd0f1c56fc5",
+      "language": "bash",
+      "line": 248,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "6d86a3c7df13c464083e754d353dd13e56b4ce354efc823d971656e3e67bb12b",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f09381dc270d8491ba54",
+      "language": "bash",
+      "line": 257,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "0821eda3749af435b707b12ed62a526e61acf60f22b2fe9b9f5ec9e7baa7a0a1",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "79b50d5775cebe649a3c",
+      "language": "mermaid",
+      "line": 301,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": false,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "58ea867410bee41b1e753689d567365564c65c84eccbf3f13562e39c61221edf",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "4a71b861e0a2db84e00a",
+      "language": "mermaid",
+      "line": 318,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": false,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "161193fb31501e570b55700100a62435646a2db3d77c4b3998575e6386895060",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "f7e05efdda640b439da3",
+      "language": "bash",
+      "line": 340,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "405abd3d471fb2f0460c313aab94a817441a1163895b2dcd1da566d3d376706c",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "60e895a10ffd9227ebeb",
+      "language": "bash",
+      "line": 358,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "7927db79204a917b2d8574fa3735778ccdddf056e15a9b6e84c0c26d1a69ad1f",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "fb705e0b3f9f6991dad0",
+      "language": "bash",
+      "line": 368,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "c4dde959d09e372967e8957fba3630965128969fa6bdf7ffa781f74770ab97cc",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "969c90e9eadefc99ef31",
+      "language": "bash",
+      "line": 376,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
+      "quality_contract": {
+        "cleanup": true,
+        "diagnosis": true,
+        "exact_command": true,
+        "expected_result": false,
+        "prerequisites": true,
+        "validation": true
+      },
+      "sha256": "3e1d3c75086fa8ab783a4ccd2186a8f4d3c9579a5718951e52bf8efeaa86d819",
+      "status": "illustrative-only"
+    },
+    {
+      "evidence": "explicit-public-classification",
+      "id": "9017ffc4d8f12ee60952",
+      "language": "bash",
+      "line": 108,
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-tuning.md",
+      "quality_contract": {
+        "cleanup": false,
+        "diagnosis": false,
+        "exact_command": true,
+        "expected_result": true,
+        "prerequisites": false,
+        "validation": true
+      },
+      "sha256": "471059a07cea5569621d197b73b8ec545c5b84168f3f5339e1a938c185180d37",
       "status": "illustrative-only"
     },
     {

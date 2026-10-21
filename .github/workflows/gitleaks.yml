@@ -37,3 +37,13 @@ jobs:
 
       - name: Run gitleaks (full history)
         run: gitleaks detect --source . --config .gitleaks.toml --log-opts=--all --redact --verbose
+
+      - name: Scan complete reproduction archive contents
+        shell: bash
+        run: |
+          (cd docs/assets && sha256sum -c existing-profiles-evaluation.tgz.sha256)
+          scan_root=$(mktemp -d "$RUNNER_TEMP/profile-secret-scan.XXXXXX")
+          trap 'rm -rf "$scan_root"' EXIT
+          mkdir -p "$scan_root/docs/assets"
+          tar -xzf docs/assets/existing-profiles-evaluation.tgz -C "$scan_root/docs/assets"
+          gitleaks dir "$scan_root" --config "$GITHUB_WORKSPACE/.gitleaks.toml" --redact

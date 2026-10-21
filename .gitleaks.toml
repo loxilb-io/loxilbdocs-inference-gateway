@@ -34,3 +34,23 @@ id = "generic-api-key"
   regexTarget = "match"
   paths = ['''(^|/)(docs|latest)/assets/model-engine-standard/catalog-registration\.json$''']
   regexes = ['''^"?tokenizerSha256"?:[ \t]*"?[0-9a-f]{64}"?[ \t]*$''']
+
+  [[rules.allowlists]]
+  description = "Pinned public tokenizer identities in existing-profile QA inputs"
+  condition = "AND"
+  regexTarget = "match"
+  paths = [
+    '''(^|/)(docs|latest)/assets/existing-profiles/(source-definitions|registry-(vllm|sglang|trtllm))/[^/]+\.yaml$''',
+    '''(^|/)(docs|latest)/assets/existing-profiles/model-identities\.json$''',
+  ]
+  regexes = [
+    '''^"?tokenizerRevision"?:[ \t]*"?[0-9a-f]{40}"?[ \t]*,?$''',
+    '''^"?tokenizerSha256"?:[ \t]*"?[0-9a-f]{64}"?[ \t]*,?$''',
+  ]
+
+  [[rules.allowlists]]
+  description = "Public tokenizer content hash assignment in existing-profile identity parameters"
+  condition = "AND"
+  regexTarget = "match"
+  paths = ['''(^|/)(docs|latest)/assets/existing-profiles/models/[^/]+\.env$''']
+  regexes = ['''^TOKENIZER_SHA=['"]?[0-9a-f]{64}['"]?[ \t]*$''']

@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Existing source-profile qualification inputs and separately reviewed QA evidence",
+  "gatewayBinarySha256": "2b4de64b4b9ad8bf1b0053c664773829b5fcb1b5e07711eb37d13b8240879617",
+  "gatewaySourceCommit": "UNVERIFIED for reused binary",
+  "releaseQualification": false,
+  "sourceCatalogPromotion": false,
+  "modelWeightsIncluded": false,
+  "tokenizerTemplateBytesIncluded": false,
+  "privateDeploymentInspectionIncluded": false,
+  "engineVersions": {
+    "vllm": "0.31.0",
+    "sglang": "0.5.19",
+    "trtllm": "1.3.0rc29"
+  },
+  "sourceProfiles": 13,
+  "sourceRegistryMetadataReady": 11,
+  "scope": "Text chat only; runtime results and all blockers are separate from historical source-catalog tuple states"
+}

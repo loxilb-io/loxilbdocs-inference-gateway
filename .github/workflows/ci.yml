@@ -87,6 +87,12 @@ jobs:
         run: python tools/validate_examples.py
       - name: Verify every public example is classified
         run: python tools/refresh_example_inventory.py --check
+      - name: Verify complete reproduction archive and retained settings
+        run: >-
+          python tools/validate_existing_profile_inputs.py
+          docs/assets/existing-profiles-evaluation.tgz
+          --source-root docs/assets/existing-profiles
+          --verify-results
       - name: Run validator mutation tests
         run: python -m unittest discover -s tests -p 'test_*.py' -v
 
