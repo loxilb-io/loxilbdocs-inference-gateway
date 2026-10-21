@@ -55,6 +55,8 @@
     
       <link rel="stylesheet" href="../../stylesheets/extra.css">
     
+      <link rel="stylesheet" href="../../stylesheets/analytics.css">
+    
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -4571,6 +4573,33 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../privacy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Privacy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -4585,10 +4614,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
         
           
-          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
             
   
   
@@ -4606,8 +4635,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_12">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -5117,7 +5146,12 @@ SSE, P/D or an active credential policy is outside AI request accounting.
 <code>completed</code> includes whole non-SSE answers and does not require a <code>[DONE]</code>
 marker. <code>aborted</code> has <code>cause="client"</code>, <code>"engine"</code> or <code>"gateway"</code>; other
 outcomes have an empty cause. A request that ended before a status was sent
-uses <code>status="none"</code>. Admission denials are recorded once at the refusal point;
+uses <code>status="none"</code>. This includes a client leaving before the answer, with
+or without P/D, and a non-P/D backend closing before any answer. Such a
+non-P/D request has no P/D lifecycle record; correlate its request outcome
+and cause with the client transport result instead of treating <code>none</code> as an
+HTTP status or a successful response.</p>
+<p>Admission denials are recorded once at the refusal point;
 dedicated authorization and rate-limit counters explain why they were refused
 and must not be added as extra requests.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Served traffic, excluding pre-dispatch denials</span>
@@ -6099,6 +6133,8 @@ tenant activity metadata. Remove temporary header files after management calls:<
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../javascripts/analytics.js"></script>
       
     
   </body>
