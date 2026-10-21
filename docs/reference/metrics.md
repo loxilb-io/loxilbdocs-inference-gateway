@@ -7,8 +7,8 @@ revision. It does **not** prove that every family is present in a particular
 deployment: feature activation, traffic, build tags, hardware, and runtime
 configuration still determine whether a series is emitted.
 
-- Gateway source commit: `ecfc3c12376bad712c61f6781fe13a9e5fc3fd9e`
-- Gateway main eBPF submodule commit: `2cac6dac18de91b0eda80e814195c637cdf389e9`
+- Gateway source commit: `9640fb6b682b429c7e70e7515f6f57c6d7f35b66`
+- Gateway main eBPF submodule commit: `9373e6d62861e6264cafa2704ebfeb17c5d2fd2a`
 - Comparison release: `v0.9.8.9-rc.1` at `f08b18beda587217265c9ba6419159119914795c`
 - Comparison release eBPF submodule commit: `5536a2117ad2ad1128900a0d808ad7dec2eee2b5`
 - Release manifest availability: **absent**
@@ -367,7 +367,7 @@ use values outside the frozen source contract.
 ## Source-declared label combinations
 
 Request outcomes, causes, P/D phases and fallback reasons are extracted from `api/prometheus/ai_metrics.go`
-at the Gateway commit above (source SHA-256: `2c62a559aa5fe519034ebb170850576851ea78df252e972426f13825f3a548b7`).
+at the Gateway commit above (source SHA-256: `dd66059b224110fa7ba0344011f31cf90f423b687a5fe7637780af46ac72b1a1`).
 The validator also rejects selectors that match none of these combinations.
 Other enums above are reviewed documentation constants. Empty cause is written as `(empty)`.
 

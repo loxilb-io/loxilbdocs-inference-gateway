@@ -70,9 +70,9 @@
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
         ],
-        "scenario_object_id": "15c22afcda13a5272ae7aebcbd43d7d97aed5067",
+        "scenario_object_id": "553cfadb3630c87d286714728f6dd8fd7d86db38",
         "scenario_path": "cicd/vllm-pd-disagg",
-        "validation_object_id": "ffd6bbbe102d34ef1cdfd851209496f0b7003bb3",
+        "validation_object_id": "ea02f52d86b7cdd935f3ece34c00fe31d8994219",
         "validation_path": "cicd/vllm-pd-disagg/validation.sh",
         "workflow_membership": "wired",
         "workflow_object_id": "2dd932f6eac7ca465ca7ba6eea4523a8c27ca909",
@@ -3804,7 +3804,7 @@
       }
     },
     "label_source": {
-      "sha256": "2c62a559aa5fe519034ebb170850576851ea78df252e972426f13825f3a548b7",
+      "sha256": "dd66059b224110fa7ba0344011f31cf90f423b687a5fe7637780af46ac72b1a1",
       "source_path": "api/prometheus/ai_metrics.go"
     },
     "provenance": {
@@ -3849,7 +3849,7 @@
         "path": "cicd/vllm-kvcache-routing-cpu"
       },
       {
-        "object_id": "4f7e1354d80b7e3b9ef94c06b71b8cfa07fc76a2",
+        "object_id": "e2840fa8325d875b590e1f01779def8e9e9998db",
         "path": "cicd/vllm-pd-admission-cpu"
       }
     ],
@@ -3926,8 +3926,8 @@
     ]
   },
   "source": {
-    "commit": "ecfc3c12376bad712c61f6781fe13a9e5fc3fd9e",
-    "ebpf_submodule_commit": "2cac6dac18de91b0eda80e814195c637cdf389e9",
+    "commit": "9640fb6b682b429c7e70e7515f6f57c6d7f35b66",
+    "ebpf_submodule_commit": "9373e6d62861e6264cafa2704ebfeb17c5d2fd2a",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
     "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",

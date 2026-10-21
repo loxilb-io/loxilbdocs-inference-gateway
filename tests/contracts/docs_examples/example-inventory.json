@@ -4665,7 +4665,7 @@
       "evidence": "metric-manifest-static",
       "id": "37eadcad0c74aeb4d691",
       "language": "promql",
-      "line": 121,
+      "line": 127,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4682,7 +4682,7 @@
       "evidence": "metric-manifest-static",
       "id": "2b8d5fe28b772b34ad03",
       "language": "promql",
-      "line": 158,
+      "line": 164,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4699,7 +4699,7 @@
       "evidence": "metric-manifest-static",
       "id": "23f73f722fda21c39dc3",
       "language": "promql",
-      "line": 197,
+      "line": 203,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4716,7 +4716,7 @@
       "evidence": "metric-manifest-static",
       "id": "391dcb71eff01acf4482",
       "language": "promql",
-      "line": 233,
+      "line": 239,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4733,7 +4733,7 @@
       "evidence": "metric-manifest-static",
       "id": "f0b696ffdf75f41d9ede",
       "language": "promql",
-      "line": 333,
+      "line": 339,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4750,7 +4750,7 @@
       "evidence": "metric-manifest-static",
       "id": "f9513be93383f3e1991b",
       "language": "promql",
-      "line": 383,
+      "line": 389,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4767,7 +4767,7 @@
       "evidence": "metric-manifest-static",
       "id": "d3f0294a9bc2c26e83a2",
       "language": "promql",
-      "line": 422,
+      "line": 428,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4784,7 +4784,7 @@
       "evidence": "swagger-union-static",
       "id": "e739436aa71a69a27bb6",
       "language": "bash",
-      "line": 510,
+      "line": 516,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
@@ -4801,7 +4801,7 @@
       "evidence": "metric-manifest-static",
       "id": "c0741d2b82929bdedab9",
       "language": "promql",
-      "line": 517,
+      "line": 523,
       "path": "docs/operations/monitoring.md",
       "quality_contract": {
         "cleanup": true,
