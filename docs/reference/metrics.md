@@ -8,7 +8,7 @@ deployment: feature activation, traffic, build tags, hardware, and runtime
 configuration still determine whether a series is emitted.
 
 - Gateway source commit: `23e57a226a4803ed91699904453cc1bf147fbefa`
-- Gateway main eBPF submodule commit: `6b5014f49bf0df6b72f8b0423acf9a81c22e60fb`
+- Selected Gateway eBPF submodule commit: `6b5014f49bf0df6b72f8b0423acf9a81c22e60fb`
 - Comparison release: `v0.9.8.9-rc.1` at `f08b18beda587217265c9ba6419159119914795c`
 - Comparison release eBPF submodule commit: `5536a2117ad2ad1128900a0d808ad7dec2eee2b5`
 - Release manifest availability: **absent**
@@ -20,7 +20,7 @@ configuration still determine whether a series is emitted.
 - Release-scope families: **283**
 - Raw writer paths and evidence prose are intentionally not copied into this public catalog.
 
-The table below is therefore a current-main source catalog, not a claim
+The table below is therefore a selected-source catalog, not a claim
 that `v0.9.8.9-rc.1` ships every listed family. The comparison
 release does not contain the generated metric manifest used by this page.
 Release packaging and runtime emission require separate qualification.
@@ -36,13 +36,13 @@ Release packaging and runtime emission require separate qualification.
 
 A writer or registration point is source evidence, not deployment evidence.
 `verified-runtime` records upstream runtime evidence for that family, but this
-documentation build does not rerun Linux, GPU, DPU, HA, or release tests.
+documentation build does not rerun Linux, GPU, HA, or release tests.
 The [verification status](verification-status.md) page keeps those evidence
 lanes separate.
 
 ## Activation codes
 
-Combined codes such as `D+V` require both conditions.
+Combined codes such as `DP+V` require both conditions.
 
 | Code | Activation condition |
 | --- | --- |
@@ -53,8 +53,6 @@ Combined codes such as `D+V` require both conditions.
 | `H` | eager TTFB histogram |
 | `Q` | quota-lazy collector |
 | `DP` | datapath-gated scalar |
-| `D` | runtime DPU-gated |
-| `BD` | DOCA build-gated |
 | `T` | TTFT-window-lazy |
 | `S` | startup-created child |
 

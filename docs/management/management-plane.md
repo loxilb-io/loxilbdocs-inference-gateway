@@ -1,260 +1,308 @@
 # Deploy the Management Plane (UI + OAM)
 
-The management-plane bundle runs the LoxiLB UI, the OAM API, PostgreSQL, and a
-Caddy edge on one Docker Compose host. Use it first in a staging environment.
-Production use requires pinned releases, verified backups, restricted network
-access, and an approved OAM-to-Gateway authentication design.
+Choose one of the three modes in the OAM repository's
+[Quick Start](https://github.com/loxilb-io/loxilb-oam/blob/main/deploy/compose/README.md#quick-start).
+Mode 1 evaluates UI/OAM over HTTP, Mode 2 deploys UI/OAM with HTTPS for managed
+instances, and Mode 3 adds a Gateway and shared state on the same Linux host.
+This guide reviews the
+[Compose files at OAM source `1c9a4fa`](https://github.com/loxilb-io/loxilb-oam/tree/1c9a4fabf05c651408dda3da459d6298729635fb/deploy/compose).
+Commands below run on Linux. Configuration checks do not certify image
+availability, a complete installation, or a browser workflow.
 
-!!! note "Audience"
-    This guide is for AI-infrastructure and DevOps engineers deploying a
-    browser-based control point for one or more Inference Gateway instances.
+## Quick Start: choose a mode
 
-The bundle is maintained in the
-[`loxilb-oam/deploy/compose`](https://github.com/loxilb-io/loxilb-oam/tree/main/deploy/compose)
-directory.
+| Mode | Deployment | Images and build | Browser access |
+|---|---|---|---|
+| **Mode 1 — Development, end-to-end HTTP** | UI + OAM + PostgreSQL + Caddy; manage separately deployed instances | Dev overlay builds OAM; UI uses its configured image | `http://<host>/netlox/` |
+| **Mode 2 — Production, end-to-end HTTPS** | Management bundle with TLS to managed instances; database on an internal network | Reviewed pre-built OAM/UI images | `https://<management-host>/netlox/` |
+| **Mode 3 — Converged single node** | Mode 2 plus Gateway on the same Linux host; separate management, data, and state projects | Initializer asks for OAM/UI/Gateway image tags | `https://<console-host>:<edge-port>/netlox/` |
 
-## Architecture and security boundaries
+All three require Docker Engine, Docker Compose v2, Git, and registry access.
+Mode 3 needs Compose support for `!override` (the initializer checks version
+2.24 or later), host networking, privileged Gateway execution, and host NIC
+access for eBPF. Check address and port ownership before installing it.
 
-```mermaid
-flowchart LR
-    B["Operator browser"] -->|"HTTPS + OAM JWT"| E["Caddy edge<br/>only published service"]
-    E --> U["UI static assets"]
-    E --> O["OAM API"]
-    O --> P["PostgreSQL<br/>users, instances, snapshots"]
-    O -->|"verified TLS + forwarded Authorization"| G["Inference Gateway"]
-
-    style E fill:#e1f5fe,stroke:#0288d1
-    style P fill:#e8f5e9,stroke:#43a047
-    style G fill:#fff9c4,stroke:#f9a825
-```
-
-| Service | Purpose | Production exposure |
-|---|---|---|
-| `caddy` | Serves the UI at `/netlox/`, proxies `/api/oam/*`, and terminates edge TLS | Ports 80/443, adjusted with `HTTP_PORT` and `HTTPS_PORT` |
-| `oam-loxilb` | OAM API and OAM RBAC | Internal only in the production overlay |
-| `postgres` | OAM users, instances, snapshots, and management state | Isolated internal network in the production overlay |
-| `ui-assets` | One-shot job that copies the UI build into the volume served by Caddy | None |
-
-OAM authenticates the browser and applies OAM RBAC. It then forwards the
-request's `Authorization` header to the Gateway; it does not exchange an OAM
-JWT for a Gateway user-service, OAuth, or manual token. TLS protects the
-connection but does not authorize the operation.
-
-!!! danger "Validate Gateway authorization before production"
-    If Gateway management authentication is enabled, an OAM JWT can be rejected
-    with `401` unless the releases share an approved credential integration. If
-    Gateway authentication is disabled, any network client that can reach its
-    management listener can bypass OAM. Restrict that listener and test both
-    successful access and denied bypass access before promotion.
-
-## Prerequisites
-
-- A Linux host with Docker Engine and Docker Compose v2.
-- Git and registry access for the selected OAM and UI images.
-- Ports 80 and 443 free, or approved alternative edge ports.
-- At least one staging Gateway reachable from OAM over verified TLS.
-- Release tags for OAM and UI that are compatible with the qualified Gateway.
-- A secret manager and a PostgreSQL backup destination.
-
-## 1. Get the deployment files
+## Get the deployment files
 
 ```bash
 git clone https://github.com/loxilb-io/loxilb-oam.git
-cd loxilb-oam/deploy/compose
+cd loxilb-oam
+git checkout --detach 1c9a4fabf05c651408dda3da459d6298729635fb
+cd deploy/compose
+umask 077
+```
+
+Keep the repository layout: Compose references files under `database/` and
+other repository directories. Continue with **one** mode below.
+
+For a fresh **Mode 1 or Mode 2** installation, prepare the environment file:
+
+```bash
 cp .env.example .env
 ```
 
-The development overlay builds OAM from this checkout but still pulls the UI
-image. Point `UI_IMAGE` and `UI_TAG` at a reviewed image; a sibling UI source
-checkout is not required.
+For **Mode 3**, skip that copy and let the initializer create its converged
+`.env`. Do not use a generic Mode 1/2 file unchanged.
 
-## 2. Configure secrets and release pins
+## Mode 1 — Development, end-to-end HTTP
 
-Generate independent JWT, database, and snapshot-key values and store them
-through your normal secret process:
+Use an access-controlled development network. The dev overlay publishes OAM
+and PostgreSQL debug ports as well as the edge. HTTP does not protect login
+credentials in transit.
 
---8<-- "snippets/common/oam-secret-generation.md"
+### Configure the development environment
 
-Assign the outputs to `OAM_JWT_SECRET`, `DB_PASSWORD`, and
-`SNAPSHOT_ENC_KEY`, respectively. Create `OAM_DEFAULT_ADMIN_PASSWORD` with a
-password manager: the fresh-database policy requires at least nine characters,
-including upper case, lower case, a digit, and a special character, and rejects
-any character repeated three times in a row. Never paste a production secret
-into documentation, a ticket, or a committed `.env` file.
+Edit the environment file prepared above. Supply these values through your
+protected secret process:
 
-| Variable | Requirement | Purpose |
-|---|---:|---|
-| `DB_PASSWORD` | required | Password for the bundled PostgreSQL `oamuser` |
-| `OAM_JWT_SECRET` | required | OAM JWT signing secret |
-| `OAM_DEFAULT_ADMIN_PASSWORD` | required | Bootstrap admin password; change it after first login |
-| `SNAPSHOT_ENC_KEY` | production | Base64-encoded 32-byte AES-256 snapshot encryption key |
-| `OAM_ALLOWED_ORIGINS` | production | Exact browser-origin allowlist |
-| `OAM_TRUSTED_PROXIES` | review | Only proxy IPs/CIDRs whose forwarded client IP OAM may trust |
-| `OAM_TAG` | production | Pinned, verified OAM release tag |
-| `UI_TAG` | production | Pinned, verified UI release tag |
+| Setting | Supply |
+|---|---|
+| `DB_PASSWORD` | Independent PostgreSQL password |
+| `OAM_JWT_SECRET` | Independent OAM signing secret |
+| `OAM_DEFAULT_ADMIN_PASSWORD` | Initial password satisfying OAM's password policy |
+| `SNAPSHOT_ENC_KEY` | Base64-encoded 32-byte snapshot encryption key |
+| `UI_IMAGE`, `UI_TAG` | UI image available in your registry or Linux Docker host |
 
-Set release placeholders to releases approved by your organization; do not
-copy the mutable defaults into production:
+Set the HTTP development settings explicitly in `.env`:
 
 ```dotenv
-OAM_TAG=<OAM_RELEASE_TAG>
-UI_TAG=<UI_RELEASE_TAG>
+SITE_ADDRESS=:80
+EDGE_TLS=
+OAM_INSTANCE_TLS_INSECURE=true
 ```
 
-Before deployment, verify that both exact image references are pullable and
-record their resolved digests:
+The example file sets `OAM_INSTANCE_TLS_INSECURE=false`; copying it without
+editing would override the dev overlay's insecure default. This setting
+controls certificate verification for HTTPS instance connections. For the
+HTTP mode, register an instance's reachable HTTP management URL; changing
+certificate verification does not change a registered URL's protocol.
+
+### Validate and start
 
 ```bash
-docker manifest inspect ghcr.io/loxilb-io/loxilb-oam:<OAM_RELEASE_TAG>
-docker manifest inspect ghcr.io/loxilb-io/loxilb-ui:<UI_RELEASE_TAG>
+docker compose -f docker-compose.yml -f docker-compose.dev.yml config --quiet
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ```
 
-!!! warning "Protect the snapshot encryption key"
-    OAM snapshots can contain IPsec pre-shared keys and certificate private
-    keys. Without `SNAPSHOT_ENC_KEY`, those values are stored unencrypted in
-    PostgreSQL. Back up the encryption key separately from the database and
-    test that the restored service can decrypt a synthetic snapshot.
+The start command stays in the foreground and displays logs. In another Linux
+terminal in the same directory, inspect the services:
 
-## 3. Configure the edge certificate
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml ps -a
+curl --fail-with-body --silent --show-error http://127.0.0.1/healthz
+curl --fail-with-body --silent --show-error http://127.0.0.1/api/oam/health
+```
 
-For a private or operator-supplied certificate, generate a test certificate or
-place the reviewed certificate and key in `certs/edge/`, then configure:
+Open `http://<host>/netlox/`, adjusting the URL if you changed `HTTP_PORT`.
+The first request checks Caddy's `ok` response; the second reaches OAM through
+the edge. The default debug publications are OAM `8080` and PostgreSQL `5432`;
+restrict them to the test network.
+
+!!! note "What this overlay builds"
+    At the reviewed source, `docker-compose.dev.yml` builds **OAM only** from
+    `OAM_SRC` (default `../..`). `ui-assets` uses `UI_IMAGE:UI_TAG` from the base
+    file. To use a source-built UI, build its image on Linux using the UI
+    repository's instructions and select that image here. A sibling UI checkout
+    alone does not make this Compose command build it.
+
+## Mode 2 — Production, end-to-end HTTPS
+
+This mode installs the management bundle. It does not provision a Gateway.
+Use reviewed OAM/UI image tags, edge TLS, and verified TLS to the managed
+instances. Only Caddy publishes host ports in the base + prod combination;
+PostgreSQL uses the internal backend network.
+
+### Configure images, secrets, and edge TLS
+
+Use the environment file prepared above. Set `DB_PASSWORD`, `OAM_JWT_SECRET`,
+`OAM_DEFAULT_ADMIN_PASSWORD`, and `SNAPSHOT_ENC_KEY` through your protected
+secret process. Configure reviewed image tags and
+an exact browser origin. Replace these placeholders before starting:
 
 ```dotenv
+OAM_TAG=<REVIEWED_OAM_TAG>
+UI_TAG=<REVIEWED_UI_TAG>
+OAM_ALLOWED_ORIGINS=https://management.example.com
 SITE_ADDRESS=https://management.example.com
 EDGE_TLS=tls /certs/edge/cert.pem /certs/edge/key.pem
 ```
 
-The repository helper can generate a local test certificate with a DNS name or
-IP subject alternative name:
+Place a certificate chain with the correct DNS SAN at `certs/edge/cert.pem`
+and its protected private key at `certs/edge/key.pem`. For an isolated
+self-signed evaluation, the repository provides:
 
 ```bash
 scripts/generate-edge-certs.sh management.example.com
 ```
 
-Trust the issuing CA on operator clients. Do not use `curl -k` as a production
-health check. Caddy automatic HTTPS is also possible for a publicly resolvable
-name, but DNS, firewall, and certificate issuance are deployment-specific and
-must be validated by the operator.
+Trust that certificate on evaluation clients. For a CA-issued certificate,
+use your issuing CA trust bundle. Review `OAM_TRUSTED_PROXIES` for the actual
+edge network. Keep secrets and keys out of Git and retain the snapshot key
+separately from database backups.
 
-## 4. Start the stack
+### Configure verified TLS to managed instances
 
-For an initial, non-production evaluation, build OAM from the checkout and use
-the pinned UI image configured above:
+Place the Gateway's issuing CA bundle at `certs/instance-ca.pem`, then set:
 
-```bash
-docker compose \
-  -f docker-compose.yml \
-  -f docker-compose.dev.yml \
-  up --build -d
+```dotenv
+OAM_INSTANCE_CA_BUNDLE=/etc/loxilb-oam/certs/instance-ca.pem
+OAM_INSTANCE_TLS_INSECURE=false
 ```
 
-The development overlay publishes PostgreSQL and OAM debug ports and defaults
-to insecure verification of managed-Gateway certificates. Do not promote this
-topology to production.
+The base file mounts `./certs` read-only at `/etc/loxilb-oam/certs`. Register
+a reachable URL such as `https://gateway.example.com:8091/netlox/v1`; its
+hostname must match the Gateway certificate SAN. For certificate preparation,
+follow [TLS to managed instances](https://github.com/loxilb-io/loxilb-oam/blob/1c9a4fabf05c651408dda3da459d6298729635fb/deploy/compose/README.md#tls-to-managed-loxilb-instances).
+Configure the independent service identity described below if the Gateway
+requires it.
 
-For a production-style topology, use only pinned images and the production
-overlay:
+### Validate, pull, and start
 
 ```bash
-docker compose \
-  -f docker-compose.yml \
-  -f docker-compose.prod.yml \
-  up -d
+docker compose -f docker-compose.yml -f docker-compose.prod.yml config --quiet
+docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.yml -f docker-compose.prod.yml ps -a
 ```
 
-The production overlay requires both tags and isolates PostgreSQL. Only Caddy
-publishes host ports.
+Record the resolved image digests. If image pull fails, correct the reference
+or registry access. The OAM [operator guide](https://github.com/loxilb-io/loxilb-oam/blob/1c9a4fabf05c651408dda3da459d6298729635fb/docs/deployment-compose.md)
+also describes building and tagging production images from reviewed source.
+Do not silently substitute `latest` for the reviewed image.
 
-## 5. Verify the management plane
-
-Use the same overlay in every follow-up command. The example below uses the
-production overlay:
+For the self-signed evaluation certificate above:
 
 ```bash
-docker compose \
-  -f docker-compose.yml \
-  -f docker-compose.prod.yml \
-  ps
-
 curl --fail-with-body --silent --show-error \
-  https://management.example.com/healthz
-
+  --cacert certs/edge/cert.pem https://management.example.com/healthz
 curl --fail-with-body --silent --show-error \
-  https://management.example.com/api/oam/health | jq .
+  --cacert certs/edge/cert.pem https://management.example.com/api/oam/health
 ```
 
-Then browse to `https://management.example.com/netlox/`, sign in with the
-bootstrap administrator account, and change its password immediately.
+For a CA-issued certificate use its issuing CA bundle instead. Open
+`https://management.example.com/netlox/`. These checks establish edge/OAM
+reachability; verify Gateway access separately.
 
-## 6. Protect the Gateway connection
+## Mode 3 — Converged single node
 
-1. Issue each Gateway a server certificate whose SAN matches the hostname or
-   IP that OAM will register.
-2. Start the Gateway with TLS and restrict its management listener to the OAM
-   network path.
-3. Mount the issuing CA into OAM and set:
+This mode adds the Gateway on the same Linux host as UI/OAM. Read the
+[converged deployment guide](https://github.com/loxilb-io/loxilb-oam/blob/1c9a4fabf05c651408dda3da459d6298729635fb/docs/deployment-converged.md)
+before running the initializer, especially on a host with existing services.
+The Gateway uses host networking, privilege, and the host NIC. Reserve the
+console address/port so an inference VIP cannot take the same endpoint.
 
-   ```dotenv
-   OAM_INSTANCE_CA_BUNDLE=/etc/loxilb-oam/certs/instance-ca.pem
-   OAM_INSTANCE_TLS_INSECURE=false
-   ```
+### Run the interactive initializer
 
-4. Register the Gateway using its verified endpoint:
+From `deploy/compose`:
 
---8<-- "snippets/common/oam-gateway-url.md"
-
-5. Test an allowed read, a reversible authorized change, a denied request from
-   an insufficient OAM role, and a direct bypass attempt to the Gateway.
-6. Confirm in both OAM and Gateway audit logs which identity and operation were
-   recorded.
-
-Do not use plain HTTP on port 11111 or
-`OAM_INSTANCE_TLS_INSECURE=true` outside an isolated evaluation environment.
-
-## Backup and recovery
-
-The management plane and Gateway have separate recovery domains:
-
-```mermaid
-flowchart TD
-    A["Recovery runbook"] --> P["PostgreSQL backup<br/>OAM users and state"]
-    A --> K["Secret-manager backup<br/>JWT and snapshot keys"]
-    A --> S["Gateway configuration snapshot"]
-    A --> D["External AI key and quota database"]
+```bash
+scripts/init-converged.sh
 ```
 
-- Back up PostgreSQL with a database-consistent method and test restoring it.
-- Escrow `OAM_JWT_SECRET`, `SNAPSHOT_ENC_KEY`, edge private keys, and Gateway
-  trust material using the organization's secret-recovery process.
-- Capture and validate each Gateway's configuration separately; the Gateway
-  snapshot API does not back up OAM PostgreSQL or the external AI key store.
-- Back up any external PostgreSQL deployment used for AI keys and tenant quotas
-  through its own procedure.
-- Restore into an isolated environment and verify OAM snapshot decryption,
-  Gateway configuration, RBAC, and audit continuity before declaring recovery
-  successful.
+Review its prompts for the console address and HTTPS port, Gateway hostname,
+actual host NIC/connect address, and OAM/UI/Gateway image tags. The initializer
+prepares secrets, a persistent OAM-to-Gateway service token, certificates,
+and the converged `.env`; it starts state, data, and management projects and
+runs its verification steps. Review their output and independently check the
+resulting deployment. The default console port is `8443`; use the address
+and port actually selected by the initializer.
 
-`docker compose down` preserves named volumes. Adding `-v` deletes the bundled
-PostgreSQL and other named volumes; do not run it against a production project
-unless the data has been recovered elsewhere and destruction is intended.
+`-y` accepts defaults, including mutable default image tags. For a reviewed
+installation, use the interactive prompts and record resolved image digests.
+To prepare configuration without starting the projects, use this alternative:
 
-## Troubleshooting
+```bash
+scripts/init-converged.sh --no-start
+```
 
-| Symptom | Check | Corrective action |
+That alternative still prepares configuration and protected files. Inspect the
+result before rerunning `scripts/init-converged.sh` to start the installation.
+Do not treat `--no-start` as a running deployment or authentication test.
+
+### Understand the three projects
+
+| Project | Compose file(s) | Purpose |
 |---|---|---|
-| Stack rejects the configuration | A required secret or production tag is empty | Inspect the sanitized Compose error and set the missing value through secret management |
-| PostgreSQL authentication fails after changing `.env` | The existing volume retains its initialized credentials | Rotate the database password using a controlled PostgreSQL procedure; do not delete the volume |
-| UI loads but API calls fail | Edge route, OAM health, or CORS allowlist | Check `/api/oam/health`, Caddy logs, and the exact `OAM_ALLOWED_ORIGINS` value |
-| Every user appears under one rate-limit identity | Incorrect trusted-proxy configuration | Set `OAM_TRUSTED_PROXIES` to only the actual edge proxy addresses/CIDRs |
-| Registered Gateway is unreachable | DNS, routing, certificate SAN, or CA mismatch | Test from the OAM network and correct the certificate or `OAM_INSTANCE_CA_BUNDLE` |
-| OAM proxy returns `401` | OAM JWT is not an accepted Gateway credential | Validate the independent Gateway management authentication design; do not disable authorization as a workaround |
-| Browser rejects the edge certificate | Untrusted issuer or hostname mismatch | Install the approved CA chain or reissue a certificate with the correct SAN |
+| `loxilb-state` | `docker-compose.database.yml` | Shared PostgreSQL and Gateway schema bootstrap; OAM-facing internal network and Gateway-facing loopback publication |
+| `loxilb-data` | `docker-compose.dataplane.yml` | Host-network Gateway and its data-plane state mounts |
+| `loxilb-mgmt` | Base + prod + converged overlays | UI, OAM, Caddy; the base bundle's PostgreSQL is disabled for this mode |
 
-## See also
+The projects are separate ownership boundaries: a management-project command
+does not include the services owned by the state/data projects. Preserve their
+external volumes. This layout alone does not certify traffic continuity during
+an upgrade or failure.
 
-- [Management & UI Overview](overview.md)
-- [LoxiLB OAM API](loxilb-oam.md)
-- [LoxiLB UI](loxilb-ui.md)
-- [Management API Authentication](../security/management-api-authentication.md)
-- [Configuration Backup and Restore](../operations/backup-restore.md)
+### Manual startup after configuration preparation
+
+Use this sequence only after preparing the converged `.env`, protected seed
+files, certificates, image selections, and port/network settings in the source
+guide. It is an alternative to the initializer's startup, not a way to skip
+its configuration requirements:
+
+```bash
+scripts/prepare-converged-volumes.py
+docker compose -f docker-compose.database.yml up -d postgres
+docker compose -f docker-compose.database.yml run --rm gateway-db-bootstrap
+docker compose -f docker-compose.dataplane.yml up -d
+docker compose -f docker-compose.yml -f docker-compose.prod.yml \
+  -f docker-compose.converged.yml up -d
+```
+
+Inspect each project independently:
+
+```bash
+docker compose -f docker-compose.database.yml ps -a
+docker compose -f docker-compose.dataplane.yml ps -a
+docker compose -f docker-compose.yml -f docker-compose.prod.yml \
+  -f docker-compose.converged.yml ps -a
+```
+
+Open the selected HTTPS console URL with `/netlox/`, check edge/OAM health,
+and confirm the registered local Gateway is reachable through OAM. Use the
+issuing CA with clients and confirm both authorized access and rejected
+missing/incorrect credentials. The converged overlay selects `service-token`
+and mounts the shared token as a protected file.
+
+For public cloud, NAT, or floating-IP installation and repair, follow the
+[English](https://github.com/loxilb-io/loxilb-oam/blob/1c9a4fabf05c651408dda3da459d6298729635fb/deploy/compose/CONVERGED-CLOUD.md)
+or [Korean cloud guide](https://github.com/loxilb-io/loxilb-oam/blob/1c9a4fabf05c651408dda3da459d6298729635fb/deploy/compose/CONVERGED-CLOUD.ko.md).
+Use the [persistent upgrade guide](https://github.com/loxilb-io/loxilb-oam/blob/1c9a4fabf05c651408dda3da459d6298729635fb/deploy/compose/PERSISTENT-UPGRADE.md)
+for adoption, upgrade, rollback, and explicit token/certificate refresh. Editing
+a host seed file alone does not rotate an existing persistent volume.
+
+## OAM-to-Gateway identity and UI acceptance
+
+OAM login, Gateway management authorization, and inference API keys are separate
+identity planes. OAM removes the browser Authorization header before applying
+its configured service identity.
+
+| Deployment | Identity configuration |
+|---|---|
+| Mode 1/2 generic bundle | Defaults to `OAM_GATEWAY_AUTH_MODE=disabled`; no browser Authorization is forwarded |
+| Mode 1/2 with authenticated Gateway | Select `OAM_GATEWAY_AUTH_MODE=service-token` and exactly one token input: `OAM_GATEWAY_SERVICE_TOKEN_FILE` or `OAM_GATEWAY_SERVICE_TOKEN`; the Gateway must accept the corresponding dedicated management identity |
+| Mode 3 | Converged overlay selects `service-token` and supplies the persistent token file for OAM and Gateway |
+
+For generic file-based input, mount a protected regular file into OAM and use
+its absolute container path. The base bundle does not mount a separate token
+directory automatically. TLS trust and a configured token do not replace an
+actual authorized request and denied bypass check.
+
+On a fresh OAM database, sign in as `admin` with
+`OAM_DEFAULT_ADMIN_PASSWORD`, then change the password. Existing databases
+retain their account state. For every mode, check required UI operations with
+the intended roles on owned staging resources, confirm actual Gateway state
+independently, and clean up the test resources. Record the exact OAM/UI/Gateway
+image identities with those results.
+
+## Recovery boundaries
+
+Do not delete volumes to repair an installation. Preserve PostgreSQL, snapshot
+keys, certificates, service tokens, and Gateway storage. Gateway
+[configuration recovery](../operations/backup-restore.md) does not restore the
+OAM database. Follow the matching source guide and test database/key recovery
+separately.
+
+The README also describes a developer-only converged backend with a separate
+local UI. That HTTP variant is distinct from the three modes above; see the
+[source instructions](https://github.com/loxilb-io/loxilb-oam/blob/1c9a4fabf05c651408dda3da459d6298729635fb/deploy/compose/README.md)
+when evaluating it on a restricted development network.

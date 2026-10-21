@@ -189,10 +189,9 @@ nav:
       - AI Key Store: operations/ai-key-store.md
       - Persistence, Backup & Restore: operations/backup-restore.md
       - Readiness, Capabilities, Diagnostics & Maintenance: operations/readiness-diagnostics-maintenance.md
-      - Appliance CLI: operations/appliance-cli.md
+      - Gateway & Appliance Recovery Scope: operations/appliance-cli.md
       - Sockmap Acceleration: operations/sockmap-acceleration.md
       - Application & L4 Tracing: operations/tracing.md
-      - DPU Offload Observability: operations/dpu-offload.md
       - Monitoring & Metrics: operations/monitoring.md
       - Grafana Dashboards: operations/observability-metrics-grafana.md
       - AI Quotas & QoS: operations/ai-qos.md
@@ -206,7 +205,7 @@ nav:
       - Example Verification Inventory: reference/example-inventory.md
       - Example Quality Contract: reference/example-quality-contract.md
       - API (swagger): reference/api.md
-      - Current-main API Schema Models: reference/api-schema-models.md
+      - Selected-source API Schema Models: reference/api-schema-models.md
       - swagger-extras (raw): reference/swagger-extras.md
       - Configuration: reference/configuration.md
       - CLI: reference/cli.md

@@ -4,18 +4,17 @@ Where to find each configuration field for the LoxiLB Inference Gateway. This pa
 it does not duplicate the field tables.
 
 !!! note "The full field reference lives elsewhere"
-    The complete, authoritative `serviceArguments` reference — every field, type, default, and
-    enum for a load-balancer rule — is the
+    The detailed `serviceArguments` reference for a load-balancer rule is the
     **[AI Gateway → Configuration Reference](../ai-gateway/configuration-reference.md)**.
     Start there for any load-balancer create (`POST /netlox/v1/config/loadbalancer`) body.
 
 ## How rules are configured
 
-There is no static config file for AI routing. Every rule is a JSON body posted to the
-load-balancer REST API on port **11111**:
+Manage routing rules through the load-balancer REST API on your protected
+management endpoint:
 
 ```
-POST http://<VIP>:11111/netlox/v1/config/loadbalancer
+POST https://gateway.example.com/netlox/v1/config/loadbalancer
 { "serviceArguments": { ... }, "endpoints": [ ... ] }
 ```
 
@@ -47,5 +46,5 @@ worked example.
 ## Related references
 
 - [API (swagger)](api.md) — the generated REST client surface.
-- [swagger-extras (raw)](swagger-extras.md) — all raw-middleware endpoint groups.
+- [swagger-extras (raw)](swagger-extras.md) — published companion endpoint contracts.
 - [System Requirements](system-requirements.md).

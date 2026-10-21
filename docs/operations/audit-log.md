@@ -1,6 +1,8 @@
 # Logging and Audit
 
-The Inference Gateway writes structured operational logs from the LoxiLB process and a separate action audit trail from the `loxilb-mcp` management surface. This page covers how to configure both, where the files land, and how they are rotated.
+The Gateway writes operational logs and a separate management audit trail.
+This page describes their configuration and status APIs at the selected source
+revision. Independently verify retained records and external delivery.
 
 !!! note "Audience"
     Infrastructure operators, DevOps engineers, and platform SREs who need durable logs for troubleshooting and an audit record of management actions.
@@ -72,7 +74,7 @@ tail -f /var/log/loxilb/loxilb.log
 
 ### Built-in rotation
 
-Rotation is handled inside the gateway — there is no need to configure an external `logrotate` unit. When a structured log file would exceed its size limit it is rotated in place: the current file is renamed with a UTC timestamp (`<base>-<timestamp>.log`), gzip-compressed, and old backups are pruned by count and age. The same rotation covers the `loxilb-mcp` audit trail described below.
+Rotation is handled inside the gateway — there is no need to configure an external `logrotate` unit. When a structured log file would exceed its size limit it is rotated in place: the current file is renamed with a UTC timestamp (`<base>-<timestamp>.log`), gzip-compressed, and old backups are pruned by count and age.
 
 The structured log files rotate with these production defaults:
 
@@ -98,42 +100,9 @@ Setting `--log-max-size=0` disables rotation and lets a file grow unbounded — 
 
 ---
 
-## loxilb-mcp audit trail
-
-The [`loxilb-mcp`](../reference/cli.md) management surface keeps its own audit log: every tool call an agent or operator makes against the gateway is recorded, separately from LoxiLB's operational logs. Use it to answer "who changed what, and when".
-
-The audit log is an append-only JSON-lines file named `audit.jsonl`. It is written to the audit directory, resolved in this order:
-
-1. the `--audit-dir` flag, if set;
-2. the `audit_dir` field in the `loxilb-mcp` config file;
-3. otherwise `~/.loxilb-mcp/` (created with `0700` permissions).
-
-Each line is one event. Recorded event kinds include tool calls, authentication rejections, request-origin rejections, rate-limit hits, and autopilot executions. A typical record carries the timestamp, event kind, client and target names, the tool and its arguments, the outcome (`ok`), any error, latency, and the remote address:
-
-```json
-{"ts":"2026-07-27T09:14:02.481Z","kind":"tool_call","client":"operator","target":"gateway","tool":"lb_create","args":{"externalIP":"192.0.2.10"},"ok":true,"latency_ms":12,"remote":"192.0.2.20"}
-```
-
-Known top-level secret-shaped argument fields (tokens, passwords, API keys, and similar) are
-masked as `[REDACTED]` before the event is written. This is a best-effort safeguard, not a
-guarantee for arbitrary nested or unexpectedly named values. Treat every audit record as
-sensitive.
-
-!!! warning "Redaction is defense in depth"
-    Do not rely on automatic masking as the only control. Avoid putting
-    credentials or prompt content in tool arguments, names, and free-form
-    fields. Restrict audit-file and archive access, and review a sanitized
-    sample before exporting logs to another system.
-
-The audit log is rotated by the same built-in mechanism as the structured logs, with a longer forensic window: it rotates above **20 MB**, keeps **8** gzipped backups, and retains them for **90 days**.
-
-For the full `loxilb-mcp` command surface, transports, and role model, see the [CLI Reference](../reference/cli.md).
-
----
-
 ## Gateway management audit trail
 
-Separately from the `loxilb-mcp` trail, the Gateway process keeps a **management audit trail** of
+The Gateway process keeps a **management audit trail** of
 the changes made through its management API. The management API serves its **state and policy**,
 never its records: no record content is served over the API, and identifiers name segments and
 events, never their content.
@@ -150,41 +119,26 @@ events, never their content.
 | `PUT /audit/sinks/{name}` | Create or replace a secondary sink. The name `compliance` is reserved. |
 | `DELETE /audit/sinks/{name}` | Stop a secondary sink; its place in the trail and its export sequence are kept |
 
+Prepare the endpoint and protected credential file:
+
+--8<-- "snippets/common/control-api-header.md"
+
 ```bash
-curl -s http://192.0.2.254:11111/netlox/v1/audit/status | jq '{available, running, last_write, write_failures, orphaned_intents}'
+curl --fail-with-body --silent --show-error --header @control-plane.headers \
+  "$CONTROL_API/audit/status" | jq '{available, running, last_write, write_failures, orphaned_intents}'
 ```
 
-- **`available: false`** means the audit directory was unusable at start. Every audited management
-  call is refused, the remaining fields describe nothing, and the status read still answers so the
-  refused calls can be explained.
-- **The reads are not audited.** `GET /audit/status` and `GET /audit/policy` are designed to be
-  polled.
-- **The policy has a floor.** A value below the deployment profile's floor is refused for every
-  caller, the gateway administrator included, with `400` (not `403`: the caller was authorized and
-  the values were not acceptable). Lowering a retention target never deletes segments already on
-  disk: they keep the terms they were sealed under, and only what is sealed afterwards is subject
-  to the shorter one. The audit root directory, the mandatory-audit mode, and the instance
-  identity are startup-only and are not served or changeable here.
-- **`orphaned_intents`** counts management intents of the previous boot that had no result when
-  the writer started. Each one is a change whose outcome is unknown; `last_orphan_event_id` names
-  the most recent for the investigator to look up.
-- **The remote sink always verifies the receiver.** The receiver's certificate is verified against
-  the configured bundle (`ca_bundle_path`, required); there is no unverified mode. Certificate
-  material is named by path and never served. `submitted` is not a delivery count: the protocol
-  carries no acknowledgement.
-- **Secondary sinks follow the trail beside the compliance sink.** A secondary sink may select
-  records by stream (`mgmt`, `data`, `audit_system`), by service and by outcome (`ok`, `failed`),
-  and may keep one data record in `data_sample`; a field that is set narrows the selection, and a
-  field judges only the records that carry what it looks at. A secondary sink numbers what it sends,
-  and that export sequence travels beside each record under the configured private enterprise
-  number, so a configuration without `enterprise_number` is refused. The receiver's certificate is
-  always verified. Replacing or deleting a sink keeps its place in the trail and its export
-  sequence: a sink configured again under the same name continues both, and no export sequence
-  number is used twice. `GET /audit/status` lists every sink's progress in `sinks`, the compliance
-  sink first. Every change to a sink is audited like any other management mutation.
-- **Metrics.** The trail exports `loxilb_audit_*` families (writer liveness, records written and
-  dropped by stream, write and sync failures, retention pruning); see the generated
-  [Metrics reference](../reference/metrics.md).
+Check writer availability/running state, write and drop counters, active
+segment, retained bytes, and orphaned intent fields. Investigate missing
+records, persistence failures, and unknown mutation outcomes independently.
+Retain exact image identity with the observations.
+
+Remote sink submission is not a delivery receipt. Verify receiver certificate
+trust and independently locate a synthetic test record at the receiver before
+using that path for operations. Review each sink's selection and progress;
+status alone does not prove complete, unique, or durable external delivery.
+See the [metric reference](../reference/metrics.md) for the frozen
+`loxilb_audit_*` family contracts.
 
 Gateway audit trail files live in their own directory (default `/var/log/loxilb/audit/`), which
 the `loxilb*.log` filter of the [log API](log-api.md) never matches, so the log API cannot read
@@ -239,9 +193,12 @@ complete paging, archive, rotation, and cleanup procedure is in
 7. Store exported evidence under the organization's access and retention
    policy, then securely remove temporary copies.
 
-## What is not covered
+## Verification boundary
 
-This page documents the logging and audit capabilities that ship in the open-source Inference Gateway. Advanced structured audit-logging features — a runtime API for changing per-category log levels without a restart, compliance-oriented export formats, and long-term audit warehousing — are outside the scope of this gateway and are intentionally not documented here. Configure log severity through the `--loglevel` startup option, and ship the JSON files to your own aggregator for retention and search.
+API availability and local status are separate from retained records, receiver
+delivery, compliance acceptance, and recovery qualification. Validate the
+selected deployment's retention and failure/recovery behavior with independent
+evidence before relying on it.
 
 For the metrics side of observability, see
 [Grafana Dashboards and Observability](observability-metrics-grafana.md).
@@ -252,5 +209,3 @@ Recovery and high-risk diagnostics need additional evidence beyond logs:
   commit, rollback, and restore metrics;
 - [Application and L4 Tracing](tracing.md) — trace data handling and OTLP
   verification;
-- [DPU Offload Observability](dpu-offload.md) — sensitive and disruptive debug
-  boundaries.

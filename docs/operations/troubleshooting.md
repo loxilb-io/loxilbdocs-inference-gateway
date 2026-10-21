@@ -6,15 +6,9 @@ A symptom → likely cause → fix guide for the real failure modes of the LoxiL
 Gateway: AI routing that never engages, model 503s, silently-broken KV-cache routing,
 prefill/decode handoff stalls, streaming cut-offs, and metrics gaps.
 
-!!! warning "Most AI-routing misconfiguration fails *silently*"
-    The recurring failure theme on this gateway is not a loud error — it is **silent degradation
-    to round-robin** (or silent metric loss). A block-size mismatch, a non-portable hash algorithm,
-    an engine-side `PYTHONHASHSEED` mismatch, the wrong ZMQ port, or a missing tokenizer directory will not raise
-    an exception; the request is simply served by the fallback tier and your carefully-tuned
-    KV-cache routing never fires. **Never trust that a feature engaged just because requests
-    succeed — always run the "verify it fired" step.** Each section below includes one.
-
----
+Successful requests do not establish that the intended routing feature was
+used. Compare resolved configuration, readiness, traffic results, and relevant
+metric deltas for the same service and test window.
 
 ## Symptom index
 
@@ -38,7 +32,6 @@ prefill/decode handoff stalls, streaming cut-offs, and metrics gaps.
 | Relay cache or backpressure grows | [Relay cache pressure](#relay-cache-pressure) |
 | Snapshot restore is rejected or rolls back | [Backup and restore failures](#backup-and-restore-failures) |
 | Tracing is enabled but no spans arrive | [Trace export failures](#trace-export-failures) |
-| DPU state is empty or offload falls back | [DPU observability and fallback](#dpu-observability-and-fallback) |
 | Problems after promotion or rolling upgrade | [HA and upgrade symptoms](#ha-and-upgrade-symptoms) |
 
 The examples below use documentation-only address ranges. Replace them for
@@ -115,31 +108,12 @@ See [Model Load Balancing](../ai-gateway/model-load-balancing.md) for the full m
 
 ## KV-cache routing silently not firing
 
-**This is the #1 issue.** KV-cache (Tier 1.5) routing is an **all-or-nothing** contract: the
-gateway hashes token blocks the same way the serving engine does, matches them against a
-per-endpoint inventory ingested over ZMQ, and routes to the endpoint already holding the prefix.
-If **any one** leg of that contract is broken, hash overlap drops to zero and the router **silently
-uses its topology-specific fallback** — mode 1 uses P/D minimum load and mode 3 uses the configured
-selector. Requests still succeed while latency quietly regresses. There is
-no error to grep for; you must assert engagement from metrics.
+Compare the selected engine's block size, tokenizer, hash/seed contract,
+event publisher, and Gateway profile binding. Use the
+[engine compatibility guide](../ai-gateway/engine-contracts.md);
+do not assume defaults are identical across engine versions.
 
-### The broken legs (all degrade silently)
 
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| vLLM KV-exact rule creation returns `412` | Gateway launch environment cannot admit vLLM KV-exact: `LLB_KV_NONE_HASH_SEED` is unset/empty or exceeds 23 bytes | Read `GET /status/capabilities`, require `kv_exact_vllm.ready=true`, then set a nonempty Gateway seed of at most 23 bytes that exactly matches vLLM `PYTHONHASHSEED`; restart through the approved deployment procedure before retrying |
-| `loxilb_pd_kv_tier15_hits_total` never advances after a cold request | **Block/page-size mismatch** — `kvBlockSize` ≠ engine block size. | Set `kvBlockSize` to the engine value: vLLM `--block-size 16` (CPU vLLM defaults to 128 — override to 16); SGLang `--page-size` (default is 1, model-dependent — read it from `GET /get_server_info`). |
-| Hits flat despite matching block size | **Non-portable hash algorithm** — vLLM's default `sha256` is pickle-based and not portable; loxilb hashes CBOR. | Launch vLLM with `--prefix-caching-hash-algo sha256_cbor` (or `xxhash_cbor`) and set `kvHashAlgo` to match. **For SGLang, OMIT `kvHashAlgo`** — the engine identity implies the algorithm; an explicit value scores 0. |
-| Hits flat, block sizes and algo correct | **Hash-seed parity broken** — `PYTHONHASHSEED` unset on the engine, or `LLB_KV_NONE_HASH_SEED` unset on loxilb. Both must pin the seed. | Set `PYTHONHASHSEED=0` in every applicable engine container **and** `LLB_KV_NONE_HASH_SEED=0` in the loxilb container. All three (block size, hash algo, seed) must agree or you measure the topology fallback instead of KV-exact. |
-| Per-endpoint block gauges stay zero; `kv_subscriber_connected` does not climb | **Wrong `kvZmqPort`** — it does not match the engine's ZMQ publisher port. | Align `kvZmqPort` to the engine's `--kv-events-config` endpoint port (default `5557`; SGLang alt `5561`). |
-| KV-exact MISS on the tokenize step | **Missing tokenizer directory** for the model. | Populate `/etc/loxilb/tokenizers/<model-id>` (replace `/` with `__` in the model id) and restart loxilb so it loads at startup. |
-| Strict rule exists but `enforcedState` is pending, degraded, faulted, or migration-required | The profile/engine binding is not fully acknowledged, attestation is incomplete/stale, or the rule is fenced | Query `kvexactstatus`; compare `modelProfileId`/generation, `apiMode`, `bindingDigest`, `reasonCodes`, `enforcement.enforced`, and `enforcement.goFenced`. Do not infer readiness from rule read-back or inventory. |
-
-!!! danger "`kvEngineType` is immutable after create"
-    `kvEngineType` (`vllm`, `sglang`, `trtllm`, or `llamacpp`) is fixed at rule creation — one
-    framework per VIP. To switch engines, delete and recreate the rule. Engine-specific validation
-    rejects incoherent shapes where possible; a mismatched event/hash contract can otherwise fall
-    through silently to the topology fallback.
 
 ### Verify profile binding, then verify engagement
 
@@ -149,26 +123,6 @@ contract. `READY_FUNCTIONAL_ONLY` is a distinct limited-trust state; unknown sta
 See [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md).
 
 After binding status is acceptable, verify that traffic engages the cache path:
-
-Do not trust KV-cache results until all four checks pass. Run against `GET /netlox/v1/metrics`:
-
-```bash
-M() { curl -s http://192.0.2.10:11111/netlox/v1/metrics; }
-
-# 1. Inventory ingested — must be > 0 (endpoint block inventory arrived over ZMQ)
-M | grep '^loxilb_pd_kv_blocks'
-
-# 2. THE key assertion — send ONE cold request, then confirm the hit counter ADVANCES.
-#    A flat delta = a broken parity leg. You are measuring the fallback selector: stop and fix.
-M | grep '^loxilb_pd_kv_tier15_hits_total'
-
-# 3. Subscribers connected — climbs by N after a rule with N endpoints
-M | grep '^loxilb_kv_subscriber_connected'
-
-# 4. Publisher-side, on EACH prefill host — at least one listener on the ZMQ port
-#    (missing = the engine's --kv-events-config never took effect)
-ss -tln | grep :5557
-```
 
 Also useful: `GET /netlox/v1/config/ai/kv/inventory` shows the ingested per-endpoint block
 inventory. Informational miss reasons live in
@@ -181,34 +135,16 @@ For full setup and tuning, see [KV-Cache-Aware Routing](../concepts/kv-routing.m
 
 ## P/D handoff fails
 
-**Symptom:** prefill/decode disaggregation produces empty or timed-out responses. The decode
-engine reports `num_external_tokens == 0`, or the client sees `504 pd_prefill_timeout`.
+Compare the exact engine version, connector, endpoint roles, bootstrap and
+KV-event ports, advertised addresses, and per-service timeout with the
+qualified [P/D deployment](../use-cases/deploy-pd-disaggregation.md).
+Transport and restart requirements depend on the engine and connector; this
+page provides no universal block-count override or mesh-restart recipe.
 
-P/D handoff moves the KV cache from a prefill endpoint to a decode endpoint over the NIXL
-side-channel. It is sensitive to GPU block-count agreement and to mesh restart discipline.
-
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| Decode logs `num_external_tokens == 0`; garbage or empty output | **NIXL block-count mismatch** — producer and consumer disagree on GPU block counts, so no blocks transfer. | Pin the decode side with `--num-gpu-blocks-override <N>`, where `N` = the **minimum** `num_gpu_blocks` across the prefill set (or use `--no-enable-prefix-caching` on decode). Read the live value back from `vllm:cache_config_info{num_gpu_blocks}`. On heterogeneous fleets, pin every mesh member to the same override. |
-| Handoff never connects across hosts | **NIXL side-channel host is `0.0.0.0`** — the advertised address is unroutable. | Set `VLLM_NIXL_SIDE_CHANNEL_HOST` to a routable IP (not `0.0.0.0`) on every prefill and decode engine. |
-| Mesh partially healthy after a redeploy; some pairs stall | **A partial vLLM restart wedged the mesh** — restarting one member leaves stale NIXL state. | Redeploy the **whole** mesh in order: tear everything down → bring decode up (healthy) → bring prefills up (healthy) → re-verify. Never restart a single member in place. |
-| Client gets `504 pd_prefill_timeout` on long contexts | Prefill exceeded the timeout (default **30s**, tripped around ~32k-token contexts). | Raise the bound for the affected service with `pd_prefill_timeout_sec` on its rule (e.g. `180` for long-context workloads), or for every P/D service with `LLB_PD_PREFILL_TIMEOUT_SEC` on loxilb. |
-
-**Verify it fired** — confirm the block counts match before trusting handoff, and that the rule is
-in P/D mode:
-
-```bash
-# Every engine in the mesh should report the SAME num_gpu_blocks
-curl -s http://198.51.100.10:8100/metrics | grep 'vllm:cache_config_info'
-
-# Rule must carry pd_disagg_mode: true and endpoints with ep_role 1 (prefill) / 2 (decode)
-curl -s http://192.0.2.10:11111/netlox/v1/config/loadbalancer/all \
-  -H @control-plane.headers \
-  | jq '.lbAttr[].serviceArguments | select(.pd_disagg_mode==true) | {port, pd_disagg_mode, kvExactMode}'
-```
-
-See [Deploy P/D Disaggregation](../use-cases/deploy-pd-disaggregation.md) for the NIXL launch flags
-and full-mesh redeploy procedure.
+Retain the client result, Gateway request/P/D lifecycle metrics, and producer
+and consumer logs for the same request. A successful prefill response does not
+prove decode completion. For a timeout, measure prefill duration before
+changing a service limit; do not infer a token-count threshold from a default.
 
 ---
 
@@ -452,7 +388,7 @@ is per connection, so aggregate memory grows with concurrency. See
 | `GET /status/ready` returns typed HTTP `503` | Configuration recovery, dependency probing, or persistence state is not ready | Inspect `reasons` and the last restore/persist fields; do not treat this endpoint as GPU, inference, or full data-plane proof |
 | Maintenance reports `refusing_new_inference: false` | No data path is attached to the management plane, so nothing refuses inference | Drain traffic with the service/load-balancer procedure before disruptive work; maintenance timeout is informational |
 | Inference still succeeds during maintenance although `refusing_new_inference: true` | The service is not an AI-gateway service, or its `fc_mode` is `observe` or `off`: only enforcing pools refuse | Read `fc_effective.mode`; drain such a service with the load-balancer procedure and prove it with a backend receipt count |
-| Appliance lifecycle exits `6` | The command is unavailable in this CLI build, the fixed backend is absent/incompatible, or Product enablement is missing | Compare CLI/Gateway/Product versions and installed backend marker; do not infer support from current-main source |
+| Appliance lifecycle exits `6` | The command is unavailable in this CLI build, the fixed backend is absent/incompatible, or Product enablement is missing | Compare CLI/Gateway/Product versions and installed backend marker; do not infer support from selected-source source |
 
 Never retry a failed commit without a fresh dry-run and root-cause review. See
 [Persistence, Backup, and Restore](backup-restore.md),
@@ -468,24 +404,8 @@ Never retry a failed commit without a fresh dry-run and root-cause review. See
 | Trace status endpoint exists but enable fails | Image lacks the required trace build profile | Verify the immutable image and build variant |
 | `enabled: true`, `otlp_connected: false` | No successful export yet, wrong endpoint/protocol, TLS trust, or collector auth failure | Generate a safe test trace and check DNS, route, TLS, collector credentials, and collector logs |
 | HTTP tracing is enabled but no spans arrive | Export/collector path failed | Check `otlp_connected` and an independent collector/backend receipt |
-| L4 dropped events or ring utilization rise | Sampling/export rate exceeds ring or collector capacity | Lower L4 sampling and fix the collector bottleneck |
 
 
-
----
-
-## DPU observability and fallback
-
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| DPU API is disabled/empty and DOCA metrics are absent | Standard non-DPU image or no plugin attached | Verify the immutable build, hardware profile, SDK/driver/firmware match, and plugin registration |
-| Filtered debug query returns `503` | DPU manager is not initialized | Use aggregate state first; do not assume hardware offload is active |
-| Offload failures rise or circuit opens | Hardware programming/capacity error triggered fallback | Correlate per-pipe errors with representative traffic and verify eBPF fallback behavior |
-| Hardware counters stay zero | No matching traffic, unsupported counter path, or collection failure | Check active flows, collector errors, and real traffic before attributing zero to success |
-
-Do not use `POST /config/dpu/debug` recovery actions during normal traffic; they
-can unregister a plugin or force the circuit breaker. See
-[DPU Offload Observability](dpu-offload.md).
 
 ---
 
@@ -495,12 +415,10 @@ can unregister a plugin or force the circuit breaker. See
 |---|---|---|
 | Existing streams disconnect on promotion | Active connections are node-local | Ensure clients reconnect with bounded retries |
 | Temporary bandwidth burst after promotion | Policer/shaper bucket restarted locally | Verify configuration parity and observe the fresh bucket |
-| Unexpected quota `429` during mixed-version upgrade | Incompatible token-quota wire semantics | Disable quotas, isolate incompatible peers, and follow the safe upgrade sequence |
 | Quota under-enforcement after restart | Peer state did not warm the new node | Inspect cold-open metric and peer logs; limit traffic until resolved |
 | Rule or policy missing after promotion | Configuration parity gap | Compare read-back and restore from the approved configuration source |
 | xSync overflow/drop counter increases | Peer is slow/unreachable or bounded queues are saturated | Stop promotion, verify TCP `22222`/`22223` reachability from allowed peers, and compare state before serving |
 | Peer port is reachable from an untrusted network | Firewall/VPN policy is too broad | Block the exposure immediately; current xSync has no built-in peer authentication or encryption |
-| Promoted node lacks recent sockproxy sessions | Missed events were not reconciled | Do not assume the implemented paged pull ran automatically; drain/rebuild state through the approved recovery procedure |
 
 Do not treat single-node validation or green CI as failover proof. See
 [HA and Upgrade Limitations](ha-limitations.md).
@@ -510,7 +428,7 @@ Do not treat single-node validation or green CI as failover proof. See
 ## Related pages
 
 - [KV-Cache-Aware Routing](../concepts/kv-routing.md) — setup, the parity triad, and the full "prove it fired" recipe
-- [Deploy P/D Disaggregation](../use-cases/deploy-pd-disaggregation.md) — NIXL launch flags, block-count override, full-mesh redeploy
+- [Deploy P/D Disaggregation](../use-cases/deploy-pd-disaggregation.md) — engine-specific setup and handoff verification
 - [Model Load Balancing](../ai-gateway/model-load-balancing.md) — the `X-Model` → `model` → wildcard hierarchy
 - [SSE & Quota Management](../ai-gateway/sse-quota-management.md) — streaming lifecycle and caps
 - [API Key Management](../ai-gateway/api-key-management.md) — key lifecycle and active enforcement
@@ -521,7 +439,6 @@ Do not treat single-node validation or green CI as failover proof. See
 - [Readiness, Capabilities, Diagnostics, and Maintenance](readiness-diagnostics-maintenance.md) — interpret typed recovery state, optional-capability preflight, and configuration-write gating
 - [Appliance CLI](appliance-cli.md) — distinguish Gateway recovery from whole-appliance lifecycle operations
 - [Application and L4 Tracing](tracing.md) — OTLP and sampling diagnostics
-- [DPU Offload Observability](dpu-offload.md) — optional hardware diagnostics
 - [HA and Upgrade Limitations](ha-limitations.md) — promotion and rolling-upgrade boundaries
 - [Monitoring & Metrics](monitoring.md) — enabling export and the metric catalog
 - [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md) — strict binding and typed status diagnosis

@@ -302,7 +302,7 @@ def render(contract: dict[str, Any]) -> str:
 
     counts = Counter(MODEL_NOTES[name][0] for name in added)
     lines = [
-        "# Current-main API schema models",
+        "# Selected-source API schema models",
         "",
         "This page classifies every Swagger definition added since the public API",
         "documentation baseline. It is generated from the union of `api/swagger.yml`",
@@ -310,7 +310,7 @@ def render(contract: dict[str, Any]) -> str:
         "until its public relevance is reviewed here.",
         "",
         f"- Public schema baseline: `{relevance['baseline_commit']}`",
-        f"- Reviewed Gateway `main`: `{source['commit']}`",
+        f"- Reviewed Gateway source: `{source['commit']}`",
         f"- Added definitions: **{len(added)}**",
         "- Removed definitions: **{}**".format(
             sum(len(delta.get("removed_definitions", [])) for delta in deltas)

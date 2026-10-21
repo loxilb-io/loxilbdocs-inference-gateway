@@ -38,3 +38,29 @@ class PublicationScope(unittest.TestCase):
                 for command in extract_shell_commands(block.text,'loxicmd'):
                     for flag in ('--protocol','--apiserver','--port','--cacert'):
                         self.assertIn(flag,command,f'{name}:{block.line}')
+
+    def test_withdrawn_dpu_operations_are_not_published(self):
+        self.assertFalse((ROOT/'docs/operations/dpu-offload.md').exists())
+        for directory in ('management', 'operations', 'reference'):
+            for path in (ROOT/'docs'/directory).glob('*.md'):
+                with self.subTest(path=path.name):
+                    self.assertIsNone(re.search(r'DPU Offload|dpu-offload|/config/dpu/|doca_pipe_', path.read_text(), re.I))
+        self.assertNotIn('dpu-offload.md', (ROOT/'mkdocs.yml').read_text())
+
+    def test_management_installation_keeps_separate_service_identity(self):
+        text = (ROOT/'docs/management/management-plane.md').read_text()
+        for required in ('deploy/compose/README.md', 'docker-compose.prod.yml',
+                         'config --quiet', 'OAM_GATEWAY_AUTH_MODE=service-token',
+                         'OAM_GATEWAY_SERVICE_TOKEN_FILE', 'OAM_INSTANCE_TLS_INSECURE=false',
+                         '## Mode 1', '## Mode 2', '## Mode 3',
+                         'docker-compose.dev.yml up --build',
+                         'scripts/init-converged.sh', 'docker-compose.database.yml',
+                         'docker-compose.dataplane.yml'):
+            self.assertIn(required, text)
+        for path in (ROOT/'docs/management').glob('*.md'):
+            self.assertIsNone(re.search(r'forwards? the (?:caller.s|request.s) [`]?Authorization', path.read_text(), re.I))
+
+    def test_cli_reference_does_not_publish_unqualified_mcp_tools(self):
+        text = (ROOT/'docs/reference/cli.md').read_text()
+        for withdrawn in ('ai_apikey_create', 'diagnose_', 'confirm-token', 'MCP (available today)'):
+            self.assertNotIn(withdrawn, text)

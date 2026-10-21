@@ -16,7 +16,7 @@ database, or external identity and quota stores.
 | `loxicmd get snapshot`, `create restore`, `create persist` | Present in CLI `v0.9.8.9-rc.2` | Present |
 | `ready`, `diagnostics`, `maintenance` Gateway APIs | Not present in Gateway `v0.9.8.9-rc.1` | Implemented on Gateway main |
 
-The examples below target the current-main Gateway contract and the CLI
+The examples below target the selected-source Gateway contract and the CLI
 `v0.9.8.9-rc.2` command surface. A green CLI command test does not make a
 Gateway main-only API part of `v0.9.8.9-rc.1`. Pin a compatible Gateway build
 and inspect `/version` before using the procedure.
@@ -24,7 +24,7 @@ and inspect `/version` before using the procedure.
 ## What a snapshot covers
 
 Current schema `1.12` records `included_domains`, `excluded_domains`, a checksum,
-and recovery-dependency identities. Full current-main captures can include
+and recovery-dependency identities. Full selected-source captures can include
 endpoint, JWT profile, half-close policy, network identity, load-balancer,
 KV-exact binding, L7 policy, firewall, policy, mirror, session, session-ULCL,
 IP filter, security-rate, BFD, BGP and BGP policy assignments, IPsec, CORS,
