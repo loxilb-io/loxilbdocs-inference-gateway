@@ -1,0 +1,4 @@
+profileId: gemma4-e2b-it-v1
+engineVersion: 0.5.19
+imageDigest: sha256:37bbbd3444732a464bbc68dee4fb0164e0ce9e18e2f027f3fc967f1152d3c262
+modelRevision: 3e22461f65e89153144f8adb70e3b8c2cc9845a7

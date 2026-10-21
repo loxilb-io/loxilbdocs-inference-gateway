@@ -70,9 +70,9 @@
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
         ],
-        "scenario_object_id": "553cfadb3630c87d286714728f6dd8fd7d86db38",
+        "scenario_object_id": "281b9f40dc0c1c8218f07302ef86e53175b51f76",
         "scenario_path": "cicd/vllm-pd-disagg",
-        "validation_object_id": "ea02f52d86b7cdd935f3ece34c00fe31d8994219",
+        "validation_object_id": "9570628c27a79b16275fae6607e443597724ed3a",
         "validation_path": "cicd/vllm-pd-disagg/validation.sh",
         "workflow_membership": "wired",
         "workflow_object_id": "2dd932f6eac7ca465ca7ba6eea4523a8c27ca909",
@@ -3804,15 +3804,15 @@
       }
     },
     "label_source": {
-      "sha256": "dd66059b224110fa7ba0344011f31cf90f423b687a5fe7637780af46ac72b1a1",
+      "sha256": "adb72630a32b9c2d94856ad58c92f665bfb965a482983506d4b6d85e0c2ee8b7",
       "source_path": "api/prometheus/ai_metrics.go"
     },
     "provenance": {
-      "generated_at": "2026-10-20T12:30:29+00:00",
-      "source_revision": "0d05de6ce01e6e246713cc00b87ac72409191e3e"
+      "generated_at": "2026-10-21T02:25:08+00:00",
+      "source_revision": "ecfc3c12376bad712c61f6781fe13a9e5fc3fd9e"
     },
     "schema_version": 1,
-    "sha256": "3ef9eb36e9f03f9b208f331b5d3ce2e827dcd951a88bd8705919c6e2b5c5ade6",
+    "sha256": "fece2dc500f072e69d25217f373d382347cc0196f91d6f58bbfd81658c32a78b",
     "source_path": "deploy/monitoring/manifest/metric-manifest.json"
   },
   "release_snapshot": {
@@ -3926,8 +3926,8 @@
     ]
   },
   "source": {
-    "commit": "9640fb6b682b429c7e70e7515f6f57c6d7f35b66",
-    "ebpf_submodule_commit": "9373e6d62861e6264cafa2704ebfeb17c5d2fd2a",
+    "commit": "23e57a226a4803ed91699904453cc1bf147fbefa",
+    "ebpf_submodule_commit": "6b5014f49bf0df6b72f8b0423acf9a81c22e60fb",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
     "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",

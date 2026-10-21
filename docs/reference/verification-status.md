@@ -7,12 +7,12 @@ scenario checked into the repository—or referenced by a workflow—is not by
 itself evidence that its latest run passed.
 
 The frozen source for this page is Gateway commit
-`9640fb6b682b429c7e70e7515f6f57c6d7f35b66`. Git object IDs for every listed
+`23e57a226a4803ed91699904453cc1bf147fbefa`. Git object IDs for every listed
 scenario, validation script, and workflow are retained in the docs contract
 fixture and checked for drift.
 
 The Gateway commit pins eBPF submodule commit
-`9373e6d62861e6264cafa2704ebfeb17c5d2fd2a`. The comparison release
+`6b5014f49bf0df6b72f8b0423acf9a81c22e60fb`. The comparison release
 `v0.9.8.9-rc.1` pins
 `5536a2117ad2ad1128900a0d808ad7dec2eee2b5`. This records the source delta; it
 does not qualify either eBPF revision on a kernel or installed host.
@@ -38,11 +38,11 @@ model evaluations retain their original source and artifact identities.
 
 | Claim area | Public source | Workflow membership | Exact frozen assertions | Claim boundary |
 | --- | --- | --- | --- | --- |
-| JWT policy and token accounting | [`cicd/ai-jwtauth`](https://github.com/loxilb-io/loxilb-inference-gateway/tree/9640fb6b682b429c7e70e7515f6f57c6d7f35b66/cicd/ai-jwtauth) | `wired`: `ai-gateway-sanity.yml` invokes the scenario | `G2`, `M4`, `U1`, `U2`, `UH1`, `UH2`, `UE`, `UE3` | Policy-store behavior and token-accounting assertions only; this set does not directly runtime-assert every JWT/JWKS metric |
-| QoS HA and quota-scope metrics | [`cicd/ai-qos-ha-sync`](https://github.com/loxilb-io/loxilb-inference-gateway/tree/9640fb6b682b429c7e70e7515f6f57c6d7f35b66/cicd/ai-qos-ha-sync) | `not wired` to a frozen GitHub workflow | `SYNC-1`, `SYNC-2`, `QOS-METRIC-1`, `QOS-METRIC-2`, `QOS-HA-013`, `QOS-HA-014` | Scenario source exists; no current public workflow-run or two-node qualification claim |
-| P/D and worker scrape metrics | [`cicd/vllm-pd-disagg`](https://github.com/loxilb-io/loxilb-inference-gateway/tree/9640fb6b682b429c7e70e7515f6f57c6d7f35b66/cicd/vllm-pd-disagg) | `wired`: `ai-gateway-sanity.yml` invokes the scenario | `TH1`, `TH2`, `TH3`, `TH4`, `TH5a`, `TM1b`, `TM2d`, `TN1`, `TN2b`, `TN3b`, `TN4b`, `TN5a`, `TN6b` | Source membership only; a current run and real GPU backend are separate evidence |
-| Sockmap observability | [`cicd/sockmap-fullproxy`](https://github.com/loxilb-io/loxilb-inference-gateway/tree/9640fb6b682b429c7e70e7515f6f57c6d7f35b66/cicd/sockmap-fullproxy) | `not wired` to a frozen GitHub workflow | `O-1`, `O-2`, `O-3`, `O-5`, `O-6` | Uses status/counter/reset observations; the manifest has no dedicated sockmap Prometheus family |
-| Monitoring stack | [`cicd/monitoring`](https://github.com/loxilb-io/loxilb-inference-gateway/tree/9640fb6b682b429c7e70e7515f6f57c6d7f35b66/cicd/monitoring) | `wired`: `monitoring-e2e.yml` and `monitoring-drill.yml` reference the scenario | Scenario-level validation; no stable public case IDs | Workflow membership is not a current run result |
+| JWT policy and token accounting | [`cicd/ai-jwtauth`](https://github.com/loxilb-io/loxilb-inference-gateway/tree/23e57a226a4803ed91699904453cc1bf147fbefa/cicd/ai-jwtauth) | `wired`: `ai-gateway-sanity.yml` invokes the scenario | `G2`, `M4`, `U1`, `U2`, `UH1`, `UH2`, `UE`, `UE3` | Policy-store behavior and token-accounting assertions only; this set does not directly runtime-assert every JWT/JWKS metric |
+| QoS HA and quota-scope metrics | [`cicd/ai-qos-ha-sync`](https://github.com/loxilb-io/loxilb-inference-gateway/tree/23e57a226a4803ed91699904453cc1bf147fbefa/cicd/ai-qos-ha-sync) | `not wired` to a frozen GitHub workflow | `SYNC-1`, `SYNC-2`, `QOS-METRIC-1`, `QOS-METRIC-2`, `QOS-HA-013`, `QOS-HA-014` | Scenario source exists; no current public workflow-run or two-node qualification claim |
+| P/D and worker scrape metrics | [`cicd/vllm-pd-disagg`](https://github.com/loxilb-io/loxilb-inference-gateway/tree/23e57a226a4803ed91699904453cc1bf147fbefa/cicd/vllm-pd-disagg) | `wired`: `ai-gateway-sanity.yml` invokes the scenario | `TH1`, `TH2`, `TH3`, `TH4`, `TH5a`, `TM1b`, `TM2d`, `TN1`, `TN2b`, `TN3b`, `TN4b`, `TN5a`, `TN6b` | Source membership only; a current run and real GPU backend are separate evidence |
+| Sockmap observability | [`cicd/sockmap-fullproxy`](https://github.com/loxilb-io/loxilb-inference-gateway/tree/23e57a226a4803ed91699904453cc1bf147fbefa/cicd/sockmap-fullproxy) | `not wired` to a frozen GitHub workflow | `O-1`, `O-2`, `O-3`, `O-5`, `O-6` | Uses status/counter/reset observations; the manifest has no dedicated sockmap Prometheus family |
+| Monitoring stack | [`cicd/monitoring`](https://github.com/loxilb-io/loxilb-inference-gateway/tree/23e57a226a4803ed91699904453cc1bf147fbefa/cicd/monitoring) | `wired`: `monitoring-e2e.yml` and `monitoring-drill.yml` reference the scenario | Scenario-level validation; no stable public case IDs | Workflow membership is not a current run result |
 
 ## Metric evidence classes
 

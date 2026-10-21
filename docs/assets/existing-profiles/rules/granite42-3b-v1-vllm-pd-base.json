@@ -1,0 +1,43 @@
+{
+  "serviceArguments": {
+    "externalIP": "192.0.2.10",
+    "host": "192.0.2.10",
+    "port": 28300,
+    "protocol": "tcp",
+    "sel": 0,
+    "mode": 4,
+    "sse_mode": true,
+    "model_name": "ibm-granite/granite-4.2-3b",
+    "pd_disagg_mode": true,
+    "monitor": true,
+    "probetype": "tcp",
+    "probeport": 18301,
+    "probeTimeout": 2,
+    "probeRetries": 1,
+    "kvExactMode": 0,
+    "kvEngineType": "vllm"
+  },
+  "endpoints": [
+    {
+      "endpointIP": "192.0.2.21",
+      "targetPort": 18301,
+      "weight": 1,
+      "ep_role": 1,
+      "nixl_port": 5600
+    },
+    {
+      "endpointIP": "192.0.2.22",
+      "targetPort": 18301,
+      "weight": 1,
+      "ep_role": 1,
+      "nixl_port": 5600
+    },
+    {
+      "endpointIP": "192.0.2.23",
+      "targetPort": 18301,
+      "weight": 1,
+      "ep_role": 2,
+      "nixl_port": 5600
+    }
+  ]
+}

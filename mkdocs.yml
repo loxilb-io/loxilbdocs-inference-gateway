@@ -150,6 +150,10 @@ nav:
               - SGLang P/D Runbook: ai-gateway/sglang-pd-disaggregation.md
               - TensorRT-LLM P/D Integration: ai-gateway/tensorrt-llm-integration.md
       - Model & Engine Reference:
+          - Existing Profiles — Results & Settings: use-cases/model-engine-standard/existing-profiles.md
+          - Existing Profiles — Launch & Verify: use-cases/model-engine-standard/existing-profiles-launch.md
+          - Existing Profiles — Native P/D: use-cases/model-engine-standard/existing-profiles-pd.md
+          - Existing Profiles — Measured Tuning: use-cases/model-engine-standard/existing-profiles-tuning.md
           - Model Matrix & Notes: use-cases/model-engine-standard/models.md
           - Profile Catalog & Discovery: use-cases/model-engine-standard/profiles.md
           - Profile Binding & Readiness: ai-gateway/model-profiles-kv-readiness.md
