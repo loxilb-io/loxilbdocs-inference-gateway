@@ -6,7 +6,7 @@
 - The rule readback passed.
 - The backend is healthy, returns `backend-llama`, and appends each received
   `X-Docs-Nonce` value to a line-oriented log available to the operator.
-- Prepare the [receipt backend](quickstart.md#prepare-the-receipt-backend)
+- Complete the "Prepare the receipt backend" section above
   first. Set `BACKEND_RECEIPT_LOG` to a readable backend-owned log or its
   read-only SSH copy. It must not be produced from Gateway or client output.
 

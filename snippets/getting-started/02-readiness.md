@@ -2,7 +2,7 @@
 
 ### Prerequisites
 
-- The development Gateway and CLI pair in [Verification Status](../reference/verification-status.md).
+- The development Gateway and CLI pair listed on the Verification Status page.
 - A management token in `CONTROL_PLANE_TOKEN` and a trusted TLS endpoint.
 - A copy of the endpoint's trusted CA at `./gateway-ca.crt`. Use a fresh lab
   working directory; the credential files below belong only to this run.
