@@ -1,0 +1,5690 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation for the LoxiLB Inference Gateway — an inference-aware L4/L7 load balancer for vLLM, SGLang, TensorRT-LLM, and llama.cpp serving fleets, with engine-aware routing, traffic governance, and secure operations guidance.">
+      
+      
+      
+        <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/existing-profiles/">
+      
+      
+        <link rel="prev" href="../../../ai-gateway/tensorrt-llm-integration/">
+      
+      
+        <link rel="next" href="../existing-profiles-launch/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Existing Profiles — Results & Settings - LoxiLB Inference Gateway</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../../stylesheets/analytics.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#existing-profiles-integration-results-and-operating-settings" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="LoxiLB Inference Gateway" class="md-header__button md-logo" aria-label="LoxiLB Inference Gateway" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LoxiLB Inference Gateway
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Existing Profiles — Results & Settings
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/loxilb-io/loxilb-inference-gateway" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    loxilb-io/loxilb-inference-gateway
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="LoxiLB Inference Gateway" class="md-nav__button md-logo" aria-label="LoxiLB Inference Gateway" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    LoxiLB Inference Gateway
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/loxilb-io/loxilb-inference-gateway" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    loxilb-io/loxilb-inference-gateway
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickstart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/prepare-supported-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a Supported Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concepts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../concepts/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../concepts/running-modes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running Modes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../concepts/lb-algorithms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LB Algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../concepts/ai-routing-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Routing Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../concepts/engine-capability-matrix/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Capability Matrix
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Gateway
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    AI Gateway
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/model-load-balancing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Load Balancing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/llm-routing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM Routing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/ai-traffic-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Traffic Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/admission-flow-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admission Flow Control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/sse-quota-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SSE & Quota
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/api-key-management/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Key Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/mcp-gateway/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP Gateway
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/configuration-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Traffic Governance Use-Cases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Traffic Governance Use-Cases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admission-flow-control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admission, Flow Control & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admission-flow-control/setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare the Lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admission-flow-control/downloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Download Lab Inputs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admission-flow-control/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common API & Rollback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admission-flow-control/identity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JWT & Model Permissions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admission-flow-control/tls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TLS & mTLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admission-flow-control/quotas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RPS, TPM & Reservations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admission-flow-control/defaults/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Defaults & VIP Budgets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admission-flow-control/outages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Policy Faults & Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admission-flow-control/capacity/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capacity, SSE & Drain
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admission-flow-control/tls-failures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TLS Errors & Resource Return
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../admission-flow-control/cleanup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cleanup & Diagnosis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Edge Cloud Security Use-Cases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Edge Cloud Security Use-Cases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../edge-cloud-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab & Reading Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../edge-cloud-security/downloads/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Download Lab Inputs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../edge-cloud-security/setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare the Single-host Lab
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../edge-cloud-security/common/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common Evidence & Rollback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../edge-cloud-security/source-protection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    XDP Source Protection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../edge-cloud-security/network-boundary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TC & Shared VIP Boundary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../edge-cloud-security/connections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connections & Header Deadlines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../edge-cloud-security/request-protection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keys & Tenant Request Budgets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../edge-cloud-security/coexistence/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KV, H2, SSE & All-on
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../edge-cloud-security/recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Snapshot & Store Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../edge-cloud-security/cleanup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cleanup & Diagnosis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../edge-cloud-security/advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Qualification Limits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LLM Integration Use-Cases
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    LLM Integration Use-Cases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview & Reading Path
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concepts & Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Concepts & Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../concepts/inference-topologies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engines & Deployment Topologies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../concepts/kv-routing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RR, Content Affinity & KV-Exact
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../routing-hierarchy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Routing Hierarchy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P/D Concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_3" id="__nav_7_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hands-on Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hands-on Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_3_1" id="__nav_7_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Converged RR & KV-Exact
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_7_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Converged RR & KV-Exact
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../matrix-manual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../select/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Select Model & Prerequisites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prepare/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Prepare Models & Profiles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../launch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Launch Engine Workers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Configure Gateway Routing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verify/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Verify Requests & Routing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lifecycle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Switch, Clean Up & Roll Back
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_3_2" id="__nav_7_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P/D Deployment
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_7_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    P/D Deployment
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pd-deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choose a P/D Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../deploy-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vLLM P/D Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/sglang-pd-disaggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang P/D Runbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/tensorrt-llm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TensorRT-LLM P/D Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7_4" id="__nav_7_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model & Engine Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Model & Engine Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Existing Profiles — Results & Settings
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Existing Profiles — Results & Settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#choose-your-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose your path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#read-the-scope-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read the scope first
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#latest-terminated-model-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Latest terminated model outcomes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#converged-starting-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Converged starting settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recorded-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recorded hardware
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understand-context-and-output-budgets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understand context and output budgets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-specific-settings-failures-and-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model-specific settings, failures, and limitations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Model-specific settings, failures, and limitations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#olmo2-0425-1b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OLMo-2 1B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#r1-distill-qwen-15b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DeepSeek-R1 Distill Qwen 1.5B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gemma3-1b-it-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gemma 3 1B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gemma4-e2b-it-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gemma 4 E2B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#llama32-1b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Llama 3.2 1B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exaone4-12b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EXAONE 4.0 1.2B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phi4-mini-instruct-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phi-4 Mini
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#granite42-3b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Granite 4.2 3B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ministral3-3b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ministral 3 3B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ax31-light-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.X 3.1 Light
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qwen36-27b-fp8-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Qwen 3.6 27B FP8
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qwen38-27b-fp8-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Qwen 3.8 27B FP8
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gptoss-20b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPT-OSS 20B
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reproduction-package-and-verification-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reproduction package and verification boundaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../existing-profiles-launch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Existing Profiles — Launch & Verify
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../existing-profiles-pd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Existing Profiles — Native P/D
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../existing-profiles-tuning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Existing Profiles — Measured Tuning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model Matrix & Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../profiles/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Catalog & Discovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/model-profiles-kv-readiness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Profile Binding & Readiness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/engine-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engine Contracts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/vllm-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    vLLM Integration Details
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/llamacpp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    llama.cpp Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration-tuning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration & Arguments
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-gateway/kv-caching/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KV-Exact Fields & Load Safety
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_5" id="__nav_7_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations & Tuning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations & Tuning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/kv-routing-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KV Routing Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../failover-tuning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Failure Detection, Retry & Recovery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../performance-methodology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Performance Measurement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced-cache-integrations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Cache Integrations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_6" id="__nav_7_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Validation & Compatibility
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Validation & Compatibility
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional Test Results
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../validation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Known Limits & Evidence Scope
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qualification-todo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open Qualification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sglang-compatibility/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SGLang Wire Compatibility
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../catalog-installer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Catalog & Installer Compatibility
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Security
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../security/management-api-authentication/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management API Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../security/data-plane-jwt-auth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data-Plane Authentication and JWT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../security/ai-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Request Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../security/opa-l4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firewall Policy Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../security/mtls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frontend mTLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../security/backend-tls/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Backend TLS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management & UI
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Management & UI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../management/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../management/management-plane/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Management Plane (UI + OAM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../management/loxilb-ui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoxiLB UI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../management/loxilb-oam/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoxiLB OAM API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/ai-key-store/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Key Store
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/backup-restore/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Persistence, Backup & Restore
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/readiness-diagnostics-maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Readiness, Capabilities, Diagnostics & Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/appliance-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appliance CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/sockmap-acceleration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sockmap Acceleration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/tracing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application & L4 Tracing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/dpu-offload/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DPU Offload Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitoring & Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/observability-metrics-grafana/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Grafana Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/ai-qos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI Quotas & QoS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/log-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Log API Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/ha-limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    HA & Upgrade Limitations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../operations/audit-log/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging & Audit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/metrics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/verification-status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/example-inventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Verification Inventory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/example-quality-contract/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Example Quality Contract
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API (swagger)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/api-schema-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Current-main API Schema Models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/swagger-extras/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    swagger-extras (raw)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../reference/system-requirements/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../privacy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Privacy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Community
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Community
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../community/contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../community/roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../community/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#choose-your-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose your path
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#read-the-scope-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read the scope first
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#latest-terminated-model-outcomes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Latest terminated model outcomes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#converged-starting-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Converged starting settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recorded-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recorded hardware
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understand-context-and-output-budgets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understand context and output budgets
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-specific-settings-failures-and-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model-specific settings, failures, and limitations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Model-specific settings, failures, and limitations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#olmo2-0425-1b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OLMo-2 1B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#r1-distill-qwen-15b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DeepSeek-R1 Distill Qwen 1.5B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gemma3-1b-it-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gemma 3 1B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gemma4-e2b-it-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gemma 4 E2B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#llama32-1b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Llama 3.2 1B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exaone4-12b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EXAONE 4.0 1.2B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phi4-mini-instruct-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phi-4 Mini
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#granite42-3b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Granite 4.2 3B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ministral3-3b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ministral 3 3B
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ax31-light-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A.X 3.1 Light
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qwen36-27b-fp8-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Qwen 3.6 27B FP8
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qwen38-27b-fp8-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Qwen 3.8 27B FP8
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gptoss-20b-v1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPT-OSS 20B
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reproduction-package-and-verification-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reproduction package and verification boundaries
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="existing-profiles-integration-results-and-operating-settings">Existing profiles: integration results and operating settings<a class="headerlink" href="#existing-profiles-integration-results-and-operating-settings" title="Permanent link">&para;</a></h1>
+<!-- example-status-default: illustrative-only -->
+
+<p>This guide records the tested engine, routing, topology, hardware, and starting settings for thirteen source profile identities. The bounded campaign has ended for eleven models; Gemma 3 and Llama 3.2 remain deferred at the user's request. Failures and unexecuted scopes remain explicit. These settings are not global optimums for arbitrary service workloads.</p>
+<p><a href="../existing-profiles-launch/">Prepare, launch, and verify</a> · <a href="../existing-profiles-pd/">Native P/D</a> · <a href="../existing-profiles-tuning/">Tuning and raw-data verification</a></p>
+<h2 id="choose-your-path">Choose your path<a class="headerlink" href="#choose-your-path" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Find your model in <strong>Latest terminated model outcomes</strong>, then select an engine and a permitted mode in <strong>Converged starting settings</strong>. Start with RR; a working RR recipe does not imply Exact or P/D support.</li>
+<li>Follow <a href="../existing-profiles-launch/">Prepare, launch, and verify</a> from prerequisites through cleanup. It separates Gateway-host commands from worker commands and gives expected results.</li>
+<li>Only if your service needs separate Prefill/Decode workers, use the <a href="../existing-profiles-pd/">optional P/D procedure</a>. It has a different permitted-mode table and different settings.</li>
+<li>Use <a href="../existing-profiles-tuning/">Tuning and raw-data verification</a> to inspect the recorded comparisons or design a new workload-specific evaluation. It is not an automatic benchmark runner.</li>
+</ol>
+<p><strong>Terminology:</strong> converged means one native engine process performs both input processing and output generation. RR distributes requests round robin. KV Exact uses compatible cached input prefixes to select a worker. P/D separates input processing (Prefill) from output generation (Decode). A recipe is a bounded, tested starting configuration, not a model's universal maximum or a production support promise.</p>
+<h2 id="read-the-scope-first">Read the scope first<a class="headerlink" href="#read-the-scope-first" title="Permanent link">&para;</a></h2>
+<p>The pinned engine baselines are vLLM 0.31.0, SGLang 0.5.19, and TRT 1.3.0rc29. No new TRT inference ran: the pinned image was unavailable and safe installation/storage was not established. This is a resource blocker, not an unsupported-model verdict.</p>
+<p>Earlier Gemma 3/Llama 3.2 pinned-artifact requests returned HTTP401. The user subsequently reported an HF account rate-limit issue and deferred both models until explicit resumption. No further authentication, download, cache discovery, or inference retries were made. The user explanation is separate from the observed HTTP401; no HTTP429 observation or independent rate-limit root cause is claimed.</p>
+<p>Original source profiles and probes were retained in isolated engine-specific candidate registries. Historical catalog tuple states were not promoted. The reused Gateway binary is pinned by SHA256, but its corresponding source commit was not established. These results do not establish release support, deployment approval, or CI qualification.</p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PASS</td>
+<td>Qualified answers, receipts, applicable negatives, new-request recovery, deletion, and GPU return within the stated scope</td>
+</tr>
+<tr>
+<td>Partial 1P</td>
+<td>Qualified 1P1D transfer/engagement; no selection between Prefills</td>
+</tr>
+<tr>
+<td>Partial 1 worker</td>
+<td>Single-worker interoperability; no two-worker selection/distribution qualification</td>
+</tr>
+<tr>
+<td>Failed / unqualified</td>
+<td>A terminated attempt did not satisfy its gate; not a global model-support verdict</td>
+</tr>
+<tr>
+<td>Blocked / deferred</td>
+<td>Access/resources were absent, rule admission was rejected, or the user deferred testing; not PASS</td>
+</tr>
+</tbody>
+</table>
+<h2 id="latest-terminated-model-outcomes">Latest terminated model outcomes<a class="headerlink" href="#latest-terminated-model-outcomes" title="Permanent link">&para;</a></h2>
+<p>RR/Exact and P/D base/Exact are separate outcomes. Base P/D uses role/load-aware selection; it is not converged RR. Earlier successes and later failures are retained as separate attempts.</p>
+<table>
+<thead>
+<tr>
+<th>Model / Profile ID</th>
+<th>vLLM RR / Exact</th>
+<th>vLLM P/D base / Exact</th>
+<th>SG RR / Exact</th>
+<th>SG P/D base / Exact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#olmo2-0425-1b-v1">OLMo-2 1B</a><br><code>olmo2-0425-1b-v1</code></td>
+<td>PASS / PASS</td>
+<td>PASS / PASS</td>
+<td>PASS / PASS</td>
+<td>PASS / Partial 1P</td>
+</tr>
+<tr>
+<td><a href="#r1-distill-qwen-15b-v1">DeepSeek-R1 Distill Qwen 1.5B</a><br><code>r1-distill-qwen-15b-v1</code></td>
+<td>PASS / PASS</td>
+<td>PASS / PASS</td>
+<td>PASS / PASS</td>
+<td>PASS / Failed</td>
+</tr>
+<tr>
+<td><a href="#gemma3-1b-it-v1">Gemma 3 1B</a><br><code>gemma3-1b-it-v1</code></td>
+<td>User deferred / User deferred</td>
+<td>User deferred / User deferred</td>
+<td>User deferred / User deferred</td>
+<td>User deferred / User deferred</td>
+</tr>
+<tr>
+<td><a href="#gemma4-e2b-it-v1">Gemma 4 E2B</a><br><code>gemma4-e2b-it-v1</code></td>
+<td>PASS / PASS</td>
+<td>Failed / Failed</td>
+<td>PASS / PASS</td>
+<td>PASS / Partial 1P</td>
+</tr>
+<tr>
+<td><a href="#llama32-1b-v1">Llama 3.2 1B</a><br><code>llama32-1b-v1</code></td>
+<td>User deferred / User deferred</td>
+<td>User deferred / User deferred</td>
+<td>User deferred / User deferred</td>
+<td>User deferred / User deferred</td>
+</tr>
+<tr>
+<td><a href="#exaone4-12b-v1">EXAONE 4.0 1.2B</a><br><code>exaone4-12b-v1</code></td>
+<td>PASS / PASS</td>
+<td>PASS / PASS</td>
+<td>PASS / PASS</td>
+<td>PASS / Partial 1P</td>
+</tr>
+<tr>
+<td><a href="#phi4-mini-instruct-v1">Phi-4 Mini</a><br><code>phi4-mini-instruct-v1</code></td>
+<td>PASS / PASS</td>
+<td>PASS / PASS</td>
+<td>PASS / PASS</td>
+<td>PASS / Partial 1P</td>
+</tr>
+<tr>
+<td><a href="#granite42-3b-v1">Granite 4.2 3B</a><br><code>granite42-3b-v1</code></td>
+<td>PASS / PASS</td>
+<td>PASS / PASS</td>
+<td>PASS / PASS</td>
+<td>PASS / Partial 1P</td>
+</tr>
+<tr>
+<td><a href="#ministral3-3b-v1">Ministral 3 3B</a><br><code>ministral3-3b-v1</code></td>
+<td>PASS / Blocked</td>
+<td>Failed / Failed</td>
+<td>PASS / Blocked</td>
+<td>PASS / Failed</td>
+</tr>
+<tr>
+<td><a href="#ax31-light-v1">A.X 3.1 Light</a><br><code>ax31-light-v1</code></td>
+<td>PASS / PASS</td>
+<td>PASS / PASS</td>
+<td>PASS / PASS</td>
+<td>PASS / Partial 1P</td>
+</tr>
+<tr>
+<td><a href="#qwen36-27b-fp8-v1">Qwen 3.6 27B FP8</a><br><code>qwen36-27b-fp8-v1</code></td>
+<td>PASS / PASS</td>
+<td>Failed / Failed</td>
+<td>PASS / Failed</td>
+<td>Failed / Failed</td>
+</tr>
+<tr>
+<td><a href="#qwen38-27b-fp8-v1">Qwen 3.8 27B FP8</a><br><code>qwen38-27b-fp8-v1</code></td>
+<td>PASS / Failed</td>
+<td>Failed / Failed</td>
+<td>PASS / PASS</td>
+<td>PASS / Partial 1P</td>
+</tr>
+<tr>
+<td><a href="#gptoss-20b-v1">GPT-OSS 20B</a><br><code>gptoss-20b-v1</code></td>
+<td>PASS / Blocked</td>
+<td>Failed / Failed</td>
+<td>PASS / PASS</td>
+<td>PASS / Partial 1P</td>
+</tr>
+</tbody>
+</table>
+<p><a href="../../../assets/existing-profiles/runtime-matrix.json">All 156 model/engine/topology/routing surfaces</a> include actual case IDs, hardware, and independent-review boundaries. Do not combine partial successes into universal support.</p>
+<h2 id="converged-starting-settings">Converged starting settings<a class="headerlink" href="#converged-starting-settings" title="Permanent link">&para;</a></h2>
+<p>Values are <strong>memory fraction / engine sequence cap / request output-token budget</strong>, followed by the permitted routing modes. Each linked file identifies its independently reviewed case and literal arguments. Output budgets are not guaranteed sufficient for arbitrary prompts. Configured context is 4096 tokens; vLLM batched-token and SG chunked-prefill settings are also 4096. These are distinct engine controls, not interchangeable context limits. Dtype is auto, vLLM is eager, and SG CUDA graphs are disabled.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>vLLM</th>
+<th>SGLang</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OLMo-2 1B</td>
+<td><a href="../../../assets/existing-profiles/settings/olmo2-0425-1b-v1-vllm.env">0.85 / 4 / 512</a>; RR, EXACT</td>
+<td><a href="../../../assets/existing-profiles/settings/olmo2-0425-1b-v1-sglang.env">0.85 / 2 / 512</a>; RR, EXACT</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 Distill Qwen 1.5B</td>
+<td><a href="../../../assets/existing-profiles/settings/r1-distill-qwen-15b-v1-vllm.env">0.85 / 2 / 1024</a>; RR, EXACT</td>
+<td><a href="../../../assets/existing-profiles/settings/r1-distill-qwen-15b-v1-sglang.env">0.85 / 2 / 1024</a>; RR, EXACT</td>
+</tr>
+<tr>
+<td>Gemma 3 1B</td>
+<td>No verified recipe</td>
+<td>No verified recipe</td>
+</tr>
+<tr>
+<td>Gemma 4 E2B</td>
+<td><a href="../../../assets/existing-profiles/settings/gemma4-e2b-it-v1-vllm.env">0.85 / 4 / 512</a>; RR, EXACT</td>
+<td><a href="../../../assets/existing-profiles/settings/gemma4-e2b-it-v1-sglang.env">0.85 / 2 / 512</a>; RR, EXACT</td>
+</tr>
+<tr>
+<td>Llama 3.2 1B</td>
+<td>No verified recipe</td>
+<td>No verified recipe</td>
+</tr>
+<tr>
+<td>EXAONE 4.0 1.2B</td>
+<td><a href="../../../assets/existing-profiles/settings/exaone4-12b-v1-vllm.env">0.85 / 2 / 512</a>; RR, EXACT</td>
+<td><a href="../../../assets/existing-profiles/settings/exaone4-12b-v1-sglang.env">0.85 / 2 / 512</a>; RR, EXACT</td>
+</tr>
+<tr>
+<td>Phi-4 Mini</td>
+<td><a href="../../../assets/existing-profiles/settings/phi4-mini-instruct-v1-vllm.env">0.55 / 2 / 512</a>; RR, EXACT</td>
+<td><a href="../../../assets/existing-profiles/settings/phi4-mini-instruct-v1-sglang.env">0.85 / 2 / 512</a>; RR, EXACT</td>
+</tr>
+<tr>
+<td>Granite 4.2 3B</td>
+<td><a href="../../../assets/existing-profiles/settings/granite42-3b-v1-vllm.env">0.55 / 2 / 512</a>; RR, EXACT</td>
+<td><a href="../../../assets/existing-profiles/settings/granite42-3b-v1-sglang.env">0.85 / 2 / 1024</a>; RR, EXACT</td>
+</tr>
+<tr>
+<td>Ministral 3 3B</td>
+<td><a href="../../../assets/existing-profiles/settings/ministral3-3b-v1-vllm.env">0.85 / 2 / 512</a>; RR</td>
+<td><a href="../../../assets/existing-profiles/settings/ministral3-3b-v1-sglang.env">0.85 / 2 / 512</a>; RR</td>
+</tr>
+<tr>
+<td>A.X 3.1 Light</td>
+<td><a href="../../../assets/existing-profiles/settings/ax31-light-v1-vllm.env">0.85 / 4 / 512</a>; RR, EXACT</td>
+<td><a href="../../../assets/existing-profiles/settings/ax31-light-v1-sglang.env">0.85 / 2 / 512</a>; RR, EXACT</td>
+</tr>
+<tr>
+<td>Qwen 3.6 27B FP8</td>
+<td><a href="../../../assets/existing-profiles/settings/qwen36-27b-fp8-v1-vllm.env">0.85 / 2 / 1536</a>; RR, EXACT</td>
+<td><a href="../../../assets/existing-profiles/settings/qwen36-27b-fp8-v1-sglang.env">0.85 / 2 / 1536</a>; RR</td>
+</tr>
+<tr>
+<td>Qwen 3.8 27B FP8</td>
+<td><a href="../../../assets/existing-profiles/settings/qwen38-27b-fp8-v1-vllm.env">0.85 / 2 / 512</a>; RR</td>
+<td><a href="../../../assets/existing-profiles/settings/qwen38-27b-fp8-v1-sglang.env">0.85 / 2 / 512</a>; RR, EXACT</td>
+</tr>
+<tr>
+<td>GPT-OSS 20B</td>
+<td><a href="../../../assets/existing-profiles/settings/gptoss-20b-v1-vllm.env">0.85 / 4 / 512</a>; RR</td>
+<td><a href="../../../assets/existing-profiles/settings/gptoss-20b-v1-sglang.env">0.85 / 2 / 512</a>; RR, EXACT</td>
+</tr>
+</tbody>
+</table>
+<p>P/D uses separate files and parameters. Do not copy converged memory/cap selections into P/D or another engine. A single-worker recipe does not qualify two-worker behavior.</p>
+<h2 id="recorded-hardware">Recorded hardware<a class="headerlink" href="#recorded-hardware" title="Permanent link">&para;</a></h2>
+<p>Workers used Ubuntu 24.04.1 LTS, Linux 6.8.0-124-generic, NVIDIA driver 580.159.03, and no swap. Each L4 worker had 24570MiB VRAM, 4 vCPUs, and approximately 47.05GiB host RAM; each L40S worker had 49140MiB VRAM, 16 vCPUs, and approximately 94.29GiB host RAM. The following hardware belongs to each selected converged case, not an engine-ranking comparison.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>vLLM converged GPUs</th>
+<th>SG converged GPUs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OLMo-2 1B</td>
+<td>L4 24GiB + L4 24GiB</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 Distill Qwen 1.5B</td>
+<td>L4 24GiB + L4 24GiB</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+</tr>
+<tr>
+<td>Gemma 3 1B</td>
+<td>Deferred; not run</td>
+<td>Deferred; not run</td>
+</tr>
+<tr>
+<td>Gemma 4 E2B</td>
+<td>L4 24GiB + L4 24GiB</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+</tr>
+<tr>
+<td>Llama 3.2 1B</td>
+<td>Deferred; not run</td>
+<td>Deferred; not run</td>
+</tr>
+<tr>
+<td>EXAONE 4.0 1.2B</td>
+<td>L4 24GiB + L4 24GiB</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+</tr>
+<tr>
+<td>Phi-4 Mini</td>
+<td>L4 24GiB + L4 24GiB</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+</tr>
+<tr>
+<td>Granite 4.2 3B</td>
+<td>L4 24GiB + L4 24GiB</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+</tr>
+<tr>
+<td>Ministral 3 3B</td>
+<td>L4 24GiB + L4 24GiB</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+</tr>
+<tr>
+<td>A.X 3.1 Light</td>
+<td>L4 24GiB + L4 24GiB</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+</tr>
+<tr>
+<td>Qwen 3.6 27B FP8</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+</tr>
+<tr>
+<td>Qwen 3.8 27B FP8</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+</tr>
+<tr>
+<td>GPT-OSS 20B</td>
+<td>L4 24GiB + L4 24GiB</td>
+<td>L40S 48GiB + L40S 48GiB</td>
+</tr>
+</tbody>
+</table>
+<p>Qualified vLLM P/D recipes used 2P1D: two L4 Prefills and one L40S Decode. Failed Qwen vLLM P/D attempts instead used 1P1D on two L40S GPUs and supply no verified recipe. SG P/D used 1P1D on two L40S GPUs. Each P/D attempt records role hardware in <code>hardwareRoles</code>. Docker host RAM limits are preserved in argument arrays and differ from GPU memory fraction. Initial OLMo converged launches had no Docker host RAM limit; later recorded limits are not backfilled.</p>
+<h2 id="understand-context-and-output-budgets">Understand context and output budgets<a class="headerlink" href="#understand-context-and-output-budgets" title="Permanent link">&para;</a></h2>
+<p><code>MAX_OUTPUT</code> limits the requested completion, including reasoning where the engine charges it as completion. It is not the model's advertised maximum output. Input after chat-template rendering and the completion must fit the engine's configured context; the exact accounting and rejection behavior belong to the selected engine/model contract. Do not subtract raw character counts from a token budget.</p>
+<p>The campaign used context 4096 and short synthetic requests. It did <strong>not</strong> qualify 1M-token input, maximum context, or arbitrary concurrency. Raising a context flag alone does not establish model support, available KV memory, Gateway inspection/Exact behavior, or P/D transfer compatibility. Revalidate all of those layers for longer requests. The public package contains no long-context capacity result.</p>
+<p>The <a href="../existing-profiles-tuning/#recorded-comparisons">recorded comparison tables</a> explain why particular memory fractions or caps were retained. They are optional background after a successful functional check.</p>
+<h2 id="model-specific-settings-failures-and-limitations">Model-specific settings, failures, and limitations<a class="headerlink" href="#model-specific-settings-failures-and-limitations" title="Permanent link">&para;</a></h2>
+<h3 id="olmo2-0425-1b-v1">OLMo-2 1B<a class="headerlink" href="#olmo2-0425-1b-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>olmo2-0425-1b-v1</code>; request model: <code>allenai/OLMo-2-0425-1B-Instruct</code>.</li>
+<li><a href="https://huggingface.co/allenai/OLMo-2-0425-1B-Instruct/tree/48d788eca847d4d7548f375ad03d3c9312f6139e">Pinned official revision</a>: <code>48d788eca847d4d7548f375ad03d3c9312f6139e</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/olmo2-0425-1b-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/olmo2-0425-1b-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 2.77GiB; image extraction/runtime headroom is additional.</li>
+<li>Template source: <code>tokenizer_config.json:chat_template</code>.</li>
+</ul>
+<p>vLLM cap 4 was selected only after all token-volume gates and three RR p95 comparisons passed (28.59%, 30.34%, 67.47% relative reductions). The lower memory candidate 0.35 met allocation reduction but regressed p95 by 10.22% in one pair, retaining 0.85.</p>
+<p>The two-worker SG follow-up independently qualified all 36 native/RR/Exact offers. Separate SG 1P1D qualified main/recovery 20 plus normal warmup 3; one-prefill Exact proves engagement only. vLLM 2P1D has its own independent transfer/selection/recovery qualification.</p>
+<p>An initial audit-directory permission error produced 503. The original failure remains; preparing the owned audit directory with mode 0700 resolved that QA prerequisite. It was not model startup failure.</p>
+<h3 id="r1-distill-qwen-15b-v1">DeepSeek-R1 Distill Qwen 1.5B<a class="headerlink" href="#r1-distill-qwen-15b-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>r1-distill-qwen-15b-v1</code>; request model: <code>deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B</code>.</li>
+<li><a href="https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B/tree/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562">Pinned official revision</a>: <code>ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/r1-distill-qwen-15b-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/r1-distill-qwen-15b-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 3.32GiB; image extraction/runtime headroom is additional.</li>
+<li>Template source: <code>tokenizer_config.json:chat_template</code>.</li>
+</ul>
+<p>The profile's 15b suffix identifies 1.5B. Three original 512-budget inputs were truncated. A controlled replay changed only max_tokens to 1024 across 29 compared payloads; the failed inputs then stopped at 555/610/610 completion tokens. Preserve original failures and reasoning closure checks.</p>
+<p>The incomplete memory comparison retains all 168 offers (main 96, direct warm 8, load warm 64). Warm distribution 9:7 and output-volume conditions prevented adoption. The complete cap comparison also failed token-volume comparability, retaining cap 2. Raw latency changes are not qualified performance gains.</p>
+<p>Both engines qualified two-worker converged RR/Exact. vLLM 2P1D qualified separately. SG 1P1D qualified base main 6, recovery 4, warmup 1, but all six Exact main offers ended at 1024 with length and unclosed reasoning. Independent failed-wire checks confirmed both-role hashes, inputs/bootstrap, Decode budget, and client/Decode identity. Only a base SG P/D recipe is supplied; a larger Exact P/D budget was not tested.</p>
+<h3 id="gemma3-1b-it-v1">Gemma 3 1B<a class="headerlink" href="#gemma3-1b-it-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>gemma3-1b-it-v1</code>; request model: <code>google/gemma-3-1b-it</code>.</li>
+<li><a href="https://huggingface.co/google/gemma-3-1b-it/tree/dcc83ea841ab6100d6b47a070329e1ba4cf78752">Pinned official revision</a>: <code>dcc83ea841ab6100d6b47a070329e1ba4cf78752</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/gemma3-1b-it-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/gemma3-1b-it-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 1.90GiB; image extraction/runtime headroom is additional.</li>
+<li>Tokenizer/template artifacts were not verified in this deferred run.</li>
+</ul>
+<p>Deferred at the user's request pending resolution of their reported HF account rate-limit issue and an explicit resumption request. No new authentication, download, cache search, or inference retries were performed for this profile.</p>
+<p>Preserve the earlier observed HTTP401 separately. No HTTP429 observation or independent rate-limit root cause was established. There are no verified runtime settings or performance results; do not infer them from another model.</p>
+<h3 id="gemma4-e2b-it-v1">Gemma 4 E2B<a class="headerlink" href="#gemma4-e2b-it-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>gemma4-e2b-it-v1</code>; request model: <code>google/gemma-4-E2B-it</code>.</li>
+<li><a href="https://huggingface.co/google/gemma-4-E2B-it/tree/3e22461f65e89153144f8adb70e3b8c2cc9845a7">Pinned official revision</a>: <code>3e22461f65e89153144f8adb70e3b8c2cc9845a7</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/gemma4-e2b-it-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/gemma4-e2b-it-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 9.57GiB; image extraction/runtime headroom is additional.</li>
+<li>Template source: <code>chat_template.jinja</code>.</li>
+</ul>
+<p>Text chat only with --language-model-only; image/audio behavior is unqualified. The 0.65 memory candidate failed the 30% allocation-reduction gate, retaining 0.85. Cap 4 passed comparable-output RR checks with median relative p95 reduction 83.02%; this is not Exact cache benefit.</p>
+<p>vLLM P/D retained forced FLASH_ATTN head-size failure and auto-attention fixed-512-block context-capacity failure. Auto attention with 1024 blocks in r3 started all roles, but base 6 plus Exact 6 all ended at 512 with length, normal 0. Independent negative-wire review verified both-role hashes, inputs, transfer metadata, and Decode/client identity. No qualified vLLM P/D recipe; larger output and subsequent recovery were not tested.</p>
+<p>Initial SG P/D aborted because the QA verifier assumed a JSON Prefill body. The original failure remains. Corrected r2 independently qualified base and one-prefill Exact engagement, main/recovery 20 plus normal warmup 3, room uniqueness, native transfer counters, negatives, recovery, deletion, and GPU return. This is not Prefill selection benefit.</p>
+<h3 id="llama32-1b-v1">Llama 3.2 1B<a class="headerlink" href="#llama32-1b-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>llama32-1b-v1</code>; request model: <code>meta-llama/Llama-3.2-1B-Instruct</code>.</li>
+<li><a href="https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct/tree/9213176726f574b556790deb65791e0c5aa438b6">Pinned official revision</a>: <code>9213176726f574b556790deb65791e0c5aa438b6</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/llama32-1b-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/llama32-1b-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 2.31GiB; image extraction/runtime headroom is additional.</li>
+<li>Tokenizer/template artifacts were not verified in this deferred run.</li>
+</ul>
+<p>Deferred at the user's request pending resolution of their reported HF account rate-limit issue and an explicit resumption request. No new authentication, download, cache search, or inference retries were performed for this profile.</p>
+<p>The earlier observed HTTP401 is not an observed HTTP429 or an independently established rate-limit root cause. Runtime settings and performance remain unverified.</p>
+<h3 id="exaone4-12b-v1">EXAONE 4.0 1.2B<a class="headerlink" href="#exaone4-12b-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>exaone4-12b-v1</code>; request model: <code>LGAI-EXAONE/EXAONE-4.0-1.2B</code>.</li>
+<li><a href="https://huggingface.co/LGAI-EXAONE/EXAONE-4.0-1.2B/tree/3abf2810673c7c0778df64a73c2d52eab32d91c4">Pinned official revision</a>: <code>3abf2810673c7c0778df64a73c2d52eab32d91c4</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/exaone4-12b-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/exaone4-12b-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 2.39GiB; image extraction/runtime headroom is additional.</li>
+<li>Template source: <code>chat_template.jinja</code>.</li>
+</ul>
+<p>The profile's 12b suffix identifies 1.2B. Keep the model-specific SG triton attention argument. Both engines qualified two-worker RR/Exact; vLLM 2P1D and SG 1P1D have separate independent qualification, with one-prefill Exact engagement only on SG.</p>
+<p>The 0.35 memory candidate met allocation reduction but regressed one p95 by 17.99%, retaining 0.85. The cap comparison stopped after a 9:7 warm split and retains 42 offers: main 24 plus warm 18. Cap 2 remains; the aborted comparison is not a performance recommendation.</p>
+<h3 id="phi4-mini-instruct-v1">Phi-4 Mini<a class="headerlink" href="#phi4-mini-instruct-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>phi4-mini-instruct-v1</code>; request model: <code>microsoft/Phi-4-mini-instruct</code>.</li>
+<li><a href="https://huggingface.co/microsoft/Phi-4-mini-instruct/tree/cfbefacb99257ffa30c83adab238a50856ac3083">Pinned official revision</a>: <code>cfbefacb99257ffa30c83adab238a50856ac3083</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/phi4-mini-instruct-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/phi4-mini-instruct-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 7.17GiB; image extraction/runtime headroom is additional.</li>
+<li>Template source: <code>tokenizer_config.json:chat_template</code>.</li>
+</ul>
+<p>The vLLM 0.55 memory candidate passed all 144 main and 108 warm answers/receipts, token-volume, allocation-reduction, and p95-regression gates; worst p95 regression was 0.41%. Separate functional requalification supports 0.55/cap 2/output 512. SG uses its independently tested 0.85 baseline.</p>
+<p>The cap comparison remains incomplete: offers 126 = main 72 + direct warm 6 + load warm 48. Retain cap 2. Both engines' P/D scopes are independently qualified, with single-prefill SG Exact engagement only.</p>
+<p>Use stock SG 0.5.19 and the recorded local-path tokenizer setup. Its engine-owned ByteLevel-to-Sequence handling is not a manual tokenizer-file override; older modified files are not part of this recipe.</p>
+<h3 id="granite42-3b-v1">Granite 4.2 3B<a class="headerlink" href="#granite42-3b-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>granite42-3b-v1</code>; request model: <code>ibm-granite/granite-4.2-3b</code>.</li>
+<li><a href="https://huggingface.co/ibm-granite/granite-4.2-3b/tree/e459acceac81e5fe67c07d9cfc72329a332e7eb1">Pinned official revision</a>: <code>e459acceac81e5fe67c07d9cfc72329a332e7eb1</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/granite42-3b-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/granite42-3b-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 6.83GiB; image extraction/runtime headroom is additional.</li>
+<li>Template source: <code>chat_template.jinja</code>.</li>
+</ul>
+<p>vLLM memory 0.55 passed the complete comparison, including the 30% allocation gate and at-most-5% p95 regression (worst 2.69%). The cap comparison is incomplete: offers 84 = main 48 + warm 36; retain cap 2.</p>
+<p>An SG Exact cold answer exhausted 512. A controlled 1024-budget follow-up qualified all 36 native/RR/Exact offers. The selected SG output budget is 1024, separate from vLLM's 512. Preserve prefilled-reasoning closure or separated reasoning plus final content.</p>
+<p>Both engines' separate P/D scopes qualified; SG Exact is one-prefill engagement, not selection benefit.</p>
+<h3 id="ministral3-3b-v1">Ministral 3 3B<a class="headerlink" href="#ministral3-3b-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>ministral3-3b-v1</code>; request model: <code>mistralai/Ministral-3-3B-Instruct-2512</code>.</li>
+<li><a href="https://huggingface.co/mistralai/Ministral-3-3B-Instruct-2512/tree/b35d4dfe56c142746f54dbd64f579faab2744308">Pinned official revision</a>: <code>b35d4dfe56c142746f54dbd64f579faab2744308</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/ministral3-3b-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/ministral3-3b-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 8.73GiB; image extraction/runtime headroom is additional.</li>
+<li>Template source: <code>chat_template.jinja</code>.</li>
+</ul>
+<p>Both engines independently qualified native/RR. Exact chat admission returned 400 describing the mistral_common native-rendering versus original chat-template hash contract. No profile/template bypass was used; completions is a separate unqualified API surface.</p>
+<p>vLLM P/D failed native Pixtral dummy-image initialization at an allowed-image count of zero. SG 1P1D qualified base main 6, recovery 4, warmup 1, while Exact creation returned 400 with zero inference offers. Its original source RESULT omitted the Exact mode row after the control failure; the export explicitly preserves the control-only attempt rather than inventing a source result.</p>
+<p>Memory and cap comparisons each offered 18 warmups and zero main requests. Some warm responses failed the predefined water/health answer condition despite HTTP200/stop. Retain 0.85/cap 2; no comparison-based performance recommendation. Initial deletion-200 assumptions and the resulting masked admission error remain in private QA evidence.</p>
+<h3 id="ax31-light-v1">A.X 3.1 Light<a class="headerlink" href="#ax31-light-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>ax31-light-v1</code>; request model: <code>skt/A.X-3.1-Light</code>.</li>
+<li><a href="https://huggingface.co/skt/A.X-3.1-Light/tree/9b41bb2406472634d8812c0b8931fa40fa9a6c3a">Pinned official revision</a>: <code>9b41bb2406472634d8812c0b8931fa40fa9a6c3a</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/ax31-light-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/ax31-light-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 13.54GiB; image extraction/runtime headroom is additional.</li>
+<li>Template source: <code>tokenizer_config.json:chat_template</code>.</li>
+</ul>
+<p>The memory comparison stopped incomplete with 84 offers: main 48 plus warm 36; retain 0.85. Cap 4 qualified with all main/warm answers and receipts, comparable output totals, and relative p95 reductions 83.74%, 83.12%, 82.84% in this bounded RR workload.</p>
+<p>The selected vLLM 0.85/cap 4/output 512 combination qualified separately. Both engines qualified two-worker native/RR/Exact, vLLM 2P1D qualified independently, and SG 1P1D qualified base plus one-prefill Exact engagement. These do not establish a global optimum or SLA.</p>
+<h3 id="qwen36-27b-fp8-v1">Qwen 3.6 27B FP8<a class="headerlink" href="#qwen36-27b-fp8-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>qwen36-27b-fp8-v1</code>; request model: <code>Qwen/Qwen3.6-27B-FP8</code>.</li>
+<li><a href="https://huggingface.co/Qwen/Qwen3.6-27B-FP8/tree/e89b16ebf1988b3d6befa7de50abc2d76f26eb09">Pinned official revision</a>: <code>e89b16ebf1988b3d6befa7de50abc2d76f26eb09</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/qwen36-27b-fp8-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/qwen36-27b-fp8-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 28.77GiB; image extraction/runtime headroom is additional.</li>
+<li>Template source: <code>chat_template.jinja</code>.</li>
+</ul>
+<p>Preserve the exact official FP8 identity, --language-model-only, and recorded state-layout environment. The 512 and 1024 vLLM attempts retain truncated answers; at 1024, 30 of 36 offers were normal. A controlled output-only replay and selected vLLM 0.85/cap 2/output 1536 follow-up qualified all 36 RR/Exact/native offers.</p>
+<p>The two-L40S SG source claimed a complete pass, but independent review found exact-recovery-warm-0 ended at 1536 with unclosed reasoning. Retain all 36 offers: 35 normal, 1 failed. RR/native 20 qualified; the entire 16-offer Exact mode remains unqualified. A prior single-worker success is a different scope and does not override this two-worker result.</p>
+<p>Memory and cap comparisons each ended after direct warm 2 + RR load warm 16, with zero main requests. Their load warmups were normal/length/timeout 4/7/5 and 8/4/4. Preserve all 36 offers and nine client timeouts, with incomplete upstream body hashes checked separately. No candidate or latency gain was adopted; retain 0.85/cap 2.</p>
+<p>vLLM P/D first overrode the native 239-block estimate with 512 and hit CUDA allocation OOM (24.50GiB requested, 18.77GiB free). One QA follow-up failed before launch because the RAM model path was not forwarded; that is a preparation failure. The corrected 192-block attempt failed NIXL local transfer-list preparation with NIXL_ERR_NOT_FOUND. No qualified vLLM P/D recipe; exact root cause remains unconfirmed.</p>
+<p>SG P/D offered six base main requests plus one Exact warmup. The first base and Exact warmup returned 504 pd_prefill_timeout; the other five were normal. Both failed Prefill calls actually completed HTTP200 in about 6.46s/0.44s. Thirteen role receipts plus one Decode request-only record are not fourteen completed transfers. No qualified SG P/D recipe or recovery/counter gate; the timeout name does not establish slow native Prefill.</p>
+<h3 id="qwen38-27b-fp8-v1">Qwen 3.8 27B FP8<a class="headerlink" href="#qwen38-27b-fp8-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>qwen38-27b-fp8-v1</code>; request model: <code>Qwen/Qwen3.8-27B-FP8</code>.</li>
+<li><a href="https://huggingface.co/Qwen/Qwen3.8-27B-FP8/tree/017b9c7af6b5689d5dd426a76e0bc077eb5ca20a">Pinned official revision</a>: <code>017b9c7af6b5689d5dd426a76e0bc077eb5ca20a</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/qwen38-27b-fp8-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/qwen38-27b-fp8-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 28.77GiB; image extraction/runtime headroom is additional.</li>
+<li>Template source: <code>chat_template.jinja</code>.</li>
+</ul>
+<p>This is a distinct model/revision/tokenizer/template from Qwen 3.6. Preserve --language-model-only and model-specific state-layout settings. vLLM native/RR qualified at 0.85/cap 2/output 512, but Exact recovery distribution was 3:1 initially and 1:3 on selected-combination replay instead of required 2:2. All four recovery answers were normal in each attempt; distribution remains unqualified, with root cause unconfirmed. Only RR is supplied for vLLM.</p>
+<p>The complete 0.85-versus-0.75 memory comparison had all 144 main + 108 warm answers/receipts and comparable tokens. The candidate failed allocation reduction and regressed one p95 by 9.29%, retaining 0.85. The cap-4 comparison also completed normally but failed token-volume comparability in every pair. Its large raw latency reductions are not qualified gains; retain cap 2.</p>
+<p>vLLM P/D retained fixed-512-block CUDA OOM and an actually applied 239-to-192-block follow-up ending in NIXL_ERR_NOT_FOUND. No qualified vLLM P/D recipe or confirmed registration root cause.</p>
+<p>SG on two L40S GPUs independently qualified all 36 converged native/RR/Exact offers. Separate 1P1D Mooncake TCP qualified main/recovery 20 plus normal warmup 3, both-role hashes, fresh rooms, native Decode transfer counts 6/4 per mode, negatives, recovery, deletion, and GPU return. Exact is single-prefill engagement, not selection or RDMA-bandwidth qualification.</p>
+<h3 id="gptoss-20b-v1">GPT-OSS 20B<a class="headerlink" href="#gptoss-20b-v1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Profile ID: <code>gptoss-20b-v1</code>; request model: <code>openai/gpt-oss-20b</code>.</li>
+<li><a href="https://huggingface.co/openai/gpt-oss-20b/tree/6cee5e81ee83917806bbde320786a8fb61efebee">Pinned official revision</a>: <code>6cee5e81ee83917806bbde320786a8fb61efebee</code>.</li>
+<li><a href="../../../assets/existing-profiles/source-definitions/gptoss-20b-v1.yaml">Original profile</a> · <a href="../../../assets/existing-profiles/weights/gptoss-20b-v1.source-index">Complete source index</a>.</li>
+<li>Indexed files: 12.84GiB; image extraction/runtime headroom is additional.</li>
+<li>Template source: <code>chat_template.jinja</code>.</li>
+</ul>
+<p>vLLM native JSON/SSE and RR independently qualified on two L4s. Exact chat admission returned 400 describing the Harmony encoder versus original chat-template contract. Do not bypass the original profile/template. Only RR is supplied for vLLM.</p>
+<p>The complete 0.85-versus-0.75 memory comparison passed answers, receipts, and token-volume comparability but failed 30% allocation reduction, retaining 0.85. Cap 4 passed all 144 main + 108 warm answers/receipts and token-volume gates. Selected 0.85/cap 4/output 512 separately qualified native/RR 20, negatives, new-request recovery, deletion, and GPU return.</p>
+<p>Initial SG exposed Harmony analysis/final controls in content despite stop/142 completion tokens. Stock --reasoning-parser gpt-oss subsequently qualified two-L40S native/RR/Exact 36 and separate SG 1P1D main/recovery 20 plus warm 3. Use the parser flag; do not rewrite raw answers. SG Exact P/D remains single-prefill engagement.</p>
+<p>The template inserts the current date. Check image UTC timezone, a common UTC date across comparisons, and identical rendered native /tokenize inputs. Output 512 is not guaranteed sufficient for arbitrary prompts.</p>
+<p>vLLM P/D retained forced-attention sink incompatibility, auto-attention fixed-512-block capacity 4080 versus context 4096, and auto/1024 r3 with empty final content in the first of six base main offers. That offer returned HTTP200/stop/52 completion tokens; five later normal answers do not replace it. Independent both-role hashes confirm the empty final in native Decode and identical client bytes. It was not output truncation. Gateway orchestration/native handoff/parser root cause remains unconfirmed, and subsequent counters/negatives/recovery did not qualify. No vLLM P/D recipe.</p>
+<h2 id="reproduction-package-and-verification-boundaries">Reproduction package and verification boundaries<a class="headerlink" href="#reproduction-package-and-verification-boundaries" title="Permanent link">&para;</a></h2>
+<p><a href="../../../assets/existing-profiles-evaluation.tgz">Download package</a> · <a href="../../../assets/existing-profiles-evaluation.tgz.sha256">Archive checksum</a> · <a href="../../../assets/existing-profiles/">Files and raw-evidence guide</a></p>
+<p>Source files are in the documentation repository's <a href="https://github.com/loxilb-io/loxilbdocs-inference-gateway/tree/main/docs/assets">assets folder on GitHub</a>, under <code>docs/assets/existing-profiles/</code>. The archive and its checksum sit alongside that folder. The repository retains settings, metadata and verification tools; raw results and token probes are present only in the evaluation archive. A Git clone or GitHub source ZIP is not a complete reproduction package. Download links are relative to the current documentation version. On GitHub Pages, the <code>latest</code> version resolves them under <code>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/assets/</code>; a localhost hostname seen in a local preview is not embedded in those links. Files become publicly downloadable only after that documentation revision and its assets are published.</p>
+<p>The current launch procedures add an excluded Exact counter-initialization request before measuring new traffic. This additional offer does not change the original campaign denominators in the package.</p>
+<p>The package includes original source profiles/probes, pinned identities, reviewed literal command parameters, functional raw bodies including failures, all setting-comparison offers, arithmetic/receipt verifiers, and real mutation rejection controls. Original multilingual Unicode probe strings are immutable test data; the documentation and guidance are English. Translating those strings would invalidate expected token IDs and hashes.</p>
+<p>Model weights, tokenizer/template bytes, credentials, full Docker inspections, private infrastructure, and native P/D session bytes are excluded. Both-role P/D wire hashes/state and native counters were independently reviewed in private evidence; public P/D entries are reviewed summaries, not a replay of private transfer state.</p>
+<p>Full HTTP-header/TCP-framing capture, transfer bandwidth, active-stream continuity, engine-crash recovery, language-task accuracy, multimodal operation, multi-model capacity, global optimums, and SLA are unqualified. The Gateway binary/source provenance limit remains explicit.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../../javascripts/analytics.js"></script>
+      
+    
+  </body>
+</html>

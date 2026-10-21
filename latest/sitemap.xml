@@ -81,6 +81,10 @@
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/assets/existing-profiles/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/assets/model-engine-standard/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
@@ -446,6 +450,22 @@
     </url>
     <url>
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/exaone35/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/existing-profiles-launch/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/existing-profiles-pd/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/existing-profiles-tuning/</loc>
+         <lastmod>2026-10-21</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/existing-profiles/</loc>
          <lastmod>2026-10-21</lastmod>
     </url>
     <url>

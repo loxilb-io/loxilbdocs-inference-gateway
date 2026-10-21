@@ -1,0 +1,515 @@
+[
+  {
+    "profileId": "olmo2-0425-1b-v1",
+    "engine": "vllm",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "vllm-cv-olmo2-0425-1b-v1-r4",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 4,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": null,
+    "sourceLaunchArgumentsSha256": "86a2c15a893c012b85e35028ade88dd11d63aaa5a99fefda0e09b0d23149f098",
+    "settings": "settings/olmo2-0425-1b-v1-vllm.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "olmo2-0425-1b-v1",
+    "engine": "sglang",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "sglang-cv-olmo2-0425-1b-v1-r3",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "9640a7b8ff2c01ea18efedbb7cb061dbd8e241443feb0cca582abac97ec034ca",
+    "settings": "settings/olmo2-0425-1b-v1-sglang.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "r1-distill-qwen-15b-v1",
+    "engine": "vllm",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "vllm-cv-r1-distill-qwen-15b-v1-r4",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 1024,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "29d1fc9c08c30567c2aa34e09eb24f2bc58a18fd41c57d9336b654c361792559",
+    "settings": "settings/r1-distill-qwen-15b-v1-vllm.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "r1-distill-qwen-15b-v1",
+    "engine": "sglang",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "sglang-cv-r1-distill-qwen-15b-v1-r3",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 1024,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "7ec41e202f441c43576ed1fcd47e0d7ba9f762a4e39db96d4645a1d772b05bef",
+    "settings": "settings/r1-distill-qwen-15b-v1-sglang.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "gemma3-1b-it-v1",
+    "engine": "vllm",
+    "status": "NO_INDEPENDENTLY_REVIEWED_NATIVE_AND_RR_RECIPE"
+  },
+  {
+    "profileId": "gemma3-1b-it-v1",
+    "engine": "sglang",
+    "status": "NO_INDEPENDENTLY_REVIEWED_NATIVE_AND_RR_RECIPE"
+  },
+  {
+    "profileId": "gemma4-e2b-it-v1",
+    "engine": "vllm",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "vllm-cv-gemma4-e2b-it-v1-r4",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 4,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [
+      "--language-model-only"
+    ],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "bd0cc9049218340d8410386082b18fa0fc291cf8385918e9dcbb43c6b92840c3",
+    "settings": "settings/gemma4-e2b-it-v1-vllm.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "gemma4-e2b-it-v1",
+    "engine": "sglang",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "sglang-cv-gemma4-e2b-it-v1-r3",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "93bd2c313bde7aa4e086ba92d7357c4bfb15c471c14c84ee30e5fcc741e132fb",
+    "settings": "settings/gemma4-e2b-it-v1-sglang.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "llama32-1b-v1",
+    "engine": "vllm",
+    "status": "NO_INDEPENDENTLY_REVIEWED_NATIVE_AND_RR_RECIPE"
+  },
+  {
+    "profileId": "llama32-1b-v1",
+    "engine": "sglang",
+    "status": "NO_INDEPENDENTLY_REVIEWED_NATIVE_AND_RR_RECIPE"
+  },
+  {
+    "profileId": "exaone4-12b-v1",
+    "engine": "vllm",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "vllm-cv-exaone4-12b-v1-r4",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "2f6df5b31aec702202c30d50ae1cc237b33c95690e9210ed4b50e74e6fd1feb4",
+    "settings": "settings/exaone4-12b-v1-vllm.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "exaone4-12b-v1",
+    "engine": "sglang",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "sglang-cv-exaone4-12b-v1-r3",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [
+      "--attention-backend",
+      "triton"
+    ],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "7f7d1512007e8589545c453533fe8a0ca2025d48d7435416732b71fe4159383a",
+    "settings": "settings/exaone4-12b-v1-sglang.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "phi4-mini-instruct-v1",
+    "engine": "vllm",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "vllm-cv-phi4-mini-instruct-v1-r4",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.55,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "4b543dc05c35b9cfe71da5b0b280b50ec034f9ca9776fd0754c7cef22c1497ba",
+    "settings": "settings/phi4-mini-instruct-v1-vllm.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "phi4-mini-instruct-v1",
+    "engine": "sglang",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "sglang-cv-phi4-mini-instruct-v1-r3",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "709f67f34aa81695ffde4af3ea6daa23604f0f082ebcd0d8717e9e3aad653d44",
+    "settings": "settings/phi4-mini-instruct-v1-sglang.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "granite42-3b-v1",
+    "engine": "vllm",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "vllm-cv-granite42-3b-v1-r4",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.55,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "24e492315434d503b9b3fac4439d1bdd4a5dfa1770702920bd043bb863cbfc1e",
+    "settings": "settings/granite42-3b-v1-vllm.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "granite42-3b-v1",
+    "engine": "sglang",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "sglang-cv-granite42-3b-v1-r7",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 1024,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "05b7f432546e91567886c9ea209e974af7ea14ecd2118bbd10be879543a11081",
+    "settings": "settings/granite42-3b-v1-sglang.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "ministral3-3b-v1",
+    "engine": "vllm",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "vllm-cv-ministral3-3b-v1-r4",
+    "acceptedModes": [
+      "rr"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [
+      "--language-model-only"
+    ],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "93bd15dab1fb38668397e9facfeceb76e2072939ee79abe67375be1b48e37b5b",
+    "settings": "settings/ministral3-3b-v1-vllm.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "ministral3-3b-v1",
+    "engine": "sglang",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "sglang-cv-ministral3-3b-v1-r3",
+    "acceptedModes": [
+      "rr"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "889cfd8461ac9c0069248ec7104f94bc536cb193cdef22545e94c8f523a511c6",
+    "settings": "settings/ministral3-3b-v1-sglang.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "ax31-light-v1",
+    "engine": "vllm",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "vllm-cv-ax31-light-v1-r4",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 4,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "ea3379c222c766b2917d869c75605366405f4c686677f2613f063f8a332107fd",
+    "settings": "settings/ax31-light-v1-vllm.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "ax31-light-v1",
+    "engine": "sglang",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "sglang-cv-ax31-light-v1-r3",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "cb857738c7d55143e4cb09c6ba09db9986e5f4e731eba25169507ee8b1a1672e",
+    "settings": "settings/ax31-light-v1-sglang.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "qwen36-27b-fp8-v1",
+    "engine": "vllm",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "vllm-cv-qwen36-27b-fp8-v1-r4",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 1536,
+    "context": 4096,
+    "extraArguments": [
+      "--language-model-only"
+    ],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "b65a6e63856248c3c89a24abfb8c3ffd32af46a93b2bfecba217e69211f06536",
+    "settings": "settings/qwen36-27b-fp8-v1-vllm.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "qwen36-27b-fp8-v1",
+    "engine": "sglang",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "sglang-cv-qwen36-27b-fp8-v1-r3",
+    "acceptedModes": [
+      "rr"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 1536,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "4a36aa2dd1c85457d7ececc5220f69f56594a3c70cc3e1c47645182f2931cbfa",
+    "settings": "settings/qwen36-27b-fp8-v1-sglang.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "qwen38-27b-fp8-v1",
+    "engine": "vllm",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "vllm-cv-qwen38-27b-fp8-v1-r4",
+    "acceptedModes": [
+      "rr"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [
+      "--language-model-only"
+    ],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "73d7b8784d92ec336afe56a1c43c92788f13540c5d14ec42fdb4afa0a91b7428",
+    "settings": "settings/qwen38-27b-fp8-v1-vllm.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "qwen38-27b-fp8-v1",
+    "engine": "sglang",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "sglang-cv-qwen38-27b-fp8-v1-r3",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "92ca02ebbaa085b8d5427d4fbd1539d8815130df5b65c498ddd78c9004062304",
+    "settings": "settings/qwen38-27b-fp8-v1-sglang.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "gptoss-20b-v1",
+    "engine": "vllm",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "vllm-cv-gptoss-20b-v1-r4",
+    "acceptedModes": [
+      "rr"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 4,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "8fd45d828ec98f16f94dbd1b049cf901c2889473450ea987c6c504c7d9d1c2b4",
+    "settings": "settings/gptoss-20b-v1-vllm.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  },
+  {
+    "profileId": "gptoss-20b-v1",
+    "engine": "sglang",
+    "status": "BOUNDED_TWO_WORKER_RECIPE",
+    "case": "sglang-cv-gptoss-20b-v1-r3",
+    "acceptedModes": [
+      "rr",
+      "exact"
+    ],
+    "configuredMemoryFraction": 0.85,
+    "configuredCap": 2,
+    "maxOutputTokens": 512,
+    "context": 4096,
+    "extraArguments": [
+      "--reasoning-parser",
+      "gpt-oss"
+    ],
+    "hostMemoryLimit": "40g",
+    "sourceLaunchArgumentsSha256": "a59dc548ef0dcac70f3e0ca5a2f868a05072395563e3c37e7b23bc10a03da0f4",
+    "settings": "settings/gptoss-20b-v1-sglang.env",
+    "limits": [
+      "These values apply to converged only; native P/D has separate parameters",
+      "A functional recipe is not proof of an optimal performance setting"
+    ]
+  }
+]

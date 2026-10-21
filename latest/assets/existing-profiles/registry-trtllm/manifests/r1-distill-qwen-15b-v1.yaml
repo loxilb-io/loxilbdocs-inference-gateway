@@ -1,0 +1,4 @@
+profileId: r1-distill-qwen-15b-v1
+engineVersion: 1.3.0rc29
+imageDigest: sha256:e9dab9fccc550dcc04356962ff152908d692e0e47ba143f57402a24a4ad64b77
+modelRevision: ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562
