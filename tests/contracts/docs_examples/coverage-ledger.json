@@ -2315,7 +2315,7 @@
     {
       "commands": [],
       "id": "37eadcad0c74aeb4d691",
-      "line": 121,
+      "line": 127,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2324,7 +2324,7 @@
     {
       "commands": [],
       "id": "2b8d5fe28b772b34ad03",
-      "line": 158,
+      "line": 164,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2333,7 +2333,7 @@
     {
       "commands": [],
       "id": "23f73f722fda21c39dc3",
-      "line": 197,
+      "line": 203,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2342,7 +2342,7 @@
     {
       "commands": [],
       "id": "391dcb71eff01acf4482",
-      "line": 233,
+      "line": 239,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2351,7 +2351,7 @@
     {
       "commands": [],
       "id": "f0b696ffdf75f41d9ede",
-      "line": 333,
+      "line": 339,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2360,7 +2360,7 @@
     {
       "commands": [],
       "id": "f9513be93383f3e1991b",
-      "line": 383,
+      "line": 389,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2369,7 +2369,7 @@
     {
       "commands": [],
       "id": "d3f0294a9bc2c26e83a2",
-      "line": 422,
+      "line": 428,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2378,7 +2378,7 @@
     {
       "commands": [],
       "id": "e739436aa71a69a27bb6",
-      "line": 510,
+      "line": 516,
       "operations": [
         "GET /metrics"
       ],
@@ -2389,7 +2389,7 @@
     {
       "commands": [],
       "id": "c0741d2b82929bdedab9",
-      "line": 517,
+      "line": 523,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -5803,7 +5803,7 @@
       "sha256": "7938d3dc01f0a18b043fa87ad717c04672c25aa82b55cdf5e4d9133e74c09bde"
     }
   ],
-  "gateway_commit": "ecfc3c12376bad712c61f6781fe13a9e5fc3fd9e",
+  "gateway_commit": "9640fb6b682b429c7e70e7515f6f57c6d7f35b66",
   "operations": {
     "DELETE /audit/sinks/{name}": [],
     "DELETE /auth/users/{id}": [],

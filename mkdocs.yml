@@ -42,6 +42,10 @@ theme:
 
 extra_css:
   - stylesheets/extra.css
+  - stylesheets/analytics.css
+
+extra_javascript:
+  - javascripts/analytics.js
 
 markdown_extensions:
   - admonition
@@ -203,6 +207,7 @@ nav:
       - Configuration: reference/configuration.md
       - CLI: reference/cli.md
       - System Requirements: reference/system-requirements.md
+  - Privacy: privacy.md
   - Community:
       - Contributing: community/contributing.md
       - Roadmap: community/roadmap.md

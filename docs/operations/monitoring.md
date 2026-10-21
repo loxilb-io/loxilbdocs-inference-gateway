@@ -113,7 +113,13 @@ SSE, P/D or an active credential policy is outside AI request accounting.
 `completed` includes whole non-SSE answers and does not require a `[DONE]`
 marker. `aborted` has `cause="client"`, `"engine"` or `"gateway"`; other
 outcomes have an empty cause. A request that ended before a status was sent
-uses `status="none"`. Admission denials are recorded once at the refusal point;
+uses `status="none"`. This includes a client leaving before the answer, with
+or without P/D, and a non-P/D backend closing before any answer. Such a
+non-P/D request has no P/D lifecycle record; correlate its request outcome
+and cause with the client transport result instead of treating `none` as an
+HTTP status or a successful response.
+
+Admission denials are recorded once at the refusal point;
 dedicated authorization and rate-limit counters explain why they were refused
 and must not be added as extra requests.
 
