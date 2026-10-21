@@ -55,7 +55,7 @@ default_target: gateway-1
 targets:
   gateway-1:
     url: http://192.0.2.254:11111
-    # username/password_env or token_env when LoxiLB runs with --userservice
+    # token_env for the qualified management endpoint
     # tls_ca / timeout_sec as needed
     # insecure_skip_verify disables TLS verification — development only, never production
 clients:                       # HTTP-mode bearer tokens, one per client
@@ -153,16 +153,17 @@ plus the confirm-token flow.
 
 !!! note "Data-plane enforcement"
     A `mode: 4` rule's independent `api_key_auth` declaration activates authentication; SSE and
-    P/D do not. The CLI can set only `disabled` or `required`. A required rule returns `401` for an
-    unknown key and fails closed with `503` if the PostgreSQL policy store cannot answer. JWT modes,
-    profile association, user quotas, and defaults are REST-only. Per-key TPM is implemented, but
-    its primary Swagger description is stale; published support remains pending convergence.
+    P/D do not. The selected CLI supports `disabled`, `required`, `jwt` and `apikey-or-jwt`;
+    JWT modes require `--jwt-auth-profile`. The comparison release supports only the first two. A required rule returns `401` for an
+    unknown key and fails closed with `503` if the PostgreSQL policy store cannot answer. JWT profile CRUD,
+    user quotas and defaults remain REST-only. Per-key TPM has admission reservation
+    and usage settlement; runtime and release qualification remain separate.
 
 | Tool | Purpose |
 |---|---|
 | `ai_apikey_list` | List AI-gateway API keys, optionally filtered by tenant. Returns key metadata only, never key material. |
 | `ai_apikey_get` | Get one API-key summary by `key_id`. Metadata only. |
-| `ai_apikey_create` | Create a tenant API key: allowed models and per-key RPS/burst values. Key material is written to a secrets file by default. The implementation enforces per-key TPM, but do not treat it as release-qualified until primary Swagger converges. |
+| `ai_apikey_create` | Create a tenant API key: allowed models and per-key RPS/burst values. Key material is written to a secrets file by default. Per-key TPM includes reservation and settlement; qualify the exact runtime tuple before a release claim. |
 | `ai_apikey_update` | Update an API key's allowed-model list and/or enabled flag. Disabling is reversible; deleting is not. |
 | `ai_apikey_delete` | Permanently delete an API key by `key_id` (destructive; confirm-token gated). |
 | `ai_ratelimit_set` | Create or update a tenant's AI rate limit: requests/s and LLM tokens/min. Set quotas to 0 to lift (there is no delete endpoint). |
@@ -371,7 +372,7 @@ The current CLI maps these flags to the Gateway API contract:
 | Hash contract | `--kv-hash-algo=<algorithm>` | Sends an explicit hash algorithm. Prefer omission so the server derives the coherent engine default. |
 | Sockmap direction | `--sockmap-mode=off|request|response|both` | Sends `sockMapMode`; a non-`off` value still requires Gateway `--sockmapsupport`, an eligible plain HTTP/1.1 service, and a compatible Gateway main build. |
 | Model-keyed create/delete | `--model-name=<model>` | Repeats the model component of the L7 rule key. |
-| API-key policy | `--api-key-auth=disabled|required` | The released CLI supports exactly these two values; CLI main adds `jwt` and `apikey-or-jwt`, which need `--jwt-auth-profile=<name>`. Omission and explicit `disabled` are different contracts. |
+| API-key policy | `--api-key-auth=disabled\|required\|jwt\|apikey-or-jwt` | The released CLI supports `disabled` and `required`; the selected CLI adds `jwt` and `apikey-or-jwt`, which need `--jwt-auth-profile=<name>`. Omission and explicit `disabled` are different contracts. |
 
 The earlier `--mtls-backend-ca-path`, `--mtls-backend-cert-path`, `--mtls-backend-key-path` and
 `--mtls-backend-verify-server` flags are retired on CLI main: the command is refused and names the
@@ -416,7 +417,7 @@ command.
 | REST-only surface | REST contract |
 |---|---|
 | JWT profile create/list/delete | `/config/ai/jwtauthprofile` and `/config/ai/jwtauthprofile/{name}` |
-| JWT-capable service binding (released CLI; CLI main has `--api-key-auth=jwt\|apikey-or-jwt` with `--jwt-auth-profile`) | `api_key_auth: jwt|apikey-or-jwt` plus `jwt_auth_profile` |
+
 | Global and rule-default QoS | `/config/ai/ratelimit/defaults...` |
 | User and user-model QoS | `/config/ai/user/ratelimit...` |
 | Model-profile discovery | `/config/ai/model-profiles[/{profile_id}]` |
@@ -425,10 +426,11 @@ command.
 | Optional capability readiness | `/status/capabilities` |
 | Active sockmap connection reset | `.../sockmapreset` |
 
-The CLI supports only `disabled` and `required` for `--api-key-auth`; omission
-and explicit `disabled` remain different contracts. Create JWT-capable services
-and associate profiles through REST. User-limit and global/rule-default QoS
-CRUD are also REST-only.
+The selected CLI supports all four `--api-key-auth` values. For `jwt` or
+`apikey-or-jwt`, bind an existing profile with `--jwt-auth-profile`; create/list/delete
+that profile through REST. The comparison release supports only `disabled` and
+`required`. Omission and explicit `disabled` remain different contracts. User-limit
+and global/rule-default QoS CRUD are also REST-only.
 
 `pdBootstrapPort` is supported by `loxicmd create lb` as
 `--pd-bootstrap-port`; it is distinct from `--kv-zmq-port`. Both CLI

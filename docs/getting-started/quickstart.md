@@ -6,6 +6,12 @@ cleanup. The configuration and traffic steps use the public
 `ai-model-routing` scenario; operational steps are checked against the frozen
 Gateway Swagger union and CLI contract.
 
+The selected development source pair is recorded in
+[Verification Status](../reference/verification-status.md). Historical model
+results retain their own recorded revisions. Do not mix their evidence with
+this Quickstart's source pair. Build and run the Gateway and CLI on Linux;
+from a macOS workstation use a Linux host for builds and executable checks.
+
 !!! warning "Choose a compatible version pair"
     The readiness route is implemented on current Gateway `main`, not Gateway
     `v0.9.8.9-rc.1`. `loxicmd get ready` is present in CLI
@@ -44,8 +50,8 @@ documentation checks.
 
 ## 2. Check readiness
 
-**Example status:** `verified` against current-main Swagger, CLI
-`v0.9.8.9-rc.2`, and the frozen readiness contract. This is source/static
+**Example status:** `verified` against the selected source pair and frozen
+readiness contract in [Verification Status](../reference/verification-status.md). This is source/static
 evidence, not a live Linux result.
 
 --8<-- "snippets/getting-started/02-readiness.md"
@@ -64,6 +70,32 @@ listener is protected.
     backend-owned `X-Api-Key` passes through unchanged. Follow
     [Data-Plane Authentication and JWT](../security/data-plane-jwt-auth.md)
     before exposing a protected inference VIP.
+
+## Prepare the receipt backend
+
+Use a separate terminal on the Linux backend host. Download the
+[small receipt backend](../assets/quickstart/receipt-backend.py) to that host.
+It is a CPU fixture, not a model-serving engine. It returns `backend-llama`
+and appends only the caller's `X-Docs-Nonce` to a backend-owned log.
+
+```bash
+python3 receipt-backend.py --listen 0.0.0.0 --port 8080 \
+  --receipt /var/tmp/docs-backend-receipts.log
+```
+
+Expected result: the server remains running and creates the receipt file.
+Allow the Gateway to reach this backend; replace `198.51.100.11` with its
+reachable lab address in the rule. Assign the chosen VIP to the Gateway's
+lab interface before creating the rule, following your network procedure.
+
+In the operator terminal, step 5 copies receipts with `scp` from
+`qa@backend.example.com`. Replace that SSH destination with your backend
+account. If both terminals share the same file system, set
+`BACKEND_RECEIPT_SOURCE=''` and use the original backend file directly.
+A missing file or failed copy is an oracle failure, never zero deliveries.
+Do not generate the receipt file from the client response or Gateway log.
+Stop the server with Ctrl-C after rule cleanup; remove only this lab's receipt
+file after retaining the required evidence.
 
 ## 4. Create one model rule
 
@@ -102,7 +134,8 @@ Do not invent CLI flags for surfaces the frozen CLI does not implement:
 
 | Surface | Supported path |
 |---|---|
-| JWT profile CRUD and `jwt` / `apikey-or-jwt` rule binding | REST-only |
+| JWT profile create/list/delete | REST-only |
+| JWT service binding | Selected CLI supports `--api-key-auth=jwt` or `apikey-or-jwt` with `--jwt-auth-profile`; the comparison CLI release supports only `disabled` and `required` |
 | Global/rule-default and user/user-model QoS CRUD | REST-only |
 | Model-profile discovery and `kvexactstatus` | REST-only |
 | `kvModelProfile` and `kvExactApiMode` | REST-only |

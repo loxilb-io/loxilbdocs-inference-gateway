@@ -34,7 +34,7 @@ Always parse the body. Important fields are:
 
 | Field | Meaning |
 |---|---|
-| `ready`, `reasons[]` | Verdict and explicit blockers |
+| `ready` | Configuration readiness verdict; inspect the full body for diagnostic details |
 | `boot.profile` | `compat` or `strict` boot policy |
 | `boot.snapshot_found`, `boot.succeeded` | Whether persisted configuration was selected and replayed |
 | `boot.generation` | Durable lineage generation that boot applied |
@@ -48,12 +48,16 @@ Always parse the body. Important fields are:
 ```bash
 install -m 600 /dev/null ./gateway.token
 printf '%s\n' "$CONTROL_PLANE_TOKEN" > ./gateway.token
-export CONTROL_API="https://gateway.example.com/netlox/v1"
+export CONTROL_SCHEME=https CONTROL_HOST=gateway.example.com CONTROL_PORT=443
+export CONTROL_API="$CONTROL_SCHEME://$CONTROL_HOST:$CONTROL_PORT/netlox/v1"
+test -r "$PWD/gateway-ca.crt"
 install -m 600 /dev/null ./control-plane.headers
 printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
 
 loxicmd get ready \
-  --token-file ./gateway.token \
+  --protocol "$CONTROL_SCHEME" --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+  --cacert "$PWD/gateway-ca.crt" \
+  --token-file "$PWD/gateway.token" \
   --output json \
   > ready.json
 
@@ -70,7 +74,7 @@ Read capability readiness before presenting or submitting controls whose prerequ
 the Gateway launch environment:
 
 ```bash
-curl --fail-with-body --silent --show-error \
+curl --fail-with-body --silent --show-error --cacert "$PWD/gateway-ca.crt" \
   --header @control-plane.headers \
   "$CONTROL_API/status/capabilities" \
   > capabilities.json
@@ -101,7 +105,9 @@ data plane is ready. Those remain separate configuration and runtime checks.
 
 ```bash
 loxicmd get diagnostics \
-  --token-file ./gateway.token \
+  --protocol "$CONTROL_SCHEME" --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+  --cacert "$PWD/gateway-ca.crt" \
+  --token-file "$PWD/gateway.token" \
   --output json \
   > diagnostics.json
 
@@ -132,7 +138,9 @@ Enter maintenance with an explicit drain window:
 
 ```bash
 loxicmd set maintenance on \
-  --token-file ./gateway.token \
+  --protocol "$CONTROL_SCHEME" --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+  --cacert "$PWD/gateway-ca.crt" \
+  --token-file "$PWD/gateway.token" \
   --drain-timeout 300 \
   --output json \
   > maintenance-on.json
@@ -150,7 +158,9 @@ Read the observed state before acting:
 
 ```bash
 loxicmd get maintenance \
-  --token-file ./gateway.token \
+  --protocol "$CONTROL_SCHEME" --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+  --cacert "$PWD/gateway-ca.crt" \
+  --token-file "$PWD/gateway.token" \
   --output json \
   > maintenance-state.json
 
@@ -183,7 +193,9 @@ Leave maintenance explicitly:
 
 ```bash
 loxicmd set maintenance off \
-  --token-file ./gateway.token \
+  --protocol "$CONTROL_SCHEME" --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+  --cacert "$PWD/gateway-ca.crt" \
+  --token-file "$PWD/gateway.token" \
   --output json \
   > maintenance-off.json
 
@@ -202,7 +214,7 @@ query `get maintenance` before retrying.
 ## Direct REST form
 
 ```bash
-curl --fail-with-body --silent --show-error \
+curl --fail-with-body --silent --show-error --cacert "$PWD/gateway-ca.crt" \
   --request PUT \
   --header @control-plane.headers \
   --header 'Content-Type: application/json' \

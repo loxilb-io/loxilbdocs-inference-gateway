@@ -50,7 +50,7 @@ configured per rule and documented in [Admission Flow Control](admission-flow-co
 |---|---|---|---|
 | API-key model allow-list | One API key | Model identifiers | Prevent a workload from calling unauthorized models |
 | API-key RPS | One API key | Requests per second | Protect against one noisy credential |
-| Per-key TPM | One API key | Tokens per minute | Implemented as a post-response debt latch; primary Swagger text is stale, so published support remains pending convergence |
+| Per-key TPM | One API key | Tokens per minute | Pre-admission reservation and usage settlement; insufficient reservation returns 429 before backend delivery, and post-response debt can affect later requests. Validate the active protocol and service |
 | User RPS/TPM | One verified tenant/user pair | Requests or tokens | Bound an identity derived from JWT claims |
 | User-and-model TPM | One verified user and model | Tokens per minute | Isolate one user's expensive-model spend |
 | Tenant RPS | All keys for one tenant | Requests per second | Share an admission ceiling across a tenant |
@@ -109,12 +109,10 @@ operations never return the raw key or its stored hash.
     Do not print `raw_key` in a terminal recording, CI log, dashboard, or issue.
     If it is exposed or lost, delete the key and create a replacement.
 
-Per-key `tokens_per_min` is enforced by the implementation: settlement charges
-the key bucket and debt denies the next request. The primary Swagger text still
-describes stored-only metadata, while the companion PATCH contract describes
-enforcement. Treat that as contract drift requiring an upstream Swagger update,
-not as proof the implementation is inactive. Published support remains pending
-convergence and release qualification.
+Per-key `tokens_per_min` reserves a request budget before backend admission and
+settles it from response usage on supported accounting paths. The selected
+primary Swagger describes both stages. Verify the active accounting path
+before using token quotas as an operational control.
 
 ## Step 2 — Set tenant and per-model token budgets
 

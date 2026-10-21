@@ -37,7 +37,7 @@ docker run -u root --cap-add SYS_ADMIN --restart unless-stopped --privileged \
   -v /dev/log:/dev/log \
   -v /opt/loxilb/config:/etc/loxilb \
   --name loxilb \
-  "$LOXILB_IMAGE"
+  "$LOXILB_IMAGE" --prometheus --metrics-auth=require
 ```
 
 Replace `<RELEASE_TAG>` with a release that your team has tested and approved.
@@ -54,6 +54,14 @@ The command uses host networking, so the REST API is reachable on the host at
 port `11111`. A bridge-network deployment must publish every management and
 data-plane port it uses and be validated separately; publishing only `11111`
 does not expose load-balanced service ports.
+
+`--prometheus` enables collection; without it `/metrics` returns `503`.
+`--metrics-auth=require` requires the configured management authenticator for
+scraping. Enable one management authentication mode before remote use; this
+metrics flag does not enable that authenticator by itself. The Quickstart
+uses a verified TLS endpoint on port `443` and supplies its CA and credentials
+to both REST and CLI. A direct Gateway TLS listener may use a different port;
+set the same scheme, host, port and CA in both clients.
 
 !!! tip "Expose the REST API on a known address"
     All configuration in these docs targets `http://<host>:11111/netlox/v1/...`.
@@ -102,13 +110,24 @@ refused, the container has not finished coming up (or port `11111` is not
 reachable from your client) — give it a few seconds and retry:
 
 ```bash
+api_live=false
 for i in $(seq 1 30); do
   if curl -sf http://<host>:11111/netlox/v1/version >/dev/null 2>&1; then
-    echo "loxilb REST API ready"; break
+    api_live=true
+    echo "loxilb REST API process is live"; break
   fi
   sleep 2
 done
+if [ "$api_live" != true ]; then
+  printf '%s\n' 'REST API did not become live before the deadline' >&2
+  exit 1
+fi
 ```
+
+This is process liveness only. On the selected development source, use
+`GET /status/ready` for configuration readiness; the comparison release does
+not implement that route. Supply management credentials and CA options when
+probing a protected listener.
 
 ## Next steps
 

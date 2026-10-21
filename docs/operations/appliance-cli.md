@@ -12,9 +12,10 @@ snapshot/restore.
 | Need | Use | Ownership |
 |---|---|---|
 | Capture, dry-run, replace, and persist Gateway configuration domains | `loxicmd get snapshot`, `create restore`, `create persist` | Gateway REST lifecycle |
-| Back up or recover the assembled host, OAM database, certificates, Gateway snapshot, and Product identity | `loxicmd appliance backup/restore` | Product-installed appliance backend |
-| Update or roll back appliance software | `loxicmd appliance update/rollback` | Product-installed appliance backend |
-| Reset the assembled appliance | `loxicmd appliance factory-reset` | Product-installed appliance backend |
+| Create and verify an assembled-host backup | `loxicmd appliance backup` | Product-installed appliance backend |
+| Recover an assembled host | Follow the matching Product recovery procedure | Not provided by the selected CLI |
+| Update or roll back appliance software | Follow the matching Product procedure | Not provided by the selected CLI |
+| Reset the assembled appliance | Follow the matching Product procedure | Not provided by the selected CLI |
 
 Do not use Gateway `/config/restore` as a whole-appliance recovery mechanism.
 It does not reinstall packages, restore OAM PostgreSQL, or drive Product
@@ -22,21 +23,24 @@ rollback.
 
 ## Release boundary
 
-| Command family | CLI `v0.9.8.9-rc.2` | CLI main after `56bff57` | Additional requirement |
+| Command family | CLI `v0.9.8.9-rc.2` | Selected CLI source | Additional requirement |
 |---|---:|---:|---|
 | `appliance status`, `network validate` | Yes | Yes | Compatible installed backend |
 | `public-address configure`, `gateway register-local`, `credentials bootstrap` | Yes | Yes | Backend capability and required privilege |
 | `diagnostics create`, `logs` | Yes | Yes | Redaction and bounded-output contract |
 | `backup key-create/create/verify` | Yes | Yes | Root-only key and compatible backend |
-| `restore plan/execute` | **Unavailable stub; exit 6** | Source implemented | Matching Product backend and release qualification |
-| `update plan/execute/status` | **Unavailable stub; exit 6** | Source implemented | Signed bundle, matching backend, Product policy |
-| `rollback plan/execute/status` | **Unavailable stub; exit 6** | Source implemented | Approved release and recovery point |
-| `factory-reset plan/execute` | **Unavailable stub; exit 6** | Source implemented | Safety-preserving Product backend policy |
+| `restore plan/execute` | **Unavailable stub; exit 6** | **Absent** | Matching Product backend and release qualification |
+| `update plan/execute/status` | **Unavailable stub; exit 6** | **Absent** | Signed bundle, matching backend, Product policy |
+| `rollback plan/execute/status` | **Unavailable stub; exit 6** | **Absent** | Approved release and recovery point |
+| `factory-reset plan/execute` | **Unavailable stub; exit 6** | **Absent** | Safety-preserving Product backend policy |
 
-The main-only rows are **not released features**. Source availability does not
-prove that the installed backend advertises the required ordered capability
-matrix, that the Product contains a matching payload schema, or that an
-installed host passed the lifecycle scenario.
+The selected CLI is the development source pair in
+[Verification Status](../reference/verification-status.md). It deliberately
+excludes the host `restore`, `update`, `rollback`, and `factory-reset` families;
+these are absent commands, not currently implemented main-only previews.
+The older comparison release contains unavailable stubs for these families.
+An installed Product backend cannot make an absent CLI command available.
+Confirm its own documented recovery interface with the Product maintainer.
 
 ## rc.2 read-only status and validation
 
@@ -100,42 +104,13 @@ loxicmd appliance diagnostics create \
 apply its allowlist and post-generation secret scan before reporting success.
 Still treat the archive as sensitive operator evidence.
 
-## Main-only governed lifecycle preview
+## Recovery and update boundary
 
-!!! warning "CLI availability: main-only"
-    The following syntax exists in CLI main, not in `v0.9.8.9-rc.2`. Do not
-    use it as released-product guidance. It also requires a Product-installed
-    backend that advertises the exact lifecycle capability matrix.
-
-Every lifecycle mutation is two phase:
-
-1. `plan` validates inputs and returns a stable expiring plan without changing
-   the host;
-2. `execute` accepts only that plan's 64-character lowercase SHA-256 and its
-   short-lived, one-time confirmation challenge.
-
-CLI availability: main-only
-
-```bash
-# CLI availability: main-only
-loxicmd appliance restore plan \
-  /var/lib/loxilb-backups/appliance-backup.tar.age \
-  --key-file /var/lib/loxilb-backups/appliance-backup.key \
-  --output json \
-  > restore-plan.json
-
-loxicmd appliance restore execute \
-  --plan-hash 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef \
-  --confirm plan-12345678 \
-  --output json \
-  > restore-execute.json
-```
-
-The same plan/execute shape applies to `update`, `rollback`, and
-`factory-reset`; update and rollback additionally expose a status command for
-the durable operation ID. Archive and bundle references must be absolute,
-existing regular files and may not be symlinks. Key files must satisfy the
-root-only secret-file policy.
+Do not use an older plan/execute example for an excluded command family.
+The selected CLI rejects those command paths before backend dispatch.
+Gateway configuration recovery remains available through `create restore`;
+it does not restore the host, OAM database, licenses, OS accounts or software.
+Use the exact Product version's separately qualified procedure for host recovery.
 
 ## Backend trust boundary
 
@@ -172,10 +147,11 @@ Automation must require agreement between the process exit and envelope code:
 
 ## Validation boundary
 
-The rc.2 and main command paths/flags on this page are checked against their
-exact completion goldens. The main-only lifecycle is source/contract evidence,
-not installed-host, Linux runtime, Product release, GPU, or HA evidence. No
-host lifecycle mutation is performed by the documentation checks.
+The comparison release and selected CLI command paths are checked separately.
+The selected CLI parser rejects the excluded lifecycle families without backend
+dispatch. Supported backup/status command syntax does not prove installed-host
+recovery or Product release qualification. No host lifecycle mutation is performed
+by the documentation checks.
 
 ## See also
 

@@ -467,12 +467,10 @@ Never retry a failed commit without a fresh dry-run and root-cause review. See
 |---|---|---|
 | Trace status endpoint exists but enable fails | Image lacks the required trace build profile | Verify the immutable image and build variant |
 | `enabled: true`, `otlp_connected: false` | No successful export yet, wrong endpoint/protocol, TLS trust, or collector auth failure | Generate a safe test trace and check DNS, route, TLS, collector credentials, and collector logs |
-| HTTP tracing is enabled but no spans arrive | Export/collector path failed | Check `otlp_connected` and collector receipt; HTTP total/dropped/ring fields are currently zero placeholders |
+| HTTP tracing is enabled but no spans arrive | Export/collector path failed | Check `otlp_connected` and an independent collector/backend receipt |
 | L4 dropped events or ring utilization rise | Sampling/export rate exceeds ring or collector capacity | Lower L4 sampling and fix the collector bottleneck |
 
-`GET /config/trace/catalogs` is marked not implemented and returns `501`; it is
-not a health check. Use the status and OTLP configuration endpoints described
-in [Application and L4 Tracing](tracing.md).
+
 
 ---
 

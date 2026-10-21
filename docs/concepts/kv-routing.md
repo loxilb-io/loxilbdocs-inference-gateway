@@ -105,7 +105,7 @@ The sync is push-based, event-driven, and eventually consistent:
 This worked example uses vLLM P/D mode 1. Mode 3 instead scores all converged
 endpoints; engine-specific event/hash encoding is described in the contract reference.
 
-**Control path (rule creation).** An operator POSTs a load-balancer rule with `kvExactMode: 1` and endpoints tagged prefill / decode. For every prefill endpoint, LoxiLB starts a subscriber that dials the worker's ZeroMQ port. Initial dial failure does not kill the subscriber — it retries on an interval, so the rule can be created before vLLM is up. (A warmup window — Guard B — is defined in the guard ladder but is currently inert; see the verification reference.)
+**Control path (rule creation).** An operator POSTs a load-balancer rule with `kvExactMode: 1` and endpoints tagged prefill / decode. For every prefill endpoint, LoxiLB starts a subscriber that dials the worker's ZeroMQ port. Initial dial failure does not kill the subscriber — it retries on an interval, so the rule can be created before vLLM is up.
 
 **Ingest path (event → inventory).** vLLM publishes a multi-frame message `[topic | sequence | payload]`. `BlockStored` adds hashes, `BlockRemoved` removes them, and `AllBlocksCleared` empties the set. Sequence handling uses a 64-event window: small gaps keep state, while large gaps clear it. Rebuilding a live socket does not itself clear inventory or replay missed events.
 

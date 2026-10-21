@@ -2,15 +2,23 @@
 
 ### Prerequisites
 
-- A current-main Gateway build that exposes `GET /status/ready`.
-- CLI `v0.9.8.9-rc.2` or later if you use the CLI form.
+- The development Gateway and CLI pair in [Verification Status](../reference/verification-status.md).
 - A management token in `CONTROL_PLANE_TOKEN` and a trusted TLS endpoint.
+- A copy of the endpoint's trusted CA at `./gateway-ca.crt`. Use a fresh lab
+  working directory; the credential files below belong only to this run.
+- The CLI token file must be an absolute, owner-only regular file. The
+  commands use `$PWD/gateway.token` and create it with mode `0600`.
 
 Prepare protected credential files once:
 
 ```bash
-export CONTROL_API='https://gateway.example.com/netlox/v1'
-install -m 600 /dev/null ./gateway.token ./control-plane.headers
+set -euo pipefail
+export CONTROL_SCHEME=https CONTROL_HOST=gateway.example.com CONTROL_PORT=443
+export CONTROL_API="$CONTROL_SCHEME://$CONTROL_HOST:$CONTROL_PORT/netlox/v1"
+: "${CONTROL_PLANE_TOKEN:?Obtain a valid management token before continuing}"
+test -r ./gateway-ca.crt
+install -m 600 /dev/null ./gateway.token
+install -m 600 /dev/null ./control-plane.headers
 printf '%s\n' "$CONTROL_PLANE_TOKEN" > ./gateway.token
 printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
 ```
@@ -21,6 +29,7 @@ printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.hea
 
     ```bash
     ready_status=$(curl --silent --show-error \
+      --cacert ./gateway-ca.crt \
       --header @control-plane.headers \
       --output ready.json \
       --write-out '%{http_code}' \
@@ -31,13 +40,16 @@ printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.hea
 === "loxicmd"
 
     ```bash
-    loxicmd get ready --token-file ./gateway.token --output json > ready.json
+    loxicmd get ready --protocol "$CONTROL_SCHEME" \
+      --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+      --cacert ./gateway-ca.crt --token-file "$PWD/gateway.token" --output json > ready.json
     ```
 
 ### Expected result
 
 Ready returns HTTP `200`; not ready returns `503`. Both responses carry the
-typed body. The CLI exits nonzero for not-ready while preserving that body.
+typed body. The selected CLI exits `7` for this typed not-ready verdict while
+preserving the JSON body. A transport or authentication error is a different failure.
 
 ### Validate
 

@@ -28,7 +28,7 @@ The `sel` field on an LB rule chooses how the gateway picks a backend endpoint. 
 | `6` | N3 | — | N3 interface selector; accepted only for UDP services. |
 | `7` | reserved | — | Not used. |
 | `8` | CHWBL | ✅ | Consistent hash with bounded loads — prompt/prefix-aware cache locality. |
-| `9` | GPU-aware (topology-dependent) | ✅ | Plain pool: prefix/session modulo placement. P/D capacity-aware activation is currently release-blocked. |
+| `9` | GPU-aware (topology-dependent) | ✅ | Plain HTTP/1.1 pool: prefix/session modulo placement. |
 | `10` | WRR-hash | ✅ | Weighted consistent hash — same prefix hashing as CHWBL, distributed by weight. |
 
 !!! note "AI routing needs fullproxy"
@@ -69,8 +69,8 @@ owner. Adding or removing a backend remaps only part of the ring.
 
 **When to use for LLM serving:** conversational and RAG workloads that benefit from strong prefix
 locality without requiring clients to send a session header. Monitor hot shared prefixes because
-strict prefix affinity can concentrate them on one endpoint. Tuning fields and their current
-runtime boundary are covered in [CHWBL tuning](#chwbl-tuning-sel-8) below.
+strict prefix affinity can concentrate them on one endpoint. Use the
+[selection checks](#chwbl-tuning-sel-8) below.
 
 #### Example: shared support-agent prompt on equal GPUs
 
@@ -105,25 +105,9 @@ flowchart LR
 
 ### `sel: 9` — GPU-aware
 
-The current fullproxy implementation has two distinct laws behind this historical name:
-
-- On a **plain single pool**, a request with a prefix hash uses
-  `prefix_hash % endpoint_count`; otherwise a conversation ID is hashed the same way, followed by
-  a health-aware fallback when neither value is available. Pushed worker metrics are not read by
-  this userspace selector.
-- On a **P/D pool**, the intended capacity-aware branch exists, but its current activation gate
-  checks the mutable endpoint cursor rather than the configured selector. A configured `sel: 9`
-  therefore does not reliably activate it. Normal Tier 2 uses active connections plus queued
-  requests.
-
-The separate GPU status and worker-metrics APIs provide observability; they are not evidence of
-least-loaded selection on the plain path. See
-[vLLM Integration](../ai-gateway/vllm-integration.md).
-
-!!! danger "P/D capacity-aware activation is currently release-blocked"
-    Configuring `sel: 9` does not reliably enable the capacity-aware scorer. Do not claim that
-    behavior until the activation gate is corrected and the exact release artifact passes an
-    integration test. On HTTP/2, selector 9 reduces to round-robin.
+For a plain HTTP/1.1 pool, selector 9 uses prefix/conversation modulo
+placement and healthy-endpoint fallback. Worker telemetry does not establish
+least-loaded placement.
 
 **When to use for LLM serving:** use `sel: 9` only when you deliberately want plain-pool modulo
 placement and have tested how endpoint additions, removals, and failures remap traffic. Prefer
@@ -170,7 +154,7 @@ On HTTP/1.1, a real prefix hash remains strictly affine to its weighted ring own
 health handling. The bounded-load check applies only when selection uses a conversation or
 fallback-derived key.
 
-**When to use for LLM serving:** mixed or transitional fleets where you want cache-aware routing but the endpoints are not equal — for example while draining an old GPU tier, or when blending large- and small-VRAM nodes under one VIP. Selector 10 uses endpoint weights, but submitted `chwbl_*` tuning values are not currently propagated to the proxy.
+**When to use for LLM serving:** mixed or transitional fleets where you want cache-aware routing but the endpoints are not equal — for example while draining an old GPU tier, or when blending large- and small-VRAM nodes under one VIP. Selector 10 uses endpoint weights; verify the observed distribution.
 
 #### Example: weighted cache affinity across different-sized GPUs
 
@@ -207,45 +191,10 @@ flowchart LR
 
 ---
 
-## CHWBL tuning (`sel: 8`)
+## CHWBL selection (`sel: 8`) { #chwbl-tuning-sel-8 }
 
-The API accepts the CHWBL knobs for `sel: 8` and `sel: 10`, but the current rule-to-data-plane
-path does not propagate them. The live proxy uses mean-load factor `175`, replication `256`,
-prefix flags `0`, and cache-salt enforcement disabled. Treat the fields below as an intended
-configuration contract, not working production tuning, until runtime metrics or a distribution
-test proves propagation in the released artifact.
-
-| Field | Type | Default | Range / values | What it controls |
-|---|---|---|---|---|
-| `chwbl_prefix_hash_level` | int | `1` | `1`, `2`, `3` | Stored/read back; the runtime currently derives prefix scope from request content. |
-| `chwbl_prefix_hash_flags` | int | `0` | `0`–`255` bitflags | Stored/read back; the runtime currently programs flags `0`. |
-| `chwbl_mean_load_factor` | int | schema `125`; runtime `175` | `100`–`300` | Intended bounded-load ceiling; currently not propagated to the proxy. |
-| `chwbl_replication` | int | schema `100`; runtime `256` | `1`–`1024` | Intended vnode count; currently not propagated to the proxy. |
-| `chwbl_enable_cache_salt` | bool | `false` | — | Intended salt requirement; currently not propagated, so it must not be used as a tenant-isolation control. |
-
-!!! danger "Do not claim strict tenant isolation from CHWBL salt"
-    Prefix scope is inferred from request content and the runtime salt switch remains off.
-    Separate untrusted tenants into independently authorized pools or listeners. A hash input is
-    an affinity hint, not an authorization boundary.
-
-### `chwbl_prefix_hash_flags` bits
-
-These bits describe the API contract. The current proxy receives flags `0` and infers prefix
-scope from each request; setting a nonzero value does not currently change the live hash input.
-
-| Bit | Value | Feature |
-|---|---|---|
-| 0 | `1` | LoRA adapter |
-| 1 | `2` | Image input |
-| 2 | `4` | Audio input |
-| 3 | `8` | Cache salt |
-| 4 | `16` | Tools / function definitions |
-| 5 | `32` | Session |
-| 6 | `64` | RAG template |
-| 7 | `128` | RAG documents |
-
-For example, the schema defines `192` as bits 6 and 7. This is descriptive API metadata only in
-the current build; setting it does not change the live hash input.
+Use controlled prefix-reuse and endpoint-distribution tests to verify the
+selected algorithm. Hash affinity is not an authorization boundary.
 
 ### Configure CHWBL
 
@@ -353,8 +302,7 @@ List the LB rules and confirm the `sel` value in effect:
 
 **CHWBL / WRR-hash knobs appear to have no effect**
 
-- Verify `sel` is `8` or `10`, then test the observed distribution. The `chwbl_*` fields are
-  stored but are not currently propagated to the proxy.
+- Verify the selected algorithm and observed endpoint distribution.
 - Confirm the rule is in `mode: 4` (fullproxy); L4 modes cannot inspect the request body to compute prefix hashes.
 
 **Session not sticking under `sel: 3`**
@@ -366,9 +314,7 @@ List the LB rules and confirm the `sel` value in effect:
 
 - On a plain pool, repeated prefixes are deliberately mapped by modulo and can concentrate
   traffic. Pushed worker metrics do not change that law. Use CHWBL for bounded prefix affinity or
-  round-robin for independent requests. Do not diagnose P/D capacity scoring from selector 9 until
-  its activation gate is corrected; normal P/D Tier 2 uses active connections plus queued requests.
-  See [vLLM Integration](../ai-gateway/vllm-integration.md).
+  round-robin for independent requests.   See [vLLM Integration](../ai-gateway/vllm-integration.md).
 
 ---
 

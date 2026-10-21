@@ -103,12 +103,8 @@ curl --fail-with-body --silent --show-error \
   "$CONTROL_API/config/trace/status" | jq .
 ```
 
-The HTTP trace status schema includes `enabled`, `total_events`,
-`dropped_events`, per-worker `ring_utilization`, OTLP settings, and
-`otlp_connected`. In the current HTTP handler, the event counters and ring
-values are zero placeholders rather than live telemetry. A true `enabled`
-value means trace hooks are active; use `otlp_connected` together with receipt
-at the collector/backend to prove export.
+Use `otlp_connected` together with independent collector/backend records to
+verify export. An enabled setting alone is insufficient.
 
 ## Enable sampled L4 tracing
 
@@ -153,9 +149,7 @@ the collector are already saturated reduces evidence quality.
    test time without recording tokens or payloads.
 
 If `otlp_connected` remains false, check DNS, route, protocol, TLS trust,
-collector authentication, and collector logs. Do not use the HTTP trace
-counter or ring fields for alerting until live accounting is implemented and
-qualified.
+collector authentication, and collector logs. Use independently collected traces to verify delivery.
 
 ## Disable and reset
 
@@ -176,17 +170,6 @@ curl --fail-with-body --silent --show-error \
   --request POST --header @control-plane.headers \
   "$CONTROL_API/config/l4trace/stats/reset"
 ```
-
-## API availability boundary
-
-`GET /config/trace/catalogs` is declared in the OpenAPI document but is marked
-not implemented and currently returns `501`. Do not build automation against
-it. Parser discovery and parser-to-catalog mapping have separate endpoints,
-but qualify them with the exact release before operational use.
-
-Tracing hooks and API handlers prove implementation, not production sizing.
-Validate overhead, data exposure, collector failure behavior, and retention
-with your immutable image and representative traffic before continuous use.
 
 ## See also
 

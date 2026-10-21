@@ -131,8 +131,8 @@ The development source no longer reads API keys or tenant quotas from the
 management user-service database and no longer creates those tables there.
 There is no automatic data migration.
 
-!!! danger "Do not upgrade with only `--userservice`"
-    An upgraded Gateway with `--userservice` but no `--aikey-db-host` has management login but no
+!!! danger "Management access does not configure the AI-key store"
+    An upgraded Gateway without `--aikey-db-host` has no
     AI-key store. Key/quota CRUD returns `503`; a service declaring `api_key_auth: required`
     also returns `503 policy_store_unavailable` before backend dispatch. A service that omitted
     the declaration remains keyless by contract. Treat either unintended state as an
@@ -172,12 +172,11 @@ new independently generated key IDs; reissue when that distinction matters.
     or `disabled` rule intentionally has no API-key validation dependency. Verify the exact
     declaration by read-back instead of inferring it from store health, SSE, or P/D flags.
 
-Per-key `tokens_per_min` is actively consumed by the implementation and its
-unit/integration tests. The frozen primary Swagger text is stale and calls it
-stored-only metadata, while the companion PATCH description says it is
-enforced. Do not present this implemented behavior as a released support
-guarantee until the primary contract is corrected and qualified. The complete
-ladder is documented in [AI Quotas and QoS](ai-qos.md).
+Positive per-key `tokens_per_min` participates in pre-admission reservation
+and usage settlement on supported token-accounting paths. The primary Swagger
+describes that behavior. Readback is not proof of active enforcement. Check a bounded
+positive request, a `429 token_quota_would_exceed` refusal before backend delivery,
+settlement, cancellation and recovery. See [AI Quotas and QoS](ai-qos.md).
 
 The management handlers expose unconfigured and unavailable as separate `503`
 error codes because they require different operator actions. The inference

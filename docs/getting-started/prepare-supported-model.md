@@ -11,8 +11,9 @@ on [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readi
     The model-profile registry, the installer and `kvModelProfile` are on Gateway `main`. They are absent from
     Gateway `v0.9.8.9-rc.1`. Check the installed Gateway identity before following this page.
 
-Every step below exists because the gateway must compute the same token ids and cache hashes as the engine.
-None of them is a tuning choice: an engine launched without one of them never reaches `READY`.
+Verify tokenization, hash geometry and engine identity against the selected
+profile. Read the binding and readiness result rather than inferring readiness
+from launch flags alone.
 
 ## 1. Choose a model and an engine version
 

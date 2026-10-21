@@ -21,7 +21,6 @@ continues to the rule's configured selector.
 | Check | Fires when… | `reason` label |
 |---|---|---|
 | Feature enabled | `kvExactMode == 0` (feature off for this rule) | `mode_off` |
-| Warmup timer | *(currently inert)* The field defines a delay, but the production path never arms its start timestamp; this check does not currently fire. | `warmup` |
 | Prompt text | No prompt text in the request | `text_empty` |
 | Model identity | No model resolvable from the body or `X-Model` header | `model_empty` |
 | Tokenizer | Tokenizer missing or failed for the model slug | `tokenize` |
@@ -66,7 +65,10 @@ Assert, in order:
 | `loxilb_pd_kv_tier15_hits_total` **advances after the first cold request** | the tier is making real decisions | **flat delta = broken parity; you are measuring the fallback → ABORT** and check the engine contract and effective launch identity before benchmarking |
 | `loxilb_pd_kv_tier15_fallthrough_total` stays roughly flat under warm traffic | requests aren't leaving tier 1.5 | rising fallthrough = overlap not scoring; mode 1 then uses P/D min-load, while mode 3 uses its selector |
 
-The hit assertion is necessary but not sufficient: retain attestation state and independent backend receipts too. Fire one **cold** request to populate the inventory, then a **warm** request that shares its prefix; `loxilb_pd_kv_tier15_hits_total` **must** increment. A flat counter means overlap is zero and the tier is inert — abort and fix parity, rather than benchmarking the fallback selector.
+Retain attestation state and independent backend receipts. Send a controlled
+repeated-prefix probe after matching inventory has been observed, and require
+a positive hit delta before labelling the result as engaged Exact routing. A
+flat counter requires diagnosis; it does not identify a single root cause.
 
 ### Check expected subscribers
 
@@ -131,7 +133,7 @@ Silent-failure decoder for "tokenizer loaded but KV-exact is still falling throu
 | `tier15_miss_reason{reason="model_empty"}` climbs request-for-request | Client is not sending OpenAI JSON, or the model field / `X-Model` header is missing. |
 | Tokenizer loaded, inventory empty | Prefill endpoint not tagged `ep_role: 1`, wrong `kvZmqPort`, or vLLM KV-events not enabled. |
 | Tokenizer loaded, inventory non-empty, overlap still 0 | `kvBlockSize`, `kvHashAlgo`/vLLM-version, or seed mismatch — check the engine contract and effective launch identity. |
-| Everything looks right but the tier stays cold just after start | Inventory is still filling from KV events — not `kvWarmupSec` (Guard B is currently inert). Wait for the first events to ingest, then re-check the block gauge. |
+| Everything looks right but the tier stays cold just after start | Inventory is still filling from KV events. Wait for the first events to ingest, then re-check the block gauge. |
 | `504 pd_prefill_timeout` on long prompts | Prefill exceeds `LLB_PD_PREFILL_TIMEOUT_SEC` (default 30) — raise to 180 for long context; confirm the rule/process timeout precedence first. |
 
 ---
@@ -147,8 +149,8 @@ Silent-failure decoder for "tokenizer loaded but KV-exact is still falling throu
 5. **Probe and retry timing differ.** Probe-down transitions are synchronized into fullproxy and
    seed the exclusion mask. Connect-failure retry covers the interval before the prober observes
    the failure; admin-down and an open circuit breaker are also excluded.
-6. **CPU vLLM defaults to `--block-size 128`** — no events for short prompts; always set `16`.
-7. **`kvWarmupSec` is currently inert.** The field is accepted, validated, and stored, but the warmup timer is never armed in the current data path — the tier is **not** suppressed after subscriber start and activates as soon as routing conditions are met. Do not design procedures around the warmup window.
+6. **Check effective block geometry.** Match the engine and selected profile;
+   defaults depend on engine version and platform.
 8. **The retained prefill examples apply to P/D mode 1.** A role-less single-pool vLLM service can instead use
    `kvExactMode: 3`, which scores every endpoint and falls back to the rule selector on a miss.
    Do not mix mode 3 with P/D endpoint roles.

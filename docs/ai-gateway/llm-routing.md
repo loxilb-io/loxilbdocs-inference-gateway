@@ -38,8 +38,8 @@ use it**, the **curl config** that creates it, and **how to verify** the rule is
 | `0` | Round-robin (baseline) | Backends are stateless or you want an even spread with no affinity |
 | `8` | CHWBL (consistent hash, bounded load) | Multi-turn chat / shared system prompts — maximize KV-cache locality with equal-capacity backends |
 | `10` | Weighted CHWBL (WRR-hash) | Same as CHWBL but backends have **different capacity** (weights) |
-| `9` | GPU-aware name, topology-dependent law | Plain-pool prefix/session modulo placement; P/D capacity scoring is release-blocked |
-| `3` | Session persistence | A specific header/cookie/query/user must always land on the same backend |
+| `9` | GPU-aware name, topology-dependent law | Plain HTTP/1.1 pool: prefix/session modulo placement |
+| `3` | Session persistence | Identifier-based affinity; verify endpoint eligibility and remapping |
 
 The `sel` enum and the semantics of each value are defined once in
 [LB Algorithms](../concepts/lb-algorithms.md) — this page does not repeat them.
@@ -103,11 +103,9 @@ recommended so unhealthy backends are pulled from rotation.
 **When to use:** conversational or prompt-sharing workloads on **equal-capacity** backends. CHWBL
 (Consistent Hashing With Bounded Loads) hashes a prefix of each request and maps it to a point on a
 ring, so requests carrying the same prefix consistently land on the same backend — reusing its KV
-cache — while the bounded-load cap prevents any one backend from being overloaded.
+cache. Verify load protection separately from affinity.
 
-The current runtime derives the prefix key from request content. The API accepts and reads back
-the `chwbl_*` fields, but the rule-to-proxy path does not yet apply their submitted values. Create
-the rule with `sel: 8`, then verify affinity and spill behavior with controlled traffic:
+Verify prefix affinity and actual endpoint load with controlled traffic:
 
 === "curl"
 
@@ -135,26 +133,6 @@ the rule with `sel: 8`, then verify affinity and spill behavior with controlled 
     ```bash
     loxicmd create lb 192.0.2.254 --tcp=2021:8000 --endpoints=192.0.2.1:1,198.51.100.1:1 --mode=fullproxy --select=chwbl --security=https
     ```
-
-### CHWBL tuning knobs
-
-These fields are accepted for `sel` 8 or 10, but the current control path does not propagate
-them. The live proxy uses mean factor 175, replication 256, flags 0, and salt enforcement off.
-
-| Field | Type | Default | Range | What it does |
-|---|---|---|---|---|
-| `chwbl_prefix_hash_level` | int | `1` | `1`, `2`, `3` | Stored/read back; current runtime infers prefix scope from request content. |
-| `chwbl_prefix_hash_flags` | int | `0` | `0`–`255` | Stored/read back; current runtime programs flags `0`. |
-| `chwbl_mean_load_factor` | int | schema `125`; runtime `175` | `100`–`300` | Intended bounded-load cap; currently not propagated. |
-| `chwbl_replication` | int | schema `100`; runtime `256` | `1`–`1024` | Intended vnode count; currently not propagated. |
-| `chwbl_enable_cache_salt` | bool | `false` | — | Intended salt guard; currently not propagated and therefore not a tenant-isolation control |
-
-!!! danger "Current runtime boundary"
-    Do not use the API examples below to claim that the displayed CHWBL values took effect.
-    Confirm the released artifact with a controlled distribution test. Isolate untrusted tenants
-    through authorization and separate pools; request-derived prefix hashing is not access control.
-
----
 
 ## Weighted CHWBL — `sel: 10`
 
@@ -197,18 +175,9 @@ tuning knobs above apply unchanged.
 
 ## GPU-aware routing — `sel: 9`
 
-**Current behavior:** the `gpuaware` name covers two different paths. In a plain single pool,
-the gateway uses `prefix_hash % endpoint_count`, then conversation-hash modulo placement, then a
-healthy fallback. It does not read the pushed worker-metrics map. A P/D capacity-aware scorer
-exists, but its activation gate checks a mutable endpoint cursor instead of the configured
-selector; configuring `sel: 9` does not reliably enable it. Normal P/D Tier 2 uses active
-connections plus queued requests.
-
-!!! warning "Do not treat plain-pool selector 9 as least-loaded routing"
-    The example below is valid configuration, but its plain-pool placement law is affinity modulo,
-    not live GPU scoring. Use CHWBL for a stable bounded-load hash ring or round-robin for
-    independent requests. Treat P/D capacity scoring as unavailable until the activation gate is
-    corrected and validated end to end.
+For a plain HTTP/1.1 pool, selector 9 provides prefix/conversation modulo
+affinity. Worker metrics do not establish least-loaded selection. Use the
+following example only for a non-P/D pool.
 
 === "curl"
 
@@ -245,7 +214,8 @@ The GPU status and worker-metrics APIs do not change this plain-pool selection l
 ## Session persistence — `sel: 3`
 
 **When to use:** a client-supplied identifier — HTTP header, cookie, query parameter, or Basic-Auth
-username — must always route to the same backend. This is the mechanism behind MCP session
+username — is used as an affinity key. Verify repeat placement and failure
+remapping separately. This supports MCP session
 stickiness (see [MCP Gateway](mcp-gateway.md)).
 
 `session_header_name` selects **what** to key on:
@@ -310,7 +280,7 @@ curl -sk https://192.0.2.254:2020/v1/models | jq .
 For CHWBL / weighted modes, send several requests carrying the same prefix (e.g. an identical
 system prompt) and confirm they consistently reach the same backend — inspect the backend
 `X-Request-Id` / access logs, or watch per-endpoint request counts. For selector 9, validate
-plain-pool modulo affinity only; P/D capacity-aware activation is currently release-blocked. See
+plain-pool modulo affinity with independent backend receipts. See
 [vLLM Integration](vllm-integration.md).
 
 ---
@@ -321,13 +291,11 @@ plain-pool modulo affinity only; P/D capacity-aware activation is currently rele
 
 - Confirm `sel` is `8` (or `10`), not `0`, in `GET /config/loadbalancer/all`.
 - The prefix hash needs shared request content. If every request has a unique prompt, expect a
-  broad spread; the stored hash-level field does not currently alter runtime prefix scope.
+  broad spread.
 
 **One backend takes almost all traffic (CHWBL)**
 
-- The bounded-load cap reacts to concurrent load; a one-request-at-a-time test may remain on the
-  same ring owner. The current proxy fixes factor 175 and replication 256, so stored REST values
-  are not a working tuning mechanism yet.
+- Compare endpoint eligibility, prefix reuse and actual concurrent load.
 
 **Weighted mode ignores my weights**
 

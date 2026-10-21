@@ -93,11 +93,10 @@ directly into your secret manager, then securely remove the temporary file.
 |---|---|---|
 | `tenant_id` | String | Owning tenant; required |
 | `name` | String | Non-secret operator label |
-| `api_key` | String | Optional caller-supplied key for a controlled credential import; write-only |
 | `allowed_models` | String array | Exact model identifiers this key may use |
 | `rate_limit_rps` | Integer | Per-key requests per second; `0` disables this limit |
 | `burst_size` | Integer | Per-key request bucket capacity |
-| `tokens_per_min` | Integer | The implementation charges a per-key TPM bucket and denies the next request after debt; primary Swagger text is stale, so published support remains pending contract convergence |
+| `tokens_per_min` | Integer | Positive values participate in pre-admission reservation and usage settlement on supported token-accounting paths; nonpositive values leave this dimension unlimited. Insufficient reservation returns 429 before backend delivery |
 | `expires_at` | RFC 3339 timestamp | Optional key expiry |
 | `enabled` | Boolean | Defaults to enabled when omitted |
 | `priority_class` | String | Source contract class: standard, critical or sheddable |
@@ -112,23 +111,17 @@ they are not a statement of GAIE/llm-d deployment qualification.
 An empty model list records no model restriction. Prefer an explicit list when
 the workload should use only known models.
 
-The implementation is authoritative for observed behavior: the current limiter
-and tests charge and latch a per-key bucket. The frozen primary Swagger text
-incorrectly calls the field stored-only metadata, while `swagger-extras.yml`
-describes PATCH enforcement. Until the primary schema text is corrected and
-release-qualified, do not call per-key TPM a supported release contract; use
-tenant/user/model or shared-VIP limits when a published guarantee is required.
+The primary Swagger documents per-key admission reservation and usage
+settlement. Admission estimates prompt tokens and uses declared `max_tokens`,
+or a configured completion default when omitted; settlement reconciles the
+reservation with usage. A request can therefore be refused before its first
+backend delivery with `429 token_quota_would_exceed` and `Retry-After`.
+Post-response debt can also affect later requests. These are related stages,
+not a post-response-only guarantee. Cancellation, missing usage and the minute
+window require their own checks. Source support and CPU functional tests do not qualify every
+protocol, engine, HA pair or released product.
 
-The normal path omits `api_key`, lets the Gateway generate the credential, and
-receives it once as `raw_key`. The development contract also accepts a
-caller-supplied key between 16 and 512 printable, non-space ASCII characters.
-That path stores only its SHA-256 hash and never echoes the supplied value.
-
-!!! warning "Imported-key response boundary"
-    The current handler returns an empty `raw_key` value for an imported key, while the development
-    Swagger description says the field is omitted and its response schema still marks `raw_key` as
-    required. Do not automate against empty-versus-absent behavior until the release contract
-    resolves this mismatch. Generated-key responses are unaffected.
+Use Gateway-generated keys and retain `raw_key` only from the create response.
 
 ## List and inspect without exposing the secret
 

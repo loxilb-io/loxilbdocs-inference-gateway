@@ -107,8 +107,7 @@ Base SGLang P/D works without `kvExactMode`. Add the following fields only after
   "kvExactMode": 1,
   "kvBlockSize": 16,
   "kvZmqPort": 5557,
-  "kvDpRankCount": 1,
-  "kvWarmupSec": 30
+  "kvDpRankCount": 1
 }
 ```
 
@@ -117,9 +116,6 @@ Base SGLang P/D works without `kvExactMode`. Add the following fields only after
 - Keep the entire consecutive port range reachable and at or below `65535`.
 - Omit `kvHashAlgo`; the gateway derives `sha256_sglang` from the engine type.
 - Do not use `kvExactMode: 3` on a P/D rule. Mode 3 is for a role-less single pool.
-- `kvWarmupSec` is accepted and stored, but the production path currently does not arm
-  its start timestamp. Gate traffic on endpoint health, subscriber connectivity, and
-  inventory signals instead of sleeping for this duration.
 
 ## Verify
 

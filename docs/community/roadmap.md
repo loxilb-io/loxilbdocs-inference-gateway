@@ -47,14 +47,9 @@ immutable image and has passed the deployment's release qualification.
   selection for heterogeneous fleets. Experimental and off by default.
 - **Tiered caching with LMCache** — a CPU (and optional remote) KV tier beneath the GPU cache.
   Advanced; gate before production rollout.
-- **OPA L4 policy watcher** — desired-state firewall synchronization is
-  implemented, but authenticated internal rule apply, meaningful fail-mode
-  behavior, atomic document validation, cache permissions, and complete SSRF
-  controls remain release gates.
-- **Presidio PII scanning** — optional source build, currently request-direction
-  only; standard release images use the stub implementation.
-- **Llama Firewall** — source integration and API contract exist, but standard
-  release images use a stub and no supported release packaging path is defined.
+
+
+
 - **NVIDIA DOCA DPU offload** — optional hardware/source build that requires
   target-specific SDK, driver, firmware, correctness, fallback, and performance
   qualification.

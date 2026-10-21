@@ -20,6 +20,26 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -31,6 +51,26 @@
           "--cacert",
           "--cert",
           "--insecure",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
           "--key",
           "--key-file",
           "--output",
@@ -62,6 +102,26 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -73,6 +133,26 @@
           "--cacert",
           "--cert",
           "--insecure",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
           "--key",
           "--key-file",
           "--output",
@@ -104,6 +184,26 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -115,6 +215,26 @@
           "--cacert",
           "--cert",
           "--insecure",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
           "--key",
           "--key-file",
           "--output",
@@ -146,6 +266,25 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -165,6 +304,25 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       }
     },
@@ -172,24 +330,8 @@
       "enums": {},
       "main": {
         "aliases": [],
-        "available": true,
-        "flags": [
-          "--apiserver",
-          "--bearer",
-          "--cacert",
-          "--cert",
-          "--confirm",
-          "--insecure",
-          "--key",
-          "--originator",
-          "--output",
-          "--plan-hash",
-          "--port",
-          "--protocol",
-          "--timeout",
-          "--token",
-          "--token-file"
-        ]
+        "available": false,
+        "flags": []
       },
       "release": {
         "aliases": [],
@@ -201,22 +343,8 @@
       "enums": {},
       "main": {
         "aliases": [],
-        "available": true,
-        "flags": [
-          "--apiserver",
-          "--bearer",
-          "--cacert",
-          "--cert",
-          "--insecure",
-          "--key",
-          "--originator",
-          "--output",
-          "--port",
-          "--protocol",
-          "--timeout",
-          "--token",
-          "--token-file"
-        ]
+        "available": false,
+        "flags": []
       },
       "release": {
         "aliases": [],
@@ -243,6 +371,25 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -254,6 +401,25 @@
           "--cacert",
           "--cert",
           "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
           "--key",
           "--output",
           "--port",
@@ -268,24 +434,8 @@
       "enums": {},
       "main": {
         "aliases": [],
-        "available": true,
-        "flags": [
-          "--apiserver",
-          "--bearer",
-          "--cacert",
-          "--cert",
-          "--confirm",
-          "--insecure",
-          "--key",
-          "--originator",
-          "--output",
-          "--plan-hash",
-          "--port",
-          "--protocol",
-          "--timeout",
-          "--token",
-          "--token-file"
-        ]
+        "available": false,
+        "flags": []
       },
       "release": {
         "aliases": [],
@@ -297,23 +447,8 @@
       "enums": {},
       "main": {
         "aliases": [],
-        "available": true,
-        "flags": [
-          "--apiserver",
-          "--bearer",
-          "--cacert",
-          "--cert",
-          "--insecure",
-          "--key",
-          "--key-file",
-          "--originator",
-          "--output",
-          "--port",
-          "--protocol",
-          "--timeout",
-          "--token",
-          "--token-file"
-        ]
+        "available": false,
+        "flags": []
       },
       "release": {
         "aliases": [],
@@ -325,24 +460,8 @@
       "enums": {},
       "main": {
         "aliases": [],
-        "available": true,
-        "flags": [
-          "--apiserver",
-          "--bearer",
-          "--cacert",
-          "--cert",
-          "--confirm",
-          "--insecure",
-          "--key",
-          "--originator",
-          "--output",
-          "--plan-hash",
-          "--port",
-          "--protocol",
-          "--timeout",
-          "--token",
-          "--token-file"
-        ]
+        "available": false,
+        "flags": []
       },
       "release": {
         "aliases": [],
@@ -354,24 +473,8 @@
       "enums": {},
       "main": {
         "aliases": [],
-        "available": true,
-        "flags": [
-          "--apiserver",
-          "--archive",
-          "--bearer",
-          "--cacert",
-          "--cert",
-          "--insecure",
-          "--key",
-          "--key-file",
-          "--originator",
-          "--output",
-          "--port",
-          "--protocol",
-          "--timeout",
-          "--token",
-          "--token-file"
-        ]
+        "available": false,
+        "flags": []
       },
       "release": {
         "aliases": [],
@@ -383,22 +486,8 @@
       "enums": {},
       "main": {
         "aliases": [],
-        "available": true,
-        "flags": [
-          "--apiserver",
-          "--bearer",
-          "--cacert",
-          "--cert",
-          "--insecure",
-          "--key",
-          "--originator",
-          "--output",
-          "--port",
-          "--protocol",
-          "--timeout",
-          "--token",
-          "--token-file"
-        ]
+        "available": false,
+        "flags": []
       },
       "release": {
         "aliases": [],
@@ -425,6 +514,25 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -436,6 +544,25 @@
           "--cacert",
           "--cert",
           "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
           "--key",
           "--output",
           "--port",
@@ -450,24 +577,8 @@
       "enums": {},
       "main": {
         "aliases": [],
-        "available": true,
-        "flags": [
-          "--apiserver",
-          "--bearer",
-          "--cacert",
-          "--cert",
-          "--confirm",
-          "--insecure",
-          "--key",
-          "--originator",
-          "--output",
-          "--plan-hash",
-          "--port",
-          "--protocol",
-          "--timeout",
-          "--token",
-          "--token-file"
-        ]
+        "available": false,
+        "flags": []
       },
       "release": {
         "aliases": [],
@@ -479,22 +590,8 @@
       "enums": {},
       "main": {
         "aliases": [],
-        "available": true,
-        "flags": [
-          "--apiserver",
-          "--bearer",
-          "--cacert",
-          "--cert",
-          "--insecure",
-          "--key",
-          "--originator",
-          "--output",
-          "--port",
-          "--protocol",
-          "--timeout",
-          "--token",
-          "--token-file"
-        ]
+        "available": false,
+        "flags": []
       },
       "release": {
         "aliases": [],
@@ -506,22 +603,8 @@
       "enums": {},
       "main": {
         "aliases": [],
-        "available": true,
-        "flags": [
-          "--apiserver",
-          "--bearer",
-          "--cacert",
-          "--cert",
-          "--insecure",
-          "--key",
-          "--originator",
-          "--output",
-          "--port",
-          "--protocol",
-          "--timeout",
-          "--token",
-          "--token-file"
-        ]
+        "available": false,
+        "flags": []
       },
       "release": {
         "aliases": [],
@@ -558,6 +641,33 @@
           "--token",
           "--token-file",
           "--tokens-per-min"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--allowed-models",
+          "--api-key-file",
+          "--apiserver",
+          "--burst",
+          "--cacert",
+          "--cert",
+          "--expires-at",
+          "--key",
+          "--name",
+          "--output",
+          "--port",
+          "--protocol",
+          "--rps",
+          "--tenant-id",
+          "--timeout",
+          "--token",
+          "--token-file",
+          "--tokens-per-min"
         ]
       },
       "release": {
@@ -575,6 +685,33 @@
           "--enabled",
           "--expires-at",
           "--insecure",
+          "--key",
+          "--name",
+          "--output",
+          "--port",
+          "--protocol",
+          "--rps",
+          "--tenant-id",
+          "--timeout",
+          "--token",
+          "--token-file",
+          "--tokens-per-min"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--allowed-models",
+          "--api-key-file",
+          "--apiserver",
+          "--burst",
+          "--cacert",
+          "--cert",
+          "--expires-at",
           "--key",
           "--name",
           "--output",
@@ -613,6 +750,30 @@
           "--token",
           "--token-file",
           "--usage"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--cert-file",
+          "--cert-id",
+          "--chain-file",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file",
+          "--usage"
         ]
       },
       "release": {
@@ -635,6 +796,29 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--cert-file",
+          "--cert-id",
+          "--chain-file",
+          "--key",
+          "--key-file",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       }
     },
@@ -642,7 +826,9 @@
       "enums": {
         "--api-key-auth": [
           "disabled",
-          "required"
+          "required",
+          "jwt",
+          "apikey-or-jwt"
         ],
         "--backend-protocol": [
           "http1",
@@ -834,6 +1020,97 @@
           "--token-file",
           "--trace-type",
           "--udp"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--api-key-auth",
+          "--apiserver",
+          "--backend-ca-cert-id",
+          "--backend-client-cert-id",
+          "--backend-keepalive-interval",
+          "--backend-protocol",
+          "--backend-tls-server-name",
+          "--cacert",
+          "--cert",
+          "--chwbl-hash-flags",
+          "--chwbl-hash-level",
+          "--chwbl-load-factor",
+          "--chwbl-replication",
+          "--connection-limit",
+          "--endpoints",
+          "--ep-role",
+          "--fc-adaptive",
+          "--fc-decode-max-inflight",
+          "--fc-ep-max-inflight",
+          "--fc-expose-headers",
+          "--fc-max-outstanding",
+          "--fc-max-queue-depth",
+          "--fc-max-queue-wait-ms",
+          "--fc-mode",
+          "--fc-prefill-max-inflight",
+          "--fc-telemetry-stale-ms",
+          "--fc-tenant-max-share-pct",
+          "--fc-ttft-target-ms",
+          "--fc-warmup-ms",
+          "--host",
+          "--hsts-max-age",
+          "--inatimeout",
+          "--jwt-auth-profile",
+          "--key",
+          "--kv-block-size",
+          "--kv-dp-ranks",
+          "--kv-engine-type",
+          "--kv-exact-mode",
+          "--kv-hash-algo",
+          "--kv-warmup",
+          "--kv-zmq-port",
+          "--mark",
+          "--max-stream-duration",
+          "--mode",
+          "--model-name",
+          "--mtls-backend-ca-path",
+          "--mtls-backend-cert-path",
+          "--mtls-backend-key-path",
+          "--mtls-client-ca-path",
+          "--mtls-client-cert-mode",
+          "--mtls-client-cn-pattern",
+          "--mtls-client-crl-path",
+          "--name",
+          "--nixl-port",
+          "--output",
+          "--path-match-mode",
+          "--path-prefix",
+          "--pd-balance-abs-threshold",
+          "--pd-bootstrap-port",
+          "--pd-cache-threshold",
+          "--pd-prefill-timeout",
+          "--pd-session-ttl",
+          "--port",
+          "--probeport",
+          "--probereq",
+          "--proberetries",
+          "--probetimeout",
+          "--probetype",
+          "--protocol",
+          "--sctp",
+          "--secips",
+          "--security",
+          "--select",
+          "--session-header-name",
+          "--sockmap-mode",
+          "--sources",
+          "--tcp",
+          "--timeout",
+          "--token",
+          "--token-file",
+          "--trace-type",
+          "--udp"
         ]
       },
       "release": {
@@ -921,6 +1198,78 @@
           "--token-file",
           "--trace-type",
           "--udp"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--api-key-auth",
+          "--apiserver",
+          "--backend-keepalive-interval",
+          "--backend-protocol",
+          "--cacert",
+          "--cert",
+          "--chwbl-hash-flags",
+          "--chwbl-hash-level",
+          "--chwbl-load-factor",
+          "--chwbl-replication",
+          "--endpoints",
+          "--ep-role",
+          "--host",
+          "--hsts-max-age",
+          "--inatimeout",
+          "--key",
+          "--kv-block-size",
+          "--kv-dp-ranks",
+          "--kv-engine-type",
+          "--kv-exact-mode",
+          "--kv-hash-algo",
+          "--kv-warmup",
+          "--kv-zmq-port",
+          "--mark",
+          "--max-stream-duration",
+          "--mode",
+          "--model-name",
+          "--mtls-backend-ca-path",
+          "--mtls-backend-cert-path",
+          "--mtls-backend-key-path",
+          "--mtls-client-ca-path",
+          "--mtls-client-cert-mode",
+          "--mtls-client-cn-pattern",
+          "--mtls-client-crl-path",
+          "--name",
+          "--nixl-port",
+          "--output",
+          "--path-match-mode",
+          "--path-prefix",
+          "--pd-balance-abs-threshold",
+          "--pd-bootstrap-port",
+          "--pd-cache-threshold",
+          "--pd-session-ttl",
+          "--port",
+          "--probeport",
+          "--probereq",
+          "--proberetries",
+          "--probetimeout",
+          "--probetype",
+          "--protocol",
+          "--sctp",
+          "--secips",
+          "--security",
+          "--select",
+          "--session-header-name",
+          "--sockmap-mode",
+          "--sources",
+          "--tcp",
+          "--timeout",
+          "--token",
+          "--token-file",
+          "--trace-type",
+          "--udp"
         ]
       }
     },
@@ -944,6 +1293,25 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -960,6 +1328,25 @@
           "--port",
           "--protocol",
           "--strict",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
           "--timeout",
           "--token",
           "--token-file"
@@ -989,6 +1376,28 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-f": "--file",
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--components",
+          "--file",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -1008,6 +1417,28 @@
           "--port",
           "--protocol",
           "--strict",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-f": "--file",
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--components",
+          "--file",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
           "--timeout",
           "--token",
           "--token-file"
@@ -1050,6 +1481,34 @@
           "--token",
           "--token-file",
           "--udp"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--host",
+          "--key",
+          "--mark",
+          "--model-name",
+          "--name",
+          "--output",
+          "--path-match-mode",
+          "--path-prefix",
+          "--port",
+          "--protocol",
+          "--sctp",
+          "--tcp",
+          "--timeout",
+          "--token",
+          "--token-file",
+          "--udp"
         ]
       },
       "release": {
@@ -1064,6 +1523,34 @@
           "--host",
           "--icmp",
           "--insecure",
+          "--key",
+          "--mark",
+          "--model-name",
+          "--name",
+          "--output",
+          "--path-match-mode",
+          "--path-prefix",
+          "--port",
+          "--protocol",
+          "--sctp",
+          "--tcp",
+          "--timeout",
+          "--token",
+          "--token-file",
+          "--udp"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--host",
           "--key",
           "--mark",
           "--model-name",
@@ -1101,6 +1588,25 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -1112,6 +1618,25 @@
           "--cacert",
           "--cert",
           "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
           "--key",
           "--output",
           "--port",
@@ -1143,6 +1668,27 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--ep-idx",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--service-id",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -1155,6 +1701,27 @@
           "--cert",
           "--ep-idx",
           "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--service-id",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--ep-idx",
           "--key",
           "--output",
           "--port",
@@ -1186,6 +1753,26 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--servName",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -1197,6 +1784,26 @@
           "--cacert",
           "--cert",
           "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--servName",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
           "--key",
           "--output",
           "--port",
@@ -1227,6 +1834,25 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -1238,6 +1864,25 @@
           "--cacert",
           "--cert",
           "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
           "--key",
           "--output",
           "--port",
@@ -1267,6 +1912,25 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -1278,6 +1942,25 @@
           "--cacert",
           "--cert",
           "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
           "--key",
           "--output",
           "--port",
@@ -1307,6 +1990,25 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -1318,6 +2020,25 @@
           "--cacert",
           "--cert",
           "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
           "--key",
           "--output",
           "--port",
@@ -1350,6 +2071,28 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-f": "--file",
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--components",
+          "--file",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -1368,6 +2111,28 @@
           "--port",
           "--protocol",
           "--strict",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-f": "--file",
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--components",
+          "--file",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
           "--timeout",
           "--token",
           "--token-file"
@@ -1394,6 +2159,26 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--drain-timeout",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -1406,6 +2191,26 @@
           "--cert",
           "--drain-timeout",
           "--insecure",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--drain-timeout",
           "--key",
           "--output",
           "--port",
@@ -1437,6 +2242,25 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       },
       "release": {
@@ -1457,6 +2281,25 @@
           "--timeout",
           "--token",
           "--token-file"
+        ],
+        "short_flags": {
+          "-k": "--insecure",
+          "-o": "--output",
+          "-p": "--port",
+          "-s": "--apiserver",
+          "-t": "--timeout"
+        },
+        "value_flags": [
+          "--apiserver",
+          "--cacert",
+          "--cert",
+          "--key",
+          "--output",
+          "--port",
+          "--protocol",
+          "--timeout",
+          "--token",
+          "--token-file"
         ]
       }
     }
@@ -1465,8 +2308,8 @@
   "source": {
     "enum_evidence": "frozen command conversion and validation functions",
     "golden_path": "cmd/goldens/testdata/completion-bash.golden",
-    "main_commit": "d8cbabbbc131d18d36cc26a14ef5a6121a9de7dd",
-    "main_golden_sha256": "7c8440772405cc3780b2a7ac3a7eede8e6a5b48aef8c24a02d21ddae2bbeb30c",
+    "main_commit": "28832f0c60ab717d8cb5133114edf2c45e22a85c",
+    "main_golden_sha256": "f0c208ea5fc4f6acc7852dae721c3769bad9d869e52e002b76c70a0e832fdcfd",
     "release_commit": "5dd978c25c967b8192c5fe9cd448783e1e74be7c",
     "release_golden_sha256": "399a529b416839bd93341664155e9177cf1bd079227a7e81df204f2c03887593",
     "release_tag": "v0.9.8.9-rc.2",

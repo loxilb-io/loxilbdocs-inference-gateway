@@ -139,8 +139,7 @@ reran them.
 - SGLang `kvDpRankCount` is limited to eight ranks, and the last port in the consecutive ZMQ range must not exceed `65535`.
 - TensorRT-LLM does not use `kvZmqPort` and does not accept `kvDpRankCount` greater than one.
 - llama.cpp deliberately rejects the KV and P/D controls.
-- `kvWarmupSec` is accepted for KV rules but its production start timestamp is currently not
-  armed. Use health, subscriber, admission, and inventory signals as readiness gates.
+
 - Cold-endpoint seeding applies to Tier-1.5 across supported KV engines. By default, every
   sixteenth hit can seed an eligible endpoint below the 16-block cold floor.
 

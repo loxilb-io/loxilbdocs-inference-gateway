@@ -92,8 +92,8 @@ apply to every rule, AI or not.
 | `6` | n3 | Reserved selection variant. |
 | `7` | reserved | Reserved (do not use). |
 | `8` | chwbl | Consistent-hash-with-bounded-load — the AI prefix-cache router (see §5). |
-| `9` | gpuaware | Plain fullproxy uses prefix/conversation affinity and healthy-endpoint fallback. A P/D capacity scorer exists, but its activation is release-blocked because the current gate checks a mutable endpoint cursor instead of the configured selector. |
-| `10` | wrr-hash | Weighted CHWBL hashing; endpoint weights apply, while stored `chwbl_*` tuning values are not currently propagated (§5). |
+| `9` | gpuaware | Prefix/conversation modulo placement on a plain HTTP/1.1 pool. |
+| `10` | wrr-hash | Weighted CHWBL; verify endpoint weights and distribution. |
 
 ### `mode` — NAT / proxy mode (default `0`)
 
@@ -189,11 +189,10 @@ and [KV load safety](kv-caching.md) for the mechanism and operating requirements
 
 | Field | Type | Default | Allowed / Enum | Notes |
 |---|---|---|---|---|
-| `kvExactMode` | int64 | `0` | `0`–`3` | `0`=off; `1`=P/D-coupled KV-exact routing and requires `pd_disagg_mode: true`; `2`=reserved and not implemented; `3`=single-role KV-exact routing and requires `mode: 4` with P/D disabled. The transport is selected by `kvEngineType`, not by this number. |
+| `kvExactMode` | int64 | `0` | `0`, `1`, `3` | `0`=off; `1`=P/D-coupled KV-exact routing and requires `pd_disagg_mode: true`; `3`=single-role KV-exact routing and requires `mode: 4` with P/D disabled. The transport is selected by `kvEngineType`, not by this number. |
 | `kvBlockSize` | int64 | `16` | ≥1 | Token block size for hash computation. Must match vLLM `--block-size`, SGLang `--page-size`, or TensorRT-LLM `tokens_per_block`. TensorRT-LLM commonly uses 32 while this field defaults to 16, so verify it explicitly. |
 | `kvHashAlgo` | string | derived | `sha256_cbor`, `xxhash_cbor`, `sha256_sglang`, `blockhash_trtllm` | Prefer omission: the gateway derives the coherent engine default (`vllm`→`sha256_cbor`, `sglang`→`sha256_sglang`, `trtllm`→`blockhash_trtllm`). Explicit engine/algo mismatches and every explicit value for llama.cpp are rejected. |
 | `kvZmqPort` | int64 | `5557` | `1`–`65535` | Base ZMQ publisher port for vLLM/SGLang. Mode 1 subscribes prefill endpoints; mode 3 subscribes all endpoints. A meaningful non-default value is rejected for TensorRT-LLM and llama.cpp. |
-| `kvWarmupSec` | int64 | `30` | ≥0 | **Accepted but currently inert on all paths.** Intended as a Tier 1.5 warmup delay after subscriber connect, but the timer is never armed in the shipped data path — Tier 1.5 activates without waiting. Do not design procedures around it. |
 | `kvEngineType` | string | `vllm` | `vllm`, `sglang`, `trtllm`, `llamacpp` | Typed serving engine. Immutable after create; delete and recreate the rule to change it. Engine selection enables validation but does not imply feature parity. |
 | `kvDpRankCount` | int32 | `1` | `1`–`8` | SGLang data-parallel rank count. Rank N publishes at `kvZmqPort+N`; all ranks union into one per-endpoint inventory. Values above 1 are rejected for TensorRT-LLM and llama.cpp. |
 | `kvExactApiMode` | string | profile surfaces or legacy `both` when omitted | `completions`, `chat`, `both` | REST-only scalar declaration. Requires `kvExactMode: 1` or `3`; immutable after create. With a bound profile, an explicit value must be a subset of `supportedApis`. |
@@ -227,22 +226,9 @@ actual routing separately. A capability flag alone is not Exact acceptance.
 
 ## 5. CHWBL / WRR-HASH tuning knobs
 
-The REST model accepts and returns these fields for `sel: 8` (CHWBL) and
-`sel: 10` (wrr-hash), but the current FullProxy programming path does not
-propagate them to the data plane. Runtime selection instead uses a mean-load
-factor of `175`, replication `256`, prefix flags `0`, and cache-salt enforcement
-off. Treat API read-back as stored configuration, not proof of enforcement. See
-[LLM Routing](llm-routing.md).
-
-| Field | Type | Default | Allowed / Enum | Notes |
-|---|---|---|---|---|
-| `chwbl_prefix_hash_level` | integer | `1` | `1`, `2`, `3` | Stored/read back; current runtime infers prefix scope from request content. |
-| `chwbl_prefix_hash_flags` | integer | `0` | `0`–`255` (bitflags) | Stored/read back; current runtime programs flags `0`. |
-| `chwbl_mean_load_factor` | integer | `125` (schema) | `100`–`300` | Stored/read back; current runtime uses `175` (1.75×) regardless of this value. |
-| `chwbl_replication` | integer | `100` | `1`–`1024` | Stored/read back; current runtime uses `256` virtual nodes. |
-| `chwbl_enable_cache_salt` | boolean | `false` | `true`/`false` | Stored/read back; current runtime does not enforce cache salt. Do not use this field as a tenant-isolation boundary. |
-
----
+For supported selection examples use [LLM Routing](llm-routing.md). Verify
+actual distribution and endpoint weights; no additional CHWBL tuning fields
+are prescribed here.
 
 ## 6. Prefill / Decode (P/D) disaggregation
 
@@ -312,7 +298,6 @@ Client-certificate verification. Only valid with `security: 1` or `security: 2` 
 |---|---|---|---|---|
 | `client_cert_mode` | string | `disabled` | `disabled`, `optional`, `required` | `disabled`=no verification, `optional`=accept with/without cert, `required`=reject without a valid cert. |
 | `client_ca_path` | string | — | filesystem path (PEM) | Absolute path to a mounted client CA bundle. Prefer a read-only secret mount. |
-| `client_ca_cert_data` | string | — | base64 PEM | Inline CA data — alternative to `client_ca_path` (e.g. for Kubernetes secrets). |
 | `require_client_cn` | boolean | `false` | `true`/`false` | Require a specific CN pattern in the client cert. |
 | `client_cn_pattern` | string | — | e.g. `client.example.test` | Required CN pattern (wildcards supported). Only used if `require_client_cn: true`. |
 | `client_crl_path` | string | — | filesystem path (PEM) | Absolute path to a mounted static CRL; a revoked client leaf certificate is rejected. Keep it current. |
@@ -426,7 +411,6 @@ scenario.
         "kvBlockSize": 16,
         "kvHashAlgo": "sha256_cbor",
         "kvZmqPort": 5557,
-        "kvWarmupSec": 30,
         "kvEngineType": "vllm"
       },
       "endpoints": [
@@ -441,12 +425,11 @@ scenario.
     ```
 === "loxicmd"
     ```bash
-    loxicmd create lb 192.0.2.10 --tcp=8080:80 --endpoints=198.51.100.11:1,198.51.100.12:1,198.51.100.13:1,198.51.100.14:1,198.51.100.15:1,198.51.100.16:1 --mode=fullproxy --host=192.0.2.10 --pd-disagg --proberetries=1 --kv-exact-mode=1 --kv-block-size=16 --kv-hash-algo=sha256_cbor --kv-zmq-port=5557 --kv-warmup=30 --kv-engine-type=vllm --ep-role=prefill,decode,prefill,decode,prefill,decode
+    loxicmd create lb 192.0.2.10 --tcp=8080:80 --endpoints=198.51.100.11:1,198.51.100.12:1,198.51.100.13:1,198.51.100.14:1,198.51.100.15:1,198.51.100.16:1 --mode=fullproxy --host=192.0.2.10 --pd-disagg --proberetries=1 --kv-exact-mode=1 --kv-block-size=16 --kv-hash-algo=sha256_cbor --kv-zmq-port=5557 --kv-engine-type=vllm --ep-role=prefill,decode,prefill,decode,prefill,decode
     ```
 
 A CHWBL prefix-cache variant (no P/D) swaps `serviceArguments` for the
-following minimal shape. The current runtime uses the fixed CHWBL values
-described in section 5; adding stored `chwbl_*` fields does not change them.
+following minimal shape; verify the resulting distribution independently.
 
 ```json
 {

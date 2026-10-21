@@ -197,7 +197,7 @@ flowchart TD
 |----------|----------|---|
 | **Model-based routing** — dispatch by model name to different pools | Serving multiple models behind one VIP | None |
 | **CHWBL consistent hash** (`sel: 8`) — cache-locality-preserving hash ring | Chatbots and multi-turn assistants that share context | None |
-| **Selector 9** (`gpuaware`) — plain-pool affinity modulo; P/D capacity scorer is release-blocked | Explicitly validated plain-pool affinity only | Pushed worker metrics are not consumed by the plain fullproxy selector |
+| **Selector 9** (`gpuaware`) — plain-pool affinity modulo | Explicitly validated plain-pool affinity only | Pushed worker metrics are not consumed by the plain fullproxy selector |
 | **KV-cache-aware routing** — send a request to the endpoint holding its KV blocks | Long-context and multi-turn workloads on vLLM, SGLang, or TensorRT-LLM | Engine-specific KV event feed plus a staged tokenizer |
 
 Strategies compose: use model-based routing to separate model pools, then apply CHWBL or KV-cache routing **within** each pool. See [LLM Routing](llm-routing.md).

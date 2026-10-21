@@ -248,11 +248,8 @@ its own baselines:
 | `:9001`  | **false** (`ep_role:0`, `sse_mode:true`)      | round-robin, single pool         | non-P/D RR baseline              |
 | `:9000`  | true, `pd_cache_aware_mode:false`             | round-robin across prefill EPs   | **P/D-RR baseline** (apples-to-apples for KV-exact) |
 | `:9002`  | true, `pd_cache_aware_mode:true` (`pd_cache_threshold:20`, `pd_balance_abs_threshold:3`) | heuristic cache-affinity | heuristic mode |
-| `:9003`  | true, **`kvExactMode:1`** (`kvZmqPort:5557`, `kvHashAlgo:sha256_cbor`, `kvWarmupSec:60`, `kvBlockSize:16`) | KV-exact overlap | the method |
+| `:9003`  | true, **`kvExactMode:1`** (`kvZmqPort:5557`, `kvHashAlgo:sha256_cbor`, `kvBlockSize:16`) | KV-exact overlap | the method |
 
-`kvWarmupSec` is accepted but currently inert because the production path does not arm its
-start timestamp. Do not sleep for 60 seconds and assume the inventory is ready; verify
-subscriber connectivity and nonzero block inventory instead.
 
 The KV-exact rule body (`:9003`), posted to `http://<VIP>:11111/netlox/v1/config/loadbalancer`:
 
@@ -265,7 +262,7 @@ The KV-exact rule body (`:9003`), posted to `http://<VIP>:11111/netlox/v1/config
         "sel": 0, "mode": 4, "security": 0, "host": "<VIP>",
         "pd_disagg_mode": true, "probeRetries": 1,
         "kvExactMode": 1, "kvZmqPort": 5557, "kvHashAlgo": "sha256_cbor",
-        "kvWarmupSec": 60, "kvBlockSize": 16
+        "kvBlockSize": 16
       },
       "endpoints": [
         {"endpointIP": "<prefill-1-ip>", "targetPort": 8100, "weight": 1, "ep_role": 1, "nixl_port": 5600},
@@ -277,7 +274,7 @@ The KV-exact rule body (`:9003`), posted to `http://<VIP>:11111/netlox/v1/config
     ```bash
     # NOTE: loxicmd applies one --tcp target port to every endpoint; the decode EP's
     # targetPort 8200 (curl) cannot be set per-endpoint — post it via REST if it differs.
-    loxicmd create lb "<VIP>" --tcp=9003:8100 --endpoints="<prefill-1-ip>:1,<prefill-2-ip>:1,<decode-1-ip>:1" --mode=fullproxy --select=rr --host="<VIP>" --pd-disagg --proberetries=1 --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-warmup=60 --kv-block-size=16 --ep-role=prefill,prefill,decode --nixl-port=5600,5600,5600
+    loxicmd create lb "<VIP>" --tcp=9003:8100 --endpoints="<prefill-1-ip>:1,<prefill-2-ip>:1,<decode-1-ip>:1" --mode=fullproxy --select=rr --host="<VIP>" --pd-disagg --proberetries=1 --kv-exact-mode=1 --kv-zmq-port=5557 --kv-hash-algo=sha256_cbor --kv-block-size=16 --ep-role=prefill,prefill,decode --nixl-port=5600,5600,5600
     ```
 
 !!! warning "Field-casing trap"
@@ -391,7 +388,7 @@ the **same** backends — two VIPs, identical endpoint lists, different selector
 
 | VIP | Selector | Key fields |
 |-----|----------|-----------|
-| `:9003` | **KV-exact** | `mode:4`, `pd_disagg_mode:true`, `kvExactMode:1`, `kvZmqPort:5557`, `kvHashAlgo:"sha256_cbor"`, `kvWarmupSec`, `kvBlockSize:16`; endpoints carry `ep_role` 1/2 + `nixl_port:5600` |
+| `:9003` | **KV-exact** | `mode:4`, `pd_disagg_mode:true`, `kvExactMode:1`, `kvZmqPort:5557`, `kvHashAlgo:"sha256_cbor"`, `kvBlockSize:16`; endpoints carry `ep_role` 1/2 + `nixl_port:5600` |
 | `:9000` | **RR baseline** | `mode:4`, `pd_disagg_mode:true`, `pd_cache_aware_mode:false`, `pd_session_ttl_sec` |
 
 Drive identical traffic at both VIPs and compare. See §5.2 for the full four-way rule table and the

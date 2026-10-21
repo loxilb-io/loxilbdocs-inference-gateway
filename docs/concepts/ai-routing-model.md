@@ -177,7 +177,8 @@ curl -s -o /dev/null -w "%{http_code}\n" -H "X-Model: unknown-xyz" http://192.0.
 
 **Header and body disagree**
 
-- The `X-Model` header always wins over the body `model` field. If a client sets both, routing follows the header.
+- Send only one model source per request, or keep the two values identical.
+  Verify both authorization and independent backend delivery.
 
 ---
 

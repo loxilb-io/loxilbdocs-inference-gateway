@@ -19,7 +19,7 @@ GATEWAY_PUBLIC_SCHEMA_BASELINE_REF = "47803fb660ed54cd1f180b616db628461ad85d1a"
 GATEWAY_RELEASE_TAG = "v0.9.8.9-rc.1"
 GATEWAY_RELEASE_TAG_OBJECT = "db28353e50f7031157187fdd2250d1098c97963a"
 GATEWAY_RELEASE_REF = "f08b18beda587217265c9ba6419159119914795c"
-CLI_MAIN_REF = "d8cbabbbc131d18d36cc26a14ef5a6121a9de7dd"
+CLI_MAIN_REF = "28832f0c60ab717d8cb5133114edf2c45e22a85c"
 CLI_RELEASE_REF = "5dd978c25c967b8192c5fe9cd448783e1e74be7c"
 CLI_RELEASE_TAG = "v0.9.8.9-rc.2"
 CLI_RELEASE_TAG_OBJECT = "2dd7dbe215982859c2ee5cfc836fe34ac4e54a37"
@@ -153,7 +153,7 @@ CLI_FUNCTIONS = {
 # explicit conversion and validation functions.
 CLI_ENUMS = {
     "create lb": {
-        "--api-key-auth": ["disabled", "required"],
+        "--api-key-auth": ["disabled", "required", "jwt", "apikey-or-jwt"],
         "--backend-protocol": ["http1", "http2", "both"],
         "--ep-role": ["normal", "prefill", "decode", "0", "1", "2"],
         "--fc-adaptive": ["on", "off", "inherit"],
@@ -192,6 +192,9 @@ CLI_ENUMS = {
 
 SCHEMA_KEYS = {
     "$ref",
+    "default",
+    "x-nullable",
+    "readOnly",
     "type",
     "format",
     "required",
@@ -276,7 +279,9 @@ def compact_schema(value: Any) -> Any:
     for key, item in value.items():
         if key not in SCHEMA_KEYS:
             continue
-        if key == "properties":
+        if key in {"default", "enum"}:
+            compact[key] = item
+        elif key == "properties":
             compact[key] = {name: compact_schema(schema) for name, schema in item.items()}
         elif key == "additionalProperties" and isinstance(item, dict):
             compact[key] = compact_schema(item)
@@ -314,6 +319,11 @@ def compact_swagger(raw: bytes, source_path: str) -> dict[str, Any]:
             ]
             operations[method.lower()] = {
                 "parameters": parameters,
+                "responses": json.loads(json.dumps(operation.get("responses", {}))),
+                "security": operation.get("security", spec.get("security", [])),
+                "consumes": operation.get("consumes", spec.get("consumes", [])),
+                "produces": operation.get("produces", spec.get("produces", [])),
+                "operationId": operation.get("operationId", ""),
             }
         if operations:
             paths[path] = operations
@@ -321,6 +331,8 @@ def compact_swagger(raw: bytes, source_path: str) -> dict[str, Any]:
         "source_path": source_path,
         "sha256": sha256(raw),
         "basePath": spec.get("basePath", ""),
+        "securityDefinitions": spec.get("securityDefinitions", {}),
+        "responses": spec.get("responses", {}),
         "paths": paths,
         "parameters": {
             name: compact
@@ -468,16 +480,31 @@ def completion_contract(completion: str) -> dict[str, Any]:
         aliases = re.findall(
             r'^\s*command_aliases\+\=\("([^" ]+)"\)', body, re.MULTILINE
         )
+        value_flags = re.findall(r'^\s*flags\+\=\("(--[^" ]+)="\)', body, re.MULTILINE)
+        short_flags = {}
+        last_long = None
+        for line in body.splitlines():
+            match = re.search(r'(?:flags|two_word_flags)\+\=\("([^" ]+)"\)', line)
+            if not match:
+                continue
+            flag = match.group(1).rstrip("=")
+            if flag.startswith("--"):
+                last_long = flag
+            elif flag.startswith("-") and last_long:
+                short_flags[flag] = last_long
         commands[command] = {
             "available": True,
+            "value_flags": sorted(set(value_flags)),
+            "short_flags": short_flags,
             "flags": sorted(flags),
             "aliases": sorted(set(aliases)),
         }
     return commands
 
 
-def build_cli_contract(cli_repo: Path) -> dict[str, Any]:
-    main_raw = git_show(cli_repo, CLI_MAIN_REF, COMPLETION_GOLDEN)
+def build_cli_contract(cli_repo: Path, cli_ref: str = CLI_MAIN_REF) -> dict[str, Any]:
+    selected_ref = resolve_ref(cli_repo, cli_ref)
+    main_raw = git_show(cli_repo, selected_ref, COMPLETION_GOLDEN)
     release_raw = git_show(cli_repo, CLI_RELEASE_REF, COMPLETION_GOLDEN)
     main_commands = completion_contract(main_raw.decode())
     release_commands = completion_contract(release_raw.decode())
@@ -492,7 +519,7 @@ def build_cli_contract(cli_repo: Path) -> dict[str, Any]:
         "contract_version": 1,
         "source": {
             "repository": "https://github.com/loxilb-io/loxicmd-inference-gateway",
-            "main_commit": CLI_MAIN_REF,
+            "main_commit": selected_ref,
             "release_tag": CLI_RELEASE_TAG,
             "release_tag_object": CLI_RELEASE_TAG_OBJECT,
             "release_commit": CLI_RELEASE_REF,
@@ -606,6 +633,7 @@ def main() -> int:
     parser.add_argument("--gateway-repo", type=Path)
     parser.add_argument("--gateway-ref", default=DEFAULT_GATEWAY_REF)
     parser.add_argument("--cli-repo", type=Path)
+    parser.add_argument("--cli-ref", default=CLI_MAIN_REF)
     parser.add_argument(
         "--only",
         choices=("all", "gateway", "cli"),
@@ -629,7 +657,7 @@ def main() -> int:
     if args.only in {"all", "cli"}:
         if args.cli_repo is None:
             parser.error("--cli-repo is required when refreshing the CLI contract")
-        write_json(args.output_dir / "cli.json", build_cli_contract(args.cli_repo))
+        write_json(args.output_dir / "cli.json", build_cli_contract(args.cli_repo, args.cli_ref))
     return 0
 
 

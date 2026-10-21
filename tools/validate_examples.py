@@ -72,25 +72,6 @@ PLACEHOLDER_VALUES = {
     "decode-1-ip": "198.51.100.21",
     "gpu": "example-gpu",
 }
-# File-backed examples are checked against public representative bodies. The
-# package tests validate every model/engine variant independently.
-_MODEL_ENGINE_RR = json.loads(
-    (Path(__file__).resolve().parents[1] /
-     "docs/assets/model-engine-standard/rules/qwen25-vllm-rr.json").read_text()
-)
-_MODEL_ENGINE_INVALID = json.loads(json.dumps(_MODEL_ENGINE_RR))
-_MODEL_ENGINE_INVALID["serviceArguments"]["kvExactMode"] = 2
-
-REFERENCED_BODY_FIXTURES = {
-    "model-engine-gateway.json": _MODEL_ENGINE_RR,
-    "invalid-model-engine-rule.json": _MODEL_ENGINE_INVALID,
-    "gateway-snapshot.json": {},
-    "initial-gateway-user.json": {
-        "username": "docs-admin",
-        "password": "placeholder-passphrase",
-        "role": "admin",
-    },
-}
 PROMETHEUS_TARGET_LABELS = {"instance", "job"}
 PROMQL_METRIC = re.compile(
     r"\b(?P<name>(?:loxilb|doca)_[A-Za-z0-9_:]+)"
@@ -331,6 +312,22 @@ class ExampleValidator:
 
         args = tokens[1:]
         commands = self.cli_contract["commands"]
+        # Cobra persistent options may precede the command path.
+        all_flags = {flag for entry in commands.values() for flag in entry["main"]["flags"]}
+        all_values = {flag for entry in commands.values() for flag in entry["main"].get("value_flags", [])}
+        all_shorts = {short: flag for entry in commands.values() for short, flag in entry["main"].get("short_flags", {}).items()}
+        leading = []
+        while args and args[0].startswith("-"):
+            token = args.pop(0)
+            leading.append(token)
+            flag, separator, _ = token.partition("=")
+            flag = all_shorts.get(flag, flag)
+            if flag not in all_flags:
+                return [f"unknown CLI flag: {token}"]
+            if flag in all_values and not separator:
+                if not args or (args[0].startswith("-") and not re.match(r"^-\d", args[0])):
+                    return [f"missing value for {flag}"]
+                leading.append(args.pop(0))
         command_name = next(
             (
                 name
@@ -355,22 +352,34 @@ class ExampleValidator:
         known_release_flags = set(release["flags"])
         enum_contracts = contract.get("enums", {})
         path_length = len(command_name.split())
+        args = args[:path_length] + leading + args[path_length:]
+        value_flags = set(main.get("value_flags", enum_contracts))
+        short_flags = main.get("short_flags", {})
         index = path_length
         while index < len(args):
             token = args[index]
-            if not token.startswith("--"):
+            if not token.startswith("-"):
                 index += 1
                 continue
             flag, separator, value = token.partition("=")
+            flag = short_flags.get(flag, flag)
             if flag not in known_main_flags:
                 errors.append(f"flag is absent from frozen main for '{command_name}': {flag}")
                 index += 1
                 continue
             if flag not in known_release_flags and MAIN_ONLY_MARKER not in context:
                 errors.append(f"main-only flag lacks '{MAIN_ONLY_MARKER}' marker: {flag}")
-            if not separator and flag in enum_contracts and index + 1 < len(args):
+            if not separator and flag in value_flags:
+                if index + 1 >= len(args) or (args[index + 1].startswith("-") and not re.match(r"^-\d", args[index + 1])):
+                    errors.append(f"missing value for {flag}")
+                    index += 1
+                    continue
                 value = args[index + 1]
                 index += 1
+            if flag == "--token-file" and value and not value.startswith(("/", "$", "~/")):
+                errors.append("--token-file requires an absolute path")
+            if separator and flag in enum_contracts and not value:
+                errors.append(f"missing value for {flag}")
             if flag in enum_contracts and value:
                 allowed = set(enum_contracts[flag])
                 supplied = value.split(",") if "," in value else [value]
@@ -650,7 +659,7 @@ class ExampleValidator:
             path = urlsplit(url).path
         if "/netlox/v1" in path:
             path = path.split("/netlox/v1", 1)[1]
-        elif not url.startswith(("$CONTROL_API", "${CONTROL_API}")):
+        elif not url.startswith(("$CONTROL_API", "${CONTROL_API}", "$GATEWAY_API", "${GATEWAY_API}")):
             return None
         if not path:
             path = "/"
@@ -927,12 +936,13 @@ class ExampleValidator:
                 if body_text is None:
                     continue
                 if body_text.startswith("@"):
-                    fixture_name = Path(body_text[1:]).name
-                    if fixture_name not in REFERENCED_BODY_FIXTURES:
-                        report.error(block.location, f"referenced JSON body lacks a safe fixture: {fixture_name}")
+                    from refresh_body_bindings import load_bound_bodies
+                    try:
+                        bodies = load_bound_bodies(self.root, block.path, body_text)
+                    except (ValueError, OSError, KeyError) as exc:
+                        report.error(block.location, str(exc))
                         continue
-                    report.count("substituted_request_bodies")
-                    body = REFERENCED_BODY_FIXTURES[fixture_name]
+                    report.count("bound_request_bodies", len(bodies))
                 elif body_text.startswith("$"):
                     report.error(block.location, "variable JSON body lacks a safe fixture")
                     continue
@@ -946,17 +956,20 @@ class ExampleValidator:
                     except json.JSONDecodeError as exc:
                         report.error(block.location, f"invalid inline JSON request body: {exc.msg}")
                         continue
-                self._run_tool(report, block.location, ["jq", "empty"], json.dumps(body))
-                schema_errors = self.validate_json_body(method, route, body)
-                expects_schema_error = EXPECTED_SCHEMA_FAILURE_MARKER in block.text
-                if expects_schema_error:
-                    if schema_errors:
-                        report.count("expected_schema_rejections")
+                if not body_text.startswith("@"):
+                    bodies = [body]
+                for body in bodies:
+                    self._run_tool(report, block.location, ["jq", "empty"], json.dumps(body))
+                    schema_errors = self.validate_json_body(method, route, body)
+                    expects_schema_error = EXPECTED_SCHEMA_FAILURE_MARKER in block.text
+                    if expects_schema_error:
+                        if schema_errors:
+                            report.count("expected_schema_rejections")
+                        else:
+                            report.error(block.location, "expected request-schema rejection was not detected")
                     else:
-                        report.error(block.location, "expected request-schema rejection was not detected")
-                else:
-                    for error in schema_errors:
-                        report.error(block.location, error)
+                        for error in schema_errors:
+                            report.error(block.location, error)
         return report
 
 
@@ -971,7 +984,7 @@ def print_report(report: ValidationReport) -> None:
         "curl_commands",
         "management_routes",
         "inline_json_request_bodies",
-        "substituted_request_bodies",
+        "bound_request_bodies",
         "expected_schema_rejections",
         "curl_external",
         "examples_verified",

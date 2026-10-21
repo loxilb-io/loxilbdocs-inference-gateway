@@ -44,7 +44,6 @@ cat > "$LAB/lb-coexistence.json" <<'JSON'
     "kvExactMode": 3,
     "kvZmqPort": 5557,
     "kvHashAlgo": "sha256_cbor",
-    "kvWarmupSec": 2,
     "kvBlockSize": 16,
     "kvEngineType": "vllm",
     "sse_mode": true

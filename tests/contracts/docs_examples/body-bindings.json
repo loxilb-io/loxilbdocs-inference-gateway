@@ -1,0 +1,2783 @@
+{
+  "bindings": {
+    "docs/use-cases/model-engine-standard/configure.md|@$RUN/model-engine-gateway.json": "model-engine-gateway.json",
+    "docs/use-cases/model-engine-standard/lifecycle.md|@$RUN/model-engine-gateway.json": "model-engine-gateway.json",
+    "docs/use-cases/model-engine-standard/verify.md|@$RUN/invalid-model-engine-rule.json": "invalid-model-engine-rule.json"
+  },
+  "producers": {
+    "invalid-model-engine-rule.json": {
+      "block_sha256": "0840bc93d001a79447fb8170037a3494866fce8c738add9a5803f0a47766c49b",
+      "command": "jq '.serviceArguments.kvExactMode=2' \"$RUN/model-engine-gateway.json\" \\\n  > \"$RUN/invalid-model-engine-rule.json\"",
+      "page": "docs/use-cases/model-engine-standard/verify.md"
+    },
+    "model-engine-gateway.json": {
+      "block_sha256": "ad9bd77010256d715ae321330fa47aba672007e7ad3c8f7576135dca7831328e",
+      "command": "jq --arg v \"$VIP\" --argjson p \"$PORT\" \\\n  --arg a \"$WORKER1\" --arg b \"$WORKER2\" --arg c \"$WORKER3\" \\\n  --argjson backend \"$BACKEND_PORT\" \\\n  'del(.serviceArguments.kvWarmupSec) |\n   .serviceArguments.externalIP=$v | .serviceArguments.host=$v |\n   .serviceArguments.port=$p | .endpoints[0].endpointIP=$a |\n   .endpoints[1].endpointIP=$b | .endpoints[2].endpointIP=$c |\n   .endpoints[].targetPort=$backend' \\\n  \"$PACKAGE/matrix-configurations/$MODEL_KEY-$ENGINE-$ROUTING_MODE.json\" \\\n  > \"$RUN/model-engine-gateway.json\"",
+      "page": "docs/use-cases/model-engine-standard/configure.md"
+    }
+  },
+  "records": [
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/exaone35-sglang-exact.json",
+      "asset_sha256": "1724d451ab1514cb2ff37c4faf2c9a30d6df95759a7250c470c968a54a1e04a9",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvDpRankCount": 1,
+              "kvEngineType": "sglang",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "exaone35-78b-instruct-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "3725281f329b0b5f7fe8c2d8029c6164aa8f48ce359e308e35c23b6ffd13954a",
+          "sha256": "91198e8b34b7810211af93600c2f9e285414a71e4ac478ceb74bfa8de3c106f8"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvDpRankCount": 1,
+              "kvEngineType": "sglang",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "exaone35-78b-instruct-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "e4431d7714932026c9e8bf1dddaf4cea01090e627190335af18d6b1d94817c21",
+          "sha256": "73211393fd2201455f31f382cdd2ccb25190eb8da013554064a6de7e44d6481f"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/exaone35-sglang-rr.json",
+      "asset_sha256": "50d88a5d29b39e7a9097043ccdd5340d65b91f45a8eecd970b1e2977b8935ac9",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "sglang",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "cea137e96bc534a19e319ec6ac8d93b8fad8635386e43518fb5b5f0255f3a019",
+          "sha256": "90d388e5bf542ff1c70f33520f12c90c28621cb4d8fc2469a96f4cea60bb4fd0"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "sglang",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "abe5ef3a19eb8304ae139934194bf4f5e91a1a78298273d35d49906c180a4ff6",
+          "sha256": "01a521e63975d3ac1d9c1ed4c5b5d0f4cfb22a122e47a5be43e8a0bb805fd823"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/exaone35-trtllm-exact.json",
+      "asset_sha256": "90a73cb95b053726f80cb6f8bfee2e20f78f82dfb5e75443d1fef54eb42e2e4e",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 32,
+              "kvEngineType": "trtllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "exaone35-78b-instruct-v1",
+              "mode": 4,
+              "model_name": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "56cbb03e77048e74a75049e82854d465ab6ae5bc95aca451ee191ed3a569be15",
+          "sha256": "29cc42047df980455b7bf0916844e71e57f80ef2d3358dfb9dda12d6022933cd"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 32,
+              "kvEngineType": "trtllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "exaone35-78b-instruct-v1",
+              "mode": 4,
+              "model_name": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "39ff9e6073fd44ca51bb7132b5475229d9d9fd4dfc34d662e4e634ac16c20d05",
+          "sha256": "902502b2d34630e0f07e0fe35f0a383e8a523a91177f00114cdc9ec7f3c4c39a"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/exaone35-trtllm-rr.json",
+      "asset_sha256": "1c9a40bd2c6ffa4d9877e0817856e156b99d8bb71ea72ec4d18722b275c6e042",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "trtllm",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "81adddc4dbd7802965986f43fd27ed474bbdd86c702537603f330a0845bdeac3",
+          "sha256": "cf97cb1c3ba4d56986cb2a8c8737baf49ba349d7f1d782dc1b240bb6b3e824af"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "trtllm",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "abe79e79db00767532f75c8efe647f97fc93bfa8f7ba74271b42eaae5f135814",
+          "sha256": "80511d6ad2c3730fbb2596b14694169986267db4676a214faf9cb20a0789473e"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/exaone35-vllm-exact.json",
+      "asset_sha256": "4f38a6ea820ae13cf3b45f7fcef739460ad955d4d9ae0125cc727f064026830d",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvEngineType": "vllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "exaone35-78b-instruct-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "8c1e02670bbb8499bf605e58b662f6d38f52add2b0475cea2898501ad9a514c6",
+          "sha256": "0ad19613041e495d1a34720489e639e7e7c046fab30095b111ae5801a411de44"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvEngineType": "vllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "exaone35-78b-instruct-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "e781474ca62deee3765a580d8f309e88b607976fc4c3cf9a1575110b6e2c2b07",
+          "sha256": "da80f0750fd7f624f511af90a645106187895d085c4deb8d1b925e0a44bf97ed"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/exaone35-vllm-rr.json",
+      "asset_sha256": "9bcd3fdedb8876827852aaed5dba0340792e8851ad4a39430064e945053604b0",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "vllm",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "8093c715ccc5024f3eac24be225fd60862a13085db8b003ea4171a12ce83c459",
+          "sha256": "649bf1a9e5ebd94c7151cdc94df2c087ecff9b2cef30c4526e344adcd3ff2856"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "vllm",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "e0fc0c30f5ff52b13e1f852241e1daf9b0f1081bdfb6233ce9ec4e4cd71d0c28",
+          "sha256": "5e91e5e2c4553975f7e5d74aec912d6b80a76df27b97f2b3e6db96398be8f461"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/gemma2-sglang-exact.json",
+      "asset_sha256": "788a3afc90945ff444296d77b227c09a3c396b97308ee084602e08d7378cb4d4",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvDpRankCount": 1,
+              "kvEngineType": "sglang",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "gemma2-9b-it-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "google/gemma-2-9b-it",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "5339dbef5b506ff16bc124e47d0504309c11f17ae796242fb6172701a1579af7",
+          "sha256": "26fadc508cdb90e4a31f0c8ca8bf022e3584f34c59b7bced11db8abf080604fb"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvDpRankCount": 1,
+              "kvEngineType": "sglang",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "gemma2-9b-it-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "google/gemma-2-9b-it",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "53476b5335088cb446dbd35a51abf023af93300aa6125284c272356b56928d3e",
+          "sha256": "415b50b3ea77c26d41d3ef0e72e80d8d6056b38403459c92d9497323ad8b67e2"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/gemma2-sglang-rr.json",
+      "asset_sha256": "b9acefab8bb960d3fde116ce9010b753a7db06a006c66996bb394435d28ee731",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "sglang",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "google/gemma-2-9b-it",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "0281826b1481d5a14a20cacfd64898b361631808e41390f6481ea39e5c4f645f",
+          "sha256": "934bc08120d4ad3181bd41205ba88acd091c7740234e1d0a0d20b7c2327ea8e0"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "sglang",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "google/gemma-2-9b-it",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "42bdd2f83886ca680145ac8894fc2437791ed94ab9901e6844bbf7c97fdc0d64",
+          "sha256": "ba5051b3fa4d9894a11c1d2719e98f456de31463b94f4f7022340a5d37153bae"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/gemma2-trtllm-exact.json",
+      "asset_sha256": "f8863ee84bffe30017bdb12d6d00c2f6923a0c7f81272e84fd34d37acadfa35f",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 32,
+              "kvEngineType": "trtllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "gemma2-9b-it-v1",
+              "mode": 4,
+              "model_name": "google/gemma-2-9b-it",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "90cad1c5a64ad2f039ca069f9a57cd5c0f1bb874ab862ac1f7c3ad7d41a67003",
+          "sha256": "349467ede76827515c485cb3f9b81fa9d411896e942cff8d8a750acab46034cf"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 32,
+              "kvEngineType": "trtllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "gemma2-9b-it-v1",
+              "mode": 4,
+              "model_name": "google/gemma-2-9b-it",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "2882e4b7ebf42cdb011805341ef3c97891c29653dba4a8f199ae5e6388b1e6bd",
+          "sha256": "e80d20a808d6f0638a0ab697edf3c48327cef972d6233448d3745c3ccadd6cdc"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/gemma2-trtllm-rr.json",
+      "asset_sha256": "5aa8345dc4a0e8c5b3a6401fe850c0dffb70593eea976d8828875d5ca9ade368",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "trtllm",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "google/gemma-2-9b-it",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "5b7501ad56d8d6570b8b790e823102454fd7b16fe8fbf7608313301b693afdfb",
+          "sha256": "c7eafeaa565f9848f78d3624b857195dcab8a518e8a4c78cf818c5c399695ba0"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "trtllm",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "google/gemma-2-9b-it",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "a44e6c2e92d5bb2ebfbafde36690bc9afe22a00b6653326858f2525b05248dc3",
+          "sha256": "26e81e3f089c8e33a87d0b3596f2b2b0fbf9c45f7cb10537e363f0f167490723"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/gemma2-vllm-exact.json",
+      "asset_sha256": "cf95ff1facf247db9a7a42b0cef6e906e5748948656f66941239066a8eab974d",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvEngineType": "vllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "gemma2-9b-it-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "google/gemma-2-9b-it",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "7d9b4f5fd892c6c6031c19e12f383401d17499bcef71f2f497ed89f71aba0089",
+          "sha256": "6ce044f7778ca10f078d15aeb5b7117418d3df8497c65c731d37fdd3d666faef"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvEngineType": "vllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "gemma2-9b-it-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "google/gemma-2-9b-it",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "362ddb5b06af41c01980e30512db597083fe82c9b3aaf032646c07b4a9dde048",
+          "sha256": "bf89e00cc09f2aa18b305b497e13a95aad21f8dd21199c088d46fec35a2a6ba3"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/gemma2-vllm-rr.json",
+      "asset_sha256": "c7dc92dbb2f3b06a8cd3d2f85ecf75a8d667c3067ba02734493fbf27e4125dcf",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "vllm",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "google/gemma-2-9b-it",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "42c30433f3d41ca8f01d5381a4f534f3dde1ac00b5747b48864341055a8087bf",
+          "sha256": "5b554368f85ef3479f21cda95dad6dd4c1476ea83f577e6a2564e5ee6cde7507"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "vllm",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "google/gemma-2-9b-it",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "25f822d171df46a78239d84f014377cd28323b444cff7d76ebeda276a0dd12d3",
+          "sha256": "e98a8867993ed9401c33e39732d4ccf61badb81187916360bcf1adbe6c04521d"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/llama31-sglang-exact.json",
+      "asset_sha256": "5b73131f1ce0ed2369f177bb7edfcbe07ed56c8fa93c8797338a9d5fba4d9f65",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvDpRankCount": 1,
+              "kvEngineType": "sglang",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "llama31-8b-instruct-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "a060f53283276e39b3b033b8dc3b044e3f5d33760368108b978e73adf56fb8a7",
+          "sha256": "df890e884084890abbd6618a757ea1ec2072f3e1f7a8e1e9bd6387ffc8fbcd95"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvDpRankCount": 1,
+              "kvEngineType": "sglang",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "llama31-8b-instruct-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "1afefc861496b146a673647778aeb8213185b4d2859aaeda5a6c9a0ebdabbff8",
+          "sha256": "2b5393f8e5f6a95346e1de0b19b420372d6259922ff74614d15dd584b54b432a"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/llama31-sglang-rr.json",
+      "asset_sha256": "cd3cb38eecb4d518d3fe6baa92d7afc2a009d7417f710d1a5826a91ed4774826",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "sglang",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "ed70aa6676eabd175cc3311b8ee2ecb4b467a28c80869372d4e514866c6db1aa",
+          "sha256": "92debcfbb7a47463f4926c11bc770f72d3a317749724cf7c392ae8c25cf0954d"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "sglang",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "92463c530119e187414e29cfa25186eb8dddc765e0a3264d75773992d4aa179a",
+          "sha256": "40bdbb93b4b032a52b95c3e32aae5d132c237fe88382635adaf9c24ff2952b8a"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/llama31-trtllm-exact.json",
+      "asset_sha256": "4420b33690eddf7f7ae82b7284da1bbe4549e18c0fdbbaae2775b3cf85b9e48c",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 32,
+              "kvEngineType": "trtllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "llama31-8b-instruct-v1",
+              "mode": 4,
+              "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "15b4abc5561d3fc702d9a973080c60f0e05ef2303564f08f36c2f838c5847c90",
+          "sha256": "c95499e3387d59bc3d3fb7357e0648077a68a3ef6d334207b0025d2ad632e798"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 32,
+              "kvEngineType": "trtllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "llama31-8b-instruct-v1",
+              "mode": 4,
+              "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "417e3f1c2dceb382c6d7beb62a0d6799e00041f7eb3e3664ed5bb9b82e378a57",
+          "sha256": "84f71f4761dad36077aca001b3b2767351c19a9771eb2a68ea32721b0e67794f"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/llama31-trtllm-rr.json",
+      "asset_sha256": "a71bc25d9b7fe66563c98ccd851c1f1cc76f0c80b55cdc5c214a77fd318a6fc6",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "trtllm",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "020250f5edc3052070a18f4dad7117a888846145fe81b08acff9b496e223f464",
+          "sha256": "f53b6df3f7a4071a63a036d9915cdda9d7dd291b77c663678ecb2c4496cbbd86"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "trtllm",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "1d00f1660dcc0afa1cdfd83ed03981eeb939ac2dfc04652d013d93116fc1f22a",
+          "sha256": "72440d9f2e7a384f1da0aabfa44ed35ab2729752c6b3d651f454e1a68174aab1"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/llama31-vllm-exact.json",
+      "asset_sha256": "1981ee9fa0cb81926a16b8aad564169bf75300fe4f1570168daf5e64f6861e49",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvEngineType": "vllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "llama31-8b-instruct-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "0893960a37a8375878bd045533ecb089e3d46933391828cab406ffe96f5211a0",
+          "sha256": "b3c51509a1ea3a904994e54918391ffacc186df8cece86c4895e012bde62cfb2"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvEngineType": "vllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "llama31-8b-instruct-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "02ae23007381dd867f7e65d3a50e6a4947f01769d507ee8d825f24d8110c5bac",
+          "sha256": "807716bf083637dad8c9b64da6f10bc100292ebd337b265661da72e4f8658a9a"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/llama31-vllm-rr.json",
+      "asset_sha256": "16eb81fe750cab0ce29e9b0e2275f02ee4f194e9a55955780c9f5847188ccd29",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "vllm",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "1caa849f1b4834011f57cd8d23e63ee2e5479de3338a9d1e88686159c8169bd9",
+          "sha256": "0c97b29defe6842fe26679ca6c5a432d2619497bf3e09a31eec6177467f095bc"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "vllm",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "meta-llama/Llama-3.1-8B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "0db91563a93ba8ac8f5901836d4ab3f96c7477bde81d9685cc7b7ff989b11fee",
+          "sha256": "a665b319902b1bfa1eede1a30e668a89f283ae0b42f7cd05d5fccc3511bd8748"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/qwen25-sglang-exact.json",
+      "asset_sha256": "3dae02149a64754886028a3c0f4c1eb9ac0019fd45564085f8e84c52aa44fa2d",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvDpRankCount": 1,
+              "kvEngineType": "sglang",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "qwen25-7b-instruct-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "Qwen/Qwen2.5-7B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "40fb50952daf3191f580a598f18a8927a969266f2ed1d3b2781b14c5255a55b3",
+          "sha256": "089b4abc3a777cb02a49bd56bec99f8a9cefd6ecf296104dd82b04f24189f73d"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvDpRankCount": 1,
+              "kvEngineType": "sglang",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "qwen25-7b-instruct-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "Qwen/Qwen2.5-7B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "74469551ed00f86717949a256fe2936c100f2ae85755550fd97478ab62833463",
+          "sha256": "2b13e853c4a812811e1e98fd8670c15fb2ded04b644664d18036942b9ecfcd20"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/qwen25-sglang-rr.json",
+      "asset_sha256": "bed6046a7fa09d28e703947040e5ea6aaa6f3feb2799a6519bbaeb20ab2643b9",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "sglang",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "Qwen/Qwen2.5-7B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "3e04c4fd157b6cbe0f9d5486e4e281ab0cc20c4d9700d9ddcf1516b559b985c9",
+          "sha256": "ddbac36e99ddff5e380c4816d5a431051a22112106534e81596379fca41ef51a"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "sglang",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "Qwen/Qwen2.5-7B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "79ddbb4a8820fc5dbc66af69827aad61c72492746026ece0f3ecf8ee6be4a2e7",
+          "sha256": "d8a2166dcf23735c218c238da8ff7cb239dac1183afc5c735a39da28b02b8b82"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/qwen25-trtllm-exact.json",
+      "asset_sha256": "27cd59a45923d4258402f72a3e3ab65a8391a02594969c98a65aafa237d5c765",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 32,
+              "kvEngineType": "trtllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "qwen25-7b-instruct-v1",
+              "mode": 4,
+              "model_name": "Qwen/Qwen2.5-7B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "be7d0c429c196822cd0d72089417e3ca660b14de14ead982533548f5b9e993a1",
+          "sha256": "e1d2cd6d979c24c3c1e1e665275523a51109ef7af925b50935d6a89938a0d73c"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 32,
+              "kvEngineType": "trtllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "qwen25-7b-instruct-v1",
+              "mode": 4,
+              "model_name": "Qwen/Qwen2.5-7B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "02861e958a7938b23a4e3bb14bbd662ecf0262b3ddac2a058d04540cce849932",
+          "sha256": "0f4c6ed3bba58bf691947e76f1ff04eff642a0dc7e27817c7439b9b9f7070746"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/qwen25-trtllm-rr.json",
+      "asset_sha256": "3d3383a487d1ee38f29e55ae42b5b0ea86cb03a2cb60fd37b7939264c5ee61af",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "trtllm",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "Qwen/Qwen2.5-7B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "56e097bc2e0f4f47f4e99d36fb28c7ab408ee87b277fada02ef657427f2bb3d7",
+          "sha256": "911cb97bb02e579840a70897804a34b8cdec07cb2cf2abbd00445e3983976107"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "trtllm",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "Qwen/Qwen2.5-7B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "36581e0b6d11516dc2610c859d06912d39352acd9fcf4223d8e982a15fc2b698",
+          "sha256": "2cbaeaf3cdf707e8ff1d86be1c2341ff86042adca26c643dbefa4aa976ba77df"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/qwen25-vllm-exact.json",
+      "asset_sha256": "e52aaaa3f15fad9b6e0b10fa5bea03870fb86accbec9cd81e7213bd7f91f441d",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvEngineType": "vllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "qwen25-7b-instruct-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "Qwen/Qwen2.5-7B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "0d030ef4abca3396ed48710ef5ac774e922dd32355579c524bcffe19f01f39b1",
+          "sha256": "ad7a948b7186e9a78332bde5f04136e32c3b3142e33d80e28c392341120eee59"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvEngineType": "vllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "qwen25-7b-instruct-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "Qwen/Qwen2.5-7B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "f350c9c5ee687ff97cd215e0c033b69f3b4e7a5e1b3371e42546a96e0953e237",
+          "sha256": "359fb3e3780ca550fe51a24a84e0cce5d50dbbf435380b6865763d1a21cf08dc"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/qwen25-vllm-rr.json",
+      "asset_sha256": "b5f77400afcdcdfee8bec98dcf89766e5d46f71512ac2f8c338a5db79ea0afad",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "vllm",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "Qwen/Qwen2.5-7B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "31377a369cd67bf43e12a156427698e088aff7bb602d1eb379cba7d4f76d7bc1",
+          "sha256": "0c91541fe69f0a1d8904e94a0657881f42d09f0c1648ee20288d4d4762d18035"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "vllm",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "Qwen/Qwen2.5-7B-Instruct",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "052ab7d2092dcc42a8dd05577c805430b16e91e4c01e8f0ef20f21833637da06",
+          "sha256": "71b471ebbe8873f7c1faf823c8078850a52e02782d9f6b59cce489bbb6e72344"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/r1-sglang-exact.json",
+      "asset_sha256": "7b77e0536f1c8cf794884bca94193af5129013f685a891ae7e17555e0c7a1e32",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvDpRankCount": 1,
+              "kvEngineType": "sglang",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "r1-distill-qwen-7b-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "8e1a518fc1460debc7ed8c4328c00e68115feaa45a8d4ea2a74f35633efedd2a",
+          "sha256": "33604ad0aae056fb30656d29c83ca80214db405adb635e8416fd995415ba56ea"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvDpRankCount": 1,
+              "kvEngineType": "sglang",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "r1-distill-qwen-7b-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "4973b5ac030fcb29d7a01a1537edc4f703b970734c6de65cea37c0a4a0f90bac",
+          "sha256": "7a4d0ba27d1dea9dda8ccb2f09dc4d49a2cb04328a70dbf1118b0ba878834009"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/r1-sglang-rr.json",
+      "asset_sha256": "8225308b9f2219ed0aa0f85d72a2d583b11cf7ab4a28ca66c38180b9cd90ba1b",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "sglang",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "223cf2aa2de70a1d0d7cf7b12aa708f73042a347aa3cc4178878c0912d7049bf",
+          "sha256": "a82b2c0299eb8705a9bcd4bf9a41b76e2d8be6bf39dfd58ea8f1b7e0945466d5"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "sglang",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "2ac27bd90aaa49920a62dccbe8eda1174ae431ce31cdf3142188e1daadb0760c",
+          "sha256": "05f13a8b77f2b370dc4cedd2e92770699bbca3b7e5923b6b4a325f1786f8b09f"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/r1-trtllm-exact.json",
+      "asset_sha256": "c7a35125642f7a97d213a9af9d2b90d19a4aa5f43125acb390ba5a499967d4cf",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 32,
+              "kvEngineType": "trtllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "r1-distill-qwen-7b-v1",
+              "mode": 4,
+              "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "a0ef67e11c668739bbb3c0648900a6f3b7a3bd006640b6ca7af093344bfb64d1",
+          "sha256": "b96eb8f945f8ce351ed23eff8d28310024e9bedde03be710eba90e9e6c872334"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 32,
+              "kvEngineType": "trtllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "r1-distill-qwen-7b-v1",
+              "mode": 4,
+              "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "84831baf233d7497faa0ef30033ed8d881115057d8943b4bb7111234baf80b0e",
+          "sha256": "0e8fc9147d2017560dcf4f17d4f561de2bf7e561d6a0a15054d124809ade64b0"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/r1-trtllm-rr.json",
+      "asset_sha256": "2473abab23833f64587b3528f6bd2b44cf6605da60520703284e6820175d2c92",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "trtllm",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "28fbde0a74ae1b5ef6528e2f040896e9a188c6a6cbd69211996327015c10868c",
+          "sha256": "b3aa05d53f5e4ca8c6f901f1453b7afc307925298ffb72641fb60cb7852b662f"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "trtllm",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "57ecb7fb52bdc0288cd983fde74ccb8191bc74682dbc23e00e933f6c30dbace5",
+          "sha256": "3f5277605381a75e34d4d8cad5cb8707e85f81b2c93cc504d9516a61be006aaa"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/r1-vllm-exact.json",
+      "asset_sha256": "968c54442a3cf10f750f1de4a1bdc5a81e6d378cdf2e2bc88509da18da0ac117",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvEngineType": "vllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 2,
+              "kvModelProfile": "r1-distill-qwen-7b-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "5d8ff9a48521be7e7aad9c3dfdfe353692b762210633ac78fa33e71c633717c5",
+          "sha256": "740ba4b742a7db1b8d902093c018805b6994eb5750942b39a717c1906e5483ca"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvBlockSize": 16,
+              "kvEngineType": "vllm",
+              "kvExactApiMode": "chat",
+              "kvExactMode": 3,
+              "kvModelProfile": "r1-distill-qwen-7b-v1",
+              "kvZmqPort": 5557,
+              "mode": 4,
+              "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "9b434301e802c971abfbeb1e78762fa37501fc18af3195528e361ef077b442b5",
+          "sha256": "012210c6dd523d806006ea5d4aca70c167204bfbd66cfbbac0a15d2b86dae8e1"
+        }
+      }
+    },
+    {
+      "asset": "docs/assets/model-engine-standard/matrix-configurations/r1-vllm-rr.json",
+      "asset_sha256": "b9d6e4e7c5f9b2e1587a2c1dd787c5236420805149cc1afdefddcd8cb4ce242c",
+      "bodies": {
+        "invalid-model-engine-rule.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "vllm",
+              "kvExactMode": 2,
+              "mode": 4,
+              "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "62111b11bd1ede0ed5e70cbc04a6b46176fa2e72861d3b7e7a8f599934e32bc1",
+          "sha256": "32954e8646e27806537eb713541e123ebba84d80c19e8a1dadd4ef647a3a7088"
+        },
+        "model-engine-gateway.json": {
+          "body": {
+            "endpoints": [
+              {
+                "endpointIP": "198.51.100.11",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.12",
+                "targetPort": 8080,
+                "weight": 1
+              },
+              {
+                "endpointIP": "198.51.100.13",
+                "targetPort": 8080,
+                "weight": 1
+              }
+            ],
+            "serviceArguments": {
+              "externalIP": "192.0.2.10",
+              "host": "192.0.2.10",
+              "kvEngineType": "vllm",
+              "kvExactMode": 0,
+              "mode": 4,
+              "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+              "monitor": true,
+              "pd_disagg_mode": false,
+              "port": 2020,
+              "probeRetries": 1,
+              "probeTimeout": 2,
+              "probeport": 8000,
+              "probetype": "tcp",
+              "protocol": "tcp",
+              "sel": 0,
+              "sse_mode": true
+            }
+          },
+          "produced_sha256": "3a0bf0071041b344a57257f61c4515be947bc70b3a8b7c3c84e794d3192895d1",
+          "sha256": "c81c4ee8f3a32a8a7d5e5f4c263b93dccc129223d50fa009d4141ccdafac0c47"
+        }
+      }
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Exact public assets and extracted jq producers; no engine runtime qualification"
+}

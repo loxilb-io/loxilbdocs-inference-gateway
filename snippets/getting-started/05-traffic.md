@@ -6,19 +6,35 @@
 - The rule readback passed.
 - The backend is healthy, returns `backend-llama`, and appends each received
   `X-Docs-Nonce` value to a line-oriented log available to the operator.
-- Set `BACKEND_RECEIPT_LOG` to that backend-owned log. It must not be produced
-  from Gateway or client output.
+- Prepare the [receipt backend](quickstart.md#prepare-the-receipt-backend)
+  first. Set `BACKEND_RECEIPT_LOG` to a readable backend-owned log or its
+  read-only SSH copy. It must not be produced from Gateway or client output.
 
 ### Exact command
 
 ```bash
 export BACKEND_RECEIPT_LOG='/var/tmp/docs-backend-receipts.log'
-test -r "$BACKEND_RECEIPT_LOG"
+# Set to an empty string only when the backend log is directly accessible.
+export BACKEND_RECEIPT_SOURCE='qa@backend.example.com:/var/tmp/docs-backend-receipts.log'
 receipt_count() {
-  grep -cF -- "$1" "$BACKEND_RECEIPT_LOG" || true
+  if [ -n "${BACKEND_RECEIPT_SOURCE:-}" ]; then
+    scp -q "$BACKEND_RECEIPT_SOURCE" "$BACKEND_RECEIPT_LOG" || return
+  fi
+  test -r "$BACKEND_RECEIPT_LOG" || return
+  grep -cxF -- "$1" "$BACKEND_RECEIPT_LOG" || test "$?" -eq 1
 }
 
 curl --fail-with-body --silent --show-error \
+  --cacert ./gateway-ca.crt --header @control-plane.headers \
+  "$CONTROL_API/config/metrics" > metrics-config-before.json
+curl --fail-with-body --silent --show-error --request POST \
+  --cacert ./gateway-ca.crt --header @control-plane.headers \
+  "$CONTROL_API/config/metrics" > metrics-enable.json
+curl --fail-with-body --silent --show-error \
+  --cacert ./gateway-ca.crt --header @control-plane.headers \
+  "$CONTROL_API/config/metrics" | jq -e '.prometheus == true'
+curl --fail-with-body --silent --show-error \
+  --cacert ./gateway-ca.crt --header @control-plane.headers \
   "$CONTROL_API/metrics" > metrics-before.prom
 
 positive_nonce="docs-positive-$(date +%s)-$$"
@@ -36,7 +52,10 @@ traffic_status=$(curl --silent --show-error \
 ### Expected result
 
 The request returns HTTP `200`, and the backend-specific marker appears in the
-response. The exact OpenAI response shape belongs to the backend.
+response. The exact OpenAI response shape belongs to the backend. Metrics are
+explicitly enabled and their previous state is retained for cleanup. A disabled
+exporter answers `503`; an enabled exporter requiring management authentication
+answers `401` without a valid credential. These are separate failure causes.
 
 ### Validate
 

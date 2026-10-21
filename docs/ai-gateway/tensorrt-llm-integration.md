@@ -106,7 +106,6 @@ curl --fail-with-body --silent --show-error \
       "kvEngineType": "trtllm",
       "kvExactMode": 1,
       "kvBlockSize": 32,
-      "kvWarmupSec": 5,
       "sse_mode": true,
       "host": "192.0.2.10",
       "monitor": true,
@@ -131,9 +130,6 @@ curl --fail-with-body --silent --show-error \
 
 Do not set a non-default `kvZmqPort`; TensorRT-LLM events use each endpoint's serving port. Do not set `kvDpRankCount` above one. Omit `kvHashAlgo` to select `blockhash_trtllm` automatically.
 
-`kvWarmupSec` is accepted and stored, but the production path currently does not arm its
-start timestamp. Treat successful `/server_info` admission plus nonzero inventory as the
-readiness signal; do not rely on the example's five-second value to delay routing.
 
 ### Convert to a single pool
 

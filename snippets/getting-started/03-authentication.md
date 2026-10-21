@@ -10,11 +10,13 @@
 
 ```bash
 unauthenticated_status=$(curl --silent --show-error \
+  --cacert ./gateway-ca.crt \
   --output unauthenticated.json \
   --write-out '%{http_code}' \
   "$CONTROL_API/config/loadbalancer/all")
 
 authenticated_status=$(curl --silent --show-error \
+  --cacert ./gateway-ca.crt \
   --header @control-plane.headers \
   --output authenticated.json \
   --write-out '%{http_code}' \

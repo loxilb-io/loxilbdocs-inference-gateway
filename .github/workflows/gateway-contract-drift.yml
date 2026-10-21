@@ -8,6 +8,11 @@ on:
         required: true
         default: main
         type: string
+      cli_ref:
+        description: CLI branch, tag, or commit to validate
+        required: true
+        default: 28832f0c60ab717d8cb5133114edf2c45e22a85c
+        type: string
   repository_dispatch:
     types: [gateway-api-updated]
   schedule:
@@ -18,8 +23,7 @@ on:
       - '.github/workflows/gateway-contract-drift.yml'
       - 'docs/**'
       - 'snippets/**'
-      - 'tests/contracts/docs_examples/gateway-api.json'
-      - 'tests/contracts/docs_examples/example-inventory.json'
+      - 'tests/contracts/docs_examples/**'
       - 'tests/test_gateway_contracts.py'
       - 'tests/test_schema_reference.py'
       - 'tests/test_validate_examples.py'
@@ -30,14 +34,19 @@ on:
       - 'tools/render_schema_reference.py'
       - 'tools/validate_examples.py'
       - 'tools/validate_gateway_docs.py'
+      - 'tools/refresh_body_bindings.py'
+      - 'tools/refresh_coverage_ledger.py'
+      - 'tools/validate_cli_runtime.py'
+      - 'tools/validate_response_contracts.py'
+      - 'tests/test_followup_contracts.py'
+      - 'tests/test_public_documentation_scope.py'
   push:
     branches: [main]
     paths:
       - '.github/workflows/gateway-contract-drift.yml'
       - 'docs/**'
       - 'snippets/**'
-      - 'tests/contracts/docs_examples/gateway-api.json'
-      - 'tests/contracts/docs_examples/example-inventory.json'
+      - 'tests/contracts/docs_examples/**'
       - 'tests/test_gateway_contracts.py'
       - 'tests/test_schema_reference.py'
       - 'tests/test_validate_examples.py'
@@ -48,6 +57,12 @@ on:
       - 'tools/render_schema_reference.py'
       - 'tools/validate_examples.py'
       - 'tools/validate_gateway_docs.py'
+      - 'tools/refresh_body_bindings.py'
+      - 'tools/refresh_coverage_ledger.py'
+      - 'tools/validate_cli_runtime.py'
+      - 'tools/validate_response_contracts.py'
+      - 'tests/test_followup_contracts.py'
+      - 'tests/test_public_documentation_scope.py'
 
 permissions:
   contents: read
@@ -74,6 +89,15 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Check out selected CLI contract
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: loxilb-io/loxicmd-inference-gateway
+          ref: ${{ github.event.client_payload.cli_ref || github.event.inputs.cli_ref || '28832f0c60ab717d8cb5133114edf2c45e22a85c' }}
+          path: upstream-cli
+          fetch-depth: 0
+          persist-credentials: false
+
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: '3.12'
@@ -91,12 +115,13 @@ jobs:
           echo "gateway_sha=$gateway_sha" >> "$GITHUB_OUTPUT"
           mkdir -p "$RUNNER_TEMP/gateway-contract"
           python tools/refresh_example_contracts.py \
-            --only gateway \
             --gateway-repo upstream-gateway \
             --gateway-ref "$gateway_sha" \
+            --cli-repo upstream-cli \
+            --cli-ref "$(git -C upstream-cli rev-parse HEAD)" \
             --output-dir "$RUNNER_TEMP/gateway-contract"
-          cp tests/contracts/docs_examples/cli.json \
-            "$RUNNER_TEMP/gateway-contract/cli.json"
+          cmp tests/contracts/docs_examples/cli.json "$RUNNER_TEMP/gateway-contract/cli.json"
+          echo "CLI source: $(git -C upstream-cli rev-parse HEAD)" >> "$GITHUB_STEP_SUMMARY"
           {
             echo '## Gateway contract validation target'
             echo

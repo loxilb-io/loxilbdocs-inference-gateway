@@ -26,6 +26,8 @@ Report a bug in the gateway itself in the **code** repository; report a document
    ```bash
    python tools/validate_examples.py
    python tools/refresh_example_inventory.py --check
+   python tools/refresh_body_bindings.py --check
+   python tools/refresh_coverage_ledger.py --check
    python tools/render_metrics_reference.py --check
    python tools/render_schema_reference.py --check
    python -m unittest discover -s tests -p 'test_*.py' -v
@@ -44,7 +46,9 @@ the combined primary and supplemental Swagger contracts; inline JSON request bod
 matching Swagger request schema; shell syntax with `bash -n`; JSON with `jq`; and YAML with `yq`.
 PromQL metric names and selector labels are checked against the frozen
 release-scope manifest; documented closed label enums are checked for exact
-selectors. Referenced snapshot and bootstrap bodies use public, non-secret fixtures for schema validation.
+selectors. File-backed management examples are bound by exact page and file
+reference to actual public assets and extracted jq producer commands. Linux CI
+recreates those inputs; deployment-owned secrets are not substituted with fixtures.
 The unit suite also applies deliberately broken examples and requires the validator to reject route
 typos, removed flags, invalid enum values, incorrect JSON field casing, missing required fields,
 non-existent metric families, wrong metric labels, and wrong metric enum values.
@@ -56,20 +60,25 @@ upstream contract change:
 ```bash
 python tools/refresh_example_contracts.py \
   --gateway-repo ../loxilb-inference-gateway \
-  --cli-repo ../loxicmd-inference-gateway
-python tools/refresh_example_inventory.py
+  --gateway-ref <accepted-gateway-commit> \
+  --cli-repo ../loxicmd-inference-gateway \
+  --cli-ref <accepted-cli-commit>
+python tools/render_metrics_reference.py --write
 python tools/render_schema_reference.py --write
+python tools/refresh_body_bindings.py
+python tools/refresh_example_inventory.py
+python tools/refresh_coverage_ledger.py
 python tools/refresh_example_inventory.py --check
 ```
 
 ### Validate a Gateway upgrade before refreshing the snapshot
 
-The `Gateway contract drift` workflow checks out a selected Gateway branch,
-tag, or commit and performs four independent gates:
+The `Gateway contract drift` workflow checks out selected Gateway and CLI
+refs and performs four independent gates:
 
 1. regenerate the candidate contract from both Swagger files, the engine
-   support catalog, the release-scope metric manifest, and selected public
-   scenario/workflow evidence;
+   support catalog, the release-scope metric manifest, selected public
+   scenario/workflow evidence, and the selected CLI source;
 2. validate documented routes, request bodies, and PromQL against that
    candidate contract;
 3. require every Swagger definition added since the public schema baseline to
@@ -77,12 +86,14 @@ tag, or commit and performs four independent gates:
 4. compare Swagger, catalog, metric-manifest, and scenario/claim evidence with
    the tracked contract. Any drift fails until it is reviewed.
 
-Run the same gate locally with one command:
+Run the same static gate on the validation runner:
 
 ```bash
 python tools/validate_gateway_docs.py \
   --gateway-repo ../loxilb-inference-gateway \
-  --gateway-ref main
+  --gateway-ref <accepted-gateway-commit> \
+  --cli-repo ../loxicmd-inference-gateway \
+  --cli-ref <accepted-cli-commit>
 ```
 
 After reviewing the report and updating affected pages, refresh only the
@@ -102,10 +113,12 @@ python -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
 The workflow runs on relevant documentation pull requests, weekly against
-Gateway `main`, and on manual dispatch with a selectable `gateway_ref`. It also
+Gateway `main` with the configured CLI baseline, and on manual dispatch with
+selectable `gateway_ref` and `cli_ref`. It also
 accepts a `repository_dispatch` event named `gateway-api-updated`; a Gateway
 release workflow can send that event with `client_payload.gateway_ref` set to
-the immutable commit or tag. The dispatch token must stay in repository
+the immutable Gateway commit or tag and `client_payload.cli_ref` set to the
+reviewed CLI ref. The dispatch token must stay in repository
 secrets and must never be placed in the event payload or logs.
 
 These checks establish static command, route, schema, metric, evidence-object, and syntax consistency. They do not execute

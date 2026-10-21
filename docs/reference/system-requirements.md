@@ -76,8 +76,6 @@ depending on it.
 | Feature | Default Ubuntu 22.04 image | Ubuntu 24.04 image | Additional build gate |
 |---|---|---|---|
 | HTTP and L4 tracing | Trace build options are not passed by `Dockerfile` | Built with HTTP/L4 trace options | Validate OTLP export and overhead |
-| Presidio PII detection | Stub | Stub | Source build with `HAVE_PII_DETECTION=1`; request-only qualification |
-| Llama Firewall | Stub | Stub | No supported release build profile currently defined |
 | NVIDIA DOCA DPU offload | Stub/non-DPU | Stub/non-DPU | Source/hardware build with `HAVE_DOCA=1` plus SDK, driver, firmware, and target validation |
 | mTLS | Built by the current release Dockerfiles | Built by the current release Dockerfiles | Configure certificates and verify the exact service path |
 
@@ -160,7 +158,7 @@ the `./loxilb` binary. Swagger generation is an explicit step, except that the
 build can invoke it when required generated model files are missing; Docker is
 not used for Swagger regeneration on every normal clean build.
 
-Optional PII and DPU builds add native dependencies and are not equivalent to
+Optional DPU builds add native dependencies and are not equivalent to
 the standard release image. Build them only from a reviewed dependency set,
 produce an SBOM, scan/sign the artifact, and validate it on the target Linux
 kernel and hardware before promotion.

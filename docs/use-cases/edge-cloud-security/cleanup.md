@@ -32,7 +32,7 @@ printf 'CURL_EXIT=%s\n' "$?"
 cat "$LAB/lift-fw.txt"
 docker logs uc7-ep > "$LAB/journal.jsonl" 2>&1
 jq -s --arg nonce "$RUN-lift-fw" '[.[] | select(.event=="uc7_receipt" and .nonce==$nonce)] | {count:length,credentials_absent:all(.key_present==false),protocols:map(.proto)}' "$LAB/journal.jsonl"
-jq '.serviceArguments.model_name="edge-alias" | del(.serviceArguments.kvExactMode,.serviceArguments.kvZmqPort,.serviceArguments.kvHashAlgo,.serviceArguments.kvWarmupSec,.serviceArguments.kvBlockSize,.serviceArguments.kvEngineType,.serviceArguments.sse_mode)' "$LAB/model.json" > "$LAB/cleanup-alias.json"
+jq '.serviceArguments.model_name="edge-alias" | del(.serviceArguments.kvExactMode,.serviceArguments.kvZmqPort,.serviceArguments.kvHashAlgo,.serviceArguments.kvBlockSize,.serviceArguments.kvEngineType,.serviceArguments.sse_mode)' "$LAB/model.json" > "$LAB/cleanup-alias.json"
 docker exec -i uc7-gw curl -sS --max-time 20 --config /etc/loxilb/control.curl -X POST -H 'Content-Type: application/json' --data-binary @- -w '\nHTTP:%{http_code}\n' "$API/config/loadbalancer" < "$LAB/cleanup-alias.json"
 docker exec uc7-gw curl -sS --max-time 20 --config /etc/loxilb/control.curl -X DELETE -w '\nHTTP:%{http_code}\n' "$API/config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/8080/protocol/tcp?model_name=edge-alias"
 docker exec uc7-gw curl -fsS --max-time 20 --config /etc/loxilb/control.curl "$API/config/loadbalancer/all" > "$LAB/final-survivor.json"

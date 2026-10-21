@@ -157,7 +157,7 @@ loxilb_ai_jwks_usable == 0
 | `loxilb_ai_token_quota_model_limit_tokens{tenant,model}` | Gauge | Model-specific TPM limit |
 | `loxilb_ai_user_token_quota_utilization{tenant,user}` / `_limit_tokens` | Gauge | User TPM state and last charged limit |
 | `loxilb_ai_user_model_token_quota_utilization{tenant,user,model}` / `_limit_tokens` | Gauge | User-and-model TPM state |
-| `loxilb_ai_key_token_quota_utilization{key_id}` / `_limit_tokens` | Gauge | Implemented per-key TPM state; primary Swagger text is stale and release support remains pending convergence |
+| `loxilb_ai_key_token_quota_utilization{key_id}` / `_limit_tokens` | Gauge | Per-key TPM reservation and settlement state on supported accounting paths; current primary Swagger describes both stages |
 | `loxilb_ai_vip_token_quota_utilization{service}` / `_limit_tokens` | Gauge | Shared service TPM state |
 | `loxilb_ai_token_quota_cold_open_total` | Counter | Quota service began with empty state because no peers were available, peer warmup was disabled, or peer warmup timed out |
 
@@ -425,14 +425,7 @@ so a flat AI response counter is not proof of failure. Request and
 bidirectional acceleration remain incompatible with any `api_key_auth`
 declaration.
 
-## OPA and optional DPU metrics
-
-OPA watcher signals are
-`loxilb_opa_watcher_syncs_total{status}`,
-`loxilb_opa_sync_duration_seconds`, `loxilb_opa_firewall_rules`, and
-`loxilb_opa_circuit_breaker_state` (`0` closed, `1` open, `2` half-open). The
-watcher is currently an experimental security integration; read its
-[production boundary](../security/opa-l4.md) before using these signals.
+## Optional DPU metrics
 
 DPU/DOCA metrics are registered only after a DPU plugin attaches. Core signals
 include `doca_offload_active_flows`, `doca_offload_attempts_total`,

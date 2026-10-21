@@ -1,0 +1,103 @@
+{
+  "cases": {
+    "create": {
+      "schema": {
+        "properties": {
+          "result": {
+            "enum": [
+              "Success"
+            ]
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "type": "object"
+      },
+      "status": 200
+    },
+    "delete": {
+      "schema": {
+        "properties": {
+          "result": {
+            "enum": [
+              "Success"
+            ]
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "type": "object"
+      },
+      "status": 200
+    },
+    "invalid-protocol": {
+      "schema": {
+        "properties": {
+          "code": {
+            "enum": [
+              606
+            ]
+          },
+          "message": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "type": "object"
+      },
+      "status": 422,
+      "unchanged": true
+    },
+    "positive": {
+      "receipt_delta": 1,
+      "schema": {
+        "properties": {
+          "marker": {
+            "enum": [
+              "backend-llama"
+            ]
+          }
+        },
+        "required": [
+          "marker"
+        ],
+        "type": "object"
+      },
+      "status": 200
+    },
+    "ready": {
+      "schema": {
+        "properties": {
+          "ready": {
+            "enum": [
+              true
+            ]
+          }
+        },
+        "required": [
+          "ready"
+        ],
+        "type": "object"
+      },
+      "status": 200
+    },
+    "unauthenticated": {
+      "schema": {},
+      "status": 401
+    },
+    "wrong-model": {
+      "receipt_delta": 0,
+      "schema": {
+        "type": "object"
+      },
+      "status": 503
+    }
+  },
+  "scope": "Selected-source CPU Quickstart response assertions; all other operations require separate execution evidence"
+}
