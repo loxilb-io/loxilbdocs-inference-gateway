@@ -3777,7 +3777,7 @@
   <span class="md-ellipsis">
     
   
-    Appliance CLI
+    Gateway & Appliance Recovery Scope
   
 
     
@@ -3834,34 +3834,6 @@
     
   
     Application & L4 Tracing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../dpu-offload/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    DPU Offload Observability
   
 
     
@@ -4177,17 +4149,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#loxilb-mcp-audit-trail" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        loxilb-mcp audit trail
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#gateway-management-audit-trail" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4221,10 +4182,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-not-covered" class="md-nav__link">
+  <a href="#verification-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is not covered
+        Verification boundary
       
     </span>
   </a>
@@ -4453,7 +4414,7 @@
   <span class="md-ellipsis">
     
   
-    Current-main API Schema Models
+    Selected-source API Schema Models
   
 
     
@@ -4850,17 +4811,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#loxilb-mcp-audit-trail" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        loxilb-mcp audit trail
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#gateway-management-audit-trail" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4894,10 +4844,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-is-not-covered" class="md-nav__link">
+  <a href="#verification-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is not covered
+        Verification boundary
       
     </span>
   </a>
@@ -4922,7 +4872,9 @@
 
 
 <h1 id="logging-and-audit">Logging and Audit<a class="headerlink" href="#logging-and-audit" title="Permanent link">&para;</a></h1>
-<p>The Inference Gateway writes structured operational logs from the LoxiLB process and a separate action audit trail from the <code>loxilb-mcp</code> management surface. This page covers how to configure both, where the files land, and how they are rotated.</p>
+<p>The Gateway writes operational logs and a separate management audit trail.
+This page describes their configuration and status APIs at the selected source
+revision. Independently verify retained records and external delivery.</p>
 <div class="admonition note">
 <p class="admonition-title">Audience</p>
 <p>Infrastructure operators, DevOps engineers, and platform SREs who need durable logs for troubleshooting and an audit record of management actions.</p>
@@ -5027,7 +4979,7 @@
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/loxilb/loxilb.log
 </code></pre></div>
 <h3 id="built-in-rotation">Built-in rotation<a class="headerlink" href="#built-in-rotation" title="Permanent link">&para;</a></h3>
-<p>Rotation is handled inside the gateway — there is no need to configure an external <code>logrotate</code> unit. When a structured log file would exceed its size limit it is rotated in place: the current file is renamed with a UTC timestamp (<code>&lt;base&gt;-&lt;timestamp&gt;.log</code>), gzip-compressed, and old backups are pruned by count and age. The same rotation covers the <code>loxilb-mcp</code> audit trail described below.</p>
+<p>Rotation is handled inside the gateway — there is no need to configure an external <code>logrotate</code> unit. When a structured log file would exceed its size limit it is rotated in place: the current file is renamed with a UTC timestamp (<code>&lt;base&gt;-&lt;timestamp&gt;.log</code>), gzip-compressed, and old backups are pruned by count and age.</p>
 <p>The structured log files rotate with these production defaults:</p>
 <table>
 <thead>
@@ -5077,33 +5029,8 @@
 </code></pre></div>
 </div>
 <hr />
-<h2 id="loxilb-mcp-audit-trail">loxilb-mcp audit trail<a class="headerlink" href="#loxilb-mcp-audit-trail" title="Permanent link">&para;</a></h2>
-<p>The <a href="../../reference/cli/"><code>loxilb-mcp</code></a> management surface keeps its own audit log: every tool call an agent or operator makes against the gateway is recorded, separately from LoxiLB's operational logs. Use it to answer "who changed what, and when".</p>
-<p>The audit log is an append-only JSON-lines file named <code>audit.jsonl</code>. It is written to the audit directory, resolved in this order:</p>
-<ol>
-<li>the <code>--audit-dir</code> flag, if set;</li>
-<li>the <code>audit_dir</code> field in the <code>loxilb-mcp</code> config file;</li>
-<li>otherwise <code>~/.loxilb-mcp/</code> (created with <code>0700</code> permissions).</li>
-</ol>
-<p>Each line is one event. Recorded event kinds include tool calls, authentication rejections, request-origin rejections, rate-limit hits, and autopilot executions. A typical record carries the timestamp, event kind, client and target names, the tool and its arguments, the outcome (<code>ok</code>), any error, latency, and the remote address:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span><span class="nt">"ts"</span><span class="p">:</span><span class="s2">"2026-07-27T09:14:02.481Z"</span><span class="p">,</span><span class="nt">"kind"</span><span class="p">:</span><span class="s2">"tool_call"</span><span class="p">,</span><span class="nt">"client"</span><span class="p">:</span><span class="s2">"operator"</span><span class="p">,</span><span class="nt">"target"</span><span class="p">:</span><span class="s2">"gateway"</span><span class="p">,</span><span class="nt">"tool"</span><span class="p">:</span><span class="s2">"lb_create"</span><span class="p">,</span><span class="nt">"args"</span><span class="p">:{</span><span class="nt">"externalIP"</span><span class="p">:</span><span class="s2">"192.0.2.10"</span><span class="p">},</span><span class="nt">"ok"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="nt">"latency_ms"</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span><span class="nt">"remote"</span><span class="p">:</span><span class="s2">"192.0.2.20"</span><span class="p">}</span>
-</code></pre></div>
-<p>Known top-level secret-shaped argument fields (tokens, passwords, API keys, and similar) are
-masked as <code>[REDACTED]</code> before the event is written. This is a best-effort safeguard, not a
-guarantee for arbitrary nested or unexpectedly named values. Treat every audit record as
-sensitive.</p>
-<div class="admonition warning">
-<p class="admonition-title">Redaction is defense in depth</p>
-<p>Do not rely on automatic masking as the only control. Avoid putting
-credentials or prompt content in tool arguments, names, and free-form
-fields. Restrict audit-file and archive access, and review a sanitized
-sample before exporting logs to another system.</p>
-</div>
-<p>The audit log is rotated by the same built-in mechanism as the structured logs, with a longer forensic window: it rotates above <strong>20 MB</strong>, keeps <strong>8</strong> gzipped backups, and retains them for <strong>90 days</strong>.</p>
-<p>For the full <code>loxilb-mcp</code> command surface, transports, and role model, see the <a href="../../reference/cli/">CLI Reference</a>.</p>
-<hr />
 <h2 id="gateway-management-audit-trail">Gateway management audit trail<a class="headerlink" href="#gateway-management-audit-trail" title="Permanent link">&para;</a></h2>
-<p>Separately from the <code>loxilb-mcp</code> trail, the Gateway process keeps a <strong>management audit trail</strong> of
+<p>The Gateway process keeps a <strong>management audit trail</strong> of
 the changes made through its management API. The management API serves its <strong>state and policy</strong>,
 never its records: no record content is served over the API, and identifiers name segments and
 events, never their content.</p>
@@ -5153,41 +5080,26 @@ events, never their content.</p>
 </tr>
 </tbody>
 </table>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://192.0.2.254:11111/netlox/v1/audit/status<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{available, running, last_write, write_failures, orphaned_intents}'</span>
+<p>Prepare the endpoint and protected credential file:</p>
+<!-- example-status-default: illustrative-only -->
+
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
 </code></pre></div>
-<ul>
-<li><strong><code>available: false</code></strong> means the audit directory was unusable at start. Every audited management
-  call is refused, the remaining fields describe nothing, and the status read still answers so the
-  refused calls can be explained.</li>
-<li><strong>The reads are not audited.</strong> <code>GET /audit/status</code> and <code>GET /audit/policy</code> are designed to be
-  polled.</li>
-<li><strong>The policy has a floor.</strong> A value below the deployment profile's floor is refused for every
-  caller, the gateway administrator included, with <code>400</code> (not <code>403</code>: the caller was authorized and
-  the values were not acceptable). Lowering a retention target never deletes segments already on
-  disk: they keep the terms they were sealed under, and only what is sealed afterwards is subject
-  to the shorter one. The audit root directory, the mandatory-audit mode, and the instance
-  identity are startup-only and are not served or changeable here.</li>
-<li><strong><code>orphaned_intents</code></strong> counts management intents of the previous boot that had no result when
-  the writer started. Each one is a change whose outcome is unknown; <code>last_orphan_event_id</code> names
-  the most recent for the investigator to look up.</li>
-<li><strong>The remote sink always verifies the receiver.</strong> The receiver's certificate is verified against
-  the configured bundle (<code>ca_bundle_path</code>, required); there is no unverified mode. Certificate
-  material is named by path and never served. <code>submitted</code> is not a delivery count: the protocol
-  carries no acknowledgement.</li>
-<li><strong>Secondary sinks follow the trail beside the compliance sink.</strong> A secondary sink may select
-  records by stream (<code>mgmt</code>, <code>data</code>, <code>audit_system</code>), by service and by outcome (<code>ok</code>, <code>failed</code>),
-  and may keep one data record in <code>data_sample</code>; a field that is set narrows the selection, and a
-  field judges only the records that carry what it looks at. A secondary sink numbers what it sends,
-  and that export sequence travels beside each record under the configured private enterprise
-  number, so a configuration without <code>enterprise_number</code> is refused. The receiver's certificate is
-  always verified. Replacing or deleting a sink keeps its place in the trail and its export
-  sequence: a sink configured again under the same name continues both, and no export sequence
-  number is used twice. <code>GET /audit/status</code> lists every sink's progress in <code>sinks</code>, the compliance
-  sink first. Every change to a sink is audited like any other management mutation.</li>
-<li><strong>Metrics.</strong> The trail exports <code>loxilb_audit_*</code> families (writer liveness, records written and
-  dropped by stream, write and sync failures, retention pruning); see the generated
-  <a href="../../reference/metrics/">Metrics reference</a>.</li>
-</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/audit/status"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{available, running, last_write, write_failures, orphaned_intents}'</span>
+</code></pre></div>
+<p>Check writer availability/running state, write and drop counters, active
+segment, retained bytes, and orphaned intent fields. Investigate missing
+records, persistence failures, and unknown mutation outcomes independently.
+Retain exact image identity with the observations.</p>
+<p>Remote sink submission is not a delivery receipt. Verify receiver certificate
+trust and independently locate a synthetic test record at the receiver before
+using that path for operations. Review each sink's selection and progress;
+status alone does not prove complete, unique, or durable external delivery.
+See the <a href="../../reference/metrics/">metric reference</a> for the frozen
+<code>loxilb_audit_*</code> family contracts.</p>
 <p>Gateway audit trail files live in their own directory (default <code>/var/log/loxilb/audit/</code>), which
 the <code>loxilb*.log</code> filter of the <a href="../log-api/">log API</a> never matches, so the log API cannot read
 them.</p>
@@ -5259,8 +5171,11 @@ complete paging, archive, rotation, and cleanup procedure is in
 <li>Store exported evidence under the organization's access and retention
    policy, then securely remove temporary copies.</li>
 </ol>
-<h2 id="what-is-not-covered">What is not covered<a class="headerlink" href="#what-is-not-covered" title="Permanent link">&para;</a></h2>
-<p>This page documents the logging and audit capabilities that ship in the open-source Inference Gateway. Advanced structured audit-logging features — a runtime API for changing per-category log levels without a restart, compliance-oriented export formats, and long-term audit warehousing — are outside the scope of this gateway and are intentionally not documented here. Configure log severity through the <code>--loglevel</code> startup option, and ship the JSON files to your own aggregator for retention and search.</p>
+<h2 id="verification-boundary">Verification boundary<a class="headerlink" href="#verification-boundary" title="Permanent link">&para;</a></h2>
+<p>API availability and local status are separate from retained records, receiver
+delivery, compliance acceptance, and recovery qualification. Validate the
+selected deployment's retention and failure/recovery behavior with independent
+evidence before relying on it.</p>
 <p>For the metrics side of observability, see
 <a href="../observability-metrics-grafana/">Grafana Dashboards and Observability</a>.</p>
 <p>Recovery and high-risk diagnostics need additional evidence beyond logs:</p>
@@ -5269,8 +5184,6 @@ complete paging, archive, rotation, and cleanup procedure is in
   commit, rollback, and restore metrics;</li>
 <li><a href="../tracing/">Application and L4 Tracing</a> — trace data handling and OTLP
   verification;</li>
-<li><a href="../dpu-offload/">DPU Offload Observability</a> — sensitive and disruptive debug
-  boundaries.</li>
 </ul>
 
 

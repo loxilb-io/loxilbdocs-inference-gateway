@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/operations/monitoring/">
       
       
-        <link rel="prev" href="../dpu-offload/">
+        <link rel="prev" href="../tracing/">
       
       
         <link rel="next" href="../observability-metrics-grafana/">
@@ -3777,7 +3777,7 @@
   <span class="md-ellipsis">
     
   
-    Appliance CLI
+    Gateway & Appliance Recovery Scope
   
 
     
@@ -3834,34 +3834,6 @@
     
   
     Application & L4 Tracing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../dpu-offload/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    DPU Offload Observability
   
 
     
@@ -4084,17 +4056,6 @@
     <span class="md-ellipsis">
       
         Sockmap observability boundary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-dpu-metrics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Optional DPU metrics
       
     </span>
   </a>
@@ -4546,7 +4507,7 @@
   <span class="md-ellipsis">
     
   
-    Current-main API Schema Models
+    Selected-source API Schema Models
   
 
     
@@ -5025,17 +4986,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#optional-dpu-metrics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Optional DPU metrics
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#core-health-metrics" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5258,9 +5208,7 @@ SSE, P/D or an active credential policy is outside AI request accounting.
 <code>completed</code> includes whole non-SSE answers and does not require a <code>[DONE]</code>
 marker. <code>aborted</code> has <code>cause="client"</code>, <code>"engine"</code> or <code>"gateway"</code>; other
 outcomes have an empty cause. A request that ended before a status was sent
-uses <code>status="none"</code>. This includes a client leaving before the answer, with
-or without P/D, and a non-P/D backend closing before any answer. Such a
-non-P/D request has no P/D lifecycle record; correlate its request outcome
+uses <code>status="none"</code> when no HTTP status was sent. Correlate its request outcome
 and cause with the client transport result instead of treating <code>none</code> as an
 HTTP status or a successful response.</p>
 <p>Admission denials are recorded once at the refusal point;
@@ -6019,12 +5967,6 @@ Those accelerated responses are not recorded by the userspace response path,
 so a flat AI response counter is not proof of failure. Request and
 bidirectional acceleration remain incompatible with any <code>api_key_auth</code>
 declaration.</p>
-<h2 id="optional-dpu-metrics">Optional DPU metrics<a class="headerlink" href="#optional-dpu-metrics" title="Permanent link">&para;</a></h2>
-<p>DPU/DOCA metrics are registered only after a DPU plugin attaches. Core signals
-include <code>doca_offload_active_flows</code>, <code>doca_offload_attempts_total</code>,
-<code>doca_offload_failures_total</code>, <code>doca_circuit_breaker_state</code>, and
-<code>doca_pipe_hw_bytes_total{pipe,direction}</code>. Absence on a standard non-DPU image
-is expected. See <a href="../dpu-offload/">DPU Offload Observability</a>.</p>
 <h2 id="core-health-metrics">Core health metrics<a class="headerlink" href="#core-health-metrics" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -6154,11 +6096,6 @@ panel with the raw series before relying on its units or aggregation.</p>
 <td>Slow/unreachable peer or event pressure</td>
 <td>Restrict promotion, inspect peer reachability and push latency, and verify state before serving</td>
 </tr>
-<tr>
-<td>DPU metrics are absent</td>
-<td>No plugin attached or non-DPU build</td>
-<td>Verify the immutable build and plugin state before treating it as a scrape fault</td>
-</tr>
 </tbody>
 </table>
 <h2 id="security-and-cleanup">Security and cleanup<a class="headerlink" href="#security-and-cleanup" title="Permanent link">&para;</a></h2>
@@ -6179,7 +6116,6 @@ tenant activity metadata. Remove temporary header files after management calls:<
 <li><a href="../../security/data-plane-jwt-auth/">Data-Plane Authentication and JWT</a></li>
 <li><a href="../backup-restore/">Configuration Backup and Restore</a></li>
 <li><a href="../tracing/">Application and L4 Tracing</a></li>
-<li><a href="../dpu-offload/">DPU Offload Observability</a></li>
 <li><a href="../troubleshooting/">Troubleshooting</a></li>
 <li><a href="../../reference/metrics/">Metrics Reference</a></li>
 <li><a href="../../reference/verification-status/">Verification Status</a></li>

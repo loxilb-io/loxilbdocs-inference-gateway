@@ -3775,7 +3775,7 @@
   <span class="md-ellipsis">
     
   
-    Appliance CLI
+    Gateway & Appliance Recovery Scope
   
 
     
@@ -3832,34 +3832,6 @@
     
   
     Application & L4 Tracing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../operations/dpu-offload/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    DPU Offload Observability
   
 
     
@@ -4497,7 +4469,7 @@
   <span class="md-ellipsis">
     
   
-    Current-main API Schema Models
+    Selected-source API Schema Models
   
 
     
@@ -5018,7 +4990,7 @@ adapting them, follow this site's <strong>Example Quality Contract</strong> and 
 alone as runtime proof.</p>
 </div>
 <p>The LoxiLB Inference Gateway management API is served under
-<code>/netlox/v1</code> on port <code>11111</code>. This page catalogs every current endpoint family
+<code>/netlox/v1</code> on port <code>11111</code>. This page catalogs the published endpoint families
 and highlights contracts that require special handling.</p>
 <ul>
 <li>Production base URL: <code>https://gateway.example.com/netlox/v1</code></li>
@@ -5038,12 +5010,12 @@ release qualification. Confirm the exact Swagger served by the image you deploy.
    parameters, and declared security.</li>
 <li>Handler and middleware code decides conditional behavior that Swagger
    cannot express, such as first-user bootstrap and raw-route authorization.</li>
-<li><code>api/swagger-extras.yml</code> documents the five raw-handler groups: AI KV
-   inventory, DPU debug, DPU hardware counters, OPA watcher, and AI-key patch.</li>
+<li><code>api/swagger-extras.yml</code> supplies companion raw-handler contracts. The
+   <a href="../swagger-extras/">published companion guide</a> covers KV inventory and AI-key patch.</li>
 <li>Runnable <code>cicd/</code> scenarios are validation evidence for selected flows; they
    are not a complete API contract.</li>
 </ol>
-<p>The generated <a href="../api-schema-models/">current-main API schema model ledger</a>
+<p>The generated <a href="../api-schema-models/">selected-source API schema model ledger</a>
 classifies every definition added since the public documentation baseline,
 including direct operation models, nested components, shared envelopes, and
 companion-spec errors. It also records the exact required and optional fields
@@ -5306,11 +5278,11 @@ lifecycle rather than independent convenience endpoints.</p>
 <tr>
 <td><code>GET/PUT /maintenance</code></td>
 <td><code>MaintenanceStatus</code></td>
-<td>Gates configuration writes. It does not reject new inference traffic and does not drain non-streaming requests.</td>
+<td>Reports configuration-write gating and observed drain state. Inference refusal depends on the attached data path and admission mode; verify affected services independently.</td>
 </tr>
 </tbody>
 </table>
-<p>The recovery endpoints are implemented on current Gateway <code>main</code>; Gateway
+<p>The recovery endpoints are implemented in the selected Gateway source; Gateway
 <code>v0.9.8.9-rc.1</code> includes snapshot, restore, and persist but not readiness, diagnostics, or
 maintenance, and it does not include the capability surface. See
 <a href="../../operations/backup-restore/">Persistence, Backup, and Restore</a> and

@@ -16,7 +16,7 @@
         <link rel="prev" href="../sockmap-acceleration/">
       
       
-        <link rel="next" href="../dpu-offload/">
+        <link rel="next" href="../monitoring/">
       
       
         
@@ -3777,7 +3777,7 @@
   <span class="md-ellipsis">
     
   
-    Appliance CLI
+    Gateway & Appliance Recovery Scope
   
 
     
@@ -3886,17 +3886,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#trace-data-flow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Trace data flow
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#before-you-enable-tracing" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3952,10 +3941,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#disable-and-reset" class="md-nav__link">
+  <a href="#disable-tracing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Disable and reset
+        Disable tracing
       
     </span>
   </a>
@@ -3977,34 +3966,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../dpu-offload/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    DPU Offload Observability
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -4419,7 +4380,7 @@
   <span class="md-ellipsis">
     
   
-    Current-main API Schema Models
+    Selected-source API Schema Models
   
 
     
@@ -4749,17 +4710,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#trace-data-flow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Trace data flow
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#before-you-enable-tracing" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4815,10 +4765,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#disable-and-reset" class="md-nav__link">
+  <a href="#disable-tracing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Disable and reset
+        Disable tracing
       
     </span>
   </a>
@@ -4865,23 +4815,6 @@ alone as runtime proof.</p>
 connection events to an OpenTelemetry Protocol (OTLP) collector. Use tracing
 for bounded troubleshooting windows: it adds processing and storage load, and
 trace attributes can expose workload metadata.</p>
-<h2 id="trace-data-flow">Trace data flow<a class="headerlink" href="#trace-data-flow" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>flowchart LR
-    T["Inference and L4 traffic"] --&gt; E["Gateway trace hooks"]
-    E --&gt; R["Per-worker ring buffers"]
-    R --&gt; X["OTLP exporter"]
-    X --&gt; C["OTLP collector"]
-    C --&gt; B["Trace backend"]
-
-    S["Status API"] --&gt; R
-    S --&gt; X
-
-    style E fill:#e1f5fe,stroke:#0288d1
-    style X fill:#fff9c4,stroke:#f9a825
-    style B fill:#e8f5e9,stroke:#43a047</code></pre>
-<p>HTTP and L4 tracing share the exporter, but they have separate enable and
-status controls. Enabling one trace family does not prove that the exporter has
-connected. Confirm <code>otlp_connected</code> after trace traffic is produced.</p>
 <h2 id="before-you-enable-tracing">Before you enable tracing<a class="headerlink" href="#before-you-enable-tracing" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Use a Gateway build that includes HTTP and L4 tracing. Build profiles differ:
@@ -4999,8 +4932,8 @@ default to <code>100</code>. Update it without disabling tracing:</p>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{"sampling_rate": 10}'</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/l4trace/sampling"</span>
 </code></pre></div>
-<p>Watch lifecycle counters and dropped events. Increasing sampling while rings or
-the collector are already saturated reduces evidence quality.</p>
+<p>Use independent collector records to assess delivery at the selected sampling
+rate. A status response alone does not prove event completeness.</p>
 <h2 id="verify-export">Verify export<a class="headerlink" href="#verify-export" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Generate one non-sensitive test request or connection.</li>
@@ -5012,7 +4945,7 @@ the collector are already saturated reduces evidence quality.</p>
 </ol>
 <p>If <code>otlp_connected</code> remains false, check DNS, route, protocol, TLS trust,
 collector authentication, and collector logs. Use independently collected traces to verify delivery.</p>
-<h2 id="disable-and-reset">Disable and reset<a class="headerlink" href="#disable-and-reset" title="Permanent link">&para;</a></h2>
+<h2 id="disable-tracing">Disable tracing<a class="headerlink" href="#disable-tracing" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/l4trace/disable"</span>
@@ -5020,11 +4953,6 @@ collector authentication, and collector logs. Use independently collected traces
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/trace/disable"</span>
-</code></pre></div>
-<p>Reset L4 counters only after retaining the required evidence:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/l4trace/stats/reset"</span>
 </code></pre></div>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>

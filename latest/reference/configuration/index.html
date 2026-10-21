@@ -3775,7 +3775,7 @@
   <span class="md-ellipsis">
     
   
-    Appliance CLI
+    Gateway & Appliance Recovery Scope
   
 
     
@@ -3832,34 +3832,6 @@
     
   
     Application & L4 Tracing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../operations/dpu-offload/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    DPU Offload Observability
   
 
     
@@ -4284,7 +4256,7 @@
   <span class="md-ellipsis">
     
   
-    Current-main API Schema Models
+    Selected-source API Schema Models
   
 
     
@@ -4748,15 +4720,14 @@
 it does not duplicate the field tables.</p>
 <div class="admonition note">
 <p class="admonition-title">The full field reference lives elsewhere</p>
-<p>The complete, authoritative <code>serviceArguments</code> reference — every field, type, default, and
-enum for a load-balancer rule — is the
+<p>The detailed <code>serviceArguments</code> reference for a load-balancer rule is the
 <strong><a href="../../ai-gateway/configuration-reference/">AI Gateway → Configuration Reference</a></strong>.
 Start there for any load-balancer create (<code>POST /netlox/v1/config/loadbalancer</code>) body.</p>
 </div>
 <h2 id="how-rules-are-configured">How rules are configured<a class="headerlink" href="#how-rules-are-configured" title="Permanent link">&para;</a></h2>
-<p>There is no static config file for AI routing. Every rule is a JSON body posted to the
-load-balancer REST API on port <strong>11111</strong>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>POST http://&lt;VIP&gt;:11111/netlox/v1/config/loadbalancer
+<p>Manage routing rules through the load-balancer REST API on your protected
+management endpoint:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>POST https://gateway.example.com/netlox/v1/config/loadbalancer
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>{ "serviceArguments": { ... }, "endpoints": [ ... ] }
 </code></pre></div>
 <p>Fields are set per-rule inside <code>serviceArguments</code> (and per-endpoint inside <code>endpoints[]</code>). See the
@@ -4857,7 +4828,7 @@ worked example.</p>
 <h2 id="related-references">Related references<a class="headerlink" href="#related-references" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../api/">API (swagger)</a> — the generated REST client surface.</li>
-<li><a href="../swagger-extras/">swagger-extras (raw)</a> — all raw-middleware endpoint groups.</li>
+<li><a href="../swagger-extras/">swagger-extras (raw)</a> — published companion endpoint contracts.</li>
 <li><a href="../system-requirements/">System Requirements</a>.</li>
 </ul>
 

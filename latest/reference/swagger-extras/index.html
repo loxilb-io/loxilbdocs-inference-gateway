@@ -3775,7 +3775,7 @@
   <span class="md-ellipsis">
     
   
-    Appliance CLI
+    Gateway & Appliance Recovery Scope
   
 
     
@@ -3832,34 +3832,6 @@
     
   
     Application & L4 Tracing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../operations/dpu-offload/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    DPU Offload Observability
   
 
     
@@ -4284,7 +4256,7 @@
   <span class="md-ellipsis">
     
   
-    Current-main API Schema Models
+    Selected-source API Schema Models
   
 
     
@@ -4391,56 +4363,6 @@
     <span class="md-ellipsis">
       
         AI KV inventory
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dpu-debug" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        DPU debug
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="DPU debug">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#read-state-and-counters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Read state and counters
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#trigger-a-debug-action" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Trigger a debug action
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dpu-hardware-counters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        DPU hardware counters
       
     </span>
   </a>
@@ -4810,56 +4732,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dpu-debug" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        DPU debug
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="DPU debug">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#read-state-and-counters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Read state and counters
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#trigger-a-debug-action" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Trigger a debug action
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dpu-hardware-counters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        DPU hardware counters
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ai-api-key-updates" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4921,12 +4793,6 @@ alone as runtime proof.</p>
 API server's global middleware. This page documents a subset of those contracts. They do not use the
 normal generated handler pipeline, even when the same path is also mentioned
 in the primary Swagger document.</p>
-<div class="admonition warning">
-<p class="admonition-title">Development-source behavior</p>
-<p>Authentication parity for these raw handlers is implemented in the current development source
-but has not completed release qualification. Confirm the behavior against the exact image you
-deploy.</p>
-</div>
 <h2 id="contract-and-authentication">Contract and authentication<a class="headerlink" href="#contract-and-authentication" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Base path: <code>/netlox/v1</code></li>
@@ -4935,21 +4801,9 @@ deploy.</p>
 <li>Client behavior: use a raw HTTP client unless your SDK explicitly adds the
   companion contract.</li>
 </ul>
-<p>The development implementation calls the same management authenticator and
-role authorizer before every raw handler. A viewer can call read-only <code>GET</code>
-operations; mutations require an administrator. A missing or invalid
-management credential returns <code>401</code>, an authenticated viewer mutation returns
-<code>403</code>, and a recognized management credential-store unavailable condition
-returns <code>503</code>. Some live driver failures can still fall through to the generic
-fail-closed <code>401</code> path, so correlate authentication failures with store health.</p>
-<div class="admonition danger">
-<p class="admonition-title">No management authentication mode means unrestricted access</p>
-<p><code>RequireManagementAuth</code> follows the configured authenticator. If no user, OAuth, or
-manual-token mode is enabled, it receives an unrestricted principal and permits the raw route.
-Protect port <code>11111</code>, enable a management authentication mode, and verify a missing-credential
-mutation returns <code>401</code>.</p>
-</div>
-<p>Prepare a protected header file once:</p>
+<p>Use the deployment's verified <a href="../../security/management-api-authentication/">management authentication</a>
+endpoint and confirm authorization against the selected image. A declared
+security schema does not activate an authenticator. Prepare a protected header:</p>
 <!-- example-status-default: illustrative-only -->
 
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
@@ -4970,16 +4824,6 @@ mutation returns <code>401</code>.</p>
 <td>AI KV inventory</td>
 <td><code>GET /config/ai/kv/inventory</code></td>
 <td>Inspect per-endpoint KV block hashes</td>
-</tr>
-<tr>
-<td>DPU debug</td>
-<td><code>GET</code>, <code>POST /config/dpu/debug</code></td>
-<td>Inspect DPU state or trigger a guarded debug action</td>
-</tr>
-<tr>
-<td>DPU hardware counters</td>
-<td><code>GET /config/dpu/hwcounters</code></td>
-<td>Read per-flow hardware packet and byte counters</td>
 </tr>
 <tr>
 <td>AI key update</td>
@@ -5024,100 +4868,13 @@ backend cache.</p>
 <p>Expected failures are <code>400</code> for invalid parameters, <code>404</code> for an unknown
 service or endpoint, <code>405</code> for another method, and <code>503</code> when no inventory
 provider is registered.</p>
-<h2 id="dpu-debug">DPU debug<a class="headerlink" href="#dpu-debug" title="Permanent link">&para;</a></h2>
-<h3 id="read-state-and-counters">Read state and counters<a class="headerlink" href="#read-state-and-counters" title="Permanent link">&para;</a></h3>
-<p><code>GET /config/dpu/debug</code> returns aggregate offload counters, per-pipe counters,
-loaded plugins, circuit-breaker state, and optional per-entry detail.</p>
-<table>
-<thead>
-<tr>
-<th>Query</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>flows=1</code></td>
-<td>Include expensive flow, FDB, route, and ACL counter arrays</td>
-</tr>
-<tr>
-<td><code>pipe=&lt;name&gt;</code></td>
-<td>Restrict filtered detail to one supported hardware pipe</td>
-</tr>
-<tr>
-<td><code>svc=&lt;name&gt;</code></td>
-<td>Filter detail by service name</td>
-</tr>
-<tr>
-<td><code>ep=&lt;address:port&gt;</code></td>
-<td>Filter detail by endpoint</td>
-</tr>
-<tr>
-<td><code>limit=&lt;n&gt;</code></td>
-<td>Limit detail rows; default <code>200</code>, clamped to <code>2000</code></td>
-</tr>
-</tbody>
-</table>
-<p>Supplying <code>pipe</code>, <code>svc</code>, <code>ep</code>, or <code>limit</code> selects the filtered-detail path and
-populates <code>doca_entry_details</code>. Treat hashed entry handles and flow tuples as
-sensitive operational metadata.</p>
-<p>Supported <code>pipe</code> values are <code>rss</code>, <code>to_kernel</code>, <code>egress_dispatch</code>,
-<code>ct_fwd_5tuple</code>, <code>ct_rev_5tuple</code>, <code>root_l3l4_dispatch</code>, <code>fdb_l2</code>, <code>deny</code>, and
-<code>allow</code>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--get<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/dpu/debug"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--data-urlencode<span class="w"> </span><span class="s1">'pipe=ct_fwd_5tuple'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--data-urlencode<span class="w"> </span><span class="s1">'limit=50'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{enabled, offload_active, circuit_breaker_open, entries: (.doca_entry_details | length)}'</span>
-</code></pre></div>
-<h3 id="trigger-a-debug-action">Trigger a debug action<a class="headerlink" href="#trigger-a-debug-action" title="Permanent link">&para;</a></h3>
-<p><code>POST /config/dpu/debug</code> accepts two actions:</p>
-<table>
-<thead>
-<tr>
-<th>Body</th>
-<th>Effect</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>{"action":"unregister","plugin":"&lt;name&gt;"}</code></td>
-<td>Unload the named DPU plugin</td>
-</tr>
-<tr>
-<td><code>{"action":"cb_force","mode":"open"}</code></td>
-<td>Force the offload circuit breaker open for testing</td>
-</tr>
-<tr>
-<td><code>{"action":"cb_force","mode":"close"}</code></td>
-<td>Force it closed</td>
-</tr>
-</tbody>
-</table>
-<p>These operations can alter forwarding behavior. Run them only in an approved
-maintenance or test window, verify the selected node, and capture sanitized
-before-and-after state. Invalid input returns <code>400</code>, another method returns
-<code>405</code>, and an unavailable DPU manager returns <code>503</code>.</p>
-<h2 id="dpu-hardware-counters">DPU hardware counters<a class="headerlink" href="#dpu-hardware-counters" title="Permanent link">&para;</a></h2>
-<p><code>GET /config/dpu/hwcounters</code> returns <code>flows[]</code> and <code>total_flows</code>. Each flow may
-include the raw flow identifier, protocol, source and destination addresses,
-packet count, and byte count. An unregistered provider returns an empty list;
-that is different from an HTTP failure.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/dpu/hwcounters"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">'{total_flows, sample: (.flows[0] // null)}'</span>
-</code></pre></div>
-<p>Do not publish raw flow identifiers or addresses in public diagnostics. Only
-<code>GET</code> is supported; another method returns <code>405</code>.</p>
 <h2 id="ai-api-key-updates">AI API-key updates<a class="headerlink" href="#ai-api-key-updates" title="Permanent link">&para;</a></h2>
 <p>Use the <a href="../../ai-gateway/api-key-management/">API-key management guide</a> for
 key lifecycle and readback. This reference does not reproduce the companion
 specification's token-accounting description.</p>
 <h2 id="cleanup">Cleanup<a class="headerlink" href="#cleanup" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN<span class="w"> </span>KEY_ID
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>rm<span class="w"> </span>-f<span class="w"> </span>./control-plane.headers
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">unset</span><span class="w"> </span>CONTROL_PLANE_TOKEN<span class="w"> </span>KEY_ID
 </code></pre></div>
 <h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>

@@ -3775,7 +3775,7 @@
   <span class="md-ellipsis">
     
   
-    Appliance CLI
+    Gateway & Appliance Recovery Scope
   
 
     
@@ -3832,34 +3832,6 @@
     
   
     Application & L4 Tracing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../operations/dpu-offload/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    DPU Offload Observability
   
 
     
@@ -4386,7 +4358,7 @@
   <span class="md-ellipsis">
     
   
-    Current-main API Schema Models
+    Selected-source API Schema Models
   
 
     
@@ -4796,7 +4768,7 @@ deployment: feature activation, traffic, build tags, hardware, and runtime
 configuration still determine whether a series is emitted.</p>
 <ul>
 <li>Gateway source commit: <code>23e57a226a4803ed91699904453cc1bf147fbefa</code></li>
-<li>Gateway main eBPF submodule commit: <code>6b5014f49bf0df6b72f8b0423acf9a81c22e60fb</code></li>
+<li>Selected Gateway eBPF submodule commit: <code>6b5014f49bf0df6b72f8b0423acf9a81c22e60fb</code></li>
 <li>Comparison release: <code>v0.9.8.9-rc.1</code> at <code>f08b18beda587217265c9ba6419159119914795c</code></li>
 <li>Comparison release eBPF submodule commit: <code>5536a2117ad2ad1128900a0d808ad7dec2eee2b5</code></li>
 <li>Release manifest availability: <strong>absent</strong></li>
@@ -4808,7 +4780,7 @@ configuration still determine whether a series is emitted.</p>
 <li>Release-scope families: <strong>283</strong></li>
 <li>Raw writer paths and evidence prose are intentionally not copied into this public catalog.</li>
 </ul>
-<p>The table below is therefore a current-main source catalog, not a claim
+<p>The table below is therefore a selected-source catalog, not a claim
 that <code>v0.9.8.9-rc.1</code> ships every listed family. The comparison
 release does not contain the generated metric manifest used by this page.
 Release packaging and runtime emission require separate qualification.</p>
@@ -4841,11 +4813,11 @@ Release packaging and runtime emission require separate qualification.</p>
 </table>
 <p>A writer or registration point is source evidence, not deployment evidence.
 <code>verified-runtime</code> records upstream runtime evidence for that family, but this
-documentation build does not rerun Linux, GPU, DPU, HA, or release tests.
+documentation build does not rerun Linux, GPU, HA, or release tests.
 The <a href="../verification-status/">verification status</a> page keeps those evidence
 lanes separate.</p>
 <h2 id="activation-codes">Activation codes<a class="headerlink" href="#activation-codes" title="Permanent link">&para;</a></h2>
-<p>Combined codes such as <code>D+V</code> require both conditions.</p>
+<p>Combined codes such as <code>DP+V</code> require both conditions.</p>
 <table>
 <thead>
 <tr>
@@ -4881,14 +4853,6 @@ lanes separate.</p>
 <tr>
 <td><code>DP</code></td>
 <td>datapath-gated scalar</td>
-</tr>
-<tr>
-<td><code>D</code></td>
-<td>runtime DPU-gated</td>
-</tr>
-<tr>
-<td><code>BD</code></td>
-<td>DOCA build-gated</td>
 </tr>
 <tr>
 <td><code>T</code></td>

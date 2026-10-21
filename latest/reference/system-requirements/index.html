@@ -3775,7 +3775,7 @@
   <span class="md-ellipsis">
     
   
-    Appliance CLI
+    Gateway & Appliance Recovery Scope
   
 
     
@@ -3832,34 +3832,6 @@
     
   
     Application & L4 Tracing
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../operations/dpu-offload/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    DPU Offload Observability
   
 
     
@@ -4284,7 +4256,7 @@
   <span class="md-ellipsis">
     
   
-    Current-main API Schema Models
+    Selected-source API Schema Models
   
 
     
@@ -4449,10 +4421,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#runtime-running-the-gateway" class="md-nav__link">
+  <a href="#deployment-prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Runtime — running the gateway
+        Deployment prerequisites
       
     </span>
   </a>
@@ -4460,10 +4432,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#supported-os-images" class="md-nav__link">
+  <a href="#ui-and-oam-installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Supported OS images
+        UI and OAM installation
       
     </span>
   </a>
@@ -4471,10 +4443,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#build-profile-dependent-features" class="md-nav__link">
+  <a href="#source-builds-and-feature-profiles" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Build-profile-dependent features
+        Source builds and feature profiles
       
     </span>
   </a>
@@ -4482,32 +4454,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#engine-aware-and-kv-cache-routing-advanced" class="md-nav__link">
+  <a href="#related-pages" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Engine-aware and KV-cache routing (advanced)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#building-from-source-optional" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Building from source (optional)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#versioning" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Versioning
+        Related pages
       
     </span>
   </a>
@@ -4727,10 +4677,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#runtime-running-the-gateway" class="md-nav__link">
+  <a href="#deployment-prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Runtime — running the gateway
+        Deployment prerequisites
       
     </span>
   </a>
@@ -4738,10 +4688,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#supported-os-images" class="md-nav__link">
+  <a href="#ui-and-oam-installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Supported OS images
+        UI and OAM installation
       
     </span>
   </a>
@@ -4749,10 +4699,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#build-profile-dependent-features" class="md-nav__link">
+  <a href="#source-builds-and-feature-profiles" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Build-profile-dependent features
+        Source builds and feature profiles
       
     </span>
   </a>
@@ -4760,32 +4710,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#engine-aware-and-kv-cache-routing-advanced" class="md-nav__link">
+  <a href="#related-pages" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Engine-aware and KV-cache routing (advanced)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#building-from-source-optional" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Building from source (optional)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#versioning" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Versioning
+        Related pages
       
     </span>
   </a>
@@ -4810,302 +4738,72 @@
 
 
 <h1 id="system-requirements">System Requirements<a class="headerlink" href="#system-requirements" title="Permanent link">&para;</a></h1>
-<p>What you need to run the LoxiLB Inference Gateway, which OS images are supported, the extra platform requirements for GPU / KV-cache-aware routing, and what it takes to build from source.</p>
-<h2 id="runtime-running-the-gateway">Runtime — running the gateway<a class="headerlink" href="#runtime-running-the-gateway" title="Permanent link">&para;</a></h2>
-<p>The gateway ships as a single container image and runs on a Linux host with Docker. Because the data plane is eBPF/XDP, the container needs elevated Linux capabilities.</p>
+<p>The Gateway data plane requires Linux. Docker on a macOS workstation does not
+qualify the host eBPF/XDP data path. Build and validate the Gateway and its CLI
+on the target Linux platform.</p>
+<h2 id="deployment-prerequisites">Deployment prerequisites<a class="headerlink" href="#deployment-prerequisites" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Requirement</th>
-<th>Value</th>
-<th>Why</th>
+<th>Check</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Host OS</td>
-<td>Linux</td>
-<td>eBPF/XDP data plane is Linux-only</td>
+<td>Linux host and kernel</td>
+<td>Verify the selected image and its eBPF program requirements on the target host</td>
 </tr>
 <tr>
-<td>Container runtime</td>
-<td>Docker</td>
-<td>Published image; <code>docker run</code> deployment</td>
+<td>Container runtime and privilege</td>
+<td>Follow the selected deployment's host-network and privileged data-plane configuration; isolate the host and Docker access</td>
 </tr>
 <tr>
-<td>Image</td>
-<td><code>ghcr.io/loxilb-io/loxilb-inference-gateway:&lt;release-tag&gt;</code></td>
-<td>Use a reviewed release tag or digest; avoid a mutable tag for production and rollback evidence.</td>
+<td>Image identity</td>
+<td>Record the reviewed image tag and resolved digest; verify the required CPU architecture in its manifest</td>
 </tr>
 <tr>
-<td>Capabilities</td>
-<td><code>--cap-add SYS_ADMIN --privileged</code></td>
-<td>Required to load and attach the eBPF/XDP programs</td>
+<td>Management listener</td>
+<td>Restrict network access; use verified TLS and the deployment's management authentication</td>
 </tr>
 <tr>
-<td>Container network</td>
-<td><code>--network host</code> in the documented deployment</td>
-<td>Exposes the management listener and configured load-balanced service ports on the host network</td>
+<td>Gateway configuration</td>
+<td>Persist <code>/etc/loxilb</code> using the deployment's supported storage mapping</td>
 </tr>
 <tr>
-<td>Plain REST API port</td>
-<td><code>11111</code> (<code>/netlox/v1/...</code>)</td>
-<td>Configuration and metrics API; isolated-lab use only unless protected by a verified proxy/network boundary</td>
+<td>AI-key database</td>
+<td>Provision and back up its PostgreSQL store independently of the Gateway snapshot</td>
 </tr>
 <tr>
-<td>TLS REST API port</td>
-<td><code>8091</code></td>
-<td>Gateway TLS management listener when configured</td>
-</tr>
-<tr>
-<td>HA peer ports</td>
-<td>TCP <code>22222</code> and <code>22223</code> for the default clustered <code>--rpc=netrpc</code> mode</td>
-<td>Connection-tracking and sockproxy/rate-limit xSync; current transports have no built-in authentication or encryption, so allow only exact peers over a protected network</td>
-</tr>
-<tr>
-<td>CPU architectures</td>
-<td><code>amd64</code>, <code>arm64</code></td>
-<td>Multi-arch image</td>
-</tr>
-<tr>
-<td>Persistent volume</td>
-<td><code>-v /opt/loxilb/config:/etc/loxilb</code></td>
-<td>Snapshot survives container recreation/upgrade</td>
+<td>Optional features</td>
+<td>Verify actual build flags, native dependencies, hardware, and feature activation for the selected image</td>
 </tr>
 </tbody>
 </table>
-<p>Minimal run command:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">LOXILB_IMAGE</span><span class="o">=</span><span class="s2">"ghcr.io/loxilb-io/loxilb-inference-gateway:REPLACE_WITH_RELEASE_TAG"</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docker<span class="w"> </span>run<span class="w"> </span>-u<span class="w"> </span>root<span class="w"> </span>--cap-add<span class="w"> </span>SYS_ADMIN<span class="w"> </span>--restart<span class="w"> </span>unless-stopped<span class="w"> </span>--privileged<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-dit<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span>-v<span class="w"> </span>/dev/log:/dev/log<span class="w"> </span>-v<span class="w"> </span>/opt/loxilb/config:/etc/loxilb<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--name<span class="w"> </span>loxilb<span class="w"> </span><span class="s2">"</span><span class="nv">$LOXILB_IMAGE</span><span class="s2">"</span>
-</code></pre></div>
-<div class="admonition danger">
-<p class="admonition-title">A privileged network container is a security boundary</p>
-<p><code>--privileged</code> gives the container broad host access so it can attach the eBPF/XDP data
-path. Run the Gateway on a dedicated or appropriately isolated host, restrict access to
-the Docker socket and management API, and use the minimum network exposure required by
-the deployment. Record the exact image digest before an upgrade.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Mount <code>/etc/loxilb</code> to a host path</p>
-<p>The gateway persists its supported configuration snapshot to <code>/etc/loxilb/snapshot.json</code>
-inside the container and boot-restores it automatically. Without the
-<code>-v /opt/loxilb/config:/etc/loxilb</code> mount, configuration survives a container
-<em>restart</em> but is <strong>lost when the container is recreated</strong> — which is exactly what an
-image upgrade does. Always bind-mount <code>/etc/loxilb</code> from the host.</p>
-</div>
-<p>The REST API listens on port <code>11111</code> under <code>/netlox/v1</code>. Load-balancer rules use
-<code>/config/loadbalancer</code>; keys, quotas, policies, metrics, and logs use their own documented
-endpoints. Keep the management listener on a trusted network and use TLS outside an isolated lab.</p>
-<p>If AI API keys or tenant/model limits are configured, the current feature
-branch uses a separate PostgreSQL AI key store. That database is not part of
-<code>snapshot.json</code>; provision, protect, monitor, and back it up independently. See
-<a href="../../operations/ai-key-store/">AI Key Store</a>.</p>
-<h2 id="supported-os-images">Supported OS images<a class="headerlink" href="#supported-os-images" title="Permanent link">&para;</a></h2>
-<p>The release workflow publishes multi-architecture images with Ubuntu 22.04 and Ubuntu 24.04
-bases. The repository also contains an Ubuntu 20.04 Dockerfile for a source build, but the release
-workflow does not publish an Ubuntu 20.04 image variant.</p>
-<table>
-<thead>
-<tr>
-<th>Ubuntu release</th>
-<th>Dockerfile</th>
-<th>Published image tag</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>22.04 LTS</td>
-<td><code>Dockerfile</code></td>
-<td><code>&lt;release-tag&gt;</code></td>
-</tr>
-<tr>
-<td>24.04 LTS</td>
-<td><code>Dockerfile.u24</code></td>
-<td><code>&lt;release-tag&gt;-u24</code></td>
-</tr>
-<tr>
-<td>20.04 LTS</td>
-<td><code>Dockerfile.u20</code></td>
-<td>Not published by the current release workflow; build locally if required</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>These are the OS bases of the Gateway <em>container image</em>. The underlying host must provide a
-Linux kernel, container runtime, privileges, interfaces, and eBPF/XDP support compatible with
-the selected data path. Validate the exact host distribution and kernel before production.</p>
-</div>
-<h2 id="build-profile-dependent-features">Build-profile-dependent features<a class="headerlink" href="#build-profile-dependent-features" title="Permanent link">&para;</a></h2>
-<p>An endpoint in Swagger can still be backed by a stub when its build tag is not
-selected. Verify the immutable image and a feature status/health response before
-depending on it.</p>
-<table>
-<thead>
-<tr>
-<th>Feature</th>
-<th>Default Ubuntu 22.04 image</th>
-<th>Ubuntu 24.04 image</th>
-<th>Additional build gate</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>HTTP and L4 tracing</td>
-<td>Trace build options are not passed by <code>Dockerfile</code></td>
-<td>Built with HTTP/L4 trace options</td>
-<td>Validate OTLP export and overhead</td>
-</tr>
-<tr>
-<td>NVIDIA DOCA DPU offload</td>
-<td>Stub/non-DPU</td>
-<td>Stub/non-DPU</td>
-<td>Source/hardware build with <code>HAVE_DOCA=1</code> plus SDK, driver, firmware, and target validation</td>
-</tr>
-<tr>
-<td>mTLS</td>
-<td>Built by the current release Dockerfiles</td>
-<td>Built by the current release Dockerfiles</td>
-<td>Configure certificates and verify the exact service path</td>
-</tr>
-</tbody>
-</table>
-<p>See <a href="../../operations/tracing/">Application and L4 Tracing</a>,
-<a href="../../security/ai-safety/">AI Safety Scanning</a>, and
-<a href="../../operations/dpu-offload/">DPU Offload Observability</a> for operational
-boundaries.</p>
-<h2 id="engine-aware-and-kv-cache-routing-advanced">Engine-aware and KV-cache routing (advanced)<a class="headerlink" href="#engine-aware-and-kv-cache-routing-advanced" title="Permanent link">&para;</a></h2>
-<p>KV-cache-aware and Prefill/Decode (P/D) routing add requirements on the <strong>serving nodes</strong> and on the <strong>host kernel</strong> running the gateway's eBPF data plane. Serving nodes run vLLM, SGLang, TensorRT-LLM, or llama.cpp; the Gateway itself does not need a GPU. The supported feature set is engine-specific, so check the <a href="../../concepts/engine-capability-matrix/">Engine Capability Matrix</a> before configuring KV or P/D fields.</p>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Recommended / required</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Gateway image</td>
-<td>A published Ubuntu 22.04 or <code>-u24</code> release image, pinned by tag or digest</td>
-</tr>
-<tr>
-<td>GPU software</td>
-<td>A driver, runtime, and engine combination supported by the chosen serving-engine release</td>
-</tr>
-<tr>
-<td>Host kernel</td>
-<td>A Linux kernel validated with the Gateway's eBPF/XDP data path and required hooks</td>
-</tr>
-<tr>
-<td>P/D transport</td>
-<td>Engine-specific: do not reuse vLLM NIXL, SGLang bootstrap, or TensorRT-LLM fields across engines</td>
-</tr>
-<tr>
-<td>Serving engine</td>
-<td>A validated vLLM, SGLang, TensorRT-LLM, or llama.cpp build; advanced capabilities differ by engine</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition warning">
-<p class="admonition-title">Do not infer compatibility from version numbers alone</p>
-<p>Kernel, driver, engine, tokenizer, and transport compatibility can change independently.
-Pin the complete tested combination, verify eBPF program attachment and backend readiness on
-the target host, and run the engine-specific validation procedure before production traffic.</p>
-</div>
-<p>For prefill/decode disaggregation, the coordination and state-transfer contract depends on the
-engine. Do not copy vLLM settings into an SGLang or TensorRT-LLM rule. See the engine chooser
-and deployment guides:</p>
+<p>The plain management API normally uses port <code>11111</code>; the configured TLS
+listener uses <code>8091</code>. Publishing a port does not secure it. The default peer
+synchronization paths use TCP <code>22222</code> and <code>22223</code>; see
+<a href="../../operations/ha-limitations/#peer-network">HA network restrictions</a>.</p>
+<h2 id="ui-and-oam-installation">UI and OAM installation<a class="headerlink" href="#ui-and-oam-installation" title="Permanent link">&para;</a></h2>
+<p>Use the <a href="../../management/management-plane/">OAM Compose installation guide</a>.
+Its database, image, certificate, credential, and volume requirements are
+separate from the Gateway container's requirements.</p>
+<h2 id="source-builds-and-feature-profiles">Source builds and feature profiles<a class="headerlink" href="#source-builds-and-feature-profiles" title="Permanent link">&para;</a></h2>
+<p>Use the build files and dependency pins in the selected Gateway source from
+<a href="../verification-status/">Verification Status</a>. Do not infer trace or sockmap
+support from a Swagger declaration, or image publication from a Dockerfile.
+Validate build-dependent behavior with the exact target image.</p>
+<p>For engine-aware routing, follow the <a href="../../ai-gateway/engine-contracts/">engine compatibility guide</a>
+and <a href="../../ai-gateway/model-profiles-kv-readiness/">model-profile readiness guide</a>.
+A GPU is an engine requirement for GPU workloads; it does not substitute for
+matching tokenizer, hash, block-size, event, and transport contracts.</p>
+<h2 id="related-pages">Related pages<a class="headerlink" href="#related-pages" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="../../concepts/inference-topologies/">Choose an Inference Engine</a> — select a supported engine and topology</li>
-<li><a href="../../ai-gateway/pd-disaggregation/">P/D Disaggregation</a> — compare the engine-specific request paths</li>
-<li><a href="../../use-cases/deploy-pd-disaggregation/">Deploy P/D disaggregation</a> — provisioning the prefill/decode fleet and NIXL mesh</li>
-<li><a href="../../use-cases/configuration-tuning/">Configuration &amp; tuning</a> — parity requirements, block/page-size, hash-algo, and verification</li>
+<li><a href="../../operations/ai-key-store/">AI Key Store Operations</a></li>
+<li><a href="../../operations/backup-restore/">Configuration Backup and Restore</a></li>
+<li><a href="../../operations/sockmap-acceleration/">Sockmap Acceleration</a></li>
+<li><a href="../../operations/tracing/">Tracing</a></li>
 </ul>
-<h2 id="building-from-source-optional">Building from source (optional)<a class="headerlink" href="#building-from-source-optional" title="Permanent link">&para;</a></h2>
-<p>Building is only needed if you are modifying the gateway; most users run the published image. The build compiles the eBPF data plane (a git submodule) and CGO components, so it is <strong>Linux-only</strong> — macOS cannot build the eBPF/CGO parts.</p>
-<table>
-<thead>
-<tr>
-<th>Requirement</th>
-<th>Value</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Host OS</td>
-<td>Linux</td>
-<td>macOS cannot build eBPF/CGO parts</td>
-</tr>
-<tr>
-<td>Go</td>
-<td>≥ 1.25.0</td>
-<td>Control-plane build (<code>go.mod</code>)</td>
-</tr>
-<tr>
-<td>Docker</td>
-<td>Conditional</td>
-<td>Required for explicit Swagger generation, or when generated API model files are missing; a normal clean <code>make build</code> does not regenerate models that are present</td>
-</tr>
-<tr>
-<td>eBPF toolchain</td>
-<td>apt packages (below)</td>
-<td>Compiles the <code>loxilb-ebpf</code> submodule</td>
-</tr>
-<tr>
-<td>Tokenizer library</td>
-<td><code>daulet/tokenizers</code> v1.27.0</td>
-<td>Prebuilt static lib the KV-cache router links against</td>
-</tr>
-</tbody>
-</table>
-<p>eBPF toolchain packages:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>clang<span class="w"> </span>llvm<span class="w"> </span>libelf-dev<span class="w"> </span>gcc-multilib<span class="w"> </span>libpcap-dev<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>linux-tools-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span><span class="w"> </span>elfutils<span class="w"> </span>dwarves<span class="w"> </span>git<span class="w"> </span>libbsd-dev<span class="w"> </span>bridge-utils<span class="w"> </span>unzip<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>build-essential<span class="w"> </span>bison<span class="w"> </span>flex<span class="w"> </span>iproute2<span class="w"> </span>libjson-c-dev<span class="w"> </span>libnghttp2-dev
-</code></pre></div>
-<p>Prebuilt tokenizer static library (linked by the KV-cache router):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nv">arch</span><span class="o">=</span><span class="k">$(</span>arch<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>s/aarch64/arm64/<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>s/x86_64/amd64/<span class="k">)</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>wget<span class="w"> </span>-q<span class="w"> </span>https://github.com/daulet/tokenizers/releases/download/v1.27.0/libtokenizers.linux-<span class="si">${</span><span class="nv">arch</span><span class="si">}</span>.tar.gz
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>sha256sum<span class="w"> </span>libtokenizers.linux-<span class="si">${</span><span class="nv">arch</span><span class="si">}</span>.tar.gz<span class="w">   </span><span class="c1"># verify before installing as root</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>sudo<span class="w"> </span>tar<span class="w"> </span>-xzf<span class="w"> </span>libtokenizers.linux-<span class="si">${</span><span class="nv">arch</span><span class="si">}</span>.tar.gz<span class="w"> </span>-C<span class="w"> </span>/usr/local/lib/
-</code></pre></div>
-<div class="admonition warning">
-<p class="admonition-title">Verify the download before extracting as root</p>
-<p>This extracts a third-party binary artifact into a system library path with root
-privileges. Compare the digest with trusted release metadata or an organization-approved
-checksum before running the <code>sudo tar</code> step. If no independent trusted digest is available,
-do not treat a locally calculated checksum as proof of origin.</p>
-</div>
-<p>Clone with the eBPF submodule and build:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>git<span class="w"> </span>clone<span class="w"> </span>--recurse-submodules<span class="w"> </span>https://github.com/loxilb-io/loxilb-inference-gateway.git
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">cd</span><span class="w"> </span>loxilb-inference-gateway
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>make<span class="w"> </span>build
-</code></pre></div>
-<p><code>make build</code> compiles the eBPF data plane and builds the Go control plane into
-the <code>./loxilb</code> binary. Swagger generation is an explicit step, except that the
-build can invoke it when required generated model files are missing; Docker is
-not used for Swagger regeneration on every normal clean build.</p>
-<p>Optional DPU builds add native dependencies and are not equivalent to
-the standard release image. Build them only from a reviewed dependency set,
-produce an SBOM, scan/sign the artifact, and validate it on the target Linux
-kernel and hardware before promotion.</p>
-<h2 id="versioning">Versioning<a class="headerlink" href="#versioning" title="Permanent link">&para;</a></h2>
-<p>Release tags follow this pattern:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>vMAJOR.MINOR.PATCH[.BUILD][-rc.N]
-</code></pre></div>
-<p>Stable examples use three or four numeric components. A release candidate appends <code>-rc.N</code>.
-Ubuntu 24.04 images add <code>-u24</code> after the release tag; this suffix is an image variant, not part of
-the Git release tag.</p>
-<div class="admonition note">
-<p class="admonition-title">Behaves as upstream loxilb by default</p>
-<p>Every AI capability is opt-in per load-balancer rule. With no AI features enabled, the
-Gateway retains its classic L4/L7 load-balancing paths. Validate migration and compatibility
-for the exact release and deployment rather than assuming binary or state equivalence with a
-separate upstream build.</p>
-</div>
 
 
 
