@@ -50,7 +50,6 @@ immutable image and has passed the deployment's release qualification.
 
 
 
-- **NVIDIA DOCA DPU offload** — optional hardware/source build that requires
   target-specific SDK, driver, firmware, correctness, fallback, and performance
   qualification.
 

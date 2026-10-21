@@ -1,4 +1,4 @@
-# Current-main API schema models
+# Selected-source API schema models
 
 This page classifies every Swagger definition added since the public API
 documentation baseline. It is generated from the union of `api/swagger.yml`
@@ -6,7 +6,7 @@ and `api/swagger-extras.yml`; a new or removed definition fails the docs gate
 until its public relevance is reviewed here.
 
 - Public schema baseline: `47803fb660ed54cd1f180b616db628461ad85d1a`
-- Reviewed Gateway `main`: `23e57a226a4803ed91699904453cc1bf147fbefa`
+- Reviewed Gateway source: `23e57a226a4803ed91699904453cc1bf147fbefa`
 - Added definitions: **46**
 - Removed definitions: **0**
 - Evidence class: **source/static contract only**

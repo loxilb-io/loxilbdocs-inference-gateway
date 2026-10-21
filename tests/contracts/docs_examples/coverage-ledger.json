@@ -1,27 +1,13 @@
 {
   "cli_commit": "28832f0c60ab717d8cb5133114edf2c45e22a85c",
   "commands": {
-    "appliance backup create": [
-      "5e02cd9f42e7d6a1aec8"
-    ],
-    "appliance backup key-create": [
-      "1c1eba023d041932ec99"
-    ],
-    "appliance backup verify": [
-      "5e02cd9f42e7d6a1aec8"
-    ],
-    "appliance diagnostics create": [
-      "3255e67f77e6a43df17e"
-    ],
-    "appliance network validate": [
-      "55beb0990beff3555457"
-    ],
-    "appliance status": [
-      "55beb0990beff3555457"
-    ],
-    "create apikey": [
-      "64bc3786b2aab9373b0f"
-    ],
+    "appliance backup create": [],
+    "appliance backup key-create": [],
+    "appliance backup verify": [],
+    "appliance diagnostics create": [],
+    "appliance network validate": [],
+    "appliance status": [],
+    "create apikey": [],
     "create cert": [
       "88ad033de57ef3eca3ca",
       "88ad033de57ef3eca3ca"
@@ -49,7 +35,6 @@
       "7684b5c051a60451e0d6",
       "bd8cdcbcbd06abb87224",
       "f6cac4892ffca3a56db9",
-      "e8b1fb0a3c8b4997ac95",
       "e4ba2dcc184672e7400b",
       "8362481d659feedc8710",
       "855a191b52d509762ab0"
@@ -70,8 +55,7 @@
       "f84e10038359286ad663"
     ],
     "get kvinventory": [
-      "14b64cf9f36bfc739c2b",
-      "88c3d6b48982ca4b553a"
+      "14b64cf9f36bfc739c2b"
     ],
     "get lb": [
       "14b64cf9f36bfc739c2b",
@@ -1543,152 +1527,62 @@
     },
     {
       "commands": [],
-      "id": "8cf71074b035469ea077",
-      "line": 15,
-      "operations": [],
-      "path": "docs/management/loxilb-oam.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "f38c0fd65aaf16a5eb2ed25e925cd46ce8055d5261be52706993a6f65b82c267"
-    },
-    {
-      "commands": [],
-      "id": "1291850a681fc6154a99",
-      "line": 42,
-      "operations": [],
-      "path": "docs/management/loxilb-oam.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "ffdae2d0daf9a6db8b5b7e34fdd0db76cdc260280198364a2f3d941361bbf6e4"
-    },
-    {
-      "commands": [],
-      "id": "ebb6b923b6294d4f60e2",
-      "line": 71,
-      "operations": [],
-      "path": "docs/management/loxilb-oam.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "dd408287382a5330b93a9745ca10c8524bd13c821358c5145c8f0d5e62b97ea7"
-    },
-    {
-      "commands": [],
-      "id": "2f54e9e8635c64f9d93d",
-      "line": 90,
-      "operations": [],
-      "path": "docs/management/loxilb-oam.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "a12556fcddc6e8d6d6aaf6b9ecb158592e3b3e85687183088ff4b85c5767bee0"
-    },
-    {
-      "commands": [],
-      "id": "4b284c63ce5551bc4bab",
-      "line": 51,
-      "operations": [],
-      "path": "docs/management/loxilb-ui.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "e4f96e5be37d141d3ccba83a39bd14f31a127e1b306b8197f9d270d23336a782"
-    },
-    {
-      "commands": [],
-      "id": "6764ce422ff780182ed6",
-      "line": 60,
-      "operations": [],
-      "path": "docs/management/loxilb-ui.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "d236a9db85ca7ee9c7b98ffaf8f4de784a78375f3218d2fb582de1dee666d5dc"
-    },
-    {
-      "commands": [],
-      "id": "4bc5b27a576b752b870d",
-      "line": 67,
-      "operations": [],
-      "path": "docs/management/loxilb-ui.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "b52675111b8d7b50c15f2895845156adb304c1db9f3e65013f71e4d868eb9ea8"
-    },
-    {
-      "commands": [],
-      "id": "7147ee701281db63da07",
-      "line": 74,
-      "operations": [],
-      "path": "docs/management/loxilb-ui.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "3de162e1f945d9aa59c84f93045a427b5cdaef3e8c89c5aaab7b927d91b3f048"
-    },
-    {
-      "commands": [],
-      "id": "ef7f3083eea73a0c958b",
-      "line": 104,
-      "operations": [],
-      "path": "docs/management/loxilb-ui.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "436098b10ed3afbc663270918fb79e6b5284c8af20cfe2e18f11f83112e94213"
-    },
-    {
-      "commands": [],
-      "id": "98280448240fc81d8726",
-      "line": 125,
-      "operations": [],
-      "path": "docs/management/loxilb-ui.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "782af19883c3d2d7542577ef1acbfe0af7a241075a9c8208b036ffb93f7d2c84"
-    },
-    {
-      "commands": [],
-      "id": "cb275ce4dd5ff6adcf5d",
-      "line": 155,
-      "operations": [],
-      "path": "docs/management/loxilb-ui.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "18339b5bfa7b2d0020ab891ac37dfd0ead3bb9292cacaa1e81678d76b4c53611"
-    },
-    {
-      "commands": [],
-      "id": "246ce68390648968f0d3",
-      "line": 19,
+      "id": "eb7a5923ddbefed42639",
+      "line": 28,
       "operations": [],
       "path": "docs/management/management-plane.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "801687111fb3983ff72da371e724d8f75149e46bdc6b071b552c8bdcfe54f80f"
+      "sha256": "8597c490667a761ccaeaa0c9c3e329afc0a4d0cd0eb4f878dd3899c5400e4cb2"
     },
     {
       "commands": [],
-      "id": "51e9e418f4abb197b30a",
-      "line": 62,
+      "id": "f3cefaefc0ac8483c55f",
+      "line": 41,
       "operations": [],
       "path": "docs/management/management-plane.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "c87c16b9a89da917a38f67ae74bb6fdd79a2db4fc90c94f03c36222951cc49c2"
+      "sha256": "a45c5dbcf2955a571b18d7d2c9b53b8cb73a8768e3685fdecbc8462a2040ac8c"
     },
     {
       "commands": [],
-      "id": "929d3916cd30cf9785a6",
-      "line": 100,
+      "id": "d8e0ddc6cda5cdcccdf0",
+      "line": 69,
       "operations": [],
       "path": "docs/management/management-plane.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "4c5364a504e05ff3ba3544278342ae05900bc7a83533a75fbe0b03ab871fc131"
+      "sha256": "4d6dcfb33a7110032bb3c5a04f60469b7feec37a00485d9a62b18b05a9d25f77"
     },
     {
       "commands": [],
-      "id": "0c014367bb505e559bd8",
-      "line": 108,
+      "id": "ffdef5fab673411d913b",
+      "line": 83,
       "operations": [],
       "path": "docs/management/management-plane.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "94b49d3dc91c323f4b9a25cd732833034555913960f9bf47f2b0ba02813f3397"
+      "sha256": "d804f6ff3ac182d5a46a05e0b9f9f0ce83d68e60518f95d0feb94a2d47c5cdd8"
     },
     {
       "commands": [],
-      "id": "77179136c49c82e0784f",
-      "line": 124,
+      "id": "3c1415efb05a783d9315",
+      "line": 91,
       "operations": [],
       "path": "docs/management/management-plane.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "e23ce8a01ce0b98380c98888792ecc755e93c5191f28c32f60f9e54dfaa3ab1b"
+      "sha256": "a3b32192a6c9633f107ce1af87ea00465cc6c1cc6fe0ed5421ad089ba39e139c"
+    },
+    {
+      "commands": [],
+      "id": "2e9812a2004ef6b7a9bb",
+      "line": 123,
+      "operations": [],
+      "path": "docs/management/management-plane.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "89072bdbcbb50cec705045aeddb5afec2efa844df1faf67c0ec62cf146f7420f"
     },
     {
       "commands": [],
       "id": "e0f3a3d7d71a121fb15d",
-      "line": 132,
+      "line": 135,
       "operations": [],
       "path": "docs/management/management-plane.md",
       "runtime": "no-public-execution-attestation",
@@ -1696,35 +1590,8 @@
     },
     {
       "commands": [],
-      "id": "ae86e535887514744b09",
-      "line": 146,
-      "operations": [],
-      "path": "docs/management/management-plane.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "8eff793e3c2c5ebf8a9b05f35b06517dbf864c17012852f1c648614a13f40e79"
-    },
-    {
-      "commands": [],
-      "id": "e8c534ba55f56a556911",
-      "line": 160,
-      "operations": [],
-      "path": "docs/management/management-plane.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "a42114b0f2d7d234c5a73a94512e2afb806298f8f77dc39efe904b4aea27db09"
-    },
-    {
-      "commands": [],
-      "id": "4b28cf69e1eebb400b24",
-      "line": 175,
-      "operations": [],
-      "path": "docs/management/management-plane.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "93a3b058a79fb61bea84bbce53a1b5b247f196e17083446bfd77c4a0d3028914"
-    },
-    {
-      "commands": [],
       "id": "14adfee4291469667f6c",
-      "line": 199,
+      "line": 148,
       "operations": [],
       "path": "docs/management/management-plane.md",
       "runtime": "no-public-execution-attestation",
@@ -1732,21 +1599,66 @@
     },
     {
       "commands": [],
-      "id": "7184fcb871c823731769",
-      "line": 220,
+      "id": "3b50bba25589c3047a34",
+      "line": 162,
       "operations": [],
       "path": "docs/management/management-plane.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "05abb40d14687ba329e991c1fc917b7c511c93a8b198c4ef9dab8d23ff548ba8"
+      "sha256": "fbb8c6b73fe4397ca4e63fcf67dfcce16f46eda6975380c4cce5c6f3177c900b"
     },
     {
       "commands": [],
-      "id": "b22ff60593cd87143334",
-      "line": 16,
+      "id": "0f0004852ee65c6d8b43",
+      "line": 176,
+      "operations": [],
+      "path": "docs/management/management-plane.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e008040ee980a0cbc590d41f2607f83bd9a8f3f0cdd344945fab2f4e495a47ad"
+    },
+    {
+      "commands": [],
+      "id": "60241e09ccb641e27e3b",
+      "line": 199,
+      "operations": [],
+      "path": "docs/management/management-plane.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "de8fc6b03d7a033f1da4353cfb49ab1a701148589c49a22b438b03d0b73401f7"
+    },
+    {
+      "commands": [],
+      "id": "b10572b2e4fdb71db635",
+      "line": 215,
+      "operations": [],
+      "path": "docs/management/management-plane.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "cdca4d316d22e7339067f09dfa33facf703c404c572166093195521885ae9433"
+    },
+    {
+      "commands": [],
+      "id": "7ec056d5d36c3327aaf2",
+      "line": 243,
+      "operations": [],
+      "path": "docs/management/management-plane.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a443f7b064cada3545fb2cebcc8a2686ace5bcdb7e5bb02438fd04415cd7fa42"
+    },
+    {
+      "commands": [],
+      "id": "20e468fb6df7abd604b7",
+      "line": 254,
+      "operations": [],
+      "path": "docs/management/management-plane.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "02b3ffe5487d017301808f69ea5b03f1106e15e8f01aef3c8ddbbd825feaa0fd"
+    },
+    {
+      "commands": [],
+      "id": "232561254c16258573a8",
+      "line": 8,
       "operations": [],
       "path": "docs/management/overview.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "bdfd695bf75cb658b79d1097fbf5c13e88d307dacfcadbdd8b261b724ee38e93"
+      "sha256": "64e9898b72ab2c5d16d3ff8273f53ee53d5b91cadb8cbc558acdeec86c2c9cf7"
     },
     {
       "commands": [],
@@ -1907,55 +1819,9 @@
       "sha256": "df2ca802175d90eeba49153ac473fe9628abff39a9177aba62c490e06913512c"
     },
     {
-      "commands": [
-        "appliance network validate",
-        "appliance status"
-      ],
-      "id": "55beb0990beff3555457",
-      "line": 48,
-      "operations": [],
-      "path": "docs/operations/appliance-cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "78248c3b6bf6d78bdbab9cf38da241d475690be9e9104a5afa3f8d7d75a906d6"
-    },
-    {
-      "commands": [
-        "appliance backup key-create"
-      ],
-      "id": "1c1eba023d041932ec99",
-      "line": 69,
-      "operations": [],
-      "path": "docs/operations/appliance-cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "5e13ab8557038f66814881cf51f1b336dd6ab4fb2144abb50fce1b32ff48a80c"
-    },
-    {
-      "commands": [
-        "appliance backup create",
-        "appliance backup verify"
-      ],
-      "id": "5e02cd9f42e7d6a1aec8",
-      "line": 78,
-      "operations": [],
-      "path": "docs/operations/appliance-cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "ecb5f1f488ba388911a6e82b7de57fd4061bfa5ece459181866125bf7b5e6f4b"
-    },
-    {
-      "commands": [
-        "appliance diagnostics create"
-      ],
-      "id": "3255e67f77e6a43df17e",
-      "line": 98,
-      "operations": [],
-      "path": "docs/operations/appliance-cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "670e9b78d39ede8fc9b078cd048cd5416d0d18225c5cb9f8dd7fec6a79bf0216"
-    },
-    {
       "commands": [],
       "id": "4c0c759f4790145b96db",
-      "line": 28,
+      "line": 30,
       "operations": [],
       "path": "docs/operations/audit-log.md",
       "runtime": "no-public-execution-attestation",
@@ -1964,7 +1830,7 @@
     {
       "commands": [],
       "id": "826000890473ac77ea15",
-      "line": 34,
+      "line": 36,
       "operations": [],
       "path": "docs/operations/audit-log.md",
       "runtime": "no-public-execution-attestation",
@@ -1973,7 +1839,7 @@
     {
       "commands": [],
       "id": "11f9e71ce31e00bd3886",
-      "line": 44,
+      "line": 46,
       "operations": [],
       "path": "docs/operations/audit-log.md",
       "runtime": "no-public-execution-attestation",
@@ -1982,7 +1848,7 @@
     {
       "commands": [],
       "id": "5754d49fb675697c5d69",
-      "line": 63,
+      "line": 65,
       "operations": [],
       "path": "docs/operations/audit-log.md",
       "runtime": "no-public-execution-attestation",
@@ -1991,7 +1857,7 @@
     {
       "commands": [],
       "id": "0711a4bdb05be6b09615",
-      "line": 92,
+      "line": 94,
       "operations": [],
       "path": "docs/operations/audit-log.md",
       "runtime": "no-public-execution-attestation",
@@ -1999,23 +1865,14 @@
     },
     {
       "commands": [],
-      "id": "105d8a93b86179d26ea5",
-      "line": 114,
-      "operations": [],
-      "path": "docs/operations/audit-log.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "133fc6b9aebb7e218c4b97a232d06e91ee7824167884c5020e49ccf696a935e5"
-    },
-    {
-      "commands": [],
-      "id": "5a856127422b10cc1e2d",
-      "line": 154,
+      "id": "1295d29f5b671fba569a",
+      "line": 127,
       "operations": [
         "GET /audit/status"
       ],
       "path": "docs/operations/audit-log.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "a2e621c1dc8d4521a6cfd5f377c7c20f3579b91917db16044de0ef0365f9fd52"
+      "sha256": "7c871e72f40cb893ca66992685cee524fa2b781e7c7734449eabc8c284bac1a0"
     },
     {
       "commands": [],
@@ -2102,110 +1959,6 @@
       "path": "docs/operations/backup-restore.md",
       "runtime": "no-public-execution-attestation",
       "sha256": "54a7617b0c067d2bf0aade4693fe11f5f409fa56db0a0ae6477d36fd15526b31"
-    },
-    {
-      "commands": [],
-      "id": "a7cb02450b63fcc885ed",
-      "line": 12,
-      "operations": [],
-      "path": "docs/operations/dpu-offload.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "d0707788634e079f846ee2269c926c9c2a9658c9c65fe24bcffa2246c8ee982f"
-    },
-    {
-      "commands": [],
-      "id": "107eede5900bfadf2626",
-      "line": 41,
-      "operations": [
-        "GET /config/dpu/debug"
-      ],
-      "path": "docs/operations/dpu-offload.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "d708377279c921526304db5811a23d90aea776f60993933a979af4f01dc267a3"
-    },
-    {
-      "commands": [],
-      "id": "58a1936c0079a2726e58",
-      "line": 65,
-      "operations": [
-        "GET /config/dpu/debug"
-      ],
-      "path": "docs/operations/dpu-offload.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "c8bc52096745a53925646ed2c8fe51e9512be0887918b825b28a6ac48e497f81"
-    },
-    {
-      "commands": [],
-      "id": "6837d11bd802ab8663b1",
-      "line": 83,
-      "operations": [
-        "GET /config/dpu/debug"
-      ],
-      "path": "docs/operations/dpu-offload.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "b513eaae2c325f70892e5e6c90a312f3b1e6e6b1ca3e68ae5bf5b80b20d267fc"
-    },
-    {
-      "commands": [],
-      "id": "a44d6e52fb4a4a13488d",
-      "line": 94,
-      "operations": [
-        "GET /config/dpu/hwcounters"
-      ],
-      "path": "docs/operations/dpu-offload.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "f4866a0b10880c99842421d4f4727e44f02110cdcce9592fef1750330f0cba9a"
-    },
-    {
-      "commands": [],
-      "id": "2aed544faed24287b19f",
-      "line": 11,
-      "operations": [],
-      "path": "docs/operations/ha-limitations.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "6e4f620cd5b2ad31f57b1fde3739694058dee60b738836eb3f38c059b63827c8"
-    },
-    {
-      "commands": [],
-      "id": "43850fdce0535c1392a1",
-      "line": 53,
-      "operations": [
-        "GET /metrics"
-      ],
-      "path": "docs/operations/kv-routing-verification.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "416547b444baa1bb65a1b043048e439a755db939dad6867651a29f681dff7e72"
-    },
-    {
-      "commands": [],
-      "id": "3f51c5a5d786877dbf5f",
-      "line": 80,
-      "operations": [],
-      "path": "docs/operations/kv-routing-verification.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "6e87727828fca843248abe76c67e153799549d841bbbccc65a39a57fe4cf48e7"
-    },
-    {
-      "commands": [],
-      "id": "8db9731de107196145a5",
-      "line": 96,
-      "operations": [
-        "GET /config/ai/kv/inventory"
-      ],
-      "path": "docs/operations/kv-routing-verification.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "64bd68edb0844194cce801fd75a28cd172eec9cc1f223015aef64365c90479a8"
-    },
-    {
-      "commands": [
-        "get kvinventory"
-      ],
-      "id": "88c3d6b48982ca4b553a",
-      "line": 101,
-      "operations": [],
-      "path": "docs/operations/kv-routing-verification.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "f8b8badf357eee5bdf32537adc44c2b4ae9550df0043ee1491d1e60f22788503"
     },
     {
       "commands": [],
@@ -2333,7 +2086,7 @@
     {
       "commands": [],
       "id": "37eadcad0c74aeb4d691",
-      "line": 127,
+      "line": 125,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2342,7 +2095,7 @@
     {
       "commands": [],
       "id": "2b8d5fe28b772b34ad03",
-      "line": 164,
+      "line": 162,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2351,7 +2104,7 @@
     {
       "commands": [],
       "id": "23f73f722fda21c39dc3",
-      "line": 203,
+      "line": 201,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2360,7 +2113,7 @@
     {
       "commands": [],
       "id": "391dcb71eff01acf4482",
-      "line": 239,
+      "line": 237,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2369,7 +2122,7 @@
     {
       "commands": [],
       "id": "f0b696ffdf75f41d9ede",
-      "line": 339,
+      "line": 337,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2378,7 +2131,7 @@
     {
       "commands": [],
       "id": "f9513be93383f3e1991b",
-      "line": 389,
+      "line": 387,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2387,7 +2140,7 @@
     {
       "commands": [],
       "id": "d3f0294a9bc2c26e83a2",
-      "line": 428,
+      "line": 426,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
@@ -2396,7 +2149,7 @@
     {
       "commands": [],
       "id": "e739436aa71a69a27bb6",
-      "line": 516,
+      "line": 506,
       "operations": [
         "GET /metrics"
       ],
@@ -2407,110 +2160,11 @@
     {
       "commands": [],
       "id": "c0741d2b82929bdedab9",
-      "line": 523,
+      "line": 513,
       "operations": [],
       "path": "docs/operations/monitoring.md",
       "runtime": "no-public-execution-attestation",
       "sha256": "5b71c86100de61b6b0501241f53649b42ce5cbd61b48e352cde1485a11a2b11b"
-    },
-    {
-      "commands": [],
-      "id": "61fa5e3eb369382a9a6c",
-      "line": 22,
-      "operations": [],
-      "path": "docs/operations/observability-metrics-grafana.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "ce44de356812571541668074803b6c79dbb391be40dc1a957d8765d7d0569d7a"
-    },
-    {
-      "commands": [],
-      "id": "bb894bb28c65d76300c0",
-      "line": 66,
-      "operations": [],
-      "path": "docs/operations/observability-metrics-grafana.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "a776bdbdf87e1db72301c7a6bbf344babb04354d165edc23ae762cb18b97a522"
-    },
-    {
-      "commands": [],
-      "id": "b37290abcceb1b5425fb",
-      "line": 108,
-      "operations": [],
-      "path": "docs/operations/observability-metrics-grafana.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "0094ebb79a6a3e61c4a5d70d6e58c13aee777dbd556bbfe5d22ed9c8f282f1a5"
-    },
-    {
-      "commands": [],
-      "id": "2dc88688fe68b9ccbe1e",
-      "line": 145,
-      "operations": [],
-      "path": "docs/operations/observability-metrics-grafana.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "ee4ad4a80c6b746aa2d7b6d9980d3867d294a07a283c96ef898ecc1a1e195e87"
-    },
-    {
-      "commands": [],
-      "id": "127fdd55ee4b285fc956",
-      "line": 203,
-      "operations": [],
-      "path": "docs/operations/observability-metrics-grafana.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "1513d10f8e6e5374046194860c9c47abb66c4abdcba93dfdc82fde6df9c5844e"
-    },
-    {
-      "commands": [],
-      "id": "35a9a18f678e09f41666",
-      "line": 231,
-      "operations": [],
-      "path": "docs/operations/observability-metrics-grafana.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "3ea6b1fc3c768254f50d929871d326035b0680e4387d5ed5c491d035fad621ae"
-    },
-    {
-      "commands": [],
-      "id": "310576e8c0d1b982feb9",
-      "line": 259,
-      "operations": [],
-      "path": "docs/operations/observability-metrics-grafana.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "5a65fd815a345cd6664cf669a98368a7773579e6de9b8a6dc74d3fd19ac453bf"
-    },
-    {
-      "commands": [],
-      "id": "8f83516307f24a33ed0b",
-      "line": 280,
-      "operations": [],
-      "path": "docs/operations/observability-metrics-grafana.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "398bef8e5f660cfdbdc4c85a4e465e5c0f4da5a8fc2fd5f240d34ba3fb88708a"
-    },
-    {
-      "commands": [],
-      "id": "1682074c2b0ec0f8a10a",
-      "line": 320,
-      "operations": [],
-      "path": "docs/operations/observability-metrics-grafana.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "ca5549e3903c1e6b32f63b699aee0fdf18148d6d175cfed1fce4756ef734922e"
-    },
-    {
-      "commands": [],
-      "id": "5ab6670b54eabd34ba13",
-      "line": 346,
-      "operations": [],
-      "path": "docs/operations/observability-metrics-grafana.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "1824eaebac134d997990d0aeb9c1efad411d42ecbf93494d27b7bf2193a742a4"
-    },
-    {
-      "commands": [],
-      "id": "74988080decc1b41f0e5",
-      "line": 362,
-      "operations": [],
-      "path": "docs/operations/observability-metrics-grafana.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "af507648a16440df7812e1db99eeedb1a34e5c3414959f401810b0d0d91d1c66"
     },
     {
       "commands": [
@@ -2664,17 +2318,8 @@
     },
     {
       "commands": [],
-      "id": "8e8f0eb3d1ede75b3fb9",
-      "line": 13,
-      "operations": [],
-      "path": "docs/operations/tracing.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "6a3015aa5b3c49f8e63a007fca16bf54e1d8f3f87da514cc9975eda3553e416a"
-    },
-    {
-      "commands": [],
       "id": "e6d40bd79931ea0d8403",
-      "line": 60,
+      "line": 38,
       "operations": [
         "POST /config/trace/otlp"
       ],
@@ -2685,7 +2330,7 @@
     {
       "commands": [],
       "id": "7ee4eae343d6d7eda4d3",
-      "line": 96,
+      "line": 74,
       "operations": [
         "GET /config/trace/status",
         "POST /config/trace/enable"
@@ -2697,7 +2342,7 @@
     {
       "commands": [],
       "id": "321c1af08b4d13da0a1c",
-      "line": 115,
+      "line": 93,
       "operations": [
         "GET /config/l4trace/status",
         "POST /config/l4trace/enable"
@@ -2709,7 +2354,7 @@
     {
       "commands": [],
       "id": "7ce5c54203520c9afe59",
-      "line": 131,
+      "line": 109,
       "operations": [
         "PUT /config/l4trace/sampling"
       ],
@@ -2720,7 +2365,7 @@
     {
       "commands": [],
       "id": "cd8a1b01e1f39c56b216",
-      "line": 157,
+      "line": 135,
       "operations": [
         "POST /config/l4trace/disable",
         "POST /config/trace/disable"
@@ -2731,19 +2376,8 @@
     },
     {
       "commands": [],
-      "id": "72afd2d517149be5ab48",
-      "line": 169,
-      "operations": [
-        "POST /config/l4trace/stats/reset"
-      ],
-      "path": "docs/operations/tracing.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "ec38756b40a3dc30210dec23424eabba8494c2ac04d647c86f03fe7dab198e01"
-    },
-    {
-      "commands": [],
       "id": "f5be8718d9c5780f0b57",
-      "line": 51,
+      "line": 44,
       "operations": [],
       "path": "docs/operations/troubleshooting.md",
       "runtime": "no-public-execution-attestation",
@@ -2752,7 +2386,7 @@
     {
       "commands": [],
       "id": "0e4c8d724dd43ab5e34f",
-      "line": 71,
+      "line": 64,
       "operations": [
         "GET /config/loadbalancer/all"
       ],
@@ -2763,7 +2397,7 @@
     {
       "commands": [],
       "id": "bffd8415b750cbc1ed61",
-      "line": 97,
+      "line": 90,
       "operations": [
         "GET /config/loadbalancer/all"
       ],
@@ -2773,30 +2407,8 @@
     },
     {
       "commands": [],
-      "id": "bc1fd6c2ae3911ff75b2",
-      "line": 156,
-      "operations": [
-        "GET /metrics"
-      ],
-      "path": "docs/operations/troubleshooting.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "7dfdd92cbf24bb00dd3904144addeeb200599f783103ef08a965d77c0af23904"
-    },
-    {
-      "commands": [],
-      "id": "61af48e7a0c8693a6205",
-      "line": 201,
-      "operations": [
-        "GET /config/loadbalancer/all"
-      ],
-      "path": "docs/operations/troubleshooting.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "b5c2c413656a5a95777c715ac99001bb5ee1bc3b950dc39af73381585afb5819"
-    },
-    {
-      "commands": [],
       "id": "195abedb19edd82100ed",
-      "line": 306,
+      "line": 242,
       "operations": [
         "GET /config/loadbalancer/all"
       ],
@@ -2807,7 +2419,7 @@
     {
       "commands": [],
       "id": "e75b06d27f87644a2976",
-      "line": 333,
+      "line": 269,
       "operations": [
         "GET /config/metrics",
         "POST /config/metrics"
@@ -2822,7 +2434,7 @@
         "set metrics"
       ],
       "id": "5f5662a8dd7f7b31b8b6",
-      "line": 343,
+      "line": 279,
       "operations": [],
       "path": "docs/operations/troubleshooting.md",
       "runtime": "no-public-execution-attestation",
@@ -2831,7 +2443,7 @@
     {
       "commands": [],
       "id": "b1ac16407876c036e62f",
-      "line": 351,
+      "line": 287,
       "operations": [
         "GET /metrics"
       ],
@@ -2842,7 +2454,7 @@
     {
       "commands": [],
       "id": "bfc1f9e0926d3b27ec1e",
-      "line": 374,
+      "line": 310,
       "operations": [
         "GET /metrics"
       ],
@@ -2853,7 +2465,7 @@
     {
       "commands": [],
       "id": "df576ccf745b93ac5fb7",
-      "line": 429,
+      "line": 365,
       "operations": [],
       "path": "docs/operations/troubleshooting.md",
       "runtime": "no-public-execution-attestation",
@@ -2915,143 +2527,29 @@
       "sha256": "521cb880796d66bacd381f3bbede419f278d3516079e22ea7e2fd138caed1a0c"
     },
     {
-      "commands": [],
-      "id": "7a9cd9c1cb18995e7953",
-      "line": 35,
-      "operations": [],
-      "path": "docs/reference/cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "be4f649a824a61931244439743e80b7593044be4b12aace8a4ec0f80b8224999"
-    },
-    {
-      "commands": [],
-      "id": "eadf11f704843fe7309a",
-      "line": 41,
-      "operations": [],
-      "path": "docs/reference/cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "4ba5e652dc56273d3a42610efe15bf4b579137b341e10c99f111a436462688ec"
-    },
-    {
-      "commands": [],
-      "id": "924296ece24e8484d5c6",
-      "line": 46,
-      "operations": [],
-      "path": "docs/reference/cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "1ee010031e88c8540b0fdce60e09c2dbda334d35ea8178cf9c1a54ff0c8077b5"
-    },
-    {
-      "commands": [],
-      "id": "991102e3d1186d2bf509",
-      "line": 54,
-      "operations": [],
-      "path": "docs/reference/cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "1a831ab1e7855175c13574fae6bc2c0df16719d2d33b4aad0b5516d072d1a870"
-    },
-    {
-      "commands": [],
-      "id": "367450c2fa7c670e6b31",
-      "line": 265,
-      "operations": [],
-      "path": "docs/reference/cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "896096d2c3f479ee1b4e58555837f6e6bc82e62dc7f0c223e8fdd71377a8814f"
-    },
-    {
-      "commands": [],
-      "id": "83f9b3f1229f9b2911ea",
-      "line": 287,
-      "operations": [
-        "POST /config/loadbalancer"
-      ],
-      "path": "docs/reference/cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "860ce334b88055b6d8d2a89919a86b1e1deef12dc67801959d4a97c54e280dac"
-    },
-    {
-      "commands": [
-        "create lb"
-      ],
-      "id": "e8b1fb0a3c8b4997ac95",
-      "line": 302,
-      "operations": [],
-      "path": "docs/reference/cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "7d44c42b76b59cb68e655fc238129b91b08e429325e1976a44b55585ded72297"
-    },
-    {
-      "commands": [],
-      "id": "3b7de19fe4c162c11684",
-      "line": 315,
-      "operations": [],
-      "path": "docs/reference/cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "31ddc22e8bf25b504f85e0152882f57e3ebdac887cd3795111308043415dffa6"
-    },
-    {
-      "commands": [],
-      "id": "bd273dff6ff1a86b35d3",
-      "line": 328,
-      "operations": [],
-      "path": "docs/reference/cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "0fdc03830ddb7d6e4e4b2117510d47c262ab93e91e4e5dafa4e9f78c82416deb"
-    },
-    {
       "commands": [
         "delete lb"
       ],
       "id": "57bbcc926e64460ceedd",
-      "line": 459,
+      "line": 107,
       "operations": [],
       "path": "docs/reference/cli.md",
       "runtime": "no-public-execution-attestation",
       "sha256": "1ccec80a74c95b33f735220dd9f5785b9da0db3b9c15dc3a7c826c4b5cd74686"
     },
     {
-      "commands": [
-        "create apikey"
-      ],
-      "id": "64bc3786b2aab9373b0f",
-      "line": 468,
-      "operations": [],
-      "path": "docs/reference/cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "d7c5ce2dafcc254d57dd256c37f73c91640180237c2f51301f859c07a44cb257"
-    },
-    {
       "commands": [],
-      "id": "80592ae0930887826ccc",
-      "line": 473,
-      "operations": [],
-      "path": "docs/reference/cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "844aecc0a72c68826621b5d7485d515e66ecdb00b78e8d88fb338e7f7df63940"
-    },
-    {
-      "commands": [],
-      "id": "f8d21b9b36397543d29b",
-      "line": 478,
-      "operations": [],
-      "path": "docs/reference/cli.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "bcfbbca4e978702d81886d99fb6d8f99f431a6d1c949ece0d20fa3c386d883a2"
-    },
-    {
-      "commands": [],
-      "id": "9be12e44ab359d3e3bd0",
-      "line": 18,
+      "id": "cefbd4c53f196094684c",
+      "line": 17,
       "operations": [],
       "path": "docs/reference/configuration.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "b742b10bc7ebecdf9c5875444c074a5d86b91527b80d6f965d6c8224f1319a19"
+      "sha256": "2f68a1e87896dc61b7f063143ff67ff7f3cc6a4eb957369cab0d3b5cad4f29bc"
     },
     {
       "commands": [],
       "id": "0fe1d371eb8c3e9a237a",
-      "line": 66,
+      "line": 47,
       "operations": [
         "GET /config/ai/kv/inventory"
       ],
@@ -3061,79 +2559,12 @@
     },
     {
       "commands": [],
-      "id": "a8bef4aa34037f4331a8",
-      "line": 100,
-      "operations": [
-        "GET /config/dpu/debug"
-      ],
-      "path": "docs/reference/swagger-extras.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "c64e3f7d85b83496db0b6b766a8c7ec33f6a5e26009a4d0e20d561978a86c84b"
-    },
-    {
-      "commands": [],
-      "id": "95c75142c0dcf89512ed",
-      "line": 131,
-      "operations": [
-        "GET /config/dpu/hwcounters"
-      ],
-      "path": "docs/reference/swagger-extras.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "df8ee9c56ff3c460bf4244b123b63c66062fa86726ade6187276002d9b7d0e81"
-    },
-    {
-      "commands": [],
       "id": "c5738289f5d0780c6961",
-      "line": 149,
+      "line": 66,
       "operations": [],
       "path": "docs/reference/swagger-extras.md",
       "runtime": "no-public-execution-attestation",
       "sha256": "b19b89cc34db970ac1d6fab5002d8f5f13b91d11de279094c23310f14ce98791"
-    },
-    {
-      "commands": [],
-      "id": "c0c50ade70961a66a1af",
-      "line": 25,
-      "operations": [],
-      "path": "docs/reference/system-requirements.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "8e0cd32a79d630954065565ef7e610679dd6ac57c2281bf9671ffc6c68caf1fb"
-    },
-    {
-      "commands": [],
-      "id": "eb36825a960976138503",
-      "line": 128,
-      "operations": [],
-      "path": "docs/reference/system-requirements.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "479803e75d3b269fe69a942d467f20968c469a6fbe35fec124f80c65cce56858"
-    },
-    {
-      "commands": [],
-      "id": "b6a19e9a88e6e729501b",
-      "line": 136,
-      "operations": [],
-      "path": "docs/reference/system-requirements.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "14e6d8315d317d2516c89a3a8b451bd690ce5d019267f363ecd429eee2cbfa8c"
-    },
-    {
-      "commands": [],
-      "id": "15479e99feab07406039",
-      "line": 151,
-      "operations": [],
-      "path": "docs/reference/system-requirements.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "0137816e5ee3d0a8f404d1570d29684dd46872fad352a6af1b888fd592aced9f"
-    },
-    {
-      "commands": [],
-      "id": "984a7b8080f27350409a",
-      "line": 171,
-      "operations": [],
-      "path": "docs/reference/system-requirements.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "6c97cb47792434f82c72543b909869a68a9432e308d6b986a686b4b8da6bcd76"
     },
     {
       "commands": [],
@@ -6295,7 +5726,7 @@
     "GET /audit/sink": [],
     "GET /audit/sinks/{name}": [],
     "GET /audit/status": [
-      "5a856127422b10cc1e2d"
+      "1295d29f5b671fba569a"
     ],
     "GET /auth/users": [],
     "GET /config/ai/apikey": [
@@ -6309,7 +5740,6 @@
     ],
     "GET /config/ai/kv/inventory": [
       "0c9409d1f0ea6ac8f193",
-      "8db9731de107196145a5",
       "0fe1d371eb8c3e9a237a"
     ],
     "GET /config/ai/model-profiles": [
@@ -6341,16 +5771,8 @@
     "GET /config/cistate/all": [],
     "GET /config/conntrack/all": [],
     "GET /config/cors/all": [],
-    "GET /config/dpu/debug": [
-      "107eede5900bfadf2626",
-      "58a1936c0079a2726e58",
-      "6837d11bd802ab8663b1",
-      "a8bef4aa34037f4331a8"
-    ],
-    "GET /config/dpu/hwcounters": [
-      "a44d6e52fb4a4a13488d",
-      "95c75142c0dcf89512ed"
-    ],
+    "GET /config/dpu/debug": [],
+    "GET /config/dpu/hwcounters": [],
     "GET /config/endpoint/all": [],
     "GET /config/export": [],
     "GET /config/fdb/all": [],
@@ -6392,7 +5814,6 @@
       "7490a84cfc9cee225b65",
       "0e4c8d724dd43ab5e34f",
       "bffd8415b750cbc1ed61",
-      "61af48e7a0c8693a6205",
       "195abedb19edd82100ed",
       "6a6e7c739fa91c0623cb",
       "204ce89aee33f522114f",
@@ -6466,9 +5887,7 @@
       "341cbd22a8f38521b003",
       "ff0e38853e3a650208bc",
       "afe32d2c798db0902c41",
-      "43850fdce0535c1392a1",
       "e739436aa71a69a27bb6",
-      "bc1fd6c2ae3911ff75b2",
       "b1ac16407876c036e62f",
       "bfc1f9e0926d3b27ec1e",
       "53ee9508d18900d0f5e2",
@@ -6585,9 +6004,7 @@
     "POST /config/l4trace/enable": [
       "321c1af08b4d13da0a1c"
     ],
-    "POST /config/l4trace/stats/reset": [
-      "72afd2d517149be5ab48"
-    ],
+    "POST /config/l4trace/stats/reset": [],
     "POST /config/l7policy": [],
     "POST /config/llamafirewall/configure": [],
     "POST /config/llamafirewall/enable": [],
@@ -6622,7 +6039,6 @@
       "1727cc0095bc2d8c1821",
       "220fa8ba9e3a0483e100",
       "adc043d2427d3edd11d6",
-      "83f9b3f1229f9b2911ea",
       "dac483a6727ff0c6c759",
       "c41069c9a3fdf60751c8",
       "54da8c66fbc924bb78ec",
@@ -6695,9 +6111,9 @@
   "schema_version": 1,
   "scope": "Direct examples are static source mappings; missing examples are not implementation failures. Runtime and release qualification are separate.",
   "summary": {
-    "fences": 632,
+    "fences": 575,
     "operations": 244,
-    "operations_with_direct_examples": 56,
-    "operations_without_direct_examples": 188
+    "operations_with_direct_examples": 53,
+    "operations_without_direct_examples": 191
   }
 }

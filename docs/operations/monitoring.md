@@ -113,9 +113,7 @@ SSE, P/D or an active credential policy is outside AI request accounting.
 `completed` includes whole non-SSE answers and does not require a `[DONE]`
 marker. `aborted` has `cause="client"`, `"engine"` or `"gateway"`; other
 outcomes have an empty cause. A request that ended before a status was sent
-uses `status="none"`. This includes a client leaving before the answer, with
-or without P/D, and a non-P/D backend closing before any answer. Such a
-non-P/D request has no P/D lifecycle record; correlate its request outcome
+uses `status="none"` when no HTTP status was sent. Correlate its request outcome
 and cause with the client transport result instead of treating `none` as an
 HTTP status or a successful response.
 
@@ -488,14 +486,6 @@ so a flat AI response counter is not proof of failure. Request and
 bidirectional acceleration remain incompatible with any `api_key_auth`
 declaration.
 
-## Optional DPU metrics
-
-DPU/DOCA metrics are registered only after a DPU plugin attaches. Core signals
-include `doca_offload_active_flows`, `doca_offload_attempts_total`,
-`doca_offload_failures_total`, `doca_circuit_breaker_state`, and
-`doca_pipe_hw_bytes_total{pipe,direction}`. Absence on a standard non-DPU image
-is expected. See [DPU Offload Observability](dpu-offload.md).
-
 ## Core health metrics
 
 | Metric | Type | Meaning |
@@ -544,7 +534,6 @@ panel with the raw series before relying on its units or aggregation.
 | Aggregate relay cache rises while max-connection cache stays low | Many concurrent slow drains | Correlate queued connections, backpressure ratio, backend latency, and memory |
 | Restore result is `ROLLBACK-FAILED` | Commit and automatic rollback both failed | Isolate the node and follow the recovery procedure |
 | xSync overflow or drop counter increases | Slow/unreachable peer or event pressure | Restrict promotion, inspect peer reachability and push latency, and verify state before serving |
-| DPU metrics are absent | No plugin attached or non-DPU build | Verify the immutable build and plugin state before treating it as a scrape fault |
 
 ## Security and cleanup
 
@@ -563,7 +552,6 @@ tenant activity metadata. Remove temporary header files after management calls:
 - [Data-Plane Authentication and JWT](../security/data-plane-jwt-auth.md)
 - [Configuration Backup and Restore](backup-restore.md)
 - [Application and L4 Tracing](tracing.md)
-- [DPU Offload Observability](dpu-offload.md)
 - [Troubleshooting](troubleshooting.md)
 - [Metrics Reference](../reference/metrics.md)
 - [Verification Status](../reference/verification-status.md)

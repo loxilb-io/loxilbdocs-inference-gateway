@@ -7,28 +7,6 @@ connection events to an OpenTelemetry Protocol (OTLP) collector. Use tracing
 for bounded troubleshooting windows: it adds processing and storage load, and
 trace attributes can expose workload metadata.
 
-## Trace data flow
-
-```mermaid
-flowchart LR
-    T["Inference and L4 traffic"] --> E["Gateway trace hooks"]
-    E --> R["Per-worker ring buffers"]
-    R --> X["OTLP exporter"]
-    X --> C["OTLP collector"]
-    C --> B["Trace backend"]
-
-    S["Status API"] --> R
-    S --> X
-
-    style E fill:#e1f5fe,stroke:#0288d1
-    style X fill:#fff9c4,stroke:#f9a825
-    style B fill:#e8f5e9,stroke:#43a047
-```
-
-HTTP and L4 tracing share the exporter, but they have separate enable and
-status controls. Enabling one trace family does not prove that the exporter has
-connected. Confirm `otlp_connected` after trace traffic is produced.
-
 ## Before you enable tracing
 
 1. Use a Gateway build that includes HTTP and L4 tracing. Build profiles differ:
@@ -136,8 +114,8 @@ curl --fail-with-body --silent --show-error \
   "$CONTROL_API/config/l4trace/sampling"
 ```
 
-Watch lifecycle counters and dropped events. Increasing sampling while rings or
-the collector are already saturated reduces evidence quality.
+Use independent collector records to assess delivery at the selected sampling
+rate. A status response alone does not prove event completeness.
 
 ## Verify export
 
@@ -151,7 +129,7 @@ the collector are already saturated reduces evidence quality.
 If `otlp_connected` remains false, check DNS, route, protocol, TLS trust,
 collector authentication, and collector logs. Use independently collected traces to verify delivery.
 
-## Disable and reset
+## Disable tracing
 
 ```bash
 curl --fail-with-body --silent --show-error \
@@ -161,14 +139,6 @@ curl --fail-with-body --silent --show-error \
 curl --fail-with-body --silent --show-error \
   --request POST --header @control-plane.headers \
   "$CONTROL_API/config/trace/disable"
-```
-
-Reset L4 counters only after retaining the required evidence:
-
-```bash
-curl --fail-with-body --silent --show-error \
-  --request POST --header @control-plane.headers \
-  "$CONTROL_API/config/l4trace/stats/reset"
 ```
 
 ## See also

@@ -3,7 +3,7 @@
 --8<-- "snippets/common/mutation-fragment-notice.md"
 
 The LoxiLB Inference Gateway management API is served under
-`/netlox/v1` on port `11111`. This page catalogs every current endpoint family
+`/netlox/v1` on port `11111`. This page catalogs the published endpoint families
 and highlights contracts that require special handling.
 
 - Production base URL: `https://gateway.example.com/netlox/v1`
@@ -22,12 +22,12 @@ and highlights contracts that require special handling.
    parameters, and declared security.
 2. Handler and middleware code decides conditional behavior that Swagger
    cannot express, such as first-user bootstrap and raw-route authorization.
-3. `api/swagger-extras.yml` documents the five raw-handler groups: AI KV
-   inventory, DPU debug, DPU hardware counters, OPA watcher, and AI-key patch.
+3. `api/swagger-extras.yml` supplies companion raw-handler contracts. The
+   [published companion guide](swagger-extras.md) covers KV inventory and AI-key patch.
 4. Runnable `cicd/` scenarios are validation evidence for selected flows; they
    are not a complete API contract.
 
-The generated [current-main API schema model ledger](api-schema-models.md)
+The generated [selected-source API schema model ledger](api-schema-models.md)
 classifies every definition added since the public documentation baseline,
 including direct operation models, nested components, shared envelopes, and
 companion-spec errors. It also records the exact required and optional fields
@@ -120,9 +120,9 @@ lifecycle rather than independent convenience endpoints.
 | `GET /status/ready` | `ReadyStatus` | Returns the same typed body with HTTP `200` or `503`; covers configuration recovery, not GPU, inference, or complete data-plane health. |
 | `GET /status/capabilities` | `CapabilityStatusList` | Returns HTTP `200` with per-capability `ready` verdicts for optional features gated by the launch environment. It is not overall health and does not affect `/status/ready`. |
 | `GET /diagnostics` | `DiagnosticsStatus` | Bounded version, readiness, maintenance, eBPF, map, and dependency context; sanitize output before sharing. |
-| `GET/PUT /maintenance` | `MaintenanceStatus` | Gates configuration writes. It does not reject new inference traffic and does not drain non-streaming requests. |
+| `GET/PUT /maintenance` | `MaintenanceStatus` | Reports configuration-write gating and observed drain state. Inference refusal depends on the attached data path and admission mode; verify affected services independently. |
 
-The recovery endpoints are implemented on current Gateway `main`; Gateway
+The recovery endpoints are implemented in the selected Gateway source; Gateway
 `v0.9.8.9-rc.1` includes snapshot, restore, and persist but not readiness, diagnostics, or
 maintenance, and it does not include the capability surface. See
 [Persistence, Backup, and Restore](../operations/backup-restore.md) and
