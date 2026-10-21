@@ -3235,7 +3235,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3263,7 +3263,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4818,18 +4818,6 @@ depending on it.</p>
 <td>Validate OTLP export and overhead</td>
 </tr>
 <tr>
-<td>Presidio PII detection</td>
-<td>Stub</td>
-<td>Stub</td>
-<td>Source build with <code>HAVE_PII_DETECTION=1</code>; request-only qualification</td>
-</tr>
-<tr>
-<td>Llama Firewall</td>
-<td>Stub</td>
-<td>Stub</td>
-<td>No supported release build profile currently defined</td>
-</tr>
-<tr>
 <td>NVIDIA DOCA DPU offload</td>
 <td>Stub/non-DPU</td>
 <td>Stub/non-DPU</td>
@@ -4959,7 +4947,7 @@ do not treat a locally calculated checksum as proof of origin.</p>
 the <code>./loxilb</code> binary. Swagger generation is an explicit step, except that the
 build can invoke it when required generated model files are missing; Docker is
 not used for Swagger regeneration on every normal clean build.</p>
-<p>Optional PII and DPU builds add native dependencies and are not equivalent to
+<p>Optional DPU builds add native dependencies and are not equivalent to
 the standard release image. Build them only from a reviewed dependency set,
 produce an SBOM, scan/sign the artifact, and validate it on the target Linux
 kernel and hardware before promotion.</p>

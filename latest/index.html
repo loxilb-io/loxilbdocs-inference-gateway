@@ -3357,7 +3357,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3385,7 +3385,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4758,10 +4758,6 @@ path (<code>mode: 4</code>) — see <a href="concepts/running-modes/">Running Mo
 <td><strong>MCP gateway</strong></td>
 <td>Session-sticky proxying of Model Context Protocol server pools, keyed on the <code>mcp-session-id</code> header.</td>
 </tr>
-<tr>
-<td><strong>OPA L4 policy</strong></td>
-<td>Optional external Open Policy Agent watcher for L4 admission policy.</td>
-</tr>
 </tbody>
 </table>
 <p>Load-balancer rule features use the management API on port <strong>11111</strong> under
@@ -4825,7 +4821,7 @@ load balancer with inference-aware routing built in.</p>
 <p>The example uses documentation-only addresses. Replace them with your management endpoint, VIP,
 and backend addresses. If management authentication is enabled, add the deployment's bearer
 header without placing the token directly in shell history. The current proxy uses fixed CHWBL
-runtime constants; stored <code>chwbl_*</code> tuning fields do not change them yet.</p>
+observed runtime behavior; verify placement against independent backend receipts.</p>
 <h2 id="where-to-go-next">Where to go next<a class="headerlink" href="#where-to-go-next" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong><a href="getting-started/installation/">Getting Started → Installation</a></strong> — run the gateway.</li>
@@ -4846,7 +4842,7 @@ runtime constants; stored <code>chwbl_*</code> tuning fields do not change them 
   together as a <a href="management/management-plane/">management plane</a>.</li>
 <li><strong><a href="operations/monitoring/">Operations → Monitoring</a></strong> — the Prometheus + Grafana stack with
   provisioned dashboards and alerts.</li>
-<li><strong><a href="security/management-api-authentication/">Security → Management API Authentication</a></strong> — separate operator credentials from inference API keys and review current release blockers.</li>
+<li><strong><a href="security/management-api-authentication/">Security → Management API Authentication</a></strong> — separate operator credentials from inference API keys and verify access through the qualified management endpoint.</li>
 <li><strong><a href="operations/ai-key-store/">Operations → AI Key Store</a></strong> — provision, protect, back up, and diagnose the development PostgreSQL key store.</li>
 <li><strong><a href="operations/backup-restore/">Operations → Persistence, Backup, and Restore</a></strong> — prove no-mutation dry-run, commit write-through, restart readback, rollback, quarantine, and lineage.</li>
 <li><strong><a href="operations/readiness-diagnostics-maintenance/">Operations → Readiness, Capabilities, Diagnostics, and Maintenance</a></strong> — interpret configuration recovery readiness, preflight optional capabilities, and use the configuration-write maintenance gate safely.</li>

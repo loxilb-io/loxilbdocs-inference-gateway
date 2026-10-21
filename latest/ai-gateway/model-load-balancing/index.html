@@ -3411,7 +3411,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3439,7 +3439,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4835,15 +4835,9 @@ is chosen, <strong>Stage 2</strong> picks a specific endpoint within it using th
     style P2 fill:#c8e6c9,stroke:#388e3c
     style P3 fill:#fff9c4,stroke:#f9a825
     style R503 fill:#ffcdd2,stroke:#e53935</code></pre>
-<p>The <code>X-Model</code> header takes precedence over the JSON body, so a client can override the body's model field per request. On keep-alive connections the header is evaluated per request — an empty or absent <code>X-Model</code> falls through to the JSON body, then to the wildcard.</p>
-<div class="admonition danger">
-<p class="admonition-title">Routing and authorization disagree when header and body differ</p>
-<p>Pool routing is header-first, but the current model-authorization gate evaluates the JSON
-body model first. A request carrying two different model names can therefore be authorized
-for one model and routed to another. Reject conflicting header/body values at a trusted
-upstream proxy, or require clients to send exactly one model source, until the implementation
-uses one canonical model identity for both decisions.</p>
-</div>
+<p>Send one model identity: either the JSON body field or <code>X-Model</code>, not
+conflicting values in both. Verify the matched rule and independent backend
+receipt for the selected model.</p>
 <div class="admonition warning">
 <p class="admonition-title">HTTP/2 feature boundary</p>
 <p>The current HTTP/2 backend path passes an empty model into endpoint lookup and falls back to
@@ -5018,8 +5012,7 @@ a permission-restricted file; never put bearer values in a URL, command argument
 <p class="admonition-title">Per-pool selection algorithm</p>
 <p><code>sel</code> can differ per pool. <code>sel: 0</code> (round-robin) is the default and is fine for even backends.
 For cache locality within a plain pool, use <code>sel: 8</code> (CHWBL). Selector 9 provides
-prefix/session modulo placement on a plain pool; its P/D capacity-aware activation is currently
-release-blocked. See <a href="../llm-routing/">LLM Routing</a>.</p>
+prefix/session modulo placement on a plain HTTP/1.1 pool. See <a href="../llm-routing/">LLM Routing</a>.</p>
 </div>
 <hr />
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>

@@ -3235,7 +3235,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3263,7 +3263,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -5168,7 +5168,7 @@ tokens and their roles:</p>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">targets</span><span class="p">:</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">gateway-1</span><span class="p">:</span>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://192.0.2.254:11111</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="c1"># username/password_env or token_env when LoxiLB runs with --userservice</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="c1"># token_env for the qualified management endpoint</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="c1"># tls_ca / timeout_sec as needed</span>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="c1"># insecure_skip_verify disables TLS verification — development only, never production</span>
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="nt">clients</span><span class="p">:</span><span class="w">                       </span><span class="c1"># HTTP-mode bearer tokens, one per client</span>
@@ -5295,10 +5295,11 @@ reference a specific backend are surfaced by <code>diagnose_endpoint</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Data-plane enforcement</p>
 <p>A <code>mode: 4</code> rule's independent <code>api_key_auth</code> declaration activates authentication; SSE and
-P/D do not. The CLI can set only <code>disabled</code> or <code>required</code>. A required rule returns <code>401</code> for an
-unknown key and fails closed with <code>503</code> if the PostgreSQL policy store cannot answer. JWT modes,
-profile association, user quotas, and defaults are REST-only. Per-key TPM is implemented, but
-its primary Swagger description is stale; published support remains pending convergence.</p>
+P/D do not. The selected CLI supports <code>disabled</code>, <code>required</code>, <code>jwt</code> and <code>apikey-or-jwt</code>;
+JWT modes require <code>--jwt-auth-profile</code>. The comparison release supports only the first two. A required rule returns <code>401</code> for an
+unknown key and fails closed with <code>503</code> if the PostgreSQL policy store cannot answer. JWT profile CRUD,
+user quotas and defaults remain REST-only. Per-key TPM has admission reservation
+and usage settlement; runtime and release qualification remain separate.</p>
 </div>
 <table>
 <thead>
@@ -5318,7 +5319,7 @@ its primary Swagger description is stale; published support remains pending conv
 </tr>
 <tr>
 <td><code>ai_apikey_create</code></td>
-<td>Create a tenant API key: allowed models and per-key RPS/burst values. Key material is written to a secrets file by default. The implementation enforces per-key TPM, but do not treat it as release-qualified until primary Swagger converges.</td>
+<td>Create a tenant API key: allowed models and per-key RPS/burst values. Key material is written to a secrets file by default. Per-key TPM includes reservation and settlement; qualify the exact runtime tuple before a release claim.</td>
 </tr>
 <tr>
 <td><code>ai_apikey_update</code></td>
@@ -5342,13 +5343,13 @@ its primary Swagger description is stale; published support remains pending conv
 </tr>
 <tr>
 <td><code>ai_traffic_report</code></td>
-<td>Composite traffic report: completed SSE-stream volume and duration by model/tenant, active streams, proxy TTFB, and rate-limit hits. Non-streaming successes are not counted by <code>loxilb_ai_requests_total</code>.</td>
+<td>Composite traffic report: AI-rule request volume by outcome/cause, completed-response duration, active streams, proxy TTFB, and rate-limit hits. Non-SSE answers on AI rules are included; request totals and denials have different accounting roles.</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Request-duration data</p>
-<p>There is no <code>ai_request_duration</code> tool. Completed SSE-stream duration, proxy TTFB, and P/D TTFT
+<p>There is no <code>ai_request_duration</code> tool. Completed-response duration, proxy TTFB, and P/D TTFT
 are reported by <code>ai_traffic_report</code> and correlated by <code>diagnose_ai_latency</code>.</p>
 </div>
 <h3 id="gpu">GPU<a class="headerlink" href="#gpu" title="Permanent link">&para;</a></h3>
@@ -5438,11 +5439,16 @@ composes them, <code>metrics_snapshot</code> returns them raw (glob <code>loxilb
 <code>loxilb_ai_rate_limit_hits_total</code>, and <code>loxilb_ai_model_not_allowed_total</code>.</p>
 </div>
 <div class="admonition note">
-<p class="admonition-title">Completed-request counting</p>
-<p><code>loxilb_ai_requests_total</code> increments only when an SSE stream completes at <code>data: [DONE]</code>;
-non-streaming successes are not included. The corresponding duration starts when SSE handling
-activates and ends at stream completion. Admission denials that stop before backend dispatch
-are represented by dedicated authorization and rate-limit metric families instead.</p>
+<p class="admonition-title">Request outcomes and error ratios</p>
+<p>On the selected Gateway source, <code>loxilb_ai_requests_total</code> covers AI-rule
+<code>completed</code>, <code>aborted</code> and <code>denied</code> records, including non-SSE responses.
+An aborted request carries <code>cause="client"</code>, <code>"engine"</code> or <code>"gateway"</code>;
+other outcomes use an empty cause. The traffic report's error ratio counts
+completed 5xx and engine/Gateway aborts over completed plus aborted traffic.
+Client aborts are traffic, not errors. Duration samples cover completed
+responses with a reported latency; denial and abort latencies are excluded.
+Older Gateways have different accounting: inspect the deployed metric labels
+before comparing reports. See <a href="../../operations/monitoring/#ai-access-and-request-metrics">Monitoring</a>.</p>
 </div>
 <h3 id="diagnostics">Diagnostics<a class="headerlink" href="#diagnostics" title="Permanent link">&para;</a></h3>
 <p>Each diagnostic returns a correlated evidence bundle whose sections degrade
@@ -5720,8 +5726,8 @@ and <a href="../../operations/appliance-cli/">Appliance CLI</a>.</p>
 </tr>
 <tr>
 <td>API-key policy</td>
-<td><code>--api-key-auth=disabled|required</code></td>
-<td>The released CLI supports exactly these two values; CLI main adds <code>jwt</code> and <code>apikey-or-jwt</code>, which need <code>--jwt-auth-profile=&lt;name&gt;</code>. Omission and explicit <code>disabled</code> are different contracts.</td>
+<td><code>--api-key-auth=disabled\|required\|jwt\|apikey-or-jwt</code></td>
+<td>The released CLI supports <code>disabled</code> and <code>required</code>; the selected CLI adds <code>jwt</code> and <code>apikey-or-jwt</code>, which need <code>--jwt-auth-profile=&lt;name&gt;</code>. Omission and explicit <code>disabled</code> are different contracts.</td>
 </tr>
 </tbody>
 </table>
@@ -5835,44 +5841,20 @@ command.</p>
 <td>JWT profile create/list/delete</td>
 <td><code>/config/ai/jwtauthprofile</code> and <code>/config/ai/jwtauthprofile/{name}</code></td>
 </tr>
-<tr>
-<td>JWT-capable service binding (released CLI; CLI main has <code>--api-key-auth=jwt\|apikey-or-jwt</code> with <code>--jwt-auth-profile</code>)</td>
-<td><code>api_key_auth: jwt|apikey-or-jwt</code> plus <code>jwt_auth_profile</code></td>
-</tr>
-<tr>
-<td>Global and rule-default QoS</td>
-<td><code>/config/ai/ratelimit/defaults...</code></td>
-</tr>
-<tr>
-<td>User and user-model QoS</td>
-<td><code>/config/ai/user/ratelimit...</code></td>
-</tr>
-<tr>
-<td>Model-profile discovery</td>
-<td><code>/config/ai/model-profiles[/{profile_id}]</code></td>
-</tr>
-<tr>
-<td>Strict KV readiness</td>
-<td><code>.../kvexactstatus</code></td>
-</tr>
-<tr>
-<td>Strict KV binding fields</td>
-<td><code>kvModelProfile</code> and <code>kvExactApiMode</code></td>
-</tr>
-<tr>
-<td>Optional capability readiness</td>
-<td><code>/status/capabilities</code></td>
-</tr>
-<tr>
-<td>Active sockmap connection reset</td>
-<td><code>.../sockmapreset</code></td>
-</tr>
 </tbody>
 </table>
-<p>The CLI supports only <code>disabled</code> and <code>required</code> for <code>--api-key-auth</code>; omission
-and explicit <code>disabled</code> remain different contracts. Create JWT-capable services
-and associate profiles through REST. User-limit and global/rule-default QoS
-CRUD are also REST-only.</p>
+<p>| Global and rule-default QoS | <code>/config/ai/ratelimit/defaults...</code> |
+| User and user-model QoS | <code>/config/ai/user/ratelimit...</code> |
+| Model-profile discovery | <code>/config/ai/model-profiles[/{profile_id}]</code> |
+| Strict KV readiness | <code>.../kvexactstatus</code> |
+| Strict KV binding fields | <code>kvModelProfile</code> and <code>kvExactApiMode</code> |
+| Optional capability readiness | <code>/status/capabilities</code> |
+| Active sockmap connection reset | <code>.../sockmapreset</code> |</p>
+<p>The selected CLI supports all four <code>--api-key-auth</code> values. For <code>jwt</code> or
+<code>apikey-or-jwt</code>, bind an existing profile with <code>--jwt-auth-profile</code>; create/list/delete
+that profile through REST. The comparison release supports only <code>disabled</code> and
+<code>required</code>. Omission and explicit <code>disabled</code> remain different contracts. User-limit
+and global/rule-default QoS CRUD are also REST-only.</p>
 <p><code>pdBootstrapPort</code> is supported by <code>loxicmd create lb</code> as
 <code>--pd-bootstrap-port</code>; it is distinct from <code>--kv-zmq-port</code>. Both CLI
 <code>v0.9.8.9-rc.2</code> and current main carry the bootstrap-port flag.</p>

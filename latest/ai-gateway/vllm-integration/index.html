@@ -2735,10 +2735,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sel-9-current-topology-dependent-behavior" class="md-nav__link">
+  <a href="#sel-9-plain-pool-affinity" class="md-nav__link">
     <span class="md-ellipsis">
       
-        sel: 9: Current Topology-Dependent Behavior
+        sel: 9: Plain-pool affinity
       
     </span>
   </a>
@@ -3435,7 +3435,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3463,7 +3463,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4715,10 +4715,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sel-9-current-topology-dependent-behavior" class="md-nav__link">
+  <a href="#sel-9-plain-pool-affinity" class="md-nav__link">
     <span class="md-ellipsis">
       
-        sel: 9: Current Topology-Dependent Behavior
+        sel: 9: Plain-pool affinity
       
     </span>
   </a>
@@ -4925,42 +4925,11 @@ for completion and independent receipt verification.</p>
 </table>
 <p>For a typical vLLM deployment, <code>backend_protocol: http1</code> with <code>security: 0</code> (plain) or <code>security: 1</code> (TLS termination on the VIP) is the right starting point.</p>
 <hr />
-<h2 id="sel-9-current-topology-dependent-behavior"><code>sel: 9</code>: Current Topology-Dependent Behavior<a class="headerlink" href="#sel-9-current-topology-dependent-behavior" title="Permanent link">&para;</a></h2>
-<p>The API and CLI call selector 9 <code>gpuaware</code>, but its current fullproxy behavior depends on the
-service topology. Do not assume that the name means every rule reads the worker-metrics API.</p>
-<pre class="mermaid"><code>flowchart TD
-    REQ([Request on a sel 9 rule]) --&gt; PD{P/D enabled?}
-    PD --&gt;|Yes| BLOCKED["Capacity-aware scorer exists&lt;br/&gt;activation is release-blocked"]
-    PD --&gt;|No| PREFIX{Prefix hash available?}
-    PREFIX --&gt;|Yes| MOD["prefix_hash modulo endpoint count"]
-    PREFIX --&gt;|No| CONV{Conversation ID available?}
-    CONV --&gt;|Yes| CMOD["conversation hash modulo endpoint count"]
-    CONV --&gt;|No| RR[Health-aware fallback selection]
-
-    style BLOCKED fill:#ffebee,stroke:#e53935
-    style MOD fill:#fff9c4,stroke:#f9a825
-    style CMOD fill:#fff9c4,stroke:#f9a825</code></pre>
-<ul>
-<li><strong>Plain single pool:</strong> selector 9 uses request affinity, not live GPU load. Adding or removing
-  endpoints can remap modulo placements. Use CHWBL (<code>sel: 8</code>) when you need a stable hash ring and
-  bounded-load protection, or round-robin (<code>sel: 0</code>) for independent requests.</li>
-<li><strong>P/D pool:</strong> a capacity-aware Tier-2 scorer exists, but the current activation gate compares a
-  mutable endpoint cursor instead of the configured selector. Configuring <code>sel: 9</code> therefore does
-  not reliably enable it. Normal Tier 2 uses active connections plus queued requests. See
-  <a href="../../use-cases/routing-hierarchy/">Routing Hierarchy</a>.</li>
-<li><strong>Worker-metrics control surface:</strong> the GPU enable/status and worker-metrics APIs populate and
-  report a separate metrics/eBPF surface. The current plain fullproxy selector does not read that
-  surface. A successful metrics POST or <code>routing_mode: gpu_aware</code> status is therefore not proof of
-  least-loaded selection for a plain pool.</li>
-</ul>
-<div class="admonition warning">
-<p class="admonition-title">Do not deploy from the historical least-loaded claim</p>
-<p>For a plain fullproxy vLLM pool, do not use <code>sel: 9</code> as a production least-loaded-GPU policy.
-Treat P/D capacity scoring as unavailable until the activation field is corrected and the exact
-release artifact passes an end-to-end test. Use the selectors above when their documented
-behavior matches the workload.</p>
-</div>
-<hr />
+<h2 id="sel-9-plain-pool-affinity"><code>sel: 9</code>: Plain-pool affinity<a class="headerlink" href="#sel-9-plain-pool-affinity" title="Permanent link">&para;</a></h2>
+<p>On the HTTP/1.1 plain-pool path, selector 9 uses prefix/conversation modulo
+affinity and healthy-endpoint fallback. Endpoint changes can remap placements.
+Worker telemetry and configuration readback do not establish least-loaded
+selection; measure backend distribution independently.</p>
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
 <p><strong>GPU monitoring status</strong> — <code>GET /config/gpu/status</code> reports the worker-metrics control surface:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>curl<span class="w"> </span>-s<span class="w"> </span><span class="s2">"http://&lt;loxilb&gt;:11111/netlox/v1/config/gpu/status"</span>

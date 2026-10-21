@@ -3235,7 +3235,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3263,7 +3263,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -5917,7 +5917,7 @@ is per connection, so aggregate memory grows with concurrency. See
 <tr>
 <td>HTTP tracing is enabled but no spans arrive</td>
 <td>Export/collector path failed</td>
-<td>Check <code>otlp_connected</code> and collector receipt; HTTP total/dropped/ring fields are currently zero placeholders</td>
+<td>Check <code>otlp_connected</code> and an independent collector/backend receipt</td>
 </tr>
 <tr>
 <td>L4 dropped events or ring utilization rise</td>
@@ -5926,9 +5926,6 @@ is per connection, so aggregate memory grows with concurrency. See
 </tr>
 </tbody>
 </table>
-<p><code>GET /config/trace/catalogs</code> is marked not implemented and returns <code>501</code>; it is
-not a health check. Use the status and OTLP configuration endpoints described
-in <a href="../tracing/">Application and L4 Tracing</a>.</p>
 <hr />
 <h2 id="dpu-observability-and-fallback">DPU observability and fallback<a class="headerlink" href="#dpu-observability-and-fallback" title="Permanent link">&para;</a></h2>
 <table>

@@ -3419,7 +3419,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3447,7 +3447,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4834,11 +4834,6 @@ continues to the rule's configured selector.</p>
 <td><code>mode_off</code></td>
 </tr>
 <tr>
-<td>Warmup timer</td>
-<td><em>(currently inert)</em> The field defines a delay, but the production path never arms its start timestamp; this check does not currently fire.</td>
-<td><code>warmup</code></td>
-</tr>
-<tr>
 <td>Prompt text</td>
 <td>No prompt text in the request</td>
 <td><code>text_empty</code></td>
@@ -4929,7 +4924,10 @@ until binding, event, inventory and delivery checks pass, any TTFT or throughput
 </tr>
 </tbody>
 </table>
-<p>The hit assertion is necessary but not sufficient: retain attestation state and independent backend receipts too. Fire one <strong>cold</strong> request to populate the inventory, then a <strong>warm</strong> request that shares its prefix; <code>loxilb_pd_kv_tier15_hits_total</code> <strong>must</strong> increment. A flat counter means overlap is zero and the tier is inert — abort and fix parity, rather than benchmarking the fallback selector.</p>
+<p>Retain attestation state and independent backend receipts. Send a controlled
+repeated-prefix probe after matching inventory has been observed, and require
+a positive hit delta before labelling the result as engaged Exact routing. A
+flat counter requires diagnosis; it does not identify a single root cause.</p>
 <h3 id="check-expected-subscribers">Check expected subscribers<a class="headerlink" href="#check-expected-subscribers" title="Permanent link">&para;</a></h3>
 <p><code>kv_subscriber_connected</code> should climb by <strong>N</strong> after you create an N-prefill-endpoint rule. Fewer than N means a subscriber failed to dial its publisher — re-check the endpoint's <code>kvZmqPort</code> and that the engine is up.</p>
 <h3 id="check-the-publisher-on-each-engine-host">Check the publisher on each engine host<a class="headerlink" href="#check-the-publisher-on-each-engine-host" title="Permanent link">&para;</a></h3>
@@ -5031,7 +5029,7 @@ TRT uses HTTP event ownership instead. A listener does not prove valid events or
 </tr>
 <tr>
 <td>Everything looks right but the tier stays cold just after start</td>
-<td>Inventory is still filling from KV events — not <code>kvWarmupSec</code> (Guard B is currently inert). Wait for the first events to ingest, then re-check the block gauge.</td>
+<td>Inventory is still filling from KV events. Wait for the first events to ingest, then re-check the block gauge.</td>
 </tr>
 <tr>
 <td><code>504 pd_prefill_timeout</code> on long prompts</td>
@@ -5051,8 +5049,8 @@ TRT uses HTTP event ownership instead. A listener does not prove valid events or
 <li><strong>Probe and retry timing differ.</strong> Probe-down transitions are synchronized into fullproxy and
    seed the exclusion mask. Connect-failure retry covers the interval before the prober observes
    the failure; admin-down and an open circuit breaker are also excluded.</li>
-<li><strong>CPU vLLM defaults to <code>--block-size 128</code></strong> — no events for short prompts; always set <code>16</code>.</li>
-<li><strong><code>kvWarmupSec</code> is currently inert.</strong> The field is accepted, validated, and stored, but the warmup timer is never armed in the current data path — the tier is <strong>not</strong> suppressed after subscriber start and activates as soon as routing conditions are met. Do not design procedures around the warmup window.</li>
+<li><strong>Check effective block geometry.</strong> Match the engine and selected profile;
+   defaults depend on engine version and platform.</li>
 <li><strong>The retained prefill examples apply to P/D mode 1.</strong> A role-less single-pool vLLM service can instead use
    <code>kvExactMode: 3</code>, which scores every endpoint and falls back to the rule selector on a miss.
    Do not mix mode 3 with P/D endpoint roles.</li>

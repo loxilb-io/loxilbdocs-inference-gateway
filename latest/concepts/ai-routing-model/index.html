@@ -3378,7 +3378,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3406,7 +3406,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4934,7 +4934,8 @@ and an unknown model to confirm matching and the 503 fall-through:</p>
 </ul>
 <p><strong>Header and body disagree</strong></p>
 <ul>
-<li>The <code>X-Model</code> header always wins over the body <code>model</code> field. If a client sets both, routing follows the header.</li>
+<li>Send only one model source per request, or keep the two values identical.
+  Verify both authorization and independent backend delivery.</li>
 </ul>
 <hr />
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>

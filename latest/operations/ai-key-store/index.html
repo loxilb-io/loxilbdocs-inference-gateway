@@ -3235,7 +3235,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3263,7 +3263,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4908,8 +4908,8 @@ fallback. The server certificate SAN must match <code>--aikey-db-host</code>.</p
 management user-service database and no longer creates those tables there.
 There is no automatic data migration.</p>
 <div class="admonition danger">
-<p class="admonition-title">Do not upgrade with only <code>--userservice</code></p>
-<p>An upgraded Gateway with <code>--userservice</code> but no <code>--aikey-db-host</code> has management login but no
+<p class="admonition-title">Management access does not configure the AI-key store</p>
+<p>An upgraded Gateway without <code>--aikey-db-host</code> has no
 AI-key store. Key/quota CRUD returns <code>503</code>; a service declaring <code>api_key_auth: required</code>
 also returns <code>503 policy_store_unavailable</code> before backend dispatch. A service that omitted
 the declaration remains keyless by contract. Treat either unintended state as an
@@ -4984,12 +4984,11 @@ new independently generated key IDs; reissue when that distinction matters.</p>
 or <code>disabled</code> rule intentionally has no API-key validation dependency. Verify the exact
 declaration by read-back instead of inferring it from store health, SSE, or P/D flags.</p>
 </div>
-<p>Per-key <code>tokens_per_min</code> is actively consumed by the implementation and its
-unit/integration tests. The frozen primary Swagger text is stale and calls it
-stored-only metadata, while the companion PATCH description says it is
-enforced. Do not present this implemented behavior as a released support
-guarantee until the primary contract is corrected and qualified. The complete
-ladder is documented in <a href="../ai-qos/">AI Quotas and QoS</a>.</p>
+<p>Positive per-key <code>tokens_per_min</code> participates in pre-admission reservation
+and usage settlement on supported token-accounting paths. The primary Swagger
+describes that behavior. Readback is not proof of active enforcement. Check a bounded
+positive request, a <code>429 token_quota_would_exceed</code> refusal before backend delivery,
+settlement, cancellation and recovery. See <a href="../ai-qos/">AI Quotas and QoS</a>.</p>
 <p>The management handlers expose unconfigured and unavailable as separate <code>503</code>
 error codes because they require different operator actions. The inference
 path deliberately returns the same <code>401 invalid_api_key</code> for unknown,

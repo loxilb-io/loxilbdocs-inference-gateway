@@ -3235,7 +3235,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3263,7 +3263,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4667,7 +4667,7 @@ worked example.</p>
 <td><a href="../../ai-gateway/configuration-reference/#3-ai-model-routing-tracing-streaming">Configuration Reference §3</a> · <a href="../../ai-gateway/sse-quota-management/">SSE &amp; Quota</a></td>
 </tr>
 <tr>
-<td><code>kvExactMode</code>, <code>kvBlockSize</code>, <code>kvHashAlgo</code>, <code>kvZmqPort</code>, <code>kvWarmupSec</code>, <code>kvEngineType</code>, <code>kvDpRankCount</code>, <code>kvExactApiMode</code>, <code>kvModelProfile</code>, <code>pdBootstrapPort</code></td>
+<td><code>kvExactMode</code>, <code>kvBlockSize</code>, <code>kvHashAlgo</code>, <code>kvZmqPort</code>, <code>kvEngineType</code>, <code>kvDpRankCount</code>, <code>kvExactApiMode</code>, <code>kvModelProfile</code>, <code>pdBootstrapPort</code></td>
 <td>Typed-engine, strict model-profile, and KV-cache routing (<code>vllm</code>, <code>sglang</code>, <code>trtllm</code>, <code>llamacpp</code>)</td>
 <td><a href="../../ai-gateway/configuration-reference/#4-kv-cache-exact-routing">Configuration Reference §4</a> · <a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV-Exact Readiness</a> · <a href="../../ai-gateway/kv-caching/">KV-Cache Routing</a></td>
 </tr>
@@ -4675,11 +4675,6 @@ worked example.</p>
 <td><code>sockMapMode</code></td>
 <td>Experimental directional sockmap acceleration for eligible plain HTTP/1.1 fullproxy services</td>
 <td><a href="../../ai-gateway/configuration-reference/#1-core-service-fields">Configuration Reference §1</a> · <a href="../../operations/sockmap-acceleration/">Sockmap Acceleration</a></td>
-</tr>
-<tr>
-<td><code>chwbl_prefix_hash_level</code>, <code>chwbl_prefix_hash_flags</code>, <code>chwbl_mean_load_factor</code>, <code>chwbl_replication</code>, <code>chwbl_enable_cache_salt</code></td>
-<td>CHWBL / WRR-HASH tuning</td>
-<td><a href="../../ai-gateway/configuration-reference/#5-chwbl-wrr-hash-tuning-knobs">Configuration Reference §5</a> · <a href="../../ai-gateway/llm-routing/">LLM Routing</a></td>
 </tr>
 <tr>
 <td><code>pd_disagg_mode</code>, <code>pd_cache_aware_mode</code>, <code>pd_session_ttl_sec</code>, <code>pd_cache_threshold</code>, <code>pd_balance_abs_threshold</code></td>
@@ -4715,11 +4710,6 @@ worked example.</p>
 <td><code>--aikey-db-*</code>, <code>AIGW_DB_PASSWORD</code></td>
 <td>Independent PostgreSQL AI-key and quota store</td>
 <td><a href="../../operations/ai-key-store/">AI Key Store Operations</a></td>
-</tr>
-<tr>
-<td><code>--userservice</code>, <code>--oauth2</code>, <code>--manualtoken</code></td>
-<td>Management API authentication and authorization</td>
-<td><a href="../../security/management-api-authentication/">Management API Authentication</a></td>
 </tr>
 </tbody>
 </table>

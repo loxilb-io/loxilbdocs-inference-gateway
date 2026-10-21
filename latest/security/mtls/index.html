@@ -3237,7 +3237,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3265,7 +3265,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4701,13 +4701,6 @@ alone as runtime proof.</p>
 <p>The current active mTLS path can verify client certificates on the frontend of
 a FullProxy service. Configure it through the <code>mtls_frontend</code> object nested in
 <code>serviceArguments</code>; there is no standalone <code>/config/mtls</code> endpoint.</p>
-<div class="admonition warning">
-<p class="admonition-title">Current implementation boundary</p>
-<p>The OpenAPI model also declares an inline certificate-data field for the
-frontend. The data-plane wiring applies only the frontend file-path fields
-documented below. Do not depend on <code>client_ca_cert_data</code> for enforcement.
-API acceptance or read-back does not prove that field is active.</p>
-</div>
 <p>This page covers the client-facing side. Verification of backend certificates
 and the client certificate the gateway presents to backends are configured by
 certificate ID and are described in
@@ -4858,8 +4851,7 @@ unredacted certificates in public evidence.</p>
 <h2 id="release-qualification-boundary">Release qualification boundary<a class="headerlink" href="#release-qualification-boundary" title="Permanent link">&para;</a></h2>
 <p>Production qualification requires frontend positive/negative handshake tests,
 certificate rotation, CRL refresh, restart, resource-load, and rollback tests
-on the exact image. Inline frontend certificate data remains an API-contract
-surface until implementation and end-to-end tests prove enforcement. Backend
+on the exact image. Backend
 verification and the backend client certificate are qualified separately; see
 <a href="../backend-tls/">Backend TLS</a>.</p>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
@@ -4867,7 +4859,7 @@ verification and the backend client certificate are qualified separately; see
 <li><a href="../backend-tls/">Backend TLS Verification and Client Certificates</a></li>
 <li><a href="../../ai-gateway/configuration-reference/">Configuration reference</a></li>
 <li><a href="../management-api-authentication/">Management API Authentication</a></li>
-<li><a href="../opa-l4/">OPA L4 Policy</a></li>
+<li><a href="../opa-l4/">Firewall Policy Verification</a></li>
 </ul>
 <p>For the integrated configure, readback, traffic, receipt and rollback sequence, see the
 <a href="../../use-cases/admission-flow-control/">Admission Control, Flow Control and QoS lab</a>.</p>

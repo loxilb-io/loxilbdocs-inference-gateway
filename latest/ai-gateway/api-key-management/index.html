@@ -3405,7 +3405,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3433,7 +3433,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4941,11 +4941,6 @@ directly into your secret manager, then securely remove the temporary file.</p>
 <td>Non-secret operator label</td>
 </tr>
 <tr>
-<td><code>api_key</code></td>
-<td>String</td>
-<td>Optional caller-supplied key for a controlled credential import; write-only</td>
-</tr>
-<tr>
 <td><code>allowed_models</code></td>
 <td>String array</td>
 <td>Exact model identifiers this key may use</td>
@@ -4963,7 +4958,7 @@ directly into your secret manager, then securely remove the temporary file.</p>
 <tr>
 <td><code>tokens_per_min</code></td>
 <td>Integer</td>
-<td>The implementation charges a per-key TPM bucket and denies the next request after debt; primary Swagger text is stale, so published support remains pending contract convergence</td>
+<td>Positive values participate in pre-admission reservation and usage settlement on supported token-accounting paths; nonpositive values leave this dimension unlimited. Insufficient reservation returns 429 before backend delivery</td>
 </tr>
 <tr>
 <td><code>expires_at</code></td>
@@ -4998,23 +4993,16 @@ contracts are described in <a href="../ai-traffic-governance/#network-identity-a
 they are not a statement of GAIE/llm-d deployment qualification.</p>
 <p>An empty model list records no model restriction. Prefer an explicit list when
 the workload should use only known models.</p>
-<p>The implementation is authoritative for observed behavior: the current limiter
-and tests charge and latch a per-key bucket. The frozen primary Swagger text
-incorrectly calls the field stored-only metadata, while <code>swagger-extras.yml</code>
-describes PATCH enforcement. Until the primary schema text is corrected and
-release-qualified, do not call per-key TPM a supported release contract; use
-tenant/user/model or shared-VIP limits when a published guarantee is required.</p>
-<p>The normal path omits <code>api_key</code>, lets the Gateway generate the credential, and
-receives it once as <code>raw_key</code>. The development contract also accepts a
-caller-supplied key between 16 and 512 printable, non-space ASCII characters.
-That path stores only its SHA-256 hash and never echoes the supplied value.</p>
-<div class="admonition warning">
-<p class="admonition-title">Imported-key response boundary</p>
-<p>The current handler returns an empty <code>raw_key</code> value for an imported key, while the development
-Swagger description says the field is omitted and its response schema still marks <code>raw_key</code> as
-required. Do not automate against empty-versus-absent behavior until the release contract
-resolves this mismatch. Generated-key responses are unaffected.</p>
-</div>
+<p>The primary Swagger documents per-key admission reservation and usage
+settlement. Admission estimates prompt tokens and uses declared <code>max_tokens</code>,
+or a configured completion default when omitted; settlement reconciles the
+reservation with usage. A request can therefore be refused before its first
+backend delivery with <code>429 token_quota_would_exceed</code> and <code>Retry-After</code>.
+Post-response debt can also affect later requests. These are related stages,
+not a post-response-only guarantee. Cancellation, missing usage and the minute
+window require their own checks. Source support and CPU functional tests do not qualify every
+protocol, engine, HA pair or released product.</p>
+<p>Use Gateway-generated keys and retain <code>raw_key</code> only from the create response.</p>
 <h2 id="list-and-inspect-without-exposing-the-secret">List and inspect without exposing the secret<a class="headerlink" href="#list-and-inspect-without-exposing-the-secret" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--get<span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/ai/apikey"</span><span class="w"> </span><span class="se">\</span>

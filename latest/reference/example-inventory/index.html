@@ -3235,7 +3235,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3263,7 +3263,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4607,17 +4607,17 @@ query, output sample, or diagram from silently bypassing classification.</p>
 </tr>
 </tbody>
 </table>
-<p>The tracked inventory currently classifies 391 fenced blocks: 21 <code>verified</code>,
-370 <code>illustrative-only</code>, and 0 <code>blocked</code>. A zero blocked count means there is no
-published fenced example instructing the reader to perform a known-blocked
-operation; prose limitations remain documented on their canonical pages.</p>
+<p>The machine-readable inventory in <code>tests/contracts/docs_examples/example-inventory.json</code>
+records the current counts and source digests. <code>verified</code> entries belong to the
+named static gate; blocked and illustrative entries are never counted as a
+Linux execution pass. Prose limitations remain on their canonical pages.</p>
 <h2 id="enforcement">Enforcement<a class="headerlink" href="#enforcement" title="Permanent link">&para;</a></h2>
 <p>Each entry records its source path, line, language, content digest, status, and
 evidence class. Each mutating entry also records the associated independent-oracle,
 negative-no-mutation, active-path, cleanup, and cleanup-verification contract.
-The current inventory detects 122 mutating blocks: 5 belong to the standalone
-quickstart workflow and 117 are explicitly non-standalone illustrative
-fragments. CI fails closed when a block is added, removed, moved, or changed
+The canonical quickstart owns the standalone mutation workflow; other fragments
+link to it and remain illustrative.
+CI fails closed when a block is added, removed, moved, or changed
 without refreshing the inventory, when a status is outside the three allowed
 values, when the evidence class is empty, or when a mutation contract is
 missing or promoted without a complete workflow.</p>
@@ -4629,6 +4629,10 @@ verified against the frozen command/flag contract while the corresponding
 Gateway behavior remains unrun locally. See <a href="../verification-status/">Verification Status</a>
 for the evidence layers and the <a href="../../getting-started/quickstart/">Quickstart</a>
 for the canonical end-to-end beginner workflow.</p>
+<p>The companion <code>tests/contracts/docs_examples/coverage-ledger.json</code> lists every
+public fence, direct API/CLI mapping, and operation without a direct example.
+CI regenerates this ledger; a missing direct example is a coverage gap, not a
+claim that the operation is unimplemented. Runtime evidence remains separate.</p>
 
 
 

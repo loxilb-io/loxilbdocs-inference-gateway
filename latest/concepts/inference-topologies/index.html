@@ -3363,7 +3363,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3391,7 +3391,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4774,8 +4774,6 @@ Check its per-model results and pending catalog integration before selecting a t
 <li><code>kvExactMode: 3</code> requires fullproxy and cannot be combined with P/D.</li>
 <li>An omitted <code>kvHashAlgo</code> lets the gateway choose the coherent engine default. This is the safest default.</li>
 <li>One rule represents one engine. To change <code>kvEngineType</code>, delete and recreate the rule.</li>
-<li><code>kvWarmupSec</code> is currently inert. Verify endpoint health, event connectivity, and nonzero
-  inventory instead of assuming a configured delay made a pool ready.</li>
 <li><code>cb_enable</code> and origin-5xx demotion improve later endpoint selection; they do not retry or
   mask the current origin response.</li>
 </ul>
@@ -4903,7 +4901,7 @@ Check its per-model results and pending catalog integration before selecting a t
 </tr>
 </tbody>
 </table>
-<p>Start with the least complex shape that meets the workload goal. P/D adds transfer networking and paired failure handling. KV-exact routing adds tokenizer, block-size, hash, event-port, and inventory-readiness requirements. The accepted <code>kvWarmupSec</code> field is currently inert, so verify readiness from subscriber and inventory metrics.</p>
+<p>Start with the least complex shape that meets the workload goal. P/D adds transfer networking and paired failure handling. KV-exact routing adds tokenizer, block-size, hash, event-port, and inventory-readiness requirements. Verify readiness from subscriber and inventory metrics.</p>
 
 
 

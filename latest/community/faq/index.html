@@ -3233,7 +3233,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3261,7 +3261,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4827,10 +4827,10 @@ verify the corresponding denial safely.</p>
 use <code>kvExactMode: 3</code> with P/D; mode 3 is for a single role-less pool. See
 <a href="../../ai-gateway/sglang-pd-disaggregation/">SGLang P/D Disaggregation</a>.</p>
 <h2 id="my-kv-cache-routing-isnt-improving-hit-rates-why">My KV-cache routing isn't improving hit rates. Why?<a class="headerlink" href="#my-kv-cache-routing-isnt-improving-hit-rates-why" title="Permanent link">&para;</a></h2>
-<p>Almost always a broken parity leg — the block/page size, hash algorithm, hash seed, ZMQ port, or
-tokenizer directory does not match between the engine and the gateway, so routing <strong>silently</strong> falls
-back to round-robin. Run the "verify it fired" recipe: <code>loxilb_pd_kv_tier15_hits_total</code> must advance
-after the first request. See <a href="../../operations/troubleshooting/">Troubleshooting</a> and the
+<p>Check block/page size, hash policy, event transport, tokenizer identity,
+profile binding and available overlap. A miss uses the topology-specific
+fallback. Require an observed hit delta during a controlled repeated-prefix
+probe before attributing results to Exact. See <a href="../../operations/troubleshooting/">Troubleshooting</a> and the
 <a href="../../concepts/kv-routing/">KV-cache-aware routing guide</a>.</p>
 <h2 id="what-license-is-it-under">What license is it under?<a class="headerlink" href="#what-license-is-it-under" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/loxilb-io/loxilbdocs-inference-gateway/blob/main/LICENSE">Apache License 2.0</a>.</p>

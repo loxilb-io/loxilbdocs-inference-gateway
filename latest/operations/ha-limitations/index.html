@@ -3235,7 +3235,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3263,7 +3263,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4872,20 +4872,12 @@ interface and allow only the exact peer addresses through a host firewall or a
 separately authenticated and encrypted network. The Gateway does not currently
 offer an xSync TLS or peer-token option that can substitute for that network
 control.</p>
-<p><code>--rpc=grpc</code> starts the main gRPC service on <code>22222</code>, but the current startup
-path does not also start the dedicated <code>22223</code> sockproxy server while the
-sockproxy client continues to target <code>22223</code>. Do not select that mode for
-sockproxy HA without release-specific end-to-end evidence.</p>
 <p>The sockproxy synchronizer batches session/conversation events and pushes
 rate-limiter state to compatible peers. Queues are bounded: overload uses
 drop-oldest behavior, and a batch can be dropped after retry exhaustion. This
 is eventual best-effort synchronization, not a consensus or transaction log.</p>
-<p>The code includes a paged <code>GetSockproxySnapshot</code> pull implementation, but the
-current production <code>MASTER</code> transition hook starts peer consumers without
-calling that pull. Its present call sites are tests. Therefore a promoted node
-must not be assumed to reconcile missed sockproxy sessions automatically before
-serving. Validate actual peer state or drain/rebuild it through the release's
-approved procedure.</p>
+<p>Validate peer state independently before promotion and require completed
+traffic and recovery evidence for the selected release.</p>
 <p>Watch these signals during every failover exercise:</p>
 <ul>
 <li><code>loxilb_sockproxy_sync_overflow_total{kind}</code> for ring/queue loss;</li>
@@ -4923,9 +4915,9 @@ two-node HA test. See <a href="../../reference/verification-status/">Verificatio
 nodes must be upgraded one at a time:</p>
 <ol>
 <li>Inventory every key, user, user-model, tenant, tenant-model, defaults, and
-   shared-VIP token limit on both peers. Per-key TPM is implemented but its
-   primary Swagger contract remains stale; record it without presenting it as
-   release-qualified support.</li>
+   shared-VIP token limit on both peers. Per-key TPM has admission reservation
+   and usage settlement in the source contract; record the active protocol and
+   runtime evidence without presenting it as two-node release qualification.</li>
 <li>Disable every active token-quota scope before upgrading the first node.</li>
 <li>Confirm both peers read back quotas as disabled.</li>
 <li>Wait for old in-memory quota entries to age out. The normal default idle

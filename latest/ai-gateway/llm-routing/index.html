@@ -854,23 +854,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="CHWBL prefix-hash routing — sel: 8">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#chwbl-tuning-knobs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CHWBL tuning knobs
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -3417,7 +3400,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3445,7 +3428,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4700,23 +4683,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="CHWBL prefix-hash routing — sel: 8">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#chwbl-tuning-knobs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CHWBL tuning knobs
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -4864,12 +4830,12 @@ only and cannot do model, session, or prefix-hash routing. See
 <tr>
 <td><code>9</code></td>
 <td>GPU-aware name, topology-dependent law</td>
-<td>Plain-pool prefix/session modulo placement; P/D capacity scoring is release-blocked</td>
+<td>Plain HTTP/1.1 pool: prefix/session modulo placement</td>
 </tr>
 <tr>
 <td><code>3</code></td>
 <td>Session persistence</td>
-<td>A specific header/cookie/query/user must always land on the same backend</td>
+<td>Identifier-based affinity; verify endpoint eligibility and remapping</td>
 </tr>
 </tbody>
 </table>
@@ -4930,10 +4896,8 @@ recommended so unhealthy backends are pulled from rotation.</p>
 <p><strong>When to use:</strong> conversational or prompt-sharing workloads on <strong>equal-capacity</strong> backends. CHWBL
 (Consistent Hashing With Bounded Loads) hashes a prefix of each request and maps it to a point on a
 ring, so requests carrying the same prefix consistently land on the same backend — reusing its KV
-cache — while the bounded-load cap prevents any one backend from being overloaded.</p>
-<p>The current runtime derives the prefix key from request content. The API accepts and reads back
-the <code>chwbl_*</code> fields, but the rule-to-proxy path does not yet apply their submitted values. Create
-the rule with <code>sel: 8</code>, then verify affinity and spill behavior with controlled traffic:</p>
+cache. Verify load protection separately from affinity.</p>
+<p>Verify prefix affinity and actual endpoint load with controlled traffic:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -4961,64 +4925,6 @@ the rule with <code>sel: 8</code>, then verify affinity and spill behavior with 
 </div>
 </div>
 </div>
-<h3 id="chwbl-tuning-knobs">CHWBL tuning knobs<a class="headerlink" href="#chwbl-tuning-knobs" title="Permanent link">&para;</a></h3>
-<p>These fields are accepted for <code>sel</code> 8 or 10, but the current control path does not propagate
-them. The live proxy uses mean factor 175, replication 256, flags 0, and salt enforcement off.</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Default</th>
-<th>Range</th>
-<th>What it does</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>chwbl_prefix_hash_level</code></td>
-<td>int</td>
-<td><code>1</code></td>
-<td><code>1</code>, <code>2</code>, <code>3</code></td>
-<td>Stored/read back; current runtime infers prefix scope from request content.</td>
-</tr>
-<tr>
-<td><code>chwbl_prefix_hash_flags</code></td>
-<td>int</td>
-<td><code>0</code></td>
-<td><code>0</code>–<code>255</code></td>
-<td>Stored/read back; current runtime programs flags <code>0</code>.</td>
-</tr>
-<tr>
-<td><code>chwbl_mean_load_factor</code></td>
-<td>int</td>
-<td>schema <code>125</code>; runtime <code>175</code></td>
-<td><code>100</code>–<code>300</code></td>
-<td>Intended bounded-load cap; currently not propagated.</td>
-</tr>
-<tr>
-<td><code>chwbl_replication</code></td>
-<td>int</td>
-<td>schema <code>100</code>; runtime <code>256</code></td>
-<td><code>1</code>–<code>1024</code></td>
-<td>Intended vnode count; currently not propagated.</td>
-</tr>
-<tr>
-<td><code>chwbl_enable_cache_salt</code></td>
-<td>bool</td>
-<td><code>false</code></td>
-<td>—</td>
-<td>Intended salt guard; currently not propagated and therefore not a tenant-isolation control</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition danger">
-<p class="admonition-title">Current runtime boundary</p>
-<p>Do not use the API examples below to claim that the displayed CHWBL values took effect.
-Confirm the released artifact with a controlled distribution test. Isolate untrusted tenants
-through authorization and separate pools; request-derived prefix hashing is not access control.</p>
-</div>
-<hr />
 <h2 id="weighted-chwbl-sel-10">Weighted CHWBL — <code>sel: 10</code><a class="headerlink" href="#weighted-chwbl-sel-10" title="Permanent link">&para;</a></h2>
 <p><strong>When to use:</strong> the same prefix-affinity behavior as CHWBL, but your backends have <strong>unequal
 capacity</strong>. <code>sel: 10</code> (WRR-hash) distributes the ring's virtual nodes proportionally to endpoint
@@ -5055,19 +4961,9 @@ still preserving prefix locality.</p>
 tuning knobs above apply unchanged.</p>
 <hr />
 <h2 id="gpu-aware-routing-sel-9">GPU-aware routing — <code>sel: 9</code><a class="headerlink" href="#gpu-aware-routing-sel-9" title="Permanent link">&para;</a></h2>
-<p><strong>Current behavior:</strong> the <code>gpuaware</code> name covers two different paths. In a plain single pool,
-the gateway uses <code>prefix_hash % endpoint_count</code>, then conversation-hash modulo placement, then a
-healthy fallback. It does not read the pushed worker-metrics map. A P/D capacity-aware scorer
-exists, but its activation gate checks a mutable endpoint cursor instead of the configured
-selector; configuring <code>sel: 9</code> does not reliably enable it. Normal P/D Tier 2 uses active
-connections plus queued requests.</p>
-<div class="admonition warning">
-<p class="admonition-title">Do not treat plain-pool selector 9 as least-loaded routing</p>
-<p>The example below is valid configuration, but its plain-pool placement law is affinity modulo,
-not live GPU scoring. Use CHWBL for a stable bounded-load hash ring or round-robin for
-independent requests. Treat P/D capacity scoring as unavailable until the activation gate is
-corrected and validated end to end.</p>
-</div>
+<p>For a plain HTTP/1.1 pool, selector 9 provides prefix/conversation modulo
+affinity. Worker metrics do not establish least-loaded selection. Use the
+following example only for a non-P/D pool.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">curl</label><label for="__tabbed_4_2">loxicmd</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -5100,7 +4996,8 @@ corrected and validated end to end.</p>
 <hr />
 <h2 id="session-persistence-sel-3">Session persistence — <code>sel: 3</code><a class="headerlink" href="#session-persistence-sel-3" title="Permanent link">&para;</a></h2>
 <p><strong>When to use:</strong> a client-supplied identifier — HTTP header, cookie, query parameter, or Basic-Auth
-username — must always route to the same backend. This is the mechanism behind MCP session
+username — is used as an affinity key. Verify repeat placement and failure
+remapping separately. This supports MCP session
 stickiness (see <a href="../mcp-gateway/">MCP Gateway</a>).</p>
 <p><code>session_header_name</code> selects <strong>what</strong> to key on:</p>
 <table>
@@ -5176,7 +5073,7 @@ stickiness (see <a href="../mcp-gateway/">MCP Gateway</a>).</p>
 <p>For CHWBL / weighted modes, send several requests carrying the same prefix (e.g. an identical
 system prompt) and confirm they consistently reach the same backend — inspect the backend
 <code>X-Request-Id</code> / access logs, or watch per-endpoint request counts. For selector 9, validate
-plain-pool modulo affinity only; P/D capacity-aware activation is currently release-blocked. See
+plain-pool modulo affinity with independent backend receipts. See
 <a href="../vllm-integration/">vLLM Integration</a>.</p>
 <hr />
 <h2 id="troubleshoot">Troubleshoot<a class="headerlink" href="#troubleshoot" title="Permanent link">&para;</a></h2>
@@ -5184,13 +5081,11 @@ plain-pool modulo affinity only; P/D capacity-aware activation is currently rele
 <ul>
 <li>Confirm <code>sel</code> is <code>8</code> (or <code>10</code>), not <code>0</code>, in <code>GET /config/loadbalancer/all</code>.</li>
 <li>The prefix hash needs shared request content. If every request has a unique prompt, expect a
-  broad spread; the stored hash-level field does not currently alter runtime prefix scope.</li>
+  broad spread.</li>
 </ul>
 <p><strong>One backend takes almost all traffic (CHWBL)</strong></p>
 <ul>
-<li>The bounded-load cap reacts to concurrent load; a one-request-at-a-time test may remain on the
-  same ring owner. The current proxy fixes factor 175 and replication 256, so stored REST values
-  are not a working tuning mechanism yet.</li>
+<li>Compare endpoint eligibility, prefix reuse and actual concurrent load.</li>
 </ul>
 <p><strong>Weighted mode ignores my weights</strong></p>
 <ul>

@@ -27,7 +27,7 @@
     
     
       
-        <title>OPA L4 Policy - LoxiLB Inference Gateway</title>
+        <title>Firewall Policy Verification - LoxiLB Inference Gateway</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#opa-l4-policy-watcher" class="md-skip">
+        <a href="#firewall-policy-verification" class="md-skip">
           Skip to content
         </a>
       
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              OPA L4 Policy
+              Firewall Policy Verification
             
           </span>
         </div>
@@ -3237,7 +3237,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3267,24 +3267,6 @@
         
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    OPA L4 Policy
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -3292,7 +3274,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -3301,135 +3283,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#current-production-boundary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Current production boundary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-synchronization-works" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How synchronization works
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#required-opa-response" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Required OPA response
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#validate-an-opa-document-separately" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Validate an OPA document separately
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#url-and-transport-restrictions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        URL and transport restrictions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configure-the-watcher-in-isolated-staging" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configure the watcher in isolated staging
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#status-and-circuit-breaker" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Status and circuit breaker
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stop-the-watcher" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Stop the watcher
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#release-gates" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Release gates
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#see-also" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        See also
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -4623,124 +4476,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#current-production-boundary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Current production boundary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-synchronization-works" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How synchronization works
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#required-opa-response" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Required OPA response
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#validate-an-opa-document-separately" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Validate an OPA document separately
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#url-and-transport-restrictions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        URL and transport restrictions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configure-the-watcher-in-isolated-staging" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Configure the watcher in isolated staging
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#status-and-circuit-breaker" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Status and circuit breaker
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stop-the-watcher" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Stop the watcher
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#release-gates" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Release gates
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#see-also" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        See also
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -4756,278 +4491,16 @@
 
 
 
-<h1 id="opa-l4-policy-watcher">OPA L4 Policy Watcher<a class="headerlink" href="#opa-l4-policy-watcher" title="Permanent link">&para;</a></h1>
-<div class="admonition note">
-<p class="admonition-title">Illustrative mutation fragments</p>
-<p>The management mutations on this page are non-standalone fragments. Before
-adapting them, follow this site's <strong>Example Quality Contract</strong> and complete
-<strong>Quickstart</strong> lifecycle. Do not treat HTTP success or management readback
-alone as runtime proof.</p>
-</div>
-<p>The OPA L4 watcher polls an Open Policy Agent (OPA) data document, converts its
-desired rules into Gateway firewall rules, diffs them against a local cache,
-and applies additions and deletions through the Gateway REST API. It is a
-desired-state synchronizer, not a per-connection OPA authorization call.</p>
-<h2 id="current-production-boundary">Current production boundary<a class="headerlink" href="#current-production-boundary" title="Permanent link">&para;</a></h2>
-<div class="admonition danger">
-<p class="admonition-title">Experimental integration — do not use as a production enforcement boundary</p>
-<p>The current watcher applies rules to the local HTTP management API without
-an authorization header. When Gateway management authentication is enabled,
-those internal apply requests are rejected. Disabling management
-authentication to make the watcher work would expose a larger control-plane
-risk. Until an authenticated internal apply path is implemented and tested,
-qualify this feature only in an isolated staging environment.</p>
-</div>
-<p>Other current limitations are also security-relevant:</p>
-<ul>
-<li><code>fail_open</code> is stored and reported but does not change outage behavior;</li>
-<li>a fetch failure preserves the rules currently applied, for either
-  <code>fail_open</code> value;</li>
-<li>a well-formed OPA response with a missing/empty rule list is desired empty
-  state and can delete all OPA-managed rules;</li>
-<li>invalid individual rules are logged and skipped, not rejected as one atomic
-  policy document; a previously applied rule that is now skipped can be
-  treated as removed by the diff;</li>
-<li>stopping the watcher does not remove firewall rules it already applied;</li>
-<li>its cached rule-state file is written with mode <code>0644</code> under
-  <code>/var/lib/loxilb</code> by default;</li>
-<li>the OPA client sends no authentication header and offers no custom CA option.</li>
-</ul>
-<p>The OpenAPI route and unit tests prove code presence, not safe multi-process or
-production behavior.</p>
-<h2 id="how-synchronization-works">How synchronization works<a class="headerlink" href="#how-synchronization-works" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>flowchart LR
-    O["OPA data API&lt;br/&gt;GET /v1/data/{policy_path}"] --&gt; F["Fetch and parse"]
-    F --&gt; N["Normalize valid rules&lt;br/&gt;skip invalid rules"]
-    N --&gt; D["Diff against local cache"]
-    D --&gt; A["DELETE removed rules&lt;br/&gt;POST added rules"]
-    A --&gt; G["Local Gateway firewall API"]
-    A --&gt; C["Persist successful operations&lt;br/&gt;in rule cache"]
-
-    F --&gt;|failure| K["Keep currently applied rules"]
-
-    style K fill:#fff9c4,stroke:#f9a825
-    style G fill:#e1f5fe,stroke:#0288d1</code></pre>
-<p>The default policy path is <code>loxilb/l4</code>, poll interval is 30 seconds, initial
-poll delay is 10 seconds, OPA request timeout is 5 seconds, and each local rule
-apply request has a 10-second timeout.</p>
-<h2 id="required-opa-response">Required OPA response<a class="headerlink" href="#required-opa-response" title="Permanent link">&para;</a></h2>
-<p>The watcher performs an HTTP <code>GET</code> with <code>Accept: application/json</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>{opa_url}/v1/data/{policy_path}
-</code></pre></div>
-<p>For the default path, OPA must return this shape:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">"l4"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="nt">"firewall_access_rules"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="p">{</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">          </span><span class="nt">"sourceIP"</span><span class="p">:</span><span class="w"> </span><span class="s2">"198.51.100.0/24"</span><span class="p">,</span>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">          </span><span class="nt">"destinationIP"</span><span class="p">:</span><span class="w"> </span><span class="s2">"203.0.113.10/32"</span><span class="p">,</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">          </span><span class="nt">"protocol"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">          </span><span class="nt">"minSourcePort"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">          </span><span class="nt">"maxSourcePort"</span><span class="p">:</span><span class="w"> </span><span class="mi">65535</span><span class="p">,</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">          </span><span class="nt">"minDestinationPort"</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">          </span><span class="nt">"maxDestinationPort"</span><span class="p">:</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">          </span><span class="nt">"action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"allow"</span><span class="p">,</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">          </span><span class="nt">"preference"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">      </span><span class="p">]</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="p">}</span>
-</code></pre></div>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Accepted values</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>sourceIP</code>, <code>destinationIP</code></td>
-<td>IPv4 or IPv6 CIDR; empty is normalized to <code>0.0.0.0/0</code></td>
-</tr>
-<tr>
-<td><code>protocol</code></td>
-<td><code>0</code> any, <code>6</code> TCP, <code>17</code> UDP, <code>132</code> SCTP</td>
-</tr>
-<tr>
-<td>source/destination port range</td>
-<td>Minimum must not exceed maximum; <code>0</code>–<code>65535</code> is normalized to no port filter</td>
-</tr>
-<tr>
-<td><code>action</code></td>
-<td><code>allow</code> or <code>deny</code></td>
-</tr>
-<tr>
-<td><code>preference</code></td>
-<td>Integer used in the firewall rule key</td>
-</tr>
-</tbody>
-</table>
-<p>The document is not applied atomically. A failed add/delete is retried during a
-later diff, but successful changes from the same cycle remain applied. Review
-<code>last_error</code> for <code>partial apply failure</code> and compare actual firewall rules.</p>
-<h2 id="validate-an-opa-document-separately">Validate an OPA document separately<a class="headerlink" href="#validate-an-opa-document-separately" title="Permanent link">&para;</a></h2>
-<p>Select and pin an OPA release approved by your organization; do not use a
-mutable image tag:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">OPA_IMAGE</span><span class="o">=</span><span class="s2">"openpolicyagent/opa:&lt;PINNED_VERSION&gt;"</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker<span class="w"> </span>pull<span class="w"> </span><span class="s2">"</span><span class="nv">$OPA_IMAGE</span><span class="s2">"</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>docker<span class="w"> </span>image<span class="w"> </span>inspect<span class="w"> </span><span class="s2">"</span><span class="nv">$OPA_IMAGE</span><span class="s2">"</span><span class="w"> </span>--format<span class="w"> </span><span class="s1">'{{index .RepoDigests 0}}'</span>
-</code></pre></div>
-<p>Before connecting a Gateway, query the exact policy path directly and validate
-the response shape:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>https://opa.example.com/v1/data/loxilb/l4<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">'</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="s1">      .result.l4.firewall_access_rules | type == "array" and</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="s1">      all(.[];</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s1">        (.action == "allow" or .action == "deny") and</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="s1">        (.protocol == 0 or .protocol == 6 or</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="s1">         .protocol == 17 or .protocol == 132))</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="s1">    '</span>
-</code></pre></div>
-<p>Use synthetic test ranges and validate empty, malformed, duplicate, and invalid
-rules. Specifically prove that an unintended empty document cannot reach the
-watcher.</p>
-<h2 id="url-and-transport-restrictions">URL and transport restrictions<a class="headerlink" href="#url-and-transport-restrictions" title="Permanent link">&para;</a></h2>
-<p><code>POST /config/opa/watcher</code> resolves the configured hostname and rejects these
-IPv4 ranges:</p>
-<ul>
-<li><code>127.0.0.0/8</code> loopback;</li>
-<li><code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, and <code>192.168.0.0/16</code> RFC 1918;</li>
-<li><code>169.254.0.0/16</code> link-local and common metadata range.</li>
-</ul>
-<p>This guard is not a complete reserved-address or IPv6 SSRF policy, and DNS can
-change after validation. The watcher also cannot attach OPA authentication
-headers. Treat the destination as administrator-controlled, enforce egress and
-DNS policy outside the process, use HTTPS with a publicly trusted certificate,
-and do not expose an unauthenticated OPA data API to an untrusted network.</p>
-<p>These constraints are another reason the current integration is not a
-recommended production enforcement path.</p>
-<h2 id="configure-the-watcher-in-isolated-staging">Configure the watcher in isolated staging<a class="headerlink" href="#configure-the-watcher-in-isolated-staging" title="Permanent link">&para;</a></h2>
-<p>The management route itself is protected when Gateway management auth is
-configured:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CONTROL_API</span><span class="o">=</span><span class="s2">"https://gateway.example.com/netlox/v1"</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>/dev/null<span class="w"> </span>./control-plane.headers
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nb">printf</span><span class="w"> </span><span class="s1">'Authorization: Bearer %s\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONTROL_PLANE_TOKEN</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>./control-plane.headers
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span>--header<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span>--data<span class="w"> </span><span class="s1">'{</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="s1">    "opa_url": "https://opa.example.com",</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="s1">    "policy_path": "loxilb/l4",</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="s1">    "poll_interval_sec": 30,</span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="s1">    "fail_open": false</span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="s1">  }'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/opa/watcher"</span>
-</code></pre></div>
-<p>This starts/replaces the watcher, but under the current implementation its
-subsequent local firewall apply calls do not carry the management credential.
-Expect them to fail when management auth is active; do not work around the
-failure by exposing an unauthenticated production management listener.</p>
-<h2 id="status-and-circuit-breaker">Status and circuit breaker<a class="headerlink" href="#status-and-circuit-breaker" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/opa/watcher"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
-</code></pre></div>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Interpretation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>status</code></td>
-<td><code>not_configured</code>, <code>running</code>, or <code>stopped</code></td>
-</tr>
-<tr>
-<td><code>last_sync_at</code></td>
-<td>Time the latest fetch/normalize/apply cycle completed, including a partial apply; it is not proof that every rule succeeded</td>
-</tr>
-<tr>
-<td><code>rules_count</code></td>
-<td>Successfully applied rules tracked in the watcher cache</td>
-</tr>
-<tr>
-<td><code>last_error</code></td>
-<td>Latest fetch, normalization, or partial-apply error</td>
-</tr>
-<tr>
-<td><code>circuit_breaker_state</code></td>
-<td><code>0</code> closed, <code>1</code> open, <code>2</code> half-open</td>
-</tr>
-</tbody>
-</table>
-<p>Five consecutive OPA fetch failures open the circuit for 60 seconds. After the
-timeout it enters half-open; two successful OPA fetches close it. A
-normalization error records a failure, but the next successful fetch resets the
-closed-state failure count before normalization, so repeated
-normalization-only errors do not reliably open the circuit. Apply errors do not
-open it. Alert on <code>last_error</code> and failed syncs rather than relying only on the
-circuit state. While the circuit is open, polling does not change existing
-rules.</p>
-<p>Prometheus metrics:</p>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>loxilb_opa_watcher_syncs_total{status}</code></td>
-<td>Sync cycles by <code>success</code> or <code>failure</code></td>
-</tr>
-<tr>
-<td><code>loxilb_opa_sync_duration_seconds</code></td>
-<td>Duration of all sync attempts</td>
-</tr>
-<tr>
-<td><code>loxilb_opa_firewall_rules</code></td>
-<td>Successfully applied rules tracked in cache</td>
-</tr>
-<tr>
-<td><code>loxilb_opa_circuit_breaker_state</code></td>
-<td><code>0</code> closed, <code>1</code> open, <code>2</code> half-open</td>
-</tr>
-</tbody>
-</table>
-<p>Alert on failed sync rate, open circuit, stale <code>last_sync_at</code>, partial apply,
-and unexpected rule-count changes. Always corroborate with the Gateway firewall
-read API.</p>
-<h2 id="stop-the-watcher">Stop the watcher<a class="headerlink" href="#stop-the-watcher" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--request<span class="w"> </span>DELETE<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/opa/watcher"</span>
-</code></pre></div>
-<p>Deleting the watcher stops polling but leaves its applied firewall rules and
-state file. Inventory and remove rules through an approved firewall change
-procedure; do not assume <code>DELETE /config/opa/watcher</code> is a policy rollback.</p>
-<h2 id="release-gates">Release gates<a class="headerlink" href="#release-gates" title="Permanent link">&para;</a></h2>
-<p>Before this integration can be treated as production-ready, require at least:</p>
-<ul>
-<li>an authenticated internal apply path compatible with management auth;</li>
-<li>authenticated OPA transport with configurable trust;</li>
-<li>fail-open/fail-closed behavior implemented and tested;</li>
-<li>document-level validation or atomic rejection of invalid/empty policy;</li>
-<li>restrictive cache-file permissions and lifecycle cleanup;</li>
-<li>IPv4/IPv6 SSRF and DNS-rebinding controls;</li>
-<li>restart, rollback, and two-node behavior tested on the release image.</li>
-</ul>
-<h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="../management-api-authentication/">Management API Authentication</a></li>
-<li><a href="../../operations/monitoring/">Monitoring and Metrics</a></li>
-<li><a href="../../operations/audit-log/">Audit Log</a></li>
-</ul>
+<h1 id="firewall-policy-verification">Firewall Policy Verification<a class="headerlink" href="#firewall-policy-verification" title="Permanent link">&para;</a></h1>
+<p>Use the <a href="../../reference/api/">firewall API reference</a> for the selected source
+contract. This page does not provide an OPA watcher deployment procedure.</p>
+<p>Before a policy change, capture the relevant rules and identify the exact rule
+keys owned by the change. Apply only reviewed rules through the authenticated
+management endpoint. Test an allowed connection and a denied connection, and
+use independent backend observations to distinguish rejection from delivery.</p>
+<p>After the test, remove only the owned rules and compare the remaining material
+configuration with the pre-change readback. Configuration acceptance alone is
+not proof that the intended traffic policy took effect.</p>
 
 
 

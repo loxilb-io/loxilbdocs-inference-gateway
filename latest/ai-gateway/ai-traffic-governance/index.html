@@ -3455,7 +3455,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3483,7 +3483,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4948,7 +4948,7 @@ configured per rule and documented in <a href="../admission-flow-control/">Admis
 <td>Per-key TPM</td>
 <td>One API key</td>
 <td>Tokens per minute</td>
-<td>Implemented as a post-response debt latch; primary Swagger text is stale, so published support remains pending convergence</td>
+<td>Pre-admission reservation and usage settlement; insufficient reservation returns 429 before backend delivery, and post-response debt can affect later requests. Validate the active protocol and service</td>
 </tr>
 <tr>
 <td>User RPS/TPM</td>
@@ -5069,12 +5069,10 @@ operations never return the raw key or its stored hash.</p>
 <p>Do not print <code>raw_key</code> in a terminal recording, CI log, dashboard, or issue.
 If it is exposed or lost, delete the key and create a replacement.</p>
 </div>
-<p>Per-key <code>tokens_per_min</code> is enforced by the implementation: settlement charges
-the key bucket and debt denies the next request. The primary Swagger text still
-describes stored-only metadata, while the companion PATCH contract describes
-enforcement. Treat that as contract drift requiring an upstream Swagger update,
-not as proof the implementation is inactive. Published support remains pending
-convergence and release qualification.</p>
+<p>Per-key <code>tokens_per_min</code> reserves a request budget before backend admission and
+settles it from response usage on supported accounting paths. The selected
+primary Swagger describes both stages. Verify the active accounting path
+before using token quotas as an operational control.</p>
 <h2 id="step-2-set-tenant-and-per-model-token-budgets">Step 2 — Set tenant and per-model token budgets<a class="headerlink" href="#step-2-set-tenant-and-per-model-token-budgets" title="Permanent link">&para;</a></h2>
 <p>This example gives the tenant an aggregate budget of 60,000 TPM and limits one
 model to 20,000 TPM:</p>

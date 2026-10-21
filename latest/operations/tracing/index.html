@@ -3235,7 +3235,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3263,7 +3263,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -3842,17 +3842,6 @@
     <span class="md-ellipsis">
       
         Disable and reset
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#api-availability-boundary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        API availability boundary
       
     </span>
   </a>
@@ -4696,17 +4685,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#api-availability-boundary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        API availability boundary
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#see-also" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4855,12 +4833,8 @@ environment values.</p>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/trace/status"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
 </code></pre></div>
-<p>The HTTP trace status schema includes <code>enabled</code>, <code>total_events</code>,
-<code>dropped_events</code>, per-worker <code>ring_utilization</code>, OTLP settings, and
-<code>otlp_connected</code>. In the current HTTP handler, the event counters and ring
-values are zero placeholders rather than live telemetry. A true <code>enabled</code>
-value means trace hooks are active; use <code>otlp_connected</code> together with receipt
-at the collector/backend to prove export.</p>
+<p>Use <code>otlp_connected</code> together with independent collector/backend records to
+verify export. An enabled setting alone is insufficient.</p>
 <h2 id="enable-sampled-l4-tracing">Enable sampled L4 tracing<a class="headerlink" href="#enable-sampled-l4-tracing" title="Permanent link">&para;</a></h2>
 <p>Start with a low percentage and raise it only when the trace pipeline has
 headroom:</p>
@@ -4896,9 +4870,7 @@ the collector are already saturated reduces evidence quality.</p>
    test time without recording tokens or payloads.</li>
 </ol>
 <p>If <code>otlp_connected</code> remains false, check DNS, route, protocol, TLS trust,
-collector authentication, and collector logs. Do not use the HTTP trace
-counter or ring fields for alerting until live accounting is implemented and
-qualified.</p>
+collector authentication, and collector logs. Use independently collected traces to verify delivery.</p>
 <h2 id="disable-and-reset">Disable and reset<a class="headerlink" href="#disable-and-reset" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>curl<span class="w"> </span>--fail-with-body<span class="w"> </span>--silent<span class="w"> </span>--show-error<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
@@ -4913,14 +4885,6 @@ qualified.</p>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--request<span class="w"> </span>POST<span class="w"> </span>--header<span class="w"> </span>@control-plane.headers<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$CONTROL_API</span><span class="s2">/config/l4trace/stats/reset"</span>
 </code></pre></div>
-<h2 id="api-availability-boundary">API availability boundary<a class="headerlink" href="#api-availability-boundary" title="Permanent link">&para;</a></h2>
-<p><code>GET /config/trace/catalogs</code> is declared in the OpenAPI document but is marked
-not implemented and currently returns <code>501</code>. Do not build automation against
-it. Parser discovery and parser-to-catalog mapping have separate endpoints,
-but qualify them with the exact release before operational use.</p>
-<p>Tracing hooks and API handlers prove implementation, not production sizing.
-Validate overhead, data exposure, collector failure behavior, and retention
-with your immutable image and representative traffic before continuous use.</p>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../monitoring/">Monitoring and Metrics</a></li>

@@ -3235,7 +3235,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3263,7 +3263,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4668,19 +4668,15 @@ immutable image and has passed the deployment's release qualification.</p>
 <ul>
 <li><strong>Adaptive routing controller</strong> (<code>loxilb-ai-controller</code>) — TTFT-aware, capacity-weighted prefill
   selection for heterogeneous fleets. Experimental and off by default.</li>
-<li><strong>Tiered caching with LMCache</strong> — a CPU (and optional remote) KV tier beneath the GPU cache.
-  Advanced; gate before production rollout.</li>
-<li><strong>OPA L4 policy watcher</strong> — desired-state firewall synchronization is
-  implemented, but authenticated internal rule apply, meaningful fail-mode
-  behavior, atomic document validation, cache permissions, and complete SSRF
-  controls remain release gates.</li>
-<li><strong>Presidio PII scanning</strong> — optional source build, currently request-direction
-  only; standard release images use the stub implementation.</li>
-<li><strong>Llama Firewall</strong> — source integration and API contract exist, but standard
-  release images use a stub and no supported release packaging path is defined.</li>
-<li><strong>NVIDIA DOCA DPU offload</strong> — optional hardware/source build that requires
+<li>
+<p><strong>Tiered caching with LMCache</strong> — a CPU (and optional remote) KV tier beneath the GPU cache.
+  Advanced; gate before production rollout.</p>
+</li>
+<li>
+<p><strong>NVIDIA DOCA DPU offload</strong> — optional hardware/source build that requires
   target-specific SDK, driver, firmware, correctness, fallback, and performance
-  qualification.</li>
+  qualification.</p>
+</li>
 </ul>
 <h2 id="longer-term">Longer term<a class="headerlink" href="#longer-term" title="Permanent link">&para;</a></h2>
 <ul>

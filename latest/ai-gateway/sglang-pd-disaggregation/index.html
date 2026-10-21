@@ -3393,7 +3393,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3421,7 +3421,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4854,9 +4854,8 @@ always confirm the stored value through the REST read-back.</p>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">"kvExactMode"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">"kvBlockSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">"kvZmqPort"</span><span class="p">:</span><span class="w"> </span><span class="mi">5557</span><span class="p">,</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">"kvDpRankCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">"kvWarmupSec"</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">}</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">"kvDpRankCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">}</span>
 </code></pre></div>
 <ul>
 <li>Set <code>kvBlockSize</code> to the effective SGLang page size; do not assume the example value fits the deployed model.</li>
@@ -4864,9 +4863,6 @@ always confirm the stored value through the REST read-back.</p>
 <li>Keep the entire consecutive port range reachable and at or below <code>65535</code>.</li>
 <li>Omit <code>kvHashAlgo</code>; the gateway derives <code>sha256_sglang</code> from the engine type.</li>
 <li>Do not use <code>kvExactMode: 3</code> on a P/D rule. Mode 3 is for a role-less single pool.</li>
-<li><code>kvWarmupSec</code> is accepted and stored, but the production path currently does not arm
-  its start timestamp. Gate traffic on endpoint health, subscriber connectivity, and
-  inventory signals instead of sleeping for this duration.</li>
 </ul>
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
 <ol>

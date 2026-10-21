@@ -3350,7 +3350,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3378,7 +3378,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4680,8 +4680,9 @@ on <a href="../../ai-gateway/model-profiles-kv-readiness/">Model Profiles and KV
 <p>The model-profile registry, the installer and <code>kvModelProfile</code> are on Gateway <code>main</code>. They are absent from
 Gateway <code>v0.9.8.9-rc.1</code>. Check the installed Gateway identity before following this page.</p>
 </div>
-<p>Every step below exists because the gateway must compute the same token ids and cache hashes as the engine.
-None of them is a tuning choice: an engine launched without one of them never reaches <code>READY</code>.</p>
+<p>Verify tokenization, hash geometry and engine identity against the selected
+profile. Read the binding and readiness result rather than inferring readiness
+from launch flags alone.</p>
 <h2 id="1-choose-a-model-and-an-engine-version">1. Choose a model and an engine version<a class="headerlink" href="#1-choose-a-model-and-an-engine-version" title="Permanent link">&para;</a></h2>
 <p>The supported-models list is generated in the gateway repository:
 <a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/main/docs/SUPPORTED-MODELS.md"><code>docs/SUPPORTED-MODELS.md</code></a>.

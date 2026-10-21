@@ -3415,7 +3415,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3443,7 +3443,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4914,23 +4914,22 @@ verification for production trust boundaries; see <a href="../../security/mtls/"
 <a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="s1">      "kvEngineType": "trtllm",</span>
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="s1">      "kvExactMode": 1,</span>
 <a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="s1">      "kvBlockSize": 32,</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="s1">      "kvWarmupSec": 5,</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="s1">      "sse_mode": true,</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="s1">      "host": "192.0.2.10",</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="s1">      "monitor": true,</span>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="s1">      "cb_enable": true,</span>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="s1">      "probetype": "http",</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="s1">      "probeport": 8355,</span>
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="s1">      "probereq": "/health",</span>
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="s1">      "probeTimeout": 5,</span>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="s1">      "probeRetries": 2</span>
-<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="s1">    },</span>
-<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="s1">    "endpoints": [</span>
-<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="s1">      {"endpointIP": "198.51.100.11", "targetPort": 8355, "weight": 1, "ep_role": 1},</span>
-<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="s1">      {"endpointIP": "198.51.100.12", "targetPort": 8355, "weight": 1, "ep_role": 1},</span>
-<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="s1">      {"endpointIP": "198.51.100.21", "targetPort": 8355, "weight": 1, "ep_role": 2}</span>
-<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="s1">    ]</span>
-<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="s1">  }'</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="s1">      "sse_mode": true,</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="s1">      "host": "192.0.2.10",</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="s1">      "monitor": true,</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="s1">      "cb_enable": true,</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="s1">      "probetype": "http",</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="s1">      "probeport": 8355,</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="s1">      "probereq": "/health",</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="s1">      "probeTimeout": 5,</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="s1">      "probeRetries": 2</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="s1">    },</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="s1">    "endpoints": [</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="s1">      {"endpointIP": "198.51.100.11", "targetPort": 8355, "weight": 1, "ep_role": 1},</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="s1">      {"endpointIP": "198.51.100.12", "targetPort": 8355, "weight": 1, "ep_role": 1},</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="s1">      {"endpointIP": "198.51.100.21", "targetPort": 8355, "weight": 1, "ep_role": 2}</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="s1">    ]</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="s1">  }'</span>
 </code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">REST is required for the typed example</p>
@@ -4938,9 +4937,6 @@ verification for production trust boundaries; see <a href="../../security/mtls/"
 client version; always confirm the stored rule through the REST read-back.</p>
 </div>
 <p>Do not set a non-default <code>kvZmqPort</code>; TensorRT-LLM events use each endpoint's serving port. Do not set <code>kvDpRankCount</code> above one. Omit <code>kvHashAlgo</code> to select <code>blockhash_trtllm</code> automatically.</p>
-<p><code>kvWarmupSec</code> is accepted and stored, but the production path currently does not arm its
-start timestamp. Treat successful <code>/server_info</code> admission plus nonzero inventory as the
-readiness signal; do not rely on the example's five-second value to delay routing.</p>
 <h3 id="convert-to-a-single-pool">Convert to a single pool<a class="headerlink" href="#convert-to-a-single-pool" title="Permanent link">&para;</a></h3>
 <p>For converged workers, remove <code>pd_disagg_mode</code> and all <code>ep_role</code> fields, keep <code>kvEngineType: "trtllm"</code>, and set <code>kvExactMode: 3</code>. All endpoints are then admitted and scored as one role-less pool.</p>
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>

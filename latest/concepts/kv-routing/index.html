@@ -3364,7 +3364,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3392,7 +3392,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4839,7 +4839,7 @@ measured resident memory under representative inventory, not from the raw-hash f
 <h2 id="example-vllm-pd-event-and-request-flow">Example: vLLM P/D event and request flow<a class="headerlink" href="#example-vllm-pd-event-and-request-flow" title="Permanent link">&para;</a></h2>
 <p>This worked example uses vLLM P/D mode 1. Mode 3 instead scores all converged
 endpoints; engine-specific event/hash encoding is described in the contract reference.</p>
-<p><strong>Control path (rule creation).</strong> An operator POSTs a load-balancer rule with <code>kvExactMode: 1</code> and endpoints tagged prefill / decode. For every prefill endpoint, LoxiLB starts a subscriber that dials the worker's ZeroMQ port. Initial dial failure does not kill the subscriber — it retries on an interval, so the rule can be created before vLLM is up. (A warmup window — Guard B — is defined in the guard ladder but is currently inert; see the verification reference.)</p>
+<p><strong>Control path (rule creation).</strong> An operator POSTs a load-balancer rule with <code>kvExactMode: 1</code> and endpoints tagged prefill / decode. For every prefill endpoint, LoxiLB starts a subscriber that dials the worker's ZeroMQ port. Initial dial failure does not kill the subscriber — it retries on an interval, so the rule can be created before vLLM is up.</p>
 <p><strong>Ingest path (event → inventory).</strong> vLLM publishes a multi-frame message <code>[topic | sequence | payload]</code>. <code>BlockStored</code> adds hashes, <code>BlockRemoved</code> removes them, and <code>AllBlocksCleared</code> empties the set. Sequence handling uses a 64-event window: small gaps keep state, while large gaps clear it. Rebuilding a live socket does not itself clear inventory or replay missed events.</p>
 <p><strong>Request path (request → worker).</strong> For each proxied request on a <code>kvExactMode=1</code> rule, the data plane runs the guard ladder:</p>
 <ol>

@@ -3235,7 +3235,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3263,7 +3263,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4740,10 +4740,12 @@ covered yet.</p>
 <li>Make sure the strict build passes (this is what CI runs):
    <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python<span class="w"> </span>tools/validate_examples.py
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python<span class="w"> </span>tools/refresh_example_inventory.py<span class="w"> </span>--check
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>python<span class="w"> </span>tools/render_metrics_reference.py<span class="w"> </span>--check
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>python<span class="w"> </span>tools/render_schema_reference.py<span class="w"> </span>--check
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>python<span class="w"> </span>-m<span class="w"> </span>unittest<span class="w"> </span>discover<span class="w"> </span>-s<span class="w"> </span>tests<span class="w"> </span>-p<span class="w"> </span><span class="s1">'test_*.py'</span><span class="w"> </span>-v
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>python<span class="w"> </span>tools/refresh_body_bindings.py<span class="w"> </span>--check
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>python<span class="w"> </span>tools/refresh_coverage_ledger.py<span class="w"> </span>--check
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>python<span class="w"> </span>tools/render_metrics_reference.py<span class="w"> </span>--check
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>python<span class="w"> </span>tools/render_schema_reference.py<span class="w"> </span>--check
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>python<span class="w"> </span>-m<span class="w"> </span>unittest<span class="w"> </span>discover<span class="w"> </span>-s<span class="w"> </span>tests<span class="w"> </span>-p<span class="w"> </span><span class="s1">'test_*.py'</span><span class="w"> </span>-v
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
 </code></pre></div></li>
 <li>Open a pull request and fill in the template.</li>
 </ol>
@@ -4756,7 +4758,9 @@ the combined primary and supplemental Swagger contracts; inline JSON request bod
 matching Swagger request schema; shell syntax with <code>bash -n</code>; JSON with <code>jq</code>; and YAML with <code>yq</code>.
 PromQL metric names and selector labels are checked against the frozen
 release-scope manifest; documented closed label enums are checked for exact
-selectors. Referenced snapshot and bootstrap bodies use public, non-secret fixtures for schema validation.
+selectors. File-backed management examples are bound by exact page and file
+reference to actual public assets and extracted jq producer commands. Linux CI
+recreates those inputs; deployment-owned secrets are not substituted with fixtures.
 The unit suite also applies deliberately broken examples and requires the validator to reject route
 typos, removed flags, invalid enum values, incorrect JSON field casing, missing required fields,
 non-existent metric families, wrong metric labels, and wrong metric enum values.</p>
@@ -4765,18 +4769,23 @@ network-independent. Maintainers can refresh them from exact local clones after 
 upstream contract change:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>tools/refresh_example_contracts.py<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--gateway-repo<span class="w"> </span>../loxilb-inference-gateway<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--cli-repo<span class="w"> </span>../loxicmd-inference-gateway
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>python<span class="w"> </span>tools/refresh_example_inventory.py
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>python<span class="w"> </span>tools/render_schema_reference.py<span class="w"> </span>--write
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>python<span class="w"> </span>tools/refresh_example_inventory.py<span class="w"> </span>--check
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--gateway-ref<span class="w"> </span>&lt;accepted-gateway-commit&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--cli-repo<span class="w"> </span>../loxicmd-inference-gateway<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--cli-ref<span class="w"> </span>&lt;accepted-cli-commit&gt;
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>python<span class="w"> </span>tools/render_metrics_reference.py<span class="w"> </span>--write
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>python<span class="w"> </span>tools/render_schema_reference.py<span class="w"> </span>--write
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>python<span class="w"> </span>tools/refresh_body_bindings.py
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>python<span class="w"> </span>tools/refresh_example_inventory.py
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>python<span class="w"> </span>tools/refresh_coverage_ledger.py
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>python<span class="w"> </span>tools/refresh_example_inventory.py<span class="w"> </span>--check
 </code></pre></div>
 <h3 id="validate-a-gateway-upgrade-before-refreshing-the-snapshot">Validate a Gateway upgrade before refreshing the snapshot<a class="headerlink" href="#validate-a-gateway-upgrade-before-refreshing-the-snapshot" title="Permanent link">&para;</a></h3>
-<p>The <code>Gateway contract drift</code> workflow checks out a selected Gateway branch,
-tag, or commit and performs four independent gates:</p>
+<p>The <code>Gateway contract drift</code> workflow checks out selected Gateway and CLI
+refs and performs four independent gates:</p>
 <ol>
 <li>regenerate the candidate contract from both Swagger files, the engine
-   support catalog, the release-scope metric manifest, and selected public
-   scenario/workflow evidence;</li>
+   support catalog, the release-scope metric manifest, selected public
+   scenario/workflow evidence, and the selected CLI source;</li>
 <li>validate documented routes, request bodies, and PromQL against that
    candidate contract;</li>
 <li>require every Swagger definition added since the public schema baseline to
@@ -4784,10 +4793,12 @@ tag, or commit and performs four independent gates:</p>
 <li>compare Swagger, catalog, metric-manifest, and scenario/claim evidence with
    the tracked contract. Any drift fails until it is reviewed.</li>
 </ol>
-<p>Run the same gate locally with one command:</p>
+<p>Run the same static gate on the validation runner:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>python<span class="w"> </span>tools/validate_gateway_docs.py<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--gateway-repo<span class="w"> </span>../loxilb-inference-gateway<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--gateway-ref<span class="w"> </span>main
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--gateway-ref<span class="w"> </span>&lt;accepted-gateway-commit&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--cli-repo<span class="w"> </span>../loxicmd-inference-gateway<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--cli-ref<span class="w"> </span>&lt;accepted-cli-commit&gt;
 </code></pre></div>
 <p>After reviewing the report and updating affected pages, refresh only the
 Gateway snapshot from the exact accepted commit:</p>
@@ -4803,10 +4814,12 @@ Gateway snapshot from the exact accepted commit:</p>
 <a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>python<span class="w"> </span>-m<span class="w"> </span>unittest<span class="w"> </span>discover<span class="w"> </span>-s<span class="w"> </span>tests<span class="w"> </span>-p<span class="w"> </span><span class="s1">'test_*.py'</span><span class="w"> </span>-v
 </code></pre></div>
 <p>The workflow runs on relevant documentation pull requests, weekly against
-Gateway <code>main</code>, and on manual dispatch with a selectable <code>gateway_ref</code>. It also
+Gateway <code>main</code> with the configured CLI baseline, and on manual dispatch with
+selectable <code>gateway_ref</code> and <code>cli_ref</code>. It also
 accepts a <code>repository_dispatch</code> event named <code>gateway-api-updated</code>; a Gateway
 release workflow can send that event with <code>client_payload.gateway_ref</code> set to
-the immutable commit or tag. The dispatch token must stay in repository
+the immutable Gateway commit or tag and <code>client_payload.cli_ref</code> set to the
+reviewed CLI ref. The dispatch token must stay in repository
 secrets and must never be placed in the event payload or logs.</p>
 <p>These checks establish static command, route, schema, metric, evidence-object, and syntax consistency. They do not execute
 the Linux CLI binary, send requests to a running gateway, or qualify GPU, high-availability, or
@@ -4833,6 +4846,14 @@ is partial or still on the roadmap, we say so with a status note rather than imp
 </ul>
 <p>By participating you agree to the project's
 <a href="https://github.com/loxilb-io/loxilbdocs-inference-gateway/blob/main/CODE_OF_CONDUCT.md">Code of Conduct</a>.</p>
+<p>When updating the Gateway source baseline, regenerate both source contracts,
+metric/schema references and the example inventory/coverage ledger on the
+Linux runner. Review the recorder-derived label combinations and update the
+exact-source/count regression expectations with the reviewed tuple. Keep
+historical engine results and immutable comparison-release identities intact.
+Run <code>python -m unittest discover -s tests -p 'test_*.py' -v</code> on that runner;
+<code>tests/test_metric_contracts.py</code> includes negative enum/combination and source
+shape checks. Source consistency does not requalify older runtime evidence.</p>
 
 
 

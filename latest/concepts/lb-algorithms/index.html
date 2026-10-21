@@ -756,24 +756,13 @@
   <a href="#chwbl-tuning-sel-8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        CHWBL tuning (sel: 8)
+        CHWBL selection (sel: 8)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="CHWBL tuning (sel: 8)">
+    <nav class="md-nav" aria-label="CHWBL selection (sel: 8)">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#chwbl_prefix_hash_flags-bits" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        chwbl_prefix_hash_flags bits
-      
-    </span>
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#configure-chwbl" class="md-nav__link">
@@ -3512,7 +3501,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3540,7 +3529,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4896,24 +4885,13 @@
   <a href="#chwbl-tuning-sel-8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        CHWBL tuning (sel: 8)
+        CHWBL selection (sel: 8)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="CHWBL tuning (sel: 8)">
+    <nav class="md-nav" aria-label="CHWBL selection (sel: 8)">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#chwbl_prefix_hash_flags-bits" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        chwbl_prefix_hash_flags bits
-      
-    </span>
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#configure-chwbl" class="md-nav__link">
@@ -5080,7 +5058,7 @@ enabling it.</p>
 <td><code>9</code></td>
 <td>GPU-aware (topology-dependent)</td>
 <td>✅</td>
-<td>Plain pool: prefix/session modulo placement. P/D capacity-aware activation is currently release-blocked.</td>
+<td>Plain HTTP/1.1 pool: prefix/session modulo placement.</td>
 </tr>
 <tr>
 <td><code>10</code></td>
@@ -5115,8 +5093,8 @@ fallback-derived key, the bounded-load ceiling can move selection away from an o
 owner. Adding or removing a backend remaps only part of the ring.</p>
 <p><strong>When to use for LLM serving:</strong> conversational and RAG workloads that benefit from strong prefix
 locality without requiring clients to send a session header. Monitor hot shared prefixes because
-strict prefix affinity can concentrate them on one endpoint. Tuning fields and their current
-runtime boundary are covered in <a href="#chwbl-tuning-sel-8">CHWBL tuning</a> below.</p>
+strict prefix affinity can concentrate them on one endpoint. Use the
+<a href="#chwbl-tuning-sel-8">selection checks</a> below.</p>
 <h4 id="example-shared-support-agent-prompt-on-equal-gpus">Example: shared support-agent prompt on equal GPUs<a class="headerlink" href="#example-shared-support-agent-prompt-on-equal-gpus" title="Permanent link">&para;</a></h4>
 <p>Three clients use the same model and support-agent system prompt. GPU-A, GPU-B, and GPU-C have
 equal capacity, so reusing one GPU's warm KV cache matters more than evenly spreading these three
@@ -5144,26 +5122,9 @@ requests.</p>
   when none is available.</li>
 </ul>
 <h3 id="sel-9-gpu-aware"><code>sel: 9</code> — GPU-aware<a class="headerlink" href="#sel-9-gpu-aware" title="Permanent link">&para;</a></h3>
-<p>The current fullproxy implementation has two distinct laws behind this historical name:</p>
-<ul>
-<li>On a <strong>plain single pool</strong>, a request with a prefix hash uses
-  <code>prefix_hash % endpoint_count</code>; otherwise a conversation ID is hashed the same way, followed by
-  a health-aware fallback when neither value is available. Pushed worker metrics are not read by
-  this userspace selector.</li>
-<li>On a <strong>P/D pool</strong>, the intended capacity-aware branch exists, but its current activation gate
-  checks the mutable endpoint cursor rather than the configured selector. A configured <code>sel: 9</code>
-  therefore does not reliably activate it. Normal Tier 2 uses active connections plus queued
-  requests.</li>
-</ul>
-<p>The separate GPU status and worker-metrics APIs provide observability; they are not evidence of
-least-loaded selection on the plain path. See
-<a href="../../ai-gateway/vllm-integration/">vLLM Integration</a>.</p>
-<div class="admonition danger">
-<p class="admonition-title">P/D capacity-aware activation is currently release-blocked</p>
-<p>Configuring <code>sel: 9</code> does not reliably enable the capacity-aware scorer. Do not claim that
-behavior until the activation gate is corrected and the exact release artifact passes an
-integration test. On HTTP/2, selector 9 reduces to round-robin.</p>
-</div>
+<p>For a plain HTTP/1.1 pool, selector 9 uses prefix/conversation modulo
+placement and healthy-endpoint fallback. Worker telemetry does not establish
+least-loaded placement.</p>
 <p><strong>When to use for LLM serving:</strong> use <code>sel: 9</code> only when you deliberately want plain-pool modulo
 placement and have tested how endpoint additions, removals, and failures remap traffic. Prefer
 CHWBL for a stable ring with bounded-load protection, round-robin for independent requests, and
@@ -5200,7 +5161,7 @@ resulting prefix hash maps to endpoint index <code>1</code> when divided by the 
 <p>On HTTP/1.1, a real prefix hash remains strictly affine to its weighted ring owner, subject to
 health handling. The bounded-load check applies only when selection uses a conversation or
 fallback-derived key.</p>
-<p><strong>When to use for LLM serving:</strong> mixed or transitional fleets where you want cache-aware routing but the endpoints are not equal — for example while draining an old GPU tier, or when blending large- and small-VRAM nodes under one VIP. Selector 10 uses endpoint weights, but submitted <code>chwbl_*</code> tuning values are not currently propagated to the proxy.</p>
+<p><strong>When to use for LLM serving:</strong> mixed or transitional fleets where you want cache-aware routing but the endpoints are not equal — for example while draining an old GPU tier, or when blending large- and small-VRAM nodes under one VIP. Selector 10 uses endpoint weights; verify the observed distribution.</p>
 <h4 id="example-weighted-cache-affinity-across-different-sized-gpus">Example: weighted cache affinity across different-sized GPUs<a class="headerlink" href="#example-weighted-cache-affinity-across-different-sized-gpus" title="Permanent link">&para;</a></h4>
 <p>GPU-A is the largest worker, GPU-B is medium, and GPU-C is smallest. Their endpoint weights are
 <code>4</code>, <code>2</code>, and <code>1</code>, and many different prompt prefixes arrive over time.</p>
@@ -5230,122 +5191,9 @@ fallback-derived key.</p>
   weight is not a live GPU-load signal.</li>
 </ul>
 <hr />
-<h2 id="chwbl-tuning-sel-8">CHWBL tuning (<code>sel: 8</code>)<a class="headerlink" href="#chwbl-tuning-sel-8" title="Permanent link">&para;</a></h2>
-<p>The API accepts the CHWBL knobs for <code>sel: 8</code> and <code>sel: 10</code>, but the current rule-to-data-plane
-path does not propagate them. The live proxy uses mean-load factor <code>175</code>, replication <code>256</code>,
-prefix flags <code>0</code>, and cache-salt enforcement disabled. Treat the fields below as an intended
-configuration contract, not working production tuning, until runtime metrics or a distribution
-test proves propagation in the released artifact.</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Default</th>
-<th>Range / values</th>
-<th>What it controls</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>chwbl_prefix_hash_level</code></td>
-<td>int</td>
-<td><code>1</code></td>
-<td><code>1</code>, <code>2</code>, <code>3</code></td>
-<td>Stored/read back; the runtime currently derives prefix scope from request content.</td>
-</tr>
-<tr>
-<td><code>chwbl_prefix_hash_flags</code></td>
-<td>int</td>
-<td><code>0</code></td>
-<td><code>0</code>–<code>255</code> bitflags</td>
-<td>Stored/read back; the runtime currently programs flags <code>0</code>.</td>
-</tr>
-<tr>
-<td><code>chwbl_mean_load_factor</code></td>
-<td>int</td>
-<td>schema <code>125</code>; runtime <code>175</code></td>
-<td><code>100</code>–<code>300</code></td>
-<td>Intended bounded-load ceiling; currently not propagated to the proxy.</td>
-</tr>
-<tr>
-<td><code>chwbl_replication</code></td>
-<td>int</td>
-<td>schema <code>100</code>; runtime <code>256</code></td>
-<td><code>1</code>–<code>1024</code></td>
-<td>Intended vnode count; currently not propagated to the proxy.</td>
-</tr>
-<tr>
-<td><code>chwbl_enable_cache_salt</code></td>
-<td>bool</td>
-<td><code>false</code></td>
-<td>—</td>
-<td>Intended salt requirement; currently not propagated, so it must not be used as a tenant-isolation control.</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition danger">
-<p class="admonition-title">Do not claim strict tenant isolation from CHWBL salt</p>
-<p>Prefix scope is inferred from request content and the runtime salt switch remains off.
-Separate untrusted tenants into independently authorized pools or listeners. A hash input is
-an affinity hint, not an authorization boundary.</p>
-</div>
-<h3 id="chwbl_prefix_hash_flags-bits"><code>chwbl_prefix_hash_flags</code> bits<a class="headerlink" href="#chwbl_prefix_hash_flags-bits" title="Permanent link">&para;</a></h3>
-<p>These bits describe the API contract. The current proxy receives flags <code>0</code> and infers prefix
-scope from each request; setting a nonzero value does not currently change the live hash input.</p>
-<table>
-<thead>
-<tr>
-<th>Bit</th>
-<th>Value</th>
-<th>Feature</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td><code>1</code></td>
-<td>LoRA adapter</td>
-</tr>
-<tr>
-<td>1</td>
-<td><code>2</code></td>
-<td>Image input</td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>4</code></td>
-<td>Audio input</td>
-</tr>
-<tr>
-<td>3</td>
-<td><code>8</code></td>
-<td>Cache salt</td>
-</tr>
-<tr>
-<td>4</td>
-<td><code>16</code></td>
-<td>Tools / function definitions</td>
-</tr>
-<tr>
-<td>5</td>
-<td><code>32</code></td>
-<td>Session</td>
-</tr>
-<tr>
-<td>6</td>
-<td><code>64</code></td>
-<td>RAG template</td>
-</tr>
-<tr>
-<td>7</td>
-<td><code>128</code></td>
-<td>RAG documents</td>
-</tr>
-</tbody>
-</table>
-<p>For example, the schema defines <code>192</code> as bits 6 and 7. This is descriptive API metadata only in
-the current build; setting it does not change the live hash input.</p>
+<h2 id="chwbl-tuning-sel-8">CHWBL selection (<code>sel: 8</code>)<a class="headerlink" href="#chwbl-tuning-sel-8" title="Permanent link">&para;</a></h2>
+<p>Use controlled prefix-reuse and endpoint-distribution tests to verify the
+selected algorithm. Hash affinity is not an authorization boundary.</p>
 <h3 id="configure-chwbl">Configure CHWBL<a class="headerlink" href="#configure-chwbl" title="Permanent link">&para;</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Protect the management API</p>
@@ -5473,8 +5321,7 @@ TLS-protected management endpoint and keep authorization values out of command a
 </ul>
 <p><strong>CHWBL / WRR-hash knobs appear to have no effect</strong></p>
 <ul>
-<li>Verify <code>sel</code> is <code>8</code> or <code>10</code>, then test the observed distribution. The <code>chwbl_*</code> fields are
-  stored but are not currently propagated to the proxy.</li>
+<li>Verify the selected algorithm and observed endpoint distribution.</li>
 <li>Confirm the rule is in <code>mode: 4</code> (fullproxy); L4 modes cannot inspect the request body to compute prefix hashes.</li>
 </ul>
 <p><strong>Session not sticking under <code>sel: 3</code></strong></p>
@@ -5486,9 +5333,7 @@ TLS-protected management endpoint and keep authorization values out of command a
 <ul>
 <li>On a plain pool, repeated prefixes are deliberately mapped by modulo and can concentrate
   traffic. Pushed worker metrics do not change that law. Use CHWBL for bounded prefix affinity or
-  round-robin for independent requests. Do not diagnose P/D capacity scoring from selector 9 until
-  its activation gate is corrected; normal P/D Tier 2 uses active connections plus queued requests.
-  See <a href="../../ai-gateway/vllm-integration/">vLLM Integration</a>.</li>
+  round-robin for independent requests.   See <a href="../../ai-gateway/vllm-integration/">vLLM Integration</a>.</li>
 </ul>
 <hr />
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>

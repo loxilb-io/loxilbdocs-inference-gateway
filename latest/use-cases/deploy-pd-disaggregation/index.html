@@ -3564,7 +3564,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3592,7 +3592,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -5416,15 +5416,12 @@ its own baselines:</p>
 </tr>
 <tr>
 <td><code>:9003</code></td>
-<td>true, <strong><code>kvExactMode:1</code></strong> (<code>kvZmqPort:5557</code>, <code>kvHashAlgo:sha256_cbor</code>, <code>kvWarmupSec:60</code>, <code>kvBlockSize:16</code>)</td>
+<td>true, <strong><code>kvExactMode:1</code></strong> (<code>kvZmqPort:5557</code>, <code>kvHashAlgo:sha256_cbor</code>, <code>kvBlockSize:16</code>)</td>
 <td>KV-exact overlap</td>
 <td>the method</td>
 </tr>
 </tbody>
 </table>
-<p><code>kvWarmupSec</code> is accepted but currently inert because the production path does not arm its
-start timestamp. Do not sleep for 60 seconds and assume the inventory is ready; verify
-subscriber connectivity and nonzero block inventory instead.</p>
 <p>The KV-exact rule body (<code>:9003</code>), posted to <code>http://&lt;VIP&gt;:11111/netlox/v1/config/loadbalancer</code>:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">curl</label><label for="__tabbed_2_2">loxicmd</label></div>
 <div class="tabbed-content">
@@ -5436,7 +5433,7 @@ subscriber connectivity and nonzero block inventory instead.</p>
 <a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="s1">    "sel": 0, "mode": 4, "security": 0, "host": "&lt;VIP&gt;",</span>
 <a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="s1">    "pd_disagg_mode": true, "probeRetries": 1,</span>
 <a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="s1">    "kvExactMode": 1, "kvZmqPort": 5557, "kvHashAlgo": "sha256_cbor",</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="s1">    "kvWarmupSec": 60, "kvBlockSize": 16</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="s1">    "kvBlockSize": 16</span>
 <a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="s1">  },</span>
 <a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="s1">  "endpoints": [</span>
 <a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="s1">    {"endpointIP": "&lt;prefill-1-ip&gt;", "targetPort": 8100, "weight": 1, "ep_role": 1, "nixl_port": 5600},</span>
@@ -5448,7 +5445,7 @@ subscriber connectivity and nonzero block inventory instead.</p>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># NOTE: loxicmd applies one --tcp target port to every endpoint; the decode EP's</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># targetPort 8200 (curl) cannot be set per-endpoint — post it via REST if it differs.</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="s2">"&lt;VIP&gt;"</span><span class="w"> </span>--tcp<span class="o">=</span><span class="m">9003</span>:8100<span class="w"> </span>--endpoints<span class="o">=</span><span class="s2">"&lt;prefill-1-ip&gt;:1,&lt;prefill-2-ip&gt;:1,&lt;decode-1-ip&gt;:1"</span><span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>rr<span class="w"> </span>--host<span class="o">=</span><span class="s2">"&lt;VIP&gt;"</span><span class="w"> </span>--pd-disagg<span class="w"> </span>--proberetries<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5557</span><span class="w"> </span>--kv-hash-algo<span class="o">=</span>sha256_cbor<span class="w"> </span>--kv-warmup<span class="o">=</span><span class="m">60</span><span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,prefill,decode<span class="w"> </span>--nixl-port<span class="o">=</span><span class="m">5600</span>,5600,5600
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>loxicmd<span class="w"> </span>create<span class="w"> </span>lb<span class="w"> </span><span class="s2">"&lt;VIP&gt;"</span><span class="w"> </span>--tcp<span class="o">=</span><span class="m">9003</span>:8100<span class="w"> </span>--endpoints<span class="o">=</span><span class="s2">"&lt;prefill-1-ip&gt;:1,&lt;prefill-2-ip&gt;:1,&lt;decode-1-ip&gt;:1"</span><span class="w"> </span>--mode<span class="o">=</span>fullproxy<span class="w"> </span>--select<span class="o">=</span>rr<span class="w"> </span>--host<span class="o">=</span><span class="s2">"&lt;VIP&gt;"</span><span class="w"> </span>--pd-disagg<span class="w"> </span>--proberetries<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-exact-mode<span class="o">=</span><span class="m">1</span><span class="w"> </span>--kv-zmq-port<span class="o">=</span><span class="m">5557</span><span class="w"> </span>--kv-hash-algo<span class="o">=</span>sha256_cbor<span class="w"> </span>--kv-block-size<span class="o">=</span><span class="m">16</span><span class="w"> </span>--ep-role<span class="o">=</span>prefill,prefill,decode<span class="w"> </span>--nixl-port<span class="o">=</span><span class="m">5600</span>,5600,5600
 </code></pre></div>
 </div>
 </div>
@@ -5627,7 +5624,7 @@ the <strong>same</strong> backends — two VIPs, identical endpoint lists, diffe
 <tr>
 <td><code>:9003</code></td>
 <td><strong>KV-exact</strong></td>
-<td><code>mode:4</code>, <code>pd_disagg_mode:true</code>, <code>kvExactMode:1</code>, <code>kvZmqPort:5557</code>, <code>kvHashAlgo:"sha256_cbor"</code>, <code>kvWarmupSec</code>, <code>kvBlockSize:16</code>; endpoints carry <code>ep_role</code> 1/2 + <code>nixl_port:5600</code></td>
+<td><code>mode:4</code>, <code>pd_disagg_mode:true</code>, <code>kvExactMode:1</code>, <code>kvZmqPort:5557</code>, <code>kvHashAlgo:"sha256_cbor"</code>, <code>kvBlockSize:16</code>; endpoints carry <code>ep_role</code> 1/2 + <code>nixl_port:5600</code></td>
 </tr>
 <tr>
 <td><code>:9000</code></td>

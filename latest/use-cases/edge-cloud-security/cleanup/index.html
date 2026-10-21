@@ -3339,7 +3339,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3367,7 +3367,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4674,7 +4674,7 @@ after this check. The complete LB key includes host/VIP/port/protocol/model (and
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>cat<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB</span><span class="s2">/lift-fw.txt"</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>docker<span class="w"> </span>logs<span class="w"> </span>uc7-ep<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB</span><span class="s2">/journal.jsonl"</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>jq<span class="w"> </span>-s<span class="w"> </span>--arg<span class="w"> </span>nonce<span class="w"> </span><span class="s2">"</span><span class="nv">$RUN</span><span class="s2">-lift-fw"</span><span class="w"> </span><span class="s1">'[.[] | select(.event=="uc7_receipt" and .nonce==$nonce)] | {count:length,credentials_absent:all(.key_present==false),protocols:map(.proto)}'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB</span><span class="s2">/journal.jsonl"</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>jq<span class="w"> </span><span class="s1">'.serviceArguments.model_name="edge-alias" | del(.serviceArguments.kvExactMode,.serviceArguments.kvZmqPort,.serviceArguments.kvHashAlgo,.serviceArguments.kvWarmupSec,.serviceArguments.kvBlockSize,.serviceArguments.kvEngineType,.serviceArguments.sse_mode)'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB</span><span class="s2">/model.json"</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB</span><span class="s2">/cleanup-alias.json"</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>jq<span class="w"> </span><span class="s1">'.serviceArguments.model_name="edge-alias" | del(.serviceArguments.kvExactMode,.serviceArguments.kvZmqPort,.serviceArguments.kvHashAlgo,.serviceArguments.kvBlockSize,.serviceArguments.kvEngineType,.serviceArguments.sse_mode)'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB</span><span class="s2">/model.json"</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB</span><span class="s2">/cleanup-alias.json"</span>
 <a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-i<span class="w"> </span>uc7-gw<span class="w"> </span>curl<span class="w"> </span>-sS<span class="w"> </span>--max-time<span class="w"> </span><span class="m">20</span><span class="w"> </span>--config<span class="w"> </span>/etc/loxilb/control.curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span>--data-binary<span class="w"> </span>@-<span class="w"> </span>-w<span class="w"> </span><span class="s1">'\nHTTP:%{http_code}\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/config/loadbalancer"</span><span class="w"> </span>&lt;<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB</span><span class="s2">/cleanup-alias.json"</span>
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>uc7-gw<span class="w"> </span>curl<span class="w"> </span>-sS<span class="w"> </span>--max-time<span class="w"> </span><span class="m">20</span><span class="w"> </span>--config<span class="w"> </span>/etc/loxilb/control.curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>-w<span class="w"> </span><span class="s1">'\nHTTP:%{http_code}\n'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/config/loadbalancer/hosturl/192.0.2.10/externalipaddress/192.0.2.10/port/8080/protocol/tcp?model_name=edge-alias"</span>
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>uc7-gw<span class="w"> </span>curl<span class="w"> </span>-fsS<span class="w"> </span>--max-time<span class="w"> </span><span class="m">20</span><span class="w"> </span>--config<span class="w"> </span>/etc/loxilb/control.curl<span class="w"> </span><span class="s2">"</span><span class="nv">$API</span><span class="s2">/config/loadbalancer/all"</span><span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB</span><span class="s2">/final-survivor.json"</span>

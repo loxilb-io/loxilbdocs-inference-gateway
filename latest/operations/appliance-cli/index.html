@@ -3235,7 +3235,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3263,7 +3263,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -3771,10 +3771,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#main-only-governed-lifecycle-preview" class="md-nav__link">
+  <a href="#recovery-and-update-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Main-only governed lifecycle preview
+        Recovery and update boundary
       
     </span>
   </a>
@@ -4685,10 +4685,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#main-only-governed-lifecycle-preview" class="md-nav__link">
+  <a href="#recovery-and-update-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Main-only governed lifecycle preview
+        Recovery and update boundary
       
     </span>
   </a>
@@ -4784,19 +4784,24 @@ snapshot/restore.</p>
 <td>Gateway REST lifecycle</td>
 </tr>
 <tr>
-<td>Back up or recover the assembled host, OAM database, certificates, Gateway snapshot, and Product identity</td>
-<td><code>loxicmd appliance backup/restore</code></td>
+<td>Create and verify an assembled-host backup</td>
+<td><code>loxicmd appliance backup</code></td>
 <td>Product-installed appliance backend</td>
+</tr>
+<tr>
+<td>Recover an assembled host</td>
+<td>Follow the matching Product recovery procedure</td>
+<td>Not provided by the selected CLI</td>
 </tr>
 <tr>
 <td>Update or roll back appliance software</td>
-<td><code>loxicmd appliance update/rollback</code></td>
-<td>Product-installed appliance backend</td>
+<td>Follow the matching Product procedure</td>
+<td>Not provided by the selected CLI</td>
 </tr>
 <tr>
 <td>Reset the assembled appliance</td>
-<td><code>loxicmd appliance factory-reset</code></td>
-<td>Product-installed appliance backend</td>
+<td>Follow the matching Product procedure</td>
+<td>Not provided by the selected CLI</td>
 </tr>
 </tbody>
 </table>
@@ -4809,7 +4814,7 @@ rollback.</p>
 <tr>
 <th>Command family</th>
 <th style="text-align: right;">CLI <code>v0.9.8.9-rc.2</code></th>
-<th style="text-align: right;">CLI main after <code>56bff57</code></th>
+<th style="text-align: right;">Selected CLI source</th>
 <th>Additional requirement</th>
 </tr>
 </thead>
@@ -4841,33 +4846,36 @@ rollback.</p>
 <tr>
 <td><code>restore plan/execute</code></td>
 <td style="text-align: right;"><strong>Unavailable stub; exit 6</strong></td>
-<td style="text-align: right;">Source implemented</td>
+<td style="text-align: right;"><strong>Absent</strong></td>
 <td>Matching Product backend and release qualification</td>
 </tr>
 <tr>
 <td><code>update plan/execute/status</code></td>
 <td style="text-align: right;"><strong>Unavailable stub; exit 6</strong></td>
-<td style="text-align: right;">Source implemented</td>
+<td style="text-align: right;"><strong>Absent</strong></td>
 <td>Signed bundle, matching backend, Product policy</td>
 </tr>
 <tr>
 <td><code>rollback plan/execute/status</code></td>
 <td style="text-align: right;"><strong>Unavailable stub; exit 6</strong></td>
-<td style="text-align: right;">Source implemented</td>
+<td style="text-align: right;"><strong>Absent</strong></td>
 <td>Approved release and recovery point</td>
 </tr>
 <tr>
 <td><code>factory-reset plan/execute</code></td>
 <td style="text-align: right;"><strong>Unavailable stub; exit 6</strong></td>
-<td style="text-align: right;">Source implemented</td>
+<td style="text-align: right;"><strong>Absent</strong></td>
 <td>Safety-preserving Product backend policy</td>
 </tr>
 </tbody>
 </table>
-<p>The main-only rows are <strong>not released features</strong>. Source availability does not
-prove that the installed backend advertises the required ordered capability
-matrix, that the Product contains a matching payload schema, or that an
-installed host passed the lifecycle scenario.</p>
+<p>The selected CLI is the development source pair in
+<a href="../../reference/verification-status/">Verification Status</a>. It deliberately
+excludes the host <code>restore</code>, <code>update</code>, <code>rollback</code>, and <code>factory-reset</code> families;
+these are absent commands, not currently implemented main-only previews.
+The older comparison release contains unavailable stubs for these families.
+An installed Product backend cannot make an absent CLI command available.
+Confirm its own documented recovery interface with the Product maintainer.</p>
 <h2 id="rc2-read-only-status-and-validation">rc.2 read-only status and validation<a class="headerlink" href="#rc2-read-only-status-and-validation" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>loxicmd<span class="w"> </span>appliance<span class="w"> </span>status<span class="w"> </span>--output<span class="w"> </span>json<span class="w"> </span>&gt;<span class="w"> </span>appliance-status.json
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
@@ -4914,39 +4922,12 @@ alone is not recovery evidence.</p>
 <p><code>--redact</code> is mandatory and there is no unredacted mode. The backend must
 apply its allowlist and post-generation secret scan before reporting success.
 Still treat the archive as sensitive operator evidence.</p>
-<h2 id="main-only-governed-lifecycle-preview">Main-only governed lifecycle preview<a class="headerlink" href="#main-only-governed-lifecycle-preview" title="Permanent link">&para;</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">CLI availability: main-only</p>
-<p>The following syntax exists in CLI main, not in <code>v0.9.8.9-rc.2</code>. Do not
-use it as released-product guidance. It also requires a Product-installed
-backend that advertises the exact lifecycle capability matrix.</p>
-</div>
-<p>Every lifecycle mutation is two phase:</p>
-<ol>
-<li><code>plan</code> validates inputs and returns a stable expiring plan without changing
-   the host;</li>
-<li><code>execute</code> accepts only that plan's 64-character lowercase SHA-256 and its
-   short-lived, one-time confirmation challenge.</li>
-</ol>
-<p>CLI availability: main-only</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># CLI availability: main-only</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>loxicmd<span class="w"> </span>appliance<span class="w"> </span>restore<span class="w"> </span>plan<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>/var/lib/loxilb-backups/appliance-backup.tar.age<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>--key-file<span class="w"> </span>/var/lib/loxilb-backups/appliance-backup.key<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>--output<span class="w"> </span>json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>&gt;<span class="w"> </span>restore-plan.json
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>loxicmd<span class="w"> </span>appliance<span class="w"> </span>restore<span class="w"> </span>execute<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span>--plan-hash<span class="w"> </span>0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span>--confirm<span class="w"> </span>plan-12345678<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span>--output<span class="w"> </span>json<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span>&gt;<span class="w"> </span>restore-execute.json
-</code></pre></div>
-<p>The same plan/execute shape applies to <code>update</code>, <code>rollback</code>, and
-<code>factory-reset</code>; update and rollback additionally expose a status command for
-the durable operation ID. Archive and bundle references must be absolute,
-existing regular files and may not be symlinks. Key files must satisfy the
-root-only secret-file policy.</p>
+<h2 id="recovery-and-update-boundary">Recovery and update boundary<a class="headerlink" href="#recovery-and-update-boundary" title="Permanent link">&para;</a></h2>
+<p>Do not use an older plan/execute example for an excluded command family.
+The selected CLI rejects those command paths before backend dispatch.
+Gateway configuration recovery remains available through <code>create restore</code>;
+it does not restore the host, OAM database, licenses, OS accounts or software.
+Use the exact Product version's separately qualified procedure for host recovery.</p>
 <h2 id="backend-trust-boundary">Backend trust boundary<a class="headerlink" href="#backend-trust-boundary" title="Permanent link">&para;</a></h2>
 <p>The CLI does not implement lifecycle mutations itself:</p>
 <ul>
@@ -5017,10 +4998,11 @@ Automation must require agreement between the process exit and envelope code:</p
 </tbody>
 </table>
 <h2 id="validation-boundary">Validation boundary<a class="headerlink" href="#validation-boundary" title="Permanent link">&para;</a></h2>
-<p>The rc.2 and main command paths/flags on this page are checked against their
-exact completion goldens. The main-only lifecycle is source/contract evidence,
-not installed-host, Linux runtime, Product release, GPU, or HA evidence. No
-host lifecycle mutation is performed by the documentation checks.</p>
+<p>The comparison release and selected CLI command paths are checked separately.
+The selected CLI parser rejects the excluded lifecycle families without backend
+dispatch. Supported backup/status command syntax does not prove installed-host
+recovery or Product release qualification. No host lifecycle mutation is performed
+by the documentation checks.</p>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="../backup-restore/">Configuration Persistence, Backup, and Restore</a></li>

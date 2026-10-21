@@ -3343,7 +3343,7 @@
   <span class="md-ellipsis">
     
   
-    AI Safety Scanning
+    AI Request Security
   
 
     
@@ -3371,7 +3371,7 @@
   <span class="md-ellipsis">
     
   
-    OPA L4 Policy
+    Firewall Policy Verification
   
 
     
@@ -4761,15 +4761,17 @@ The command below selects one of the 30 bodies using <code>MODEL_KEY</code>, <co
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>jq<span class="w"> </span>--arg<span class="w"> </span>v<span class="w"> </span><span class="s2">"</span><span class="nv">$VIP</span><span class="s2">"</span><span class="w"> </span>--argjson<span class="w"> </span>p<span class="w"> </span><span class="s2">"</span><span class="nv">$PORT</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--arg<span class="w"> </span>a<span class="w"> </span><span class="s2">"</span><span class="nv">$WORKER1</span><span class="s2">"</span><span class="w"> </span>--arg<span class="w"> </span>b<span class="w"> </span><span class="s2">"</span><span class="nv">$WORKER2</span><span class="s2">"</span><span class="w"> </span>--arg<span class="w"> </span>c<span class="w"> </span><span class="s2">"</span><span class="nv">$WORKER3</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>--argjson<span class="w"> </span>backend<span class="w"> </span><span class="s2">"</span><span class="nv">$BACKEND_PORT</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="s1">'.serviceArguments.externalIP=$v | .serviceArguments.host=$v |</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s1">   .serviceArguments.port=$p | .endpoints[0].endpointIP=$a |</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s1">   .endpoints[1].endpointIP=$b | .endpoints[2].endpointIP=$c |</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s1">   .endpoints[].targetPort=$backend'</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$PACKAGE</span><span class="s2">/matrix-configurations/</span><span class="nv">$MODEL_KEY</span><span class="s2">-</span><span class="nv">$ENGINE</span><span class="s2">-</span><span class="nv">$ROUTING_MODE</span><span class="s2">.json"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$RUN</span><span class="s2">/model-engine-gateway.json"</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>jq<span class="w"> </span>.<span class="w"> </span><span class="s2">"</span><span class="nv">$RUN</span><span class="s2">/model-engine-gateway.json"</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="s1">'del(.serviceArguments.kvWarmupSec) |</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="s1">   .serviceArguments.externalIP=$v | .serviceArguments.host=$v |</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="s1">   .serviceArguments.port=$p | .endpoints[0].endpointIP=$a |</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="s1">   .endpoints[1].endpointIP=$b | .endpoints[2].endpointIP=$c |</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="s1">   .endpoints[].targetPort=$backend'</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="s2">"</span><span class="nv">$PACKAGE</span><span class="s2">/matrix-configurations/</span><span class="nv">$MODEL_KEY</span><span class="s2">-</span><span class="nv">$ENGINE</span><span class="s2">-</span><span class="nv">$ROUTING_MODE</span><span class="s2">.json"</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$RUN</span><span class="s2">/model-engine-gateway.json"</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>jq<span class="w"> </span>.<span class="w"> </span><span class="s2">"</span><span class="nv">$RUN</span><span class="s2">/model-engine-gateway.json"</span>
 </code></pre></div>
-<p>The command sets both VIP fields, all three workers and the allocated service
+<p>The command omits the legacy warmup field from the retained input snapshot, then
+sets both VIP fields, all three workers and the allocated service
 port from Step 1; review the resulting JSON before POST. Default
 <code>targetPort</code> and <code>probeport</code> are 8000. QA also used a separate receipt collector;
 its instrumented path does not establish direct-connection performance.</p>
