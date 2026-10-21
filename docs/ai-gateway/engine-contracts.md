@@ -196,6 +196,4 @@ contracts, functional results, performance and release support are separate lane
 
 The SGLang rank-1 examples preserve the official tokenizer/template and independent
 fixtures. For R1 7B, keep the supplied SGLang-scoped `completionsBos:true` metadata;
-it is not a reason to change another engine's profile. `kvWarmupSec` is accepted
-but inert in the reviewed path; subscriber, attestation and inventory evidence
-are required instead of waiting for that field's nominal duration.
+it is not a reason to change another engine's profile.

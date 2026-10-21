@@ -60,7 +60,7 @@ and settlement charge every applicable TPM bucket.
 
 | Scope | Identity source | Resolution and isolation |
 |---|---|---|
-| Key | Validated `X-Api-Key` | Key RPS and the implementation's post-response TPM debt latch are active; primary Swagger text must be corrected before this becomes a published support guarantee |
+| Key | Validated `X-Api-Key` | Key RPS plus pre-admission TPM reservation and usage settlement on supported accounting paths; post-response debt can affect later requests. Verify the active protocol and service |
 | User | Verified JWT tenant plus user claim | Explicit user row, otherwise rule/global user default, otherwise unlimited |
 | User + model | Verified JWT user and effective model | Explicit pair only; debt must not affect another model or user |
 | Tenant | API-key tenant or verified JWT tenant | Explicit tenant row, otherwise rule/global tenant default, otherwise unlimited; caps the sum of its users/keys |

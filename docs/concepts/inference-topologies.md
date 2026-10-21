@@ -59,8 +59,6 @@ flowchart TD
 - `kvExactMode: 3` requires fullproxy and cannot be combined with P/D.
 - An omitted `kvHashAlgo` lets the gateway choose the coherent engine default. This is the safest default.
 - One rule represents one engine. To change `kvEngineType`, delete and recreate the rule.
-- `kvWarmupSec` is currently inert. Verify endpoint health, event connectivity, and nonzero
-  inventory instead of assuming a configured delay made a pool ready.
 - `cb_enable` and origin-5xx demotion improve later endpoint selection; they do not retry or
   mask the current origin response.
 
@@ -133,4 +131,4 @@ The important correction is that SGLang is not restricted to a single-role pool.
 | Separate prefill and decode capacity | Sequential P/D | Concurrent P/D |
 | Exact prefill inventory inside P/D | Mode 1 | Mode 1 |
 
-Start with the least complex shape that meets the workload goal. P/D adds transfer networking and paired failure handling. KV-exact routing adds tokenizer, block-size, hash, event-port, and inventory-readiness requirements. The accepted `kvWarmupSec` field is currently inert, so verify readiness from subscriber and inventory metrics.
+Start with the least complex shape that meets the workload goal. P/D adds transfer networking and paired failure handling. KV-exact routing adds tokenizer, block-size, hash, event-port, and inventory-readiness requirements. Verify readiness from subscriber and inventory metrics.

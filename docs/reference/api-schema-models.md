@@ -6,7 +6,7 @@ and `api/swagger-extras.yml`; a new or removed definition fails the docs gate
 until its public relevance is reviewed here.
 
 - Public schema baseline: `47803fb660ed54cd1f180b616db628461ad85d1a`
-- Reviewed Gateway `main`: `571213927ec0a4a2e1b94b92d77f9c82f80f39c0`
+- Reviewed Gateway `main`: `ecfc3c12376bad712c61f6781fe13a9e5fc3fd9e`
 - Added definitions: **46**
 - Removed definitions: **0**
 - Evidence class: **source/static contract only**
@@ -30,7 +30,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 
 ## `api/swagger.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/571213927ec0a4a2e1b94b92d77f9c82f80f39c0/api/swagger.yml). Definition count changed from **147** to **191**; **44** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/ecfc3c12376bad712c61f6781fe13a9e5fc3fd9e/api/swagger.yml). Definition count changed from **147** to **191**; **44** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |
@@ -77,11 +77,11 @@ referenced objects, and braces identify a closed enum from Swagger.
 | `UserModelRateLimit` | `nested-component` | One model-specific token quota nested in a user's QoS row. | none | `model:string`, `tokens_per_min:integer(int64)` | [Details](../operations/ai-qos.md) |
 | `UserRateLimitEntry` | `direct-operation` | Stored per-user RPS, burst, aggregate TPM, and per-model quota row. | `tenant_id:string`, `user_id:string` | `burst_size:integer(int64)`, `model_limits:array<UserModelRateLimit>`, `rps:integer(int64)`, `tokens_per_min:integer(int64)`, `updated_at:string(date-time)` | [Details](../operations/ai-qos.md) |
 | `UserRateLimitMod` | `direct-operation` | Replacement request for a user's explicit and per-model quota rows. | `tenant_id:string`, `user_id:string` | `burst_size:integer(int64)`, `model_limits:array<UserModelRateLimit>`, `rps:integer(int64)`, `tokens_per_min:integer(int64)` | [Details](../operations/ai-qos.md) |
-| `UserSummary` | `direct-operation` | Read-only account identity that excludes password material. | none | `created_at:string`, `delegation_allowed:boolean`, `id:integer`, `role:string{admin/viewer}`, `username:string` | [Details](../security/management-api-authentication.md) |
+| `UserSummary` | `direct-operation` | Source-declared account identity fields. | none | `created_at:string`, `delegation_allowed:boolean`, `id:integer`, `role:string{admin/viewer}`, `username:string` | [Details](../security/management-api-authentication.md) |
 
 ## `api/swagger-extras.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/571213927ec0a4a2e1b94b92d77f9c82f80f39c0/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/ecfc3c12376bad712c61f6781fe13a9e5fc3fd9e/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |

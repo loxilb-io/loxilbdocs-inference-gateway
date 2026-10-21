@@ -124,7 +124,8 @@ The command below selects one of the 30 bodies using `MODEL_KEY`, `ENGINE` and
 jq --arg v "$VIP" --argjson p "$PORT" \
   --arg a "$WORKER1" --arg b "$WORKER2" --arg c "$WORKER3" \
   --argjson backend "$BACKEND_PORT" \
-  '.serviceArguments.externalIP=$v | .serviceArguments.host=$v |
+  'del(.serviceArguments.kvWarmupSec) |
+   .serviceArguments.externalIP=$v | .serviceArguments.host=$v |
    .serviceArguments.port=$p | .endpoints[0].endpointIP=$a |
    .endpoints[1].endpointIP=$b | .endpoints[2].endpointIP=$c |
    .endpoints[].targetPort=$backend' \
@@ -133,7 +134,8 @@ jq --arg v "$VIP" --argjson p "$PORT" \
 jq . "$RUN/model-engine-gateway.json"
 ```
 
-The command sets both VIP fields, all three workers and the allocated service
+The command omits the legacy warmup field from the retained input snapshot, then
+sets both VIP fields, all three workers and the allocated service
 port from Step 1; review the resulting JSON before POST. Default
 `targetPort` and `probeport` are 8000. QA also used a separate receipt collector;
 its instrumented path does not establish direct-connection performance.

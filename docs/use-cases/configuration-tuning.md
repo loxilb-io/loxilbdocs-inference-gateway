@@ -19,7 +19,7 @@ The hierarchy is configured in a few distinct places; each ladder row maps to sp
 | Rule shape (P/D vs single-pool) | REST rule | `mode`, `pd_disagg_mode`, `ep_role`, `nixl_port` |
 | Tier 0 stickiness | REST rule | `pd_session_ttl_sec` (P/D); `sel:3` / session headers (single-pool) |
 | Tier 1 trie | REST rule | `pd_cache_aware_mode`, `pd_cache_threshold`, `pd_balance_abs_threshold` |
-| Tier 1.5 KV-exact | REST rule + LoxiLB env + vLLM flags | `kvExactMode`, `kvZmqPort`, `kvHashAlgo`, `kvBlockSize`, `kvWarmupSec`; `LLB_KV_NONE_HASH_SEED`, `LOXILB_KV_MAX_BLOCKS`; vLLM parity triad |
+| Tier 1.5 KV-exact | REST rule + LoxiLB env + vLLM flags | `kvExactMode`, `kvZmqPort`, `kvHashAlgo`, `kvBlockSize`, `LLB_KV_NONE_HASH_SEED`, `LOXILB_KV_MAX_BLOCKS`; vLLM parity triad |
 | Tier 1.5 blend law | LoxiLB env | `LOXILB_KV_LB_MODE`, `LOXILB_KV_MEAN_LOAD_FACTOR`, `LOXILB_KV_LOAD_PENALTY`, `LOXILB_KV_SPILL_RELIEF`, `LOXILB_KV_CAP_SUM_MILLI` |
 | Admission gate | LoxiLB env | `LLB_PD_MAX_INFLIGHT_PER_EP`, `LLB_PD_QUEUE_DEPTH_PER_EP`, `LLB_PD_MAX_PARK_SEC`, `LLB_PD_MAX_TOTAL_INFLIGHT` |
 | Single-pool cache affinity | REST rule | `sel:8/9/10`; current CHWBL constants are fixed in the proxy |
@@ -37,7 +37,7 @@ Endpoint: `POST http://192.0.2.254:11111/netlox/v1/config/loadbalancer`.
 !!! warning "Field-casing trap (silent)"
     `pd_disagg_mode`, `pd_cache_aware_mode`, `pd_session_ttl_sec`, `pd_cache_threshold`,
     `pd_balance_abs_threshold`, `ep_role`, `nixl_port` are **snake_case**; `kvExactMode`,
-    `kvZmqPort`, `kvHashAlgo`, `kvBlockSize`, `kvWarmupSec`, `externalIP`, `targetPort` are
+    `kvZmqPort`, `kvHashAlgo`, `kvBlockSize`, `externalIP`, `targetPort` are
     **camelCase**. A wrong-cased field is silently dropped — the API does not error, the feature
     just never engages.
 
@@ -152,10 +152,7 @@ mapped cleanly:
 curl -s "http://<endpoint-ip>:8100/metrics" | grep 'vllm:cache_config_info'
 ```
 
-`vllm:cache_config_info` carries `num_gpu_blocks` as a label. Confirm
-`max(num_gpu_blocks) ≥ 4 × min(num_gpu_blocks)` across the fleet before running a future
-capacity-routing validation. Do not interpret the current placement result as proof that the
-release-blocked selector-9 arm is active.
+Read allocated capacity as an observation; verify placement separately.
 
 ## Per-layer enablement matrix
 
@@ -167,11 +164,11 @@ What turns each layer on, and the *fastest* check that it engaged (metrics on
 | P/D ladder | rule: `mode:4`, `pd_disagg_mode:true`, ≥1 `ep_role:1` + ≥1 `ep_role:2` | `loxilb_ai_pd_requests_total` advances |
 | Tier 0 | on by default under P/D (`pd_session_ttl_sec`) | `loxilb_ai_pd_session_hits_total` advances on repeat `X-Conversation-Id` |
 | Tier 1 | rule: `pd_cache_aware_mode:true` | repeat-prefix requests pin; imbalance bypass visible in logs |
-| Tier 1.5 | rule: `kvExactMode:1` + triad + tokenizer; `kvWarmupSec` is currently inert | `loxilb_pd_kv_tier15_hits_total{ep_idx}` advances; `loxilb_pd_kv_blocks` > 0; `loxilb_kv_subscriber_connected` = 1 |
+| Tier 1.5 | rule: `kvExactMode:1` + triad + tokenizer | `loxilb_pd_kv_tier15_hits_total{ep_idx}` advances; `loxilb_pd_kv_blocks` > 0; `loxilb_kv_subscriber_connected` = 1 |
 | Blend law | `LOXILB_KV_LB_MODE` (default `hard`) | `loxilb_pd_kv_tier15_spills_total` under hot-prefix load |
 | Cold recovery | default on; tune with `LOXILB_KV_COLDSTART_SEED_N` and `_MIN_BLOCKS` | `loxilb_pd_kv_tier15_cold_seeds_total` advances only while an eligible endpoint is cold |
 | Admission | `LLB_PD_MAX_INFLIGHT_PER_EP` > 0 | `loxilb_pd_admission_queued_total` / `loxilb_pd_admission_shed_total` |
-| Single-pool affinity | rule: `sel:8` or `sel:10` | same-prefix requests land on one endpoint; test the fixed runtime cap because stored `chwbl_*` values are inert |
+| Single-pool affinity | rule: `sel:8` or `sel:10` | compare repeated-prefix placement and actual endpoint load |
 
 ## Tuning playbook
 
@@ -197,10 +194,8 @@ can, run `adaptive` and let the law move.
 
 ### Warmup, timeouts, session TTL
 
-- `kvWarmupSec`: do not tune this as a readiness delay; it is currently inert. Gate rollout on
-  subscriber connectivity and nonzero inventory instead.
-- `LLB_PD_PREFILL_TIMEOUT_SEC`: size to your p99.9 prefill duration. For 32k-context on
-  L4-class GPUs use **180**; the 30 s default will time out the bulk of saturated traffic.
+- `LLB_PD_PREFILL_TIMEOUT_SEC`: size to your p99.9 prefill duration. Use completed-request and timeout observations from the selected workload; no
+  universal GPU-specific value is prescribed.
 - `pd_session_ttl_sec`: match your conversational think-time. Too long pins conversations to
   workers whose cache has moved on; too short forfeits the multi-turn affinity win.
 
@@ -235,9 +230,6 @@ and completed-traffic evidence before performance interpretation.
    tokenizer / vLLM version).
 2. **Silent fallback (no inventory):** `loxilb_pd_kv_blocks` = 0 + `kv_subscriber_connected` = 1 ⇒ vLLM not
    publishing (missing `--kv-events-config`, wrong bind, or a decode endpoint mistagged `ep_role:1`).
-3. **Unexpected warmup misses:** the production path currently never arms `kv_warmup_start`, so
-   `reason="warmup"` should stay at zero. A nonzero value indicates a changed build or test-only
-   path; verify the exact artifact before interpreting the result.
 
 ## Operational cautions
 

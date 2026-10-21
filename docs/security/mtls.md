@@ -6,11 +6,6 @@ The current active mTLS path can verify client certificates on the frontend of
 a FullProxy service. Configure it through the `mtls_frontend` object nested in
 `serviceArguments`; there is no standalone `/config/mtls` endpoint.
 
-!!! warning "Current implementation boundary"
-    The OpenAPI model also declares an inline certificate-data field for the
-    frontend. The data-plane wiring applies only the frontend file-path fields
-    documented below. Do not depend on `client_ca_cert_data` for enforcement.
-    API acceptance or read-back does not prove that field is active.
 
 This page covers the client-facing side. Verification of backend certificates
 and the client certificate the gateway presents to backends are configured by
@@ -136,8 +131,7 @@ unredacted certificates in public evidence.
 
 Production qualification requires frontend positive/negative handshake tests,
 certificate rotation, CRL refresh, restart, resource-load, and rollback tests
-on the exact image. Inline frontend certificate data remains an API-contract
-surface until implementation and end-to-end tests prove enforcement. Backend
+on the exact image. Backend
 verification and the backend client certificate are qualified separately; see
 [Backend TLS](backend-tls.md).
 
@@ -146,7 +140,7 @@ verification and the backend client certificate are qualified separately; see
 - [Backend TLS Verification and Client Certificates](backend-tls.md)
 - [Configuration reference](../ai-gateway/configuration-reference.md)
 - [Management API Authentication](management-api-authentication.md)
-- [OPA L4 Policy](opa-l4.md)
+- [Firewall Policy Verification](opa-l4.md)
 
 For the integrated configure, readback, traffic, receipt and rollback sequence, see the
 [Admission Control, Flow Control and QoS lab](../use-cases/admission-flow-control/index.md).

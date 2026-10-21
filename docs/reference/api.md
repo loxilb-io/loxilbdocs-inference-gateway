@@ -41,86 +41,35 @@ workflow for readiness, authenticated create, independent traffic validation,
 metrics, and exact cleanup. This reference describes contracts and links to
 that workflow rather than maintaining a second copy of the commands.
 
-### Development contract deltas
-
-The current development source has several known wire-contract differences
-that must be resolved or explicitly accepted before release:
-
-| Area | Declared contract | Current handler behavior |
-|---|---|---|
-| `POST /auth/users` success | `201` with a `User` body | `200` with `{ "result": "Success" }` |
-| Caller-supplied `api_key` create response | Description says `raw_key` is omitted; schema marks it required | Handler supplies an empty `raw_key` value |
-| Generated key/quota store failures | Key routes currently enumerate generic `500`, not store-specific `503` | Recognized unconfigured/unavailable store conditions return `503` |
-| Raw API-key `PATCH` store failures | Companion spec lists generic `500` | Recognized unconfigured/unavailable store conditions return `503` |
-| `/config/opa/watcher` | Appears in the primary Swagger and companion spec | Raw global middleware intercepts the path first when registered |
-
-Generated clients may not model these responses correctly. Use the HTTP status
-and sanitized body during development validation, then update clients only
-after the release contract is frozen.
-
-### Auth/QoS implementation versus Swagger
-
-For runtime behavior, the reviewed implementation and its focused tests take
-precedence over stale descriptive text. That does not make a drifted feature a
-released support guarantee: update both Swagger sources, regenerate models,
-and repeat release qualification before removing the limitation.
-
-The frozen documentation contract reviewed both `api/swagger.yml` and
-`api/swagger-extras.yml`. The companion file owns the raw API-key PATCH
-contract; the primary file owns JWT profiles, LB credential fields, and the
-user/default QoS APIs.
-
-| Area | Implementation behavior | `swagger.yml` state | `swagger-extras.yml` state | Required upstream correction |
-|---|---|---|---|---|
-| Per-key TPM | Key settlement charges `tokens_per_min`; debt denies the next request and exports key-scoped metrics | `ApiKeyCreateRequest`, `ApiKeySummary`, and related prose incorrectly say stored-only/not connected | PATCH description correctly says the value is enforced post-hoc | Make primary descriptions match implementation, keep PATCH wording aligned, regenerate models/embedded spec, and qualify the active path |
-| API-key PATCH fields | Handler updates `allowed_models`, `enabled`, `rate_limit_rps`, `burst_size`, and `tokens_per_min` with presence semantics | Generated path is intentionally a marked stub and does not enumerate the body fields | Companion schema is authoritative and enumerates all five fields | Keep the stub/companion split explicit; test union-based client validation so the primary stub is never mistaken for the whole PATCH contract |
-| JWT profile name | Profile creation rejects names longer than 63 bytes; the LB reference has the same limit | `jwt_auth_profile` has `maxLength: 63`, but `JWTAuthProfileEntry.name` lacks the matching bound | Not defined | Add `maxLength: 63` to profile `name` so invalid configuration is rejected by schema before handler dispatch |
-| JWT numeric and algorithm validation | Negative leeway/refresh is rejected; algorithms are a closed asymmetric set and `none`/HMAC are always rejected | Constraints are described in prose, but `leeway_sec`/`refresh_sec` lack `minimum: 0` and `algs.items` lacks the closed enum | Not defined | Encode the machine-checkable minimum and algorithm enum; retain handler tests as the authority for http(s)-only URL and safety checks |
-| Tenant/user model row | Handler requires a nonempty model and rejects unsafe identity delimiters/prefixes | `TenantModelRateLimit.model` and `UserModelRateLimit.model` are described as required but are not in each schema's `required` list | Not defined | Add `required: [model]`; preserve handler validation for cross-field and reserved-prefix rules that OpenAPI 2.0 cannot express cleanly |
-| Rule/default QoS conditions | `scope=global` forbids `rule_ident`; `scope=rule` requires it; all-zero rows are rejected; rule values override global values field by field | Prose is accurate, but the schema cannot enforce the conditional requirement or nonzero-row invariant | Not defined | Retain explicit prose and negative handler tests; add vendor/schema constraints only if generated clients and validators honor them consistently |
-
-No mismatch was found in the reviewed five-state `api_key_auth` description,
-the `jwt_auth_profile` pairing/deletion rules, or the required-policy status
-split: unknown key is `401`, while an unevaluable required policy is
-`503 policy_store_unavailable`. Those still require an independent backend
-receipt delta of `0`; Swagger text alone cannot prove non-delivery.
+The documentation uses the selected source pair in
+[Verification Status](verification-status.md). A declared response schema is
+source metadata; it is not proof that every handler or generated binder returns
+that response. Follow the tested Quickstart for its exact response assertions.
 
 ## Authentication and public exceptions
 
-The primary Swagger applies `BearerAuth` globally. The current runtime
-evaluates that bearer credential only when user-service, OAuth, or manual-token
-management authentication is enabled.
+The primary Swagger applies `BearerAuth` globally. Client authorization must be verified through the deployment's qualified
+management endpoint.
 
 !!! danger "Swagger security does not enable an authenticator"
     With none of those modes configured, the current authenticator returns an unrestricted
-    principal and protected-looking operations are callable without credentials. Enable one mode,
-    protect port `11111`, and verify an unauthenticated mutation returns `401`.
+    principal and protected-looking operations are callable without credentials. Protect port `11111` and verify an unauthenticated configuration read is rejected.
 
 Explicit public or conditional operations are:
 
 | Operation | Runtime purpose |
 |---|---|
 | `GET /meta` | Generated POST-field metadata |
-| `POST /auth/login` | User-service login |
-| `POST /auth/users` | Handler-enforced admin create or one-time loopback bootstrap |
 | `GET /metrics` | Prometheus scrape; export still depends on metrics configuration |
 | `GET /version` | Product and build identity |
-| `GET /oauth/{provider}` | Begin OAuth flow |
-| `GET /oauth/{provider}/callback` | OAuth callback |
-| `GET /oauth/{provider}/token` | OAuth token refresh path |
-
-`POST /auth/users` has `security: []` because the generated chain cannot
-express “loopback peer and empty user table.” It is not unconditionally open in
-the development implementation. See
-[Management API Authentication](../security/management-api-authentication.md).
 
 Prepare a reusable protected header:
 
 --8<-- "snippets/common/control-api-header.md"
 
-## Complete endpoint-family catalog
+## Published endpoint families { #complete-endpoint-family-catalog }
 
-The patterns below cover every path family in the current primary Swagger.
+The patterns below list the endpoint families covered by this guide.
 Plural braces such as `{key}` stand for the concrete path parameters shown in
 the Swagger document.
 
@@ -129,11 +78,10 @@ the Swagger document.
 | Configuration lifecycle | `POST /config/import`, `GET /config/export`, `GET /config/snapshot`, `POST /config/restore`, `POST /config/persist` | Import/export, transactional snapshot/restore, and durable persistence |
 | Recovery and capability status | `GET /status/ready`, `GET /status/capabilities`, `GET /diagnostics`, `GET/PUT /maintenance` | Main-only configuration readiness, optional launch-environment capability readiness, bounded diagnostics, and operator configuration-write gate; absent from Gateway `v0.9.8.9-rc.1` |
 | API metadata | `GET /meta` | Public generated metadata for POST operations |
-| Authentication and users | `POST /auth/login`, `POST /auth/logout`, `GET/POST /auth/users`, `PUT/DELETE /auth/users/{id}`, `POST /auth/token/upgrade` | User login/logout, exact-role user administration, and manual-token update |
 | Load balancers | `POST /config/loadbalancer`, `GET/DELETE /config/loadbalancer/all`, and `GET/PATCH/DELETE` id/name/VIP/host-key variants | Core L4/L7 and AI service rules, status, and statistics |
 | L7 policy | `GET/POST /config/l7policy`, `GET/DELETE /config/l7policy/id/{id}` | L7 policy lifecycle |
 | Certificates and SNI | `POST /config/cert`, `GET/PUT/DELETE /config/cert/{certId}`, `GET/POST/DELETE /sni/certificates` | TLS certificate and SNI mapping lifecycle. `POST /config/cert` answers `201` with the `certId` the certificate is stored under, including one the gateway minted because the request named none. A certificate entry has a `usage` (`server`, `ca`, `client`); `ca` and `client` entries serve the backend leg, see [Backend TLS](../security/backend-tls.md) |
-| HTTP tracing | `POST /config/trace/enable`, `POST /config/trace/disable`, `GET /config/trace/status`, `GET/POST /config/trace/otlp`, catalog/parser paths | Trace control, OTLP exporter, and parser assignment; `GET /config/trace/catalogs` is **not implemented** |
+| HTTP tracing | `POST /config/trace/enable`, `POST /config/trace/disable`, `GET /config/trace/status`, `GET/POST /config/trace/otlp`, catalog/parser paths | Trace control, OTLP exporter, and parser assignment |
 | L4 tracing | `POST /config/l4trace/enable`, `POST /config/l4trace/disable`, `GET /config/l4trace/status`, `PUT /config/l4trace/sampling`, `POST /config/l4trace/stats/reset` | L4 event tracing and sampling control |
 | Connection and routing state | `GET /config/conntrack/all`, `GET /config/port/all`, `GET/POST/DELETE /config/route...` | Conntrack, interfaces, and static routes |
 | Sessions | `GET/POST/DELETE /config/session...`, `GET/POST/DELETE /config/sessionulcl...` | Session and ULCL session configuration |
@@ -148,25 +96,15 @@ the Swagger document.
 | IPsec | `GET/POST /config/ipsec`, tunnel, action, peer-config, SA, stats, certificate, validation, and CA-certificate paths | IPsec global state, tunnels, actions, SAs, stats, and certificate lifecycle |
 | BGP | Neighbor, defined-set, policy-definition, apply-policy, and global paths under `/config/bgp` | BGP neighbors and policy configuration |
 | Prometheus | `GET /metrics`, `GET/POST/DELETE /config/metrics` | Public scrape plus protected export configuration |
-| GPU and workers | `POST /config/gpu/enable`, `POST /config/gpu/disable`, `GET /config/gpu/status`, cleanup, `GET/POST /config/worker/metrics` | GPU-aware selection and worker telemetry |
-| PII controls | Enable, configure, URL-pattern, status, and stats paths under `/config/pii` | PII inspection configuration and counters |
-| Llama Firewall | Enable, configure, scanner, status, stats, and health paths under `/config/llamafirewall` | Llama Firewall integration and health |
+| GPU and workers | `POST /config/gpu/enable`, `POST /config/gpu/disable`, `GET /config/gpu/status`, cleanup, `GET/POST /config/worker/metrics` | Worker telemetry ingestion and status |
 | Product identity | `GET /version` | Public product, version, and build identity |
 | BFD | `GET/POST/DELETE /config/bfd...` | BFD session lifecycle |
-| Legacy metric resources | Twelve `GET /metrics/{metric-family}` paths | **Not implemented**; use `GET /metrics` instead |
 | Logs | `GET /logs`, `GET /log-archives`, `GET /log-archives/{filename}` | Filtered live logs and archive download |
-| Node graph | `GET /nodegraph/all`, `GET /nodegraph/{service}` | **Not implemented** in the primary API |
-| OAuth | Provider, callback, and token `GET` paths under `/oauth/{provider}` | Public OAuth flow endpoints when OAuth is enabled |
 | CORS | `GET/POST /config/cors...`, `DELETE /config/cors/{cors_url}` | CORS origin lifecycle |
 | AI keys, JWT, and quotas | API-key paths; `GET/POST /config/ai/jwtauthprofile`; `DELETE /config/ai/jwtauthprofile/{name}`; tenant, user, and defaults rate-limit paths | Data-plane credentials and the quota ladder; independent from management authentication |
 | Engine and KV discovery | `GET /config/ai/model-profiles[/{profile_id}]`; `GET .../kvexactstatus` | Read-only published profile discovery and dedicated desired/enforced KV binding status; current main, REST-only |
 | Sockmap control | `POST .../sockmapreset` | Close this service's currently accelerated connections without changing `sockMapMode`; current main, REST-only |
-| OPA watcher | `GET/POST/DELETE /config/opa/watcher` | Runtime is intercepted by the raw handler; use the companion contract |
 
-The twelve not-implemented legacy metric paths are `flowcount`, `hostcount`,
-`lbrulecount`, `newflowcount`, `requestcount`, `errorcount`,
-`processedtraffic`, `lbprocessedtraffic`, `epdisttraffic`,
-`servicedisttraffic`, `fwdrops`, and `reqcountperclient`.
 
 ### Configuration lifecycle and recovery operations
 
@@ -222,8 +160,7 @@ event-stream, or data-plane readiness.
 
 Worker metric updates do not make a plain `sel: 9` rule capacity-aware. That path uses
 prefix-affinity, conversation-affinity, and healthy-endpoint fallbacks without consuming pushed
-worker metrics. A P/D capacity-aware scorer exists, but its activation is currently release-blocked
-because the gate checks a mutable endpoint cursor instead of the configured selector.
+worker metrics. Telemetry ingestion is separate from placement behavior.
 
 ## Worker telemetry contract
 
@@ -263,8 +200,7 @@ curl --fail-with-body --silent --show-error \
 
 `GET /config/worker/metrics` returns `workers[]` containing these entries and a
 `monitoring_enabled` boolean. A successful update proves telemetry ingestion only; it does not
-prove least-loaded placement, and the current P/D selector-9 capacity activation remains
-release-blocked.
+prove least-loaded placement.
 
 ## Load-balancer rules
 
@@ -349,37 +285,6 @@ profile with `GET /config/ai/model-profiles`, create or replace the rule, then v
 `kvexactstatus` response. See
 [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md).
 
-## Management users and status codes
-
-The current authorization model uses exact `admin` and `viewer` roles. Admins
-may read and mutate. Viewers may call `GET` and may log out, but other mutations
-return `403`. Unknown roles fail closed.
-
-!!! danger "Current authentication release blockers"
-    OAuth validation currently produces a hard-coded `admin` principal; it does not map an IdP
-    role. `GET /auth/users` is viewer-readable and currently exposes stored password material.
-    JWT signing uses a hard-coded key, and OAuth access/refresh token files are created with mode
-    `0644`. Current password writers and login both use bcrypt, but the exact release image must pass
-    the password-rotation regression probe. Do not release this development implementation for
-    production management access until the remaining issues are corrected and regression-tested.
-
-!!! warning "Logout does not currently revoke the normal bearer token"
-    The logout handler passes the literal `Bearer ...` header value to an exact token-key delete.
-    Stored keys do not contain that prefix, so a normal bearer token remains valid after the current
-    logout response. Treat logout-based revocation as release-blocked.
-
-| Status | Interpretation |
-|---|---|
-| `401` | Missing, invalid, expired, or non-management credential |
-| `403` | Authenticated management identity lacks authority |
-| `409` | Conflicting state or another protected operation is in progress |
-| `500` | Operation failed internally; inspect a sanitized error body |
-| `503` | Maintenance or a recognized credential/key-store dependency is unavailable |
-
-Generated handlers normally return the Swagger `Error` envelope. Raw handlers
-may return a minimal `{ "error": "..." }` envelope; authentication failures on
-the development raw path use the generated-style error envelope.
-
 ## AI keys and tenant quotas
 
 | Method | Path | Purpose |
@@ -417,10 +322,10 @@ independent of `sse_mode` and `pd_disagg_mode`. A required policy that cannot
 be evaluated returns `503 policy_store_unavailable`; an unknown key returns
 `401 invalid_api_key`. Require backend receipt delta `0` for both.
 
-Per-key `tokens_per_min` is enforced by current code/unit/integration evidence,
-but the primary Swagger description incorrectly says stored-only metadata.
-The companion PATCH description matches the implementation. Published support
-remains pending correction and release qualification.
+Per-key `tokens_per_min` reserves a request budget before backend admission and
+settles it from response usage. The selected primary Swagger describes both
+stages. Confirm the
+active protocol path and release evidence before making deployment claims.
 
 See [API Key Management](../ai-gateway/api-key-management.md) and
 [AI Key Store Operations](../operations/ai-key-store.md). JWT profile and
@@ -454,3 +359,27 @@ fields before applying configuration, especially across mixed versions.
 - [Log API Operations](../operations/log-api.md)
 - [Model Profiles and KV-Exact Readiness](../ai-gateway/model-profiles-kv-readiness.md)
 - [Sockmap Acceleration](../operations/sockmap-acceleration.md)
+
+## Selected-source contract notes
+
+The source pair in [Verification Status](verification-status.md) declares
+`EndPointHostState.epPort` as an integer from 0 to 65535 with explicit
+`x-nullable: false`; its Go field remains a value integer. That annotation
+alone is not a new runtime null-rejection test. Inspect the deployed binder
+and response before relying on an input-error contract.
+
+The current snapshot declaration uses schema `1.12`, including JWT profiles,
+network identity, half-close policy, BGP policy assignments and audit-sink
+configuration. See [Backup and Restore](../operations/backup-restore.md) for
+coverage and external-secret boundaries. The current BGP startup declaration
+reuses an identical running core and reconciles `SetNextHopSelf`; a running
+ASN/router-ID/listen-port change is refused with `400`. Review a scoped
+snapshot replacement instead of treating startup as a general replacement.
+These are source contracts, not installed-host recovery results.
+
+An L7 `FORWARD` target selects within the listener's base endpoint pool.
+Endpoint references restrict selection to those base-pool members, with
+round-robin or weighted round-robin selection and shared health/accounting;
+`poolId` does not resolve an independent pool. P/D rules enable event-stream
+detection even when `sse_mode` is false. Other rules use the explicit SSE
+opt-in described in [SSE and Quota Management](../ai-gateway/sse-quota-management.md).

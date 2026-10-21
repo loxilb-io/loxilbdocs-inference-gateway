@@ -60,22 +60,14 @@ separately authenticated and encrypted network. The Gateway does not currently
 offer an xSync TLS or peer-token option that can substitute for that network
 control.
 
-`--rpc=grpc` starts the main gRPC service on `22222`, but the current startup
-path does not also start the dedicated `22223` sockproxy server while the
-sockproxy client continues to target `22223`. Do not select that mode for
-sockproxy HA without release-specific end-to-end evidence.
 
 The sockproxy synchronizer batches session/conversation events and pushes
 rate-limiter state to compatible peers. Queues are bounded: overload uses
 drop-oldest behavior, and a batch can be dropped after retry exhaustion. This
 is eventual best-effort synchronization, not a consensus or transaction log.
 
-The code includes a paged `GetSockproxySnapshot` pull implementation, but the
-current production `MASTER` transition hook starts peer consumers without
-calling that pull. Its present call sites are tests. Therefore a promoted node
-must not be assumed to reconcile missed sockproxy sessions automatically before
-serving. Validate actual peer state or drain/rebuild it through the release's
-approved procedure.
+Validate peer state independently before promotion and require completed
+traffic and recovery evidence for the selected release.
 
 Watch these signals during every failover exercise:
 
@@ -120,9 +112,9 @@ Prefer upgrading both peers together inside an approved maintenance window. If
 nodes must be upgraded one at a time:
 
 1. Inventory every key, user, user-model, tenant, tenant-model, defaults, and
-   shared-VIP token limit on both peers. Per-key TPM is implemented but its
-   primary Swagger contract remains stale; record it without presenting it as
-   release-qualified support.
+   shared-VIP token limit on both peers. Per-key TPM has admission reservation
+   and usage settlement in the source contract; record the active protocol and
+   runtime evidence without presenting it as two-node release qualification.
 2. Disable every active token-quota scope before upgrading the first node.
 3. Confirm both peers read back quotas as disabled.
 4. Wait for old in-memory quota entries to age out. The normal default idle

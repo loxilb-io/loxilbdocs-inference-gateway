@@ -93,7 +93,9 @@ not interrupted.
 Create protected management credentials for the examples:
 
 ```bash
-export CONTROL_API="https://gateway.example.com/netlox/v1"
+export CONTROL_SCHEME=https CONTROL_HOST=gateway.example.com CONTROL_PORT=443
+export CONTROL_API="$CONTROL_SCHEME://$CONTROL_HOST:$CONTROL_PORT/netlox/v1"
+test -r "$PWD/gateway-ca.crt"
 install -m 600 /dev/null ./control-plane.headers
 printf 'Authorization: Bearer %s\n' "$CONTROL_PLANE_TOKEN" > ./control-plane.headers
 install -m 600 /dev/null ./gateway.token
@@ -103,7 +105,7 @@ printf '%s\n' "$CONTROL_PLANE_TOKEN" > ./gateway.token
 ## Step 1: Prove readiness and capture identity
 
 ```bash
-curl --silent --show-error \
+curl --silent --show-error --cacert "$PWD/gateway-ca.crt" \
   --header @control-plane.headers \
   --output ready-before.json \
   --write-out '%{http_code}\n' \
@@ -122,7 +124,9 @@ HA synchronization.
 ```bash
 umask 077
 loxicmd get snapshot \
-  --token-file ./gateway.token \
+  --protocol "$CONTROL_SCHEME" --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+  --cacert "$PWD/gateway-ca.crt" \
+  --token-file "$PWD/gateway.token" \
   --strict \
   --file gateway-snapshot.json
 
@@ -146,13 +150,15 @@ that the planned restore would replace; the abbreviated example uses the
 load-balancer list.
 
 ```bash
-curl --fail-with-body --silent --show-error \
+curl --fail-with-body --silent --show-error --cacert "$PWD/gateway-ca.crt" \
   --header @control-plane.headers \
   "$CONTROL_API/config/loadbalancer/all" \
   | jq -S . > lb-before.json
 
 loxicmd create restore \
-  --token-file ./gateway.token \
+  --protocol "$CONTROL_SCHEME" --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+  --cacert "$PWD/gateway-ca.crt" \
+  --token-file "$PWD/gateway.token" \
   --file gateway-snapshot.json \
   --strict \
   --output json \
@@ -166,7 +172,7 @@ jq -e '
   .data.restore.mode == "dry-run"
 ' restore-dry-run.json
 
-curl --fail-with-body --silent --show-error \
+curl --fail-with-body --silent --show-error --cacert "$PWD/gateway-ca.crt" \
   --header @control-plane.headers \
   "$CONTROL_API/config/loadbalancer/all" \
   | jq -S . > lb-after-dry-run.json
@@ -182,7 +188,9 @@ approved change.
 
 ```bash
 loxicmd create restore \
-  --token-file ./gateway.token \
+  --protocol "$CONTROL_SCHEME" --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+  --cacert "$PWD/gateway-ca.crt" \
+  --token-file "$PWD/gateway.token" \
   --file gateway-snapshot.json \
   --commit \
   --strict \
@@ -214,7 +222,9 @@ is required:
 
 ```bash
 loxicmd create persist \
-  --token-file ./gateway.token \
+  --protocol "$CONTROL_SCHEME" --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+  --cacert "$PWD/gateway-ca.crt" \
+  --token-file "$PWD/gateway.token" \
   --strict \
   --output json \
   > persist-result.json
@@ -240,7 +250,9 @@ a container, systemd, or appliance restart command. After restart:
 
 ```bash
 loxicmd get ready \
-  --token-file ./gateway.token \
+  --protocol "$CONTROL_SCHEME" --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+  --cacert "$PWD/gateway-ca.crt" \
+  --token-file "$PWD/gateway.token" \
   --output json \
   > ready-after-restart.json
 

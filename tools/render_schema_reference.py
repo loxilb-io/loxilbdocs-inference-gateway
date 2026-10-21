@@ -232,7 +232,7 @@ MODEL_NOTES = {
     ),
     "UserSummary": (
         "direct-operation",
-        "Read-only account identity that excludes password material.",
+        "Source-declared account identity fields.",
         "../security/management-api-authentication.md",
     ),
     "ManagementError": (

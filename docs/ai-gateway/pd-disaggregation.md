@@ -121,7 +121,7 @@ receipt delta `0`.
 | Rule creation fails | Fullproxy mode, both endpoint roles, and engine-specific field coherence |
 | Client request hangs | Engine request order, role health, transfer reachability, and first-byte timeouts |
 | Decode recomputes the prompt | Engine transfer configuration and side-channel/bootstrap connectivity |
-| Traffic succeeds but KV-exact hits remain zero | Tokenizer, model, block size, hash algorithm, event feed, and inventory readiness; `kvWarmupSec` is currently inert |
+| Traffic succeeds but KV-exact hits remain zero | Tokenizer, model, block size, hash algorithm, event feed, and inventory readiness |
 | One role becomes overloaded | Endpoint health, session TTL, load threshold, and role counts |
 | Errors continue to select one endpoint | Circuit-breaker enablement and origin/connect failure classification |
 

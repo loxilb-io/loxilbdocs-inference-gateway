@@ -67,10 +67,10 @@ use `kvExactMode: 3` with P/D; mode 3 is for a single role-less pool. See
 
 ## My KV-cache routing isn't improving hit rates. Why?
 
-Almost always a broken parity leg — the block/page size, hash algorithm, hash seed, ZMQ port, or
-tokenizer directory does not match between the engine and the gateway, so routing **silently** falls
-back to round-robin. Run the "verify it fired" recipe: `loxilb_pd_kv_tier15_hits_total` must advance
-after the first request. See [Troubleshooting](../operations/troubleshooting.md) and the
+Check block/page size, hash policy, event transport, tokenizer identity,
+profile binding and available overlap. A miss uses the topology-specific
+fallback. Require an observed hit delta during a controlled repeated-prefix
+probe before attributing results to Exact. See [Troubleshooting](../operations/troubleshooting.md) and the
 [KV-cache-aware routing guide](../concepts/kv-routing.md).
 
 ## What license is it under?

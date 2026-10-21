@@ -43,7 +43,6 @@ them.
 | **AI traffic governance** | On fullproxy rules, an independent five-state credential policy selects keyless, API-key, JWT, or either credential; model authorization and scoped request/token quotas run before dispatch. Byte-rate QoS remains separate. The development contract must be qualified against the deployed image. |
 | **CHWBL / GPU-aware algorithms** | Consistent-hash-with-bounded-load selection (`sel: 8`), weighted CHWBL (`sel: 10`) for heterogeneous GPUs, and GPU-aware selection (`sel: 9`). |
 | **MCP gateway** | Session-sticky proxying of Model Context Protocol server pools, keyed on the `mcp-session-id` header. |
-| **OPA L4 policy** | Optional external Open Policy Agent watcher for L4 admission policy. |
 
 Load-balancer rule features use the management API on port **11111** under
 `/netlox/v1/config/loadbalancer`; keys, quotas, QoS, logs, and authentication use their own
@@ -115,7 +114,7 @@ A pool of identical vLLM replicas behind one OpenAI-compatible VIP, with CHWBL p
 The example uses documentation-only addresses. Replace them with your management endpoint, VIP,
 and backend addresses. If management authentication is enabled, add the deployment's bearer
 header without placing the token directly in shell history. The current proxy uses fixed CHWBL
-runtime constants; stored `chwbl_*` tuning fields do not change them yet.
+observed runtime behavior; verify placement against independent backend receipts.
 
 ## Where to go next
 
@@ -137,7 +136,7 @@ runtime constants; stored `chwbl_*` tuning fields do not change them yet.
   together as a [management plane](management/management-plane.md).
 - **[Operations → Monitoring](operations/monitoring.md)** — the Prometheus + Grafana stack with
   provisioned dashboards and alerts.
-- **[Security → Management API Authentication](security/management-api-authentication.md)** — separate operator credentials from inference API keys and review current release blockers.
+- **[Security → Management API Authentication](security/management-api-authentication.md)** — separate operator credentials from inference API keys and verify access through the qualified management endpoint.
 - **[Operations → AI Key Store](operations/ai-key-store.md)** — provision, protect, back up, and diagnose the development PostgreSQL key store.
 - **[Operations → Persistence, Backup, and Restore](operations/backup-restore.md)** — prove no-mutation dry-run, commit write-through, restart readback, rollback, quarantine, and lineage.
 - **[Operations → Readiness, Capabilities, Diagnostics, and Maintenance](operations/readiness-diagnostics-maintenance.md)** — interpret configuration recovery readiness, preflight optional capabilities, and use the configuration-write maintenance gate safely.

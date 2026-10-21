@@ -66,12 +66,12 @@ then a decode endpoint is chosen separately.
 
 | Stage | Purpose | Falls through when |
 |---|---|---|
-| **excluded_mask seeding** | Health / circuit-breaker pre-filter: every down or CB-open endpoint is masked out of **every** tier below (so an excluded Tier-1.5 winner falls to the 2nd-best *prefill*, never straight to RR) | — (always runs) |
+| **excluded_mask seeding** | Filter known-down, disabled or circuit-breaker-excluded candidates before scoring; verify the next eligible candidate or topology fallback | — (always runs) |
 | **Controller fold-in** | Fold controller-DISABLED endpoints into the mask; collect the DRAINING set | No-op when no controller is attached |
 | **Admission gate** (default-off) | Per-endpoint in-flight caps; when all are capped, either **park** (hold-don't-drop) or **shed** a retriable `429` | Caps unset (default) → byte-identical skip |
 | **Tier 0 — session stickiness** | Pin the `(prefill, decode)` pair for a conversation | No key; pinned endpoint unhealthy / masked / CB-open / TTL-evicted |
 | **Tier 1 — radix-trie prefix affinity** | Heuristic: LoxiLB's own trie of observed prefixes (not vLLM state) | `pd_cache_aware_mode` off; empty prefix; imbalance guard; `match_rate < pd_cache_threshold` |
-| **Tier 1.5 — KV-exact block-hash** | Route to the prefill endpoint whose *actual* vLLM cache best overlaps the prompt, bounded by load | `kvExactMode` off; any guard miss (hash-contract, warmup, tokenize, empty inventory) |
+| **Tier 1.5 — KV-exact block-hash** | Route to the prefill endpoint whose *actual* vLLM cache best overlaps the prompt, bounded by load | `kvExactMode` off; a guard miss, missing overlap or unavailable inventory |
 | **Tier 2 — min-load fallback** | `score = active_conns + queued_requests`, lower wins; RR only on a genuine tie | Terminal (only returns "none" if no healthy candidate) |
 | **Decode selection** | Session-pinned decode hint if valid, else min-load + RR among `ep_role:2` endpoints | — |
 | **Any-healthy rescue** | Non-P/D rescue using role-0 endpoints; else `503` | None healthy → `503` |
@@ -109,11 +109,12 @@ Two REST-tunable guards keep the heuristic honest:
 
 The trie tracks *what LoxiLB routed*, not *what vLLM actually holds*. It is cheap (no
 tokenization, no hashing) and needs no vLLM-side configuration, but it can go stale when vLLM
-evicts. Tier 1.5 tracks the truth; Tier 1 is a useful heuristic when KV-exact is not deployable.
+evicts. Tier 1.5 uses engine-published inventory, which can lag engine state. Verify
+events and backend delivery separately. Tier 1 uses a routing-history heuristic.
 
 ### Tier 1.5 — KV-exact block-hash routing
 
-The centerpiece. LoxiLB mirrors each prefill endpoint's **actual prefix-cache content** (a set
+The centerpiece. LoxiLB tracks each prefill endpoint's **reported prefix-cache inventory** (a set
 of 64-bit block hashes streamed over vLLM's ZMQ KV-events channel), recomputes the same block
 hashes vLLM would compute for the prompt (tokenize → per-block canonical CBOR → hash →
 truncate), scores every prefill endpoint by **overlap count**, and routes through the unified
@@ -125,9 +126,6 @@ documented in [KV-Cache Routing](../ai-gateway/kv-caching.md).
 Despite the historical name, Tier 2 is a **min-load scorer**:
 
 - **Default arm:** `score = active_conns + queued_requests`, lower wins.
-- **Capacity-blend arm:** the scorer exists for GPU-aware (`sel:9`) rules, but its current
-  activation gate checks a mutable endpoint cursor instead of the configured selector. Treat it as
-  release-blocked; normal Tier 2 uses the default arm.
 
 The round-robin counter advances **only on a genuine tie**, so it is a tie-breaker, not the
 algorithm.
@@ -253,8 +251,8 @@ Use `loxilb_pd_kv_tier15_spills_total` and
 
 ## Resilience semantics
 
-- **Health / CB pre-filter:** the excluded_mask guarantees an excluded Tier-1.5 winner falls to
-  the 2nd-best-overlap prefill endpoint, never to a decode endpoint and never straight to RR.
+- **Health / CB pre-filter:** eligible endpoints are filtered before KV overlap selection. Verify the
+  selected endpoint and topology-specific fallback under each injected fault.
 - **Circuit breaker:** per-endpoint `CLOSED → OPEN → HALF_OPEN`. For P/D services this
   auto-enables with a threshold of 3 consecutive failures and a 30 s open window. CB state is
   local-only, never HA-synced.
@@ -281,7 +279,7 @@ the rule uses its selector directly. The cache-aware members of that family:
 | REST `sel` | Selector | Mechanism |
 |---|---|---|
 | `8` | chwbl | Consistent Hash with Bounded Loads over a hash ring, keyed by **prefix_hash** |
-| `9` | gpuaware | `prefix_hash % n_eps` placement on the single-pool path; the separate P/D capacity scorer is currently release-blocked |
+| `9` | gpuaware | `prefix_hash % n_eps` placement on the plain HTTP/1.1 single-pool path |
 | `10` | wrr-hash | CHWBL with endpoint **weights** folded into the ring (capacity-weighted bounded load) |
 
 The routing-key priority is identical for all three:

@@ -77,6 +77,10 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
+      - name: Verify real file bodies and producers
+        run: python tools/refresh_body_bindings.py --check
+      - name: Verify public coverage ledger
+        run: python tools/refresh_coverage_ledger.py --check
       - name: Validate documented commands and payloads
         run: python tools/validate_examples.py
       - name: Verify every public example is classified

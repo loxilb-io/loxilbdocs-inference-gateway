@@ -12,6 +12,7 @@
 
     ```bash
     cleanup_status=$(curl --silent --show-error \
+      --cacert ./gateway-ca.crt \
       --request DELETE \
       --header @control-plane.headers \
       --output cleanup.json \
@@ -28,7 +29,9 @@
       --path-prefix=/ \
       --path-match-mode=prefix \
       --model-name=llama-70b \
-      --token-file ./gateway.token
+      --protocol "$CONTROL_SCHEME" --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+      --cacert ./gateway-ca.crt \
+      --token-file "$PWD/gateway.token"
     ```
 
 ### Expected result
@@ -40,6 +43,7 @@ The REST form returns `200`; the CLI exits `0`.
 ```bash
 test "${cleanup_status:-200}" = 200
 curl --fail-with-body --silent --show-error \
+  --cacert ./gateway-ca.crt \
   --header @control-plane.headers \
   "$CONTROL_API/config/loadbalancer/all" > rules-after-cleanup.json
 ! jq -e '
@@ -49,6 +53,7 @@ curl --fail-with-body --silent --show-error \
   select(.serviceArguments.model_name == "llama-70b")
 ' rules-after-cleanup.json
 curl --fail-with-body --silent --show-error \
+  --cacert ./gateway-ca.crt \
   --header @control-plane.headers \
   "$CONTROL_API/status/ready" > ready-after-cleanup.json
 jq -e '.ready == true and (.reasons | length == 0)' ready-after-cleanup.json
@@ -56,15 +61,32 @@ jq -e '.ready == true and (.reasons | length == 0)' ready-after-cleanup.json
 
 ### Cleanup
 
-Remove local credential and response files:
+Restore the previous metrics setting before removing credential files:
+
+```bash
+if jq -e '.prometheus == false' metrics-config-before.json >/dev/null; then
+  curl --fail-with-body --silent --show-error --request DELETE \
+    --cacert ./gateway-ca.crt --header @control-plane.headers \
+    "$CONTROL_API/config/metrics" > metrics-restore.json
+  curl --fail-with-body --silent --show-error \
+    --cacert ./gateway-ca.crt --header @control-plane.headers \
+    "$CONTROL_API/config/metrics" | jq -e '.prometheus == false'
+fi
+```
+
+Remove only this lab's local credential and response files. Stop the receipt
+backend in its terminal with Ctrl-C; preserve its log until the receipt checks
+have been reviewed.
 
 ```bash
 rm -f ./gateway.token ./control-plane.headers ready.json \
   unauthenticated.json authenticated.json create.json rules.json \
-  invalid-create.json rules-before-invalid.json rules-after-invalid.json \
+  invalid-create.json rules-before-invalid.json rules-after-invalid.json rules-after-invalid-raw.json \
+  metrics-config-before.json metrics-enable.json metrics-restore.json \
   inference.json wrong-model.json metrics-before.prom metrics-after.prom cleanup.json \
   rules-after-cleanup.json ready-after-cleanup.json gateway-version.json gateway-image.id
-unset CONTROL_PLANE_TOKEN CONTROL_API BACKEND_RECEIPT_LOG
+unset CONTROL_PLANE_TOKEN CONTROL_API CONTROL_SCHEME CONTROL_HOST CONTROL_PORT \
+  BACKEND_RECEIPT_LOG BACKEND_RECEIPT_SOURCE
 ```
 
 ### Diagnose

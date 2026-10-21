@@ -16,6 +16,7 @@
 
     ```bash
     create_status=$(curl --silent --show-error \
+      --cacert ./gateway-ca.crt \
       --request POST \
       --header @control-plane.headers \
       --header 'Content-Type: application/json' \
@@ -53,7 +54,9 @@
       --path-match-mode=prefix \
       --model-name=llama-70b \
       --inatimeout=30 \
-      --token-file ./gateway.token
+      --protocol "$CONTROL_SCHEME" --apiserver "$CONTROL_HOST" --port "$CONTROL_PORT" \
+      --cacert ./gateway-ca.crt \
+      --token-file "$PWD/gateway.token"
     ```
 
 ### Expected result
@@ -66,6 +69,7 @@ invalid body returns a non-success status and must not be counted as created.
 ```bash
 test "${create_status:-200}" = 200
 curl --fail-with-body --silent --show-error \
+  --cacert ./gateway-ca.crt \
   --header @control-plane.headers \
   "$CONTROL_API/config/loadbalancer/all" > rules.json
 jq -e '
@@ -81,8 +85,20 @@ Also prove a rejected mutation leaves the complete readback unchanged:
 
 ```bash
 # docs-example: expect-schema-error
-jq -S . rules.json > rules-before-invalid.json
+canonical_rules() {
+  jq -S '
+    .lbAttr | map({serviceArguments,
+      endpoints: (.endpoints | map({endpointIP,targetPort,weight}) |
+        sort_by(.endpointIP,.targetPort))}) |
+    sort_by(.serviceArguments.externalIP,.serviceArguments.port,
+      .serviceArguments.protocol,.serviceArguments.host,
+      .serviceArguments.path_prefix,.serviceArguments.path_match_mode,
+      .serviceArguments.model_name)
+  ' "$1"
+}
+canonical_rules rules.json > rules-before-invalid.json
 invalid_status=$(curl --silent --show-error \
+  --cacert ./gateway-ca.crt \
   --request POST \
   --header @control-plane.headers \
   --header 'Content-Type: application/json' \
@@ -101,13 +117,21 @@ invalid_status=$(curl --silent --show-error \
   --output invalid-create.json \
   --write-out '%{http_code}' \
   "$CONTROL_API/config/loadbalancer")
-test "$invalid_status" = 400
+test "$invalid_status" = 422
 curl --fail-with-body --silent --show-error \
+  --cacert ./gateway-ca.crt \
   --header @control-plane.headers \
-  "$CONTROL_API/config/loadbalancer/all" \
-  | jq -S . > rules-after-invalid.json
+  "$CONTROL_API/config/loadbalancer/all" > rules-after-invalid-raw.json
+canonical_rules rules-after-invalid-raw.json > rules-after-invalid.json
 cmp --silent rules-before-invalid.json rules-after-invalid.json
 ```
+
+This invalid enum is rejected by the generated request binder with `422`
+(error code `606`), before the handler applies configuration. Handler-level
+validation can instead return `400`. Do not accept every 4xx as the same result.
+The comparison sorts rules by their material key and excludes endpoint counters;
+`jq -S` alone sorts object keys, not the rule array. Backend health and traffic
+counters are observations, not proof that the invalid mutation changed configuration.
 
 ### Cleanup
 

@@ -223,19 +223,19 @@ class DocumentationExampleTests(unittest.TestCase):
             family for family in manifest["families"]
             if family["release_scope"] == "release"
         ]
-        self.assertEqual(278, len(families))
-        self.assertEqual(278, len(manifest["families"]))
+        self.assertEqual(283, len(families))
+        self.assertEqual(283, len(manifest["families"]))
         self.assertTrue(all(family["writer_present"] for family in families))
         self.assertTrue(all(family["evidence_present"] for family in families))
 
     def test_gateway_main_and_release_sources_are_exactly_frozen(self) -> None:
         contract = self.validator.gateway_contract
         self.assertEqual(
-            "571213927ec0a4a2e1b94b92d77f9c82f80f39c0",
+            "ecfc3c12376bad712c61f6781fe13a9e5fc3fd9e",
             contract["source"]["commit"],
         )
         self.assertEqual(
-            "bc75f808d612d56078b78587e10d5b3c2019d004",
+            "2cac6dac18de91b0eda80e814195c637cdf389e9",
             contract["source"]["ebpf_submodule_commit"],
         )
         self.assertEqual("v0.9.8.9-rc.1", contract["source"]["release_tag"])
@@ -252,7 +252,7 @@ class DocumentationExampleTests(unittest.TestCase):
     def test_cli_main_and_release_sources_are_exactly_frozen(self) -> None:
         source = self.validator.cli_contract["source"]
         self.assertEqual(
-            "d8cbabbbc131d18d36cc26a14ef5a6121a9de7dd",
+            "28832f0c60ab717d8cb5133114edf2c45e22a85c",
             source["main_commit"],
         )
         self.assertEqual("v0.9.8.9-rc.2", source["release_tag"])
@@ -343,18 +343,16 @@ class DocumentationExampleTests(unittest.TestCase):
                 self.assertTrue(contract["release"]["available"])
                 self.assertTrue(contract["main"]["available"])
 
-    def test_main_only_appliance_lifecycle_needs_marker(self) -> None:
-        command = (
-            "loxicmd appliance restore plan /var/lib/backup/appliance.tar.age "
-            "--key-file /root/backup.key"
-        )
-        self.assertTrue(self.validator.validate_cli_command(command))
-        self.assertEqual(
-            [],
-            self.validator.validate_cli_command(
-                command, "CLI availability: main-only"
-            ),
-        )
+    def test_removed_appliance_lifecycle_cannot_be_enabled_by_marker(self) -> None:
+        for family, leaves in {
+            "restore": ("plan", "execute"), "update": ("plan", "execute", "status"),
+            "rollback": ("plan", "execute", "status"), "factory-reset": ("plan", "execute"),
+        }.items():
+            for leaf in leaves:
+                with self.subTest(family=family, leaf=leaf):
+                    errors = self.validator.validate_cli_command(
+                        f"loxicmd appliance {family} {leaf}", "CLI availability: main-only")
+                    self.assertTrue(any("absent" in error for error in errors))
 
     def test_recovery_operations_are_in_the_swagger_union(self) -> None:
         operations = (

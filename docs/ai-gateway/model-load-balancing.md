@@ -48,14 +48,10 @@ flowchart TD
     style R503 fill:#ffcdd2,stroke:#e53935
 ```
 
-The `X-Model` header takes precedence over the JSON body, so a client can override the body's model field per request. On keep-alive connections the header is evaluated per request — an empty or absent `X-Model` falls through to the JSON body, then to the wildcard.
+Send one model identity: either the JSON body field or `X-Model`, not
+conflicting values in both. Verify the matched rule and independent backend
+receipt for the selected model.
 
-!!! danger "Routing and authorization disagree when header and body differ"
-    Pool routing is header-first, but the current model-authorization gate evaluates the JSON
-    body model first. A request carrying two different model names can therefore be authorized
-    for one model and routed to another. Reject conflicting header/body values at a trusted
-    upstream proxy, or require clients to send exactly one model source, until the implementation
-    uses one canonical model identity for both decisions.
 
 !!! warning "HTTP/2 feature boundary"
     The current HTTP/2 backend path passes an empty model into endpoint lookup and falls back to
@@ -201,8 +197,7 @@ An empty `model_name` (`""`) makes this rule the catch-all for any model that do
 !!! tip "Per-pool selection algorithm"
     `sel` can differ per pool. `sel: 0` (round-robin) is the default and is fine for even backends.
     For cache locality within a plain pool, use `sel: 8` (CHWBL). Selector 9 provides
-    prefix/session modulo placement on a plain pool; its P/D capacity-aware activation is currently
-    release-blocked. See [LLM Routing](llm-routing.md).
+    prefix/session modulo placement on a plain HTTP/1.1 pool. See [LLM Routing](llm-routing.md).
 
 ---
 

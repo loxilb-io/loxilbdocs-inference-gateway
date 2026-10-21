@@ -67,45 +67,12 @@ For a typical vLLM deployment, `backend_protocol: http1` with `security: 0` (pla
 
 ---
 
-## `sel: 9`: Current Topology-Dependent Behavior
+## `sel: 9`: Plain-pool affinity
 
-The API and CLI call selector 9 `gpuaware`, but its current fullproxy behavior depends on the
-service topology. Do not assume that the name means every rule reads the worker-metrics API.
-
-```mermaid
-flowchart TD
-    REQ([Request on a sel 9 rule]) --> PD{P/D enabled?}
-    PD -->|Yes| BLOCKED["Capacity-aware scorer exists<br/>activation is release-blocked"]
-    PD -->|No| PREFIX{Prefix hash available?}
-    PREFIX -->|Yes| MOD["prefix_hash modulo endpoint count"]
-    PREFIX -->|No| CONV{Conversation ID available?}
-    CONV -->|Yes| CMOD["conversation hash modulo endpoint count"]
-    CONV -->|No| RR[Health-aware fallback selection]
-
-    style BLOCKED fill:#ffebee,stroke:#e53935
-    style MOD fill:#fff9c4,stroke:#f9a825
-    style CMOD fill:#fff9c4,stroke:#f9a825
-```
-
-- **Plain single pool:** selector 9 uses request affinity, not live GPU load. Adding or removing
-  endpoints can remap modulo placements. Use CHWBL (`sel: 8`) when you need a stable hash ring and
-  bounded-load protection, or round-robin (`sel: 0`) for independent requests.
-- **P/D pool:** a capacity-aware Tier-2 scorer exists, but the current activation gate compares a
-  mutable endpoint cursor instead of the configured selector. Configuring `sel: 9` therefore does
-  not reliably enable it. Normal Tier 2 uses active connections plus queued requests. See
-  [Routing Hierarchy](../use-cases/routing-hierarchy.md).
-- **Worker-metrics control surface:** the GPU enable/status and worker-metrics APIs populate and
-  report a separate metrics/eBPF surface. The current plain fullproxy selector does not read that
-  surface. A successful metrics POST or `routing_mode: gpu_aware` status is therefore not proof of
-  least-loaded selection for a plain pool.
-
-!!! warning "Do not deploy from the historical least-loaded claim"
-    For a plain fullproxy vLLM pool, do not use `sel: 9` as a production least-loaded-GPU policy.
-    Treat P/D capacity scoring as unavailable until the activation field is corrected and the exact
-    release artifact passes an end-to-end test. Use the selectors above when their documented
-    behavior matches the workload.
-
----
+On the HTTP/1.1 plain-pool path, selector 9 uses prefix/conversation modulo
+affinity and healthy-endpoint fallback. Endpoint changes can remap placements.
+Worker telemetry and configuration readback do not establish least-loaded
+selection; measure backend distribution independently.
 
 ## Verify
 
