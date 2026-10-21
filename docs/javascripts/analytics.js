@@ -4,6 +4,8 @@
   const measurementId = 'G-WJSBVPS5RV';
   const base = '/loxilbdocs-inference-gateway/';
   const storageKey = 'igw_analytics_consent_v1';
+  // Resolve against this version's asset, preserving mike's latest/version prefix.
+  const privacyUrl = new URL('../privacy/', document.currentScript.src).href;
   // Local builds, forks and other projects on the shared Pages host never collect.
   const production = location.protocol === 'https:' && location.hostname === 'loxilb-io.github.io' &&
     location.pathname.startsWith(base);
@@ -69,7 +71,7 @@
   panel.setAttribute('aria-label', 'Optional analytics');
   panel.innerHTML = '<p>Allow optional Google Analytics to help improve these docs? ' +
     'Google receives usage events only after you accept. Search text and URL query strings are excluded. ' +
-    '<a href="' + base + 'privacy/">Privacy details</a></p>' +
+    '<a href="' + privacyUrl + '">Privacy details</a></p>' +
     '<button type="button" data-choice="granted">Accept analytics</button> ' +
     '<button type="button" data-choice="denied">Reject analytics</button>';
   panel.hidden = privacySignal || choice === 'granted' || choice === 'denied';

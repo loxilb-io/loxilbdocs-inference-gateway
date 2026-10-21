@@ -16,7 +16,7 @@ function setup({choice=null,host='loxilb-io.github.io',path='/loxilbdocs-inferen
     }});
   const location={protocol:'https:',hostname:host,pathname:path,origin:'https://'+host,
     href:'https://'+host+path+'?token=SYNTHETIC_PRIVATE#secret',reload(){this.reloaded=true;}};
-  const document={title:'Public docs',referrer:'https://example.com/private?token=SYNTHETIC_PRIVATE',
+  const document={currentScript:{src:location.origin+'/loxilbdocs-inference-gateway/latest/javascripts/analytics.js'},title:'Public docs',referrer:'https://example.com/private?token=SYNTHETIC_PRIVATE',
     querySelector(){return {href:badCanonical?'https://evil.invalid/':location.origin+path};},
     createElement:element,body:{appendChild(el){appended.push(el);}},head:{appendChild(el){appended.push(el);}}};
   Object.defineProperty(document,'cookie',{get(){return '_ga=old; _ga_WJSBVPS5RV=old; unrelated=keep';},set(v){cookieWrites.push(v);}});
@@ -60,3 +60,8 @@ test('local preview, forks and other Pages projects never collect',()=>{
   }
 });
 test('untrusted canonical target disables collection',()=>assert.equal(google(setup({choice:'granted',badCanonical:true})).length,0));
+
+test('privacy link preserves the deployed documentation version',()=>{
+  const s=setup();
+  assert.ok(s.appended.find(el=>el.tag==='section').innerHTML.includes('/loxilbdocs-inference-gateway/latest/privacy/'));
+});
