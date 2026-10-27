@@ -115,6 +115,17 @@ nav:
       - Capacity, SSE & Drain: use-cases/admission-flow-control/capacity.md
       - TLS Errors & Resource Return: use-cases/admission-flow-control/tls-failures.md
       - Cleanup & Diagnosis: use-cases/admission-flow-control/cleanup.md
+  - Shared Inference Use-Cases:
+      - Departments & Reading Path: use-cases/shared-inference/index.md
+      - Prepare the Lab: use-cases/shared-inference/setup.md
+      - Inputs & Conventions: use-cases/shared-inference/downloads.md
+      - Tenant & Priority Authority: use-cases/shared-inference/identity.md
+      - Network Tenant Identity: use-cases/shared-inference/networks.md
+      - Strict, Weighted & Tenant Turns: use-cases/shared-inference/scheduling.md
+      - Floors & Critical Reserve: use-cases/shared-inference/capacity.md
+      - Overload & Deadlines: use-cases/shared-inference/overload.md
+      - Defense & Recovery: use-cases/shared-inference/recovery.md
+      - Cleanup: use-cases/shared-inference/cleanup.md
   - Edge Cloud Security Use-Cases:
       - Lab & Reading Path: use-cases/edge-cloud-security/index.md
       - Download Lab Inputs: use-cases/edge-cloud-security/downloads.md

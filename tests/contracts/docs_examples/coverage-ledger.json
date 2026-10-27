@@ -5300,6 +5300,359 @@
     },
     {
       "commands": [],
+      "id": "ebaf11d0e6586e8905a4",
+      "line": 14,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "db511a6ce1664eebe655cb83efd06f69f96841f4c25e7d34085ed58e43b8b47d"
+    },
+    {
+      "commands": [],
+      "id": "e169c361e7092c8f2543",
+      "line": 355,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "9a0cc559d6a92e42233280354121074c3913a1f68de94da83a1e59838ae61e2d"
+    },
+    {
+      "commands": [],
+      "id": "87f20fc927bb1abbde93",
+      "line": 12,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ceb5cb82b10928224b68acbc7a3ca957d8e486f4c6ff445d8665f7ac12c07e75"
+    },
+    {
+      "commands": [],
+      "id": "78ebf1a208cc53b45c7a",
+      "line": 96,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "43cdff33c720650e719385aacf9116b76c19ab5435b8a0c995a19381b6cf4590"
+    },
+    {
+      "commands": [],
+      "id": "4e53dc53cbeeae6ccff3",
+      "line": 127,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "c8144321f7ba92f1315afc3fd91274aad0ec900a9f7047c33a1664e26a58a3f7"
+    },
+    {
+      "commands": [],
+      "id": "bad569b569e03ac6612c",
+      "line": 12,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e3ba0108658dd9c2cadaee3fcae72c2dda542507d1dd6efafeb7b769d7bef1cb"
+    },
+    {
+      "commands": [],
+      "id": "c73735ba7e5800886b34",
+      "line": 52,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "6173cb0ea51a40a5f1efa3362d310a15c57b33e3771928be00b1125eef49c213"
+    },
+    {
+      "commands": [],
+      "id": "6a8ed3da94a377b7f0c1",
+      "line": 83,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "16ff0d5a9101f58d244d442edaa8d6026effc75f0fa1b869b762a7df01451899"
+    },
+    {
+      "commands": [],
+      "id": "b2c85f7e51ab5b09085e",
+      "line": 117,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "cefa6d73a90401fb4cfaadb8394a3a4a20139dbf30bdc0b6db25083ac4a3c82d"
+    },
+    {
+      "commands": [],
+      "id": "ac5102962b67708b5403",
+      "line": 151,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "6135843c8e30fe3eac49a01bb45881fdf55f441648682cae60fcb5288b3cebc0"
+    },
+    {
+      "commands": [],
+      "id": "6516ca71d5fdf800cdce",
+      "line": 180,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e9254cfb0b78541f8ed58e517c5e14d121dbde21e90a7be5bb7c5a79b1864c3b"
+    },
+    {
+      "commands": [],
+      "id": "7318f8ceb4a564c51294",
+      "line": 214,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "eb3f4ead2aaf46794b1a774455e7360bd68c298314f7a9505bbec54fbba7a8ff"
+    },
+    {
+      "commands": [],
+      "id": "f0f42055259f65e534e0",
+      "line": 248,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "61fea8335b4ee8a6da709b824f315dc86e7dabc5065a6cedd93edf90054eb8b9"
+    },
+    {
+      "commands": [],
+      "id": "1ad2727af2a200d7ba6f",
+      "line": 426,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d2c475318650a7fc072eeec1b215af2c6fd0c1b7ee2f9f9f815c0aa2ffcd1e45"
+    },
+    {
+      "commands": [],
+      "id": "cf8a06bbba04b6a0fb3d",
+      "line": 560,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "707b0dc6ee2eaf5b8854def462e360b91895ba0ecfb80a91a753e850621bc621"
+    },
+    {
+      "commands": [],
+      "id": "d3189a44f778154fea3d",
+      "line": 623,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "2873cc0c8ed25ec0b0d8790162e49308ab041f6ca4230be0e727564b6f7971f7"
+    },
+    {
+      "commands": [],
+      "id": "09498705679b2f4d261d",
+      "line": 14,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "37d98bbd0419912f1b98948a385f08123f90d32ef3a2cad7bc195fd89306029c"
+    },
+    {
+      "commands": [],
+      "id": "e3946dfa6b85e8d7c4b2",
+      "line": 266,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a017bcd1d04d55dfdd2e1b75b27c5a4e5770a11e16f4b9d271db592426d30a18"
+    },
+    {
+      "commands": [],
+      "id": "60270e0e0186c019ed43",
+      "line": 315,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "4f079eec7e8d9bc11b4e642bd6a65cc981765e11d072d2276a8717f793f46403"
+    },
+    {
+      "commands": [],
+      "id": "e9e4846c4c059115cb09",
+      "line": 527,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "010069cf869d530d410b67b25b8c5634ce840fa474e36124111ab802523add7a"
+    },
+    {
+      "commands": [],
+      "id": "fde5b930f32ad641060e",
+      "line": 691,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "933e3aa37da88d1115672da378ed9da1e5cda208a52be2057b5e105bb02fa891"
+    },
+    {
+      "commands": [],
+      "id": "47b74fb7ed71ea5773c4",
+      "line": 14,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "b0d6f491f7b1030e200ffa75481e7c15589bd2dabcae046bcf1dc5b50afaa758"
+    },
+    {
+      "commands": [],
+      "id": "6829f2658d64716eacb0",
+      "line": 329,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d89787675af450a2f685f73134099f197d2c1f122b660f7f2f679a4a66da5240"
+    },
+    {
+      "commands": [],
+      "id": "4ad90c03339c0ebdb9c8",
+      "line": 568,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "23e9217f785c5d1446a92105779b72c7ac14b71c20774ddf0087b1bd92d6c976"
+    },
+    {
+      "commands": [],
+      "id": "c5806915b6fa7648a4f6",
+      "line": 14,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "f40d1a950f4b5f3de9efa000bac263ebd1b22179bc819391de348ae17e52ed09"
+    },
+    {
+      "commands": [],
+      "id": "6365ac1581473d1541ea",
+      "line": 77,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "31f852496954197807573bf92bc6d6925a2858f7c452393c398a16456a1f4efb"
+    },
+    {
+      "commands": [],
+      "id": "e5f6f322f786ea4606b7",
+      "line": 154,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "7233667ec6b9511522eb53cb3250fc0765b0cbfbbd098391164acc7ac66f7fba"
+    },
+    {
+      "commands": [],
+      "id": "52b70f7390d463313fa6",
+      "line": 387,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "1e1674c2d5ce7bebcb08070521c1c837ef9c438a36db48aa41f0747963bb33c1"
+    },
+    {
+      "commands": [],
+      "id": "44cdb78844772ea7ba18",
+      "line": 563,
+      "operations": [
+        "GET /metrics"
+      ],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "8e02af3eb9a74027e515752a1896a654888650727b6778fd3f7009e124db1c9c"
+    },
+    {
+      "commands": [],
+      "id": "143e2f276a5e584f974c",
+      "line": 14,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "2398075d015d26836a9928fbeaa1892cd68e7b4449b88665b85cc3b8fb5d85a7"
+    },
+    {
+      "commands": [],
+      "id": "2dc86d95066a14fd18cc",
+      "line": 234,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a6ce1065202b381a7fc277a2da16005aa5f1932dedf0ea0b535ca992dfaf49b8"
+    },
+    {
+      "commands": [],
+      "id": "d016b3c17ca7109c12a7",
+      "line": 490,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "037a35d99f1708c3a93637348428f211941ee1981563bf624986f5c5e6eae117"
+    },
+    {
+      "commands": [],
+      "id": "5d219279944089e25b21",
+      "line": 653,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d55e377992bcc6b0a25772b17b0243ba2d9d6429d007927e1c5f24dd74d2cfd7"
+    },
+    {
+      "commands": [],
+      "id": "d4f155366ea16e6c19de",
+      "line": 703,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "77f32fa92bd315aa79a88b905f67fbd5a96495797bfb508eedafe273114e4582"
+    },
+    {
+      "commands": [],
+      "id": "6c222728e51ed0c75b69",
+      "line": 25,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/setup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "7fd67b149bf0f9befcf695aeada75d84db4d3519d7406ec829ae8041de9bcc33"
+    },
+    {
+      "commands": [],
+      "id": "eb9742894f474a2bef8d",
+      "line": 80,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/setup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e8d837b077473094754c3757adc2f8d6fa67e75abc11ceab9f5f82f7e1b7220a"
+    },
+    {
+      "commands": [],
+      "id": "815e8e20367a9f315e92",
+      "line": 119,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/setup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ea49cefb55657a6ecd1431a7e847bf6dcf0d245593c31909e2f4a1ebe409c207"
+    },
+    {
+      "commands": [],
+      "id": "98d87908d0ea5d83d38c",
+      "line": 181,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/setup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "216382759815ed5594638993c9550757681d403aa00abd9e1a78c9649437b154"
+    },
+    {
+      "commands": [],
+      "id": "39137e99731f7538f3e6",
+      "line": 221,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/setup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "103a97cc31a4657ed6e9179854e379ab6d11d45260726d8f5d35ae9ab197b94a"
+    },
+    {
+      "commands": [],
       "id": "3ee038dbe9579d3657a9",
       "line": 4,
       "operations": [],
@@ -5891,6 +6244,7 @@
       "b1ac16407876c036e62f",
       "bfc1f9e0926d3b27ec1e",
       "53ee9508d18900d0f5e2",
+      "44cdb78844772ea7ba18",
       "385e0c453360b9cac26f",
       "d88b41c37bcb3abc465d"
     ],
@@ -6111,7 +6465,7 @@
   "schema_version": 1,
   "scope": "Direct examples are static source mappings; missing examples are not implementation failures. Runtime and release qualification are separate.",
   "summary": {
-    "fences": 575,
+    "fences": 614,
     "operations": 244,
     "operations_with_direct_examples": 53,
     "operations_without_direct_examples": 191
