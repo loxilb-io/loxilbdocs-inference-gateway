@@ -10,7 +10,29 @@ Distinguish verified identity forwarding, cached-key validation and confirmed po
     The [Quickstart](../../getting-started/quickstart.md) provides the canonical mutation lifecycle.
     Read the [evidence limits](index.md#verification-and-evidence-limits) before recording a result.
 
-## Prerequisites and identity verification
+## Before you start
+
+Use only the lab-owned dependency containers and retain their healthy baseline.
+
+**Focus of this page:** Interrupt one policy or identity dependency while keeping a normal control path.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/admission.md"
+
+These are Linux containers/namespaces on one disposable host. The model names identify synthetic echoes, not loaded GPU models. The baseline listener is VIP 192.0.2.254:2040; TLS, capacity and failure exercises add the explicit listener ports shown in their steps. Keycloak/JWKS and PostgreSQL use inspected Docker-bridge addresses.
+
+| Where | What happens here |
+|---|---|
+| Host operator | Prepare private LAB files, issue credentials and run namespace commands. |
+| l3h1 | Send management calls and client traffic into llb1. |
+| llb1 | Enforce identity, quota and capacity before choosing a backend. |
+| l3ep1 / l3ep2 | Observe independent Llama/Mistral receipt and hold/release fixtures. |
+| kc-aigw / pg-jwtauth | Supply identity and policy state; they are not on the inference response path. |
+
+## Walkthrough
+
+### Prerequisites and identity verification
 
 Run only on the disposable lab; leave the bootstrap profiles intact. kc/2040 strips Authorization and client X-Auth fields, kc-fwd/2045 injects verified tenant/user without bearer passthrough, kc-pass/2046 explicitly forwards Authorization. Profile forward_identity and authorization_passthrough are independent booleans, false by default. Send forged X-Auth-Tenant/User with a valid JWT: the backend must see tenant-a and Alice sub, never the forged values. Compare with 2040 and 2046.
 
@@ -23,7 +45,7 @@ sudo ip netns exec l3h1 curl -sS -i --config "$LAB/alice.curl" \
   --data-binary @"$LAB/examples/llama-request.json" "http://$VIP:2045/v1/chat/completions"
 ```
 
-## Verify cached JWKS versus never-fetched keys
+### Verify cached JWKS versus never-fetched keys
 
 First warm 2047 with a valid Alice request and confirm receipt1. Keep the existing token unexpired, then pause the lab Keycloak. New token issuance times out; cached verification on 2047 continues while keyset freshness and token validity permit. The never-fetched blackhole profile on 2044 must return 503 `policy_store_unavailable` with receipt0. The outage profile refresh is ten seconds; the default maximum key staleness is 24 hours, not indefinite fail-open. Always unpause Keycloak and verify new issuance plus normal requests afterwards.
 
@@ -44,7 +66,7 @@ sudo ip netns exec l3h1 curl -sS -i --config "$LAB/alice.curl" \
 docker unpause kc-aigw
 ```
 
-## Configure confirmed policy states, inject and recover a store fault
+### Configure confirmed policy states, inject and recover a store fault
 
 The commands source the private bootstrap .state locally for PG owner/database/role values; never print it. Warm f1/f2 on 2063. Set f1 RPS1; create then DELETE f2 so the store has confirmed absence. Do not pre-query 2066: GET/traffic can warm the supposedly unread rung.
 
@@ -71,6 +93,10 @@ sudo ip netns exec l3h1 curl -sS -i "$API/config/ai/user/ratelimit/$(jq -r .tena
 sudo ip netns exec l3h1 curl -sS -i -X DELETE "$API/config/ai/user/ratelimit/tenant-qf/$F2_SUB"
 ```
 
+**Step 1 — Send the request and save the observation**
+
+Use the namespace/container shown by the command. Keep the response file and HTTP status separate; the next check explains the expected result.
+
 ```bash
 sleep 2
 export GW_START_BEFORE=$(docker inspect -f '{{.State.StartedAt}}' llb1)
@@ -96,6 +122,13 @@ sudo ip netns exec l3h1 curl -sS -i --max-time 15 \
   --data-binary @"$LAB/examples/llama-request.json" "http://$VIP:2064/v1/chat/completions"
 docker exec "$PG_NAME" psql -U "$PG_OWNER" -d "$PG_DB" -Atc \
   'GRANT USAGE ON SCHEMA aigw TO aigwuser'
+```
+
+**Step 2 — Send the request and save the observation**
+
+Use the namespace/container shown by the command. Keep the response file and HTTP status separate; the next check explains the expected result.
+
+```bash
 sudo ip netns exec l3h1 curl -sS -i --config "$LAB/alice.curl" \
   -H 'Content-Type: application/json' -H "X-Test-Nonce: $RUN-store-recovery" \
   --data-binary @"$LAB/examples/llama-request.json" "http://$VIP:2066/v1/chat/completions"
@@ -112,6 +145,16 @@ docker inspect -f '{{.Name}} paused={{.State.Paused}} running={{.State.Running}}
 ```
 
 
-## Troubleshooting and cleanup
+### Troubleshooting and cleanup
 
 Use [diagnosis and scoped cleanup](cleanup.md). Restore this chapter's changes before moving to another policy experiment.
+
+## Check your result
+
+Separate cached/applied decisions, fresh dependency access and recovery; never leave a dependency paused.
+
+Compare API readback with the normal request, the deliberate denial, and an independent backend observation. Check the chapter's exact HTTP code and error body; HTTP 200 alone does not prove quota, identity, queue order, or resource return.
+
+## Next steps and cleanup
+
+Restore the chapter's temporary policy before continuing in the same lab. Keep the original configuration and private evidence; use the final cleanup chapter when the entire lab is finished. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

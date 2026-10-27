@@ -6,7 +6,29 @@
 
 [Converged guide overview](matrix-manual.md) · [Previous: 4. Configure Gateway Routing](configure.md) · [Next: 6. Switch Modes, Clean Up and Roll Back](lifecycle.md)
 
-## Verify requests and outcomes { #matrix-request-verification }
+## Before you start
+
+Keep the working workers and Gateway rule from Step 4.
+
+**Focus of this page:** Send complete chat/SSE through the Gateway and correlate independent worker evidence.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/converged.md"
+
+This diagram shows the converged three-worker guide. Choose one engine and one model per run: workers 1/2/3 are replicas of that choice, not vLLM, SGLang and TensorRT-LLM mixed together. Select actual host addresses in the model-selection step; documentation addresses are examples. Each converged worker performs both prefill and decode.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### Verify requests and outcomes { #matrix-request-verification }
 
 ```bash
 curl -fsS --max-time 180 -H 'Content-Type: application/json' \
@@ -22,7 +44,7 @@ curl -N -fsS --max-time 180 -H 'Content-Type: application/json' \
 cat "$RUN/stream-response.sse"
 ```
 
-## Validate complete SSE
+### Validate complete SSE
 
 On the controller, validate the saved stream. For a worker's direct check in
 Step 3, set `SSE_FILE="$RUN/direct-stream.sse"` in that worker's shell instead.
@@ -64,7 +86,7 @@ is insufficient.
   verification on a native engine path, obtain approved backend-side receipts.
   Successful requests alone do not establish cache reuse or an Exact benefit.
 
-## Controlled routing check on the isolated receipt path
+### Controlled routing check on the isolated receipt path
 
 Use this block only when Step 3's collectors are running on all workers and
 Step 4 used `BACKEND_PORT=8102`. For native port 8000, supply equivalent
@@ -196,7 +218,7 @@ return and capacity using the [operations checks](verify.md#negative-and-recover
 Report only the executed scope. [Fail-over tuning](failover-tuning.md) also
 separates observations from the independent P/D tests.
 
-## Troubleshooting
+### Troubleshooting
 
 | Symptom | Diagnosis and next step |
 |---|---|
@@ -213,7 +235,7 @@ separates observations from the independent P/D tests.
 | High latency or incomplete load | Lower arrivals/concurrency/output; compare RR under the same workload or add GPU capacity; follow the QA appendix |
 | Deleted rule returns after restart | Inspect persisted snapshot/effective state and supported persistence workflow; do not delete unrelated snapshots |
 
-## Negative and recovery checks
+### Negative and recovery checks
 
 On an isolated owned rule, retain before/after state and independent backend
 receipts as prescribed by the quickstart. Do not send disruptive probes to shared
@@ -235,3 +257,13 @@ remains a failure even when a later request succeeds.
 ---
 
 [Previous: 4. Configure Gateway Routing](configure.md) · [Next: 6. Switch Modes, Clean Up and Roll Back](lifecycle.md)
+
+## Check your result
+
+A returned response is not Exact placement or cache reuse proof; keep negative mutations and receipts.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

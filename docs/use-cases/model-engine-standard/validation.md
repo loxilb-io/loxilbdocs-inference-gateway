@@ -6,7 +6,29 @@ This appendix is separate from the [installation path](matrix-manual.md). Ordina
 operators first need healthy engines, correct Gateway state and completed chat/SSE.
 A performance claim requires a controlled workload and independent verification.
 
-## What is established, and what is still required
+## Before you start
+
+Use this page to decide which additional checks your deployment needs.
+
+**Focus of this page:** Separate functional delivery from GPU, release, fail-over and production acceptance.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/llm-reference.md"
+
+This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Reading path and reference
+
+### What is established, and what is still required
 
 | Evidence lane | Scope of this guide | What it does not establish |
 |---|---|---|
@@ -28,7 +50,7 @@ package. This guide deliberately publishes no numerical speedup or capacity clai
 Keep operational failure limitations visible rather than promoting successful
 subsets into a performance result.
 
-## Historical operating lessons
+### Historical operating lessons
 
 The original comparison used three L4 24 GB workers in a converged pool. vLLM
 prefix caching was enabled for both RR and Exact. Exact changed worker placement;
@@ -51,7 +73,7 @@ it did not turn engine caching on for the first time.
   They are not a pure binary-only comparison against arbitrary current releases.
   They do not prove P/D behavior or a new fail-over campaign.
 
-## Measurement and failure qualification
+### Measurement and failure qualification
 
 Use [Performance Measurement](../performance-methodology.md) for the common
 A/B protocol, input table, complete-population accounting and interpretation.
@@ -71,3 +93,13 @@ functional result does not close capacity, full fail-over or release gates.
 <a id="failure-recovery-and-cleanup-gate"></a>
 
 [Current reference](verify.md#negative-and-recovery-checks).
+
+## Check your result
+
+Treat an unrun dimension as unqualified even when another dimension passed.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

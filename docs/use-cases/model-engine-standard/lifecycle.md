@@ -6,7 +6,29 @@
 
 [Converged guide overview](matrix-manual.md) · [Previous: 5. Verify Requests and Routing](verify.md)
 
-## Change and rollback
+## Before you start
+
+Stop new load and retain the original rule, profile identities and owner labels.
+
+**Focus of this page:** Drain before switching policy or deleting owned workers and Gateway resources.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/converged.md"
+
+This diagram shows the converged three-worker guide. Choose one engine and one model per run: workers 1/2/3 are replicas of that choice, not vLLM, SGLang and TensorRT-LLM mixed together. Select actual host addresses in the model-selection step; documentation addresses are examples. Each converged worker performs both prefill and decode.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### Change and rollback
 
 Stop/drain application traffic before destructive replacement. Preserve the last
 **applied create JSON**, image digest and model/engine settings. Also retain a
@@ -27,7 +49,7 @@ which creates a service interruption. To roll back, delete the failed replacemen
 copy `gateway-before-change.json` back to `model-engine-gateway.json`, POST it, and repeat
 readback, Exact readiness when applicable, and actual chat/SSE checks.
 
-## Apply a different mode
+### Apply a different mode
 
 **Gateway/controller shell.** Save the original body above, drain clients, then
 run the rule deletion/readback block under [Cleanup and restart](#cleanup-and-restart).
@@ -65,7 +87,7 @@ export ROUTING_MODE=rr
 Choose `exact` instead for RR to Exact. Save the replacement readback and test
 responses separately before repeating a check whose filenames already exist.
 
-## Roll back a failed replacement
+### Roll back a failed replacement
 
 Delete the failed replacement with the scoped block below and prove absence.
 Restore the original engine/registry/Gateway tuple first if it changed. Then:
@@ -95,7 +117,7 @@ before starting the old container on its former port. Environment changes in a
 Gateway container require recreation with the intended mounts/flags and persistence
 policy; see [backup/restore](../../operations/backup-restore.md).
 
-## Cleanup and restart
+### Cleanup and restart
 
 First stop client traffic. These commands are for the IP-hosted rule in this guide;
 if you changed `host`, use the actual host component in the deletion path.
@@ -145,7 +167,7 @@ image and settings, then check actual engine version/model, health and traffic
 through the Gateway. A changed engine or registry requires restoration of that
 matching tuple as well as the rule.
 
-## Finish the owned lab
+### Finish the owned lab
 
 After rule absence/readiness checks, stop optional collector processes with
 Ctrl-C in their recorded terminals. Save Gateway logs and stop only this named,
@@ -169,3 +191,13 @@ already-used name.
 ---
 
 [Previous: 5. Verify Requests and Routing](verify.md)
+
+## Check your result
+
+Check requests have stopped and original state is restored; keep model data under the chosen retention policy.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

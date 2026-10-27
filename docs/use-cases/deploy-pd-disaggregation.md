@@ -22,7 +22,29 @@ selection internals, and read this page for the wire, launch flags, and debuggin
 
 ---
 
-## 1. Choose the KV-exact topology before you deploy
+## Before you start
+
+Use an isolated GPU fleet and the historical engine contract stated below.
+
+**Focus of this page:** This advanced vLLM reference uses two Prefill workers and one Decode worker.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/pd.md"
+
+Prefill and decode are separate workers. The solid lines are request/control paths; the dashed worker-to-worker edge is engine-specific KV transfer and needs its own ports, version compatibility and evidence. An HTTP route or an accepted config is not transfer proof. Follow only the selected engine runbook.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### 1. Choose the KV-exact topology before you deploy
 
 LoxiLB supports two KV-exact topologies: mode 1 for a P/D-disaggregated pool and mode 3 for a
 role-less single pool. This guide is intentionally about **P/D mode 1**, whose selector is invoked
@@ -52,7 +74,7 @@ two shapes.
 
 ---
 
-## 2. Reference topology (2 prefill + 1 decode)
+### 2. Reference topology (2 prefill + 1 decode)
 
 Any GPU instances will do; co-locate the nodes on one low-latency subnet so NIXL KV transfer and
 ZMQ events stay fast. Addresses below are placeholders — substitute your own.
@@ -71,7 +93,7 @@ ZMQ events stay fast. Addresses below are placeholders — substitute your own.
 
 ---
 
-## 3. The three planes
+### 3. The three planes
 
 | Plane           | Carries                                         | Path                                                                     |
 |-----------------|-------------------------------------------------|--------------------------------------------------------------------------|
@@ -86,9 +108,9 @@ broken KV-transfer plane fails requests outright (503/timeout).
 
 ---
 
-## 4. vLLM configuration (commonly misconfigured)
+### 4. vLLM configuration (commonly misconfigured)
 
-### 4.1 Prefill node (kv_producer + KV-event publish)
+#### 4.1 Prefill node (kv_producer + KV-event publish)
 
 ```text
 docker run -d --name vllm --gpus all --network host \
@@ -106,12 +128,12 @@ docker run -d --name vllm --gpus all --network host \
     --kv-events-config '{"enable_kv_cache_events":true,"publisher":"zmq","endpoint":"tcp://*:5557"}'
 ```
 
-### 4.2 Decode node (kv_consumer; no KV-event publish)
+#### 4.2 Decode node (kv_consumer; no KV-event publish)
 
 Identical to the prefill launch, except: `--port 8200`, `"kv_role":"kv_consumer"`, and **no
 `--kv-events-config`** (decode nodes don't publish inventory; they're never KV-selection candidates).
 
-### 4.3 Why each non-obvious flag matters
+#### 4.3 Why each non-obvious flag matters
 
 | Flag | Why | Failure if wrong |
 |------|-----|------------------|
@@ -123,7 +145,7 @@ Identical to the prefill launch, except: `--port 8200`, `"kv_role":"kv_consumer"
 | `--block-size 16` | Must equal the rule's `kvBlockSize`. | Hashes computed over different token spans → no match. |
 | `--kv-events-config endpoint tcp://*:5557` | `*` binds PUB mode; `127.0.0.1` puts ZMQ in connect mode and **nothing is published**. | `loxilb_pd_kv_blocks` stays 0 forever. |
 
-### 4.4 Historical launch layouts — prefill and decode { #44-copy-paste-launch-reference-prefill-and-decode }
+#### 4.4 Historical launch layouts — prefill and decode { #44-copy-paste-launch-reference-prefill-and-decode }
 
 The two launches below are the full, exact commands with every load-bearing flag spelled out.
 Prefill **publishes** KV events; decode does **not**. Substitute `<MODEL>`, the node IPs, and the
@@ -174,7 +196,7 @@ for the selected artifact rather than executing these annotated layouts.
     side channel on `:5600`, `kv_buffer_device:"cpu"` paired with `UCX_TLS=tcp` (RDMA-free) — is
     identical on both roles. Keep `--max-model-len` identical fleet-wide.
 
-### 4.5 The decode NIXL block-count contract
+#### 4.5 The decode NIXL block-count contract
 
 The NIXL producer and consumer must agree on GPU block counts. If the decode engine advertises a
 different `num_gpu_blocks` than the prefill set, the handoff trips with `num_external_tokens == 0`
@@ -199,7 +221,7 @@ curl -s "http://<node-ip>:8100/metrics" | grep 'vllm:cache_config_info'
     There is no error — decode simply recomputes. Always reconcile `num_gpu_blocks` across the mesh
     before believing a P/D deployment is transferring KV.
 
-### 4.6 Full-mesh redeploy discipline
+#### 4.6 Full-mesh redeploy discipline
 
 The NIXL mesh is a fully-connected producer/consumer set. **A partial restart wedges it** — bringing
 one prefill back against a mesh the others already joined leaves stale peer state, and the new node
@@ -214,9 +236,9 @@ When any engine's launch flags change, redeploy the **whole** mesh in order:
 
 ---
 
-## 5. loxilb configuration
+### 5. loxilb configuration
 
-### 5.1 Run loxilb as a CONTAINER (native does not serve the VIP)
+#### 5.1 Run loxilb as a CONTAINER (native does not serve the VIP)
 
 A natively-launched `loxilb` process has no eBPF VIP intercept wired — `curl VIP:9003` gets
 connection-refused. You **must** run the container:
@@ -237,7 +259,7 @@ Replace `<released-version>` with an explicitly reviewed release tag, or set
 `LLB_KV_HASH_DEBUG=1` only during short, access-controlled parity troubleshooting because it
 produces verbose per-block diagnostics.
 
-### 5.2 The LB rules — four modes to compare
+#### 5.2 The LB rules — four modes to compare
 
 All P/D rules are `mode: 4` + `pd_disagg_mode: true`, with endpoints `ep_role: 1` (prefill) /
 `ep_role: 2` (decode) and `nixl_port: 5600`. A four-way VIP setup lets you compare KV-exact against
@@ -282,7 +304,7 @@ The KV-exact rule body (`:9003`), posted to `http://<VIP>:11111/netlox/v1/config
     `kvExactMode`, `kvZmqPort`, `kvHashAlgo`, `kvBlockSize`, `externalIP`, `targetPort` are
     **camelCase**. Mixing them up silently drops the field — the API does not error.
 
-### 5.3 BYO fleet provisioning — the inventory model
+#### 5.3 BYO fleet provisioning — the inventory model
 
 For a reproducible bring-your-own-hardware deployment, drive the whole fleet from a **single
 inventory** (one source of truth, zero hardcoded hosts). Describe each host once; every launch
@@ -314,7 +336,7 @@ The `role` / `pd_role` split maps directly onto the pools and their ports:
 Both prefill and decode run the NIXL side channel on `:5600`; only prefill runs the ZMQ publisher on
 `:5557`.
 
-### 5.4 Running loxilb on the fleet
+#### 5.4 Running loxilb on the fleet
 
 On the `loxilb` host, run the gateway as a privileged host-network container so its eBPF/XDP hooks
 attach to the real NIC. Mount the tokenizer tree (§5.5) and set the parity env:
@@ -342,7 +364,7 @@ promote a moving tag directly into production.
     and **wedges the host's networking** — the box can lose connectivity until reboot. Always stop it
     gracefully with `docker stop -t 30 loxilb` so it detaches the data-plane hooks cleanly.
 
-### 5.5 Staging per-model tokenizers
+#### 5.5 Staging per-model tokenizers
 
 loxilb tokenizes prompts itself to compute block hashes, so each served model's tokenizer must be
 staged on the loxilb host **before** the rule goes live. The directory name is the model id with
@@ -359,7 +381,7 @@ produces a KV-exact MISS on the tokenize step (visible as
 through to minimum-load selection. Switching the model a rule serves means staging that model's
 tokenizer dir first.
 
-### 5.6 Synthesizing a capacity contrast
+#### 5.6 Synthesizing a capacity contrast
 
 The rule in this guide uses `sel: 0`, whose Tier-2 score is active connections plus queued
 requests. It does not consume a capacity contrast. The procedure below is retained only to prepare
@@ -381,7 +403,7 @@ done
 # compare the num_gpu_blocks labels — max should be >= 4x min
 ```
 
-### 5.7 The two-rule A/B pattern
+#### 5.7 The two-rule A/B pattern
 
 To prove KV-exact routing is doing something, run it side by side against a round-robin baseline over
 the **same** backends — two VIPs, identical endpoint lists, different selectors:
@@ -396,14 +418,14 @@ KV-exact rule body, and [KV-Cache-Aware Routing](../concepts/kv-routing.md) for 
 
 ---
 
-## 6. Verify the engine contract
+### 6. Verify the engine contract
 
 Use [Engine Contracts](../ai-gateway/engine-contracts.md) for the canonical vLLM
 seed/hash/block-size contract and [profile readiness](../ai-gateway/model-profiles-kv-readiness.md)
 for strict binding. Legacy profile-less examples here are not a validated strict
 model installation. Complete effective-state and event/receipt checks before A/B.
 
-## 7. End-to-end request sequence (client → response)
+### 7. End-to-end request sequence (client → response)
 
 Observed flow for a request whose prefix is already cached on Prefill-2 (2 prefill, 1 decode):
 
@@ -441,7 +463,7 @@ sequenceDiagram
 
 ---
 
-## 8. Observe serving and cache engagement
+### 8. Observe serving and cache engagement
 
 Use [KV Routing Verification](../operations/kv-routing-verification.md) for
 inventory, subscribers, hit/miss signals and independent delivery proof. P/D
@@ -450,7 +472,7 @@ requires both roles, transfer readiness and complete SSE. The
 explains terminal phase/status counters. A metrics-only decision is not backend
 receipt evidence; a healthy decode socket is not transfer recovery proof.
 
-## 9. Debugging playbook
+### 9. Debugging playbook
 
 | Symptom | Likely cause | Diagnosis / fix |
 |---------|-------------|-----------------|
@@ -465,7 +487,7 @@ receipt evidence; a healthy decode socket is not transfer recovery proof.
 
 ---
 
-## 10. Verification recipe
+### 10. Verification recipe
 
 A ~30-second probe proving the whole path: warm one long-prefix request, then confirm same-prefix
 requests pin to the cached prefill endpoint and inventory grew.
@@ -490,7 +512,7 @@ Any other shape points back to the parity triad (§6) or the ZMQ inventory plane
 
 ---
 
-## See also
+### See also
 
 - [P/D Disaggregation](../ai-gateway/pd-disaggregation.md) — mechanism reference: selection
   internals, the `pd_*` service arguments, and endpoint roles.
@@ -522,3 +544,13 @@ Any other shape points back to the parity triad (§6) or the ZMQ inventory plane
 <a id="83-quick-did-it-fire-checks-for-a-fresh-byo-fleet"></a>
 
 [Current reference](../ai-gateway/engine-contracts.md).
+
+## Check your result
+
+Verify all three planes: client HTTP, metadata/inventory, and native KV transfer. Preserve the historical version limits.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the role-specific cleanup in the selected P/D runbook below or linked from this page. Stop its transfer/event publishers and native Prefill/Decode processes by their recorded ownership. Do not apply a converged worker teardown to a separate P/D deployment. Preserve the model data and evidence under your retention policy.

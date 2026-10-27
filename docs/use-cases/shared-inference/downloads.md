@@ -11,15 +11,37 @@ The same complete rule is written out in [onboarding](identity.md); downloading 
 
 <!-- example-status-default: illustrative-only -->
 
-## How to run and adapt a chapter
+## Before you start
 
-Use the root Bash session and variables from [setup](setup.md). Keep the outer `LAB` variable set to the same private run directory. Each block sources `$LAB/env` inside a subshell and stops on an unexpected failure; the parent shell remains available for diagnosis and cleanup. `exit 1` below exits only that block. To reopen a terminal, set `LAB` to your existing run directory before resuming; the block loads the remaining saved values. Never skip a failed block or run only its trailing lines. Read each experiment first, then run its complete Bash block. The hold fixture releases after 60 seconds and clients time out after 55 seconds; pausing while reading in the middle of a contention experiment invalidates its backlog. Keep those bounds when increasing request counts, or deliberately adjust the fixture/client bounds and revalidate the contention state.
+Keep the selected DOCS checkout and private LAB from setup.
+
+**Focus of this page:** The backend is the only executable fixture; rule.json is editable input.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/shared.md"
+
+One disposable Linux host contains two Gateway/DB containers and four network namespaces. Support reaches the Gateway on 192.0.2.254; research uses its 198.51.100.254 interface. The backend is a host Python process in share-backend, not an inference engine. PostgreSQL uses its inspected Docker-bridge address.
+
+| Where | What happens here |
+|---|---|
+| Host root Bash | Create namespaces, save LAB inputs, start/stop exact owned processes. |
+| share-a / share-b | Send inference as support/research; management curls use share-a. |
+| share-gateway | Apply policy and forward requests; management is port 11111, inference port 8080. |
+| share-backend | Read /receipt/ and /order directly, bypassing Gateway routing. |
+| share-pg | Keep keys/objectives; pause only in the explicit recovery experiment. |
+
+## Reading path and reference
+
+### How to run and adapt a chapter
+
+Use the root Bash session and variables from [setup](setup.md). Keep the outer `LAB` variable set to the same private run directory. The blocks run in one dedicated root Bash and retain variables and background jobs between steps. Do not open a new shell for each box: later `wait` commands must run in the shell that started the clients. An unexpected failure exits the dedicated lab shell; use the original terminal for diagnosis and cleanup. For diagnosis or cleanup from a new terminal, set `LAB` to the saved directory and source its private env file. Do not resume a half-run contention experiment in that new shell: its clients belong to the old shell. Clean up the owned run and start a new LAB for a complete retry. Never skip a failed block or run only its trailing lines. Read each experiment first, then run its short Bash steps consecutively in the same shell. The hold fixture releases after 60 seconds and clients time out after 55 seconds; pausing while reading in the middle of a contention experiment invalidates its backlog. Keep those bounds when increasing request counts, or deliberately adjust the fixture/client bounds and revalidate the contention state.
 
 Each management request shows its HTTP method, exact API path, JSON request file, response file and expected status. POST `/config/loadbalancer` receives `serviceArguments` plus `endpoints`; GET `/config/loadbalancer/all` returns `lbAttr`. Only request fields belong in a POST. Effective GET fields such as fc_effective are observations, not configuration inputs.
 
 Each policy experiment derives its request from `$LAB/base-rule.json` with an explicit jq merge into serviceArguments. This resets the other knobs to the visible base for a controlled comparison. If you want to change only part of your own deployment, retain its original **request** JSON and edit that instead; do not use this lab's base to replace an unrelated service. Review omitted/zero semantics in [UC-1 common conventions](../admission-flow-control/common.md).
 
-## Read the request and the independent receipt
+### Read the request and the independent receipt
 
 `curl --config "$LAB/keys/support.curl"` reads a private key header without printing it. Change that file to select another workload credential. `--data-binary @...request.json` sends the exact bytes shown in the preceding heredoc; edit model, messages, max_tokens or an authorized objective there. `--http1.1` selects the waiting-queue path this lab measures. A trailing `&` starts a held request, `$!` captures its PID, and `wait` checks its eventual curl exit.
 
@@ -38,7 +60,7 @@ The receipt is fetched directly inside share-backend, bypassing Gateway routing.
 
 X-Test-Nonce, X-Test-Hold and the backend `/receipt/` and `/release/` endpoints are synthetic lab controls, not product policy APIs. Every experiment uses unique request names. Keep LAB private: keys, prompts and observed headers must not be copied to public issues. The chapters show explicit jq checks for resolved tenant/class and typed errors; inspect the saved JSON when adapting a condition.
 
-## Policy units and defaults
+### Policy units and defaults
 
 Triples always follow `critical:standard:sheddable`. Positive objective priority is critical, zero is standard, negative is sheddable. Magnitude matters for permission raises (including negative-to-less-negative), not for creating more than three scheduling bands.
 
@@ -60,3 +82,13 @@ Triples always follow `critical:standard:sheddable`. Positive objective priority
 | fc_shed_queue | on / off / inherit | Whether sheddable requests may wait |
 
 A base-rule POST can return 409 for an identical no-op; do not treat arbitrary 409 as successful apply. Every exercise changes a field before expecting 200. Rejected invalid configurations must preserve prior traffic. Tenant ratelimit POST normally returns **204**, key creation **201**, rule/objective/binding POST **200**. Auth disabled uses enum `disabled`, never `off`. Read [UC-1 replacement semantics](../admission-flow-control/common.md) before restoring existing tenant quotas: a class-only tenant POST (tenant_id plus class/default/grant fields, as shown here) leaves rate limits unchanged. A POST that includes aggregate rate-limit fields uses their replacement semantics, where omitted aggregate values can reset limits; model rows have their own upsert behavior. Review the whole payload before applying it to an existing tenant.
+
+## Check your result
+
+Understand which files hold the request, Gateway response and independent receipt before adapting commands.
+
+Keep the configured policy, HTTP status, resolved identity, and independent backend receipt together. A rejected request must have receipt 0; a successful request must have receipt 1. A missing receipt response is a failed observation, never a zero.
+
+## Next steps and cleanup
+
+Continue in the documented order with the same LAB. Remove an experiment's binding or temporary rule before the next experiment; stop the shared lab only at the final cleanup chapter. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

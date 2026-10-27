@@ -1,5 +1,27 @@
 # Converged RR and KV-Exact: Five-Model Guide
 
+## Before you start
+
+Choose the model/engine tuple from the result ledger before starting.
+
+**Focus of this page:** One converged pool, three replicas, one complete six-step guide.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/converged.md"
+
+This diagram shows the converged three-worker guide. Choose one engine and one model per run: workers 1/2/3 are replicas of that choice, not vLLM, SGLang and TensorRT-LLM mixed together. Select actual host addresses in the model-selection step; documentation addresses are examples. Each converged worker performs both prefill and decode.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Reading path and reference
+
 Use this ordered guide to prepare a three-worker converged service and choose RR
 or strict KV-Exact. Every worker performs both prefill and decode. Follow the
 steps in order; later pages reuse the variables and evidence directory selected
@@ -77,3 +99,13 @@ and follow Step 1 to verify it. Historical inputs remain separate from current
 [Current section](matrix-manual.md).
 
 </details>
+
+## Check your result
+
+The input model, snapshot, tokenizer and profile identity must remain consistent across selection, launch and routing.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

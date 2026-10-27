@@ -6,7 +6,29 @@
 
 [Converged guide overview](matrix-manual.md) · [Previous: 3. Launch Engine Workers](launch.md) · [Next: 5. Verify Requests and Routing](verify.md)
 
-## Prerequisites
+## Before you start
+
+Require direct inference from every selected worker and the saved RUN environment.
+
+**Focus of this page:** Start the dedicated Gateway and configure one RR or strict Exact rule.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/converged.md"
+
+This diagram shows the converged three-worker guide. Choose one engine and one model per run: workers 1/2/3 are replicas of that choice, not vLLM, SGLang and TensorRT-LLM mixed together. Select actual host addresses in the model-selection step; documentation addresses are examples. Each converged worker performs both prefill and decode.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### Prerequisites
 
 On the controller, complete the [manual's selection and working-directory setup](select.md#matrix-model-selection)
 and keep its `PACKAGE`, `MODEL`, `PROFILE`, `ENGINE`, `RUN`, `VIP`, `PORT` and
@@ -15,7 +37,7 @@ an Exact registry there. Replace the documentation VIP/worker addresses and
 management URL in both variables and the selected JSON. Keep separate run
 folders for separate services; retain the applied create body for rollback.
 
-## Start a dedicated lab Gateway
+### Start a dedicated lab Gateway
 
 **Gateway/controller shell only.** This example starts an isolated **proxy-only**
 service on the host network, with loopback management and a local manual token.
@@ -113,7 +135,7 @@ For vLLM Exact additionally require the `kv_exact_vllm` capability's `ready=true
 inspect its reason codes if the seed precondition failed. RR skips profile
 discovery/attestation and does not require the evaluation registry.
 
-## Apply RR or Exact JSON { #matrix-rule-application }
+### Apply RR or Exact JSON { #matrix-rule-application }
 
 Copy the chosen tuple's file from `matrix-configurations/`; see the
 [Qwen/vLLM RR example](../../assets/model-engine-standard/matrix-configurations/qwen25-vllm-rr.json).
@@ -199,7 +221,7 @@ jq -e --slurpfile sent "$RUN/model-engine-gateway.json" \
 This command must print `true`; also inspect the full readback's monitoring,
 streaming and event fields. Preserve any additional configuration difference.
 
-## Verify strict Exact binding
+### Verify strict Exact binding
 
 **Exact only; skip this section for RR.** The generation below is from discovery
 above. If you reopened the shell, repeat that discovery to restore `PROFILE_GEN`.
@@ -228,7 +250,7 @@ timestamps, and recheck within a bounded window. For persistent errors, inspect
 other `/kv_cache_events` consumers, connectivity, contracts and subscriber state.
 Keep ownership checks enabled and classify ordinary serving separately from Exact.
 
-## Service fields to customize
+### Service fields to customize
 
 | JSON field | Required example | Meaning / customization |
 |---|---|---|
@@ -255,3 +277,13 @@ adapted identity/monitoring procedure.
 ---
 
 [Previous: 3. Launch Engine Workers](launch.md) · [Next: 5. Verify Requests and Routing](verify.md)
+
+## Check your result
+
+Compare complete request JSON, installed state, profile readiness and actual routing observations.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

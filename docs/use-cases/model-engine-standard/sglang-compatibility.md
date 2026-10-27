@@ -8,7 +8,29 @@ Use the [current case results](results.md#matrix-results) for actual
 model/mode acceptance. Source inspection and an old version's PASS are not new
 GPU evidence.
 
-## Version selection from the existing history
+## Before you start
+
+Select the exact SGLang version and event format used by your worker.
+
+**Focus of this page:** Keep tagged-array and tagged-map wire contracts separate.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/llm-reference.md"
+
+This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Reading path and reference
+
+### Version selection from the existing history
 
 The [engine capability history](../../concepts/engine-capability-matrix.md)
 records v0.5.18 with the `sglang-kv-rank-v1` tagged-array contract and prior live
@@ -41,7 +63,7 @@ The [version-selection record](../../assets/model-engine-standard/sglang-version
 separates historical wire samples, selected image identity, source evidence and
 current runtime results.
 
-## Separate development request: tagged-map events
+### Separate development request: tagged-map events
 
 A separate stock **0.5.21** evaluation used image
 `sha256:2dbe4c7f53230b09aaa8fa41891c13c51d9d2e253f486a70822aaf08783fff75`.
@@ -59,3 +81,13 @@ are retained separately from the compatible-version operator guide.
 
 The [catalog and installer integration page](catalog-installer.md) tracks the core-team
 registration proposal, successful staging checks and unresolved integration findings.
+
+## Check your result
+
+A compatible HTTP chat path does not prove the selected KV-event decoder or engine transfer path.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

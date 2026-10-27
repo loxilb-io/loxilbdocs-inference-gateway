@@ -7,7 +7,29 @@ bounded starting configuration, and verify recovery. The [standard cards](matrix
 use a converged pool. P/D settings below apply only to a separately prepared
 prefill/decode service; they must not be added wholesale to a converged rule.
 
-## Evidence and topology boundary
+## Before you start
+
+Use a known healthy deployment and retain its rule and retry settings before injecting failure.
+
+**Focus of this page:** Separate connection failure, response truncation, retry and endpoint recovery.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/llm-reference.md"
+
+This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### Evidence and topology boundary
 
 The tuning references were derived from historical Qwen2.5-7B/vLLM 0.31.0
 fail-over trials with two prefill workers, two decode workers, CPU KV buffers and
@@ -32,7 +54,7 @@ Distinguish four goals before tuning:
 | A recovered worker can serve again | Direct health, actual pair chat/SSE and redistributed backend receipts | TCP-active means KV transfer is ready |
 | Resources return after failure/cancel | Reservations, active proxy contexts, worker handles/memory and steady recovery | Zero role gauges alone prove no retained resources |
 
-## 1. Detect failures without confusing health with readiness
+### 1. Detect failures without confusing health with readiness
 
 | Argument / layer | Default or recorded starting value | Meaning, trade-off and check |
 |---|---|---|
@@ -47,7 +69,7 @@ entire decode endpoint can also exclude healthy pairs using it. The historical
 trials did not establish a public pair-readiness/canary argument. Do not invent
 one or call endpoint health a pair-readiness implementation.
 
-## 2. Bound connection attempts and avoid unsafe replay
+### 2. Bound connection attempts and avoid unsafe replay
 
 | Argument / behavior | Default or recorded input | Scope and limit |
 |---|---|---|
@@ -62,7 +84,7 @@ retry ENV to 3 does not authorize extra decode replays. Verify a failing attempt
 stage, whether any bytes/content were emitted, the actual backend receipts, and
 whether old reservations were returned before interpreting a successful retry.
 
-## 3. Keep survivors within a measured capacity
+### 3. Keep survivors within a measured capacity
 
 | Argument / layer | Default and historical evaluation input | Tuning consequence |
 |---|---|---|
@@ -77,7 +99,7 @@ The historical cap-4/queue-0 condition is a **reproduction starting point**,
 not a production recommendation proved for every model/GPU. Unset cap conditions
 were also used to study failures; they must not be promoted as safe defaults.
 
-### Newer capacity-admission contracts
+#### Newer capacity-admission contracts
 
 If your build exposes [Admission Flow Control](../../ai-gateway/admission-flow-control.md),
 inspect `fc_mode`, `fc_effective` and `fc_effective.source` first. Rule
@@ -92,7 +114,7 @@ active. Do not assume importing the historical ENV overrides newer per-rule
 settings. `observe` reports decisions without protecting the backend; `enforce`
 changes admission. Follow the linked contract's development/qualification limits.
 
-## 4. Align waiting budgets, sessions and KV lifetimes
+### 4. Align waiting budgets, sessions and KV lifetimes
 
 | Argument / layer | Default or recorded input | Meaning and precedence |
 |---|---|---|
@@ -116,7 +138,7 @@ environment. Gateway HTTP redial does not reset the engine's UCX TCP backoff.
 Do not copy an interface name from a test host. Keep existing NIC, MTU, route and
 OS TCP settings fixed while isolating one application-level variable.
 
-## 5. Inspect and adapt the separate reference files
+### 5. Inspect and adapt the separate reference files
 
 The [configuration ZIP](../../assets/model-engine-standard.zip) includes a
 separate `failover/` directory:
@@ -155,7 +177,7 @@ alone does not update a running process. Record actual container environment,
 image digest and effective rule. Use the canonical P/D deployment guide for the
 complete startup command; these fragments do not redefine that workflow.
 
-## 6. Tune one variable, validate and roll back
+### 6. Tune one variable, validate and roll back
 
 1. Retain the immutable Gateway/engine identities, original rule and environment,
    model/tokenizer/template revision, workload and healthy baseline receipts.
@@ -186,3 +208,13 @@ correctness, memory-leak freedom or GA fail-over acceptance. See the
 [QA evidence criteria](verify.md#negative-and-recovery-checks) and
 [configuration reference](../../ai-gateway/configuration-reference.md) for the
 public fields; check the served schema of the installed build before applying.
+
+## Check your result
+
+Count attempts and independent backend delivery; a final HTTP 200 cannot establish safe or single delivery.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

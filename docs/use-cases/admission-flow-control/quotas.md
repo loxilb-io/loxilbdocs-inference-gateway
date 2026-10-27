@@ -10,7 +10,29 @@ Apply separate user, tenant and model budgets, then verify admission, accounting
     The [Quickstart](../../getting-started/quickstart.md) provides the canonical mutation lifecycle.
     Read the [evidence limits](index.md#verification-and-evidence-limits) before recording a result.
 
-## Prerequisites and user RPS configuration
+## Before you start
+
+Complete identity and retain the separate user credentials.
+
+**Focus of this page:** Apply user, tenant and model request/token budgets one scope at a time.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/admission.md"
+
+These are Linux containers/namespaces on one disposable host. The model names identify synthetic echoes, not loaded GPU models. The baseline listener is VIP 192.0.2.254:2040; TLS, capacity and failure exercises add the explicit listener ports shown in their steps. Keycloak/JWKS and PostgreSQL use inspected Docker-bridge addresses.
+
+| Where | What happens here |
+|---|---|
+| Host operator | Prepare private LAB files, issue credentials and run namespace commands. |
+| l3h1 | Send management calls and client traffic into llb1. |
+| llb1 | Enforce identity, quota and capacity before choosing a backend. |
+| l3ep1 / l3ep2 | Observe independent Llama/Mistral receipt and hold/release fixtures. |
+| kc-aigw / pg-jwtauth | Supply identity and policy state; they are not on the inference response path. |
+
+## Walkthrough
+
+### Prerequisites and user RPS configuration
 
 Use q1/q2 under tenant-q. Issue each credential using setup, retaining decoded sub in its claims file. User `tenant_id` and `user_id` are required; `rps=1` is requests/second and `burst_size=1` is requests of burst capacity. Zero/omitted burst_size uses rps. User POST replaces the complete row: repeat existing TPM/model_limits to preserve them. A zero user rps falls through to rule/global defaults, rather than overriding them with unlimited.
 
@@ -34,7 +56,7 @@ export T1=$(date +%s%N)
 printf 'pair elapsed ms=%s\n' "$(( (T1-T0)/1000000 ))"
 ```
 
-## Verify a shared tenant RPS ceiling
+### Verify a shared tenant RPS ceiling
 
 Use t1/t2, both tenant-qt, without explicit user rows. The first request from t1 is 200; an immediate t2 request is 429 `tenant_quota_exceeded`, receipt 0. Tenant rps is aggregate requests/second; this API has no user burst_size. `burst_pct` adjusts token bucket depth, not RPS burst. Omitted tenant aggregate rps/TPM are written as zero; preserve them explicitly when updating model policy. Omitted/empty tenant model_limits preserves existing model rows.
 
@@ -58,7 +80,7 @@ sudo ip netns exec l3h1 curl -sS -i -X POST "$API/config/ai/tenant/ratelimit" \
 sudo ip netns exec l3h1 curl -sS "$API/config/ai/tenant/ratelimit/tenant-qt" | jq .
 ```
 
-## Cleanup and verify RPS recovery
+### Cleanup and verify RPS recovery
 
 DELETE the explicit user row, GET 404, and verify resulting defaults with traffic. Tenant quotas have no DELETE endpoint: POST rps=0 and tokens_per_min=0, GET zero/omitted aggregates, then repeat t1/t2 requests and require 200. A tenant row need not disappear. If there was a policy before the lab, restore that policy instead of zero.
 
@@ -70,7 +92,7 @@ sudo ip netns exec l3h1 curl -sS "$API/config/ai/tenant/ratelimit/tenant-qt" | j
 sudo ip netns exec l3h1 curl -sS "$API/config/ai/tenant/ratelimit/tenant-qt" | jq .
 ```
 
-## Token policy configuration and scope isolation
+### Token policy configuration and scope isolation
 
 | Input | Required / unit / example | Replacement and effective behavior |
 |---|---|---|
@@ -129,7 +151,7 @@ sudo ip netns exec l3h1 curl -sS "$API/config/ai/tenant/ratelimit/tenant-qn" | j
 sudo ip netns exec l3h1 curl -sS "$API/config/ai/tenant/ratelimit/tenant-qn" | jq .
 ```
 
-## Verify reservation, cancellation and recovery
+### Verify reservation, cancellation and recovery
 
 The complete reserve-request.json explicitly sets max_tokens=20; the reserved total also includes the prompt estimate. Set tenant-qr TPM40. In terminal A send the delayed r1 request and let the client cancel after three seconds; in B, while the holder receipt is 1, send the second request and require 429 `token_quota_would_exceed`/receipt 0. After cancellation send reserve-request again with nonce reservation-after-cancel and require 200/receipt 1. Record the same epoch and short elapsed time to distinguish release from refill. A Gateway permit return does not prove the engine stopped computation.
 
@@ -184,7 +206,7 @@ sudo ip netns exec l3ep1 curl -sS "http://127.0.0.1:8080/__receipts/$RUN-model-r
 sudo ip netns exec l3ep1 curl -sS "http://127.0.0.1:8080/__receipts/$RUN-model-restored-2"
 ```
 
-## Verify missing usage, backend errors and SSE accounting
+### Verify missing usage, backend errors and SSE accounting
 
 Record before/after metrics around exactly one request without concurrent traffic for that identity. Bootstrap ports 2055/2056 omit usage (H1/H2), 2057/2058 return 500. H2 uses --http2-prior-knowledge and receipts on 8093/8095. Expected non-streaming 200 without usage: consumed delta0, missing delta1. Normal usage: consumed +12, missing +0. Backend 500: both +0. Missing non-streaming usage is not charged as an estimate. SSE without final usage follows a distinct stream_estimated path; use the capacity chapter for real event streams. A failed scrape is never a zero-valued counter.
 
@@ -199,7 +221,7 @@ grep '^loxilb_ai_tokens_missing_total' "$LAB/results/accounting-before.prom"
 grep '^loxilb_ai_tokens_missing_total' "$LAB/results/accounting-after.prom"
 ```
 
-## Cleanup and verify token policy absence
+### Cleanup and verify token policy absence
 
 GET user 404 after DELETE; tenant aggregates must be zero/omitted and cleared model lists null/[]. Tenant [] alone never clears a previous model policy. Repeat the normal requests and receipt checks after restoration. Defaults can still apply after explicit policy removal.
 
@@ -212,6 +234,16 @@ sudo ip netns exec l3h1 curl -sS "$API/config/ai/tenant/ratelimit/tenant-qr" | j
 ```
 
 
-## Troubleshooting and cleanup
+### Troubleshooting and cleanup
 
 Use [diagnosis and scoped cleanup](cleanup.md). Restore this chapter's changes before moving to another policy experiment.
+
+## Check your result
+
+Distinguish admission, token reservation and settlement; a later successful request does not erase a denial.
+
+Compare API readback with the normal request, the deliberate denial, and an independent backend observation. Check the chapter's exact HTTP code and error body; HTTP 200 alone does not prove quota, identity, queue order, or resource return.
+
+## Next steps and cleanup
+
+Restore the chapter's temporary policy before continuing in the same lab. Keep the original configuration and private evidence; use the final cleanup chapter when the entire lab is finished. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

@@ -4,11 +4,33 @@
 
 These candidates were tested with specific images, checkpoints, GPUs, and short text workloads. They are not global optimums or SLA commitments. Consult RR, Exact, P/D, and setting-comparison results separately. Blocked or incomparable attempts do not justify performance recommendations.
 
-## Start here
+## Before you start
+
+Start from the corresponding recorded profile/engine/settings row.
+
+**Focus of this page:** Use measured settings within their original workload and hardware limits.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/existing-profiles.md"
+
+This is the separate existing-profile campaign: two converged worker hosts, one pre-existing dedicated Gateway, and an independent receipt proxy on each worker. Native inference uses 18300; receipt forwarding uses 18301. These profile settings and recorded identities must not be replaced by the five-model guide's three-worker variables.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### Start here
 
 For an initial deployment, use the [selected recipe and permitted modes](existing-profiles.md#converged-starting-settings), then complete the [launch and verification procedure](existing-profiles-launch.md). This page explains the **recorded vLLM setting comparisons** and their acceptance rules. No equivalent SGLang tuning comparison or automatic workload runner is supplied. Keep recorded-result verification separate from a fresh service evaluation.
 
-## Change one parameter at a time
+### Change one parameter at a time
 
 Verify normal answers and routing at a conservative baseline. Change memory fraction only, then change the sequence cap at the selected fraction. Requalify the selected combination for RR/Exact, negatives, new-request recovery, and deletion. Do not transfer a converged cap into P/D.
 
@@ -27,13 +49,13 @@ Read `workload.maxOutput` in each comparison. Ordinary short-answer comparisons 
 
 Memory comparisons use 0.85 versus one model-specific lower candidate. `gpu_memory_utilization` budgets engine memory, not weights-only or per-request VRAM. Sequence-cap comparisons use `max_num_seqs` 2 versus 4; client concurrency remains 8.
 
-## Keep warm and main denominators separate
+### Keep warm and main denominators separate
 
 Start new native engines in each arm. Offer one direct JSON warmup per worker, then 16 Gateway RR SSE warmups at concurrency 8. Wait one second before the 24 main requests. Independent receipts must show eight load warmups per worker. A failed prerequisite rejects the comparison while preserving any main requests already sent. Do not mix 18 warm samples into the 24-request main latency distribution.
 
 A 9:7 warm split fails the predefined condition even when answers are normal. Retain batches saved before aggregate append. R1's aborted memory comparison has 168 offers: main 96 + direct warm 8 + load warm 64. It is not a completed three-pair comparison.
 
-## Normal-answer gates
+### Normal-answer gates
 
 HTTP200 alone is insufficient. Require readable final English content, positive prompt/completion usage, `finish_reason: stop`, exactly one SSE `[DONE]`, and independent request/response SHA256 matching. Reject `length`, unclosed reasoning, reasoning without final content, and exposed tokenizer controls.
 
@@ -45,7 +67,7 @@ Both Qwen 3.6 comparisons stopped after direct warm 2 + RR load warm 16; main re
 
 For the nine client timeouts, saved client bodies differ from independently recorded partial upstream bodies. Retain both originals and hashes. Partial upstream bytes are not normally delivered client answers. `verify-incomplete-results.py` requires `CLIENT_READ_TIMEOUT`, incomplete upstream state, and matching partial-body hash/length. Its mutation control must reject an actual partial-body change when those samples exist.
 
-## Interpret latency and allocation correctly
+### Interpret latency and allocation correctly
 
 These client timings include the receipt-proxy test topology. TTFT starts at the first nonempty `delta.content`, including whitespace or reasoning carried in content. A separate `reasoning_content` event does not start this clock. TTFT is not time to final-answer content. Untimed SSE cannot reconstruct arrival times; use the recorded per-request measurements.
 
@@ -53,7 +75,7 @@ Sort each arm's 24 TTFT values and take nearest-rank p95, the 23rd value. Relati
 
 GPU allocation was sampled with `nvidia-smi` immediately after direct native JSON warmup and before the 16 RR load warmups. GPU utilization at that point is also retained. This is not peak request memory. Compare baseline/candidate allocation on the same worker and repetition.
 
-## Candidate acceptance
+### Candidate acceptance
 
 Every main request must complete normally and match its receipt. Output-token totals must differ by at most 5% relative to baseline in every pair. Shorter output cannot be credited as faster execution of the same workload.
 
@@ -66,7 +88,7 @@ OLMo's 0.35 memory candidate completed normally and met the allocation condition
 
 Cap 4 was accepted for OLMo, Gemma 4, A.X, and GPT-OSS in this bounded RR workload. R1 and Qwen 3.8 failed the 5% token-volume gate and retained cap 2; their raw latency differences are not qualified improvements. Use the final model table and separate selected-combination requalification.
 
-## Recorded complete and incomplete comparisons {#recorded-comparisons}
+### Recorded complete and incomplete comparisons {#recorded-comparisons}
 
 Each complete comparison uses two unchanged GPUs, converged RR, client concurrency 8, three paired repetitions, 144 main offers, and 108 separate warm offers. It is an engine-setting comparison, not Exact cache-benefit measurement. Token totals must remain within 5% in every pair. Lower memory additionally requires at least 30% lower sampled allocation on every GPU and at most 5% p95 regression in every pair. Cap 4 requires lower p95 in all pairs and at least 10% median relative reduction.
 
@@ -100,7 +122,7 @@ All incomplete comparisons retain every offer:
 - Phi-4 Mini / seqs: 126 offers = main 72 + direct warm 6 + load warm 48. No three-pair performance recommendation.
 - Qwen 3.6 27B FP8 / seqs: 18 offers = main 0 + direct warm 2 + load warm 16. No three-pair performance recommendation.
 
-## Reverify recorded results independently
+### Reverify recorded results independently
 
 If you have not extracted the package yet, complete [package verification and setup](existing-profiles-launch.md#select-and-save) first. From the extracted immutable package, run the checks below; adjust the path only if you chose a different working directory. The portable Python verifiers use the standard library. Each mutation control modifies an actual receipt hash in a temporary copy and invokes the real verifier, which must reject it.
 
@@ -117,10 +139,20 @@ Expect all three commands to exit 0, with their verification report and successf
 
 `verify-results.py` recomputes recorded selection arithmetic; it does not turn `performanceComparisonQualified:false` into a performance claim. `verify-incomplete-results.py` accounts for all incomplete offers and receipts without selecting settings. `verify-converged.py` retains normal/failed answers and independently qualified routing scopes. Native P/D addresses and session bytes remain private; the public package supplies reviewed summaries and editable deployment examples.
 
-## Repeat for your service workload
+### Repeat for your service workload
 
 Define input/output lengths, concurrency, streaming share, reasoning mode, and model count before repeating the sequence. Finish weights and image preparation before measurement. Avoid overlapping unrelated GPU jobs or downloads; preserve failed arms and rejected candidates.
 
 Templates that insert the current date require the image's UTC timezone, one common UTC date across the comparison, and matching rendered native inputs. Identical API body bytes can render differently across dates; reject such a comparison.
 
 Update settings, budgets, raw evidence, and selection rationale together after requalification. Candidate registry state, historical catalog support, and deployed Gateway release qualification remain separate.
+
+## Check your result
+
+Re-measure when changing model bytes, context, topology or concurrency; do not extrapolate retained functional checks.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

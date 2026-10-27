@@ -6,7 +6,29 @@
 
 [Converged guide overview](matrix-manual.md) · [Previous: 1. Select a Model and Check Prerequisites](select.md) · [Next: 3. Launch Engine Workers](launch.md)
 
-## Prepare snapshots on each worker
+## Before you start
+
+Keep the saved selection from Step 1.
+
+**Focus of this page:** Stage identical model/tokenizer snapshots and the selected Exact registry.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/converged.md"
+
+This diagram shows the converged three-worker guide. Choose one engine and one model per run: workers 1/2/3 are replicas of that choice, not vLLM, SGLang and TensorRT-LLM mixed together. Select actual host addresses in the model-selection step; documentation addresses are examples. Each converged worker performs both prefill and decode.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### Prepare snapshots on each worker
 
 **Worker shells only.** Continue with the variables and working directory from Step 1.
 Download the same immutable snapshot everywhere. The Gateway host also needs the
@@ -40,7 +62,7 @@ your artifact process. The two `test` commands check presence only; complete the
 If an image pull is denied or missing, obtain the approved artifact; silently
 substituting a newer tag changes the evaluated tuple.
 
-## Verify pinned weights and image identity
+### Verify pinned weights and image identity
 
 ```bash
 cd "$SNAP"
@@ -53,7 +75,7 @@ Resolve missing files or checksum mismatches before launch. Changing revision,
 quantization or checkpoint creates a different tuple. Preserve failed evidence
 alongside any subsequent successful run.
 
-## Prepare the Exact evaluation registry { #matrix-registry-preparation }
+### Prepare the Exact evaluation registry { #matrix-registry-preparation }
 
 Skip this step for RR. For Exact, perform it **on the Gateway host**. The five
 profiles are separate evaluation definitions absent from the upstream installer;
@@ -123,3 +145,13 @@ attestation. Preserve root-owned registry directories for that startup.
 ---
 
 [Previous: 1. Select a Model and Check Prerequisites](select.md) · [Next: 3. Launch Engine Workers](launch.md)
+
+## Check your result
+
+Verify checksums and identities before starting any worker; a staged profile does not prove readiness.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

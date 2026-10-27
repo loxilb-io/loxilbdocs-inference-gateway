@@ -8,14 +8,36 @@ Prove security behavior after snapshot restoration and separate fresh store chec
     Use the same root Bash session from [setup](setup.md). Follow the
     [common evidence and rollback conventions](common.md) throughout the exercises.
 
-## Prerequisites and recovery boundaries
+## Before you start
+
+Complete the all-on tuple and preserve its original configuration snapshot.
+
+**Focus of this page:** Restore owned policy and interrupt only the lab key store.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/edge.md"
+
+All seven containers are on the isolated Docker network 192.0.2.0/24; they are not seven physical machines. No host port is published. A host localhost curl cannot replace docker exec into uc7-gw. Source and service protections act before the request reaches the CPU backend.
+
+| Where | What happens here |
+|---|---|
+| Host root Bash | Own WORK/LAB, lifecycle inputs and private curl credential files. |
+| uc7-a / b / c / d | Send source-specific traffic; preserve the A/B/C/D roles in each experiment. |
+| uc7-gw | Run REST curl against localhost:11111 inside the container; enforce controls on inference 8080. |
+| uc7-ep | Keep the nonce journal, direct backend observations and optional synthetic KV publisher. |
+| uc7-pg | Store policy/keys on .30; interrupt it only in the recovery chapter. |
+
+## Walkthrough
+
+### Prerequisites and recovery boundaries
 
 Keep the all-on tuple and a working normal baseline. Snapshot is Gateway configuration, not a
 backup of PostgreSQL keys/users or an external engine. See [snapshot coverage and state machine](../../operations/backup-restore.md)
 and [key-store/cache semantics](../../operations/ai-key-store.md); those references own the complete
 contract. This exercise uses REST and checks that the restored security boundary still handles traffic.
 
-## Persist, download and dry-run without mutation
+### Persist, download and dry-run without mutation
 
 Snapshots can contain secrets. Save them only under private LAB; never publish raw files, include
 one in the download bundle or paste it into an issue. Capture the writable LB/ACL oracle separately
@@ -38,7 +60,7 @@ Expected persist200, valid snapshot metadata/checksum, dry-run200 with no materi
 Inspect planned domains, deletes, warnings and external dependencies before commit. A dry-run popup
 or status200 alone does not establish restore success.
 
-## Reject tampering, commit and verify traffic
+### Reject tampering, commit and verify traffic
 
 Change only the checksum; the rejected request must not change configuration. Then commit the
 original snapshot and require the same normal/denied source behavior. Preserve both the rejected
@@ -71,7 +93,7 @@ The pinned legacy KV rule can become `REQUIRES_MIGRATION` after restore: record 
 and stop claiming post-restore Exact hits. Ordinary inference delivery and guarded Exact engagement
 are separate results. Do not force a profile-less fence open to obtain a routing PASS.
 
-## Stop only the lab DB and probe a fresh invalid key
+### Stop only the lab DB and probe a fresh invalid key
 
 A previously valid cached key can still work while DB is down. Generate one never-issued key and
 save its credential file; it must yield store503/receipt 0 during the outage and401/receipt 0 after
@@ -114,8 +136,18 @@ If an error cache/connection is still recovering, retain the first RED and inspe
 before bounded re-probes. Do not recreate the database or regenerate role passwords to hide a fault.
 Management users and key quotas use separate schemas even though this lab stops their common DB container.
 
-## Cleanup and troubleshooting
+### Cleanup and troubleshooting
 
 Always restart the **owned** DB after an interrupted outage before other work. Keep the private
 snapshot and original failure evidence. Check that the store, keys and normal traffic are recovered
 before [final cleanup](cleanup.md). Never stop a host-wide PostgreSQL service or another campaign's DB.
+
+## Check your result
+
+Check applied policy, fresh key decisions and recovered traffic separately from container liveness.
+
+Keep a normal control request alongside each denied or interrupted request. Separate packet drop, TCP refusal, HTTP denial, backend receipt, and counter changes. Readback establishes stored policy; client traffic and the backend journal establish delivery.
+
+## Next steps and cleanup
+
+Remove the isolated control before adding the next layer. Recovery restores the complete owned tuple; final cleanup uses the recorded ownership state and must preserve unrelated containers. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

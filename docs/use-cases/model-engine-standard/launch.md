@@ -6,7 +6,29 @@
 
 [Converged guide overview](matrix-manual.md) · [Previous: 2. Prepare Models and Profiles](prepare.md) · [Next: 4. Configure Gateway Routing](configure.md)
 
-## Launch the selected engine { #matrix-engine-launch }
+## Before you start
+
+Use the selected model/profile/image and execute only the chosen engine branch.
+
+**Focus of this page:** Launch each replica on its own worker host, then probe it directly.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/converged.md"
+
+This diagram shows the converged three-worker guide. Choose one engine and one model per run: workers 1/2/3 are replicas of that choice, not vLLM, SGLang and TensorRT-LLM mixed together. Select actual host addresses in the model-selection step; documentation addresses are examples. Each converged worker performs both prefill and decode.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### Launch the selected engine { #matrix-engine-launch }
 
 **On each worker**, restore its Step 1 session if necessary. Confirm that the
 recorded container name and ports are unused before launch. Keep its Bash shell
@@ -98,7 +120,7 @@ Repeat the [direct engine checks](launch.md#verify-direct-engine-responses)
 from the Gateway network to every worker. Retain effective arguments, image
 ID/digest, model revision, GPU/driver inventory, complete responses and error logs.
 
-## Verify direct engine responses
+### Verify direct engine responses
 
 ```bash
 docker logs --tail 60 "$ENGINE_NAME"
@@ -128,7 +150,7 @@ controller, repeat health/model checks against each actual worker address before
 [Gateway registration](configure.md). For failure recovery and stopping only
 owned containers, use [cleanup and restart](lifecycle.md#cleanup-and-restart).
 
-## Optional isolated receipt instrumentation
+### Optional isolated receipt instrumentation
 
 The normal path keeps `BACKEND_PORT=8000`. For independent routing receipts using
 the supplied collector, start it **before Step 4** in a second terminal on each
@@ -148,7 +170,7 @@ Confirm the Gateway can reach every collector. This path buffers responses and
 is for low-volume functional QA, not performance measurement. For a native path,
 obtain equivalent correlated worker-side receipts from your approved tooling.
 
-## Versioned upstream references
+### Versioned upstream references
 
 The current manual pins the engines actually evaluated. Consult the versioned [vLLM model documentation](https://github.com/vllm-project/vllm/blob/v0.31.0/docs/models/supported_models.md),
 [SGLang model implementations](https://github.com/sgl-project/sglang/tree/v0.5.19/python/sglang/srt/models)
@@ -159,3 +181,13 @@ qualify Gateway interoperability, a particular GPU or the settings here.
 ---
 
 [Previous: 2. Prepare Models and Profiles](prepare.md) · [Next: 4. Configure Gateway Routing](configure.md)
+
+## Check your result
+
+All selected workers must answer direct inference; do not use Gateway retries to hide a bad worker.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

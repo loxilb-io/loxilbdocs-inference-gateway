@@ -2,7 +2,29 @@
 
 This page has been consolidated. Continue to the [current documentation](../concepts/kv-routing.md).
 
-## Previous section links
+## Before you start
+
+Choose an engine/profile hash contract and a complete deployment runbook first.
+
+**Focus of this page:** Distinguish Gateway prefix-based selection from native engine cache reuse.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/llm-reference.md"
+
+This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Reading path and reference
+
+### Previous section links
 
 <a id="kv-cache-aware-routing"></a>
 
@@ -147,3 +169,13 @@ This page has been consolidated. Continue to the [current documentation](../conc
 <a id="related"></a>
 
 [Continue: related](../concepts/kv-routing.md)
+
+## Check your result
+
+Validate metadata readiness, actual endpoint placement and engine-side reuse separately.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](model-engine-standard/lifecycle.md) when ending the run.

@@ -4,7 +4,29 @@ Use pinned CICD fixtures for infrastructure and individual REST commands for the
 
 <!-- example-status-default: illustrative-only -->
 
-## Prerequisites and conflict checks
+## Before you start
+
+Start with a dedicated rootful Docker host and unused uc7-* names.
+
+**Focus of this page:** Create the isolated bridge and seven owned containers, then a plain baseline.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/edge.md"
+
+All seven containers are on the isolated Docker network 192.0.2.0/24; they are not seven physical machines. No host port is published. A host localhost curl cannot replace docker exec into uc7-gw. Source and service protections act before the request reaches the CPU backend.
+
+| Where | What happens here |
+|---|---|
+| Host root Bash | Own WORK/LAB, lifecycle inputs and private curl credential files. |
+| uc7-a / b / c / d | Send source-specific traffic; preserve the A/B/C/D roles in each experiment. |
+| uc7-gw | Run REST curl against localhost:11111 inside the container; enforce controls on inference 8080. |
+| uc7-ep | Keep the nonce journal, direct backend observations and optional synthetic KV publisher. |
+| uc7-pg | Store policy/keys on .30; interrupt it only in the recovery chapter. |
+
+## Walkthrough
+
+### Prerequisites and conflict checks
 
 Use rootful Docker on a dedicated Ubuntu24.04 amd64 Linux host. Allow 4 cores, 8 GiB RAM and
 30 GiB free disk for a source build. Containers share the host kernel; the Gateway needs privileged
@@ -42,7 +64,7 @@ numbers. If a name or `192.0.2.0/24` route/subnet is in use, stop without deleti
 
 The copy above places the already-downloaded public inputs inside the new lab and verifies their hashes. Keep input acquisition separate from private runtime state.
 
-## Acquire pinned sources and build fixture images
+### Acquire pinned sources and build fixture images
 
 The [public CICD scenario](https://github.com/loxilb-io/loxilb-inference-gateway/tree/0f78cc3329e23934be4924069b137bfbe557e8f2/cicd/edge-cloud-security)
 owns build/preflight/bootstrap/owner-checked teardown. Use it for infrastructure, then perform policy
@@ -87,7 +109,7 @@ Require its successful setup stage, not just container presence. Its generated p
 Read [management authentication](../../security/management-api-authentication.md) for role/bootstrap
 semantics. Never print or commit `login.private.json`, state/DB directories or curl credential files.
 
-## Topology and execution locations
+### Topology and execution locations
 
 ```mermaid
 flowchart LR
@@ -96,8 +118,8 @@ flowchart LR
     G -->|"HTTP80"| E["Backend .21"]
     G -->|"DB5432: separate roles/schemas"| P["PostgreSQL .30"]
     E -->|"synthetic events5557"| G
-    style G fill:#e1f5fe,stroke:#0288d1
-    style E fill:#e8f5e9,stroke:#43a047
+    style G fill:#e1f5fe,stroke:#0288d1,color:#1f2937
+    style E fill:#e8f5e9,stroke:#43a047,color:#1f2937
 ```
 
 All addresses are on isolated `192.0.2.0/24`; Docker assigns its bridge gateway independently.
@@ -106,7 +128,7 @@ host's private venv/files. `docker exec -i ... < "$LAB/file"` streams a **host**
 `--config /run/edge-key.curl` reads a **container** credential file. Management `API` is localhost
 inside `uc7-gw`, whereas inference `VIP` is reached from A/B/C/D.
 
-## Configure a plain baseline and issue one lab key
+### Configure a plain baseline and issue one lab key
 
 Start without KV or source ACLs so that isolated controls cannot hide one another's failures.
 The fullproxy rule uses the synthetic model label and CPU fixture; the label does not deploy Qwen.
@@ -176,7 +198,7 @@ docker logs uc7-ep > "$LAB/journal.jsonl" 2>&1
 jq -s --arg nonce "$RUN-missing" '[.[] | select(.event=="uc7_receipt" and .nonce==$nonce)] | {count:length,credentials_absent:all(.key_present==false),protocols:map(.proto)}' "$LAB/journal.jsonl"
 ```
 
-## Expected results, cleanup and troubleshooting
+### Expected results, cleanup and troubleshooting
 
 Require LB HTTP 200, a key response containing nonempty `key_id` and private `raw_key`, and baseline
 HTTP 200/curl 0/receipt 1 with `credentials_absent:true`. Missing key is HTTP 401/curl 0/receipt 0.
@@ -188,3 +210,13 @@ Keep the bootstrap running between chapters. On failure inspect the private boot
 identity, DB readiness and routes; do not treat timeout as denial. Partial setup is cleaned only with
 [owned cleanup](cleanup.md). Generated keys/DB/snapshots remain local, outside a public checkout.
 Continue to [common conventions](common.md), then [source protection](source-protection.md).
+
+## Check your result
+
+Verify the owner/image locks, management auth, client role and backend journal before policy changes.
+
+Keep a normal control request alongside each denied or interrupted request. Separate packet drop, TCP refusal, HTTP denial, backend receipt, and counter changes. Readback establishes stored policy; client traffic and the backend journal establish delivery.
+
+## Next steps and cleanup
+
+Remove the isolated control before adding the next layer. Recovery restores the complete owned tuple; final cleanup uses the recorded ownership state and must preserve unrelated containers. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

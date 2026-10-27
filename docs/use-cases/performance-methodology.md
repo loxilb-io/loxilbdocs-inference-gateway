@@ -13,7 +13,29 @@ measure, never a number quoted from elsewhere.
 
 ---
 
-## 1. The metric: goodput@SLO
+## Before you start
+
+Begin only after direct and Gateway functional checks pass for the chosen tuple.
+
+**Focus of this page:** Keep client load, Gateway routing, worker execution and measurement collection distinguishable.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/llm-reference.md"
+
+This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### 1. The metric: goodput@SLO
 
 The headline metric is **goodput@SLO**, defined exactly as DistServe defines it. It rests on two
 per-request latency measures:
@@ -56,7 +78,7 @@ compute good-fraction, and compare configurations with a statistical verdict.
 
 ---
 
-## 2. The five-phase flow
+### 2. The five-phase flow
 
 Every reproducible run walks the same five phases. Skipping any phase invalidates the number.
 
@@ -75,7 +97,7 @@ once the verify gates pass.
 
 ---
 
-## 3. Phase 0 — pre-run health
+### 3. Phase 0 — pre-run health
 
 Run a read-only readiness check before **every** measurement. A run started on a half-warm or
 partially-serving fleet is invalid data, not a slow result.
@@ -120,7 +142,7 @@ through the VIP returning `200` — not merely a port being open. Confirm, in or
 
 ---
 
-## 4. Phase 1 — per-endpoint capacity calibration
+### 4. Phase 1 — per-endpoint capacity calibration
 
 Before you can pick a *fair* offered rate, you must know each endpoint's actual saturation
 throughput. **Never assume it** — measured capacity routinely differs from the configured prior by
@@ -130,7 +152,7 @@ Calibrate by driving **one endpoint directly** — never the VIP or router. A ca
 measure a backend, not the balancer; a sweep target that points at the load balancer is measuring
 the wrong thing and should be refused.
 
-### 4.1 The protocol (pre-register it — do not tune mid-run)
+#### 4.1 The protocol (pre-register it — do not tune mid-run)
 
 Fix the calibration parameters *before* the run and hold them constant. The shape of the protocol:
 
@@ -146,7 +168,7 @@ Fix the calibration parameters *before* the run and hold them constant. The shap
 **Capacity** is the mean delivered throughput across the plateau steps — prompt tokens/sec for a
 prefill role, output tokens/sec for a decode role.
 
-### 4.2 The client-bottleneck cross-check
+#### 4.2 The client-bottleneck cross-check
 
 A plateau alone is not proof the *endpoint* saturated — your load generator may have hit its own
 ceiling first. Guard against this with a **queue-divergence cross-check**: sample the backend's
@@ -159,7 +181,7 @@ in-flight/waiting-queue depth throughout the sweep.
 This is what stops you from accidentally calibrating your own load generator and reporting it as
 backend capacity.
 
-### 4.3 Pick a fair operating rate
+#### 4.3 Pick a fair operating rate
 
 Take the **lowest-capacity member** of a role as the reference. Run the A/B (Phase 3) at rates that
 are:
@@ -173,7 +195,7 @@ what later lets you report goodput@SLO as a capacity, not just a single-rate sna
 
 ---
 
-## 5. Phase 2 — mechanism probe
+### 5. Phase 2 — mechanism probe
 
 Before trusting any goodput delta, prove the routing configuration is *mechanically* doing what it
 claims — that a spreading policy actually spreads load and a concentrating one actually
@@ -197,7 +219,7 @@ measured several times.
 
 ---
 
-## 6. Phase 3 — the trace-replay A/B
+### 6. Phase 3 — the trace-replay A/B
 
 Replay the same trace through each arm at the controlled offered load, writing per-request results
 so each arm's TTFT/TPOT distribution can be reconstructed. The A/B design is what makes the
@@ -224,7 +246,7 @@ Design rules that keep the replay honest:
 
 ---
 
-## 7. Phase 4 — analyze
+### 7. Phase 4 — analyze
 
 Reduce each arm's raw per-request export into aligned arrays of successful TTFT/TPOT values, plus
 bookkeeping the verdict depends on: the usable (paired) count, the attempted total, per-class error
@@ -249,7 +271,7 @@ From those arrays, compute in order:
     equivalence.** Only a passing **TOST** verdict legitimately claims parity. Never upgrade a
     failed difference test into a parity claim.
 
-### The knee
+#### The knee
 
 The good-fraction above is at one fixed rate. To report **goodput@SLO** as a capacity, run Phase 3
 across the rate ladder from §4.3 and take the highest rate whose good-fraction still clears your
@@ -258,13 +280,13 @@ number.
 
 ---
 
-## 8. Phase 5 — verification gates
+### 8. Phase 5 — verification gates
 
 A performance number is worthless without proving three things: the run was **valid**, the result
 is **stable enough to publish**, and the pipeline **computed what it claims**. Enforce these in
 code so a noisy or invalid number *cannot* be emitted by eye.
 
-### 8.1 Validity gate (auto-discard)
+#### 8.1 Validity gate (auto-discard)
 
 Discard an individual (arm, repetition) run **by rule, not judgment**, logging a reason, when any of
 these hold:
@@ -281,7 +303,7 @@ these hold:
 Run the validity filter **first**, before any statistic is computed, so discards happen
 automatically.
 
-### 8.2 Stability gate (publish policy)
+#### 8.2 Stability gate (publish policy)
 
 Pre-register the stability thresholds and encode them, so publishability is a mechanical verdict:
 
@@ -300,7 +322,7 @@ Pre-register the stability thresholds and encode them, so publishability is a me
     publish gate. Meeting the δ-floor lets you *resolve* a difference; only **N ≥ 5 / CV ≤ 10%** on
     the system-under-test arm makes a result **publishable**. Do not conflate them.
 
-### 8.3 Independent integrity cross-check
+#### 8.3 Independent integrity cross-check
 
 Re-derive goodput@SLO with an **independent** implementation that does not import the main
 analyzer's modules, and audit the pipeline end-to-end. It should confirm: the denominator matches
@@ -309,7 +331,7 @@ values are in the expected unit; an independent good/total recompute matches the
 cluster-robust per-repetition interval agrees with the pooled bootstrap. A green cross-check is your
 evidence the analyzer is not fooling itself.
 
-### 8.4 BCa bootstrap and self-checks
+#### 8.4 BCa bootstrap and self-checks
 
 Use **BCa** (bias-corrected and accelerated) bootstrap confidence intervals for the reported
 medians and tail percentiles — they are more honest than normal-theory intervals on the skewed
@@ -317,7 +339,7 @@ latency distributions typical of inference. Ship each statistics module with a s
 asserts its logic against known vectors on a bare host, so you can prove the conjunction good-mask,
 the TOST/δ resolution, and the stability thresholds behave *before* trusting them on real data.
 
-### 8.5 The dual-proof: decision vs delivery
+#### 8.5 The dual-proof: decision vs delivery
 
 A good goodput number can still be measuring the wrong thing. Cross-check the routing **decision**
 against the **delivery**:
@@ -334,7 +356,7 @@ cache-aware routing. **Discard it.**
 
 ---
 
-## 9. The honest caveats
+### 9. The honest caveats
 
 Read these before quoting any verdict. Each protects the number from a common, self-flattering
 mistake.
@@ -357,7 +379,7 @@ mistake.
 
 ---
 
-## 10. The tuning loop
+### 10. The tuning loop
 
 Performance measurement feeds configuration — it is not a one-shot report:
 
@@ -373,7 +395,7 @@ Performance measurement feeds configuration — it is not a one-shot report:
 
 ---
 
-## Related pages
+### Related pages
 
 - [KV-Cache-Aware Routing](../concepts/kv-routing.md) — the routing this method is designed to
   measure.
@@ -381,9 +403,9 @@ Performance measurement feeds configuration — it is not a one-shot report:
 - [Configuration & Tuning](configuration-tuning.md) — the knobs the tuning loop sweeps.
 - [Monitoring & Metrics](../operations/monitoring.md) — the counters the dual-proof reads.
 
-## Request and receipt accounting
+### Request and receipt accounting
 
-### Fix the comparison inputs
+#### Fix the comparison inputs
 
 First record the exact Gateway image digest and runtime flags; model revision,
 weights/tokenizer/template checksums; engine image/args; registry generation,
@@ -414,7 +436,7 @@ that silently change offered load or erase rejected requests. Interleave/order
 arms to control drift and repeat at least three clean pairs before making a
 quantitative claim; disclose excluded trials and why.
 
-### Collect and interpret results
+#### Collect and interpret results
 
 Retain request-level client timing and completion records, backend-owned correlated
 receipts, raw SSE or chat, engine access/error logs, Gateway routing metrics,
@@ -448,3 +470,13 @@ Use these interpretations:
 | One endpoint receives many requests | Placement imbalance may contribute | Examine per-endpoint receipts/load; do not declare a sole cause from aggregate data |
 | Both direct and Gateway requests fail | Failure does not require Gateway on that observed path | Isolate engine/model/resource conditions without changing several variables |
 | Clean component or documentation checks | The named bounded check passed | Run the separate deployed service/GPU gate |
+
+## Check your result
+
+Retain every arm, denominator and failure; functional PASS alone is not a latency SLO or cache benefit.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](model-engine-standard/lifecycle.md) when ending the run.

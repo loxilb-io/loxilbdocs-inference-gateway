@@ -8,14 +8,36 @@ Verify listener slots independently from per-request rates and interpret the pro
     Use the same root Bash session from [setup](setup.md). Follow the
     [common evidence and rollback conventions](common.md) throughout the exercises.
 
-## Prerequisites and connection versus request budgets
+## Before you start
+
+Use the plain baseline and the chapter's TCP/header generators.
+
+**Focus of this page:** Bound connection slots and incomplete-header lifetime before authenticated requests are admitted.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/edge.md"
+
+All seven containers are on the isolated Docker network 192.0.2.0/24; they are not seven physical machines. No host port is published. A host localhost curl cannot replace docker exec into uc7-gw. Source and service protections act before the request reaches the CPU backend.
+
+| Where | What happens here |
+|---|---|
+| Host root Bash | Own WORK/LAB, lifecycle inputs and private curl credential files. |
+| uc7-a / b / c / d | Send source-specific traffic; preserve the A/B/C/D roles in each experiment. |
+| uc7-gw | Run REST curl against localhost:11111 inside the container; enforce controls on inference 8080. |
+| uc7-ep | Keep the nonce journal, direct backend observations and optional synthetic KV publisher. |
+| uc7-pg | Store policy/keys on .30; interrupt it only in the recovery chapter. |
+
+## Walkthrough
+
+### Prerequisites and connection versus request budgets
 
 Use the plain rule, no packet rate/FW/fence, and the unlimited-RPS setup key. The fixture's4 TCP slots
 are distinct from executing model requests and from H2 streams. Read [admission scope](../../ai-gateway/admission-flow-control.md)
 for capacity/queue semantics. Global accept protection counts client **and backend** proxy contexts;
 it is not a hard cap of16 frontend connections or tenant fairness.
 
-## Hold four incomplete headers and verify the fifth
+### Hold four incomplete headers and verify the fifth
 
 Each background `docker exec` is a host child whose PID is saved. The Bash `/dev/tcp` handle opens
 a fresh connection and deliberately omits the terminating blank header line. It does not send a
@@ -55,7 +77,7 @@ Expected: excess connection reset/no HTTP (curl 7/52/55/56 as observed by this c
 receipt; after holder termination,200/curl 0/receipt 1. A mere timeout is inconclusive: check slot occupancy
 and the global valve first. The stats collector is asynchronous and is supplementary to the live probe.
 
-## Verify an incomplete-header deadline
+### Verify an incomplete-header deadline
 
 A3000ms inspect timeout applies even when Host arrived first. Keep client maximum10s above it.
 The incomplete header must close before the holder's10s deadline and must not reach the backend.
@@ -81,7 +103,7 @@ client's10s), no inference delivery, and the normal control returns200/receipt 1
 payload/deadline. A timing-only result without effective readback and no-backend evidence is partial.
 Idle `inactiveTimeOut:60` is a separate relay/connection setting, not the incomplete-header deadline.
 
-## Process accept valve: readback and bounded qualification
+### Process accept valve: readback and bounded qualification
 
 ```bash
 docker exec uc7-gw curl -fsS --max-time 20 --config /etc/loxilb/control.curl "$API/metrics" > "$LAB/accept-valve.prom"
@@ -94,9 +116,19 @@ happens before authentication, so a normal tenant can also wait. Source limits, 
 per-rule cap are separate experiments; [advanced qualification](advanced.md) describes the low-bound arm.
 The core lab does not declare valve enforcement PASS solely from the configured bound gauge.
 
-## Cleanup and troubleshooting
+### Cleanup and troubleshooting
 
 Wait only the four recorded host children. Confirm no holder remains and a fresh normal request
 succeeds before [request protection](request-protection.md). Do not kill all curl/Bash processes.
 A timeout instead of reset can mean the process valve engaged earlier, a route failed, or the four
 holders were not established together. Inspect those causes and preserve the failed attempt.
+
+## Check your result
+
+Separate socket-level behavior from HTTP errors; verify normal traffic and slot recovery afterward.
+
+Keep a normal control request alongside each denied or interrupted request. Separate packet drop, TCP refusal, HTTP denial, backend receipt, and counter changes. Readback establishes stored policy; client traffic and the backend journal establish delivery.
+
+## Next steps and cleanup
+
+Remove the isolated control before adding the next layer. Recovery restores the complete owned tuple; final cleanup uses the recorded ownership state and must preserve unrelated containers. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

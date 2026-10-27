@@ -8,13 +8,35 @@ These chapters form one ordered lab. The [Quickstart](../../getting-started/quic
 standalone mutation workflow; this tutorial keeps the exact payloads and controls needed for the
 combined exercise. Run each command block in order and compare its output before continuing.
 
-## Prerequisites and state
+## Before you start
+
+Complete setup and retain the initial rule/ownership record.
+
+**Focus of this page:** Learn host files versus container files, complete rule replacement and independent evidence.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/edge.md"
+
+All seven containers are on the isolated Docker network 192.0.2.0/24; they are not seven physical machines. No host port is published. A host localhost curl cannot replace docker exec into uc7-gw. Source and service protections act before the request reaches the CPU backend.
+
+| Where | What happens here |
+|---|---|
+| Host root Bash | Own WORK/LAB, lifecycle inputs and private curl credential files. |
+| uc7-a / b / c / d | Send source-specific traffic; preserve the A/B/C/D roles in each experiment. |
+| uc7-gw | Run REST curl against localhost:11111 inside the container; enforce controls on inference 8080. |
+| uc7-ep | Keep the nonce journal, direct backend observations and optional synthetic KV publisher. |
+| uc7-pg | Store policy/keys on .30; interrupt it only in the recovery chapter. |
+
+## Reading path and reference
+
+### Prerequisites and state
 
 Complete [setup](setup.md). Keep `WORK`, `SRC`, `EDGE_STATE`, `EDGE_VENV`, `LAB`, `API`, `VIP`,
 `RUN` and `KEY_ID` in the same root Bash. A new RUN prevents nonce collisions. Restore each isolated
 chapter before the next; only coexistence deliberately keeps every control active.
 
-## Read the control by resource and unit
+### Read the control by resource and unit
 
 | Control | Scope and unit | Example / zero / omission |
 |---|---|---|
@@ -41,7 +63,7 @@ for full dictionaries. Here, retain the complete writable rule as `model.json`. 
 response containing effective fields. Security-rate POST is a full replacement; a missing flag is
 not a PATCH. Firewall duplicates are not a safe update procedure. Save request payloads before mutation.
 
-## Verify traffic and independent receipts
+### Verify traffic and independent receipts
 
 The backend logs nonce, protocol and whether any credential reached it; it never logs credential
 values. Every positive request has a unique `X-Edge-Nonce`. Refresh the journal for every verdict.
@@ -59,7 +81,7 @@ receipt and recovery. HTTP 401/429/503 must be complete responses with the expec
 | `HTTP:401`, `429` or `503` / `CURL_EXIT=0` | A complete expected error body and no receipt; the HTTP response itself was received successfully |
 | Counter helper `delta=...` | Positive finite increase from the saved before/after files; a missing series is an observation failure |
 
-## Verify counter deltas without invented zeros
+### Verify counter deltas without invented zeros
 
 Read metrics through the protected management route. Save each before/after snapshot while the policy
 is installed. Some collectors update asynchronously; allow at most30s, re-scraping before deleting it.
@@ -71,7 +93,7 @@ fixture: it sums only the named family, requires valid samples in both files and
 A missing initial series must be established by an explicitly recorded warm-up probe, not silently
 converted to0. Record exact labels when other policies share a family; whole-family sum is not per-rule loss.
 
-## Rollback, cleanup and troubleshooting
+### Rollback, cleanup and troubleshooting
 
 Before editing, save the original writable payload and GET. LB deletion uses Host/VIP/port/protocol plus
 model/path; deleting one shared peer does not remove its survivor's fence. Tenant limits have no DELETE:
@@ -80,3 +102,13 @@ another denying the same source. Test recovery after restoring **all** relevant 
 
 Use [cleanup](cleanup.md) for final key/tuple/process ownership checks. Scrape/journal failure,
 unsupported API, stale token, missing tool, timeout and unexecuted cases must remain separate from PASS.
+
+## Check your result
+
+Scope every mutation to the owned lab; save the full original request before changing a field.
+
+Keep a normal control request alongside each denied or interrupted request. Separate packet drop, TCP refusal, HTTP denial, backend receipt, and counter changes. Readback establishes stored policy; client traffic and the backend journal establish delivery.
+
+## Next steps and cleanup
+
+Remove the isolated control before adding the next layer. Recovery restores the complete owned tuple; final cleanup uses the recorded ownership state and must preserve unrelated containers. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

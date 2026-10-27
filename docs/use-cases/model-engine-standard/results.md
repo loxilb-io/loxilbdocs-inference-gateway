@@ -2,7 +2,29 @@
 
 <!-- example-status-default: illustrative-only -->
 
-## Actual results for all 30 cases { #matrix-results }
+## Before you start
+
+Read this ledger before selecting a model/engine run. It records a bounded historical evaluation.
+
+**Focus of this page:** Relate each row to its original model, engine, routing mode and artifact identity.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/llm-reference.md"
+
+This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Reading path and reference
+
+### Actual results for all 30 cases { #matrix-results }
 
 **Executed/reviewed 2026-10-20.** PASS below is limited to low-concurrency,
 three-worker converged functional checks. The [public result JSON](../../assets/model-engine-standard/matrix-results.json)
@@ -76,7 +98,7 @@ HTTP 400, traffic and receipt evidence. A comparison control with a real
 `kvExactMode` change detected the difference. Other configuration differences
 were not ignored.
 
-## Remaining qualification and rerun conditions
+### Remaining qualification and rerun conditions
 
 [Verification To-do](qualification-todo.md) keeps load, faults/recovery,
 cancellation, resource return, sustained operation, clean replay, release-image
@@ -84,3 +106,13 @@ and host-data-plane checks open after functional PASS. This 30-case campaign
 is not a new fail-over qualification. Gemma's historical load-completion failures
 remain open despite successful sequential requests. Requalify after a change to
 configuration, image, revision or topology; an earlier PASS applies to its recorded tuple.
+
+## Check your result
+
+Do not pool successful rows into a universal compatibility or performance claim; preserve FAIL and BLOCKED rows.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

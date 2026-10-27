@@ -6,7 +6,29 @@ How LoxiLB decides which worker serves each request: a strict, fail-through
 priority ladder that prefers the strongest cache-affinity signal available, then bounds
 it by load, capacity, health, and admission.
 
-## Why a hierarchy?
+## Before you start
+
+Choose the service and its profile contract before interpreting endpoint decisions.
+
+**Focus of this page:** Follow eligibility, load safety and the selected routing mode in their actual order.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/llm-reference.md"
+
+This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Reading path and reference
+
+### Why a hierarchy?
 
 vLLM keeps a **prefix cache** — the KV tensors for token prefixes it has already computed.
 If a new request's prompt shares a prefix with blocks a particular worker already holds,
@@ -30,7 +52,7 @@ and terminal availability gates can return `429` or `503`; the ladder does not g
     [KV-Cache Routing](../ai-gateway/kv-caching.md) and
     [KV-Cache-Aware Routing](../concepts/kv-routing.md).
 
-## Terminology: "tiers" and "layers"
+### Terminology: "tiers" and "layers"
 
 The selection stages are called **tiers** (Tier 0/1/1.5/2) in the routing engine; operators
 often say **Layer 1 / 1.5 / 2 / 3** for the same thing. This page uses tier numbering.
@@ -43,7 +65,7 @@ often say **Layer 1 / 1.5 / 2 / 3** for the same thing. This page uses tier numb
 | Layer 2 | Tier 2 | Min-load fallback with round-robin tie-break |
 | "Layer 3" | — (control plane) | Not a data-path tier: the adaptive selection law and the optional external controller, which *bias* Tiers 1.5/2 rather than select directly |
 
-## The two deployment shapes
+### The two deployment shapes
 
 The hierarchy behaves differently depending on whether the service is **P/D-disaggregated**
 (prefill and decode split across separate endpoint roles):
@@ -59,7 +81,7 @@ The hierarchy behaves differently depending on whether the service is **P/D-disa
     falling back to that rule's selector. CHWBL (`sel:8`/`10`) remains an inventory-free
     approximation of cache locality and can be used without either KV-exact mode.
 
-## The P/D tier ladder — one request, top to bottom
+### The P/D tier ladder — one request, top to bottom
 
 For a P/D rule, one request descends the ladder until a stage selects a **prefill** endpoint,
 then a decode endpoint is chosen separately.
@@ -84,7 +106,7 @@ then a decode endpoint is chosen separately.
 `LLB_KV_MIN_MATCH_TOKENS` adds a Tier-1.5 guard: default `16`, accepted range `0–4096`,
 and `0` disables the minimum-token check.
 
-### Tier 0 — session stickiness
+#### Tier 0 — session stickiness
 
 The session key is the request's `user_id` JSON field if present, overridden by a
 client-supplied `X-Conversation-Id` header (LoxiLB's own `auto-` prefixed IDs are deliberately
@@ -95,7 +117,7 @@ unhealthy, masked, or CB-open causes the key to be evicted and the ladder to con
 the workers that served the previous turns, so keeping the pair stable is the strongest
 cache-affinity signal available, and it costs nothing to evaluate.
 
-### Tier 1 — radix-trie prefix affinity (heuristic)
+#### Tier 1 — radix-trie prefix affinity (heuristic)
 
 Enabled by `pd_cache_aware_mode:true`. LoxiLB maintains its **own** radix trie of prompt
 prefixes it has routed before; the trie leaf remembers which endpoint last served that prefix.
@@ -112,7 +134,7 @@ tokenization, no hashing) and needs no vLLM-side configuration, but it can go st
 evicts. Tier 1.5 uses engine-published inventory, which can lag engine state. Verify
 events and backend delivery separately. Tier 1 uses a routing-history heuristic.
 
-### Tier 1.5 — KV-exact block-hash routing
+#### Tier 1.5 — KV-exact block-hash routing
 
 The centerpiece. LoxiLB tracks each prefill endpoint's **reported prefix-cache inventory** (a set
 of 64-bit block hashes streamed over vLLM's ZMQ KV-events channel), recomputes the same block
@@ -121,7 +143,7 @@ truncate), scores every prefill endpoint by **overlap count**, and routes throug
 blend law below. The mechanics — inventory plane, hash contract, and guard ladder — are
 documented in [KV-Cache Routing](../ai-gateway/kv-caching.md).
 
-### Tier 2 — min-load with RR tie-break
+#### Tier 2 — min-load with RR tie-break
 
 Despite the historical name, Tier 2 is a **min-load scorer**:
 
@@ -130,13 +152,13 @@ Despite the historical name, Tier 2 is a **min-load scorer**:
 The round-robin counter advances **only on a genuine tie**, so it is a tie-breaker, not the
 algorithm.
 
-### Decode selection
+#### Decode selection
 
 After the prefill endpoint is chosen, decode picks: (1) the Tier-0 session-pinned decode hint
 if valid; else (2) min-load among decode endpoints with its own RR tie-break. Decode endpoints
 are **never** KV-selection candidates — they publish no KV events and hold no scored inventory.
 
-### The admission gate (default-off)
+#### The admission gate (default-off)
 
 Before any tier body runs, the admission gate can exclude prefill endpoints at their in-flight
 cap and, when **all** are capped, either **park** the request (hold-don't-drop: enqueue on the
@@ -145,14 +167,14 @@ a retriable `429`. A separate global valve refuses new connections beyond a tota
 bound. All four knobs default to off. Treat admission as opt-in protection for latency-SLO
 fleets, not a throughput optimizer.
 
-## The unified selection law (Tier 1.5's blend modes)
+### The unified selection law (Tier 1.5's blend modes)
 
 Raw overlap-argmax is load-blind: 50 clients sharing one hot preamble would all route to the
 same prefill endpoint. The **unified mode** bounds cache affinity by a capacity-weighted load
 cap, in the spirit of CHWBL (consistent hashing with bounded loads). The mode is selected by
 the `LOXILB_KV_LB_MODE` environment variable.
 
-### The candidate set
+#### The candidate set
 
 Each prefill endpoint *i* contributes a candidate carrying:
 
@@ -161,7 +183,7 @@ Each prefill endpoint *i* contributes a candidate carrying:
 - `capacity_i` — the endpoint's advertised KV-block capacity, optionally scaled by the
   controller weight.
 
-### `hard` mode (default) — capacity-weighted bounded load
+#### `hard` mode (default) — capacity-weighted bounded load
 
 A per-endpoint cap:
 
@@ -182,7 +204,7 @@ Intuition: an endpoint may hold its cache-affinity traffic while it carries at m
 its capacity-fair share of the current total load; beyond that, the excess spills to siblings.
 Higher ε ⇒ more affinity-preserving; lower ε ⇒ more aggressive spilling.
 
-### `soft` mode — continuous cost blend
+#### `soft` mode — continuous cost blend
 
 No hard cutoff; argmin of a cost that prices both the cache miss and the queue:
 
@@ -194,7 +216,7 @@ uncached_blocks_i = promptBlocks − overlap_i
 λ defaults to **32**; `1000` is the fixed cost scale. At zero load, soft mode reduces exactly
 to overlap-argmax.
 
-### `adaptive` / `adaptive-soft` — the load-keyed ε/λ law
+#### `adaptive` / `adaptive-soft` — the load-keyed ε/λ law
 
 No static ε/λ is optimal across load: the best values increase with load (tight ε wins at
 moderate rate, loose ε at saturation). Adaptive mode scales the knob with the load the selector
@@ -211,13 +233,13 @@ static `hard`/`soft`; the law only loosens the bound where loosening wins, cappi
 saturation anchor (L ≥ 26). `adaptive` runs the `hard` selector with `ε_eff`; `adaptive-soft`
 runs `soft` with `λ_eff` — nothing else differs.
 
-### Mode resolution
+#### Mode resolution
 
 A valid `LOXILB_KV_LB_MODE` (`off | hard | soft | adaptive | adaptive-soft`) wins outright;
 garbage warns and falls back to `hard`. The **out-of-box default is `hard` with ε = 0.75**;
 `off` restores pure overlap-argmax.
 
-### Full-fleet pressure relief and cold-start seeding
+#### Full-fleet pressure relief and cold-start seeding
 
 The primary selector considers positive-overlap candidates. Two safeguards handle endpoints
 outside that set:
@@ -241,15 +263,15 @@ flowchart LR
     TICK -->|Yes| SEED[Seed cold endpoint]
     TICK -->|No| FINAL[Keep current selection]
 
-    style RELIEF fill:#fff3e0,stroke:#f57c00
-    style SEED fill:#e1f5fe,stroke:#0288d1
-    style FINAL fill:#e8f5e9,stroke:#43a047
+    style RELIEF fill:#fff3e0,stroke:#f57c00,color:#1f2937
+    style SEED fill:#e1f5fe,stroke:#0288d1,color:#1f2937
+    style FINAL fill:#e8f5e9,stroke:#43a047,color:#1f2937
 ```
 
 Use `loxilb_pd_kv_tier15_spills_total` and
 `loxilb_pd_kv_tier15_cold_seeds_total` to observe these deliberate cache-locality tradeoffs.
 
-## Resilience semantics
+### Resilience semantics
 
 - **Health / CB pre-filter:** eligible endpoints are filtered before KV overlap selection. Verify the
   selected endpoint and topology-specific fallback under each injected fault.
@@ -270,7 +292,7 @@ Use `loxilb_pd_kv_tier15_spills_total` and
   per-endpoint weights decay toward neutral — capacity scaling relaxes back to unweighted;
   endpoints are never zero-filled or dropped by staleness alone.
 
-## The single-pool (non-disaggregated) hierarchy
+### The single-pool (non-disaggregated) hierarchy
 
 For converged fullproxy without P/D, Exact mode 3 first attempts inventory-aware
 placement. On a miss it falls back to the rule's selector. With Exact disabled,
@@ -300,7 +322,7 @@ virtual nodes; submitted CHWBL factor and replication fields do not currently ch
     no engine event feed, tokenizer staging or hash-contract parity. Exact mode 3
     adds those contracts and can observe block overlap in a converged pool.
 
-## Configure and verify the selected shape
+### Configure and verify the selected shape
 
 Use the [converged RR/Exact guide](model-engine-standard/matrix-manual.md) for mode 3,
 or [P/D deployment](pd-deployment.md) for mode 1. Field meanings and tuning inputs
@@ -317,3 +339,13 @@ Verify effective binding and independent delivery with
 <a id="verify"></a>
 
 [Current reference](routing-hierarchy.md).
+
+## Check your result
+
+Use independent request placement evidence; a configured Exact label alone does not prove a cache hit.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](model-engine-standard/lifecycle.md) when ending the run.
