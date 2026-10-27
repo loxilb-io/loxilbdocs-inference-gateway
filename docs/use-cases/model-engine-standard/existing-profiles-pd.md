@@ -4,7 +4,29 @@
 
 This is an **optional separate topology**, after a normal two-worker converged RR check. Prefill processes the input; Decode generates output using state transferred by the native engine. A completed chat response alone does not prove P/D transfer. [Start with the results guide](existing-profiles.md); the table below lists the only P/D recipes supplied.
 
-## 1. Select a permitted P/D scope {#select-pd}
+## Before you start
+
+Complete the documented converged baseline, clean up its native workers, and select a supplied P/D recipe.
+
+**Focus of this page:** Choose 2P1D for the supplied vLLM recipes or 1P1D for the supplied SGLang recipes.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/pd.md"
+
+Prefill and decode are separate workers. The solid lines are request/control paths; the dashed worker-to-worker edge is engine-specific KV transfer and needs its own ports, version compatibility and evidence. An HTTP route or an accepted config is not transfer proof. Follow only the selected engine runbook.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### 1. Select a permitted P/D scope {#select-pd}
 
 | Profile ID | vLLM P/D | SGLang P/D |
 |---|---|---|
@@ -59,7 +81,7 @@ cd "$PD_RUN" || exit 1
 
 Gateway request IDs must be copied to worker verification terminals, not replaced with worker-local IDs. One active attempt per host is assumed; `pd-operator.env` points to its local evidence directory.
 
-## 2. Allocate roles and verify readiness prerequisites {#pd-role-preparation}
+### 2. Allocate roles and verify readiness prerequisites {#pd-role-preparation}
 
 | Role | Documentation address | Native HTTP | Receipt HTTP | Additional connectivity |
 |---|---|---|---|---|
@@ -71,9 +93,9 @@ Replace addresses with allocated hosts in both native arguments and rule JSON. S
 
 On every role, verify the same full model snapshot/checksums from [worker preparation](existing-profiles-launch.md#worker-artifacts), Docker GPU access, free ports, and the exact image. Mount all roles' weights at `/qa/model:ro`. `PD_MEMORY_ARGS` is the recorded Docker host RAM array; `PD_GPU_BLOCKS` is matched vLLM KV geometry, not an optimal capacity recommendation. Do not copy converged caps or memory limits into P/D.
 
-## 3. Launch only the selected engine {#pd-native-launch}
+### 3. Launch only the selected engine {#pd-native-launch}
 
-### vLLM: CPU NIXL/UCX TCP
+#### vLLM: CPU NIXL/UCX TCP
 
 **Each vLLM role:**
 
@@ -128,7 +150,7 @@ docker run -d --name existing-profile-vllm-decode --label igw.qa=existing-profil
 
 All roles must use the same recorded block count and compatible geometry. Decode does not publish inventory. A running process or enough VRAM alone does not prove a working NIXL transfer.
 
-### SGLang: Mooncake TCP
+#### SGLang: Mooncake TCP
 
 **Both SG roles:**
 
@@ -177,7 +199,7 @@ docker run -d --name existing-profile-sg-decode --label igw.qa=existing-profile-
 
 Preserve model-specific attention/reasoning arguments. Do not add Decode inventory publication or an unqualified decode-radix-cache flag. Native memory-pool8192 and chunk size4096 are separate from the4096-token context and request output budget.
 
-### Check every role and start its receipt collector
+#### Check every role and start its receipt collector
 
 On each role set its actual container name, then check readiness and served model. Do **not** send an ordinary standalone chat request to a disaggregated role as a readiness test; SG roles require coordinated bootstrap state.
 
@@ -201,7 +223,7 @@ python3 "$PACKAGE/receipt-proxy.py" --bind "$WORKER_IP" --port 18301   --upstrea
 
 Preserve that directory for restart. Native/bootstrap timeouts and the collector's180s upstream timeout are independent; changing a timeout is a new condition, not proof that a failed transfer is fixed.
 
-## 4. Apply one P/D rule {#pd-apply}
+### 4. Apply one P/D rule {#pd-apply}
 
 **Gateway shell:** restore its selected identity, source the P/D settings, and use its `PD_RUN`/`PD_RID`. Confirm that the previous converged/P/D rule is absent before POST. Exact additionally needs the [prepared Gateway registry](existing-profiles-launch.md#gateway-preparation).
 
@@ -223,7 +245,7 @@ Readback must show the exact selected model, VIP/port 28300, `pd_disagg_mode:tru
 
 For **Exact only**, run the [Exact READY check](existing-profiles-launch.md#exact-ready) for this model/rule before warming inventory. Both creation and the READY readback are required; discovery alone is insufficient.
 
-## 5. Warm inventory, then send six main requests {#pd-traffic}
+### 5. Warm inventory, then send six main requests {#pd-traffic}
 
 Create a request explicitly; this page does not depend on an unmentioned `request.json` left by a prior shell. The source input below is the selected profile's recorded converged RR repeated-prefix input. Its output budget is replaced by the separately qualified **P/D** budget. Use fresh native roles for a clean replay; reusing an existing prefix cache changes the cold/warm condition.
 
@@ -279,7 +301,7 @@ curl --fail-with-body "http://$DECODE_IP:18300/metrics" > pd-decode-after.txt
 
 The **2P1D Exact-only** `metric-prime` is a separate normal client request and transfer; retain its role receipts and exclude it from main6 and its transfer delta. It establishes an exported hit-counter series before the numeric baseline. Skip these hit-counter checks for 1P1D: that scope proves engagement/transfer and does not qualify Prefill selection benefit. Do not silently interpret a missing metric series as zero; stop that metric check if either snapshot lacks the required count.
 
-## 6. Verify answers, role receipts, and actual transfer {#pd-verify}
+### 6. Verify answers, role receipts, and actual transfer {#pd-verify}
 
 All six client answers must pass the [normal-answer checks](existing-profiles-launch.md#receipt-collectors). Use the [receipt/hash procedure](existing-profiles-launch.md#verify-routing) on each role with the Gateway's `PD_RID-main-*` IDs. Each main request needs exactly one selected Prefill receipt and one Decode receipt. Verify each native request/response hash against its own ledger; only the Decode response must match the client body. The native rewritten requests are **not** byte-identical to the client request: verify preserved model/messages/temperature and Decode output/stream settings plus transfer/bootstrap fields.
 
@@ -293,7 +315,7 @@ All six client answers must pass the [normal-answer checks](existing-profiles-la
 
 Do not sum histogram buckets as request counts; sum the matching **count** series and compare before/after with no unrelated traffic. Preserve Gateway's legacy KV-params-missing delta separately; it is not the native transfer count. The public package supplies reviewed P/D summaries, not private raw native session bytes. Its verifiers do not reconstruct your new P/D run; retain your own role evidence privately.
 
-## Request flows {#pd-request-flows}
+### Request flows {#pd-request-flows}
 
 vLLM forwards the returned transfer state:
 
@@ -332,7 +354,7 @@ sequenceDiagram
     G-->>C: Decode response
 ```
 
-## 7. Negative checks, optional recovery, and cleanup {#pd-cleanup}
+### 7. Negative checks, optional recovery, and cleanup {#pd-cleanup}
 
 **Gateway shell:** unknown model must return 503 with zero native receipts. Invalid P/D mode 2 must return 400 without changing effective configuration. Keep the original readbacks and compare only after removing the two documented volatile fields.
 
@@ -383,7 +405,7 @@ docker rm "$ENGINE_CONTAINER"
 
 Expected: empty test rules, no receipt listeners or owned native containers, GPU memory returned to baseline, and preserved evidence/caches. To retry another mode, prepare a fresh run after absence and port checks. Do not change model/profile/template or native geometry simply to bypass a retained failure.
 
-## Troubleshooting and qualification limits {#pd-limits}
+### Troubleshooting and qualification limits {#pd-limits}
 
 | Observation | Customer action / established boundary |
 |---|---|
@@ -398,3 +420,13 @@ Expected: empty test rules, no receipt listeners or owned native containers, GPU
 These recipes use context 4096. They do not qualify long-context/1M input. Current-source analysis identified different large-body handling for plain forwarding and P/D; identity with a deployed binary must be checked. Do not assume raising an engine context flag preserves Gateway inspection/Exact/P/D semantics. No RDMA-bandwidth, SLA, arbitrary concurrency, or production failover claim follows from this bounded TCP test.
 
 [Back to results](existing-profiles.md) · [Return to converged setup](existing-profiles-launch.md) · [Optional: recorded tuning](existing-profiles-tuning.md)
+
+## Check your result
+
+Require both response delivery and native transfer evidence; one-Prefill Exact cannot prove selection between Prefills.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the role-specific cleanup in the selected P/D runbook below or linked from this page. Stop its transfer/event publishers and native Prefill/Decode processes by their recorded ownership. Do not apply a converged worker teardown to a separate P/D deployment. Preserve the model data and evidence under your retention policy.

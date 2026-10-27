@@ -4,7 +4,29 @@ Build the public JWT scenario once, then perform policy changes individually thr
 
 <!-- example-status-default: illustrative-only -->
 
-## Prerequisites
+## Before you start
+
+Start on a disposable Linux host with unused fixture names and the required HTTP/2 tools.
+
+**Focus of this page:** Create clients, Gateway, identity provider, policy store and two synthetic backends.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/admission.md"
+
+These are Linux containers/namespaces on one disposable host. The model names identify synthetic echoes, not loaded GPU models. The baseline listener is VIP 192.0.2.254:2040; TLS, capacity and failure exercises add the explicit listener ports shown in their steps. Keycloak/JWKS and PostgreSQL use inspected Docker-bridge addresses.
+
+| Where | What happens here |
+|---|---|
+| Host operator | Prepare private LAB files, issue credentials and run namespace commands. |
+| l3h1 | Send management calls and client traffic into llb1. |
+| llb1 | Enforce identity, quota and capacity before choosing a backend. |
+| l3ep1 / l3ep2 | Observe independent Llama/Mistral receipt and hold/release fixtures. |
+| kc-aigw / pg-jwtauth | Supply identity and policy state; they are not on the inference response path. |
+
+## Walkthrough
+
+### Prerequisites
 
 Use a dedicated Ubuntu 24.04 Linux host with Docker, Bash, iproute2, curl with HTTP/2, jq, Python3 (including the upstream scenario's HTTP/2 dependencies), OpenSSL, Go and Git. Read the upstream [scenario README](https://github.com/loxilb-io/loxilb-inference-gateway/tree/main/cicd/ai-jwtauth) and [installation guide](../../getting-started/installation.md). Use an image built from the chosen Gateway/eBPF tuple with backend mTLS support. Pin its digest and record it; source checkout alone does not identify the running binary.
 
@@ -23,7 +45,7 @@ sudo ip link show docker0
 
 If h2 is absent, install the Ubuntu python3-h2 package on the dedicated host before bootstrap. curl's Features line must include HTTP2 for the H2 cases. The bootstrap does not make a host-only pip --user installation available to root. The default Docker bridge must be operational before bootstrap. If its configured bridge device is missing, stop and restore the dedicated host's Docker networking before retrying; a network definition alone does not prove that the bridge device exists.
 
-## Acquire public sources and examples
+### Acquire public sources and examples
 
 Clone both public repositories into a new lab directory. Select a reviewed immutable Gateway commit and matching image digest for your lab. The placeholders below are mandatory operator choices, not a default release recommendation.
 
@@ -44,7 +66,7 @@ cd gateway/cicd/ai-jwtauth
 
 Select a documentation revision containing these pages and record its commit alongside the Gateway/image tuple. The downloadable [download catalog](downloads.md) and [TLS fixture](../../assets/admission-flow-control/fixtures/tls-lab.go) are also part of this documentation build. Copy them before disconnecting from the source repository.
 
-## Adapt the bootstrap to documentation addresses
+### Adapt the bootstrap to documentation addresses
 
 The original upstream scenario uses different hard-coded lab networks. From the scenario directory in the new disposable clone, substitute the three prefixes in the bootstrap command text so its topology, rules, routes and generated frontend certificate agree with this guide. The source files remain unchanged. The bracketed patterns intentionally match literal dots. Other upstream validation scripts still use the upstream addresses; do not run them against this adapted topology. Policy experiments below use individual commands.
 
@@ -64,7 +86,7 @@ cp "$DOCS/docs/assets/admission-flow-control/examples/"*.json "$LAB/examples/"
 
 config.sh is upstream infrastructure bootstrap (realm, policy store, namespaces, profiles and base rules). It is not a substitute for the following configure→GET→traffic→receipt→cleanup exercises. Keep the original source and evidence. Run this command from cicd/ai-jwtauth. Supplying the original path as bash's command name preserves helper-path resolution; passing the complete command text with stdin closed prevents nested interactive Docker commands from consuming the bootstrap itself. Do not invoke rmconfig.sh as a routine chapter cleanup.
 
-## Topology and verification
+### Topology and verification
 
 | Component | Namespace/container | Lab data path |
 |---|---|---|
@@ -104,7 +126,7 @@ All requests prefixed sudo ip netns exec l3h1 run in the client's network namesp
 
 The disposable bootstrap uses its existing unauthenticated management interface. On an authenticated deployment follow [management API authentication](../../security/management-api-authentication.md) with a separate protected management credential file. An inference JWT is not a management token.
 
-## Issue a token
+### Issue a token
 
 The bootstrap bakes test-only identities into the Keycloak aigw realm. Alice/Bob/Carol exercise model permissions; q1/q2 user RPS; t1/t2 tenant-qt RPS; q9/q10 user TPM/model TPM; m1/m2 tenant-qm TPM; n1 tenant-qn model TPM; r1 tenant-qr reservations; q4/q7 defaults; f1/f2 tenant-qf store faults. Inspect the selected public mkrealm.py if an account differs on your revision.
 
@@ -126,7 +148,7 @@ export ALICE_SUB=$(jq -r .sub "$LAB/alice.claims.json")
 
 The token endpoint uses form encoding, not JSON. client_id is a registered test client; grant_type=password is this fixture's grant. For other named identities repeat these individual commands replacing username/password (fixture <username>pw) **and every output basename**. Store sub from each claims file for quota user_id. Decoding claims does not verify a JWT signature. Refresh each token before a chapter and after expiry; expires_in is seconds, normally300 in this realm. Never print the full token. The .curl file is a private curl credential file, not Gateway configuration.
 
-## Expected baseline and independent receipt
+### Expected baseline and independent receipt
 
 ```bash
 sudo ip netns exec l3h1 curl -sS --max-time 10 --http1.1 \
@@ -144,6 +166,16 @@ sudo ip netns exec l3h1 curl -sS "$API/metrics" > "$LAB/results/baseline.metrics
 
 Require HTTP200, server-llama, Llama receipt1 and Mistral0. Stop to diagnose before proceeding if this fails. Use a fresh RUN each session and a unique case suffix per request. Denied traffic needs the expected HTTP/error and both receipts0; a curl timeout or HTTP000 does not prove an HTTP-level refusal.
 
-## Cleanup and troubleshooting
+### Cleanup and troubleshooting
 
 Do not delete the infrastructure between chapters. Use [scoped cleanup](cleanup.md) for added rules, policies and fixtures. Preserve private tokens/keys/results locally. If bootstrap fails, record which containers, namespaces and files it created; reconcile only those resources against the upstream teardown before retrying. Check routes, selected image, Keycloak reachability and token freshness before diagnosing admission.
+
+## Check your result
+
+Check the actual namespace routes, selected image identity and base JWT/model service before continuing.
+
+Compare API readback with the normal request, the deliberate denial, and an independent backend observation. Check the chapter's exact HTTP code and error body; HTTP 200 alone does not prove quota, identity, queue order, or resource return.
+
+## Next steps and cleanup
+
+Restore the chapter's temporary policy before continuing in the same lab. Keep the original configuration and private evidence; use the final cleanup chapter when the entire lab is finished. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

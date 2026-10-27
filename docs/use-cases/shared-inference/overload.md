@@ -6,12 +6,37 @@ Separate queue population limits from time limits. A batch queue cap does not re
 
 Change fc_max_queue_depth for the whole pool, fc_band_queue_pct for the selected band's waiting population, and fc_band_wait_ms for waiting time. The llm-d TTL is a client header on an individual request. These are separate controls, so change one at a time and inspect both typed response and backend receipt.
 
-## Band queue cap and batch shedding
+## Before you start
+
+Complete capacity and return to its documented baseline.
+
+**Focus of this page:** Bound queue population and waiting time separately from the client TTL.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/shared.md"
+
+One disposable Linux host contains two Gateway/DB containers and four network namespaces. Support reaches the Gateway on 192.0.2.254; research uses its 198.51.100.254 interface. The backend is a host Python process in share-backend, not an inference engine. PostgreSQL uses its inspected Docker-bridge address.
+
+| Where | What happens here |
+|---|---|
+| Host root Bash | Create namespaces, save LAB inputs, start/stop exact owned processes. |
+| share-a / share-b | Send inference as support/research; management curls use share-a. |
+| share-gateway | Apply policy and forward requests; management is port 11111, inference port 8080. |
+| share-backend | Read /receipt/ and /order directly, bypassing Gateway routing. |
+| share-pg | Keep keys/objectives; pause only in the explicit recovery experiment. |
+
+## Walkthrough
+
+### Band queue cap and batch shedding
 
 Complete [capacity](capacity.md). With one executing request and a global queue of four, a 25% sheddable queue cap allows one waiting batch request. The second batch request must be refused as 429 `admission_capacity` without backend receipt. Queue-full is the internal refusal reason, not an additional JSON error code; inspect queued counts alongside the typed response. Standard work may still queue.
 
+**Step 1 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer` and retain its response. Require HTTP 200 for the saved management response before continuing.
+
 ```bash
-(
 set -euo pipefail
 umask 077
 source "${LAB:?set LAB to your private run directory}/env"
@@ -27,6 +52,13 @@ status=$(ip netns exec share-a curl -sS --max-time 10 -X POST \
 printf 'HTTP %s\n' "$status"
 jq . "$LAB/overload-rule-1.response.json"
 test "$status" = 200
+```
+
+**Step 2 — Send `queue-holder` and retain the response**
+
+Write `queue-holder.request.json` with the displayed editable JSON input. Send `queue-holder` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps.
+
+```bash
 cat > "$LAB/queue-holder.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -49,6 +81,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   -w '%{http_code}\n' "$INFER" > "$LAB/queue-holder.http" &
 printf '%s\n' "$!" > "$LAB/queue-holder.pid"
 arrived=false
+```
+
+**Step 3 — Check independent backend delivery**
+
+Read `queue-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `queue-holder`. Write `queue-batch-1.request.json` with the displayed editable JSON input.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-backend curl -fsS --max-time 3 \
     "http://127.0.0.1:8080/receipt/queue-holder" -o "$LAB/queue-holder.receipt.json"
@@ -71,6 +110,13 @@ cat > "$LAB/queue-batch-1.request.json" <<'JSON'
   "max_tokens": 4
 }
 JSON
+```
+
+**Step 4 — Apply or read back the displayed management policy**
+
+Send `queue-batch-1` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps. Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --config "$LAB/keys/research-batch.curl" \
   -H 'Content-Type: application/json' \
@@ -93,6 +139,13 @@ for attempt in $(seq 1 80); do
   sleep 0.1
 done
 test "$reached" = true
+```
+
+**Step 5 — Send `queue-batch-2` and retain the response**
+
+Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state. Write `queue-batch-2.request.json` with the displayed editable JSON input. Send `queue-batch-2` through the Gateway from the namespace shown below; retain its HTTP status and response separately.
+
+```bash
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/overload-state-3.json"
@@ -115,6 +168,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --data-binary "@$LAB/queue-batch-2.request.json" \
   -D "$LAB/queue-batch-2.headers" -o "$LAB/queue-batch-2.response.json" \
   -w '%{http_code}\n' "$INFER" > "$LAB/queue-batch-2.http"
+```
+
+**Step 6 — Check independent backend delivery**
+
+Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 429 for `queue-batch-2`. Read `queue-batch-2` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `queue-batch-2`. Write `queue-standard.request.json` with the displayed editable JSON input.
+
+```bash
 if test -f "$LAB/queue-batch-2.pid"; then
   wait "$(cat "$LAB/queue-batch-2.pid")"
 fi
@@ -135,6 +195,13 @@ cat > "$LAB/queue-standard.request.json" <<'JSON'
   "max_tokens": 4
 }
 JSON
+```
+
+**Step 7 — Apply or read back the displayed management policy**
+
+Send `queue-standard` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps. Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --config "$LAB/keys/research.curl" \
   -H 'Content-Type: application/json' \
@@ -157,6 +224,13 @@ for attempt in $(seq 1 80); do
   sleep 0.1
 done
 test "$reached" = true
+```
+
+**Step 8 — Release held requests and check delivery**
+
+Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state. Release the held backend request `queue-holder` so its capacity can return to the Gateway. Read `queue-standard` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `queue-standard`. Release the held backend request `queue-standard` so its capacity can return to the Gateway.
+
+```bash
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/overload-state-4.json"
@@ -176,6 +250,13 @@ test "$arrived" = true
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/release/queue-standard" | jq .
 arrived=false
+```
+
+**Step 9 — Release held requests and check delivery**
+
+Read `queue-batch-1` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `queue-batch-1`. Release the held backend request `queue-batch-1` so its capacity can return to the Gateway. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 200 for `queue-holder`. Read `queue-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `queue-holder`. Require saved HTTP 200 for `queue-standard`.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-backend curl -fsS --max-time 3 \
     "http://127.0.0.1:8080/receipt/queue-batch-1" -o "$LAB/queue-batch-1.receipt.json"
@@ -199,6 +280,13 @@ if test -f "$LAB/queue-standard.pid"; then
   wait "$(cat "$LAB/queue-standard.pid")"
 fi
 test "$(cat "$LAB/queue-standard.http")" = 200
+```
+
+**Step 10 — Apply or read back the displayed management policy**
+
+Read `queue-standard` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `queue-standard`. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 200 for `queue-batch-1`. Read `queue-batch-1` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `queue-batch-1`. Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/queue-standard" -o "$LAB/queue-standard.receipt.json"
 jq -e '.count == 1' "$LAB/queue-standard.receipt.json"
@@ -222,6 +310,13 @@ for attempt in $(seq 1 80); do
   sleep 0.1
 done
 test "$reached" = true
+```
+
+**Step 11 — Apply or read back the displayed management policy**
+
+Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state. Send the displayed management request to `/config/loadbalancer` and retain its response. Require HTTP 200 for the saved management response before continuing.
+
+```bash
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/overload-state-5.json"
@@ -236,6 +331,13 @@ status=$(ip netns exec share-a curl -sS --max-time 10 -X POST \
 printf 'HTTP %s\n' "$status"
 jq . "$LAB/overload-rule-6.response.json"
 test "$status" = 200
+```
+
+**Step 12 — Send `shed-holder` and retain the response**
+
+Write `shed-holder.request.json` with the displayed editable JSON input. Send `shed-holder` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps.
+
+```bash
 cat > "$LAB/shed-holder.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -258,6 +360,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   -w '%{http_code}\n' "$INFER" > "$LAB/shed-holder.http" &
 printf '%s\n' "$!" > "$LAB/shed-holder.pid"
 arrived=false
+```
+
+**Step 13 — Check independent backend delivery**
+
+Read `shed-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `shed-holder`. Write `shed-batch.request.json` with the displayed editable JSON input.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-backend curl -fsS --max-time 3 \
     "http://127.0.0.1:8080/receipt/shed-holder" -o "$LAB/shed-holder.receipt.json"
@@ -280,6 +389,13 @@ cat > "$LAB/shed-batch.request.json" <<'JSON'
   "max_tokens": 4
 }
 JSON
+```
+
+**Step 14 — Send `shed-batch` and retain the response**
+
+Send `shed-batch` through the Gateway from the namespace shown below; retain its HTTP status and response separately. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 429 for `shed-batch`. Read `shed-batch` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `shed-batch`. Release the held backend request `shed-holder` so its capacity can return to the Gateway. Require saved HTTP 200 for `shed-holder`. Read `shed-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `shed-holder`.
+
+```bash
 ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --config "$LAB/keys/research-batch.curl" \
   -H 'Content-Type: application/json' \
@@ -304,6 +420,13 @@ test "$(cat "$LAB/shed-holder.http")" = 200
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/shed-holder" -o "$LAB/shed-holder.receipt.json"
 jq -e '.count == 1' "$LAB/shed-holder.receipt.json"
+```
+
+**Step 15 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 reached=false
 for attempt in $(seq 1 80); do
   ip netns exec share-a curl -fsS --max-time 5 "$API/config/loadbalancer/all" \
@@ -320,13 +443,15 @@ test "$reached" = true
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/overload-state-8.json"
-)
 ```
 
 When the entire queue is full, an eligible higher band can displace the youngest sheddable waiter; the displaced client receives a shed response. To observe that distinct behavior, fill a depth-two queue with two batch waiters and then submit standard work:
 
+**Step 1 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer` and retain its response. Require HTTP 200 for the saved management response before continuing.
+
 ```bash
-(
 set -euo pipefail
 umask 077
 source "${LAB:?set LAB to your private run directory}/env"
@@ -341,6 +466,13 @@ status=$(ip netns exec share-a curl -sS --max-time 10 -X POST \
 printf 'HTTP %s\n' "$status"
 jq . "$LAB/overload-rule-9.response.json"
 test "$status" = 200
+```
+
+**Step 2 — Send `evict-holder` and retain the response**
+
+Write `evict-holder.request.json` with the displayed editable JSON input. Send `evict-holder` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps.
+
+```bash
 cat > "$LAB/evict-holder.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -363,6 +495,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   -w '%{http_code}\n' "$INFER" > "$LAB/evict-holder.http" &
 printf '%s\n' "$!" > "$LAB/evict-holder.pid"
 arrived=false
+```
+
+**Step 3 — Check independent backend delivery**
+
+Read `evict-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `evict-holder`. Write `evict-old.request.json` with the displayed editable JSON input.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-backend curl -fsS --max-time 3 \
     "http://127.0.0.1:8080/receipt/evict-holder" -o "$LAB/evict-holder.receipt.json"
@@ -385,6 +524,13 @@ cat > "$LAB/evict-old.request.json" <<'JSON'
   "max_tokens": 4
 }
 JSON
+```
+
+**Step 4 — Apply or read back the displayed management policy**
+
+Send `evict-old` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps. Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --config "$LAB/keys/support-batch.curl" \
   -H 'Content-Type: application/json' \
@@ -407,6 +553,13 @@ for attempt in $(seq 1 80); do
   sleep 0.1
 done
 test "$reached" = true
+```
+
+**Step 5 — Send `evict-young` and retain the response**
+
+Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state. Write `evict-young.request.json` with the displayed editable JSON input. Send `evict-young` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps.
+
+```bash
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/overload-state-11.json"
@@ -431,6 +584,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   -D "$LAB/evict-young.headers" -o "$LAB/evict-young.response.json" \
   -w '%{http_code}\n' "$INFER" > "$LAB/evict-young.http" &
 printf '%s\n' "$!" > "$LAB/evict-young.pid"
+```
+
+**Step 6 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 reached=false
 for attempt in $(seq 1 80); do
   ip netns exec share-a curl -fsS --max-time 5 "$API/config/loadbalancer/all" \
@@ -447,6 +607,13 @@ test "$reached" = true
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/overload-state-12.json"
+```
+
+**Step 7 — Send `evict-standard` and retain the response**
+
+Write `evict-standard.request.json` with the displayed editable JSON input. Send `evict-standard` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps. Wait for the saved client PID in this same parent Bash before checking its final response.
+
+```bash
 cat > "$LAB/evict-standard.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -471,6 +638,13 @@ printf '%s\n' "$!" > "$LAB/evict-standard.pid"
 if test -f "$LAB/evict-young.pid"; then
   wait "$(cat "$LAB/evict-young.pid")"
 fi
+```
+
+**Step 8 — Apply or read back the displayed management policy**
+
+Require saved HTTP 429 for `evict-young`. Read `evict-young` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `evict-young`. Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state. Release the held backend request `evict-holder` so its capacity can return to the Gateway.
+
+```bash
 test "$(cat "$LAB/evict-young.http")" = 429
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/evict-young" -o "$LAB/evict-young.receipt.json"
@@ -495,6 +669,13 @@ jq --argjson port "$PORT" \
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/release/evict-holder" | jq .
 arrived=false
+```
+
+**Step 9 — Release held requests and check delivery**
+
+Read `evict-standard` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `evict-standard`. Release the held backend request `evict-standard` so its capacity can return to the Gateway. Read `evict-old` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `evict-old`.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-backend curl -fsS --max-time 3 \
     "http://127.0.0.1:8080/receipt/evict-standard" -o "$LAB/evict-standard.receipt.json"
@@ -518,6 +699,13 @@ for attempt in $(seq 1 80); do
   sleep 0.1
 done
 test "$arrived" = true
+```
+
+**Step 10 — Release held requests and check delivery**
+
+Release the held backend request `evict-old` so its capacity can return to the Gateway. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 200 for `evict-holder`. Read `evict-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `evict-holder`. Require saved HTTP 200 for `evict-standard`. Read `evict-standard` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `evict-standard`. Require saved HTTP 200 for `evict-old`. Read `evict-old` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `evict-old`.
+
+```bash
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/release/evict-old" | jq .
 if test -f "$LAB/evict-holder.pid"; then
@@ -542,6 +730,13 @@ ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/evict-old" -o "$LAB/evict-old.receipt.json"
 jq -e '.count == 1' "$LAB/evict-old.receipt.json"
 reached=false
+```
+
+**Step 11 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-a curl -fsS --max-time 5 "$API/config/loadbalancer/all" \
     -o "$LAB/overload-state-14.json"
@@ -557,15 +752,17 @@ test "$reached" = true
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/overload-state-14.json"
-)
 ```
 
-## Band window versus client TTL
+### Band window versus client TTL
 
 Use a 1000 ms rule window, 150 ms standard window, and 100 ms sheddable window. With an existing holder, a standard request times out as HTTP 504 `admission_queue_timeout` around its band window. A valid llm-d TTL of `50ms` expires sooner as HTTP 429 `admission_ttl_expired`. Bare `50` is not a duration and does not install a 50 ms TTL. Inspect the saved response's `queued_ms`; allow host scheduling overhead in elapsed client time.
 
+**Step 1 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer` and retain its response. Require HTTP 200 for the saved management response before continuing.
+
 ```bash
-(
 set -euo pipefail
 umask 077
 source "${LAB:?set LAB to your private run directory}/env"
@@ -582,6 +779,13 @@ status=$(ip netns exec share-a curl -sS --max-time 10 -X POST \
 printf 'HTTP %s\n' "$status"
 jq . "$LAB/overload-rule-15.response.json"
 test "$status" = 200
+```
+
+**Step 2 — Send `deadline-holder` and retain the response**
+
+Write `deadline-holder.request.json` with the displayed editable JSON input. Send `deadline-holder` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps.
+
+```bash
 cat > "$LAB/deadline-holder.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -604,6 +808,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   -w '%{http_code}\n' "$INFER" > "$LAB/deadline-holder.http" &
 printf '%s\n' "$!" > "$LAB/deadline-holder.pid"
 arrived=false
+```
+
+**Step 3 — Check independent backend delivery**
+
+Read `deadline-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `deadline-holder`. Write `band-window.request.json` with the displayed editable JSON input.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-backend curl -fsS --max-time 3 \
     "http://127.0.0.1:8080/receipt/deadline-holder" -o "$LAB/deadline-holder.receipt.json"
@@ -626,6 +837,13 @@ cat > "$LAB/band-window.request.json" <<'JSON'
   "max_tokens": 4
 }
 JSON
+```
+
+**Step 4 — Send `band-window` and retain the response**
+
+Send `band-window` through the Gateway from the namespace shown below; retain its HTTP status and response separately. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 504 for `band-window`. Read `band-window` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `band-window`.
+
+```bash
 ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --config "$LAB/keys/research.curl" \
   -H 'Content-Type: application/json' \
@@ -642,6 +860,13 @@ ip netns exec share-backend curl -fsS --max-time 3 \
 jq -e '.count == 0' "$LAB/band-window.receipt.json"
 jq -e '(((.["error"] == "admission_queue_timeout")) and ((150 <= .["queued_ms"]) and (.["queued_ms"] <= 200)))' "$LAB/band-window.response.json"
 cat "$LAB/band-window.response.json"
+```
+
+**Step 5 — Send `client-ttl` and retain the response**
+
+Write `client-ttl.request.json` with the displayed editable JSON input. Send `client-ttl` through the Gateway from the namespace shown below; retain its HTTP status and response separately. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 429 for `client-ttl`.
+
+```bash
 cat > "$LAB/client-ttl.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -666,6 +891,13 @@ if test -f "$LAB/client-ttl.pid"; then
   wait "$(cat "$LAB/client-ttl.pid")"
 fi
 test "$(cat "$LAB/client-ttl.http")" = 429
+```
+
+**Step 6 — Send `invalid-ttl` and retain the response**
+
+Read `client-ttl` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `client-ttl`. Write `invalid-ttl.request.json` with the displayed editable JSON input. Send `invalid-ttl` through the Gateway from the namespace shown below; retain its HTTP status and response separately.
+
+```bash
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/client-ttl" -o "$LAB/client-ttl.receipt.json"
 jq -e '.count == 0' "$LAB/client-ttl.receipt.json"
@@ -690,6 +922,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --data-binary "@$LAB/invalid-ttl.request.json" \
   -D "$LAB/invalid-ttl.headers" -o "$LAB/invalid-ttl.response.json" \
   -w '%{http_code}\n' "$INFER" > "$LAB/invalid-ttl.http"
+```
+
+**Step 7 — Check independent backend delivery**
+
+Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 504 for `invalid-ttl`. Read `invalid-ttl` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `invalid-ttl`. Write `batch-window.request.json` with the displayed editable JSON input.
+
+```bash
 if test -f "$LAB/invalid-ttl.pid"; then
   wait "$(cat "$LAB/invalid-ttl.pid")"
 fi
@@ -710,6 +949,13 @@ cat > "$LAB/batch-window.request.json" <<'JSON'
   "max_tokens": 4
 }
 JSON
+```
+
+**Step 8 — Send `batch-window` and retain the response**
+
+Send `batch-window` through the Gateway from the namespace shown below; retain its HTTP status and response separately. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 504 for `batch-window`. Read `batch-window` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `batch-window`. Release the held backend request `deadline-holder` so its capacity can return to the Gateway. Require saved HTTP 200 for `deadline-holder`. Read `deadline-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `deadline-holder`.
+
+```bash
 ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --config "$LAB/keys/research-batch.curl" \
   -H 'Content-Type: application/json' \
@@ -734,6 +980,13 @@ test "$(cat "$LAB/deadline-holder.http")" = 200
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/deadline-holder" -o "$LAB/deadline-holder.receipt.json"
 jq -e '.count == 1' "$LAB/deadline-holder.receipt.json"
+```
+
+**Step 9 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state. Read `band-window` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `band-window`. Read `client-ttl` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `client-ttl`.
+
+```bash
 reached=false
 for attempt in $(seq 1 80); do
   ip netns exec share-a curl -fsS --max-time 5 "$API/config/loadbalancer/all" \
@@ -758,6 +1011,13 @@ jq -e '.count == 0' "$LAB/band-window.receipt.json"
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/client-ttl" -o "$LAB/client-ttl.receipt.json"
 jq -e '.count == 0' "$LAB/client-ttl.receipt.json"
+```
+
+**Step 10 — Check independent backend delivery**
+
+Read `invalid-ttl` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `invalid-ttl`. Read `batch-window` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `batch-window`. Write `deadline-recovery.request.json` with the displayed editable JSON input.
+
+```bash
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/invalid-ttl" -o "$LAB/invalid-ttl.receipt.json"
 jq -e '.count == 0' "$LAB/invalid-ttl.receipt.json"
@@ -776,6 +1036,13 @@ cat > "$LAB/deadline-recovery.request.json" <<'JSON'
   "max_tokens": 4
 }
 JSON
+```
+
+**Step 11 — Send `deadline-recovery` and retain the response**
+
+Send `deadline-recovery` through the Gateway from the namespace shown below; retain its HTTP status and response separately. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 200 for `deadline-recovery`. Read `deadline-recovery` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `deadline-recovery`.
+
+```bash
 ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --config "$LAB/keys/research.curl" \
   -H 'Content-Type: application/json' \
@@ -790,7 +1057,16 @@ test "$(cat "$LAB/deadline-recovery.http")" = 200
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/deadline-recovery" -o "$LAB/deadline-recovery.receipt.json"
 jq -e '.count == 1' "$LAB/deadline-recovery.receipt.json"
-)
 ```
 
 Expect queued_ms near 150/50/150/100 respectively, receipt 0 for all four after release, and successful new traffic. TTL handling requires llm-d headers enabled. The effective deadline is the earlier applicable rule/band window and valid client TTL; it is not a GPU execution deadline. HTTP/2 no-queue behavior is outside this H1 experiment. Continue with [defense and recovery](recovery.md).
+
+## Check your result
+
+Compare exact typed 429/504 errors with queued_ms and receipt 0 after held work is released.
+
+Keep the configured policy, HTTP status, resolved identity, and independent backend receipt together. A rejected request must have receipt 0; a successful request must have receipt 1. A missing receipt response is a failed observation, never a zero.
+
+## Next steps and cleanup
+
+Continue in the documented order with the same LAB. Remove an experiment's binding or temporary rule before the next experiment; stop the shared lab only at the final cleanup chapter. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

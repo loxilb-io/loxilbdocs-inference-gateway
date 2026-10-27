@@ -6,12 +6,37 @@ Observe actual backend admission order while one existing request occupies capac
 
 Each rule update below merges the displayed values into the full baseline JSON from onboarding, then POSTs the complete service. Change fc_wake_policy to choose band dispatch, fc_tenant_wake for tenant turns inside a band, and fc_tenant_max_share_pct for the per-tenant inflight ceiling. The following requests show the actual key, objective header, JSON body and background PID.
 
-## Strict bands: urgency before waiting batch
+## Before you start
+
+Finish the network exercises and remove their temporary bindings. Read each contention experiment before starting its held requests.
+
+**Focus of this page:** Change the Gateway queue selection and tenant share, leaving the synthetic backend unchanged.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/shared.md"
+
+One disposable Linux host contains two Gateway/DB containers and four network namespaces. Support reaches the Gateway on 192.0.2.254; research uses its 198.51.100.254 interface. The backend is a host Python process in share-backend, not an inference engine. PostgreSQL uses its inspected Docker-bridge address.
+
+| Where | What happens here |
+|---|---|
+| Host root Bash | Create namespaces, save LAB inputs, start/stop exact owned processes. |
+| share-a / share-b | Send inference as support/research; management curls use share-a. |
+| share-gateway | Apply policy and forward requests; management is port 11111, inference port 8080. |
+| share-backend | Read /receipt/ and /order directly, bypassing Gateway routing. |
+| share-pg | Keep keys/objectives; pause only in the explicit recovery experiment. |
+
+## Walkthrough
+
+### Strict bands: urgency before waiting batch
 
 Complete [network exercises](networks.md) and confirm no bindings remain. This experiment leaves one running request untouched, queues batch first, then critical. Strict chooses the critical waiter when a permit returns. It can starve batch under sustained critical demand.
 
+**Step 1 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer` and retain its response. Require HTTP 200 for the saved management response before continuing.
+
 ```bash
-(
 set -euo pipefail
 umask 077
 source "${LAB:?set LAB to your private run directory}/env"
@@ -26,6 +51,13 @@ status=$(ip netns exec share-a curl -sS --max-time 10 -X POST \
 printf 'HTTP %s\n' "$status"
 jq . "$LAB/scheduling-rule-1.response.json"
 test "$status" = 200
+```
+
+**Step 2 — Send `strict-holder` and retain the response**
+
+Write `strict-holder.request.json` with the displayed editable JSON input. Send `strict-holder` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps.
+
+```bash
 cat > "$LAB/strict-holder.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -48,6 +80,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   -w '%{http_code}\n' "$INFER" > "$LAB/strict-holder.http" &
 printf '%s\n' "$!" > "$LAB/strict-holder.pid"
 arrived=false
+```
+
+**Step 3 — Check independent backend delivery**
+
+Read `strict-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `strict-holder`. Write `strict-batch.request.json` with the displayed editable JSON input.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-backend curl -fsS --max-time 3 \
     "http://127.0.0.1:8080/receipt/strict-holder" -o "$LAB/strict-holder.receipt.json"
@@ -70,6 +109,13 @@ cat > "$LAB/strict-batch.request.json" <<'JSON'
   "max_tokens": 4
 }
 JSON
+```
+
+**Step 4 — Apply or read back the displayed management policy**
+
+Send `strict-batch` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps. Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --config "$LAB/keys/research-batch.curl" \
   -H 'Content-Type: application/json' \
@@ -92,6 +138,13 @@ for attempt in $(seq 1 80); do
   sleep 0.1
 done
 test "$reached" = true
+```
+
+**Step 5 — Send `strict-urgent` and retain the response**
+
+Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state. Write `strict-urgent.request.json` with the displayed editable JSON input. Send `strict-urgent` through the Gateway from the namespace shown below; retain its HTTP status and response separately.
+
+```bash
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/scheduling-state-3.json"
@@ -116,6 +169,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --data-binary "@$LAB/strict-urgent.request.json" \
   -D "$LAB/strict-urgent.headers" -o "$LAB/strict-urgent.response.json" \
   -w '%{http_code}\n' "$INFER" > "$LAB/strict-urgent.http" &
+```
+
+**Step 6 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state. Read `strict-batch` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `strict-batch`. Release the held backend request `strict-holder` so its capacity can return to the Gateway.
+
+```bash
 printf '%s\n' "$!" > "$LAB/strict-urgent.pid"
 reached=false
 for attempt in $(seq 1 80); do
@@ -139,6 +199,13 @@ jq -e '.count == 0' "$LAB/strict-batch.receipt.json"
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/release/strict-holder" | jq .
 arrived=false
+```
+
+**Step 7 — Apply or read back the displayed management policy**
+
+Read `strict-urgent` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `strict-urgent`. Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-backend curl -fsS --max-time 3 \
     "http://127.0.0.1:8080/receipt/strict-urgent" -o "$LAB/strict-urgent.receipt.json"
@@ -162,6 +229,13 @@ for attempt in $(seq 1 80); do
   sleep 0.1
 done
 test "$reached" = true
+```
+
+**Step 8 — Release held requests and check delivery**
+
+Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state. Read `strict-batch` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `strict-batch`. Release the held backend request `strict-urgent` so its capacity can return to the Gateway. Require backend receipt count 1 for `strict-batch`. Release the held backend request `strict-batch` so its capacity can return to the Gateway. Wait for the saved client PID in this same parent Bash before checking its final response.
+
+```bash
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/scheduling-state-5.json"
@@ -186,6 +260,13 @@ ip netns exec share-backend curl -fsS --max-time 3 \
 if test -f "$LAB/strict-holder.pid"; then
   wait "$(cat "$LAB/strict-holder.pid")"
 fi
+```
+
+**Step 9 — Check independent backend delivery**
+
+Require saved HTTP 200 for `strict-holder`. Read `strict-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `strict-holder`. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 200 for `strict-urgent`. Read `strict-urgent` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `strict-urgent`. Require saved HTTP 200 for `strict-batch`. Read `strict-batch` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `strict-batch`.
+
+```bash
 test "$(cat "$LAB/strict-holder.http")" = 200
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/strict-holder" -o "$LAB/strict-holder.receipt.json"
@@ -206,6 +287,13 @@ ip netns exec share-backend curl -fsS --max-time 3 \
 jq -e '.count == 1' "$LAB/strict-batch.receipt.json"
 jq -e '((.["arrival"] > 0))' "$LAB/strict-batch.receipt.json"
 reached=false
+```
+
+**Step 10 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-a curl -fsS --max-time 5 "$API/config/loadbalancer/all" \
     -o "$LAB/scheduling-state-6.json"
@@ -221,17 +309,19 @@ test "$reached" = true
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/scheduling-state-6.json"
-)
 ```
 
 Both reads of strict-batch before urgent release must show count 0. `fc_effective` must reach inflight 1/queued 2 before release; otherwise you have not tested contention. Running work is never preempted.
 
-## Tenant RR within the standard band
+### Tenant RR within the standard band
 
 FIFO preserves global arrival order. Change to RR to give research a turn despite support's earlier burst; support's own pending work retains FIFO order. RR counts resolved tenant identities, not keys, connections, prompt tokens or GPU milliseconds. It rotates tenant slots from the current cursor. The first turn below relies on this fresh lab's slot-allocation history (support in slot 0) and cursor reset; an existing pool can start with another tenant. Preserve per-tenant FIFO and rotation when adapting the check, rather than assuming support always starts.
 
+**Step 1 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer` and retain its response. Require HTTP 200 for the saved management response before continuing.
+
 ```bash
-(
 set -euo pipefail
 umask 077
 source "${LAB:?set LAB to your private run directory}/env"
@@ -246,6 +336,13 @@ status=$(ip netns exec share-a curl -sS --max-time 10 -X POST \
 printf 'HTTP %s\n' "$status"
 jq . "$LAB/scheduling-rule-7.response.json"
 test "$status" = 200
+```
+
+**Step 2 — Send `rr-holder` and retain the response**
+
+Write `rr-holder.request.json` with the displayed editable JSON input. Send `rr-holder` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps.
+
+```bash
 cat > "$LAB/rr-holder.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -268,6 +365,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   -w '%{http_code}\n' "$INFER" > "$LAB/rr-holder.http" &
 printf '%s\n' "$!" > "$LAB/rr-holder.pid"
 arrived=false
+```
+
+**Step 3 — Check independent backend delivery**
+
+Read `rr-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `rr-holder`. Write `rr-support-1.request.json` with the displayed editable JSON input.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-backend curl -fsS --max-time 3 \
     "http://127.0.0.1:8080/receipt/rr-holder" -o "$LAB/rr-holder.receipt.json"
@@ -290,6 +394,13 @@ cat > "$LAB/rr-support-1.request.json" <<'JSON'
   "max_tokens": 4
 }
 JSON
+```
+
+**Step 4 — Apply or read back the displayed management policy**
+
+Send `rr-support-1` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps. Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --config "$LAB/keys/support.curl" \
   -H 'Content-Type: application/json' \
@@ -312,6 +423,13 @@ for attempt in $(seq 1 80); do
   sleep 0.1
 done
 test "$reached" = true
+```
+
+**Step 5 — Send `rr-support-2` and retain the response**
+
+Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state. Write `rr-support-2.request.json` with the displayed editable JSON input. Send `rr-support-2` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps.
+
+```bash
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/scheduling-state-9.json"
@@ -336,6 +454,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   -D "$LAB/rr-support-2.headers" -o "$LAB/rr-support-2.response.json" \
   -w '%{http_code}\n' "$INFER" > "$LAB/rr-support-2.http" &
 printf '%s\n' "$!" > "$LAB/rr-support-2.pid"
+```
+
+**Step 6 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 reached=false
 for attempt in $(seq 1 80); do
   ip netns exec share-a curl -fsS --max-time 5 "$API/config/loadbalancer/all" \
@@ -352,6 +477,13 @@ test "$reached" = true
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/scheduling-state-10.json"
+```
+
+**Step 7 — Send `rr-research` and retain the response**
+
+Write `rr-research.request.json` with the displayed editable JSON input. Send `rr-research` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps.
+
+```bash
 cat > "$LAB/rr-research.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -374,6 +506,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   -w '%{http_code}\n' "$INFER" > "$LAB/rr-research.http" &
 printf '%s\n' "$!" > "$LAB/rr-research.pid"
 reached=false
+```
+
+**Step 8 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state. Release the held backend request `rr-holder` so its capacity can return to the Gateway.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-a curl -fsS --max-time 5 "$API/config/loadbalancer/all" \
     -o "$LAB/scheduling-state-11.json"
@@ -392,6 +531,13 @@ jq --argjson port "$PORT" \
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/release/rr-holder" | jq .
 arrived=false
+```
+
+**Step 9 — Release held requests and check delivery**
+
+Read `rr-support-1` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `rr-support-1`. Release the held backend request `rr-support-1` so its capacity can return to the Gateway. Read `rr-research` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `rr-research`.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-backend curl -fsS --max-time 3 \
     "http://127.0.0.1:8080/receipt/rr-support-1" -o "$LAB/rr-support-1.receipt.json"
@@ -415,6 +561,13 @@ for attempt in $(seq 1 80); do
   sleep 0.1
 done
 test "$arrived" = true
+```
+
+**Step 10 — Release held requests and check delivery**
+
+Read `rr-support-2` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `rr-support-2`. Release the held backend request `rr-research` so its capacity can return to the Gateway. Require backend receipt count 1 for `rr-support-2`. Release the held backend request `rr-support-2` so its capacity can return to the Gateway. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 200 for `rr-holder`. Read `rr-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway.
+
+```bash
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/rr-support-2" -o "$LAB/rr-support-2.receipt.json"
 jq -e '.count == 0' "$LAB/rr-support-2.receipt.json"
@@ -439,6 +592,13 @@ fi
 test "$(cat "$LAB/rr-holder.http")" = 200
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/rr-holder" -o "$LAB/rr-holder.receipt.json"
+```
+
+**Step 11 — Check independent backend delivery**
+
+Require backend receipt count 1 for `rr-holder`. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 200 for `rr-support-1`. Read `rr-support-1` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `rr-support-1`. Require saved HTTP 200 for `rr-research`. Read `rr-research` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `rr-research`. Require saved HTTP 200 for `rr-support-2`. Read `rr-support-2` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `rr-support-2`.
+
+```bash
 jq -e '.count == 1' "$LAB/rr-holder.receipt.json"
 if test -f "$LAB/rr-support-1.pid"; then
   wait "$(cat "$LAB/rr-support-1.pid")"
@@ -462,6 +622,13 @@ ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/rr-support-2" -o "$LAB/rr-support-2.receipt.json"
 jq -e '.count == 1' "$LAB/rr-support-2.receipt.json"
 reached=false
+```
+
+**Step 12 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-a curl -fsS --max-time 5 "$API/config/loadbalancer/all" \
     -o "$LAB/scheduling-state-12.json"
@@ -477,17 +644,19 @@ test "$reached" = true
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/scheduling-state-12.json"
-)
 ```
 
 Expected dispatch: support-1, research, support-2. If it differs, save the receipt arrival times and effective policy; do not infer RR from three eventual HTTP 200s.
 
-## Weighted bands: bounded progress under mixed backlog
+### Weighted bands: bounded progress under mixed backlog
 
 Use weights 8:3:1 with no floors or reserve, so the wake algorithm alone determines turns. The shell commands below hold one permit, queue 10 critical, 5 standard and 3 sheddable requests, and release one dispatched request at a time. Change the three case rows to alter the backlog or credentials; change fc_band_weights in the rule to choose the allocation. Keep each band runnable for at least one complete weighted cycle. Every request, response, receipt and dispatch turn is visible below.
 
+**Step 1 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer` and retain its response. Require HTTP 200 for the saved management response before continuing. Send the displayed management request to `/config/loadbalancer/all` and retain its response.
+
 ```bash
-(
 set -euo pipefail
 umask 077
 source "${LAB:?set LAB to your private run directory}/env"
@@ -511,6 +680,13 @@ status=$(ip netns exec share-a curl -sS --max-time 10 -X GET \
 printf 'HTTP %s\n' "$status"
 jq . "$LAB/scheduling-config-15.response.json"
 test "$status" = 200
+```
+
+**Step 2 — Send `weighted-holder` and retain the response**
+
+Write `weighted-holder.request.json` with the displayed editable JSON input. Send `weighted-holder` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps.
+
+```bash
 cat > "$LAB/weighted-holder.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -533,6 +709,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   -w '%{http_code}\n' "$INFER" > "$LAB/weighted-holder.http" &
 printf '%s\n' "$!" > "$LAB/weighted-holder.pid"
 arrived=false
+```
+
+**Step 3 — Check independent backend delivery**
+
+Read `weighted-holder` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `weighted-holder`.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-backend curl -fsS --max-time 3 \
     "http://127.0.0.1:8080/receipt/weighted-holder" -o "$LAB/weighted-holder.receipt.json"
@@ -545,6 +728,13 @@ done
 test "$arrived" = true
 # Every row describes a band, its backlog size and the credential to use.
 : > "$LAB/weighted-pending.txt"
+```
+
+**Step 4 — Send `$name" -H "X-Request-Id: $name" -H ` and retain the response**
+
+This client runs in the background; keep the same Bash session for the later release and wait steps.
+
+```bash
 for band in critical standard sheddable; do
   case "$band" in
     critical) count=10; identity=support; objective=interactive ;;
@@ -571,6 +761,13 @@ for band in critical standard sheddable; do
     printf '%s\n' "$name" >> "$LAB/weighted-pending.txt"
   done
 done
+```
+
+**Step 5 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state. Release the held backend request `weighted-holder` so its capacity can return to the Gateway.
+
+```bash
 reached=false
 for attempt in $(seq 1 80); do
   ip netns exec share-a curl -fsS --max-time 5 "$API/config/loadbalancer/all" \
@@ -590,6 +787,13 @@ jq --argjson port "$PORT" \
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/release/weighted-holder" | jq .
 : > "$LAB/weighted-order.tsv"
+```
+
+**Step 6 — Release held requests and check delivery**
+
+Read `$name` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `$name`. Release the held backend request `$arrived` so its capacity can return to the Gateway.
+
+```bash
 for turn in $(seq 1 18); do
   arrived=''
   for attempt in $(seq 1 100); do
@@ -614,6 +818,13 @@ for turn in $(seq 1 18); do
   grep -Fxv "$arrived" "$LAB/weighted-pending.txt" > "$LAB/weighted-pending.tmp" || test "$turn" = 18
   mv "$LAB/weighted-pending.tmp" "$LAB/weighted-pending.txt"
 done
+```
+
+**Step 7 — Check independent backend delivery**
+
+Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 200 for `$name`. Read `$name` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `$name`.
+
+```bash
 for file in "$LAB"/weighted-*.pid; do
   name=$(basename "$file" .pid)
   wait "$(cat "$file")"
@@ -627,8 +838,14 @@ head -n 12 "$LAB/weighted-order.tsv" | cut -f2 | sort | uniq -c
 test "$(head -n 12 "$LAB/weighted-order.tsv" | cut -f2 | grep -c '^critical$')" = 8
 test "$(head -n 12 "$LAB/weighted-order.tsv" | cut -f2 | grep -c '^standard$')" = 3
 test "$(head -n 12 "$LAB/weighted-order.tsv" | cut -f2 | grep -c '^sheddable$')" = 1
-
 reached=false
+```
+
+**Step 8 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-a curl -fsS --max-time 5 "$API/config/loadbalancer/all" \
     -o "$LAB/scheduling-state-16.json"
@@ -644,13 +861,15 @@ test "$reached" = true
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/scheduling-state-16.json"
-)
 ```
 
 Expected first 12 dispatches, while all bands have runnable backlog: critical 8, standard 3, sheddable 1. Remaining work drains as bands empty; do not require the same ratio after a band runs out. This is a bounded dispatch experiment, not a long-term latency or compute-share guarantee. An invalid weight configuration must leave the accepted policy usable:
 
+**Step 1 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer` and retain its response. Require HTTP 400 for the saved management response before continuing.
+
 ```bash
-(
 set -euo pipefail
 umask 077
 source "${LAB:?set LAB to your private run directory}/env"
@@ -666,6 +885,13 @@ status=$(ip netns exec share-a curl -sS --max-time 10 -X POST \
 printf 'HTTP %s\n' "$status"
 jq . "$LAB/scheduling-rule-17.response.json"
 test "$status" = 400
+```
+
+**Step 2 — Send `after-invalid-weight` and retain the response**
+
+Write `after-invalid-weight.request.json` with the displayed editable JSON input. Send `after-invalid-weight` through the Gateway from the namespace shown below; retain its HTTP status and response separately. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 200 for `after-invalid-weight`.
+
+```bash
 cat > "$LAB/after-invalid-weight.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -689,18 +915,27 @@ if test -f "$LAB/after-invalid-weight.pid"; then
   wait "$(cat "$LAB/after-invalid-weight.pid")"
 fi
 test "$(cat "$LAB/after-invalid-weight.http")" = 200
+```
+
+**Step 3 — Check independent backend delivery**
+
+Read `after-invalid-weight` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `after-invalid-weight`.
+
+```bash
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/after-invalid-weight" -o "$LAB/after-invalid-weight.receipt.json"
 jq -e '.count == 1' "$LAB/after-invalid-weight.receipt.json"
-)
 ```
 
-## One tenant cannot multiply its inflight share with keys
+### One tenant cannot multiply its inflight share with keys
 
 At ceiling 4 and tenant share 50%, support can hold 2 permits. A second interactive-capable key for the same department cannot obtain a third. Research still proceeds. For this experiment `fc_max_queue_depth: 0` resets to the process default. Setup explicitly sets `LLB_FC_MAX_QUEUE_DEPTH=0`, so the effective depth is zero and the third support request receives an immediate 429. If your process default is nonzero, a rule value of zero inherits that queue; check the effective configuration before expecting immediate refusal.
 
+**Step 1 — Apply or read back the displayed management policy**
+
+Write `support-secondary.key-request.json` with the displayed editable JSON input. Send the displayed management request to `/config/ai/apikey` and retain its response. Require HTTP 201 for the saved management response before continuing.
+
 ```bash
-(
 set -euo pipefail
 umask 077
 source "${LAB:?set LAB to your private run directory}/env"
@@ -725,6 +960,13 @@ jq -er '"header = \"X-Api-Key: " + .raw_key + "\""' \
   "$LAB/keys/support-secondary.json" > "$LAB/keys/support-secondary.curl"
 chmod 600 "$LAB/keys/support-secondary.json" "$LAB/keys/support-secondary.curl"
 jq '{key_id,tenant_id,allowed_models,priority_class}' "$LAB/keys/support-secondary.json"
+```
+
+**Step 2 — Apply or read back the displayed management policy**
+
+Send the displayed management request to `/config/loadbalancer` and retain its response. Require HTTP 200 for the saved management response before continuing.
+
+```bash
 jq '.serviceArguments += {
   "fc_max_outstanding": 4,
   "fc_max_queue_depth": 0,
@@ -739,6 +981,13 @@ status=$(ip netns exec share-a curl -sS --max-time 10 -X POST \
 printf 'HTTP %s\n' "$status"
 jq . "$LAB/scheduling-rule-19.response.json"
 test "$status" = 200
+```
+
+**Step 3 — Send `share-support-1` and retain the response**
+
+Write `share-support-1.request.json` with the displayed editable JSON input. Send `share-support-1` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps.
+
+```bash
 cat > "$LAB/share-support-1.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -761,6 +1010,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   -w '%{http_code}\n' "$INFER" > "$LAB/share-support-1.http" &
 printf '%s\n' "$!" > "$LAB/share-support-1.pid"
 arrived=false
+```
+
+**Step 4 — Check independent backend delivery**
+
+Read `share-support-1` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `share-support-1`. Write `share-support-2.request.json` with the displayed editable JSON input.
+
+```bash
 for attempt in $(seq 1 80); do
   ip netns exec share-backend curl -fsS --max-time 3 \
     "http://127.0.0.1:8080/receipt/share-support-1" -o "$LAB/share-support-1.receipt.json"
@@ -783,6 +1039,13 @@ cat > "$LAB/share-support-2.request.json" <<'JSON'
   "max_tokens": 4
 }
 JSON
+```
+
+**Step 5 — Send `share-support-2` and retain the response**
+
+Send `share-support-2` through the Gateway from the namespace shown below; retain its HTTP status and response separately. This client runs in the background; keep the same Bash session for the later release and wait steps. Read `share-support-2` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `share-support-2`.
+
+```bash
 ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --config "$LAB/keys/support.curl" \
   -H 'Content-Type: application/json' \
@@ -803,6 +1066,13 @@ for attempt in $(seq 1 80); do
   sleep 0.1
 done
 test "$arrived" = true
+```
+
+**Step 6 — Send `share-same-tenant` and retain the response**
+
+Write `share-same-tenant.request.json` with the displayed editable JSON input. Send `share-same-tenant` through the Gateway from the namespace shown below; retain its HTTP status and response separately. Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 429 for `share-same-tenant`.
+
+```bash
 cat > "$LAB/share-same-tenant.request.json" <<'JSON'
 {
   "model": "shared-model",
@@ -826,6 +1096,13 @@ if test -f "$LAB/share-same-tenant.pid"; then
   wait "$(cat "$LAB/share-same-tenant.pid")"
 fi
 test "$(cat "$LAB/share-same-tenant.http")" = 429
+```
+
+**Step 7 — Send `share-other-tenant` and retain the response**
+
+Read `share-same-tenant` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 0 for `share-same-tenant`. Write `share-other-tenant.request.json` with the displayed editable JSON input. Send `share-other-tenant` through the Gateway from the namespace shown below; retain its HTTP status and response separately.
+
+```bash
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/share-same-tenant" -o "$LAB/share-same-tenant.receipt.json"
 jq -e '.count == 0' "$LAB/share-same-tenant.receipt.json"
@@ -849,6 +1126,13 @@ ip netns exec share-a curl --http1.1 -sS --max-time 55 \
   --data-binary "@$LAB/share-other-tenant.request.json" \
   -D "$LAB/share-other-tenant.headers" -o "$LAB/share-other-tenant.response.json" \
   -w '%{http_code}\n' "$INFER" > "$LAB/share-other-tenant.http"
+```
+
+**Step 8 — Release held requests and check delivery**
+
+Wait for the saved client PID in this same parent Bash before checking its final response. Require saved HTTP 200 for `share-other-tenant`. Read `share-other-tenant` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `share-other-tenant`. Release the held backend request `share-support-1` so its capacity can return to the Gateway. Release the held backend request `share-support-2` so its capacity can return to the Gateway. Require saved HTTP 200 for `share-support-1`. Read `share-support-1` directly from the backend receipt endpoint; this observation bypasses the Gateway. Require backend receipt count 1 for `share-support-1`. Require saved HTTP 200 for `share-support-2`. Read `share-support-2` directly from the backend receipt endpoint; this observation bypasses the Gateway.
+
+```bash
 if test -f "$LAB/share-other-tenant.pid"; then
   wait "$(cat "$LAB/share-other-tenant.pid")"
 fi
@@ -873,6 +1157,13 @@ fi
 test "$(cat "$LAB/share-support-2.http")" = 200
 ip netns exec share-backend curl -fsS --max-time 3 \
   "http://127.0.0.1:8080/receipt/share-support-2" -o "$LAB/share-support-2.receipt.json"
+```
+
+**Step 9 — Apply or read back the displayed management policy**
+
+Require backend receipt count 1 for `share-support-2`. Send the displayed management request to `/config/loadbalancer/all` and retain its response. Inspect the displayed effective inflight/queue condition; a successful configuration response alone does not prove this state.
+
+```bash
 jq -e '.count == 1' "$LAB/share-support-2.receipt.json"
 reached=false
 for attempt in $(seq 1 80); do
@@ -890,7 +1181,16 @@ test "$reached" = true
 jq --argjson port "$PORT" \
   '.lbAttr[] | select(.serviceArguments.port == $port) | .serviceArguments.fc_effective' \
   "$LAB/scheduling-state-21.json"
-)
 ```
 
 Tenant share is local to this pool. Cross-node limits need a separate contract. Continue to [floor and reserve](capacity.md).
+
+## Check your result
+
+Prove a backlog and actual backend admission order; eventual completion order is not dispatch order.
+
+Keep the configured policy, HTTP status, resolved identity, and independent backend receipt together. A rejected request must have receipt 0; a successful request must have receipt 1. A missing receipt response is a failed observation, never a zero.
+
+## Next steps and cleanup
+
+Continue in the documented order with the same LAB. Remove an experiment's binding or temporary rule before the next experiment; stop the shared lab only at the final cleanup chapter. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

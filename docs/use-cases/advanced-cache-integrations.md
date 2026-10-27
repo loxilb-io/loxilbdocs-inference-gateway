@@ -5,7 +5,29 @@ Historical examples do not inherit vLLM 0.31 qualification. Pin and qualify the
 complete engine/connector/runtime tuple before use. Default-off features remain
 experimental; no new runtime test is claimed by this documentation reorganization.
 
-## 13. Advanced: AI controller (experimental)
+## Before you start
+
+Read the stated experimental/version boundaries before planning another cache layer.
+
+**Focus of this page:** Separate Gateway routing from engine cache storage and transfer.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/llm-reference.md"
+
+This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Reading path and reference
+
+### 13. Advanced: AI controller (experimental)
 
 !!! warning "Experimental — no CI coverage, default OFF"
     The AI controller is an optional, experimental component. **No automated CI scenario ships for
@@ -48,7 +70,7 @@ hosts:
 
 ---
 
-## Tiered caching with LMCache (advanced)
+### Tiered caching with LMCache (advanced)
 
 !!! warning "Advanced — gate this before rollout"
     LMCache adds a second KV cache tier *inside* the engine. It is powerful for
@@ -64,7 +86,7 @@ down — it gives each engine a **larger place to keep KV** so a prefix survives
 from the GPU cache. LoxiLB still does the routing; LMCache changes what "the endpoint
 already holds this" can mean.
 
-### What it is
+#### What it is
 
 LMCache is wired into vLLM as a **MultiConnector** that composes two connectors:
 
@@ -78,7 +100,7 @@ Composing both lets one vLLM process both participate in P/D transfer *and* back
 cache with a CPU tier. LMCache runs on the **prefill tier only** — decode nodes are
 excluded from the connector config.
 
-### Configuration surface
+#### Configuration surface
 
 LMCache is configured entirely on the **vLLM launch**, not on the LoxiLB rule — LoxiLB's
 KV-exact contract is unchanged. The moving parts:
@@ -96,7 +118,7 @@ The `--kv-transfer-config` is a MultiConnector document (rather than a single
 (e.g. `vllm/vllm-openai:v0.17.0`): LMCache and NIXL versions travel with the image and a
 bump can change the wire behavior.
 
-### Metrics
+#### Metrics
 
 LMCache exports its own `lmcache:*` Prometheus series. Read the **hit counter**, not the
 rate gauge:
@@ -114,7 +136,7 @@ rate gauge:
     `1.0` even when no retrieval has happened. Judge effectiveness by the delta on
     `lmcache:num_hit_tokens` over a known workload, not by the rate.
 
-### Hazards (read before enabling)
+#### Hazards (read before enabling)
 
 - **No official compat matrix.** vLLM × LMCache × NIXL has no vendor-published
   compatibility table. Pin all three (via the engine image tag) and validate the exact
@@ -139,3 +161,13 @@ rate gauge:
     Before you attribute a hit-rate change to LMCache, run the read-only preflight in
     [Configuration & Tuning → Environment parity & preflight](../ai-gateway/engine-contracts.md)
     to confirm the triad and the version/platform matrix are still intact.
+
+## Check your result
+
+A diagram or configuration option is not proof that an experimental integration is installed or validated.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](model-engine-standard/lifecycle.md) when ending the run.

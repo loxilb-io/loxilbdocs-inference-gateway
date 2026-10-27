@@ -8,14 +8,36 @@ Verify the surviving boundary and revoked credential before owner-checked infras
     Use the same root Bash session from [setup](setup.md). Follow the
     [common evidence and rollback conventions](common.md) throughout the exercises.
 
-## Prerequisites and owner checks
+## Before you start
+
+Finish recovery and stop new traffic before removing the owned lab.
+
+**Focus of this page:** Verify peer deletion and use the recorded owner-checked lifecycle teardown.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/edge.md"
+
+All seven containers are on the isolated Docker network 192.0.2.0/24; they are not seven physical machines. No host port is published. A host localhost curl cannot replace docker exec into uc7-gw. Source and service protections act before the request reaches the CPU backend.
+
+| Where | What happens here |
+|---|---|
+| Host root Bash | Own WORK/LAB, lifecycle inputs and private curl credential files. |
+| uc7-a / b / c / d | Send source-specific traffic; preserve the A/B/C/D roles in each experiment. |
+| uc7-gw | Run REST curl against localhost:11111 inside the container; enforce controls on inference 8080. |
+| uc7-ep | Keep the nonce journal, direct backend observations and optional synthetic KV publisher. |
+| uc7-pg | Store policy/keys on .30; interrupt it only in the recovery chapter. |
+
+## Walkthrough
+
+### Prerequisites and owner checks
 
 Finish recovery and restore the owned DB first. Save all result files before stopping fixtures.
 Read `active.json` and compare its owner and exact names with live resources. The CICD guard checks
 all containers plus network endpoints before mutating any; a foreign endpoint must cause refusal.
 Never use broad prune, `down -v`, host sysctl/kernel changes or reboot as cleanup.
 
-## Lift controls and verify a surviving source fence
+### Lift controls and verify a surviving source fence
 
 Remove B blacklist, D operator firewall and security-rate policy. D is allowed by the remaining
 A/C/D fence and must recover. Create a matching plain alias, delete only that alias, then require
@@ -53,7 +75,7 @@ jq -s --arg nonce "$RUN-final-peer-normal" '[.[] | select(.event=="uc7_receipt" 
 Expected D: 200/1 after layer removal, only primary with A/C/D prefixes after alias deletion,
 Btimeout/0 and A: 200/1. If a key rate causes429, wait for refill and record that attempt separately.
 
-## Revoke the last lab key and prove the same credential fails
+### Revoke the last lab key and prove the same credential fails
 
 ```bash
 docker exec uc7-gw curl -sS --max-time 20 --config /etc/loxilb/control.curl -X DELETE -w '\nHTTP:%{http_code}\n' "$API/config/ai/apikey/$KEY_ID"
@@ -77,7 +99,7 @@ Require key handle404 or documented absence, same raw-key401/receipt 0 and no la
 rules. Rate counters may survive disabled guards; inspect flags/aggregate values, not counter0.
 The lab tenant row may remain with its restored zero aggregates; there is no tenant DELETE API.
 
-## Stop the publisher and tear down only owned infrastructure
+### Stop the publisher and tear down only owned infrastructure
 
 Compare PID/start time before signalling. If it has already exited, record that fact rather than
 killing a reused PID. Then call the same pinned CICD teardown from the same `SRC` and `EDGE_STATE`.
@@ -102,10 +124,20 @@ container IDs/names/states. Inspect the recorded preflight network/routes too. B
 private evidence are deliberately retained; this is not a disk-wipe procedure. Do not delete secrets
 or snapshots from another run. New `config.sh` starts a fresh DB/run after the old one is cleaned.
 
-## Troubleshooting and result record
+### Troubleshooting and result record
 
 A refused ownership guard means inspect the conflicting endpoint/label and stop. Do not remove an
 unidentified object to get a green cleanup. A missing process/metric/journal is not a zero/PASS.
 For each case retain source/eBPF/image/binary, document/input hashes, kernel, command and timestamp,
 HTTP status/version/exit, GET/effective, nonce/receipt, owning delta, failures, recovery and cleanup.
 Keep raw logs, snapshots, DB data and credentials private; share only reviewed allow-listed summaries.
+
+## Check your result
+
+Compare final resources with the original inventory and preserve unrelated workloads.
+
+Keep a normal control request alongside each denied or interrupted request. Separate packet drop, TCP refusal, HTTP denial, backend receipt, and counter changes. Readback establishes stored policy; client traffic and the backend journal establish delivery.
+
+## Next steps and cleanup
+
+Compare the final resources with the preflight inventory. The lifecycle owner record must identify everything removed; unrelated containers and networks must remain. Retain the private LAB evidence and start a new lifecycle run rather than reusing a partially deleted deployment.

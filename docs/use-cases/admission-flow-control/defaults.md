@@ -10,7 +10,29 @@ Apply policy fallbacks once, override selected fields for a service, and disting
     The [Quickstart](../../getting-started/quickstart.md) provides the canonical mutation lifecycle.
     Read the [evidence limits](index.md#verification-and-evidence-limits) before recording a result.
 
-## Prerequisites, configuration and expected precedence
+## Before you start
+
+Finish quotas and save every default and service-budget scope that will be changed.
+
+**Focus of this page:** Compare inherited defaults with explicit scope values and a listener token budget.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/admission.md"
+
+These are Linux containers/namespaces on one disposable host. The model names identify synthetic echoes, not loaded GPU models. The baseline listener is VIP 192.0.2.254:2040; TLS, capacity and failure exercises add the explicit listener ports shown in their steps. Keycloak/JWKS and PostgreSQL use inspected Docker-bridge addresses.
+
+| Where | What happens here |
+|---|---|
+| Host operator | Prepare private LAB files, issue credentials and run namespace commands. |
+| l3h1 | Send management calls and client traffic into llb1. |
+| llb1 | Enforce identity, quota and capacity before choosing a backend. |
+| l3ep1 / l3ep2 | Observe independent Llama/Mistral receipt and hold/release fixtures. |
+| kc-aigw / pg-jwtauth | Supply identity and policy state; they are not on the inference response path. |
+
+## Walkthrough
+
+### Prerequisites, configuration and expected precedence
 
 Use q4/q7/t1 credentials and bootstrap ports 2059–2062. Save every pre-existing scope row before changing it. Each positive field resolves explicit → rule → global → no limit; zero falls through. POST is a scope-row upsert: include all fields to preserve. An all-zero defaults row is rejected; use DELETE.
 
@@ -44,7 +66,7 @@ sudo ip netns exec l3h1 curl -sS \
   "$API/config/ai/ratelimit/defaults/rule?rule_ident=192.0.2.254:2060" | jq .
 ```
 
-### Verify before removing defaults
+#### Verify before removing defaults
 
 Run the pairs together so refill does not obscure the intended refusal.
 
@@ -85,7 +107,7 @@ sudo ip netns exec l3h1 curl -sS -i -X DELETE \
   "$API/config/ai/ratelimit/defaults/rule?rule_ident=192.0.2.254:2060"
 ```
 
-### Cleanup when the original global GET was 404
+#### Cleanup when the original global GET was 404
 
 Run this branch only if the row did not exist.
 
@@ -94,7 +116,7 @@ sudo ip netns exec l3h1 curl -sS -i -X DELETE "$API/config/ai/ratelimit/defaults
 sudo ip netns exec l3h1 curl -sS -i "$API/config/ai/ratelimit/defaults/global"
 ```
 
-### Restore when the original global GET was 200
+#### Restore when the original global GET was 200
 
 Run this alternative branch only for a saved successful response.
 
@@ -125,11 +147,21 @@ sudo ip netns exec l3h1 curl -sS -i -X POST "$API/config/ai/ratelimit/defaults" 
 sudo ip netns exec l3h1 curl -sS "$API/config/ai/ratelimit/defaults/rule?rule_ident=192.0.2.254:2061" | jq .
 ```
 
-## Verification and cleanup
+### Verification and cleanup
 
 After each scope change read the exact scope path. A 200 from POST is not traffic proof. Require appropriate per-nonce receipts (1 for delivered, 0 for denied), isolated metric deltas, default GET absence or exact restored values, and the same users' normal traffic after cleanup. See [common rollback semantics](common.md#zero-omission-empty-arrays-and-delete).
 
 
-## Troubleshooting and cleanup
+### Troubleshooting and cleanup
 
 Use [diagnosis and scoped cleanup](cleanup.md). Restore this chapter's changes before moving to another policy experiment.
+
+## Check your result
+
+Read both the configured limit and the observed admission decision; restore complete original requests.
+
+Compare API readback with the normal request, the deliberate denial, and an independent backend observation. Check the chapter's exact HTTP code and error body; HTTP 200 alone does not prove quota, identity, queue order, or resource return.
+
+## Next steps and cleanup
+
+Restore the chapter's temporary policy before continuing in the same lab. Keep the original configuration and private evidence; use the final cleanup chapter when the entire lab is finished. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

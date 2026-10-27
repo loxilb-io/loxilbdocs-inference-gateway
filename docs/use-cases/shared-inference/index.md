@@ -20,10 +20,42 @@ The chapters show the actual curl/JSON, Docker and network commands so you can a
 
 <!-- example-status-default: illustrative-only -->
 
-## What this lab establishes
+## Before you start
+
+Choose this lab when several departments share one inference service.
+
+**Focus of this page:** Tenant identity and request urgency are different decisions.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/shared.md"
+
+One disposable Linux host contains two Gateway/DB containers and four network namespaces. Support reaches the Gateway on 192.0.2.254; research uses its 198.51.100.254 interface. The backend is a host Python process in share-backend, not an inference engine. PostgreSQL uses its inspected Docker-bridge address.
+
+| Where | What happens here |
+|---|---|
+| Host root Bash | Create namespaces, save LAB inputs, start/stop exact owned processes. |
+| share-a / share-b | Send inference as support/research; management curls use share-a. |
+| share-gateway | Apply policy and forward requests; management is port 11111, inference port 8080. |
+| share-backend | Read /receipt/ and /order directly, bypassing Gateway routing. |
+| share-pg | Keep keys/objectives; pause only in the explicit recovery experiment. |
+
+## Reading path and reference
+
+### What this lab establishes
 
 Configuration readback, independent backend receipts, resolved tenant/class headers, dispatch order, typed denials and recovery are separate observations. An HTTP 200 alone establishes none of the other properties. Network attribution is not fabric isolation. Request turns and inflight limits do not allocate GPU time or VRAM. These controls are local to the selected service/pool and node; this lab does not establish cluster-wide fairness, GPU memory/fault isolation, job preemption, physical VLAN fabric correctness, HA or a latency SLO. IPsec is excluded.
 
 The Gateway does not preempt running work. Class-to-engine-native-priority mapping is not implemented. Native-priority sanitization requires AI Gateway mode and active class policy; without class policy these hints can pass through. Removing untrusted native priority does not guarantee critical execution before every already-dispatched engine request. HTTP/2 streams do not use the HTTP/1.1 waiting queue; do not transfer queued floor, weighted wake or TTL observations to H2 without separate validation.
 
 Readiness must include required stores. A version response can precede store readiness; this known startup limitation remains open. The setup waits for `/status/ready` and the key/objective APIs using the authentication contract of this lab.
+
+## Check your result
+
+Follow the numbered reading path; none of these CPU receipts establishes GPU allocation.
+
+Keep the configured policy, HTTP status, resolved identity, and independent backend receipt together. A rejected request must have receipt 0; a successful request must have receipt 1. A missing receipt response is a failed observation, never a zero.
+
+## Next steps and cleanup
+
+Continue in the documented order with the same LAB. Remove an experiment's binding or temporary rule before the next experiment; stop the shared lab only at the final cleanup chapter. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

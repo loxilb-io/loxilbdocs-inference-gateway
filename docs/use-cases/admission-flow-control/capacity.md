@@ -10,7 +10,29 @@ Protect a model pool with request permits and a bounded queue, then drain it for
     The [Quickstart](../../getting-started/quickstart.md) provides the canonical mutation lifecycle.
     Read the [evidence limits](index.md#verification-and-evidence-limits) before recording a result.
 
-## Prerequisites and capacity configuration
+## Before you start
+
+Complete identity/quota setup and start the documented hold/release backend.
+
+**Focus of this page:** Change execution permits, waiting queues, SSE backpressure and maintenance drain.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/admission.md"
+
+These are Linux containers/namespaces on one disposable host. The model names identify synthetic echoes, not loaded GPU models. The baseline listener is VIP 192.0.2.254:2040; TLS, capacity and failure exercises add the explicit listener ports shown in their steps. Keycloak/JWKS and PostgreSQL use inspected Docker-bridge addresses.
+
+| Where | What happens here |
+|---|---|
+| Host operator | Prepare private LAB files, issue credentials and run namespace commands. |
+| l3h1 | Send management calls and client traffic into llb1. |
+| llb1 | Enforce identity, quota and capacity before choosing a backend. |
+| l3ep1 / l3ep2 | Observe independent Llama/Mistral receipt and hold/release fixtures. |
+| kc-aigw / pg-jwtauth | Supply identity and policy state; they are not on the inference response path. |
+
+## Walkthrough
+
+### Prerequisites and capacity configuration
 
 Start the public mock backend in a separate foreground terminal, check readiness200/count0, then create capacity.json. Run setup variables in every terminal.
 
@@ -75,7 +97,7 @@ sudo ip netns exec l3h1 curl -sS "$API/config/loadbalancer/all" | \
   jq '.lbAttr[] | select(.serviceArguments.port==2220) | .serviceArguments.fc_effective'
 ```
 
-## Verify one executing request, one queued request and a rejected third
+### Verify one executing request, one queued request and a rejected third
 
 For manual timing, first derive a complete capacity.json copy with fc_max_queue_wait_ms=30000 and POST it; GET the effective wait before starting. Terminal A holds the request; verify holder receipt1 before starting B. Terminal B queues; C must observe inflight1/queued1 and waiter receipt0, then send the third request (429 admission_capacity/receipt0). Release the exact holder nonce and require holder/waiter200, receipts1, final inflight/queued0. Metrics refresh approximately every ten seconds: realtime effective state is needed for short queues. Zero-valued live counters can be omitted from fc_effective; do not confuse omitted live counts with the configured queue_depth or max_outstanding. Corroborate final zero with the loxilb_ai_admission_inflight and loxilb_ai_admission_queued gauges after a refresh, including the normal-role series. For FIFO, use depth2, shared nonce with distinct X-Request-Id values and fixture /__order/<nonce>.
 
@@ -115,7 +137,7 @@ sudo ip netns exec l3ep1 curl -sS "http://127.0.0.1:8088/__release/$RUN-holder"
 sudo ip netns exec l3ep1 curl -sS "http://127.0.0.1:8088/__receipts/$RUN-waiter"
 ```
 
-## Verify queue timeout, client cancellation and observe mode
+### Verify queue timeout, client cancellation and observe mode
 
 Restore wait4000ms with the complete original JSON before the timeout case. Keep a new holder: the waiter must get 504 admission_queue_timeout/receipt0. In a separate run cancel a queued client and require queued0/receipt0, then release the holder. Re-POST observe mode, repeat excess traffic and check would-shed/would-queue observations with successful traffic; off bypasses the gate. Capture the observe decision counters after their refresh while observe mode is still active, before switching to off or restoring enforce. Restore capacity.json to enforce afterwards; input0 does not disable the gate.
 
@@ -127,7 +149,7 @@ sudo ip netns exec l3h1 curl -sS "$API/config/loadbalancer/all" | \
   jq --argjson p "$(jq -r .serviceArguments.port "$LAB/capacity-observe.json")" '[.lbAttr[] | select(.serviceArguments.port==$p) | {service:.serviceArguments,endpoints:.endpoints}]'
 ```
 
-## Verify SSE duration and permit return
+### Verify SSE duration and permit return
 
 Set sse_mode=true on the rule and stream=true in the request. The provided JSON sets port2221→8088, execution cap2, duration3seconds and idle timeout30seconds. max_stream_duration_sec=0/omitted resolves to the 86400-second system upper bound; QoS parking is excluded, so this is not an exact wall-clock SLA.
 
@@ -177,7 +199,7 @@ sudo ip netns exec l3h1 curl -sS -N --max-time 10 --config "$LAB/alice.curl" \
   "http://$VIP:2221/v1/chat/completions"
 ```
 
-## Verify drain, recover and clean up
+### Verify drain, recover and clean up
 
 Before the block, establish a new holder/waiter on 2220 and confirm live states. PUT enabled=true is global maintenance admission control; GET state/refusing_new_inference/in_flight_requests/in_flight_streams. Existing execution should complete200 after release, queued request503 admission_drained, and new request503 gateway_draining/receipt0. PUT enabled=false; require GET active and a new normal request200/receipt1. The remaining blocks delete both lab rules, GET[] and recreate them as a lifecycle check. Delete these recreated rules during final cleanup.
 
@@ -221,6 +243,16 @@ sudo ip netns exec l3h1 curl -sS "$API/config/loadbalancer/all" | \
 ```
 
 
-## Troubleshooting and cleanup
+### Troubleshooting and cleanup
 
 Use [diagnosis and scoped cleanup](cleanup.md). Restore this chapter's changes before moving to another policy experiment.
+
+## Check your result
+
+Observe queued/inflight state and returned resources as well as HTTP/SSE output.
+
+Compare API readback with the normal request, the deliberate denial, and an independent backend observation. Check the chapter's exact HTTP code and error body; HTTP 200 alone does not prove quota, identity, queue order, or resource return.
+
+## Next steps and cleanup
+
+Restore the chapter's temporary policy before continuing in the same lab. Keep the original configuration and private evidence; use the final cleanup chapter when the entire lab is finished. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

@@ -103,10 +103,12 @@ nav:
       - MCP Gateway: ai-gateway/mcp-gateway.md
       - Configuration Reference: ai-gateway/configuration-reference.md
   - Traffic Governance Use-Cases:
-      - Admission, Flow Control & QoS: use-cases/admission-flow-control/index.md
+    - 1. Overview & Topology: use-cases/admission-flow-control/index.md
+    - 2. Preparation:
       - Prepare the Lab: use-cases/admission-flow-control/setup.md
       - Download Lab Inputs: use-cases/admission-flow-control/downloads.md
       - Common API & Rollback: use-cases/admission-flow-control/common.md
+    - 3. Walkthroughs:
       - JWT & Model Permissions: use-cases/admission-flow-control/identity.md
       - TLS & mTLS: use-cases/admission-flow-control/tls.md
       - RPS, TPM & Reservations: use-cases/admission-flow-control/quotas.md
@@ -114,76 +116,85 @@ nav:
       - Policy Faults & Recovery: use-cases/admission-flow-control/outages.md
       - Capacity, SSE & Drain: use-cases/admission-flow-control/capacity.md
       - TLS Errors & Resource Return: use-cases/admission-flow-control/tls-failures.md
+    - 4. Verification & Cleanup:
       - Cleanup & Diagnosis: use-cases/admission-flow-control/cleanup.md
   - Shared Inference Use-Cases:
-      - Departments & Reading Path: use-cases/shared-inference/index.md
+    - 1. Overview & Topology: use-cases/shared-inference/index.md
+    - 2. Preparation:
       - Prepare the Lab: use-cases/shared-inference/setup.md
       - Inputs & Conventions: use-cases/shared-inference/downloads.md
+    - 3. Walkthroughs:
       - Tenant & Priority Authority: use-cases/shared-inference/identity.md
       - Network Tenant Identity: use-cases/shared-inference/networks.md
       - Strict, Weighted & Tenant Turns: use-cases/shared-inference/scheduling.md
       - Floors & Critical Reserve: use-cases/shared-inference/capacity.md
       - Overload & Deadlines: use-cases/shared-inference/overload.md
       - Defense & Recovery: use-cases/shared-inference/recovery.md
+    - 4. Verification & Cleanup:
       - Cleanup: use-cases/shared-inference/cleanup.md
   - Edge Cloud Security Use-Cases:
-      - Lab & Reading Path: use-cases/edge-cloud-security/index.md
+    - 1. Overview & Topology: use-cases/edge-cloud-security/index.md
+    - 2. Preparation:
       - Download Lab Inputs: use-cases/edge-cloud-security/downloads.md
       - Prepare the Single-host Lab: use-cases/edge-cloud-security/setup.md
       - Common Evidence & Rollback: use-cases/edge-cloud-security/common.md
+    - 3. Walkthroughs:
       - XDP Source Protection: use-cases/edge-cloud-security/source-protection.md
       - TC & Shared VIP Boundary: use-cases/edge-cloud-security/network-boundary.md
       - Connections & Header Deadlines: use-cases/edge-cloud-security/connections.md
       - Keys & Tenant Request Budgets: use-cases/edge-cloud-security/request-protection.md
       - KV, H2, SSE & All-on: use-cases/edge-cloud-security/coexistence.md
       - Snapshot & Store Recovery: use-cases/edge-cloud-security/recovery.md
+    - 4. Verification & Cleanup:
       - Cleanup & Diagnosis: use-cases/edge-cloud-security/cleanup.md
       - Advanced Qualification Limits: use-cases/edge-cloud-security/advanced.md
   - LLM Integration Use-Cases:
-      - Overview & Reading Path: use-cases/llm-integration.md
+    - 1. Overview & Topology: use-cases/llm-integration.md
+    - 2. Preparation:
       - Concepts & Architecture:
-          - Engines & Deployment Topologies: concepts/inference-topologies.md
-          - RR, Content Affinity & KV-Exact: concepts/kv-routing.md
-          - Routing Hierarchy: use-cases/routing-hierarchy.md
-          - P/D Concepts: ai-gateway/pd-disaggregation.md
-      - Hands-on Guides:
-          - Converged RR & KV-Exact:
-              - Guide Overview: use-cases/model-engine-standard/matrix-manual.md
-              - 1. Select Model & Prerequisites: use-cases/model-engine-standard/select.md
-              - 2. Prepare Models & Profiles: use-cases/model-engine-standard/prepare.md
-              - 3. Launch Engine Workers: use-cases/model-engine-standard/launch.md
-              - 4. Configure Gateway Routing: use-cases/model-engine-standard/configure.md
-              - 5. Verify Requests & Routing: use-cases/model-engine-standard/verify.md
-              - 6. Switch, Clean Up & Roll Back: use-cases/model-engine-standard/lifecycle.md
-          - P/D Deployment:
-              - Choose a P/D Runbook: use-cases/pd-deployment.md
-              - vLLM P/D Runbook: use-cases/deploy-pd-disaggregation.md
-              - SGLang P/D Runbook: ai-gateway/sglang-pd-disaggregation.md
-              - TensorRT-LLM P/D Integration: ai-gateway/tensorrt-llm-integration.md
+        - Engines & Deployment Topologies: concepts/inference-topologies.md
+        - RR, Content Affinity & KV-Exact: concepts/kv-routing.md
+        - Routing Hierarchy: use-cases/routing-hierarchy.md
+        - P/D Concepts: ai-gateway/pd-disaggregation.md
       - Model & Engine Reference:
-          - Existing Profiles — Results & Settings: use-cases/model-engine-standard/existing-profiles.md
-          - Existing Profiles — Launch & Verify: use-cases/model-engine-standard/existing-profiles-launch.md
-          - Existing Profiles — Native P/D: use-cases/model-engine-standard/existing-profiles-pd.md
-          - Existing Profiles — Measured Tuning: use-cases/model-engine-standard/existing-profiles-tuning.md
-          - Model Matrix & Notes: use-cases/model-engine-standard/models.md
-          - Profile Catalog & Discovery: use-cases/model-engine-standard/profiles.md
-          - Profile Binding & Readiness: ai-gateway/model-profiles-kv-readiness.md
-          - Engine Contracts: ai-gateway/engine-contracts.md
-          - vLLM Integration Details: ai-gateway/vllm-integration.md
-          - llama.cpp Integration: ai-gateway/llamacpp-integration.md
-          - Configuration & Arguments: use-cases/configuration-tuning.md
-          - KV-Exact Fields & Load Safety: ai-gateway/kv-caching.md
+        - Existing Profiles — Results & Settings: use-cases/model-engine-standard/existing-profiles.md
+        - Existing Profiles — Launch & Verify: use-cases/model-engine-standard/existing-profiles-launch.md
+        - Existing Profiles — Native P/D: use-cases/model-engine-standard/existing-profiles-pd.md
+        - Existing Profiles — Measured Tuning: use-cases/model-engine-standard/existing-profiles-tuning.md
+        - Model Matrix & Notes: use-cases/model-engine-standard/models.md
+        - Profile Catalog & Discovery: use-cases/model-engine-standard/profiles.md
+        - Profile Binding & Readiness: ai-gateway/model-profiles-kv-readiness.md
+        - Engine Contracts: ai-gateway/engine-contracts.md
+        - vLLM Integration Details: ai-gateway/vllm-integration.md
+        - llama.cpp Integration: ai-gateway/llamacpp-integration.md
+        - Configuration & Arguments: use-cases/configuration-tuning.md
+        - KV-Exact Fields & Load Safety: ai-gateway/kv-caching.md
+    - 3. Walkthroughs:
+      - Converged RR & KV-Exact:
+        - Guide Overview: use-cases/model-engine-standard/matrix-manual.md
+        - 1. Select Model & Prerequisites: use-cases/model-engine-standard/select.md
+        - 2. Prepare Models & Profiles: use-cases/model-engine-standard/prepare.md
+        - 3. Launch Engine Workers: use-cases/model-engine-standard/launch.md
+        - 4. Configure Gateway Routing: use-cases/model-engine-standard/configure.md
+        - 5. Verify Requests & Routing: use-cases/model-engine-standard/verify.md
+        - 6. Switch, Clean Up & Roll Back: use-cases/model-engine-standard/lifecycle.md
+      - P/D Deployment:
+        - Choose a P/D Runbook: use-cases/pd-deployment.md
+        - vLLM P/D Runbook: use-cases/deploy-pd-disaggregation.md
+        - SGLang P/D Runbook: ai-gateway/sglang-pd-disaggregation.md
+        - TensorRT-LLM P/D Integration: ai-gateway/tensorrt-llm-integration.md
+    - 4. Verification & Cleanup:
       - Operations & Tuning:
-          - KV Routing Verification: operations/kv-routing-verification.md
-          - Failure Detection, Retry & Recovery: use-cases/model-engine-standard/failover-tuning.md
-          - Performance Measurement: use-cases/performance-methodology.md
-          - Advanced Cache Integrations: use-cases/advanced-cache-integrations.md
+        - KV Routing Verification: operations/kv-routing-verification.md
+        - Failure Detection, Retry & Recovery: use-cases/model-engine-standard/failover-tuning.md
+        - Performance Measurement: use-cases/performance-methodology.md
+        - Advanced Cache Integrations: use-cases/advanced-cache-integrations.md
       - Validation & Compatibility:
-          - Functional Test Results: use-cases/model-engine-standard/results.md
-          - Known Limits & Evidence Scope: use-cases/model-engine-standard/validation.md
-          - Open Qualification: use-cases/model-engine-standard/qualification-todo.md
-          - SGLang Wire Compatibility: use-cases/model-engine-standard/sglang-compatibility.md
-          - Catalog & Installer Compatibility: use-cases/model-engine-standard/catalog-installer.md
+        - Functional Test Results: use-cases/model-engine-standard/results.md
+        - Known Limits & Evidence Scope: use-cases/model-engine-standard/validation.md
+        - Open Qualification: use-cases/model-engine-standard/qualification-todo.md
+        - SGLang Wire Compatibility: use-cases/model-engine-standard/sglang-compatibility.md
+        - Catalog & Installer Compatibility: use-cases/model-engine-standard/catalog-installer.md
   - Security:
       - Management API Authentication: security/management-api-authentication.md
       - Data-Plane Authentication and JWT: security/data-plane-jwt-auth.md

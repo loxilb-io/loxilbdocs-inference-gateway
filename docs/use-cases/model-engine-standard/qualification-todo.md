@@ -14,7 +14,29 @@ and [sanitized evidence summary](../../assets/model-engine-standard/matrix-resul
 The results distinguish bounded functional PASS from native architecture blockers;
 none closes production/release or load/fault qualification.
 
-## Original five cards: completed functional checks and open gates
+## Before you start
+
+Start from the retained result ledger and choose a concrete missing acceptance gate.
+
+**Focus of this page:** Identify the topology, stimulus and independent observation needed to close that gate.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/llm-reference.md"
+
+This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Reading path and reference
+
+### Original five cards: completed functional checks and open gates
 
 The current evaluation profiles/manifests/fixtures are supplied separately from
 the upstream catalog. The earlier “publish missing profile” prerequisite is now
@@ -42,7 +64,7 @@ runs and successful-subset accounting; low-concurrency functional PASS does not
 resolve its capacity/root-cause question. Product findings are handed to the
 internal development team; QA does not patch engine or Gateway code to pass.
 
-## Separate development request: SGLang tagged-map events
+### Separate development request: SGLang tagged-map events
 
 The [SGLang compatibility note](sglang-compatibility.md) records the preserved
 0.5.21 wire/Exact failure and development acceptance criteria. The current
@@ -50,7 +72,7 @@ operator baseline is the verified **0.5.19 tagged-array** tuple.
 A future tagged-map implementation requires its own product candidate and fresh
 QA; it is not a prerequisite for following the compatible-version manual.
 
-## Separate public-catalog example: six additional cases
+### Separate public-catalog example: six additional cases
 
 The [R1 1.5B evidence archive](routing-choice.md) retains separately scoped
 results and old paired inputs, not the current setup procedure for the 7B row above.
@@ -66,7 +88,7 @@ A backend/image prerequisite must stay visible. In particular, TRT's installer
 `SKIP_NO_PULLABLE_IMAGE` is not a successful engine start. Do not substitute an
 rc29 image and retain an rc24 success label.
 
-## Execution order and closure criteria
+### Execution order and closure criteria
 
 For each model/engine, qualify RR and Exact as separately labeled runs on the
 same immutable tuple and workload wherever possible. Keep the engine's native
@@ -113,7 +135,7 @@ and the evidence required to close it. A documentation/schema test does not
 close a GPU case. A functional pass also does not promote a catalog row; product
 support promotion is a separate reviewed process.
 
-## Capacity and performance remain additional tasks
+### Capacity and performance remain additional tasks
 
 After functional acceptance, run the [paired QA methodology](validation.md)
 against the application's workload and completion/SLO targets. Retain all failed
@@ -126,7 +148,7 @@ in the configuration ZIP tracks all **36 mode cases**, current prerequisites and
 required evidence. It records this documentation edition's state, not a live test
 service or a claim that the work has been executed.
 
-## Required core integration: catalog and installer
+### Required core integration: catalog and installer
 
 [Catalog and Installer Alignment](catalog-installer.md) records the five-profile
 registration proposal: 13 candidate tuples and two TRT architecture-blocked
@@ -143,3 +165,13 @@ After the core team provides a fixed immutable candidate, repeat isolated
 installation, rejected/no-mutation cases, discovery/READY and complete RR/Exact
 traffic using the newly installed registry. Current Linux staging checks and
 prior GPU functional PASS do not close this new installed-candidate gate.
+
+## Check your result
+
+Record NOT_RUN, FAIL and BLOCKED honestly; this page does not execute or close them.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

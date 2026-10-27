@@ -8,7 +8,29 @@ and TensorRT-LLM 1.3.0rc29/PyTorch. The [functional result table](results.md#mat
 records the actual RR/Exact trials. A reference-version decision does not promote
 an upstream catalog row to `validated`.
 
-## Registration proposal and current availability
+## Before you start
+
+Compare the evaluation profiles with the reviewed public source catalog before installation.
+
+**Focus of this page:** Separate a local evaluation package from a catalog entry and candidate installation.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/llm-reference.md"
+
+This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### Registration proposal and current availability
 
 The core team registration proposal adds these profiles:
 
@@ -33,7 +55,7 @@ Use the separately supplied evaluation registry in the [current manual](matrix-m
 until a matching core-owned candidate is supplied. Do not rewrite the historical
 [catalog snapshot](profiles.md) to imply that registration already happened.
 
-## What the installer verification established
+### What the installer verification established
 
 A metadata-only candidate was checked in an isolated source copy. The stock
 Linux installer staged all 13 candidate combinations with matching model
@@ -49,7 +71,7 @@ GPU inference qualification. The common R1 profile retains
 `engineQuirks.sglang-kv-rank-v1.completionsBos:true`, so the installer does not
 lose the SGLang BOS policy. This engine-specific key must remain scoped to SGLang.
 
-## Core integration gates before using the public installer
+### Core integration gates before using the public installer
 
 The following failures were preserved rather than converted into a full PASS:
 
@@ -64,7 +86,7 @@ These are QA findings for the core team; no installer or Gateway product-code
 fix was applied. A rendered catalog page and `modelctl.py check` alone do not
 close these gates.
 
-## Validate the core team's completed candidate
+### Validate the core team's completed candidate
 
 After the core team supplies the integrated source/artifact, use individual
 commands and isolated, absolute installation roots. Retain the source revision,
@@ -110,3 +132,13 @@ Then mount the newly staged registry on the allocated Gateway and follow the
 READY/unfenced status, completed RR/Exact chat/SSE, backend receipts and scoped
 cleanup. Record this as a new installed-candidate check; the old QA registry's
 PASS cannot substitute for it. Release/support promotion remains a separate review.
+
+## Check your result
+
+Do not infer installer readiness from a profile file; follow the explicit pending integration boundary.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

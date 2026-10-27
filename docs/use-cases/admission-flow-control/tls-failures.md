@@ -10,7 +10,29 @@ Test backend refusal as a complete client response and verify that failed reques
     The [Quickstart](../../getting-started/quickstart.md) provides the canonical mutation lifecycle.
     Read the [evidence limits](index.md#verification-and-evidence-limits) before recording a result.
 
-## Prerequisites: extended TLS fixture and topology
+## Before you start
+
+Complete TLS and start its extended fixture with the selected certificate identities.
+
+**Focus of this page:** Trigger one backend handshake or framing failure while another path remains usable.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/admission.md"
+
+These are Linux containers/namespaces on one disposable host. The model names identify synthetic echoes, not loaded GPU models. The baseline listener is VIP 192.0.2.254:2040; TLS, capacity and failure exercises add the explicit listener ports shown in their steps. Keycloak/JWKS and PostgreSQL use inspected Docker-bridge addresses.
+
+| Where | What happens here |
+|---|---|
+| Host operator | Prepare private LAB files, issue credentials and run namespace commands. |
+| l3h1 | Send management calls and client traffic into llb1. |
+| llb1 | Enforce identity, quota and capacity before choosing a backend. |
+| l3ep1 / l3ep2 | Observe independent Llama/Mistral receipt and hold/release fixtures. |
+| kc-aigw / pg-jwtauth | Supply identity and policy state; they are not on the inference response path. |
+
+## Walkthrough
+
+### Prerequisites: extended TLS fixture and topology
 
 Finish TLS registration and start 9443–9448 fixtures first. Build the downloadable public tls-lab.go below; it adds TLS1.2 pinning, hold/usage controls and a two-request reuse client. It is an observable server/client, not an automated Gateway configuration or verdict runner. Use it as betls-fixture-accounting. Ports9449/9451 are separate foreground servers. Refresh Alice, r1 and t1 (300-second tokens).
 
@@ -41,7 +63,7 @@ sudo ip netns exec l3ep1 "$LAB/betls-fixture-accounting" serve -name hold-usage 
   -cert "$LAB/pki/backend.crt" -key "$LAB/pki/backend.key" -receipts "$LAB/receipts/hold.txt"
 ```
 
-## Verify backend trust and client-certificate failures
+### Verify backend trust and client-certificate failures
 
 After a positive control200/receipt1, test A: wrong server CA/expired/SAN, and B: absent or wrong-CA backend client identity. Keep frontend cert/JWT valid. Expected H1 is502 and H2 is503, JSON error backend_unreachable, complete transport exit0 and receipt0. Do not use curl --fail for this transport test (it intentionally changes HTTP-error exit to22). Record VERSION=2 for H2. Backend TLS1.3 may fail by a late alert after handshake; inspect the bounded relevant Gateway/server error, without publishing raw host logs.
 
@@ -85,7 +107,7 @@ sudo ip netns exec l3h1 curl -sS "$API/config/loadbalancer/all" | \
   jq --argjson p "$(jq -r .serviceArguments.port "$LAB/tls13-wrong-client.json")" '[.lbAttr[] | select(.serviceArguments.port==$p) | {service:.serviceArguments,endpoints:.endpoints}]'
 ```
 
-## Verify strict H1 framing and TLS shutdown
+### Verify strict H1 framing and TLS shutdown
 
 Run while2232 still has the **missing backend client ID** policy; the previous block's wrong-client case also refuses, but keep the tested configuration explicit. The generated request contains a token: retain it privately. wc -c counts request bytes; the response must have positive declared Content-Length equal to actual bytes, status502, OpenSSL exit0 and close_notify, and receipt0. A curl exit0 alone does not prove correct TLS shutdown. H1 A can use2211 without frontend client-cert arguments. H2 requires complete stream termination, not mandatory closure of the shared TLS connection.
 
@@ -111,7 +133,7 @@ python3 -c 'import pathlib,re;d=pathlib.Path(__import__("sys").argv[1]).read_byt
 sudo grep -cx "$RUN-strict" "$LAB/receipts/required.txt"
 ```
 
-## Verify TLS1.2 with both mTLS legs
+### Verify TLS1.2 with both mTLS legs
 
 Use fresh2231 H1 and2233 H2 rules to backend9449, which is pinned by the fixture -tls12 flag. HTTP version and TLS version are separate layers. Direct openssl -tls1_2 verifies the fixture, not Gateway delivery. Require valid proxy200/receipt1; remove/wrong backend client ID for502(H1)/503(H2), complete response/receipt0; restore and repeat the positive. Compare peer fingerprint with the backend client identity.
 
@@ -127,7 +149,7 @@ sudo ip netns exec l3h1 curl -sS --http1.1 --max-time 10 \
 sudo grep -cx "$RUN-tls12-valid" "$LAB/receipts/tls12.txt"
 ```
 
-## Verify failed-request reservation and permit return
+### Verify failed-request reservation and permit return
 
 Use isolated tenant-qr/r1/H1 and tenant-qt/t1/H2 at TPM40, explicit max_tokens20. Record short elapsed time and epoch; continuous refill and reservation bookkeeping must not explain the result. The first block creates2216, confirms policy and sends one failure. Repeat it with fresh nonces ai-fail-2…5; each must be502/curl0/receipt0, never quota refusal caused by a leaked prior reservation. For H2 use tls-accounting-h2.json/2218, t1, --http2 and require503/VERSION2/receipt0.
 
@@ -167,7 +189,7 @@ sudo ip netns exec l3ep1 "$LAB/betls-fixture-accounting" serve -name repaired-wr
   -cert "$LAB/pki/backend.crt" -key "$LAB/pki/backend.key" -receipts "$LAB/receipts/wrongca.txt"
 ```
 
-## Verify another live request keeps its reservation
+### Verify another live request keeps its reservation
 
 Set tenant-qr TPM120; the holder-request explicitly asks max_tokens60 and reserve-request20. Capacity2 avoids mistaking a capacity1 rejection for token protection. Remove the local gate before starting; A holds a normal2217 request with receipt1/inflight1. B sends three failing20-token requests through2216. While the holder is still running, C sends the large60-token probe through2217 and requires429 token_quota_would_exceed/receipt0; then touch the gate. The holder must finish200/usage12 and a small reserve-request probe must succeed200/receipt1. This checks that one failure did not release another request's claim, not every internal race or exactly-once property.
 
@@ -198,7 +220,7 @@ printf 'after=%s\n' "$(($(date +%s)/60))"
 touch "$LAB/receipts/hold.txt.gate"
 ```
 
-## Verify refusal on an actually reused connection
+### Verify refusal on an actually reused connection
 
 The pair client sends its first request, waits for a local gate, then sends the second. Terminal A must print first200 before B changes backend trust to other CA and opens the gate. Require second502(H1)/503(H2), reused=true, full body and receipt0. reused=false is a reconnection test, not reuse PASS; the helper does not make a verdict for you and its output is not strict framing proof. Restore both trusted full rules, GET and make new positive control requests.
 
@@ -257,7 +279,7 @@ sudo ip netns exec l3h1 curl -sS "$API/config/loadbalancer/all" | \
   jq --argjson p "$(jq -r .serviceArguments.port "$LAB/pair-h2.json")" '[.lbAttr[] | select(.serviceArguments.port==$p) | {service:.serviceArguments,endpoints:.endpoints}]'
 ```
 
-## Verify endpoint update, listener takeover and frontend policy preservation
+### Verify endpoint update, listener takeover and frontend policy preservation
 
 Use unused2234 and a fresh token. Initial valid mTLS request goes to required9443 with200/receipt1. Before endpoint-only POST record the listener takeover event count. After POST→9444, GET the whole rule and wait for a **new** matching takeover event before sending a new client connection; GET200/applied or a fixed sleep is insufficient. Require200/optional receipt1. Roll back the original JSON, repeat the new-event/positive check, then full-key DELETE/recreate and repeat.
 
@@ -372,6 +394,16 @@ sudo ip netns exec l3h1 curl -sS "$API/config/ai/tenant/ratelimit/tenant-qt" | j
 ```
 
 
-## Troubleshooting and cleanup
+### Troubleshooting and cleanup
 
 Use [diagnosis and scoped cleanup](cleanup.md). Restore this chapter's changes before moving to another policy experiment.
+
+## Check your result
+
+Inspect the complete error/closure and resource counters; a client timeout is not a typed denial.
+
+Compare API readback with the normal request, the deliberate denial, and an independent backend observation. Check the chapter's exact HTTP code and error body; HTTP 200 alone does not prove quota, identity, queue order, or resource return.
+
+## Next steps and cleanup
+
+Restore the chapter's temporary policy before continuing in the same lab. Keep the original configuration and private evidence; use the final cleanup chapter when the entire lab is finished. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

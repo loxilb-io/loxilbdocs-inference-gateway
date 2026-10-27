@@ -6,7 +6,29 @@ This guide records the tested engine, routing, topology, hardware, and starting 
 
 [Prepare, launch, and verify](existing-profiles-launch.md) · [Native P/D](existing-profiles-pd.md) · [Tuning and raw-data verification](existing-profiles-tuning.md)
 
-## Choose your path
+## Before you start
+
+Read this result/settings ledger before choosing a profile and native engine.
+
+**Focus of this page:** This campaign uses a separate two-worker converged baseline, not the five-model three-worker guide.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/existing-profiles.md"
+
+This is the separate existing-profile campaign: two converged worker hosts, one pre-existing dedicated Gateway, and an independent receipt proxy on each worker. Native inference uses 18300; receipt forwarding uses 18301. These profile settings and recorded identities must not be replaced by the five-model guide's three-worker variables.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Reading path and reference
+
+### Choose your path
 
 1. Find your model in **Latest terminated model outcomes**, then select an engine and a permitted mode in **Converged starting settings**. Start with RR; a working RR recipe does not imply Exact or P/D support.
 2. Follow [Prepare, launch, and verify](existing-profiles-launch.md) from prerequisites through cleanup. It separates Gateway-host commands from worker commands and gives expected results.
@@ -15,7 +37,7 @@ This guide records the tested engine, routing, topology, hardware, and starting 
 
 **Terminology:** converged means one native engine process performs both input processing and output generation. RR distributes requests round robin. KV Exact uses compatible cached input prefixes to select a worker. P/D separates input processing (Prefill) from output generation (Decode). A recipe is a bounded, tested starting configuration, not a model's universal maximum or a production support promise.
 
-## Read the scope first
+### Read the scope first
 
 The pinned engine baselines are vLLM 0.31.0, SGLang 0.5.19, and TRT 1.3.0rc29. No new TRT inference ran: the pinned image was unavailable and safe installation/storage was not established. This is a resource blocker, not an unsupported-model verdict.
 
@@ -31,7 +53,7 @@ Original source profiles and probes were retained in isolated engine-specific ca
 | Failed / unqualified | A terminated attempt did not satisfy its gate; not a global model-support verdict |
 | Blocked / deferred | Access/resources were absent, rule admission was rejected, or the user deferred testing; not PASS |
 
-## Latest terminated model outcomes
+### Latest terminated model outcomes
 
 RR/Exact and P/D base/Exact are separate outcomes. Base P/D uses role/load-aware selection; it is not converged RR. Earlier successes and later failures are retained as separate attempts.
 
@@ -53,7 +75,7 @@ RR/Exact and P/D base/Exact are separate outcomes. Base P/D uses role/load-aware
 
 [All 156 model/engine/topology/routing surfaces](../../assets/existing-profiles/runtime-matrix.json) include actual case IDs, hardware, and independent-review boundaries. Do not combine partial successes into universal support.
 
-## Converged starting settings
+### Converged starting settings
 
 Values are **memory fraction / engine sequence cap / request output-token budget**, followed by the permitted routing modes. Each linked file identifies its independently reviewed case and literal arguments. Output budgets are not guaranteed sufficient for arbitrary prompts. Configured context is 4096 tokens; vLLM batched-token and SG chunked-prefill settings are also 4096. These are distinct engine controls, not interchangeable context limits. Dtype is auto, vLLM is eager, and SG CUDA graphs are disabled.
 
@@ -75,7 +97,7 @@ Values are **memory fraction / engine sequence cap / request output-token budget
 
 P/D uses separate files and parameters. Do not copy converged memory/cap selections into P/D or another engine. A single-worker recipe does not qualify two-worker behavior.
 
-## Recorded hardware
+### Recorded hardware
 
 Workers used Ubuntu 24.04.1 LTS, Linux 6.8.0-124-generic, NVIDIA driver 580.159.03, and no swap. Each L4 worker had 24570MiB VRAM, 4 vCPUs, and approximately 47.05GiB host RAM; each L40S worker had 49140MiB VRAM, 16 vCPUs, and approximately 94.29GiB host RAM. The following hardware belongs to each selected converged case, not an engine-ranking comparison.
 
@@ -97,7 +119,7 @@ Workers used Ubuntu 24.04.1 LTS, Linux 6.8.0-124-generic, NVIDIA driver 580.159.
 
 Qualified vLLM P/D recipes used 2P1D: two L4 Prefills and one L40S Decode. Failed Qwen vLLM P/D attempts instead used 1P1D on two L40S GPUs and supply no verified recipe. SG P/D used 1P1D on two L40S GPUs. Each P/D attempt records role hardware in `hardwareRoles`. Docker host RAM limits are preserved in argument arrays and differ from GPU memory fraction. Initial OLMo converged launches had no Docker host RAM limit; later recorded limits are not backfilled.
 
-## Understand context and output budgets
+### Understand context and output budgets
 
 `MAX_OUTPUT` limits the requested completion, including reasoning where the engine charges it as completion. It is not the model's advertised maximum output. Input after chat-template rendering and the completion must fit the engine's configured context; the exact accounting and rejection behavior belong to the selected engine/model contract. Do not subtract raw character counts from a token budget.
 
@@ -105,9 +127,9 @@ The campaign used context 4096 and short synthetic requests. It did **not** qual
 
 The [recorded comparison tables](existing-profiles-tuning.md#recorded-comparisons) explain why particular memory fractions or caps were retained. They are optional background after a successful functional check.
 
-## Model-specific settings, failures, and limitations
+### Model-specific settings, failures, and limitations
 
-### OLMo-2 1B {#olmo2-0425-1b-v1}
+#### OLMo-2 1B {#olmo2-0425-1b-v1}
 
 - Profile ID: `olmo2-0425-1b-v1`; request model: `allenai/OLMo-2-0425-1B-Instruct`.
 - [Pinned official revision](https://huggingface.co/allenai/OLMo-2-0425-1B-Instruct/tree/48d788eca847d4d7548f375ad03d3c9312f6139e): `48d788eca847d4d7548f375ad03d3c9312f6139e`.
@@ -121,7 +143,7 @@ The two-worker SG follow-up independently qualified all 36 native/RR/Exact offer
 
 An initial audit-directory permission error produced 503. The original failure remains; preparing the owned audit directory with mode 0700 resolved that QA prerequisite. It was not model startup failure.
 
-### DeepSeek-R1 Distill Qwen 1.5B {#r1-distill-qwen-15b-v1}
+#### DeepSeek-R1 Distill Qwen 1.5B {#r1-distill-qwen-15b-v1}
 
 - Profile ID: `r1-distill-qwen-15b-v1`; request model: `deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B`.
 - [Pinned official revision](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B/tree/ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562): `ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562`.
@@ -135,7 +157,7 @@ The incomplete memory comparison retains all 168 offers (main 96, direct warm 8,
 
 Both engines qualified two-worker converged RR/Exact. vLLM 2P1D qualified separately. SG 1P1D qualified base main 6, recovery 4, warmup 1, but all six Exact main offers ended at 1024 with length and unclosed reasoning. Independent failed-wire checks confirmed both-role hashes, inputs/bootstrap, Decode budget, and client/Decode identity. Only a base SG P/D recipe is supplied; a larger Exact P/D budget was not tested.
 
-### Gemma 3 1B {#gemma3-1b-it-v1}
+#### Gemma 3 1B {#gemma3-1b-it-v1}
 
 - Profile ID: `gemma3-1b-it-v1`; request model: `google/gemma-3-1b-it`.
 - [Pinned official revision](https://huggingface.co/google/gemma-3-1b-it/tree/dcc83ea841ab6100d6b47a070329e1ba4cf78752): `dcc83ea841ab6100d6b47a070329e1ba4cf78752`.
@@ -147,7 +169,7 @@ Deferred at the user's request pending resolution of their reported HF account r
 
 Preserve the earlier observed HTTP401 separately. No HTTP429 observation or independent rate-limit root cause was established. There are no verified runtime settings or performance results; do not infer them from another model.
 
-### Gemma 4 E2B {#gemma4-e2b-it-v1}
+#### Gemma 4 E2B {#gemma4-e2b-it-v1}
 
 - Profile ID: `gemma4-e2b-it-v1`; request model: `google/gemma-4-E2B-it`.
 - [Pinned official revision](https://huggingface.co/google/gemma-4-E2B-it/tree/3e22461f65e89153144f8adb70e3b8c2cc9845a7): `3e22461f65e89153144f8adb70e3b8c2cc9845a7`.
@@ -161,7 +183,7 @@ vLLM P/D retained forced FLASH_ATTN head-size failure and auto-attention fixed-5
 
 Initial SG P/D aborted because the QA verifier assumed a JSON Prefill body. The original failure remains. Corrected r2 independently qualified base and one-prefill Exact engagement, main/recovery 20 plus normal warmup 3, room uniqueness, native transfer counters, negatives, recovery, deletion, and GPU return. This is not Prefill selection benefit.
 
-### Llama 3.2 1B {#llama32-1b-v1}
+#### Llama 3.2 1B {#llama32-1b-v1}
 
 - Profile ID: `llama32-1b-v1`; request model: `meta-llama/Llama-3.2-1B-Instruct`.
 - [Pinned official revision](https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct/tree/9213176726f574b556790deb65791e0c5aa438b6): `9213176726f574b556790deb65791e0c5aa438b6`.
@@ -173,7 +195,7 @@ Deferred at the user's request pending resolution of their reported HF account r
 
 The earlier observed HTTP401 is not an observed HTTP429 or an independently established rate-limit root cause. Runtime settings and performance remain unverified.
 
-### EXAONE 4.0 1.2B {#exaone4-12b-v1}
+#### EXAONE 4.0 1.2B {#exaone4-12b-v1}
 
 - Profile ID: `exaone4-12b-v1`; request model: `LGAI-EXAONE/EXAONE-4.0-1.2B`.
 - [Pinned official revision](https://huggingface.co/LGAI-EXAONE/EXAONE-4.0-1.2B/tree/3abf2810673c7c0778df64a73c2d52eab32d91c4): `3abf2810673c7c0778df64a73c2d52eab32d91c4`.
@@ -185,7 +207,7 @@ The profile's 12b suffix identifies 1.2B. Keep the model-specific SG triton atte
 
 The 0.35 memory candidate met allocation reduction but regressed one p95 by 17.99%, retaining 0.85. The cap comparison stopped after a 9:7 warm split and retains 42 offers: main 24 plus warm 18. Cap 2 remains; the aborted comparison is not a performance recommendation.
 
-### Phi-4 Mini {#phi4-mini-instruct-v1}
+#### Phi-4 Mini {#phi4-mini-instruct-v1}
 
 - Profile ID: `phi4-mini-instruct-v1`; request model: `microsoft/Phi-4-mini-instruct`.
 - [Pinned official revision](https://huggingface.co/microsoft/Phi-4-mini-instruct/tree/cfbefacb99257ffa30c83adab238a50856ac3083): `cfbefacb99257ffa30c83adab238a50856ac3083`.
@@ -199,7 +221,7 @@ The cap comparison remains incomplete: offers 126 = main 72 + direct warm 6 + lo
 
 Use stock SG 0.5.19 and the recorded local-path tokenizer setup. Its engine-owned ByteLevel-to-Sequence handling is not a manual tokenizer-file override; older modified files are not part of this recipe.
 
-### Granite 4.2 3B {#granite42-3b-v1}
+#### Granite 4.2 3B {#granite42-3b-v1}
 
 - Profile ID: `granite42-3b-v1`; request model: `ibm-granite/granite-4.2-3b`.
 - [Pinned official revision](https://huggingface.co/ibm-granite/granite-4.2-3b/tree/e459acceac81e5fe67c07d9cfc72329a332e7eb1): `e459acceac81e5fe67c07d9cfc72329a332e7eb1`.
@@ -213,7 +235,7 @@ An SG Exact cold answer exhausted 512. A controlled 1024-budget follow-up qualif
 
 Both engines' separate P/D scopes qualified; SG Exact is one-prefill engagement, not selection benefit.
 
-### Ministral 3 3B {#ministral3-3b-v1}
+#### Ministral 3 3B {#ministral3-3b-v1}
 
 - Profile ID: `ministral3-3b-v1`; request model: `mistralai/Ministral-3-3B-Instruct-2512`.
 - [Pinned official revision](https://huggingface.co/mistralai/Ministral-3-3B-Instruct-2512/tree/b35d4dfe56c142746f54dbd64f579faab2744308): `b35d4dfe56c142746f54dbd64f579faab2744308`.
@@ -227,7 +249,7 @@ vLLM P/D failed native Pixtral dummy-image initialization at an allowed-image co
 
 Memory and cap comparisons each offered 18 warmups and zero main requests. Some warm responses failed the predefined water/health answer condition despite HTTP200/stop. Retain 0.85/cap 2; no comparison-based performance recommendation. Initial deletion-200 assumptions and the resulting masked admission error remain in private QA evidence.
 
-### A.X 3.1 Light {#ax31-light-v1}
+#### A.X 3.1 Light {#ax31-light-v1}
 
 - Profile ID: `ax31-light-v1`; request model: `skt/A.X-3.1-Light`.
 - [Pinned official revision](https://huggingface.co/skt/A.X-3.1-Light/tree/9b41bb2406472634d8812c0b8931fa40fa9a6c3a): `9b41bb2406472634d8812c0b8931fa40fa9a6c3a`.
@@ -239,7 +261,7 @@ The memory comparison stopped incomplete with 84 offers: main 48 plus warm 36; r
 
 The selected vLLM 0.85/cap 4/output 512 combination qualified separately. Both engines qualified two-worker native/RR/Exact, vLLM 2P1D qualified independently, and SG 1P1D qualified base plus one-prefill Exact engagement. These do not establish a global optimum or SLA.
 
-### Qwen 3.6 27B FP8 {#qwen36-27b-fp8-v1}
+#### Qwen 3.6 27B FP8 {#qwen36-27b-fp8-v1}
 
 - Profile ID: `qwen36-27b-fp8-v1`; request model: `Qwen/Qwen3.6-27B-FP8`.
 - [Pinned official revision](https://huggingface.co/Qwen/Qwen3.6-27B-FP8/tree/e89b16ebf1988b3d6befa7de50abc2d76f26eb09): `e89b16ebf1988b3d6befa7de50abc2d76f26eb09`.
@@ -257,7 +279,7 @@ vLLM P/D first overrode the native 239-block estimate with 512 and hit CUDA allo
 
 SG P/D offered six base main requests plus one Exact warmup. The first base and Exact warmup returned 504 pd_prefill_timeout; the other five were normal. Both failed Prefill calls actually completed HTTP200 in about 6.46s/0.44s. Thirteen role receipts plus one Decode request-only record are not fourteen completed transfers. No qualified SG P/D recipe or recovery/counter gate; the timeout name does not establish slow native Prefill.
 
-### Qwen 3.8 27B FP8 {#qwen38-27b-fp8-v1}
+#### Qwen 3.8 27B FP8 {#qwen38-27b-fp8-v1}
 
 - Profile ID: `qwen38-27b-fp8-v1`; request model: `Qwen/Qwen3.8-27B-FP8`.
 - [Pinned official revision](https://huggingface.co/Qwen/Qwen3.8-27B-FP8/tree/017b9c7af6b5689d5dd426a76e0bc077eb5ca20a): `017b9c7af6b5689d5dd426a76e0bc077eb5ca20a`.
@@ -273,7 +295,7 @@ vLLM P/D retained fixed-512-block CUDA OOM and an actually applied 239-to-192-bl
 
 SG on two L40S GPUs independently qualified all 36 converged native/RR/Exact offers. Separate 1P1D Mooncake TCP qualified main/recovery 20 plus normal warmup 3, both-role hashes, fresh rooms, native Decode transfer counts 6/4 per mode, negatives, recovery, deletion, and GPU return. Exact is single-prefill engagement, not selection or RDMA-bandwidth qualification.
 
-### GPT-OSS 20B {#gptoss-20b-v1}
+#### GPT-OSS 20B {#gptoss-20b-v1}
 
 - Profile ID: `gptoss-20b-v1`; request model: `openai/gpt-oss-20b`.
 - [Pinned official revision](https://huggingface.co/openai/gpt-oss-20b/tree/6cee5e81ee83917806bbde320786a8fb61efebee): `6cee5e81ee83917806bbde320786a8fb61efebee`.
@@ -291,7 +313,7 @@ The template inserts the current date. Check image UTC timezone, a common UTC da
 
 vLLM P/D retained forced-attention sink incompatibility, auto-attention fixed-512-block capacity 4080 versus context 4096, and auto/1024 r3 with empty final content in the first of six base main offers. That offer returned HTTP200/stop/52 completion tokens; five later normal answers do not replace it. Independent both-role hashes confirm the empty final in native Decode and identical client bytes. It was not output truncation. Gateway orchestration/native handoff/parser root cause remains unconfirmed, and subsequent counters/negatives/recovery did not qualify. No vLLM P/D recipe.
 
-## Reproduction package and verification boundaries
+### Reproduction package and verification boundaries
 
 [Download package](../../assets/existing-profiles-evaluation.tgz) · [Archive checksum](../../assets/existing-profiles-evaluation.tgz.sha256) · [Files and raw-evidence guide](../../assets/existing-profiles/README.md)
 
@@ -305,3 +327,13 @@ The package includes original source profiles/probes, pinned identities, reviewe
 Model weights, tokenizer/template bytes, credentials, full Docker inspections, private infrastructure, and native P/D session bytes are excluded. Both-role P/D wire hashes/state and native counters were independently reviewed in private evidence; public P/D entries are reviewed summaries, not a replay of private transfer state.
 
 Full HTTP-header/TCP-framing capture, transfer bandwidth, active-stream continuity, engine-crash recovery, language-task accuracy, multimodal operation, multi-model capacity, global optimums, and SLA are unqualified. The Gateway binary/source provenance limit remains explicit.
+
+## Check your result
+
+Retain each profile/engine's actual status and artifacts; a settings file does not establish Gateway binary provenance.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

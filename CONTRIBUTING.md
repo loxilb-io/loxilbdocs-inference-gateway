@@ -96,6 +96,14 @@ If you forgot on an unpushed commit, amend it with `git commit --amend -s`.
 - Prefer relative links between pages (e.g. `../ai-gateway/kv-caching.md`).
 - Use placeholder or lab addresses in examples — never real production hosts, keys, or credentials.
 
+### Operator use-case walkthroughs
+
+Use the same navigation phases for each use-case family: **Overview & Topology → Preparation → Walkthroughs → Verification & Cleanup**. Keep model/engine reference and historical results visibly distinct from executable instructions; a bookmark page should link to its canonical guide rather than duplicate it.
+
+A substantial walkthrough starts with **Before you start**, **Topology and execution locations**, and **Walkthrough**, then ends with **Check your result** and **Next steps and cleanup**. Explain which shell, namespace or container runs each action. Draw data, management, store and independent observation paths separately. Reuse a canonical topology snippet when multiple chapters share the same lab; add a focused diagram when a chapter changes the network or worker roles.
+
+Keep command boxes near 25 lines where complete command boundaries allow it. Explain the input, intended change and expected observation beside the box. Keep heredocs, conditionals and loops complete; do not split a command just to meet a line target. A timed contention sequence must state its live interval and require the reader to prepare it before starting clients. Document the shared Bash-session requirement whenever later waits depend on earlier background jobs. Preserve failure handling, independent receipts and owner-checked cleanup when changing presentation.
+
 ### Diagrams and page structure
 
 Confirm the patterns used by nearby pages before introducing a new layout. Feature and operations

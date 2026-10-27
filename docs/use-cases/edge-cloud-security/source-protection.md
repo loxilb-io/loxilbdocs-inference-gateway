@@ -8,7 +8,29 @@ Apply XDP source filtering and isolate source packet-rate guards before adding a
     Use the same root Bash session from [setup](setup.md). Follow the
     [common evidence and rollback conventions](common.md) throughout the exercises.
 
-## Prerequisites and source-only baseline
+## Before you start
+
+Start from the plain baseline with the documented A/B/C/D source roles.
+
+**Focus of this page:** Change XDP source controls and source/aggregate packet budgets before HTTP handling.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/edge.md"
+
+All seven containers are on the isolated Docker network 192.0.2.0/24; they are not seven physical machines. No host port is published. A host localhost curl cannot replace docker exec into uc7-gw. Source and service protections act before the request reaches the CPU backend.
+
+| Where | What happens here |
+|---|---|
+| Host root Bash | Own WORK/LAB, lifecycle inputs and private curl credential files. |
+| uc7-a / b / c / d | Send source-specific traffic; preserve the A/B/C/D roles in each experiment. |
+| uc7-gw | Run REST curl against localhost:11111 inside the container; enforce controls on inference 8080. |
+| uc7-ep | Keep the nonce journal, direct backend observations and optional synthetic KV publisher. |
+| uc7-pg | Store policy/keys on .30; interrupt it only in the recovery chapter. |
+
+## Walkthrough
+
+### Prerequisites and source-only baseline
 
 Start with the plain setup rule: no allowedSources fence, no rate policy or firewall. A and B must
 both return200/receipt 1 with the lab key. This prevents a TC fence from masquerading as XDP blocking.
@@ -21,12 +43,16 @@ docker logs uc7-ep > "$LAB/journal.jsonl" 2>&1
 jq -s --arg nonce "$RUN-source-before" '[.[] | select(.event=="uc7_receipt" and .nonce==$nonce)] | {count:length,credentials_absent:all(.key_present==false),protocols:map(.proto)}' "$LAB/journal.jsonl"
 ```
 
-## Configure and verify XDP blacklist
+### Configure and verify XDP blacklist
 
 `cidr` identifies B's ingress source; this is not a model or key filter. The list/prefix forms the
 DELETE key. `priority` is integer0..65535, larger wins; zone is0 or omitted because filtering precedes
 zone classification. A matching whitelist wins equal priority. Keep backend/store/event sources out
 of blacklist tests.
+
+**Step 1 — Prepare `blacklist.json`**
+
+Write the complete input before sending it. This step creates a local file; it does not apply policy. Change the displayed values here, then use this same file in the following request.
 
 ```bash
 cat > "$LAB/blacklist.json" <<'JSON'
@@ -53,6 +79,13 @@ jq -s --arg nonce "$RUN-blacklist-denied" '[.[] | select(.event=="uc7_receipt" a
 docker exec -i uc7-a curl -sS --http1.1 --connect-timeout 2 --max-time 6 --config /run/edge-key.curl -H 'Content-Type: application/json' -H "X-Edge-Nonce: $RUN-blacklist-normal" --data-binary @- -w '\nHTTP:%{http_code} VERSION:%{http_version}\n' "http://$VIP:8080/v1/completions" < "$LAB/request.json" > "$LAB/blacklist-normal.txt" 2> "$LAB/blacklist-normal.err"
 printf 'CURL_EXIT=%s\n' "$?"
 cat "$LAB/blacklist-normal.txt"
+```
+
+**Step 2 — Send the request and save the observation**
+
+Use the namespace/container shown by the command. Keep the response file and HTTP status separate; the next check explains the expected result.
+
+```bash
 docker logs uc7-ep > "$LAB/journal.jsonl" 2>&1
 jq -s --arg nonce "$RUN-blacklist-normal" '[.[] | select(.event=="uc7_receipt" and .nonce==$nonce)] | {count:length,credentials_absent:all(.key_present==false),protocols:map(.proto)}' "$LAB/journal.jsonl"
 sleep 12
@@ -86,11 +119,15 @@ jq -s --arg nonce "$RUN-blacklist-recovered" '[.[] | select(.event=="uc7_receipt
 
 Expected: invalid zone400 with canonical policy unchanged, then exact-prefix absence and B: 200/receipt 1.
 
-## Configure source packet rate and verify recovery
+### Configure source packet rate and verify recovery
 
 The complete eight required fields below are a replacement, even for disabled guards. SYN and
 connection-rate controls both count SYN packets, not completed handshakes. UDP byte limits are MiB/s.
 First exercise UDP by itself so that a SYN drop cannot explain the result.
+
+**Step 1 — Prepare `rate-source.json`**
+
+Write the complete input before sending it. This step creates a local file; it does not apply policy. Change the displayed values here, then use this same file in the following request.
 
 ```bash
 cat > "$LAB/rate-source.json" <<'JSON'
@@ -117,6 +154,13 @@ docker exec uc7-c bash -c 'for n in {1..20}; do printf edge > /dev/udp/192.0.2.1
 sleep 12
 docker exec uc7-gw curl -fsS --max-time 20 --config /etc/loxilb/control.curl "$API/metrics" > "$LAB/udp-after.prom"
 python3 "$INPUTS/metric-delta.py" "$LAB/udp-before.prom" "$LAB/udp-after.prom" loxilb_security_udp_blocked_total
+```
+
+**Step 2 — Send the request and save the observation**
+
+Use the namespace/container shown by the command. Keep the response file and HTTP status separate; the next check explains the expected result.
+
+```bash
 docker exec -i uc7-a curl -sS --http1.1 --connect-timeout 2 --max-time 6 --config /run/edge-key.curl -H 'Content-Type: application/json' -H "X-Edge-Nonce: $RUN-udp-normal" --data-binary @- -w '\nHTTP:%{http_code} VERSION:%{http_version}\n' "http://$VIP:8080/v1/completions" < "$LAB/request.json" > "$LAB/udp-normal.txt" 2> "$LAB/udp-normal.err"
 printf 'CURL_EXIT=%s\n' "$?"
 cat "$LAB/udp-normal.txt"
@@ -165,7 +209,7 @@ Expect the isolated SYN or connection blocked counter to increase over its pre-a
 A: 200/receipt 1 after DELETE. The saved pre-arm JSON and positive comparison distinguish retained counters from new blocks. Disabled guards may omit a zero-valued counter; this API representation is separate from a missing Prometheus series.
 `cookieThreshold` telemetry is not kernel-cookie proof. Do not count401s as accepted inference requests.
 
-## Optional aggregate replacement and invalid-input check
+### Optional aggregate replacement and invalid-input check
 
 Per-source limits allow each new source its own budget. Aggregate limits share one aligned-window
 budget across listeners/interfaces/families, before tenant authentication. They can also reject
@@ -204,12 +248,16 @@ values retained. This configuration check alone does not qualify aggregate packe
 packet-count/whitelist/byte-window tests use the separate [advanced scope](advanced.md), keeping the
 same complete replacement and both source controls independent.
 
-## Verify a small distributed UDP aggregate and whitelist arm
+### Verify a small distributed UDP aggregate and whitelist arm
 
 This bounded packet test turns source guards off and sets a shared UDP2-packet budget. Two sources
 send10 datagrams each; retain all20 sends and allow the aligned-window boundary to vary the exact
 cardinality. Require a positive **aggregate** owning counter rather than inferring protection from
 a source counter. The warm-up creates an observed series before the measured interval.
+
+**Step 1 — Check completion and delivery**
+
+Wait for the relevant client and check its saved HTTP code. Fetch receipts directly from the backend namespace: accepted traffic and policy denials have different expected counts.
 
 ```bash
 jq '.aggregateSynThreshold=0 | .aggregateUdpPktThreshold=2' "$LAB/rate-aggregate.json" > "$LAB/aggregate-packets.json"
@@ -236,6 +284,13 @@ docker exec uc7-c bash -c 'for n in {1..20}; do printf edge > /dev/udp/192.0.2.1
 sleep 12
 docker exec uc7-gw curl -fsS --config /etc/loxilb/control.curl "$API/metrics" > "$LAB/whitelist-before.prom"
 docker exec uc7-a bash -c 'for n in {1..20}; do printf edge > /dev/udp/192.0.2.10/8080; done'
+```
+
+**Step 2 — Send the request and save the observation**
+
+Use the namespace/container shown by the command. Keep the response file and HTTP status separate; the next check explains the expected result.
+
+```bash
 sleep 12
 docker exec uc7-gw curl -fsS --config /etc/loxilb/control.curl "$API/metrics" > "$LAB/whitelist-after.prom"
 grep '^loxilb_security_aggregate_udp_blocked_total ' "$LAB/whitelist-before.prom" > "$LAB/whitelist-before.counter"
@@ -265,9 +320,19 @@ then positive blocked delta for nonwhitelisted C. This is not exact-cardinality,
 attack saturation or wire-loss qualification; those remain [advanced](advanced.md). DELETE clears the
 rate-managed whitelist, which shares maps with IP filtering. Confirm B/A normal TCP delivery again.
 
-## Cleanup and troubleshooting
+### Cleanup and troubleshooting
 
 Require blacklist absence, all rate guards disabled/zero and B/A normal delivery before moving on.
 If B still times out, inspect remaining ACL/FW layers and routes rather than calling DELETE ineffective.
 Capture readback, owning counter and normal control at each arm. Do not reset shared counters to make
 an unexplained delta disappear. Continue to [network boundary](network-boundary.md).
+
+## Check your result
+
+Compare the intended source drop and counter change with an allowed control request and backend journal.
+
+Keep a normal control request alongside each denied or interrupted request. Separate packet drop, TCP refusal, HTTP denial, backend receipt, and counter changes. Readback establishes stored policy; client traffic and the backend journal establish delivery.
+
+## Next steps and cleanup
+
+Remove the isolated control before adding the next layer. Recovery restores the complete owned tuple; final cleanup uses the recorded ownership state and must preserve unrelated containers. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

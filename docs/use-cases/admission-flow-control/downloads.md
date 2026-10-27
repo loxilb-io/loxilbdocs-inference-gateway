@@ -2,7 +2,29 @@
 
 These files are public, sanitized lab inputs, using the documentation-range topology in [preparation](setup.md). No internal directory, customer credential or private test host is needed.
 
-## JSON configurations and inference requests
+## Before you start
+
+Choose the same documentation revision as the walkthrough.
+
+**Focus of this page:** Obtain the JSON/TLS inputs without putting private run state in the public checkout.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/admission.md"
+
+These are Linux containers/namespaces on one disposable host. The model names identify synthetic echoes, not loaded GPU models. The baseline listener is VIP 192.0.2.254:2040; TLS, capacity and failure exercises add the explicit listener ports shown in their steps. Keycloak/JWKS and PostgreSQL use inspected Docker-bridge addresses.
+
+| Where | What happens here |
+|---|---|
+| Host operator | Prepare private LAB files, issue credentials and run namespace commands. |
+| l3h1 | Send management calls and client traffic into llb1. |
+| llb1 | Enforce identity, quota and capacity before choosing a backend. |
+| l3ep1 / l3ep2 | Observe independent Llama/Mistral receipt and hold/release fixtures. |
+| kc-aigw / pg-jwtauth | Supply identity and policy state; they are not on the inference response path. |
+
+## Reading path and reference
+
+### JSON configurations and inference requests
 
 | File | Role |
 |---|---|
@@ -28,8 +50,18 @@ These files are public, sanitized lab inputs, using the documentation-range topo
 
 LB JSON contains writable serviceArguments/endpoints only, not effective response fields. Model names here are synthetic echo routing labels, not a model deployment or supported-engine claim. Preserve compact request files when reproducing tiny-budget reservation examples. Change VIP, Host, endpoint, request URL, certificate SAN/SNI and DELETE key together when customizing.
 
-## Observable TLS server and connection client
+### Observable TLS server and connection client
 
 Download [tls-lab.go](../../assets/admission-flow-control/fixtures/tls-lab.go). It is a standard-library Go fixture adapted from the upstream public TLS helper. Build and run it with the explicit commands in [TLS failure qualification](tls-failures.md); no private module dependency is required. It generates a fresh local PKI, reports backend peer fingerprints and nonce receipts, pins TLS1.2 when requested, and offers a gated two-request client. The fixture's usage/hold/nonce options are test controls, not product API fields.
 
 A helper process exit or successful build is not a Gateway verdict. Check the stated HTTP version/status, complete body/termination, independent receipt, counters and recovery. Keep generated keys, tokens and raw results outside the docs checkout.
+
+## Check your result
+
+Check each downloaded file and its role before changing host paths or policy values.
+
+Compare API readback with the normal request, the deliberate denial, and an independent backend observation. Check the chapter's exact HTTP code and error body; HTTP 200 alone does not prove quota, identity, queue order, or resource return.
+
+## Next steps and cleanup
+
+Restore the chapter's temporary policy before continuing in the same lab. Keep the original configuration and private evidence; use the final cleanup chapter when the entire lab is finished. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

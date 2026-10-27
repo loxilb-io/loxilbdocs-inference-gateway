@@ -2768,7 +2768,7 @@
     {
       "commands": [],
       "id": "7308ce563cb3e70b9da5",
-      "line": 29,
+      "line": 51,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2777,7 +2777,7 @@
     {
       "commands": [],
       "id": "cc68a4ac86bfc288fcd0",
-      "line": 33,
+      "line": 55,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2786,7 +2786,7 @@
     {
       "commands": [],
       "id": "089300704045081ff426",
-      "line": 37,
+      "line": 59,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2795,7 +2795,7 @@
     {
       "commands": [],
       "id": "e04c75225389bfb45445",
-      "line": 69,
+      "line": 91,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2804,7 +2804,7 @@
     {
       "commands": [],
       "id": "ed582630b09ff7fcb6c1",
-      "line": 85,
+      "line": 107,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2813,7 +2813,7 @@
     {
       "commands": [],
       "id": "1bea867404872bd1f4b0",
-      "line": 93,
+      "line": 115,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2822,7 +2822,7 @@
     {
       "commands": [],
       "id": "9b2427b814a1b672e854",
-      "line": 100,
+      "line": 122,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2831,7 +2831,7 @@
     {
       "commands": [],
       "id": "5262904168e883230e6c",
-      "line": 107,
+      "line": 129,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2840,7 +2840,7 @@
     {
       "commands": [],
       "id": "9f342482d7103504884b",
-      "line": 123,
+      "line": 145,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2849,7 +2849,7 @@
     {
       "commands": [],
       "id": "dfd78f372f6c3300ab4d",
-      "line": 137,
+      "line": 159,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2858,7 +2858,7 @@
     {
       "commands": [],
       "id": "280592aab4cbfa43e634",
-      "line": 167,
+      "line": 189,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2867,7 +2867,7 @@
     {
       "commands": [],
       "id": "705effb8a7570f3ff440",
-      "line": 185,
+      "line": 207,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2876,7 +2876,7 @@
     {
       "commands": [],
       "id": "a793865c29ff4699bd91",
-      "line": 198,
+      "line": 220,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/capacity.md",
       "runtime": "no-public-execution-attestation",
@@ -2885,7 +2885,7 @@
     {
       "commands": [],
       "id": "ae6505f4f828174317d2",
-      "line": 22,
+      "line": 44,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/cleanup.md",
       "runtime": "no-public-execution-attestation",
@@ -2893,17 +2893,26 @@
     },
     {
       "commands": [],
-      "id": "52d2a3f5d35e2460e130",
-      "line": 29,
+      "id": "9c4e0cf98f3f78d57fc5",
+      "line": 55,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/cleanup.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "85fdd4330f2c882dd0b9a05b3c9b7028b6db9839add5675a5d246688a51bf65a"
+      "sha256": "e7c550da0b95c66d16e67f1afa26dcdc794fd175be27d74e7e31e5e9b0c8b241"
+    },
+    {
+      "commands": [],
+      "id": "e40e79587b1fa626a722",
+      "line": 86,
+      "operations": [],
+      "path": "docs/use-cases/admission-flow-control/cleanup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "77438329ef5a6708f3920b28d58d039a7d395fb554ec7e943167e21be5da4f94"
     },
     {
       "commands": [],
       "id": "4c68a5c92b6d849ebcee",
-      "line": 75,
+      "line": 108,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/cleanup.md",
       "runtime": "no-public-execution-attestation",
@@ -2912,7 +2921,7 @@
     {
       "commands": [],
       "id": "0571f73ca8966d55eaf0",
-      "line": 86,
+      "line": 119,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/cleanup.md",
       "runtime": "no-public-execution-attestation",
@@ -2921,7 +2930,7 @@
     {
       "commands": [],
       "id": "3a4b9d61cbb5a389fc1d",
-      "line": 98,
+      "line": 131,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/cleanup.md",
       "runtime": "no-public-execution-attestation",
@@ -2930,7 +2939,7 @@
     {
       "commands": [],
       "id": "9eb62ad15b41c04eb02d",
-      "line": 31,
+      "line": 53,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/defaults.md",
       "runtime": "no-public-execution-attestation",
@@ -2939,7 +2948,7 @@
     {
       "commands": [],
       "id": "2ca8a7419f0cfa031c4a",
-      "line": 52,
+      "line": 74,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/defaults.md",
       "runtime": "no-public-execution-attestation",
@@ -2948,7 +2957,7 @@
     {
       "commands": [],
       "id": "a5afbbaea6f5a156a41c",
-      "line": 81,
+      "line": 103,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/defaults.md",
       "runtime": "no-public-execution-attestation",
@@ -2957,7 +2966,7 @@
     {
       "commands": [],
       "id": "aa73a0aa232c80a97642",
-      "line": 93,
+      "line": 115,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/defaults.md",
       "runtime": "no-public-execution-attestation",
@@ -2966,7 +2975,7 @@
     {
       "commands": [],
       "id": "4acdccac46dab8f83b47",
-      "line": 102,
+      "line": 124,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/defaults.md",
       "runtime": "no-public-execution-attestation",
@@ -2975,7 +2984,7 @@
     {
       "commands": [],
       "id": "df77737073c0ecb1aa26",
-      "line": 108,
+      "line": 130,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/defaults.md",
       "runtime": "no-public-execution-attestation",
@@ -2984,7 +2993,7 @@
     {
       "commands": [],
       "id": "4d8d91df140dd21f6806",
-      "line": 115,
+      "line": 137,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/defaults.md",
       "runtime": "no-public-execution-attestation",
@@ -2993,7 +3002,7 @@
     {
       "commands": [],
       "id": "41188a27ee59e5cf29b2",
-      "line": 30,
+      "line": 52,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/identity.md",
       "runtime": "no-public-execution-attestation",
@@ -3002,7 +3011,7 @@
     {
       "commands": [],
       "id": "a86328f63e02b01f4f74",
-      "line": 45,
+      "line": 67,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/identity.md",
       "runtime": "no-public-execution-attestation",
@@ -3011,7 +3020,7 @@
     {
       "commands": [],
       "id": "902091661d6dbeaff99e",
-      "line": 71,
+      "line": 93,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/identity.md",
       "runtime": "no-public-execution-attestation",
@@ -3020,7 +3029,7 @@
     {
       "commands": [],
       "id": "0894c2aa28733bd19d71",
-      "line": 86,
+      "line": 108,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/identity.md",
       "runtime": "no-public-execution-attestation",
@@ -3029,7 +3038,7 @@
     {
       "commands": [],
       "id": "b613a37b2c66b934335e",
-      "line": 105,
+      "line": 127,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/identity.md",
       "runtime": "no-public-execution-attestation",
@@ -3038,7 +3047,7 @@
     {
       "commands": [],
       "id": "cf9d515cb0ed0addf502",
-      "line": 114,
+      "line": 136,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/identity.md",
       "runtime": "no-public-execution-attestation",
@@ -3047,7 +3056,7 @@
     {
       "commands": [],
       "id": "6d9aacba06b2628a3b0d",
-      "line": 128,
+      "line": 150,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/identity.md",
       "runtime": "no-public-execution-attestation",
@@ -3056,7 +3065,7 @@
     {
       "commands": [],
       "id": "30c45ea94593decb2fbc",
-      "line": 146,
+      "line": 168,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/identity.md",
       "runtime": "no-public-execution-attestation",
@@ -3065,7 +3074,7 @@
     {
       "commands": [],
       "id": "09f73264ce2b74701acb",
-      "line": 26,
+      "line": 48,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/index.md",
       "runtime": "no-public-execution-attestation",
@@ -3074,7 +3083,7 @@
     {
       "commands": [],
       "id": "e7e5db64adbdf3b26ff3",
-      "line": 20,
+      "line": 42,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/outages.md",
       "runtime": "no-public-execution-attestation",
@@ -3083,7 +3092,7 @@
     {
       "commands": [],
       "id": "7932c1c659b9872969be",
-      "line": 31,
+      "line": 53,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/outages.md",
       "runtime": "no-public-execution-attestation",
@@ -3092,7 +3101,7 @@
     {
       "commands": [],
       "id": "47c317c4c5b4344a2cf1",
-      "line": 56,
+      "line": 78,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/outages.md",
       "runtime": "no-public-execution-attestation",
@@ -3101,7 +3110,7 @@
     {
       "commands": [],
       "id": "6351c7ca3da4fb9593e5",
-      "line": 66,
+      "line": 88,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/outages.md",
       "runtime": "no-public-execution-attestation",
@@ -3109,17 +3118,26 @@
     },
     {
       "commands": [],
-      "id": "37143fb1bcd17e63ba1a",
-      "line": 75,
+      "id": "84027f86987b6a8e36d8",
+      "line": 101,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/outages.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "5a0153a65fa37b2687b18fd3329b63e99229b5e805346c3ba178e3cd581129de"
+      "sha256": "abfefa44c1b0e89d73138e3338cdd1e1f06f781773b7a1f72ffee44c4ba52c37"
+    },
+    {
+      "commands": [],
+      "id": "345e785c91a71f2d3394",
+      "line": 132,
+      "operations": [],
+      "path": "docs/use-cases/admission-flow-control/outages.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "9cebaccff35ea8c5d59bf71015faee5e9eef57bd38ab01424b907bfcd79e6031"
     },
     {
       "commands": [],
       "id": "966f8aae4a5c6f2485ce",
-      "line": 107,
+      "line": 140,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/outages.md",
       "runtime": "no-public-execution-attestation",
@@ -3128,7 +3146,7 @@
     {
       "commands": [],
       "id": "33642b1ce0a5152d4c6c",
-      "line": 20,
+      "line": 42,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3137,7 +3155,7 @@
     {
       "commands": [],
       "id": "ac2cd13fd78a3b2173c0",
-      "line": 42,
+      "line": 64,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3146,7 +3164,7 @@
     {
       "commands": [],
       "id": "a5e7a9f2f4f4a4d58f30",
-      "line": 49,
+      "line": 71,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3155,7 +3173,7 @@
     {
       "commands": [],
       "id": "7ee37396ef6dce1ea184",
-      "line": 66,
+      "line": 88,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3164,7 +3182,7 @@
     {
       "commands": [],
       "id": "7e571e00c82471192909",
-      "line": 93,
+      "line": 115,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3173,7 +3191,7 @@
     {
       "commands": [],
       "id": "ed90fb50e3be32a54872",
-      "line": 111,
+      "line": 133,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3182,7 +3200,7 @@
     {
       "commands": [],
       "id": "d83b9cfbefaa680ca0f7",
-      "line": 121,
+      "line": 143,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3191,7 +3209,7 @@
     {
       "commands": [],
       "id": "fdbd017b580157943108",
-      "line": 139,
+      "line": 161,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3200,7 +3218,7 @@
     {
       "commands": [],
       "id": "a73e49e1fd7be828962a",
-      "line": 149,
+      "line": 171,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3209,7 +3227,7 @@
     {
       "commands": [],
       "id": "5aa4c19059ef870c91ac",
-      "line": 157,
+      "line": 179,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3218,7 +3236,7 @@
     {
       "commands": [],
       "id": "45f8729b293026f17d5c",
-      "line": 164,
+      "line": 186,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3227,7 +3245,7 @@
     {
       "commands": [],
       "id": "bdc720ffed2a04650aa9",
-      "line": 169,
+      "line": 191,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3236,7 +3254,7 @@
     {
       "commands": [],
       "id": "b446b05933185e8d64a1",
-      "line": 179,
+      "line": 201,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3245,7 +3263,7 @@
     {
       "commands": [],
       "id": "f1fb257edac19afac073",
-      "line": 192,
+      "line": 214,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3254,7 +3272,7 @@
     {
       "commands": [],
       "id": "0cbac44d7aa413258af8",
-      "line": 207,
+      "line": 229,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/quotas.md",
       "runtime": "no-public-execution-attestation",
@@ -3263,7 +3281,7 @@
     {
       "commands": [],
       "id": "05ff55a668f4f96ae946",
-      "line": 16,
+      "line": 38,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/setup.md",
       "runtime": "no-public-execution-attestation",
@@ -3272,7 +3290,7 @@
     {
       "commands": [],
       "id": "296a7a6ffcc30d6f2334",
-      "line": 31,
+      "line": 53,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/setup.md",
       "runtime": "no-public-execution-attestation",
@@ -3281,7 +3299,7 @@
     {
       "commands": [],
       "id": "3dee0f28eea4faf10faa",
-      "line": 52,
+      "line": 74,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/setup.md",
       "runtime": "no-public-execution-attestation",
@@ -3290,7 +3308,7 @@
     {
       "commands": [],
       "id": "086400aed0a251bdab6a",
-      "line": 82,
+      "line": 104,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/setup.md",
       "runtime": "no-public-execution-attestation",
@@ -3299,7 +3317,7 @@
     {
       "commands": [],
       "id": "c8600a9b97233f3664d5",
-      "line": 112,
+      "line": 134,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/setup.md",
       "runtime": "no-public-execution-attestation",
@@ -3308,7 +3326,7 @@
     {
       "commands": [],
       "id": "9e72c0bffa01047e77f2",
-      "line": 132,
+      "line": 154,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/setup.md",
       "runtime": "no-public-execution-attestation",
@@ -3317,7 +3335,7 @@
     {
       "commands": [],
       "id": "46a2f348b9fcc2d664bf",
-      "line": 20,
+      "line": 42,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3326,7 +3344,7 @@
     {
       "commands": [],
       "id": "705cfe7ea1738a4f2ceb",
-      "line": 30,
+      "line": 52,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3335,7 +3353,7 @@
     {
       "commands": [],
       "id": "2ad2ca343f99044b4847",
-      "line": 34,
+      "line": 56,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3344,7 +3362,7 @@
     {
       "commands": [],
       "id": "fa1ef434f0dee2712cf1",
-      "line": 40,
+      "line": 62,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3353,7 +3371,7 @@
     {
       "commands": [],
       "id": "bb0a65e972ba22fe5b99",
-      "line": 51,
+      "line": 73,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3362,7 +3380,7 @@
     {
       "commands": [],
       "id": "ef209e66bd00249804bd",
-      "line": 72,
+      "line": 94,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3371,7 +3389,7 @@
     {
       "commands": [],
       "id": "a249d4af0b33f44db0fd",
-      "line": 81,
+      "line": 103,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3380,7 +3398,7 @@
     {
       "commands": [],
       "id": "ac1580c60c6c615ab250",
-      "line": 95,
+      "line": 117,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3389,7 +3407,7 @@
     {
       "commands": [],
       "id": "d974e82b83f522cb37dd",
-      "line": 119,
+      "line": 141,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3398,7 +3416,7 @@
     {
       "commands": [],
       "id": "7a264e818723912986ba",
-      "line": 139,
+      "line": 161,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3407,7 +3425,7 @@
     {
       "commands": [],
       "id": "1afd5a4494ad0b1075f1",
-      "line": 156,
+      "line": 178,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3416,7 +3434,7 @@
     {
       "commands": [],
       "id": "473f263230eef579208d",
-      "line": 166,
+      "line": 188,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3425,7 +3443,7 @@
     {
       "commands": [],
       "id": "f367c41afe70dac0cea8",
-      "line": 175,
+      "line": 197,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3434,7 +3452,7 @@
     {
       "commands": [],
       "id": "1017e1606a8dbed4aae5",
-      "line": 190,
+      "line": 212,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3443,7 +3461,7 @@
     {
       "commands": [],
       "id": "57d41ec2ac9ae9d60f32",
-      "line": 206,
+      "line": 228,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3452,7 +3470,7 @@
     {
       "commands": [],
       "id": "9cf702ed32c1c09059d1",
-      "line": 219,
+      "line": 241,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3461,7 +3479,7 @@
     {
       "commands": [],
       "id": "c20da3b9f6145adc7a06",
-      "line": 228,
+      "line": 250,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3470,7 +3488,7 @@
     {
       "commands": [],
       "id": "7a579cb6dd0867c3b811",
-      "line": 241,
+      "line": 263,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3479,7 +3497,7 @@
     {
       "commands": [],
       "id": "25f2106f20b1e8a849c6",
-      "line": 250,
+      "line": 272,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3488,7 +3506,7 @@
     {
       "commands": [],
       "id": "611c44490924dcd44032",
-      "line": 267,
+      "line": 289,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3497,7 +3515,7 @@
     {
       "commands": [],
       "id": "59e36d48b91f50067234",
-      "line": 284,
+      "line": 306,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3506,7 +3524,7 @@
     {
       "commands": [],
       "id": "5335c8fb91aefe947e80",
-      "line": 288,
+      "line": 310,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3515,7 +3533,7 @@
     {
       "commands": [],
       "id": "a73c67096df4400372a0",
-      "line": 308,
+      "line": 330,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3524,7 +3542,7 @@
     {
       "commands": [],
       "id": "051a51029d9087568af5",
-      "line": 325,
+      "line": 347,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3533,7 +3551,7 @@
     {
       "commands": [],
       "id": "9cca676f9bdee2bcaac9",
-      "line": 339,
+      "line": 361,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3542,7 +3560,7 @@
     {
       "commands": [],
       "id": "7457e8cd7b57ec1442f6",
-      "line": 358,
+      "line": 380,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3551,7 +3569,7 @@
     {
       "commands": [],
       "id": "8876dc6aa1a74044a924",
-      "line": 368,
+      "line": 390,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls-failures.md",
       "runtime": "no-public-execution-attestation",
@@ -3560,7 +3578,7 @@
     {
       "commands": [],
       "id": "309689ae96c597f4d208",
-      "line": 36,
+      "line": 58,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3569,7 +3587,7 @@
     {
       "commands": [],
       "id": "c98066a89518d4b8f790",
-      "line": 55,
+      "line": 77,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3578,7 +3596,7 @@
     {
       "commands": [],
       "id": "8e0dad559e3ea947e4c5",
-      "line": 61,
+      "line": 83,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3587,7 +3605,7 @@
     {
       "commands": [],
       "id": "e661408bbe4fd2e4a500",
-      "line": 67,
+      "line": 89,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3596,7 +3614,7 @@
     {
       "commands": [],
       "id": "7110bda3bf7e6cf1ff06",
-      "line": 73,
+      "line": 95,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3605,7 +3623,7 @@
     {
       "commands": [],
       "id": "2a3819c907056d1af5c2",
-      "line": 79,
+      "line": 101,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3614,7 +3632,7 @@
     {
       "commands": [],
       "id": "9822ee31d304c2eef53a",
-      "line": 85,
+      "line": 107,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3623,7 +3641,7 @@
     {
       "commands": [],
       "id": "6014f1ec9f08393b4ff3",
-      "line": 91,
+      "line": 113,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3632,7 +3650,7 @@
     {
       "commands": [],
       "id": "94b2bf512a7866abfa8c",
-      "line": 108,
+      "line": 130,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3641,7 +3659,7 @@
     {
       "commands": [],
       "id": "3d143560db4cdf354fe4",
-      "line": 133,
+      "line": 155,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3650,7 +3668,7 @@
     {
       "commands": [],
       "id": "612faf9bf17ffc5a4661",
-      "line": 143,
+      "line": 165,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3659,7 +3677,7 @@
     {
       "commands": [],
       "id": "72d6a5898b74a499245b",
-      "line": 170,
+      "line": 192,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3668,7 +3686,7 @@
     {
       "commands": [],
       "id": "4450831393beba91a376",
-      "line": 183,
+      "line": 205,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3677,7 +3695,7 @@
     {
       "commands": [],
       "id": "cd78f16979faded98b83",
-      "line": 197,
+      "line": 219,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3686,7 +3704,7 @@
     {
       "commands": [],
       "id": "92740791e3e19a263187",
-      "line": 217,
+      "line": 239,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3695,7 +3713,7 @@
     {
       "commands": [],
       "id": "6c7506fab909d3c1de99",
-      "line": 237,
+      "line": 259,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3704,7 +3722,7 @@
     {
       "commands": [],
       "id": "17a8c9a4159b6d12a6fd",
-      "line": 264,
+      "line": 286,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3713,7 +3731,7 @@
     {
       "commands": [],
       "id": "ddfa3f3524fe48184fcc",
-      "line": 290,
+      "line": 312,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3722,7 +3740,7 @@
     {
       "commands": [],
       "id": "cb53009572fe2b6b74f3",
-      "line": 318,
+      "line": 340,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3731,7 +3749,7 @@
     {
       "commands": [],
       "id": "0195c08dda0c5355d1c3",
-      "line": 349,
+      "line": 371,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3740,7 +3758,7 @@
     {
       "commands": [],
       "id": "f28ee63542574e22f32d",
-      "line": 364,
+      "line": 386,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3749,7 +3767,7 @@
     {
       "commands": [],
       "id": "4abe55b29a6341aa20c6",
-      "line": 377,
+      "line": 399,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3758,7 +3776,7 @@
     {
       "commands": [],
       "id": "0779580a0cfda38f2c50",
-      "line": 389,
+      "line": 411,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3767,7 +3785,7 @@
     {
       "commands": [],
       "id": "d4baf47d4e0b267908a7",
-      "line": 409,
+      "line": 431,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3776,7 +3794,7 @@
     {
       "commands": [],
       "id": "072bc133c4c84d92d0a6",
-      "line": 436,
+      "line": 458,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3785,7 +3803,7 @@
     {
       "commands": [],
       "id": "2f1cc90c62940b00309c",
-      "line": 455,
+      "line": 477,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3794,7 +3812,7 @@
     {
       "commands": [],
       "id": "027a151456db9e65ebeb",
-      "line": 481,
+      "line": 503,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3803,7 +3821,7 @@
     {
       "commands": [],
       "id": "19d9d41576ca2f3b486c",
-      "line": 496,
+      "line": 518,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3812,7 +3830,7 @@
     {
       "commands": [],
       "id": "5adb7c05f285ca49268b",
-      "line": 515,
+      "line": 537,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3821,7 +3839,7 @@
     {
       "commands": [],
       "id": "3f1cede96784b10c7bbc",
-      "line": 530,
+      "line": 552,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3830,7 +3848,7 @@
     {
       "commands": [],
       "id": "79fa4ef7bd5768e1d3f9",
-      "line": 546,
+      "line": 568,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3839,7 +3857,7 @@
     {
       "commands": [],
       "id": "7702b1784b450e7141d9",
-      "line": 566,
+      "line": 588,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3848,7 +3866,7 @@
     {
       "commands": [],
       "id": "e806811e7fa62f56132c",
-      "line": 601,
+      "line": 623,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3857,7 +3875,7 @@
     {
       "commands": [],
       "id": "4f4cc59436438c62f102",
-      "line": 619,
+      "line": 641,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3866,7 +3884,7 @@
     {
       "commands": [],
       "id": "b7bda91b66ed30884326",
-      "line": 655,
+      "line": 677,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3875,7 +3893,7 @@
     {
       "commands": [],
       "id": "cc10713af0e0b010dbeb",
-      "line": 679,
+      "line": 701,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3884,7 +3902,7 @@
     {
       "commands": [],
       "id": "2fd7519eb30a114f57bb",
-      "line": 692,
+      "line": 714,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3893,7 +3911,7 @@
     {
       "commands": [],
       "id": "c6d91f5c909d45e123c4",
-      "line": 697,
+      "line": 719,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3902,7 +3920,7 @@
     {
       "commands": [],
       "id": "0a407f21122336ad8ff0",
-      "line": 723,
+      "line": 745,
       "operations": [],
       "path": "docs/use-cases/admission-flow-control/tls.md",
       "runtime": "no-public-execution-attestation",
@@ -3911,7 +3929,7 @@
     {
       "commands": [],
       "id": "12f2fd3e5a08de324f09",
-      "line": 21,
+      "line": 43,
       "operations": [],
       "path": "docs/use-cases/advanced-cache-integrations.md",
       "runtime": "no-public-execution-attestation",
@@ -3920,7 +3938,7 @@
     {
       "commands": [],
       "id": "e701d5335f5618f97534",
-      "line": 151,
+      "line": 173,
       "operations": [],
       "path": "docs/use-cases/configuration-tuning.md",
       "runtime": "no-public-execution-attestation",
@@ -3929,7 +3947,7 @@
     {
       "commands": [],
       "id": "cabb50c259a349ffd3e4",
-      "line": 32,
+      "line": 54,
       "operations": [],
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "runtime": "no-public-execution-attestation",
@@ -3938,7 +3956,7 @@
     {
       "commands": [],
       "id": "282c082856bbc2dcc4fb",
-      "line": 94,
+      "line": 116,
       "operations": [],
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "runtime": "no-public-execution-attestation",
@@ -3947,7 +3965,7 @@
     {
       "commands": [],
       "id": "6f6c1d3da58749aa63f6",
-      "line": 136,
+      "line": 158,
       "operations": [],
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "runtime": "no-public-execution-attestation",
@@ -3956,7 +3974,7 @@
     {
       "commands": [],
       "id": "ce189c9844df4aef9396",
-      "line": 154,
+      "line": 176,
       "operations": [],
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "runtime": "no-public-execution-attestation",
@@ -3965,7 +3983,7 @@
     {
       "commands": [],
       "id": "8e1d3db3c7a34efc954b",
-      "line": 194,
+      "line": 216,
       "operations": [],
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "runtime": "no-public-execution-attestation",
@@ -3974,7 +3992,7 @@
     {
       "commands": [],
       "id": "497e0a66cc6619cac3de",
-      "line": 225,
+      "line": 247,
       "operations": [],
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "runtime": "no-public-execution-attestation",
@@ -3983,7 +4001,7 @@
     {
       "commands": [],
       "id": "879363cdc5cde6582dc4",
-      "line": 258,
+      "line": 280,
       "operations": [
         "POST /config/loadbalancer"
       ],
@@ -3996,7 +4014,7 @@
         "create lb"
       ],
       "id": "8362481d659feedc8710",
-      "line": 275,
+      "line": 297,
       "operations": [],
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "runtime": "no-public-execution-attestation",
@@ -4005,7 +4023,7 @@
     {
       "commands": [],
       "id": "e8468970b2f3a535edaf",
-      "line": 324,
+      "line": 346,
       "operations": [],
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "runtime": "no-public-execution-attestation",
@@ -4014,7 +4032,7 @@
     {
       "commands": [],
       "id": "b20c566b0ae92ac36101",
-      "line": 352,
+      "line": 374,
       "operations": [],
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "runtime": "no-public-execution-attestation",
@@ -4023,7 +4041,7 @@
     {
       "commands": [],
       "id": "11c00f31bddd8c52abfc",
-      "line": 378,
+      "line": 400,
       "operations": [],
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "runtime": "no-public-execution-attestation",
@@ -4032,7 +4050,7 @@
     {
       "commands": [],
       "id": "64b689e3cc6396ea2bd0",
-      "line": 411,
+      "line": 433,
       "operations": [],
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "runtime": "no-public-execution-attestation",
@@ -4041,7 +4059,7 @@
     {
       "commands": [],
       "id": "c8a654c5712b8983324b",
-      "line": 483,
+      "line": 505,
       "operations": [],
       "path": "docs/use-cases/deploy-pd-disaggregation.md",
       "runtime": "no-public-execution-attestation",
@@ -4050,7 +4068,7 @@
     {
       "commands": [],
       "id": "0afe38b2bec671aee266",
-      "line": 26,
+      "line": 48,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/cleanup.md",
       "runtime": "no-public-execution-attestation",
@@ -4059,7 +4077,7 @@
     {
       "commands": [],
       "id": "c54ad340ba6e1dfe49d7",
-      "line": 59,
+      "line": 81,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/cleanup.md",
       "runtime": "no-public-execution-attestation",
@@ -4068,7 +4086,7 @@
     {
       "commands": [],
       "id": "2670a21fcfe8082782db",
-      "line": 87,
+      "line": 109,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/cleanup.md",
       "runtime": "no-public-execution-attestation",
@@ -4076,17 +4094,35 @@
     },
     {
       "commands": [],
-      "id": "867c7cc28a2d2e3cc5c2",
-      "line": 32,
+      "id": "06294fce7ade1f096eff",
+      "line": 58,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/coexistence.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "4e9efd5e57c0eb520009c5312a98b20f62101ea7250205faf0d7bffd8e943148"
+      "sha256": "0fc3b94ca26691b2032f6a5d5d21432939448ae1ff54f6d069f0685cc574ec3d"
+    },
+    {
+      "commands": [],
+      "id": "2e94dac491abdbcbd17a",
+      "line": 104,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/coexistence.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "805120805bd09b24fc45e47833c9838d5b6d25decde9ca04da8c690dc2f2c65e"
+    },
+    {
+      "commands": [],
+      "id": "b014af1aebe953e5ea68",
+      "line": 135,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/coexistence.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e63b2cfd1a9f39d6227533dd77b545d26535b24cfa1dc5440b6fffeca71b9733"
     },
     {
       "commands": [],
       "id": "ff8c844afddf88706ce2",
-      "line": 106,
+      "line": 146,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/coexistence.md",
       "runtime": "no-public-execution-attestation",
@@ -4095,7 +4131,7 @@
     {
       "commands": [],
       "id": "0ddb022eb30e79fe055d",
-      "line": 142,
+      "line": 182,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/coexistence.md",
       "runtime": "no-public-execution-attestation",
@@ -4103,17 +4139,26 @@
     },
     {
       "commands": [],
-      "id": "254e8115561f28d105af",
-      "line": 177,
+      "id": "2eb8850fc4c218ad3f32",
+      "line": 221,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/coexistence.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "c708a9c60efbb08383e5299830f208073e3d5db8a03d2fb95c915e122f5aa79f"
+      "sha256": "a2768090cc67dfbeec364f6abdb76231a14fc00744030fbc80cd5c6104befef3"
+    },
+    {
+      "commands": [],
+      "id": "b84b189979237e1a00ae",
+      "line": 252,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/coexistence.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "15c0b3fb9e1359b8e5cf7634de3ec25edbeead62629d5f8f73d3806acd7af10a"
     },
     {
       "commands": [],
       "id": "499aca7064b99bf55300",
-      "line": 25,
+      "line": 47,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/connections.md",
       "runtime": "no-public-execution-attestation",
@@ -4122,7 +4167,7 @@
     {
       "commands": [],
       "id": "b06dfe35102f8cc60786",
-      "line": 36,
+      "line": 58,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/connections.md",
       "runtime": "no-public-execution-attestation",
@@ -4131,7 +4176,7 @@
     {
       "commands": [],
       "id": "e586ced9a311c5901fd8",
-      "line": 64,
+      "line": 86,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/connections.md",
       "runtime": "no-public-execution-attestation",
@@ -4140,7 +4185,7 @@
     {
       "commands": [],
       "id": "ecf99cb53974e2f6c128",
-      "line": 87,
+      "line": 109,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/connections.md",
       "runtime": "no-public-execution-attestation",
@@ -4149,7 +4194,7 @@
     {
       "commands": [],
       "id": "bbaa9ce59fb4f15d7eea",
-      "line": 24,
+      "line": 46,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/index.md",
       "runtime": "no-public-execution-attestation",
@@ -4157,26 +4202,62 @@
     },
     {
       "commands": [],
-      "id": "42e32ea280321dde3730",
-      "line": 19,
+      "id": "5148e70846c5923b9c75",
+      "line": 45,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/network-boundary.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "f13430dfd379274d6187855f75aae9bd7f9293977623031197de07f9e1e65b58"
+      "sha256": "868d4870ea3fe31d3994e80b11948893c5da6235cb57ad7299932be8203480e7"
     },
     {
       "commands": [],
-      "id": "1a50a4d275caf8cbe336",
-      "line": 79,
+      "id": "c9aca9fb91af34611291",
+      "line": 76,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/network-boundary.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "b8abad30001a5e14be27f0c58d7071b88870c481e9b720f1c890b62f908a8f64"
+      "sha256": "a31e965d3ed0dd0f935ad65dc9e1d4c3523b2c5d60024bc68b80645405cda0c2"
+    },
+    {
+      "commands": [],
+      "id": "b7b172b623fad99d9ae7",
+      "line": 107,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/network-boundary.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "424d03bdeaa39e57163cf90e5039d25fc3acd55787aabb3dd056950f85fa2f9b"
+    },
+    {
+      "commands": [],
+      "id": "200d383979063aba619b",
+      "line": 123,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/network-boundary.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "c6c00449779ecd9c8fd09f99e78c97d11e88538717d279223095535d57bd5f53"
+    },
+    {
+      "commands": [],
+      "id": "7fbd9fd6e186fbfb8427",
+      "line": 131,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/network-boundary.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "55693045d539479b56ca5eb4bf2154dc46825fd4ccacbb8010e3235f349f20da"
+    },
+    {
+      "commands": [],
+      "id": "e25b4c86ee37cf344aa5",
+      "line": 171,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/network-boundary.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "5290f165b5fec909ac8c642a106bdfa768405cd57ea05b15a3b38c5be3d203b8"
     },
     {
       "commands": [],
       "id": "d0c3319fa95eb3e5d4c0",
-      "line": 145,
+      "line": 203,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/network-boundary.md",
       "runtime": "no-public-execution-attestation",
@@ -4185,7 +4266,7 @@
     {
       "commands": [],
       "id": "390bf285c9d004232335",
-      "line": 25,
+      "line": 47,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/recovery.md",
       "runtime": "no-public-execution-attestation",
@@ -4194,7 +4275,7 @@
     {
       "commands": [],
       "id": "5f3e594c8f1349552ac8",
-      "line": 48,
+      "line": 70,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/recovery.md",
       "runtime": "no-public-execution-attestation",
@@ -4203,7 +4284,7 @@
     {
       "commands": [],
       "id": "e7a99364e09dc8ead345",
-      "line": 82,
+      "line": 104,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/recovery.md",
       "runtime": "no-public-execution-attestation",
@@ -4212,7 +4293,7 @@
     {
       "commands": [],
       "id": "5b1afb80c702f9307663",
-      "line": 18,
+      "line": 40,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/request-protection.md",
       "runtime": "no-public-execution-attestation",
@@ -4221,7 +4302,7 @@
     {
       "commands": [],
       "id": "6e531cf1d51200929a38",
-      "line": 40,
+      "line": 62,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/request-protection.md",
       "runtime": "no-public-execution-attestation",
@@ -4230,7 +4311,7 @@
     {
       "commands": [],
       "id": "3dd6d9008d24d611da83",
-      "line": 73,
+      "line": 95,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/request-protection.md",
       "runtime": "no-public-execution-attestation",
@@ -4239,7 +4320,7 @@
     {
       "commands": [],
       "id": "8f3e13e9f5e5837e916b",
-      "line": 93,
+      "line": 115,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/request-protection.md",
       "runtime": "no-public-execution-attestation",
@@ -4248,7 +4329,7 @@
     {
       "commands": [],
       "id": "a68541d4ef9e5bb0a801",
-      "line": 103,
+      "line": 125,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/request-protection.md",
       "runtime": "no-public-execution-attestation",
@@ -4257,7 +4338,7 @@
     {
       "commands": [],
       "id": "349109b650d23df6070f",
-      "line": 123,
+      "line": 145,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/request-protection.md",
       "runtime": "no-public-execution-attestation",
@@ -4266,7 +4347,7 @@
     {
       "commands": [],
       "id": "984d920db1d230d11c24",
-      "line": 143,
+      "line": 165,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/request-protection.md",
       "runtime": "no-public-execution-attestation",
@@ -4274,26 +4355,62 @@
     },
     {
       "commands": [],
-      "id": "22215962a07deac43cb2",
-      "line": 196,
+      "id": "6bbff422677a47ea0681",
+      "line": 222,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/request-protection.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "99a0b74f61b0e43fa910ac76db03fbb58e1ac1352910f9fbe06071360acf76a1"
+      "sha256": "cae593a83035ea4abebf6a9d476935ff347084d3a61aa0948ad0a17e8a702b20"
     },
     {
       "commands": [],
-      "id": "53df0924ab2566fb1129",
-      "line": 275,
+      "id": "cbda0ff9b1cc5997fae5",
+      "line": 239,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/request-protection.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "5ce3579aadf3f0ea1b575704508e25bb9cde96331dc5a1797871ebda3f51144e"
+      "sha256": "35d40ef43aa170417d7650433dca1661f5e300b512e37318abdc7f8a33fb0e6e"
+    },
+    {
+      "commands": [],
+      "id": "cd69da0ed3ea7c8c0fdb",
+      "line": 270,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "f1fd5ad1f8dc74c8bb26c08dd1bc2d4a3e3140fcc49267876f641ab26521963d"
+    },
+    {
+      "commands": [],
+      "id": "747a1aabbb363efce5d3",
+      "line": 301,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "7ab5e080a7ca97f073ec09a036fa39260e4f47671e4542f890aac11c5bef4231"
+    },
+    {
+      "commands": [],
+      "id": "16a29310a09ea7902c52",
+      "line": 326,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "edd153c6b659d4b615f5a45664df4946fc99b8e4960416b5fb96526e83abb12b"
+    },
+    {
+      "commands": [],
+      "id": "52eb395c7341d03bb4bb",
+      "line": 357,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/request-protection.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "721a75f67a0d2abcc8c2d9ba29b3b143b6d333d528db22a5f44d9ef42c6a2a09"
     },
     {
       "commands": [],
       "id": "a8a4637bc0f19f48126d",
-      "line": 22,
+      "line": 44,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/setup.md",
       "runtime": "no-public-execution-attestation",
@@ -4302,7 +4419,7 @@
     {
       "commands": [],
       "id": "8213fb17e10aad95ca83",
-      "line": 54,
+      "line": 76,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/setup.md",
       "runtime": "no-public-execution-attestation",
@@ -4310,17 +4427,17 @@
     },
     {
       "commands": [],
-      "id": "83f2c18639cca412c083",
-      "line": 93,
+      "id": "5f3c7921f249ffb2a02f",
+      "line": 115,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/setup.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "5776bc83bc76a84254a527b7ff8d3bc0cbf6662fa53f7ca1dd493b5adc6c3283"
+      "sha256": "d07555ec6ef7fbb16a7c746e9479cc1fa7df9203640531afb51daf8cd0ff3c5a"
     },
     {
       "commands": [],
       "id": "f60eef58ef3e35ee1e44",
-      "line": 115,
+      "line": 137,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/setup.md",
       "runtime": "no-public-execution-attestation",
@@ -4329,7 +4446,7 @@
     {
       "commands": [],
       "id": "2ecf7a4b7e47e437fe2e",
-      "line": 141,
+      "line": 163,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/setup.md",
       "runtime": "no-public-execution-attestation",
@@ -4338,7 +4455,7 @@
     {
       "commands": [],
       "id": "8981fa0a65c2894d4257",
-      "line": 165,
+      "line": 187,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/setup.md",
       "runtime": "no-public-execution-attestation",
@@ -4347,7 +4464,7 @@
     {
       "commands": [],
       "id": "95bd369a8baf96fd8b03",
-      "line": 17,
+      "line": 39,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/source-protection.md",
       "runtime": "no-public-execution-attestation",
@@ -4355,17 +4472,26 @@
     },
     {
       "commands": [],
-      "id": "af5c3b84eb3c57a129a5",
-      "line": 32,
+      "id": "9b830ad3ad0e52502d22",
+      "line": 58,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/source-protection.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "99a2119a67c416e03cb39ae03f4b70371115468722c2ffe315726688148b9cc7"
+      "sha256": "6c18469ec0fa754ba5a40783caec65ec2f56314a78e265b8125a7fc7513455b2"
+    },
+    {
+      "commands": [],
+      "id": "35ec18419a0fa87c9e70",
+      "line": 89,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/source-protection.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e13b610609fc20c814c6a167ed9381bb301ae19a8a68451bff2f45cea33a5945"
     },
     {
       "commands": [],
       "id": "7f50c1792d05c455eebf",
-      "line": 70,
+      "line": 103,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/source-protection.md",
       "runtime": "no-public-execution-attestation",
@@ -4373,17 +4499,26 @@
     },
     {
       "commands": [],
-      "id": "825402a767ab76826cfa",
-      "line": 96,
+      "id": "8b5366b4aa8c4b4db6c4",
+      "line": 133,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/source-protection.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "e771ec80f1f58804cbe3f5ad7f193cd567423f74b32a4461190eddb50721de0c"
+      "sha256": "1b0175d8ecbc631c2853547872ea5217edf734ee3a114c0526fa8087c64d7a07"
+    },
+    {
+      "commands": [],
+      "id": "99303c8733376f22a932",
+      "line": 164,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/source-protection.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "81c1b8a2030e36e4dad7bd9dc655178194a1565fc3ab97813a6d755704b153cb"
     },
     {
       "commands": [],
       "id": "6cfae808fe0c8da8f393",
-      "line": 136,
+      "line": 180,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/source-protection.md",
       "runtime": "no-public-execution-attestation",
@@ -4392,7 +4527,7 @@
     {
       "commands": [],
       "id": "d0af90d536a92d10f6e3",
-      "line": 175,
+      "line": 219,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/source-protection.md",
       "runtime": "no-public-execution-attestation",
@@ -4400,17 +4535,26 @@
     },
     {
       "commands": [],
-      "id": "57bb7c30ddaa49fdf55f",
-      "line": 215,
+      "id": "85a3be9761251ecaa67f",
+      "line": 263,
       "operations": [],
       "path": "docs/use-cases/edge-cloud-security/source-protection.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "5de2b4591af5bade7af6653b1d2c544b4bf03a3e143926c283103fe83b6b3b12"
+      "sha256": "edcb15b045be71bb73940dae3ba15be574cd2348b148527c71ac2dc7a621ec9e"
+    },
+    {
+      "commands": [],
+      "id": "5fef3b1d5fc065d56517",
+      "line": 294,
+      "operations": [],
+      "path": "docs/use-cases/edge-cloud-security/source-protection.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "cf8799d0c0fa37220470bb81187765810ef8a77f526a6e923dd69b68af69f2ce"
     },
     {
       "commands": [],
       "id": "61dd5f7e80763e264896",
-      "line": 74,
+      "line": 96,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/catalog-installer.md",
       "runtime": "no-public-execution-attestation",
@@ -4419,7 +4563,7 @@
     {
       "commands": [],
       "id": "3194b0658e7d00a5536a",
-      "line": 94,
+      "line": 116,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/catalog-installer.md",
       "runtime": "no-public-execution-attestation",
@@ -4428,7 +4572,7 @@
     {
       "commands": [],
       "id": "7301d89af206b015c9b2",
-      "line": 32,
+      "line": 54,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/configure.md",
       "runtime": "no-public-execution-attestation",
@@ -4437,7 +4581,7 @@
     {
       "commands": [],
       "id": "086237605a74b4ed7fee",
-      "line": 57,
+      "line": 79,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/configure.md",
       "runtime": "no-public-execution-attestation",
@@ -4446,7 +4590,7 @@
     {
       "commands": [],
       "id": "bca12c9ecae870380ec8",
-      "line": 68,
+      "line": 90,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/configure.md",
       "runtime": "no-public-execution-attestation",
@@ -4455,7 +4599,7 @@
     {
       "commands": [],
       "id": "5d48045e6de6c665ef17",
-      "line": 89,
+      "line": 111,
       "operations": [
         "GET /status/capabilities",
         "GET /status/ready"
@@ -4467,7 +4611,7 @@
     {
       "commands": [],
       "id": "4b2e2f638f4e0071c4f5",
-      "line": 103,
+      "line": 125,
       "operations": [
         "GET /config/ai/model-profiles"
       ],
@@ -4478,7 +4622,7 @@
     {
       "commands": [],
       "id": "27835d640e4ba8bad40e",
-      "line": 124,
+      "line": 146,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/configure.md",
       "runtime": "no-public-execution-attestation",
@@ -4487,7 +4631,7 @@
     {
       "commands": [],
       "id": "98f77a67fed25ba93d53",
-      "line": 157,
+      "line": 179,
       "operations": [
         "GET /config/loadbalancer/all",
         "POST /config/loadbalancer"
@@ -4499,7 +4643,7 @@
     {
       "commands": [],
       "id": "74c4d4c1d83ec68d5342",
-      "line": 175,
+      "line": 197,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/configure.md",
       "runtime": "no-public-execution-attestation",
@@ -4508,7 +4652,7 @@
     {
       "commands": [],
       "id": "c245343b60a168d1b49b",
-      "line": 186,
+      "line": 208,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/configure.md",
       "runtime": "no-public-execution-attestation",
@@ -4517,7 +4661,7 @@
     {
       "commands": [],
       "id": "79c6933bda08f44c7f49",
-      "line": 208,
+      "line": 230,
       "operations": [
         "GET /config/loadbalancer/externalipaddress/{ip_address}/port/{port}/protocol/{proto}/kvexactstatus"
       ],
@@ -4527,17 +4671,26 @@
     },
     {
       "commands": [],
-      "id": "daded69237f5df67efe5",
-      "line": 36,
+      "id": "b0ab6da6c8addc0bfbcc",
+      "line": 62,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "24ddac044095120306cb42c62c91444c7c6d27751ef93f107942a1171a41fe71"
+      "sha256": "47dc5774cdf8edca877b9920c41a2f1926f98e8913c0ae0f5c1f933d7416131f"
+    },
+    {
+      "commands": [],
+      "id": "2f6570fca36c6db97283",
+      "line": 93,
+      "operations": [],
+      "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "c98057884c439ccbdb69fc51ef877b951787865400d7fdad6583fb23273d1c9c"
     },
     {
       "commands": [],
       "id": "13f98c8a048fef1e889f",
-      "line": 84,
+      "line": 117,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4546,7 +4699,7 @@
     {
       "commands": [],
       "id": "4acd9d2381b8e7b47397",
-      "line": 99,
+      "line": 132,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4555,7 +4708,7 @@
     {
       "commands": [],
       "id": "edc310a342d39aea4dfe",
-      "line": 132,
+      "line": 165,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4564,7 +4717,7 @@
     {
       "commands": [],
       "id": "57ed27b5d72ca5f04d9d",
-      "line": 154,
+      "line": 187,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4573,7 +4726,7 @@
     {
       "commands": [],
       "id": "48cc5b235fd54614f51d",
-      "line": 175,
+      "line": 208,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4582,7 +4735,7 @@
     {
       "commands": [],
       "id": "98ed744811fb530b81dc",
-      "line": 190,
+      "line": 223,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4591,7 +4744,7 @@
     {
       "commands": [],
       "id": "0f8a95930c99ba3378f8",
-      "line": 202,
+      "line": 235,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4600,7 +4753,7 @@
     {
       "commands": [],
       "id": "55aeae32c7b614b6547f",
-      "line": 221,
+      "line": 254,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4609,7 +4762,7 @@
     {
       "commands": [],
       "id": "87a421620cd9a06c2071",
-      "line": 265,
+      "line": 298,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4618,7 +4771,7 @@
     {
       "commands": [],
       "id": "3c193ccc6b61a696418a",
-      "line": 275,
+      "line": 308,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4627,7 +4780,7 @@
     {
       "commands": [],
       "id": "fb182db2a6d6308e47e0",
-      "line": 284,
+      "line": 317,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4636,7 +4789,7 @@
     {
       "commands": [],
       "id": "28119bf8cad45c896657",
-      "line": 302,
+      "line": 335,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4645,7 +4798,7 @@
     {
       "commands": [],
       "id": "1caf9c2d31d805682109",
-      "line": 311,
+      "line": 344,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4654,7 +4807,7 @@
     {
       "commands": [],
       "id": "f99c8677c866f8c10771",
-      "line": 344,
+      "line": 377,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4663,7 +4816,7 @@
     {
       "commands": [],
       "id": "492e6c51652abab20e40",
-      "line": 354,
+      "line": 387,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4672,7 +4825,7 @@
     {
       "commands": [],
       "id": "51cb4578f8a83b84d217",
-      "line": 370,
+      "line": 403,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4681,7 +4834,7 @@
     {
       "commands": [],
       "id": "f4f02ee782d804faaff0",
-      "line": 390,
+      "line": 423,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4690,7 +4843,7 @@
     {
       "commands": [],
       "id": "b700960b3f08d6a0758e",
-      "line": 397,
+      "line": 430,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4699,7 +4852,7 @@
     {
       "commands": [],
       "id": "e8ba0863400a02b2ee25",
-      "line": 405,
+      "line": 438,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4708,7 +4861,7 @@
     {
       "commands": [],
       "id": "24d894af65b6ed6d7cb0",
-      "line": 423,
+      "line": 456,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4717,7 +4870,7 @@
     {
       "commands": [],
       "id": "c5886f1267f1d6e02760",
-      "line": 433,
+      "line": 466,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4726,7 +4879,7 @@
     {
       "commands": [],
       "id": "ceb5162cfff05d5d3768",
-      "line": 32,
+      "line": 54,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4735,7 +4888,7 @@
     {
       "commands": [],
       "id": "850a85ee63c2aba27a3d",
-      "line": 52,
+      "line": 74,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4744,7 +4897,7 @@
     {
       "commands": [],
       "id": "577a0136ebf2cddd8e61",
-      "line": 81,
+      "line": 103,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4753,7 +4906,7 @@
     {
       "commands": [],
       "id": "3ba3e1785453ac8b6b58",
-      "line": 91,
+      "line": 113,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4762,7 +4915,7 @@
     {
       "commands": [],
       "id": "38ae088a3e354ccc52c4",
-      "line": 112,
+      "line": 134,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4771,7 +4924,7 @@
     {
       "commands": [],
       "id": "1243ef606fdbc579be9c",
-      "line": 136,
+      "line": 158,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4780,7 +4933,7 @@
     {
       "commands": [],
       "id": "f3e08a4edbce307d6ac4",
-      "line": 146,
+      "line": 168,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4789,7 +4942,7 @@
     {
       "commands": [],
       "id": "065d6ae5d3d52359850e",
-      "line": 164,
+      "line": 186,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4798,7 +4951,7 @@
     {
       "commands": [],
       "id": "6d627e79f77c884b2b34",
-      "line": 185,
+      "line": 207,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4807,7 +4960,7 @@
     {
       "commands": [],
       "id": "a5a8edcb02265a41a498",
-      "line": 196,
+      "line": 218,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4816,7 +4969,7 @@
     {
       "commands": [],
       "id": "62fbce538e4b4b69cff4",
-      "line": 209,
+      "line": 231,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4825,7 +4978,7 @@
     {
       "commands": [],
       "id": "1baeeabcb4212c568777",
-      "line": 231,
+      "line": 253,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4834,7 +4987,7 @@
     {
       "commands": [],
       "id": "906c37f9e90040067ca6",
-      "line": 240,
+      "line": 262,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4843,7 +4996,7 @@
     {
       "commands": [],
       "id": "09f13ede5fd0f1c56fc5",
-      "line": 248,
+      "line": 270,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4852,7 +5005,7 @@
     {
       "commands": [],
       "id": "f09381dc270d8491ba54",
-      "line": 257,
+      "line": 279,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4861,7 +5014,7 @@
     {
       "commands": [],
       "id": "79b50d5775cebe649a3c",
-      "line": 301,
+      "line": 323,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4870,7 +5023,7 @@
     {
       "commands": [],
       "id": "4a71b861e0a2db84e00a",
-      "line": 318,
+      "line": 340,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4879,7 +5032,7 @@
     {
       "commands": [],
       "id": "f7e05efdda640b439da3",
-      "line": 340,
+      "line": 362,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4888,7 +5041,7 @@
     {
       "commands": [],
       "id": "60e895a10ffd9227ebeb",
-      "line": 358,
+      "line": 380,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4897,7 +5050,7 @@
     {
       "commands": [],
       "id": "fb705e0b3f9f6991dad0",
-      "line": 368,
+      "line": 390,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4906,7 +5059,7 @@
     {
       "commands": [],
       "id": "969c90e9eadefc99ef31",
-      "line": 376,
+      "line": 398,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-pd.md",
       "runtime": "no-public-execution-attestation",
@@ -4915,7 +5068,7 @@
     {
       "commands": [],
       "id": "9017ffc4d8f12ee60952",
-      "line": 108,
+      "line": 130,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/existing-profiles-tuning.md",
       "runtime": "no-public-execution-attestation",
@@ -4924,7 +5077,7 @@
     {
       "commands": [],
       "id": "47746142e7d199eb9797",
-      "line": 143,
+      "line": 165,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/failover-tuning.md",
       "runtime": "no-public-execution-attestation",
@@ -4933,7 +5086,7 @@
     {
       "commands": [],
       "id": "07bf411cb7fc9d0f91df",
-      "line": 33,
+      "line": 55,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4942,7 +5095,7 @@
     {
       "commands": [],
       "id": "6363b80d07fe2ca9f435",
-      "line": 49,
+      "line": 71,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4951,7 +5104,7 @@
     {
       "commands": [],
       "id": "ef32c7386157cf79d0e2",
-      "line": 66,
+      "line": 88,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4960,7 +5113,7 @@
     {
       "commands": [],
       "id": "abcb6af9c7a4518365d0",
-      "line": 104,
+      "line": 126,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4969,7 +5122,7 @@
     {
       "commands": [],
       "id": "2d46addecf9335382337",
-      "line": 138,
+      "line": 160,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/launch.md",
       "runtime": "no-public-execution-attestation",
@@ -4978,7 +5131,7 @@
     {
       "commands": [],
       "id": "2d55ea89aab2ec2170d7",
-      "line": 17,
+      "line": 39,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/lifecycle.md",
       "runtime": "no-public-execution-attestation",
@@ -4987,7 +5140,7 @@
     {
       "commands": [],
       "id": "2e89cc7f5697c9c89266",
-      "line": 41,
+      "line": 63,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/lifecycle.md",
       "runtime": "no-public-execution-attestation",
@@ -4996,7 +5149,7 @@
     {
       "commands": [],
       "id": "a5a4b73fcace0eca38d1",
-      "line": 62,
+      "line": 84,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/lifecycle.md",
       "runtime": "no-public-execution-attestation",
@@ -5005,7 +5158,7 @@
     {
       "commands": [],
       "id": "e2865cca3f096702313e",
-      "line": 74,
+      "line": 96,
       "operations": [
         "GET /config/loadbalancer/all",
         "POST /config/loadbalancer"
@@ -5017,7 +5170,7 @@
     {
       "commands": [],
       "id": "480d58e3c600869407bb",
-      "line": 104,
+      "line": 126,
       "operations": [
         "DELETE /config/loadbalancer/hosturl/{hosturl}/externalipaddress/{ip_address}/port/{port}/protocol/{proto}",
         "GET /config/loadbalancer/all",
@@ -5030,7 +5183,7 @@
     {
       "commands": [],
       "id": "561db0fa1ad061207505",
-      "line": 126,
+      "line": 148,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/lifecycle.md",
       "runtime": "no-public-execution-attestation",
@@ -5039,7 +5192,7 @@
     {
       "commands": [],
       "id": "c2265ba9abe6baee74b3",
-      "line": 155,
+      "line": 177,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/lifecycle.md",
       "runtime": "no-public-execution-attestation",
@@ -5048,7 +5201,7 @@
     {
       "commands": [],
       "id": "3e3d97295b52ed635bf8",
-      "line": 18,
+      "line": 40,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/prepare.md",
       "runtime": "no-public-execution-attestation",
@@ -5057,7 +5210,7 @@
     {
       "commands": [],
       "id": "5c36ef3c1fc721a7aa02",
-      "line": 46,
+      "line": 68,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/prepare.md",
       "runtime": "no-public-execution-attestation",
@@ -5066,7 +5219,7 @@
     {
       "commands": [],
       "id": "4001a24f8e69e6bbcb3b",
-      "line": 67,
+      "line": 89,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/prepare.md",
       "runtime": "no-public-execution-attestation",
@@ -5075,7 +5228,7 @@
     {
       "commands": [],
       "id": "494f0a4f3ecfc0a35286",
-      "line": 84,
+      "line": 106,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/prepare.md",
       "runtime": "no-public-execution-attestation",
@@ -5084,7 +5237,7 @@
     {
       "commands": [],
       "id": "0ea32bf933a22c215145",
-      "line": 148,
+      "line": 170,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/profiles.md",
       "runtime": "no-public-execution-attestation",
@@ -5093,7 +5246,7 @@
     {
       "commands": [],
       "id": "dbd9ea7d89a00d79d306",
-      "line": 168,
+      "line": 190,
       "operations": [
         "GET /config/ai/model-profiles"
       ],
@@ -5104,7 +5257,7 @@
     {
       "commands": [],
       "id": "74c55b15a66e7565669b",
-      "line": 188,
+      "line": 210,
       "operations": [
         "GET /config/ai/model-profiles/{profile_id}"
       ],
@@ -5115,7 +5268,7 @@
     {
       "commands": [],
       "id": "0e1eea3b9b36961c40fb",
-      "line": 88,
+      "line": 110,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/select.md",
       "runtime": "no-public-execution-attestation",
@@ -5124,7 +5277,7 @@
     {
       "commands": [],
       "id": "3f97ec1f67cb59090ba6",
-      "line": 109,
+      "line": 131,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/select.md",
       "runtime": "no-public-execution-attestation",
@@ -5133,7 +5286,7 @@
     {
       "commands": [],
       "id": "a1c6e9ca6d14c900ff04",
-      "line": 146,
+      "line": 168,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/select.md",
       "runtime": "no-public-execution-attestation",
@@ -5142,7 +5295,7 @@
     {
       "commands": [],
       "id": "f77e31bb0921230b98c0",
-      "line": 159,
+      "line": 181,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/select.md",
       "runtime": "no-public-execution-attestation",
@@ -5151,7 +5304,7 @@
     {
       "commands": [],
       "id": "5d7e5e410e203da62d39",
-      "line": 175,
+      "line": 197,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/select.md",
       "runtime": "no-public-execution-attestation",
@@ -5160,7 +5313,7 @@
     {
       "commands": [],
       "id": "69441166e84dab276e99",
-      "line": 12,
+      "line": 34,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/verify.md",
       "runtime": "no-public-execution-attestation",
@@ -5169,7 +5322,7 @@
     {
       "commands": [],
       "id": "eb0fab615dbeeeef61be",
-      "line": 33,
+      "line": 55,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/verify.md",
       "runtime": "no-public-execution-attestation",
@@ -5178,7 +5331,7 @@
     {
       "commands": [],
       "id": "004a29aa7e9385989eea",
-      "line": 77,
+      "line": 99,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/verify.md",
       "runtime": "no-public-execution-attestation",
@@ -5187,7 +5340,7 @@
     {
       "commands": [],
       "id": "72f8244658d77028a275",
-      "line": 87,
+      "line": 109,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/verify.md",
       "runtime": "no-public-execution-attestation",
@@ -5196,7 +5349,7 @@
     {
       "commands": [],
       "id": "53ee9508d18900d0f5e2",
-      "line": 98,
+      "line": 120,
       "operations": [
         "GET /metrics",
         "POST /config/metrics"
@@ -5208,7 +5361,7 @@
     {
       "commands": [],
       "id": "3335b4e80b420381e301",
-      "line": 123,
+      "line": 145,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/verify.md",
       "runtime": "no-public-execution-attestation",
@@ -5217,7 +5370,7 @@
     {
       "commands": [],
       "id": "c474559a1bf76a625e9f",
-      "line": 137,
+      "line": 159,
       "operations": [],
       "path": "docs/use-cases/model-engine-standard/verify.md",
       "runtime": "no-public-execution-attestation",
@@ -5226,7 +5379,7 @@
     {
       "commands": [],
       "id": "b8ba8114020bc85e5c40",
-      "line": 156,
+      "line": 178,
       "operations": [
         "GET /config/loadbalancer/all",
         "POST /config/loadbalancer"
@@ -5238,7 +5391,7 @@
     {
       "commands": [],
       "id": "e73e5a47115cf883860d",
-      "line": 27,
+      "line": 49,
       "operations": [],
       "path": "docs/use-cases/performance-methodology.md",
       "runtime": "no-public-execution-attestation",
@@ -5247,7 +5400,7 @@
     {
       "commands": [],
       "id": "724be9c53f512e4cbff0",
-      "line": 64,
+      "line": 86,
       "operations": [],
       "path": "docs/use-cases/performance-methodology.md",
       "runtime": "no-public-execution-attestation",
@@ -5256,7 +5409,7 @@
     {
       "commands": [],
       "id": "9b31aba3e03816b398aa",
-      "line": 96,
+      "line": 118,
       "operations": [],
       "path": "docs/use-cases/performance-methodology.md",
       "runtime": "no-public-execution-attestation",
@@ -5265,7 +5418,7 @@
     {
       "commands": [],
       "id": "61baabd68b2a8f3e2cac",
-      "line": 169,
+      "line": 191,
       "operations": [],
       "path": "docs/use-cases/routing-hierarchy.md",
       "runtime": "no-public-execution-attestation",
@@ -5274,7 +5427,7 @@
     {
       "commands": [],
       "id": "f985c8b91d17047ab187",
-      "line": 190,
+      "line": 212,
       "operations": [],
       "path": "docs/use-cases/routing-hierarchy.md",
       "runtime": "no-public-execution-attestation",
@@ -5283,7 +5436,7 @@
     {
       "commands": [],
       "id": "d921e243215e444a584c",
-      "line": 204,
+      "line": 226,
       "operations": [],
       "path": "docs/use-cases/routing-hierarchy.md",
       "runtime": "no-public-execution-attestation",
@@ -5291,365 +5444,2093 @@
     },
     {
       "commands": [],
-      "id": "c1be9768dddb86cbbf8b",
-      "line": 236,
+      "id": "1cc564411d06cf74340a",
+      "line": 258,
       "operations": [],
       "path": "docs/use-cases/routing-hierarchy.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "bd7b0b1065b934476d36e457aec96cf2c94b03d5ab5e51d4bb1250f0f533970d"
+      "sha256": "58fd4b83de357e0c7d546a75aa1be9061997e9bb7a42c9bbd638cc1c6a53ee29"
     },
     {
       "commands": [],
-      "id": "ebaf11d0e6586e8905a4",
-      "line": 14,
+      "id": "b4127a583405312fc8e3",
+      "line": 40,
       "operations": [],
       "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "db511a6ce1664eebe655cb83efd06f69f96841f4c25e7d34085ed58e43b8b47d"
+      "sha256": "816fbffdb61b3084b1cdeb25bce7b74146a4743dc811b3e5aeea2071fb90e514"
     },
     {
       "commands": [],
-      "id": "e169c361e7092c8f2543",
-      "line": 355,
+      "id": "2e34bca177a7e26304d4",
+      "line": 63,
       "operations": [],
       "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "9a0cc559d6a92e42233280354121074c3913a1f68de94da83a1e59838ae61e2d"
+      "sha256": "64aacd702d14c196722fd12444906e1a123cb9accc73ecda069a4a0f60736dca"
     },
     {
       "commands": [],
-      "id": "87f20fc927bb1abbde93",
-      "line": 12,
+      "id": "ae53a36da372a3fbfdb4",
+      "line": 92,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "ceb5cb82b10928224b68acbc7a3ca957d8e486f4c6ff445d8665f7ac12c07e75"
+      "sha256": "4bf02d1cca10c97fb8bbdb88b55efad1cb6d94e4a00bf37c077d2fae11f8bddc"
     },
     {
       "commands": [],
-      "id": "78ebf1a208cc53b45c7a",
-      "line": 96,
+      "id": "e34e554e06662ea45c42",
+      "line": 121,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "43cdff33c720650e719385aacf9116b76c19ab5435b8a0c995a19381b6cf4590"
+      "sha256": "19239ea8db6066e44448c155a766ad0be66211b6316887e635e0851e8cb5aac5"
     },
     {
       "commands": [],
-      "id": "4e53dc53cbeeae6ccff3",
-      "line": 127,
+      "id": "0da37ffb60bdd66f6756",
+      "line": 148,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "c8144321f7ba92f1315afc3fd91274aad0ec900a9f7047c33a1664e26a58a3f7"
+      "sha256": "afc09597dcb4537e7f20fc029518f6b9e029c18db40bc7c82bd6048b4ae6fb4a"
     },
     {
       "commands": [],
-      "id": "bad569b569e03ac6612c",
-      "line": 12,
+      "id": "0512ced7642e2d20325a",
+      "line": 177,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/identity.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "e3ba0108658dd9c2cadaee3fcae72c2dda542507d1dd6efafeb7b769d7bef1cb"
+      "sha256": "890787483a74be7ae9f4d7f6cd30a504a485d88a28a3c83ae067e89f66fb6ed1"
     },
     {
       "commands": [],
-      "id": "c73735ba7e5800886b34",
-      "line": 52,
+      "id": "90e13c71d32572fdb7a6",
+      "line": 206,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/identity.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "6173cb0ea51a40a5f1efa3362d310a15c57b33e3771928be00b1125eef49c213"
+      "sha256": "7f87e17144eda785809dde08bc802bbb48b392ffd4e89d95461d8ea9d95e5184"
     },
     {
       "commands": [],
-      "id": "6a8ed3da94a377b7f0c1",
-      "line": 83,
+      "id": "e2a1d623e59f1710ca22",
+      "line": 234,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/identity.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "16ff0d5a9101f58d244d442edaa8d6026effc75f0fa1b869b762a7df01451899"
+      "sha256": "459caf7da35252fd233644d4f4dd8bd351e76eae2951f565c45db9c00fb5bab7"
     },
     {
       "commands": [],
-      "id": "b2c85f7e51ab5b09085e",
-      "line": 117,
+      "id": "7ab32f5f8117b3a6146f",
+      "line": 256,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/identity.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "cefa6d73a90401fb4cfaadb8394a3a4a20139dbf30bdc0b6db25083ac4a3c82d"
+      "sha256": "3f21579520e9b5972e01443b3313bfac6d298a97990ec93be3df516cb20152fe"
     },
     {
       "commands": [],
-      "id": "ac5102962b67708b5403",
-      "line": 151,
+      "id": "da2b255abcb03f0a0f96",
+      "line": 284,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/identity.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "6135843c8e30fe3eac49a01bb45881fdf55f441648682cae60fcb5288b3cebc0"
+      "sha256": "14624474ff6222763b9328b154fca221936406b9b5404d27f6d8d928cf48723d"
     },
     {
       "commands": [],
-      "id": "6516ca71d5fdf800cdce",
-      "line": 180,
+      "id": "a3a9c4eb934c850a82a9",
+      "line": 314,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/identity.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "e9254cfb0b78541f8ed58e517c5e14d121dbde21e90a7be5bb7c5a79b1864c3b"
+      "sha256": "9fd2b962f18be65cbef025e79550d33c5ee8d01ab55a6c8a9e7d239763203c44"
     },
     {
       "commands": [],
-      "id": "7318f8ceb4a564c51294",
-      "line": 214,
+      "id": "fa08a67100879c4d08b9",
+      "line": 339,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/identity.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "eb3f4ead2aaf46794b1a774455e7360bd68c298314f7a9505bbec54fbba7a8ff"
+      "sha256": "07260f98a74090fbb82036c14468f8538ec629fc81ce0965d042ac4c7d387616"
     },
     {
       "commands": [],
-      "id": "f0f42055259f65e534e0",
-      "line": 248,
+      "id": "c1bda306099f70f8bf9f",
+      "line": 369,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/identity.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "61fea8335b4ee8a6da709b824f315dc86e7dabc5065a6cedd93edf90054eb8b9"
+      "sha256": "92534b54814d7ca66fff9c56d4b640cb0132365821b1102e615b02c65b34e776"
     },
     {
       "commands": [],
-      "id": "1ad2727af2a200d7ba6f",
-      "line": 426,
+      "id": "86ad22ff065a95930470",
+      "line": 399,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/identity.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "d2c475318650a7fc072eeec1b215af2c6fd0c1b7ee2f9f9f815c0aa2ffcd1e45"
+      "sha256": "3cb0c09fba552653a939472d3cc86ced24d0672906541372a2499985d97f6469"
     },
     {
       "commands": [],
-      "id": "cf8a06bbba04b6a0fb3d",
-      "line": 560,
+      "id": "911298f55e253836d86f",
+      "line": 430,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/identity.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "707b0dc6ee2eaf5b8854def462e360b91895ba0ecfb80a91a753e850621bc621"
+      "sha256": "08e6e465c7b02fbfa3643d72e6ad07bdfc1b16ec9a060a74ac17d3cb6e0c8386"
     },
     {
       "commands": [],
-      "id": "d3189a44f778154fea3d",
-      "line": 623,
+      "id": "237e728fa868aa3af73d",
+      "line": 460,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/identity.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "2873cc0c8ed25ec0b0d8790162e49308ab041f6ca4230be0e727564b6f7971f7"
+      "sha256": "12a7e5f507eeb2c3b3d68a3dc46e6619a689ba6d228e8d595a44c2b9fb0ed3dd"
     },
     {
       "commands": [],
-      "id": "09498705679b2f4d261d",
-      "line": 14,
+      "id": "349e52db54bc54755ad3",
+      "line": 488,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/networks.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "37d98bbd0419912f1b98948a385f08123f90d32ef3a2cad7bc195fd89306029c"
+      "sha256": "5aeeb26aedd60e0bae96334e225858ca5e5ab9d95be69a5fc5136aaf36c0e1ad"
     },
     {
       "commands": [],
-      "id": "e3946dfa6b85e8d7c4b2",
-      "line": 266,
+      "id": "f814d40dbfd14c21b3ec",
+      "line": 510,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/networks.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "a017bcd1d04d55dfdd2e1b75b27c5a4e5770a11e16f4b9d271db592426d30a18"
+      "sha256": "cd32bee88ae82eca69ed38e77657a2190e48108ae210fe483af31ecc417efed4"
     },
     {
       "commands": [],
-      "id": "60270e0e0186c019ed43",
-      "line": 315,
+      "id": "219665dc8a7fd988949a",
+      "line": 539,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/networks.md",
+      "path": "docs/use-cases/shared-inference/capacity.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "4f079eec7e8d9bc11b4e642bd6a65cc981765e11d072d2276a8717f793f46403"
+      "sha256": "c59bc73f1e4f6c937255954c78f0ea69a5e29c7b4e6e7f3e12c555ef5255873e"
     },
     {
       "commands": [],
-      "id": "e9e4846c4c059115cb09",
-      "line": 527,
-      "operations": [],
-      "path": "docs/use-cases/shared-inference/networks.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "010069cf869d530d410b67b25b8c5634ce840fa474e36124111ab802523add7a"
-    },
-    {
-      "commands": [],
-      "id": "fde5b930f32ad641060e",
-      "line": 691,
-      "operations": [],
-      "path": "docs/use-cases/shared-inference/networks.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "933e3aa37da88d1115672da378ed9da1e5cda208a52be2057b5e105bb02fa891"
-    },
-    {
-      "commands": [],
-      "id": "47b74fb7ed71ea5773c4",
-      "line": 14,
-      "operations": [],
-      "path": "docs/use-cases/shared-inference/overload.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "b0d6f491f7b1030e200ffa75481e7c15589bd2dabcae046bcf1dc5b50afaa758"
-    },
-    {
-      "commands": [],
-      "id": "6829f2658d64716eacb0",
-      "line": 329,
-      "operations": [],
-      "path": "docs/use-cases/shared-inference/overload.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "d89787675af450a2f685f73134099f197d2c1f122b660f7f2f679a4a66da5240"
-    },
-    {
-      "commands": [],
-      "id": "4ad90c03339c0ebdb9c8",
+      "id": "f20b64f4a7b848aec417",
       "line": 568,
       "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ff4d5d0eb1f346518c3130c1236439f6d8179a9494d3a1d61e18d737e4c816dd"
+    },
+    {
+      "commands": [],
+      "id": "7783c644698cea5b85aa",
+      "line": 595,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "5b5d6ea04e36e715700dc1bf92fddf1d50ba191d6a8d2051508cf082e4c629d5"
+    },
+    {
+      "commands": [],
+      "id": "d257c5fc601ec897d912",
+      "line": 624,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "8af700f4ee9c0b805de0326f5b32ff9d7dc0d94c461a1599c241c32775ea5e37"
+    },
+    {
+      "commands": [],
+      "id": "18e6acae8589ca545cbd",
+      "line": 653,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "4e15314837d9246b3d877b3f2e36fc6578bb4ced9e4904ac7091c2376568b65c"
+    },
+    {
+      "commands": [],
+      "id": "dc335da60197cf6f7c4d",
+      "line": 682,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "054acf3ee91b7c3c7cfb7a7a76471759594a403371177e8d0a28142962afcdf6"
+    },
+    {
+      "commands": [],
+      "id": "d37ccfcbd140530561e2",
+      "line": 707,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "2be7aea48ac0952a815434384ba0a0fc331204cb442ada8f8cf6949e89a2d90a"
+    },
+    {
+      "commands": [],
+      "id": "0bc59957db2ae56da657",
+      "line": 736,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "4ed7c632dc40ace81cb6dad93bbfd12dcfe6a87cde3737e3d50cf976bc95f8ca"
+    },
+    {
+      "commands": [],
+      "id": "bef98e2dd67f2ce2cc90",
+      "line": 767,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "836f1a6afb5eca4efd798043e1e112cb0c5a4af3b9bea4b413546d539fea4e1a"
+    },
+    {
+      "commands": [],
+      "id": "abbf0f225001bb22a551",
+      "line": 793,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "8cbfd4feedddcaccdc7387a4ae5a6d3d7a5c63b08edd212fea5b1f730e8679c0"
+    },
+    {
+      "commands": [],
+      "id": "7ccebd557dfab1c3086b",
+      "line": 823,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a21b7f0bfe1cfd5bae9e9c8d82fa03e1ca6c37334a1e7e173a47195121f76608"
+    },
+    {
+      "commands": [],
+      "id": "924bc6531a2e67f593ab",
+      "line": 852,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "6561d56991300aa39dc9a4447b52f10649058bcde215d6ff5a275ff3bdfa5447"
+    },
+    {
+      "commands": [],
+      "id": "2daa33771dab4145b17d",
+      "line": 883,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "88adfa6020f47b05fde44931ac344ea0562325b2936c0917fa8d98528e581ffb"
+    },
+    {
+      "commands": [],
+      "id": "e8ab41c1067b78364d1c",
+      "line": 912,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/capacity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "0764a9f54b303bf15dd8823f3d6195fb0ac51fcc6717f011562dabfff7274c6c"
+    },
+    {
+      "commands": [],
+      "id": "02a7ac3107f98288939b",
+      "line": 38,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "1ad74b99f5a35ef457ecc02b67a8d7406c227924d6db2a8c2b1a9e5bafb4b246"
+    },
+    {
+      "commands": [],
+      "id": "7c694811d0a499e7f53b",
+      "line": 69,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "155239508f4d6d00c71085598122489eb6590254c4e0c954cb91d44ee5128edb"
+    },
+    {
+      "commands": [],
+      "id": "277c95d48dda5e770c27",
+      "line": 100,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "3d18855b054a112a1a728398dc2d09ef6b802448c3c849232f0e34a111daf2a3"
+    },
+    {
+      "commands": [],
+      "id": "7a6ca1a252801ef436a9",
+      "line": 129,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d4ac7e3fb0ab8e467551b9dbccc521f16a8f48c4533666e4d1d23d5c3a33888c"
+    },
+    {
+      "commands": [],
+      "id": "c4a3d8cd5c1a3f6b3aec",
+      "line": 141,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "bc61b0755cd6655b6cff165c7f7a6b14e8cee34f1a73c48e6e5b72ccee1e9072"
+    },
+    {
+      "commands": [],
+      "id": "077c7edbb1f8250553d4",
+      "line": 174,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "2bd351baa743336313096a0f53f74fc2e9fb55927fa085d1890d878f535368a2"
+    },
+    {
+      "commands": [],
+      "id": "e3608593490e58342eeb",
+      "line": 205,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/cleanup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "037e743bf23f5d3b1da37fc87ba24dee2535f5a64f6cfc72f6a25a9d84ed8189"
+    },
+    {
+      "commands": [],
+      "id": "9f13cc8ded6762d3035e",
+      "line": 38,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "df6a85f5a062c1d9deaa188a5b4b912c3896c3bde9451ed59a219cae8286e794"
+    },
+    {
+      "commands": [],
+      "id": "33613f0ae1da68559c8d",
+      "line": 67,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "7062a64dbe451efbea25a94881152542923818bf8a3e070f4d53d1b0b6884046"
+    },
+    {
+      "commands": [],
+      "id": "b40ae0404e95d910f9db",
+      "line": 81,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "f0ca5caf54b44296fdf3b8779c022ebf2900d8e7b6e990f3f2053c10a76e3f37"
+    },
+    {
+      "commands": [],
+      "id": "49f6c9c213500cc36c70",
+      "line": 110,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ee513df59f6068e0f4ce1ca8b853e805ad0abfdb856f2589c33d87fa8b29e3e5"
+    },
+    {
+      "commands": [],
+      "id": "196b63a1dbe05bf9632e",
+      "line": 142,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "da61b6f25df717a1a52497c0e1f4e3e844f76d484ca90b2cd55d5e28069e7f65"
+    },
+    {
+      "commands": [],
+      "id": "70539dd52225a8af7acc",
+      "line": 174,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "9073ce0b1b9d290596165d6cab1a110e92d874b31c2a14c073565859482e86bc"
+    },
+    {
+      "commands": [],
+      "id": "97e7f1c93863d9705271",
+      "line": 201,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e5dc66b8365d45094fef40767bc26a72daacc1de621e5f3715dd5dd151e9085f"
+    },
+    {
+      "commands": [],
+      "id": "f7e12f9f54fbd07ac539",
+      "line": 233,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "6d83a8ce506a5ab5768524577bd9ec8ed635d2fb1ae902ac208b047e07107316"
+    },
+    {
+      "commands": [],
+      "id": "1dc352bf11211f573cad",
+      "line": 269,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d560f9c01d8d568529ab57883bb9bb770f9ff4d112be8306254ca67e6b79c8f6"
+    },
+    {
+      "commands": [],
+      "id": "11dce583143684d2dcb1",
+      "line": 279,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d0e98b4335745aa80aef0c3b62ce2f840ce51071b6160738b944fc90f4c73dfb"
+    },
+    {
+      "commands": [],
+      "id": "0fe8b1b493929130b2f0",
+      "line": 327,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "49cc1b72ab6fce17d124466344feab81974b76bf0f967f93facee1b93a4807b8"
+    },
+    {
+      "commands": [],
+      "id": "992bc61c989359ffa4d6",
+      "line": 347,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "551a0daf6007abc63b234d7c08a2ee0ab4c90fe87e762095745492f7adfcd26a"
+    },
+    {
+      "commands": [],
+      "id": "72589a92971116fd9f90",
+      "line": 377,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "79912736e37685469e8f6453772c412f7be5f338a868deb0fd3ed9998d95add2"
+    },
+    {
+      "commands": [],
+      "id": "f8f3bf80cd17ba2da4fc",
+      "line": 407,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "552528460ad314f08d18a1240b633fcd7efb261a9b71375870cbd40d8d09b842"
+    },
+    {
+      "commands": [],
+      "id": "de000eac048b893a7e6e",
+      "line": 433,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "636f8012e3a321995bf72711d6b764615c15ac9b31f1144ba81c114c81c3fdcf"
+    },
+    {
+      "commands": [],
+      "id": "7c6a0b4996973f688fa6",
+      "line": 456,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "1b6219f264aba8a3134a27fce7cfa0a9ee0aac4855568bbfd86e159aa6ec055a"
+    },
+    {
+      "commands": [],
+      "id": "4bcd0cd2e83407ba731f",
+      "line": 486,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a426a96b46a187c656e3c9d78c90b173fc5b285c3b608c53ed1260e3d2f74b84"
+    },
+    {
+      "commands": [],
+      "id": "ccdda0dddbbd290e5af6",
+      "line": 505,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "82192a798285d3d9a6e81d8813010c9ad18fcaf22b8443d7db3a7a68db61a211"
+    },
+    {
+      "commands": [],
+      "id": "f5df39c6c419c6c71af8",
+      "line": 536,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "4ff69b88633b5c2c99985f9c56169780ae1e724effa914895b390bc36350f7c9"
+    },
+    {
+      "commands": [],
+      "id": "252ac9e492bca97bd1cc",
+      "line": 566,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "8c5ef59a77a050cea8eb6770dca0471173b3a2c8aedef44dcbaabbfb8be5dd91"
+    },
+    {
+      "commands": [],
+      "id": "e2791db3f7343365cd9f",
+      "line": 592,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "1ea189f67b99e5eca5e7115712c29b14d408c0dba21811d759942c6bdd7a78ed"
+    },
+    {
+      "commands": [],
+      "id": "50593677b2bdb383312b",
+      "line": 617,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "457840947b686c9eaa6036cb1f69445c60cb3484ccfa27d98d25e70a17d116a1"
+    },
+    {
+      "commands": [],
+      "id": "72c65dae5c21e2acd1fb",
+      "line": 638,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ca62182c9a811c770d537edfe6902c12130be07a219deb5c085f7ad23911cee4"
+    },
+    {
+      "commands": [],
+      "id": "30963c518d87db2508ea",
+      "line": 669,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "775a7189926400a54208ce9a84be7e5f016114c4a88211981ebaad41d8c84c50"
+    },
+    {
+      "commands": [],
+      "id": "b0a353a7c3f02876c3aa",
+      "line": 683,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "0a4371d6ebe4420da8acb61dfdcc1877724daf778ec157ea58d95c25bee83f15"
+    },
+    {
+      "commands": [],
+      "id": "be20dca7ac5c25ba400a",
+      "line": 704,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "841c2ddf23144f845e9155a6bc77a0dac87c286b3e6ca2dba947cd80e58fd653"
+    },
+    {
+      "commands": [],
+      "id": "83f3655e19f396691614",
+      "line": 735,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "eef11b3f23d0deaead82ae7ad819317ddc878b07b8675ea50e45af7721824bac"
+    },
+    {
+      "commands": [],
+      "id": "abe7b15b7c0e3cddb9c4",
+      "line": 762,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e2b34cdc75f3abb2368967c5e51624bee7470b16db7aabaf354ac5de4f567f2a"
+    },
+    {
+      "commands": [],
+      "id": "03b93093a3e1c92b1330",
+      "line": 791,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "f4058afffc6f48ae2609d4f7721763b6270edd86f4351ada886ced59cd6f9d6d"
+    },
+    {
+      "commands": [],
+      "id": "ac6a54715dc499c21732",
+      "line": 822,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "c4e6239a6d5d193be4500225a1c5dbf438deff41cfd2eda778f26964e36db438"
+    },
+    {
+      "commands": [],
+      "id": "d54d5d5c40b66e9542cd",
+      "line": 852,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "fa632e08ccf135cef2240a7b30c4af3ae55839c4e62d7c6745d9f57e14d7a4f1"
+    },
+    {
+      "commands": [],
+      "id": "53072bd967ad6eaf5009",
+      "line": 877,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "65611b3bc1963670869b73d528a4e87cc22e801e06f4a10f9f570c28509d3b58"
+    },
+    {
+      "commands": [],
+      "id": "010e0068356f8cede292",
+      "line": 904,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/identity.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "0947d9bbc1fa2390de8670c4c8c712e1ffec903864e82494e57544578f5e725a"
+    },
+    {
+      "commands": [],
+      "id": "973f741eb2b91aafcd99",
+      "line": 40,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "298cf5512ff9391c5727ec52ce39b36bf979c6e7eca252396b77d017c9a813ac"
+    },
+    {
+      "commands": [],
+      "id": "917a1bbda954c3e8f06e",
+      "line": 71,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "176742a39b67687b7b2fde0532d659701e4648fc87b553b40ebd0da42d20e7cb"
+    },
+    {
+      "commands": [],
+      "id": "157c07112d8d969d1e60",
+      "line": 99,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "becf752ac4ab1a8fad2c302ed0102fe3862f9d52a65c9added6d5c7e8bb19ac5"
+    },
+    {
+      "commands": [],
+      "id": "ee78ec344125fb71604e",
+      "line": 121,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "f423205c137a250423f5f890e6065761c16a7a234efca8dbce5db02288525979"
+    },
+    {
+      "commands": [],
+      "id": "dd01608ec69f0e2f1efc",
+      "line": 151,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "47d0913a00c4aab53794e922ba2ef33e08b3a7a08b0d137d91d33f77cf8db684"
+    },
+    {
+      "commands": [],
+      "id": "8f03e0bcb16d66e6e769",
+      "line": 182,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "988166ba09c8335cb1fb4e0b29c3ddd1e3b5676dcdeedff6ce6cb3bec6dee4cf"
+    },
+    {
+      "commands": [],
+      "id": "d2bf675ace3cc87eded6",
+      "line": 211,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "783bdd6294097924f9901accf32a080bf7b055d825a9bf6108fe12a30fb1c51a"
+    },
+    {
+      "commands": [],
+      "id": "849ecf20dca8eec810fa",
+      "line": 242,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e561a2ab9169d4e57c326b359198d949ca2ea554d1eace1f18e0203b2d2fbe14"
+    },
+    {
+      "commands": [],
+      "id": "be0e8790850da2855153",
+      "line": 268,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "f2bfd4555bc8587cf6a6768aea55585f1f9287770958c2a3c24b4aeab7a092f5"
+    },
+    {
+      "commands": [],
+      "id": "6a2eec4504b5b8bb97a9",
+      "line": 289,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "fdc08e3b75eff4e76df59c340ceb52bcb368c05dc68cb2fd64f287c47e30c31b"
+    },
+    {
+      "commands": [],
+      "id": "69efb9fc77141645a0ba",
+      "line": 317,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "878b060628ee6262102d4d8f2be33586f76b783d42fd7a235de7d7eaa51440bd"
+    },
+    {
+      "commands": [],
+      "id": "439855b9792f03e6eeb3",
+      "line": 347,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "04afb3f73da940679605c96b51ccc611deeb169d1ca8f591429d2fcb63b88f9e"
+    },
+    {
+      "commands": [],
+      "id": "841d8a00c36b3940b3e6",
+      "line": 371,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "131a79808119c394b6fed47abfb23cadc3060c33ca06da651b0912f624d5f2e4"
+    },
+    {
+      "commands": [],
+      "id": "a2ab7e85ee47692c6c71",
+      "line": 400,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "aec27bcf9a37da5b6dce7e2791f40292bb8040666b5bd51ac824044a95f647e7"
+    },
+    {
+      "commands": [],
+      "id": "67f9fa64291d884b1624",
+      "line": 429,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "6eee06ee7976d25fcdff0a49d47a7e4455dd1990c41e16269f8b06add0e9930f"
+    },
+    {
+      "commands": [],
+      "id": "4339492badfb4ffd3ff2",
+      "line": 445,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "00f79a6f9e968f70830434edbbd3c8dc3269813de8861c42b8d6e7a060b9e0a7"
+    },
+    {
+      "commands": [],
+      "id": "25e4cb6479dde5aa30bf",
+      "line": 476,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "25bb198b41fdbd544df4a7a1de0e68f381828dad1b37efa716ca57476299bb42"
+    },
+    {
+      "commands": [],
+      "id": "0b69b1c8e2470fab80e1",
+      "line": 507,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "dd5463baf9336b1c85fbad8b8d2fea9aac357a3e3fbe732abfdd138f214ccd33"
+    },
+    {
+      "commands": [],
+      "id": "2c78a64345cb92c5ed7b",
+      "line": 538,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ec07b408bfab16e14e33f0df68290d0900140aab134ea909ec4af80cb6a4b1c0"
+    },
+    {
+      "commands": [],
+      "id": "a72d2994eda29a2fa89f",
+      "line": 568,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "291631024dd814c9fa75fb1fa8f239060ccdc939bd7fbaf4f3e40dd8bed8a6fb"
+    },
+    {
+      "commands": [],
+      "id": "138e467d9fcb17ecb146",
+      "line": 594,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "746ec2490fd359ada0531967e8daa78f506b861e8f4f64f21cda47c6e7e1d660"
+    },
+    {
+      "commands": [],
+      "id": "a0b06c44019915221cb2",
+      "line": 617,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "2f617f7db564e95a8e7cebbb1b02cb163828620f0122fe8eba3a75f501568f0b"
+    },
+    {
+      "commands": [],
+      "id": "8eadd40f35041c7aac47",
+      "line": 648,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ff4b565d527fd17104419836b588f0129c1db2a47a99c1600ff50858b2ec71f2"
+    },
+    {
+      "commands": [],
+      "id": "86675908321cdd95ca97",
+      "line": 670,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "dc4c5290844bac358c3dbed543fcb59e9898148da196c22caf5f2abf7a427dfa"
+    },
+    {
+      "commands": [],
+      "id": "d4c543233b8241b31eaa",
+      "line": 701,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "64364ea36cee2a2269e84201b9b6b51d7527a5e5e17139fbf3f8ac6baf3d2722"
+    },
+    {
+      "commands": [],
+      "id": "707c79eef25e03c67f00",
+      "line": 707,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "6b343b4d0e44512691b2e513482351f7b29ae11634e6c1c1e7ee5b6d577b917c"
+    },
+    {
+      "commands": [],
+      "id": "453b3ae02508c52004e1",
+      "line": 723,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d468084cbe0dfd0428acef33c7d09e3f2075f44075e798a72b9d75bc8b8687d4"
+    },
+    {
+      "commands": [],
+      "id": "197bf6b3144419a68bb3",
+      "line": 740,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "40c956d373ae00cde680650607e831fb3e1ba5ad00e1aaaaf4026631d72832c5"
+    },
+    {
+      "commands": [],
+      "id": "d8225854a65200863316",
+      "line": 770,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "4269708e233158a6e2c8a9408801126627b2890fe42472314bb415024a90811d"
+    },
+    {
+      "commands": [],
+      "id": "0fa05c66001ad2ff709e",
+      "line": 801,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "2cb0c68f25a20d5d909f2b1f076c8a5c375f161abc48f877d35a3befeb674277"
+    },
+    {
+      "commands": [],
+      "id": "088f98c5736cb1e9c128",
+      "line": 832,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "fa95e17caa81119912ecd01c32293395fd67a64d3e24770f0d03cfe19eda954b"
+    },
+    {
+      "commands": [],
+      "id": "8867e578fed57c25b08c",
+      "line": 852,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "8205c78a2eb565dac5abcd08a86b37b60fecc064cd0be7c9319555f667cec232"
+    },
+    {
+      "commands": [],
+      "id": "087da84dcb7183a91fa8",
+      "line": 883,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "8ca63362af2fbf7a24e68acb4f52e58d14c6914892dbd066c95884b6ed27eb37"
+    },
+    {
+      "commands": [],
+      "id": "91e7b9031f680ba779be",
+      "line": 909,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "acdecbeef75006df081920791afcf278a1ed9d2bea390507dc970d9f8654ceee"
+    },
+    {
+      "commands": [],
+      "id": "ef13fb31adeea204961d",
+      "line": 932,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "db412e8332c0b5a027f99831af5c4f00c841edf5a2c892c1a0994971b3b996e7"
+    },
+    {
+      "commands": [],
+      "id": "1377df8d2a37e821f41e",
+      "line": 949,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "9abe15052f3dcfa5464c19050bc4ff2cfe703ef450bee28af68527a3f09535a1"
+    },
+    {
+      "commands": [],
+      "id": "91507e012cf333f9e074",
+      "line": 966,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "42138d00384f710d71c39ab2430dba8f6e954a042c652c8e49649092fdf1c500"
+    },
+    {
+      "commands": [],
+      "id": "cd616610465cb1d888da",
+      "line": 996,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "c6f1c5a6a81fd1ccd515396213de8a472d6709e3280a1c05fbb2593f022fb0b6"
+    },
+    {
+      "commands": [],
+      "id": "080d3e3700b2245519b2",
+      "line": 1027,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "dd26f08898dca54d58ab5e69ee0b1dca5b91b9be5922299e3a2daada9f9369b7"
+    },
+    {
+      "commands": [],
+      "id": "1daa01abb75e12d3d6a4",
+      "line": 1058,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "8a5ed3cbed4c0719a41d0868a26fdc0796a3903fc00f17f72c5ee48ace0ad015"
+    },
+    {
+      "commands": [],
+      "id": "9f66b989b686686fa2bf",
+      "line": 1085,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "9014178b13cd13ed1fd0a57ed3aa8993edf9fd4d690405af0bc77a5807a36ba6"
+    },
+    {
+      "commands": [],
+      "id": "41f4db99c38e2441f82c",
+      "line": 1108,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "4d34c77aabdc368fd14e19b141a9e521fd1a1fbaa6af9e678c307d8e9e13ef1a"
+    },
+    {
+      "commands": [],
+      "id": "849228625a2abcbe320b",
+      "line": 1139,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "1ce88cc2853788b521a65d8f33315e733c45de942618fb34d5b0e5d50c652c86"
+    },
+    {
+      "commands": [],
+      "id": "53bd6e6050a0bda993fd",
+      "line": 1165,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/networks.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "56b70433f1b2e1390b3ba75abee884c00e72c7df3bf638384a1e00f66c2448be"
+    },
+    {
+      "commands": [],
+      "id": "c52259304ed1a651ea78",
+      "line": 40,
+      "operations": [],
       "path": "docs/use-cases/shared-inference/overload.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "23e9217f785c5d1446a92105779b72c7ac14b71c20774ddf0087b1bd92d6c976"
+      "sha256": "7c9edbd57bbad39bbd7efce62c08bb1caa120a1b141b5e376b894731fb5897fb"
     },
     {
       "commands": [],
-      "id": "c5806915b6fa7648a4f6",
-      "line": 14,
+      "id": "a7cd69725b60223ac10c",
+      "line": 62,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/recovery.md",
+      "path": "docs/use-cases/shared-inference/overload.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "f40d1a950f4b5f3de9efa000bac263ebd1b22179bc819391de348ae17e52ed09"
+      "sha256": "6e158287b4c5ba0bf546f37ad2b1a870c12592a76df9fdb7dfbd21990fa33d1a"
     },
     {
       "commands": [],
-      "id": "6365ac1581473d1541ea",
-      "line": 77,
+      "id": "946731a11c7e7023b0c3",
+      "line": 91,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/recovery.md",
+      "path": "docs/use-cases/shared-inference/overload.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "31f852496954197807573bf92bc6d6925a2858f7c452393c398a16456a1f4efb"
+      "sha256": "7055990536e9f4257892987296fd97bc80d2ef21549b30aa876fe304d1131c27"
     },
     {
       "commands": [],
-      "id": "e5f6f322f786ea4606b7",
-      "line": 154,
+      "id": "7b08c573f8e65f975236",
+      "line": 120,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/recovery.md",
+      "path": "docs/use-cases/shared-inference/overload.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "7233667ec6b9511522eb53cb3250fc0765b0cbfbbd098391164acc7ac66f7fba"
+      "sha256": "7089627c4c78c08d272050a94ca18bfe8d17ae1c6cf3655577b0f4b4c4388131"
     },
     {
       "commands": [],
-      "id": "52b70f7390d463313fa6",
-      "line": 387,
+      "id": "ea328c899c2c6af754c3",
+      "line": 149,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/recovery.md",
+      "path": "docs/use-cases/shared-inference/overload.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "1e1674c2d5ce7bebcb08070521c1c837ef9c438a36db48aa41f0747963bb33c1"
+      "sha256": "1a691edbb005520f508a6aba3ddc495b048e8f87605f5941ae2b477737e03d49"
     },
     {
       "commands": [],
-      "id": "44cdb78844772ea7ba18",
+      "id": "ee145cd5a9bc180459f5",
+      "line": 178,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "62f809c46707d9539ba05ab919c91c4427da4a98c6ac6b039560f3346654fb74"
+    },
+    {
+      "commands": [],
+      "id": "ed6cb6ecd6bd07e6923e",
+      "line": 205,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "1f6af5b420df4fa28d3e3ade2a7bffd5a9c935aa941281c65560c797a7a62d62"
+    },
+    {
+      "commands": [],
+      "id": "9643b9ba581c45a656e7",
+      "line": 234,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "4a48cc7a814d216a88de5526c295674aa9c4b577facb509fa83d2accd7f01dba"
+    },
+    {
+      "commands": [],
+      "id": "17631e3fd1bb71f77bd9",
+      "line": 260,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "67f153ce1178c506f75715b10f9ffd766647a5a47266e5ed306fea0a795a0ead"
+    },
+    {
+      "commands": [],
+      "id": "a60882f7ee6be53bbf09",
+      "line": 290,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "5852bd45569aef9d02996d1182f1b05e7f63529b81191ced9aa1a10ef6ec0fb7"
+    },
+    {
+      "commands": [],
+      "id": "0b4a1ef59660243c729b",
+      "line": 320,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "8a55dae34e6bcc8eb8fa5d9eb0909cb5c441f2c3f68c75040bf00334e18838ec"
+    },
+    {
+      "commands": [],
+      "id": "304cf0aadbe200343ec2",
+      "line": 341,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "cad00d9b58ec18820289cd733ff2aab82d1e2ec0b958c44c3262e406bafe6fcd"
+    },
+    {
+      "commands": [],
+      "id": "1f66a92392dd7d209142",
+      "line": 370,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "bac909df192075c6e944fffa7960ba684e11ca9b2126798d93a572e26526fc11"
+    },
+    {
+      "commands": [],
+      "id": "e7e1a879e9696257e008",
+      "line": 399,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "9bd0ede97dae6004e5ead61afa80f8b363cd954a0d4609ec6b96a7dc1616af14"
+    },
+    {
+      "commands": [],
+      "id": "f5137f1b08d0d03bf777",
+      "line": 430,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "0cb42c0b6c3c7ee8bf885cf5432a906136e2506bb20111a7841cc780a2f17fa9"
+    },
+    {
+      "commands": [],
+      "id": "77bfd2bd30b2c40ef833",
+      "line": 455,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ff17c901d34fdf1186caad2eaddfd4f2590bfbc7134555a90c8af5a48165eebf"
+    },
+    {
+      "commands": [],
+      "id": "d12431208858828ef40a",
+      "line": 476,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "849429e3e05f47835fb96186329f23f05b01fb33168d73726dac902771d6c39c"
+    },
+    {
+      "commands": [],
+      "id": "b932f214a4d5d6e26f0e",
+      "line": 505,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "39618d461c65f5451b781fabc1a36a5afbde35a0b6bf33d0f133ed95a00061df"
+    },
+    {
+      "commands": [],
+      "id": "c247387fc740c6834e50",
+      "line": 534,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "7d5424e8850190afc1ec27348a0a279deb88a5c18e48c2308b71930d5148f50d"
+    },
+    {
+      "commands": [],
+      "id": "f3695817dc5496633d71",
       "line": 563,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ea9ef74836b7ac0bad3edf0f4d51a750f8e6ac22459e7a5a1321a9a5a3aa2fa6"
+    },
+    {
+      "commands": [],
+      "id": "d51a1949acc8cc202137",
+      "line": 594,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "697c5ee028b6427d68bce28581f431d20bf06053a628920ab21d28dc8565909a"
+    },
+    {
+      "commands": [],
+      "id": "121f05c2b42e2d682a26",
+      "line": 617,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "3b32a45a6e3780b207595ea2bc139c2e53bc190a9545fc59f85704bae6059f9d"
+    },
+    {
+      "commands": [],
+      "id": "b047facbe8371c2ad920",
+      "line": 648,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "12c746bfb51afea54620452144709cdaa434c12ee243dcdb54c08fd716d72656"
+    },
+    {
+      "commands": [],
+      "id": "c2785a0e70136dad1a94",
+      "line": 679,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "1edcbf308f731bf3ac924442a31f5dc6c8b65a5d8908cd8d310f90a3405dbaec"
+    },
+    {
+      "commands": [],
+      "id": "2f1b743bec3634e57212",
+      "line": 709,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e41e8f581b97e88c8fae8db386789587224a4a6917e14c2821df547ac0a36c1c"
+    },
+    {
+      "commands": [],
+      "id": "aa0ead316a8d0d978271",
+      "line": 740,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "160aea0856df8ee1233dc5b5508b1542576775a6796c4220775019d1cfe89cfb"
+    },
+    {
+      "commands": [],
+      "id": "2ae049e1ac2232f7a626",
+      "line": 766,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d9d2c4f23eb3ec71aad66ee590fba4d0169bdf753462eb86baf9caea166d7277"
+    },
+    {
+      "commands": [],
+      "id": "077fd702b10de5b50277",
+      "line": 789,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "fe82bc9bb2352270cfd8eae8ede5b33fb628db9920babbf734e104b2ed68d7c8"
+    },
+    {
+      "commands": [],
+      "id": "126c8095a9d81af589d3",
+      "line": 818,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "0ac86c1723e8d72d24a9d9fb2dd05bf4b4a05e1637f350582cc83000b798c61e"
+    },
+    {
+      "commands": [],
+      "id": "d156bab33541cd6f3842",
+      "line": 847,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "9e1bbcadb233bcb650bdea9d6ae032151597f8cdb4fcb9222e75c34eec25d222"
+    },
+    {
+      "commands": [],
+      "id": "3b77eda0fb4f008955c5",
+      "line": 870,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e1d3ad125a24ba914b4ae01ebbd35233ba562b0d6c4359fc74ee4da459ab7a89"
+    },
+    {
+      "commands": [],
+      "id": "83a1d842a3b840a9825b",
+      "line": 901,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "eed7bf88524f2fe90a25074b8e19f65f444c371dbcc21a3a6149f1dee01c8861"
+    },
+    {
+      "commands": [],
+      "id": "859b2f11913aab9daf5a",
+      "line": 932,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ccb5aed3f547222ffa1db4e37de8f7a54eabe459ecf8b2fbe16c44955076d4cc"
+    },
+    {
+      "commands": [],
+      "id": "c7769a93b2c7960c2d1c",
+      "line": 959,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "027416f25e985f9b5b75bb45de595dfa2cecfc25838590d781a6a260b6afd979"
+    },
+    {
+      "commands": [],
+      "id": "27e68b98a353e46d06e7",
+      "line": 990,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "f65f0c88f04e869aa7309549384d5f9ce10e162b3c5976c96e87ec351196ea30"
+    },
+    {
+      "commands": [],
+      "id": "44e814e3bcabbb0f2e44",
+      "line": 1021,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "2a712b16caeb89caba4100a45449f9df5c856376cc88c31bcbf9ccc01a1fce94"
+    },
+    {
+      "commands": [],
+      "id": "4307c4bfc29501419057",
+      "line": 1046,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/overload.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "4dab4f387d690c530fb2e2f9447363b3ce6a6b6ab7dd4999c591d1c62d0cccc9"
+    },
+    {
+      "commands": [],
+      "id": "87e700499fc8a4f217a4",
+      "line": 40,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "77246f9bcad887fbbdd7fa87c7292d8165396117be7c8b62c13489af63e41101"
+    },
+    {
+      "commands": [],
+      "id": "ce8709a185a75715f833",
+      "line": 64,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "486de62bf34dc1d1ed79d5cadaced258c67ba5a03c1230aa547a778a4542f75d"
+    },
+    {
+      "commands": [],
+      "id": "6737eb10552a5e71c6c8",
+      "line": 93,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "38b995599574b683594216a8503da712b1c48fc02e1d63685fbb3894d082ed8e"
+    },
+    {
+      "commands": [],
+      "id": "ca951433d6f3f1af1bc0",
+      "line": 119,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d21420b49ca60a93ba7f2c0e9a286be8685009b3fd55e7235c21aab408f16170"
+    },
+    {
+      "commands": [],
+      "id": "3940c6a918c69fc1e934",
+      "line": 141,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "bf3c99888c5a9f98481fc455ecf2b23f2ac05e0685e7acd498c2b4760533b6d9"
+    },
+    {
+      "commands": [],
+      "id": "15b6666e6376a07c7e68",
+      "line": 171,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a61d2d02703085732685a1d5e52b328a520b70b0d64df41a32c42efb04350118"
+    },
+    {
+      "commands": [],
+      "id": "1d740606ce88927dd783",
+      "line": 202,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "abd37f23b7117dfeca2c172fbd7bcbd6761779bd7d8476ad732f99f6fed91152"
+    },
+    {
+      "commands": [],
+      "id": "f92b7006d8f44a608f1d",
+      "line": 219,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "de1caf7d6e28fd7f9955d77c1ef121f8e092fd578a275f86676e7bc9e9535f82"
+    },
+    {
+      "commands": [],
+      "id": "8499d4bc7dc7ff0acb31",
+      "line": 250,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ce5fa7cd0e9ee3b7fce48cd28da3bc668729d830c71eb246ba77381aadde6924"
+    },
+    {
+      "commands": [],
+      "id": "14c9c68d100992df83a3",
+      "line": 281,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "528f9cebfd7a0386bb9cd7ee263d8a42e18269295abcec77c4e3c07742754ba9"
+    },
+    {
+      "commands": [],
+      "id": "32e286b3053cd3b7610c",
+      "line": 303,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "56697b32f0fe734a381680fba8e9b559f9b516fbffa902d543f639ce4ad0789f"
+    },
+    {
+      "commands": [],
+      "id": "37b5e0d0cad4a3d0703f",
+      "line": 330,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "54e699dae5a11e5aaf1bf464330ce37e19183a605e460cd895aafd7cfcb18c9e"
+    },
+    {
+      "commands": [],
+      "id": "79b9fbd5d062c4b25286",
+      "line": 350,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "5663c4c90665df14a7d9ea4cb8d2c23c015e0b9395d554f0640795215d9ea17e"
+    },
+    {
+      "commands": [],
+      "id": "b408995cf7ff41d2f7f3",
+      "line": 378,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d90d9c45fe63512b8889c8337184a1c0a65ff40fe7419f3493c71d48e92ac83e"
+    },
+    {
+      "commands": [],
+      "id": "7f22a0d396c387ae7c3d",
+      "line": 409,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "2ebd0edd030ab2ebeb6cd67095233c9a7489aa8ddb6069c97a3648834fb70c9c"
+    },
+    {
+      "commands": [],
+      "id": "5b7fe69fb0f2840a5164",
+      "line": 440,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "5f76753cab945a738e5fe0e2f0bc10aa0012ca17031b1af8dc59ddb195f7a3c3"
+    },
+    {
+      "commands": [],
+      "id": "fc4d92703dcf9a2f6139",
+      "line": 467,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "b6db7d7a55fa79a7db292676ac105fc646fc3504991731f65b6f71e076f4a141"
+    },
+    {
+      "commands": [],
+      "id": "ed684f86d4ad4cd9ba14",
+      "line": 488,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "598e9a5e03972f4d872c5373a12def93d78ef4de5cbc166f097fc0312616a06d"
+    },
+    {
+      "commands": [],
+      "id": "54d66752eb2a377bd8bd",
+      "line": 519,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "3250642b40cc9778dd1ead009c5a7bb53c4ddbea7458a57e852749232bdb0630"
+    },
+    {
+      "commands": [],
+      "id": "b2ec92d621225f960320",
+      "line": 531,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "4d0ea6e665129ac8a89fc79a7c045b4a5b5bffd3e2982e481f1c8836d543ab66"
+    },
+    {
+      "commands": [],
+      "id": "0110ef497266881705ff",
+      "line": 562,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a673865eaae5c6f057213a8880d350b30301a61461f90ea06c090a15b04e3c5b"
+    },
+    {
+      "commands": [],
+      "id": "efd349ad781b8b11e9c9",
+      "line": 588,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "3d1bc2e03214b8d1a42b51bfd38056713a02e9323dbe47713cc047d19cbd0764"
+    },
+    {
+      "commands": [],
+      "id": "f71cbfdfc15882c64ef4",
+      "line": 614,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ea4297acd6d23ec12788ab6220046886c648a46346ee9ea8255514a29a187d88"
+    },
+    {
+      "commands": [],
+      "id": "56c953c9182078d703fc",
+      "line": 644,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "5cbc99a7e9ada0cd83a9069c9462fa1a7742e3f87cea1c340b24c4a3e0227438"
+    },
+    {
+      "commands": [],
+      "id": "6b772910997750d4a034",
+      "line": 666,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "910b516ea00b2cd9126116493b9436d0b009f501440147fa5e1c5a82979d524c"
+    },
+    {
+      "commands": [],
+      "id": "8efb165d3fdd6e66fe63",
+      "line": 697,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "fcee7e1d8bbd56bc4ff6254074676aae8aaad0436f6f07d3bed45402d2b66846"
+    },
+    {
+      "commands": [],
+      "id": "0979a082c813dc2565c7",
+      "line": 728,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/recovery.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "c8ad507b3c7a55a441f6cc612a69d302c26791e0121c9419c787caddd308a25a"
+    },
+    {
+      "commands": [],
+      "id": "2dd64531f623f4563fd6",
+      "line": 754,
       "operations": [
         "GET /metrics"
       ],
       "path": "docs/use-cases/shared-inference/recovery.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "8e02af3eb9a74027e515752a1896a654888650727b6778fd3f7009e124db1c9c"
+      "sha256": "407235e2822593da3dca958ff6d4801bc52bc970197237cbd311b3ece08906f7"
     },
     {
       "commands": [],
-      "id": "143e2f276a5e584f974c",
-      "line": 14,
+      "id": "fd59f57729fb6904bf1c",
+      "line": 40,
       "operations": [],
       "path": "docs/use-cases/shared-inference/scheduling.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "2398075d015d26836a9928fbeaa1892cd68e7b4449b88665b85cc3b8fb5d85a7"
+      "sha256": "fcd9c5e45dc0959c4732d4bcda0f1abcacfa9f31aeacae11848e1658ea7fd85b"
     },
     {
       "commands": [],
-      "id": "2dc86d95066a14fd18cc",
-      "line": 234,
+      "id": "635e1c0d908c8a633bb5",
+      "line": 61,
       "operations": [],
       "path": "docs/use-cases/shared-inference/scheduling.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "a6ce1065202b381a7fc277a2da16005aa5f1932dedf0ea0b535ca992dfaf49b8"
+      "sha256": "a616e1f295521983e319fe95299f8b9184f88d9f0e180e792cfb90dff33c9b87"
     },
     {
       "commands": [],
-      "id": "d016b3c17ca7109c12a7",
-      "line": 490,
+      "id": "7a9c16a132d2e96f744c",
+      "line": 90,
       "operations": [],
       "path": "docs/use-cases/shared-inference/scheduling.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "037a35d99f1708c3a93637348428f211941ee1981563bf624986f5c5e6eae117"
+      "sha256": "912e38e81e42940c43857107c90cdeaf7bfc60cb52ef4e8cc7691c338acfa458"
     },
     {
       "commands": [],
-      "id": "5d219279944089e25b21",
-      "line": 653,
-      "operations": [],
-      "path": "docs/use-cases/shared-inference/scheduling.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "d55e377992bcc6b0a25772b17b0243ba2d9d6429d007927e1c5f24dd74d2cfd7"
-    },
-    {
-      "commands": [],
-      "id": "d4f155366ea16e6c19de",
-      "line": 703,
-      "operations": [],
-      "path": "docs/use-cases/shared-inference/scheduling.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "77f32fa92bd315aa79a88b905f67fbd5a96495797bfb508eedafe273114e4582"
-    },
-    {
-      "commands": [],
-      "id": "6c222728e51ed0c75b69",
-      "line": 25,
-      "operations": [],
-      "path": "docs/use-cases/shared-inference/setup.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "7fd67b149bf0f9befcf695aeada75d84db4d3519d7406ec829ae8041de9bcc33"
-    },
-    {
-      "commands": [],
-      "id": "eb9742894f474a2bef8d",
-      "line": 80,
-      "operations": [],
-      "path": "docs/use-cases/shared-inference/setup.md",
-      "runtime": "no-public-execution-attestation",
-      "sha256": "e8d837b077473094754c3757adc2f8d6fa67e75abc11ceab9f5f82f7e1b7220a"
-    },
-    {
-      "commands": [],
-      "id": "815e8e20367a9f315e92",
+      "id": "4edf424289a41b9e2a01",
       "line": 119,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/setup.md",
+      "path": "docs/use-cases/shared-inference/scheduling.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "ea49cefb55657a6ecd1431a7e847bf6dcf0d245593c31909e2f4a1ebe409c207"
+      "sha256": "56e46db776dae19aa5b7571cc4a4d14b0692439237111728ad0bcbf800cdff42"
     },
     {
       "commands": [],
-      "id": "98d87908d0ea5d83d38c",
-      "line": 181,
+      "id": "9a5600f6bc2bb0927492",
+      "line": 148,
       "operations": [],
-      "path": "docs/use-cases/shared-inference/setup.md",
+      "path": "docs/use-cases/shared-inference/scheduling.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "216382759815ed5594638993c9550757681d403aa00abd9e1a78c9649437b154"
+      "sha256": "e399b801e4a805a5b8f2b7113452f69cf68f49fb86e06b13f930b4f5c6cba120"
     },
     {
       "commands": [],
-      "id": "39137e99731f7538f3e6",
-      "line": 221,
+      "id": "898995313bfc1ea44ef3",
+      "line": 179,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "55df9fec302d0340f3436407294e98d34a776a7090255b706358a2ea7a951216"
+    },
+    {
+      "commands": [],
+      "id": "346c3554a7822a223078",
+      "line": 209,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "8bdbded50ab16a0c113aa7cea8933c1e5693938697fd621591ba69f7d47bffb4"
+    },
+    {
+      "commands": [],
+      "id": "678f0b4fcdb7c297e591",
+      "line": 239,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "41a7693acacd5d74147289ff71cbdaf849ebab14057ac6a97fccde4a33d85276"
+    },
+    {
+      "commands": [],
+      "id": "b5e87499ec3714f3b0a6",
+      "line": 270,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "646f64e9bdc811d6d3d35ee3e3ba53020a4f89523d0c71bd5a2699ada1e5ab7b"
+    },
+    {
+      "commands": [],
+      "id": "01a5632266c6efd259f4",
+      "line": 297,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "8f568cf3229de32f4920325ea6ca43143fad1bbdd9e3e950e922799636f17f8a"
+    },
+    {
+      "commands": [],
+      "id": "a807775b12fb175584b8",
+      "line": 325,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "2b1b760ffa2360f9d9bd25a2058b3742de3b5161a9fde146125ea86006240833"
+    },
+    {
+      "commands": [],
+      "id": "f4f1f47c9a1a85e19a83",
+      "line": 346,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "0b1691d3274254c3cc3fdd299e8ef55edbfde5e037e9d5f3529968046f913e71"
+    },
+    {
+      "commands": [],
+      "id": "ad92212e1b816175410a",
+      "line": 375,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "58761d4bd1f0870d23367716404be53f45c7e00bbfc3a7f4de6a7f41aeeef176"
+    },
+    {
+      "commands": [],
+      "id": "a53098311e6204570a0a",
+      "line": 404,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "1c431bf538872b57fd34689df0c2e954f4b8345e6b811f9893245d3186c2fa5e"
+    },
+    {
+      "commands": [],
+      "id": "061257b00694af79c9f1",
+      "line": 433,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a81855c5d600c07220b339c6fb236eed65a89647c487261d890a63eff8442b65"
+    },
+    {
+      "commands": [],
+      "id": "2a356d85d55343914962",
+      "line": 464,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "5c459ca9d77dbd46239b21b8428f9614a052274febe155c9290655dd37be765c"
+    },
+    {
+      "commands": [],
+      "id": "fcad18f87f1028c38d7b",
+      "line": 487,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e7752fbf8874857a502bcb5efb157ef320bbd53974eb73bc1766f1be68e8c1f0"
+    },
+    {
+      "commands": [],
+      "id": "f4e7229ba4f8632482b1",
+      "line": 516,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "2f600e924ad918bcca57db827560a5646fc90db34aef186772935fceb866c231"
+    },
+    {
+      "commands": [],
+      "id": "3151b8928a26490ffac3",
+      "line": 541,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d4c062292505d2df74894085d2c807542ce59c984315f89677a0529b9f66528f"
+    },
+    {
+      "commands": [],
+      "id": "ff711756c3ce2ddcfbeb",
+      "line": 571,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "51700f3ece0c8fcc04dd65abf18398338d2c31c5b835e7a4867295ce7ab50daa"
+    },
+    {
+      "commands": [],
+      "id": "3dddf6192db3c6186d8a",
+      "line": 602,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "dabfa5ee5b844f23f88099eaa4644df43b9e092e6f20b76cddac15456f44b6d9"
+    },
+    {
+      "commands": [],
+      "id": "8d055110e4496f21f635",
+      "line": 632,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e47c543c6eefc0d3b2e0bf61eb2dc44daafd546225f59219dd621d8c9c5ea25a"
+    },
+    {
+      "commands": [],
+      "id": "a10ca7bc60c33836abe5",
+      "line": 660,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a2808cbbbb1d97605990ceaac14941afe4fe847392e4fd498a7b3351bb9aee37"
+    },
+    {
+      "commands": [],
+      "id": "cbf737a2aa5403c61b28",
+      "line": 690,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "63f1bcf8587da70aaf63c28b3b1be3f5a2aadc7bb7fb3ca1fb5174999e19c25e"
+    },
+    {
+      "commands": [],
+      "id": "0f497be5d0861773affd",
+      "line": 719,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "69fd02750fcb8fa3adb5540565bb6da6a628ae6c45a945adb8b83be901c826f0"
+    },
+    {
+      "commands": [],
+      "id": "6ee5d1ee3b9cf9094240",
+      "line": 738,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "42790fa0dc71c7eec68a3c71e8ca520c2935f89d51bb65cc36ce938560995710"
+    },
+    {
+      "commands": [],
+      "id": "c9b7c982a29b934cfbcd",
+      "line": 771,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d3eb472afcb9e6c9ba51769b8d2994a7ab8e3e01e3adfb60eaa3b8421045caae"
+    },
+    {
+      "commands": [],
+      "id": "442f6b03f2b6452a9348",
+      "line": 797,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "4c2fa7deba3765db948695a706345c65c67ab0d10fef1048860cdbf109637daa"
+    },
+    {
+      "commands": [],
+      "id": "794c98d225f926f1dd59",
+      "line": 828,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "45777ef4edad59063fdda57ce34eda3a5e53a2f6525c257b6fa9ec6a17019441"
+    },
+    {
+      "commands": [],
+      "id": "b62ebf070d2e2361220e",
+      "line": 849,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "d216da42f127555948b42db456dfd32357e6669a66977fecfa9465449f4238cd"
+    },
+    {
+      "commands": [],
+      "id": "8a4340b4806028cf4b30",
+      "line": 873,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "3b2d0c3b2b0b55e8f453de6ce1c264ef329639db1dfbe7abbfec09c948316b70"
+    },
+    {
+      "commands": [],
+      "id": "6d826d9fdb112bac2201",
+      "line": 895,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a5f42727c391506c107d9d979cad91d397600642614a0508b95634ec94f04a28"
+    },
+    {
+      "commands": [],
+      "id": "0ae6865415bbd02ddcc1",
+      "line": 925,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "922b778023894bb29b48649d6a18359a4674216ae016b5909b1a08bae58fc6c2"
+    },
+    {
+      "commands": [],
+      "id": "0d05230b75764b64371f",
+      "line": 939,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "75034079aaf46cce7cb0d32daccd37400dc119f63c3ea6c9ce2a6823855c0183"
+    },
+    {
+      "commands": [],
+      "id": "277a09e769e1aabe32bf",
+      "line": 970,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "496b6654ceec7001b11c7a0cd7b8f5d0702cff5f07f70391e6fde8b75c7d9096"
+    },
+    {
+      "commands": [],
+      "id": "f3ef6c00f6842c0eeaf7",
+      "line": 991,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "1e3212f27c037f1a555a03aa649ed9a7c390045121e24a8f03e3ca86f321ffb3"
+    },
+    {
+      "commands": [],
+      "id": "1e20d8328b130e3ce0f7",
+      "line": 1020,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "a9dc86e90d8365d217786df6c22053c76f96b32e3f15366522a78827bc620cea"
+    },
+    {
+      "commands": [],
+      "id": "6091ff5a20f028d951c7",
+      "line": 1049,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "9e8b74d77d5c19c4da40e03da5a76db97c7c1da71d6a7f5b21b750eb2afc5b1b"
+    },
+    {
+      "commands": [],
+      "id": "e3aceed7827293ca6e12",
+      "line": 1076,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "5dd64d9d786d7f369d294da2b0b66dac16de4a2dadeb16e40bfa2aef2a162c24"
+    },
+    {
+      "commands": [],
+      "id": "c7397d794a3e752ab02d",
+      "line": 1106,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "5812bf7cd961fdf5c0420b1e3adbd70ccb9f45bbe288d43240f238f8215d44be"
+    },
+    {
+      "commands": [],
+      "id": "9ce18d1cdaf83392911a",
+      "line": 1136,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "aa273e008fbaa481968eef2143f2f39e8f230a09b8bf924aa87ca3011ff41add"
+    },
+    {
+      "commands": [],
+      "id": "1877e82c405e4982148c",
+      "line": 1167,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/scheduling.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "14ae1d6de34a2948cb7edf58fc879e464fb22bcdea876e147426eed76d514b9e"
+    },
+    {
+      "commands": [],
+      "id": "75d6babecad52e7ab446",
+      "line": 60,
       "operations": [],
       "path": "docs/use-cases/shared-inference/setup.md",
       "runtime": "no-public-execution-attestation",
-      "sha256": "103a97cc31a4657ed6e9179854e379ab6d11d45260726d8f5d35ae9ab197b94a"
+      "sha256": "b698120174fed853310bf9bb648f246454708e025f73f1502ae832a45f4ec5ca"
+    },
+    {
+      "commands": [],
+      "id": "6b71d41b234621dff70e",
+      "line": 91,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/setup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "ccb7704d293342f80f81206c8fe64bff1d0150e1791786e39d5a68c44ec8c4c9"
+    },
+    {
+      "commands": [],
+      "id": "e92a8e40b9b7b69ac195",
+      "line": 120,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/setup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "38668285bd90cd31d9aa4108ee9d0694006d9ee95f26bf9450beab9d7cd129fb"
+    },
+    {
+      "commands": [],
+      "id": "bac6241b157fb8c264de",
+      "line": 161,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/setup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "109937a14a7dd478beed234d2247e6af4b616e14e0f6663a3b13bbe83fbc6f92"
+    },
+    {
+      "commands": [],
+      "id": "271ca0486bd8409475b6",
+      "line": 192,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/setup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "3c7de37a1cebe1fe6ef9cb25edba5df7564fca31efb29abcad3c9e3bc34db066"
+    },
+    {
+      "commands": [],
+      "id": "1054732ec28cccc1d021",
+      "line": 228,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/setup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "fb060e6c9b9067aee6c75c912f62d4b576120dcf96832ae28ac40d25a3351ccb"
+    },
+    {
+      "commands": [],
+      "id": "7aa5eddc670efc85a5c8",
+      "line": 252,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/setup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "2b304bbe4351f5f9cc6f7eb790459d505e2f03cc0f1d89fb9465d5866eaf1370"
+    },
+    {
+      "commands": [],
+      "id": "109a887224338e2d2870",
+      "line": 273,
+      "operations": [],
+      "path": "docs/use-cases/shared-inference/setup.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "2299d941c2a3de1b27c18606fa377e30954a7deeddec44f330321af6c66ae55c"
     },
     {
       "commands": [],
@@ -5999,6 +7880,69 @@
       "path": "snippets/model-engine-standard/select-vllm.md",
       "runtime": "no-public-execution-attestation",
       "sha256": "7938d3dc01f0a18b043fa87ad717c04672c25aa82b55cdf5e4d9133e74c09bde"
+    },
+    {
+      "commands": [],
+      "id": "65ad99dfe3156b6daa17",
+      "line": 2,
+      "operations": [],
+      "path": "snippets/use-cases/topology/admission.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "e0e06bd51b2ce28df9e686996aaa054cc52e7eddc8f90be5287b8e7b4a3a25e8"
+    },
+    {
+      "commands": [],
+      "id": "f9ddc6e5f123a9509114",
+      "line": 2,
+      "operations": [],
+      "path": "snippets/use-cases/topology/converged.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "bb3a51d79fa248d5dff01573505389a2c99fd002bd4894778cbd4d0b940f72ce"
+    },
+    {
+      "commands": [],
+      "id": "f548afc9e25056998a96",
+      "line": 2,
+      "operations": [],
+      "path": "snippets/use-cases/topology/edge.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "234164d9307caf1a2efa09ba7179609385f4f8d7a0dd4441816e802f88cc56c1"
+    },
+    {
+      "commands": [],
+      "id": "a6b92fcd735e24e1c20e",
+      "line": 2,
+      "operations": [],
+      "path": "snippets/use-cases/topology/existing-profiles.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "289bf332b7f1f09e508a17e609c2b778fcef0ed9c8aaba44496a4a350e78bd38"
+    },
+    {
+      "commands": [],
+      "id": "5bebb1ea25a67673bbd7",
+      "line": 2,
+      "operations": [],
+      "path": "snippets/use-cases/topology/llm-reference.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "892ab80ec201f187f6d8089c9b1c09f8b37c75e3faf50f21baf986fc1959db5f"
+    },
+    {
+      "commands": [],
+      "id": "5230c2f6ab0ee0c255b7",
+      "line": 2,
+      "operations": [],
+      "path": "snippets/use-cases/topology/pd.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "88a35febbaed6d510909967f9a5b68fa9f3dacaa17cb1898212963645db5a5f9"
+    },
+    {
+      "commands": [],
+      "id": "544354f12007ee85f8c4",
+      "line": 2,
+      "operations": [],
+      "path": "snippets/use-cases/topology/shared.md",
+      "runtime": "no-public-execution-attestation",
+      "sha256": "88a5a231032a5f9391ea3ac19de59a262f0816c6144a1b850065b8db40a61b5b"
     }
   ],
   "gateway_commit": "ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1",
@@ -6244,7 +8188,7 @@
       "b1ac16407876c036e62f",
       "bfc1f9e0926d3b27ec1e",
       "53ee9508d18900d0f5e2",
-      "44cdb78844772ea7ba18",
+      "2dd64531f623f4563fd6",
       "385e0c453360b9cac26f",
       "d88b41c37bcb3abc465d"
     ],
@@ -6465,7 +8409,7 @@
   "schema_version": 1,
   "scope": "Direct examples are static source mappings; missing examples are not implementation failures. Runtime and release qualification are separate.",
   "summary": {
-    "fences": 614,
+    "fences": 830,
     "operations": 244,
     "operations_with_direct_examples": 53,
     "operations_without_direct_examples": 191

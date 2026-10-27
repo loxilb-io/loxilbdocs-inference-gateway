@@ -6,7 +6,29 @@
 
 [Converged guide overview](matrix-manual.md) · [Next: 2. Prepare Models and Profiles](prepare.md)
 
-## Where commands run
+## Before you start
+
+Begin on the operator host; allocate actual Gateway and worker addresses before copying commands.
+
+**Focus of this page:** Choose one supported model/engine version tuple and one private RUN directory.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/converged.md"
+
+This diagram shows the converged three-worker guide. Choose one engine and one model per run: workers 1/2/3 are replicas of that choice, not vLLM, SGLang and TensorRT-LLM mixed together. Select actual host addresses in the model-selection step; documentation addresses are examples. Each converged worker performs both prefill and decode.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### Where commands run
 
 | Shell | Run here | Local files |
 |---|---|---|
@@ -20,7 +42,7 @@ do not travel between hosts. Run selection below in all four shells, then run
 only the commands assigned to that host. Use individual command blocks and stop
 on any failed check; never continue after a failed download, hash or readiness check.
 
-## Versions and verification scope
+### Versions and verification scope
 
 | Component | Selection in this manual |
 |---|---|
@@ -55,7 +77,7 @@ integrated into the upstream installer. See [catalog and installer alignment](ca
 for staging evidence and outstanding core integration findings. The manual QA
 registry preparation in Step 2 is distinct from the proposed catalog installer path.
 
-## Check prerequisites { #2-check-prerequisites }
+### Check prerequisites { #2-check-prerequisites }
 
 Use a Linux Gateway and three Linux x86_64 GPU workers. The vLLM/SGLang campaign
 used three L4 24 GB workers; supported TRT cases used one L4 and two L40S 48 GB
@@ -77,7 +99,7 @@ Replace addresses in JSON as well as shell variables. Keep official weights,
 tokenizer and chat template unchanged and verify their pinned hashes. See
 [worker preparation](prepare.md) and [management authentication](../../security/management-api-authentication.md).
 
-## Select a model and files { #matrix-model-selection }
+### Select a model and files { #matrix-model-selection }
 
 Download the [configuration ZIP](../../assets/model-engine-standard.zip) through that link and transfer it to each allocated host. In each host's Bash terminal, change to its download directory and extract it into a
 new working directory and verify `SHA256SUMS`. It contains configurations,
@@ -149,7 +171,7 @@ ss -lntp
 df -h "$HOME"
 ```
 
-## Save the selection and resume a terminal
+### Save the selection and resume a terminal
 
 After replacing the documentation addresses, save **on each host**. This file
 contains paths and choices, not credentials. It sources the reviewed package's
@@ -186,3 +208,13 @@ selected mode; update that entry if you later retain another applied mode.
 ---
 
 [Next: 2. Prepare Models and Profiles](prepare.md)
+
+## Check your result
+
+Check access, hardware and BLOCKED cases first; an image download is not a working engine.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

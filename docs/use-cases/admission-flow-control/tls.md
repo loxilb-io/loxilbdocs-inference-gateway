@@ -10,7 +10,29 @@ Configure HTTPS termination, backend verification and two independent client-cer
     The [Quickstart](../../getting-started/quickstart.md) provides the canonical mutation lifecycle.
     Read the [evidence limits](index.md#verification-and-evidence-limits) before recording a result.
 
-## TLS field reference
+## Before you start
+
+Complete identity and prepare the chapter's fresh local PKI.
+
+**Focus of this page:** Secure the client-to-Gateway leg and Gateway-to-backend leg independently.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/admission.md"
+
+These are Linux containers/namespaces on one disposable host. The model names identify synthetic echoes, not loaded GPU models. The baseline listener is VIP 192.0.2.254:2040; TLS, capacity and failure exercises add the explicit listener ports shown in their steps. Keycloak/JWKS and PostgreSQL use inspected Docker-bridge addresses.
+
+| Where | What happens here |
+|---|---|
+| Host operator | Prepare private LAB files, issue credentials and run namespace commands. |
+| l3h1 | Send management calls and client traffic into llb1. |
+| llb1 | Enforce identity, quota and capacity before choosing a backend. |
+| l3ep1 / l3ep2 | Observe independent Llama/Mistral receipt and hold/release fixtures. |
+| kc-aigw / pg-jwtauth | Supply identity and policy state; they are not on the inference response path. |
+
+## Walkthrough
+
+### TLS field reference
 
 | Location / field | Required condition / example | Default and change impact |
 |---|---|---|
@@ -24,7 +46,7 @@ Configure HTTPS termination, backend verification and two independent client-cer
 | `mtls_frontend.client_ca_path` | Required when validating clients here | Container-local PEM path, not the caller's file |
 | `mtls_frontend.require_client_cn`, `client_cn_pattern` | Enable together for name-filter exercise | Disabled otherwise; DNS SAN takes precedence over CN |
 
-## Prerequisites: certificates and observable backends
+### Prerequisites: certificates and observable backends
 
 Complete setup first. Build the upstream public CA/leaf generator; it produces fresh local keys and certificates, not credentials to copy into Git. Never rotate files underneath a running fixture without restarting only that fixture and comparing served/disk fingerprints.
 
@@ -93,7 +115,7 @@ sudo ip netns exec l3ep1 "$LAB/betls-fixture" serve -name dnsonly -port 9448 \
   -receipts "$LAB/receipts/dnsonly.txt"
 ```
 
-## Register CA and backend client identities
+### Register CA and backend client identities
 
 | Registry field | Required / example / default | Meaning |
 |---|---|---|
@@ -123,7 +145,7 @@ sudo ip netns exec l3h1 curl -sS -i "$API/config/cert/$(jq -r .certId "$LAB/back
 sudo ip netns exec l3h1 curl -sS "$API/config/cert/manual-backend-ca" | jq .
 ```
 
-## HTTPS to HTTP: configure, verify, delete and recreate
+### HTTPS to HTTP: configure, verify, delete and recreate
 
 The JSON example sets FullProxy `mode=4`, `security=1`, frontend port 2210 and plain backend 8080. Client `--cacert` verifies the Gateway certificate. Refresh Alice before the chapter; the bootstrap token lifespan is only 300 seconds. Expected positive is 200/receipt 1, missing or expired JWT is 401/receipt 0, and Bob requesting Llama is 403/receipt 0. These are complete HTTP responses after a valid frontend handshake.
 
@@ -206,7 +228,7 @@ cat "$LAB/results/uc03-jwt-missing.body"
 sudo ip netns exec l3ep1 curl -sS "http://127.0.0.1:8080/__receipts/$RUN-uc03-jwt-missing"
 ```
 
-### Complete JWT rejection, recovery and rule lifecycle checks
+#### Complete JWT rejection, recovery and rule lifecycle checks
 
 After the missing-token case above, verify Bob's forbidden Llama request (403),
 then a short-lived expired token (401). Each rejection must have receipt0.
@@ -303,7 +325,7 @@ The delete readback must be[] and the recreated rule must match the original
 input. After a new listener takeover event, repeat the recovered request above
 with a new nonce and require200/receipt1. Keep this rule for the next exercises.
 
-## HTTPS to verified HTTPS
+### HTTPS to verified HTTPS
 
 FullProxy security=2 uses TLS on both legs. Explicitly set
 mtls_backend.verify_server_cert=true and backend_ca_cert_id=manual-backend-ca.
@@ -445,7 +467,7 @@ cat "$LAB/results/uc04-jwt-recovered.body"
 sudo awk -v nonce="$RUN-uc04-jwt-recovered" '$0==nonce {n++} END {print n+0}' "$LAB/receipts/optional.txt"
 ```
 
-## Verify rejection for wrong CA, expiry and IP SAN
+### Verify rejection for wrong CA, expiry and IP SAN
 
 Use separate backend ports: 9445 wrong CA, 9446 expired leaf, 9447 wrong IP SAN. Their foreground serve commands are in the prerequisite section. Set each targetPort on a complete copy of the trusted rule, POST and GET it, then send a new nonce. The expected backend failure is H1 502 / H2 503 `backend_unreachable`, receipt 0. Restore the complete https-https.json and require 200/receipt 1. These checks must keep frontend TLS and JWT valid.
 
@@ -507,7 +529,7 @@ printf 'curl_exit=%s\n' "$?"
 sudo grep -cx "$RUN-wrongip-backend" "$LAB/receipts/wrongip.txt"
 ```
 
-## Verify DNS SAN and SNI, then remove the rule
+### Verify DNS SAN and SNI, then remove the rule
 
 The DNS-only backend on 9448 needs `backend_tls_server_name=backend.manual.test`; this sets SNI and the server identity to verify. Omission verifies the endpoint IP SAN. Host routing is independent. Set the wrong name to require rejection, then restore the original rule. `backend_protocol` is http1 (new-rule default), http2, or both (H2 first with H1 fallback); omission on replace retains it. A client --http2 flag alone proves no protocol negotiation: record VERSION=2.
 
@@ -556,7 +578,7 @@ sudo ip netns exec l3h1 curl -sS "$API/config/loadbalancer/all" | \
   jq '[.lbAttr[] | select(.serviceArguments.port==2211) | {service:.serviceArguments,endpoints:.endpoints}]'
 ```
 
-## Require a frontend client certificate plus JWT
+### Require a frontend client certificate plus JWT
 
 `mtls_frontend.client_cert_mode` is required/optional/disabled (default disabled). `client_ca_path` is inside llb1. Client --cert/--key files live on the host. The complete 2212 rule requires a trusted client certificate and a permitted JWT model role independently; it does not bind their identities together.
 
@@ -611,7 +633,7 @@ sudo ip netns exec l3h1 curl -sS -i --http1.1 --max-time 10 \
   "https://$VIP:2212/v1/chat/completions?nonce=$RUN-frontend-mtls"
 ```
 
-## Present a different client identity to the backend
+### Present a different client identity to the backend
 
 The complete 2213 → 9443 rule adds `backend_client_cert_id=manual-backend-client`. Match body peer=<SHA256> against backend-client.fp, and require receipt 1. GET applied/client_cert confirms installation only. Remove backend_client_cert_id from a full copy to require a complete backend failure response/receipt 0, then restore both-mtls.json and require recovery.
 
@@ -669,7 +691,7 @@ cat "$LAB/pki/backend-client.fp"
 sudo grep -cx "$RUN-both-mtls" "$LAB/receipts/required.txt"
 ```
 
-## Rotate, reject invalid replacement, rollback and cleanup
+### Rotate, reject invalid replacement, rollback and cleanup
 
 PUT the same certificate ID with matching v2 PEM/key, GET metadata and effective generation, then make a fresh connection and compare the backend peer fingerprint with v2. A broken PEM PUT must return 400 and preserve v2 behavior on a new nonce. Restore the original payload by PUT and compare the original fingerprint. CA changes similarly require reject→restore→positive traffic.
 
@@ -725,6 +747,16 @@ sudo ip netns exec l3h1 curl -sS -i "$API/config/cert/manual-backend-client"
 ```
 
 
-## Troubleshooting and cleanup
+### Troubleshooting and cleanup
 
 Use [diagnosis and scoped cleanup](cleanup.md). Restore this chapter's changes before moving to another policy experiment.
+
+## Check your result
+
+A successful frontend handshake does not prove backend mTLS; test wrong issuers and the required peer identity.
+
+Compare API readback with the normal request, the deliberate denial, and an independent backend observation. Check the chapter's exact HTTP code and error body; HTTP 200 alone does not prove quota, identity, queue order, or resource return.
+
+## Next steps and cleanup
+
+Restore the chapter's temporary policy before continuing in the same lab. Keep the original configuration and private evidence; use the final cleanup chapter when the entire lab is finished. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

@@ -8,7 +8,29 @@ It covers vLLM 0.31.0, SGLang 0.5.19 and TRT rc29/PyTorch. This page retains
 The older SGLang/TRT launch procedures have been replaced by the current manual.
 Their archived inputs remain available for evidence comparison.
 
-## Identity and scope
+## Before you start
+
+Use this historical routing evaluation only with its own source, image and model identities.
+
+**Focus of this page:** Compare its original routing arms without substituting newer launch settings.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/llm-reference.md"
+
+This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Reading path and reference
+
+### Identity and scope
 
 | Input | Separate evaluation identity |
 |---|---|
@@ -19,7 +41,7 @@ Their archived inputs remain available for evidence comparison.
 | Evaluated engine | Stock vLLM 0.31.0, three L4 24 GB workers |
 | Archived inputs | SGLang 0.5.18 and TRT 1.3.0rc24; no new runtime PASS inferred |
 
-### What was verified for vLLM 0.31
+#### What was verified for vLLM 0.31
 
 On 2026-10-20 a source-built Gateway at the commit above, in proxy-only mode
 on an isolated container network, was evaluated with three L4 24 GB workers
@@ -50,7 +72,7 @@ serving, **not Exact proof**. Do not assume every non-READY condition is globall
 fail-closed; inspect effective status, reasons and enforcement and require the
 selected mode's traffic evidence.
 
-## Retained files and current setup
+### Retained files and current setup
 
 The [configuration ZIP](../../assets/model-engine-standard.zip) retains the
 `routing-choice/` R1 1.5B bodies, its vLLM 0.31 evaluation manifest and bounded
@@ -63,3 +85,13 @@ for the five standard models. The [profile catalog](profiles.md) and
 [catalog/installer alignment](catalog-installer.md) explain source membership,
 candidate opt-in and pending integration. See [Verification To-do](qualification-todo.md)
 for remaining release, capacity, failure/recovery and archived-example gates.
+
+## Check your result
+
+Keep the historical workload and evidence boundaries; it does not qualify a newer engine or Gateway revision.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

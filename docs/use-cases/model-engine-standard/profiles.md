@@ -7,7 +7,29 @@ RR/Exact evaluation configurations and separately supplied QA profiles. Earlier 
 separate list. A model name, a profile in a source checkout, a supported engine
 row, a published runtime profile and a ready rule answer different questions.
 
-## Which list should I use?
+## Before you start
+
+Keep the selected model snapshot and engine version at hand; no service mutation is required here.
+
+**Focus of this page:** Compare profile identity, block hash contract and registry readiness.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/llm-reference.md"
+
+This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### Which list should I use?
 
 | List or surface | What it tells you | What it does not prove |
 |---|---|---|
@@ -32,7 +54,7 @@ model-engine tuple in the latter catalog is still candidate. An **engine**
 `validated` label must not be used to promote a **model** row. See
 [framework capability versus card verification](results.md#matrix-results).
 
-## Historical card profiles are not public catalog rows
+### Historical card profiles are not public catalog rows
 
 The original cards and the committed catalog were compared by **exact profile ID,
 model repository/revision and engine version**, not by model family name.
@@ -80,7 +102,7 @@ the current guide baseline. Installer positive checks passed for those 13
 candidate tuples, but core version-selector and installer negative gates remain
 open. The proposal is separate from the historical source snapshot below.
 
-## Additional source-catalog profiles
+### Additional source-catalog profiles
 
 The following snapshot was reviewed on **2026-10-20** from the committed
 [Gateway supported-model manifest](https://github.com/loxilb-io/loxilb-inference-gateway/blob/1d51393773e4974b5e356377496c9d677dba9f9c/scripts/models/validated-models.yaml).
@@ -122,7 +144,7 @@ The snapshot omits internal evidence locations and runtime credentials. Always
 recheck the [upstream supported-model page](https://github.com/loxilb-io/loxilb-inference-gateway/blob/main/docs/SUPPORTED-MODELS.md)
 for the exact release you install.
 
-### Read the blocked reasons and mode limits
+#### Read the blocked reasons and mode limits
 
 - `architecture_unsupported`: that pinned engine has no usable model implementation.
 - `hardware_unsupported`: the tested hardware/backend combination is blocked;
@@ -139,7 +161,7 @@ can have different cache groups and block/chunk geometry; copying Qwen's block
 settings is not a registration procedure. llama.cpp has no strict KV-exact rows
 in this catalog and uses its [ordinary integration path](../../ai-gateway/llamacpp-integration.md).
 
-## Inspect the release catalog locally
+### Inspect the release catalog locally
 
 Run these commands **from the approved Gateway source checkout matching your
 installed image**, not from the extracted configuration package:
@@ -159,7 +181,7 @@ and reload are covered by [Prepare a Supported Model](../../getting-started/prep
 The public model-registration tool is the only script dependency in this path;
 there is no new profile-generation script in this package.
 
-## Discover what this Gateway has published
+### Discover what this Gateway has published
 
 On the controller, use `CONTROL_API`, `RUN` and the protected management header
 from [Gateway prerequisites](configure.md#prerequisites):
@@ -201,7 +223,7 @@ the matching generation and unfenced enforcement. Retain `setDigest` and
 `bindingDigest` separately: one identifies the published set, the other the rule's
 binding. Never replay discovery or status JSON as a create body.
 
-## Missing or changed profiles
+### Missing or changed profiles
 
 If a profile is absent, mismatched, blocked or still candidate, keep that state
 visible and stop the supported Exact path. Use a separately qualified RR service
@@ -209,3 +231,13 @@ if appropriate. New model support requires a published profile and engine contra
 verified tokenizer/template/artifacts and the release's qualification/promotion
 process; an operator cannot create support by changing `model_name` in a JSON file.
 Registry upgrades also require rule migration/readiness and chat/SSE rechecks.
+
+## Check your result
+
+Catalog membership, a staged profile and installed readiness are different states; verify each before Exact traffic.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

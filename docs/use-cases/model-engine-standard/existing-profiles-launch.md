@@ -4,7 +4,29 @@
 
 Use this page to bring up **one model and one engine on two allocated workers**, first with round robin (RR), then optionally with KV Exact. Start with the [model results and permitted modes](existing-profiles.md). Run **either** the vLLM **or** the SGLang launch block, never both on the same ports.
 
-## Before you begin {#before-you-begin}
+## Before you start
+
+Choose a profile with an available runtime recipe and a dedicated empty Gateway.
+
+**Focus of this page:** Run the two-worker launch guide on the Gateway host and workers A/B.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/existing-profiles.md"
+
+This is the separate existing-profile campaign: two converged worker hosts, one pre-existing dedicated Gateway, and an independent receipt proxy on each worker. Native inference uses 18300; receipt forwarding uses 18301. These profile settings and recorded identities must not be replaced by the five-model guide's three-worker variables.
+
+| Where | What happens here |
+|---|---|
+| Operator terminal | Select the version tuple, private run directory, model snapshot and profiles. |
+| Gateway host / namespace | Start the dedicated Gateway; apply and read back only the selected service. |
+| Each worker host | Launch the chosen engine and prove direct inference before Gateway traffic. |
+| Client | Send the same request through the Gateway and retain its HTTP/SSE observations. |
+| Independent evidence | Correlate worker requests/receipts with the selected rule and request identifiers. |
+
+## Walkthrough
+
+### Before you begin {#before-you-begin}
 
 | Machine / terminal | Responsibility | Required tools |
 |---|---|---|
@@ -28,9 +50,13 @@ Allocate GPUs matching the [recorded hardware](existing-profiles.md#recorded-har
 
 The examples assume directly reachable Linux host networking on each worker. Prepare the assigned VIP/network through your approved deployment procedure; a JSON rule alone does not prove the client can reach it. Container GPU access, firewall/route reachability, and free ports are prerequisites.
 
-## 1. Verify the package and save local shell settings {#select-and-save}
+### 1. Verify the package and save local shell settings {#select-and-save}
 
 On **each participating machine**, use a new working directory outside any existing extraction. Save the [archive](../../assets/existing-profiles-evaluation.tgz) and [checksum](../../assets/existing-profiles-evaluation.tgz.sha256) there. The following uses a dedicated directory under your home; choose another path consistently if needed. Do not download models or write run outputs inside the immutable package. A Git clone or GitHub source ZIP omits raw results and token probes; use the evaluation archive for every launch and result-verification step. Before this documentation revision is deployed, use the archive/checksum links in the PR Files view instead of the not-yet-published Pages URLs.
+
+**Step 1 — Send the request and save the observation**
+
+Use the namespace/container shown by the command. Keep the response file and HTTP status separate; the next check explains the expected result.
 
 ```bash
 set -e
@@ -57,6 +83,13 @@ export VIP=192.0.2.10
 export WORKER_A=192.0.2.21
 export WORKER_B=192.0.2.22
 export GATEWAY_CONTAINER=existing-profile-gateway
+```
+
+**Step 2 — Send the request and save the observation**
+
+Use the namespace/container shown by the command. Keep the response file and HTTP status separate; the next check explains the expected result.
+
+```bash
 export CURL_CONFIG="$WORK/management.curl"
 if test ! -e "$CURL_CONFIG"; then install -m 600 /dev/null "$CURL_CONFIG"; fi
 case "$ENGINE" in
@@ -91,7 +124,7 @@ printf 'profile=%s engine=%s model=%s output=%s\n' "$PROFILE" "$ENGINE" "$MODEL"
 
 Keep Gateway-host and worker paths local to each machine. Repeat Step 1 there rather than copying an environment file containing another host's paths. To change model/engine later, finish cleanup first and start a new run. Gemma 3 and Llama 3.2 have no runtime recipe and fail the selection gate; do not retry their access during this campaign.
 
-## 2. Prepare model files on both workers {#worker-artifacts}
+### 2. Prepare model files on both workers {#worker-artifacts}
 
 **Workers only; skip on the Gateway host.** Verify free ports 18300/18301/5557, disk headroom, Docker GPU access, and the selected snapshot. Authenticate interactively with HF only if the selected, non-deferred model requires existing authorized access. Do not paste tokens into these commands or logs.
 
@@ -112,7 +145,7 @@ docker run --rm --gpus all --entrypoint nvidia-smi "$ENGINE_IMAGE"
 
 All files must verify, and the diagnostic container must see the allocated GPU. Preserve the exact image reference; if it cannot be obtained, stop and resolve artifact access rather than silently substituting a tag. Allow extraction and runtime headroom beyond the indexed weight/image sizes. Preserve symlink targets if using an existing HF cache.
 
-## 3. Launch the selected native engine {#native-launch}
+### 3. Launch the selected native engine {#native-launch}
 
 Run **one** of the following blocks on **both** workers. `MODEL` is the served repository name; `PROFILE` is registry metadata. Do not start the second engine on the same ports. Each fixed container name must be absent before creation.
 
@@ -182,7 +215,7 @@ jq -e --arg m "$MODEL" 'any(.data[]; .id==$m)' native-models.json || exit 1
 
 Wait for native startup completion before testing. Running is not readiness. A missing model, failed health request, or startup exception stops this procedure; preserve the logs and use the [model-specific failure notes](existing-profiles.md#model-specific-settings-failures-and-limitations).
 
-## 4. Start receipt collectors and check direct answers {#receipt-collectors}
+### 4. Start receipt collectors and check direct answers {#receipt-collectors}
 
 Open a **second terminal on each worker**, restore its `operator.env` and selected settings, and choose that worker's address. Use `WORKER_A` on A and `WORKER_B` on B. This foreground process must remain running while traffic is tested.
 
@@ -211,7 +244,7 @@ sed -n 's/^data: *//p' native-sse.body | sed '/^\[DONE\]\r*$/d' | jq -s   'map(.
 
 Require readable final content, positive prompt/completion usage, normal `stop`, exactly one SSE `[DONE]`, and matching native/client response hashes. The jq/awk checks alone do not prove readable final content or close reasoning. Inspect the printed final answer. R1 requires `</think>` plus a final answer; Qwen/Granite require closure of prefilled reasoning or separated reasoning plus final content. `length`, empty finals, exposed controls, or unclosed reasoning fail even with HTTP200. Preserve failures rather than stripping markers or increasing budgets without a separate controlled test.
 
-## 5. Prepare the Gateway for your routing mode {#gateway-preparation}
+### 5. Prepare the Gateway for your routing mode {#gateway-preparation}
 
 **RR:** skip the entire Exact-artifact subsection and continue to the Gateway readiness checks below. `ENGINE` and `API` were already defined in Step 1. No model-profile discovery or Exact status call is needed for RR.
 
@@ -276,7 +309,7 @@ curl --config "$CURL_CONFIG" --fail-with-body "$API/config/ai/model-profiles" > 
 jq -e --arg p "$PROFILE" --arg m "$MODEL" --arg t "$TOKENIZER_SHA" --arg h "$TEMPLATE_SHA"   'any(.profiles[]; .profileId==$p and .baseModel==$m and .tokenizerSha256==$t and .templateSha256==$h)'   published-profiles.json || exit 1
 ```
 
-## 6. Create one rule and check its effective state {#apply-routing}
+### 6. Create one rule and check its effective state {#apply-routing}
 
 **Gateway shell:** start with `ROUTING=rr`. Exact is a separate run after the RR rule has been deleted and its absence checked. `rules/` contains only permitted modes; a missing file is a stop condition, not a reason to copy another model's rule.
 
@@ -294,7 +327,7 @@ jq -e --arg m "$MODEL" --arg vip "$VIP"   '[.lbAttr[]|select(.serviceArguments.m
 
 Check the selected model, mode, both endpoint addresses/ports, and weights against `rule.json`. RR uses fullproxy `mode:4`, `sel:0`, `pd_disagg_mode:false`, `kvExactMode:0`. Converged Exact uses `kvExactMode:3`, selected `kvModelProfile`, `kvExactApiMode:chat`, `kvBlockSize:16`, and inventory `kvZmqPort:5557`. These geometry settings must match the actual engine; endpoint listener readiness is not model readiness.
 
-### Exact readiness {#exact-ready}
+#### Exact readiness {#exact-ready}
 
 **Exact only; skip for RR:** wait for the correct binding to become READY with no reasons. Retry this read-only check after startup if needed; do not send Exact traffic before it succeeds.
 
@@ -303,7 +336,7 @@ curl --config "$CURL_CONFIG" --fail-with-body   "$API/config/loadbalancer/extern
 jq -e 'any(.kvExactStatusAttr[]; .enforcedState=="READY" and ((.reasonCodes // [])|length)==0)' exact-status.json || exit 1
 ```
 
-## 7. Send traffic and verify worker selection {#verify-routing}
+### 7. Send traffic and verify worker selection {#verify-routing}
 
 Use fresh engines for the packaged repeated-prefix inputs. Warm worker B, then save all six main client responses and each worker's receipt ledger. For Exact, wait for inventory propagation before sending the six requests. Three seconds was used in this campaign; READY plus actual hit/distribution evidence is the success gate, not the sleep alone.
 
@@ -362,7 +395,7 @@ jq -r --arg r "$RID" 'select(.requestId==$r)|.responseSha256' "$RECEIPTS/receipt
 
 The last two digests must match each other and the Gateway host's `main-1.body` digest. Repeat for all six; retain complete receipt folders through your approved private evidence-transfer process. These commands verify your new run, whereas the package's three verifiers validate the **recorded campaign**. They are not interchangeable.
 
-## 8. Verify rejection and new-request path recovery {#reject-recover-cleanup}
+### 8. Verify rejection and new-request path recovery {#reject-recover-cleanup}
 
 **Gateway shell:** an unknown model must return 503 `model_unavailable` with `no backend pool for this model`. Both workers must have zero receipts for its request ID. Invalid converged mode 7 must return 422 without changing effective state.
 
@@ -415,7 +448,7 @@ curl --fail-with-body --max-time 180 -o recovery-4.body -H 'Content-Type: applic
 
 The recovery inputs use two fresh prefixes warmed separately on the two workers. The recorded gate is **2:2**, with all answers normal and receipts complete. Count only `-survivor-` or `-recovery-1` through `-recovery-4` IDs for the corresponding phase; exclude recovery warmups. Do not reuse an old main denominator. Exact recovery must additionally demonstrate the expected affinity/hit behavior. Preserve failures such as Qwen3.8's observed 3:1/1:3 distributions rather than declaring recovery from HTTP200 alone.
 
-## 9. Delete the rule and return owned resources {#cleanup}
+### 9. Delete the rule and return owned resources {#cleanup}
 
 **Gateway shell:** delete only the selected model/VIP/port rule and verify the dedicated Gateway has returned to its original empty rule list.
 
@@ -443,7 +476,7 @@ Expected: no test rule, no test receipt listener, no owned engine container, and
 
 For **RR to Exact**, delete/verify the RR rule first, prepare Exact Gateway bindings, restart fresh native engines if reproducing cold behavior, and repeat Steps 6–9 with `ROUTING=exact` instead of the default `rr`. Use a new run/request-ID prefix. For **P/D**, complete cleanup and follow the [separate topology procedure](existing-profiles-pd.md).
 
-## Troubleshooting and restore {#troubleshooting}
+### Troubleshooting and restore {#troubleshooting}
 
 | Symptom | Check / next action |
 |---|---|
@@ -460,3 +493,13 @@ For **RR to Exact**, delete/verify the RR rule first, prepare Exact Gateway bind
 This isolated procedure rolls back to **empty rules**, not to a prior production service. For an engine-setting rollback, stop the owned container, reload the verified environment, launch a fresh engine, and recheck answers/routing/recovery. Previous process KV state is not restored. Zero-downtime production rollback, long-context/1M inference, and arbitrary concurrency are outside the recorded qualification.
 
 [Back to results](existing-profiles.md) · [Next: optional native P/D](existing-profiles-pd.md) · [Optional: inspect recorded tuning](existing-profiles-tuning.md)
+
+## Check your result
+
+Prove native inference, receipt forwarding and Gateway delivery separately; keep each host's paths and saved operator.env local.
+
+Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.
+
+## Next steps and cleanup
+
+Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the [lab starting point](../model-engine-standard/select.md) if required values are missing. Use [cleanup and recovery](../model-engine-standard/lifecycle.md) when ending the run.

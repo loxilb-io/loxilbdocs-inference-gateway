@@ -2,11 +2,33 @@
 
 Read field scope and effective state before changing a policy. These conventions apply to every chapter in the admission lab.
 
-## Prerequisites
+## Before you start
+
+Complete setup and keep the LAB paths and scoped backups.
+
+**Focus of this page:** Learn request versus readback envelopes and replacement/reset semantics before changing policy.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/admission.md"
+
+These are Linux containers/namespaces on one disposable host. The model names identify synthetic echoes, not loaded GPU models. The baseline listener is VIP 192.0.2.254:2040; TLS, capacity and failure exercises add the explicit listener ports shown in their steps. Keycloak/JWKS and PostgreSQL use inspected Docker-bridge addresses.
+
+| Where | What happens here |
+|---|---|
+| Host operator | Prepare private LAB files, issue credentials and run namespace commands. |
+| l3h1 | Send management calls and client traffic into llb1. |
+| llb1 | Enforce identity, quota and capacity before choosing a backend. |
+| l3ep1 / l3ep2 | Observe independent Llama/Mistral receipt and hold/release fixtures. |
+| kc-aigw / pg-jwtauth | Supply identity and policy state; they are not on the inference response path. |
+
+## Reading path and reference
+
+### Prerequisites
 
 Complete [preparation](setup.md), preserve original configuration and prove the baseline receipt. Each mutation is part of the multi-page lab lifecycle; the [Quickstart](../../getting-started/quickstart.md) is the site's canonical standalone mutation workflow. Commands and expected results are conditional on the selected deployment contract.
 
-## Units and purpose
+### Units and purpose
 
 | Control | Unit | What it bounds | Verification |
 |---|---|---|---|
@@ -25,7 +47,7 @@ Complete [preparation](setup.md), preserve original configuration and prove the 
 
 Do not call all these TPS. Continuous TPM refill is not an RPS burst, GPU memory capacity or a reset at the next minute. A zero usage metric alone proves neither claim return nor a free execution permit. See [byte QoS](../../operations/ai-qos.md) for policy attachment, units and rate measurements; small SSE responses in this lab are insufficient to prove watermark backpressure.
 
-## Common curl and inference fields
+### Common curl and inference fields
 
 | Option / field | Required / example | Meaning and change coupling |
 |---|---|---|
@@ -41,7 +63,7 @@ Do not call all these TPS. Continuous TPM refill is not an RPS burst, GPU memory
 | `X-Test-Nonce`, `nonce` query | Fixture-only unique case identifier | Independent receipt; not a production policy API field |
 | Fixture hold/release/delay/usage options | Scenario-specific | Synthetic backend behavior; never add these to Gateway policy JSON |
 
-## Load-balancer request versus response
+### Load-balancer request versus response
 
 POST /config/loadbalancer accepts `serviceArguments` and `endpoints[]`. Use the complete downloadable JSON for a chapter. GET /config/loadbalancer/all returns `lbAttr[]`.
 
@@ -58,7 +80,7 @@ POST /config/loadbalancer accepts `serviceArguments` and `endpoints[]`. Use the 
 
 `backend_tls_effective` and `fc_effective` are **GET-only observations**, not request fields. Read effective values/source/generation, saved IDs and live inflight/queued. Applied means installation, not handshake success. A stored cert ID is not proof of backend peer identity. Only actual response, nonce receipt and peer fingerprint establish the corresponding runtime behavior.
 
-## Zero, omission, empty arrays and DELETE
+### Zero, omission, empty arrays and DELETE
 
 | Resource | Omission / zero / empty list | Removal and verification |
 |---|---|---|
@@ -73,12 +95,22 @@ POST /config/loadbalancer accepts `serviceArguments` and `endpoints[]`. Use the 
 
 Before editing, retain original **request** payloads as rollback inputs. A GET response can contain read-only fields and must not blindly become a POST. On a partial tenant write failure inspect aggregates and all model rows. Reapply the complete intended state. Deleting a policy row can expose a default, so absence alone does not prove unlimited admission.
 
-## Verification, expected results and cleanup
+### Verification, expected results and cleanup
 
 Each chapter follows pre-change GET→explicit JSON/configure→saved/effective GET→positive and denied requests with independent receipts→resource/accounting evidence→delete or restore→GET and positive recovery. Keep metrics snapshots isolated by tenant/user/model/service and elapsed interval. Capture errors as well as success. A scrape failure, absent receipt server, timeout or unexecuted case is not a zero/PASS.
 
 Rule deletion uses host/VIP/port/protocol **and** path/model query. A final rule can leave a kept socket listener. Before recreating or changing its endpoint, record the matching takeover event count; wait for a new event after POST before fresh traffic. This does not apply to every policy mutation. Refer to [TLS updates](tls-failures.md#verify-endpoint-update-listener-takeover-and-frontend-policy-preservation) and [cleanup](cleanup.md).
 
-## Troubleshooting
+### Troubleshooting
 
 For an unexpected denial read the typed error first, then the exact explicit/default policy and effective capacity state. Separate TLS-before-HTTP refusal from an HTTP401/403/429 and backend TLS502/503. Confirm a fresh credential and a successful baseline before attributing a result to the changed policy.
+
+## Check your result
+
+A GET response is not automatically a valid rollback payload; preserve the original requests.
+
+Compare API readback with the normal request, the deliberate denial, and an independent backend observation. Check the chapter's exact HTTP code and error body; HTTP 200 alone does not prove quota, identity, queue order, or resource return.
+
+## Next steps and cleanup
+
+Restore the chapter's temporary policy before continuing in the same lab. Keep the original configuration and private evidence; use the final cleanup chapter when the entire lab is finished. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.

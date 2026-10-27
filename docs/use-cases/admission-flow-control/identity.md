@@ -10,7 +10,29 @@ Use one public inference endpoint for separate tenant and model permissions. The
     The [Quickstart](../../getting-started/quickstart.md) provides the canonical mutation lifecycle.
     Read the [evidence limits](index.md#verification-and-evidence-limits) before recording a result.
 
-## Prerequisites and profile configuration
+## Before you start
+
+Complete setup and obtain the per-user credentials described below.
+
+**Focus of this page:** Change JWT profile/model permissions while keeping the client-to-backend route fixed.
+
+## Topology and execution locations
+
+--8<-- "snippets/use-cases/topology/admission.md"
+
+These are Linux containers/namespaces on one disposable host. The model names identify synthetic echoes, not loaded GPU models. The baseline listener is VIP 192.0.2.254:2040; TLS, capacity and failure exercises add the explicit listener ports shown in their steps. Keycloak/JWKS and PostgreSQL use inspected Docker-bridge addresses.
+
+| Where | What happens here |
+|---|---|
+| Host operator | Prepare private LAB files, issue credentials and run namespace commands. |
+| l3h1 | Send management calls and client traffic into llb1. |
+| llb1 | Enforce identity, quota and capacity before choosing a backend. |
+| l3ep1 / l3ep2 | Observe independent Llama/Mistral receipt and hold/release fixtures. |
+| kc-aigw / pg-jwtauth | Supply identity and policy state; they are not on the inference response path. |
+
+## Walkthrough
+
+### Prerequisites and profile configuration
 
 Prepare Alice and Bob credentials in [setup](setup.md#issue-a-token). On the fixture realm Alice has tenant-a and model:llama-70b; Bob has tenant-b and model:mistral-7b. Carol deliberately has no tenant. A valid signature alone is insufficient for attributable admission.
 
@@ -76,7 +98,7 @@ sudo ip netns exec l3h1 curl -sS "$API/config/loadbalancer/all" | \
   jq --argjson p "$(jq -r .serviceArguments.port "$LAB/examples/jwt-mistral.json")" '[.lbAttr[] | select(.serviceArguments.port==$p) | {service:.serviceArguments,endpoints:.endpoints}]'
 ```
 
-## Verify positive and denied traffic
+### Verify positive and denied traffic
 
 Expect Alice→Llama 200 with Llama receipt 1 / Mistral 0; Alice→Mistral 403 `model_not_allowed` with both 0; Bob→Mistral 200 with Mistral 1. Missing, malformed, wrong-audience and wrong-issuer tokens return 401 (typed errors `missing_token` or `invalid_token`), receipt 0. Bootstrap ports 2042/2043 isolate audience/issuer mismatch.
 
@@ -120,7 +142,7 @@ sudo ip netns exec l3h1 curl -sS -i --config "$LAB/short.curl" -H 'Content-Type:
   -H "X-Test-Nonce: $RUN-expired" --data-binary @"$LAB/examples/llama-request.json" "http://$VIP:2040/v1/chat/completions"
 ```
 
-## Cleanup: isolated profile and full-key model rules
+### Cleanup: isolated profile and full-key model rules
 
 Use kc-manual and port 2244 for the deletion exercise, preserving bootstrap-owned kc/2040. Repeat the positive and denied requests above against 2244 with new nonces before deletion. A referenced profile DELETE must return 409 and leave it intact. Remove both model full keys, expect the port filter `[]`, then delete the profile and expect its list filter `[]`. Recheck 2040 positive traffic.
 
@@ -154,6 +176,16 @@ sudo ip netns exec l3h1 curl -sS "$API/config/ai/jwtauthprofile" | jq '[.jwtAuth
 ```
 
 
-## Troubleshooting and cleanup
+### Troubleshooting and cleanup
 
 Use [diagnosis and scoped cleanup](cleanup.md). Restore this chapter's changes before moving to another policy experiment.
+
+## Check your result
+
+Pair accepted and forbidden model requests with tenant/user identity and backend receipts.
+
+Compare API readback with the normal request, the deliberate denial, and an independent backend observation. Check the chapter's exact HTTP code and error body; HTTP 200 alone does not prove quota, identity, queue order, or resource return.
+
+## Next steps and cleanup
+
+Restore the chapter's temporary policy before continuing in the same lab. Keep the original configuration and private evidence; use the final cleanup chapter when the entire lab is finished. Read the [lab starting point](setup.md) if required values are missing. Use [cleanup and recovery](cleanup.md) when ending the run.
