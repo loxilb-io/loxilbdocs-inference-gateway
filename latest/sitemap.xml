@@ -544,4 +544,44 @@
          <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/model-engine-standard/verify/</loc>
          <lastmod>2026-10-27</lastmod>
     </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/shared-inference/</loc>
+         <lastmod>2026-10-27</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/shared-inference/capacity/</loc>
+         <lastmod>2026-10-27</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/shared-inference/cleanup/</loc>
+         <lastmod>2026-10-27</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/shared-inference/downloads/</loc>
+         <lastmod>2026-10-27</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/shared-inference/identity/</loc>
+         <lastmod>2026-10-27</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/shared-inference/networks/</loc>
+         <lastmod>2026-10-27</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/shared-inference/overload/</loc>
+         <lastmod>2026-10-27</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/shared-inference/recovery/</loc>
+         <lastmod>2026-10-27</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/shared-inference/scheduling/</loc>
+         <lastmod>2026-10-27</lastmod>
+    </url>
+    <url>
+         <loc>https://loxilb-io.github.io/loxilbdocs-inference-gateway/latest/use-cases/shared-inference/setup/</loc>
+         <lastmod>2026-10-27</lastmod>
+    </url>
 </urlset>
