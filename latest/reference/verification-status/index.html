@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -31,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -4744,11 +4744,11 @@ membership, recorded scenario assertions, and deployment qualification. A
 scenario checked into the repository—or referenced by a workflow—is not by
 itself evidence that its latest run passed.</p>
 <p>The frozen source for this page is Gateway commit
-<code>23e57a226a4803ed91699904453cc1bf147fbefa</code>. Git object IDs for every listed
+<code>ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1</code>. Git object IDs for every listed
 scenario, validation script, and workflow are retained in the docs contract
 fixture and checked for drift.</p>
 <p>The Gateway commit pins eBPF submodule commit
-<code>6b5014f49bf0df6b72f8b0423acf9a81c22e60fb</code>. The comparison release
+<code>f515ab5aeed8e8643f08906d0a90e9a2b893ba8d</code>. The comparison release
 <code>v0.9.8.9-rc.1</code> pins
 <code>5536a2117ad2ad1128900a0d808ad7dec2eee2b5</code>. This records the source delta; it
 does not qualify either eBPF revision on a kernel or installed host.</p>
@@ -4825,35 +4825,35 @@ model evaluations retain their original source and artifact identities.</p>
 <tbody>
 <tr>
 <td>JWT policy and token accounting</td>
-<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/23e57a226a4803ed91699904453cc1bf147fbefa/cicd/ai-jwtauth"><code>cicd/ai-jwtauth</code></a></td>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1/cicd/ai-jwtauth"><code>cicd/ai-jwtauth</code></a></td>
 <td><code>wired</code>: <code>ai-gateway-sanity.yml</code> invokes the scenario</td>
 <td><code>G2</code>, <code>M4</code>, <code>U1</code>, <code>U2</code>, <code>UH1</code>, <code>UH2</code>, <code>UE</code>, <code>UE3</code></td>
 <td>Policy-store behavior and token-accounting assertions only; this set does not directly runtime-assert every JWT/JWKS metric</td>
 </tr>
 <tr>
 <td>QoS HA and quota-scope metrics</td>
-<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/23e57a226a4803ed91699904453cc1bf147fbefa/cicd/ai-qos-ha-sync"><code>cicd/ai-qos-ha-sync</code></a></td>
-<td><code>not wired</code> to a frozen GitHub workflow</td>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1/cicd/ai-qos-ha-sync"><code>cicd/ai-qos-ha-sync</code></a></td>
+<td><code>wired</code>: <code>ha-two-node-nightly.yml</code> invokes the scenario</td>
 <td><code>SYNC-1</code>, <code>SYNC-2</code>, <code>QOS-METRIC-1</code>, <code>QOS-METRIC-2</code>, <code>QOS-HA-013</code>, <code>QOS-HA-014</code></td>
-<td>Scenario source exists; no current public workflow-run or two-node qualification claim</td>
+<td>Source/workflow membership only; no current public workflow-run or two-node qualification claim</td>
 </tr>
 <tr>
 <td>P/D and worker scrape metrics</td>
-<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/23e57a226a4803ed91699904453cc1bf147fbefa/cicd/vllm-pd-disagg"><code>cicd/vllm-pd-disagg</code></a></td>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1/cicd/vllm-pd-disagg"><code>cicd/vllm-pd-disagg</code></a></td>
 <td><code>wired</code>: <code>ai-gateway-sanity.yml</code> invokes the scenario</td>
 <td><code>TH1</code>, <code>TH2</code>, <code>TH3</code>, <code>TH4</code>, <code>TH5a</code>, <code>TM1b</code>, <code>TM2d</code>, <code>TN1</code>, <code>TN2b</code>, <code>TN3b</code>, <code>TN4b</code>, <code>TN5a</code>, <code>TN6b</code></td>
 <td>Source membership only; a current run and real GPU backend are separate evidence</td>
 </tr>
 <tr>
 <td>Sockmap observability</td>
-<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/23e57a226a4803ed91699904453cc1bf147fbefa/cicd/sockmap-fullproxy"><code>cicd/sockmap-fullproxy</code></a></td>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1/cicd/sockmap-fullproxy"><code>cicd/sockmap-fullproxy</code></a></td>
 <td><code>not wired</code> to a frozen GitHub workflow</td>
 <td><code>O-1</code>, <code>O-2</code>, <code>O-3</code>, <code>O-5</code>, <code>O-6</code></td>
 <td>Uses status/counter/reset observations; the manifest has no dedicated sockmap Prometheus family</td>
 </tr>
 <tr>
 <td>Monitoring stack</td>
-<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/23e57a226a4803ed91699904453cc1bf147fbefa/cicd/monitoring"><code>cicd/monitoring</code></a></td>
+<td><a href="https://github.com/loxilb-io/loxilb-inference-gateway/tree/ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1/cicd/monitoring"><code>cicd/monitoring</code></a></td>
 <td><code>wired</code>: <code>monitoring-e2e.yml</code> and <code>monitoring-drill.yml</code> reference the scenario</td>
 <td>Scenario-level validation; no stable public case IDs</td>
 <td>Workflow membership is not a current run result</td>
@@ -4861,7 +4861,7 @@ model evaluations retain their original source and artifact identities.</p>
 </tbody>
 </table>
 <h2 id="metric-evidence-classes">Metric evidence classes<a class="headerlink" href="#metric-evidence-classes" title="Permanent link">&para;</a></h2>
-<p>The generated <a href="../metrics/">metrics reference</a> records all 283 families marked
+<p>The generated <a href="../metrics/">metrics reference</a> records all 292 families marked
 <code>release</code> in the frozen manifest. It distinguishes four upstream evidence
 classes:</p>
 <ul>
@@ -4951,10 +4951,10 @@ contract; a changed declaration must be reviewed before regeneration succeeds.</
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
       
         <script src="../../javascripts/analytics.js"></script>
       

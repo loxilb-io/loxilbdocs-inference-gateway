@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
     
     
       
@@ -31,10 +31,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -4744,8 +4744,8 @@ and <code>api/swagger-extras.yml</code>; a new or removed definition fails the d
 until its public relevance is reviewed here.</p>
 <ul>
 <li>Public schema baseline: <code>47803fb660ed54cd1f180b616db628461ad85d1a</code></li>
-<li>Reviewed Gateway source: <code>23e57a226a4803ed91699904453cc1bf147fbefa</code></li>
-<li>Added definitions: <strong>46</strong></li>
+<li>Reviewed Gateway source: <code>ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1</code></li>
+<li>Added definitions: <strong>47</strong></li>
 <li>Removed definitions: <strong>0</strong></li>
 <li>Evidence class: <strong>source/static contract only</strong></li>
 </ul>
@@ -4770,7 +4770,7 @@ deploy.</p>
 </tr>
 <tr>
 <td><code>nested-component</code></td>
-<td style="text-align: right;">17</td>
+<td style="text-align: right;">18</td>
 <td>Public component nested in another operation model</td>
 </tr>
 <tr>
@@ -4788,7 +4788,7 @@ deploy.</p>
 <p>Field notation is <code>name:type</code>; <code>array&lt;Model&gt;</code> identifies an array of
 referenced objects, and braces identify a closed enum from Swagger.</p>
 <h2 id="apiswaggeryml"><code>api/swagger.yml</code><a class="headerlink" href="#apiswaggeryml" title="Permanent link">&para;</a></h2>
-<p><a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/23e57a226a4803ed91699904453cc1bf147fbefa/api/swagger.yml">Open the exact source</a>. Definition count changed from <strong>147</strong> to <strong>191</strong>; <strong>44</strong> definitions were added and <strong>0</strong> removed.</p>
+<p><a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1/api/swagger.yml">Open the exact source</a>. Definition count changed from <strong>147</strong> to <strong>192</strong>; <strong>45</strong> definitions were added and <strong>0</strong> removed.</p>
 <table>
 <thead>
 <tr>
@@ -5002,6 +5002,14 @@ referenced objects, and braces identify a closed enum from Swagger.</p>
 <td><a href="../../operations/backup-restore/">Details</a></td>
 </tr>
 <tr>
+<td><code>FcBandEffective</code></td>
+<td><code>nested-component</code></td>
+<td>Read-only per-band inflight, queued, wait, queue-share, floor, and weighted-wake observations nested in fc_effective.bands; not a configuration payload.</td>
+<td>none</td>
+<td><code>floor_units:integer(int32)</code>, <code>inflight:integer(int32)</code>, <code>min_share_pct:integer(int32)</code>, <code>queue_pct:integer(int32)</code>, <code>queued:integer(int32)</code>, <code>wait_ms:integer(int32)</code>, <code>weight:integer(int32)</code>, <code>weight_pct:integer(int32)</code></td>
+<td><a href="../../ai-gateway/configuration-reference/">Details</a></td>
+</tr>
+<tr>
 <td><code>FilesystemStatus</code></td>
 <td><code>direct-operation</code></td>
 <td>Formal schema for the existing filesystem-status response.</td>
@@ -5156,7 +5164,7 @@ referenced objects, and braces identify a closed enum from Swagger.</p>
 </tbody>
 </table>
 <h2 id="apiswagger-extrasyml"><code>api/swagger-extras.yml</code><a class="headerlink" href="#apiswagger-extrasyml" title="Permanent link">&para;</a></h2>
-<p><a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/23e57a226a4803ed91699904453cc1bf147fbefa/api/swagger-extras.yml">Open the exact source</a>. Definition count changed from <strong>2</strong> to <strong>4</strong>; <strong>2</strong> definitions were added and <strong>0</strong> removed.</p>
+<p><a href="https://github.com/loxilb-io/loxilb-inference-gateway/blob/ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1/api/swagger-extras.yml">Open the exact source</a>. Definition count changed from <strong>2</strong> to <strong>4</strong>; <strong>2</strong> definitions were added and <strong>0</strong> removed.</p>
 <table>
 <thead>
 <tr>
@@ -5253,10 +5261,10 @@ negative behavior, and release limitations that a schema alone cannot express.</
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tabs.link", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
       
         <script src="../../javascripts/analytics.js"></script>
       
