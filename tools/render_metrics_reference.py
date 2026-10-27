@@ -15,7 +15,7 @@ ACTIVATION = {
     "E": "eager scalar",
     "V": "lazy vector children",
     "P": "pre-created children",
-    "C": "QoS custom collector; sample-lazy",
+    "C": "custom collector; collector-defined samples",
     "H": "eager TTFB histogram",
     "Q": "quota-lazy collector",
     "DP": "datapath-gated scalar",

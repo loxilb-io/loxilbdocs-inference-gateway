@@ -7,17 +7,17 @@ revision. It does **not** prove that every family is present in a particular
 deployment: feature activation, traffic, build tags, hardware, and runtime
 configuration still determine whether a series is emitted.
 
-- Gateway source commit: `23e57a226a4803ed91699904453cc1bf147fbefa`
-- Selected Gateway eBPF submodule commit: `6b5014f49bf0df6b72f8b0423acf9a81c22e60fb`
+- Gateway source commit: `ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1`
+- Selected Gateway eBPF submodule commit: `f515ab5aeed8e8643f08906d0a90e9a2b893ba8d`
 - Comparison release: `v0.9.8.9-rc.1` at `f08b18beda587217265c9ba6419159119914795c`
 - Comparison release eBPF submodule commit: `5536a2117ad2ad1128900a0d808ad7dec2eee2b5`
 - Release manifest availability: **absent**
 - Manifest path: `deploy/monitoring/manifest/metric-manifest.json`
-- Manifest SHA-256: `fece2dc500f072e69d25217f373d382347cc0196f91d6f58bbfd81658c32a78b`
-- Embedded manifest source revision: `ecfc3c12376bad712c61f6781fe13a9e5fc3fd9e`
-- Embedded manifest generation time: `2026-10-21T02:25:08+00:00`
+- Manifest SHA-256: `a4df2fb32afb3024f9e03c6b5b9a65767f0b403cb623d81cb80e27597409e513`
+- Embedded manifest source revision: `82bbeaccc2b78f35149f0637f257f0bba10b83d9`
+- Embedded manifest generation time: `2026-10-26T11:50:00+00:00`
 - Manifest schema version: `1`
-- Release-scope families: **283**
+- Release-scope families: **292**
 - Raw writer paths and evidence prose are intentionally not copied into this public catalog.
 
 The table below is therefore a selected-source catalog, not a claim
@@ -29,10 +29,10 @@ Release packaging and runtime emission require separate qualification.
 
 | Status | Meaning |
 | --- | --- |
-| `verified-runtime` (68) | writer plus recorded runtime evidence in the upstream manifest |
-| `verified-static` (64) | writer verified by static or unit evidence; no runtime claim |
+| `verified-runtime` (70) | writer plus recorded runtime evidence in the upstream manifest |
+| `verified-static` (68) | writer verified by static or unit evidence; no runtime claim |
 | `conditional-with-proven-writer` (74) | writer exists but the family appears only when its feature path is active |
-| `writer-mapped` (77) | writer source is mapped; runtime emission was not verified |
+| `writer-mapped` (80) | writer source is mapped; runtime emission was not verified |
 
 A writer or registration point is source evidence, not deployment evidence.
 `verified-runtime` records upstream runtime evidence for that family, but this
@@ -49,7 +49,7 @@ Combined codes such as `DP+V` require both conditions.
 | `E` | eager scalar |
 | `V` | lazy vector children |
 | `P` | pre-created children |
-| `C` | QoS custom collector; sample-lazy |
+| `C` | custom collector; collector-defined samples |
 | `H` | eager TTFB histogram |
 | `Q` | quota-lazy collector |
 | `DP` | datapath-gated scalar |
@@ -80,12 +80,16 @@ Combined codes such as `DP+V` require both conditions.
 | `loxilb_ai_admission_warming_endpoints` | `gauge` | `service`, `pool` | `C` | `gateway-default` | `verified-static` |
 | `loxilb_ai_class_config_lkg_intervals_total` | `counter` | none | `C` | `gateway-default` | `verified-static` |
 | `loxilb_ai_engine_info` | `gauge` | `service`, `engine` | `V` | `gateway-default` | `conditional-with-proven-writer` |
+| `loxilb_ai_fc_band_total` | `counter` | `service`, `band`, `outcome` | `C` | `gateway-default` | `verified-static` |
 | `loxilb_ai_fc_tenant_slots` | `gauge` | `service`, `kind` | `C` | `gateway-default` | `verified-static` |
 | `loxilb_ai_jwks_keys` | `gauge` | `profile` | `E` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ai_jwks_last_success_timestamp_seconds` | `gauge` | `profile` | `E` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ai_jwks_refresh_total` | `counter` | `profile`, `outcome` | `E` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ai_jwks_usable` | `gauge` | `profile` | `E` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ai_jwt_validation_total` | `counter` | `tenant`, `reason` | `E` | `gateway-default` | `conditional-with-proven-writer` |
+| `loxilb_ai_key_store_circuit_open` | `gauge` | none | `C` | `gateway-default` | `verified-static` |
+| `loxilb_ai_key_store_lookup_inflight` | `gauge` | none | `C` | `gateway-default` | `verified-static` |
+| `loxilb_ai_key_store_lookup_seconds` | `histogram` | `result` | `C` | `gateway-default` | `verified-static` |
 | `loxilb_ai_key_token_quota_limit_tokens` | `gauge` | `key_id` | `Q` | `gateway-default` | `verified-runtime` |
 | `loxilb_ai_key_token_quota_utilization` | `gauge` | `key_id` | `Q` | `gateway-default` | `verified-runtime` |
 | `loxilb_ai_keyed_services` | `gauge` | none | `E` | `gateway-default` | `writer-mapped` |
@@ -101,6 +105,8 @@ Combined codes such as `DP+V` require both conditions.
 | `loxilb_ai_netid_resolver_faults_total` | `counter` | `service` | `V` | `gateway-default` | `verified-static` |
 | `loxilb_ai_normal_session_hits_total` | `counter` | `model` | `V` | `gateway-default` | `verified-runtime` |
 | `loxilb_ai_pd_decode_duration_seconds` | `histogram` | `model` | `V` | `gateway-default` | `conditional-with-proven-writer` |
+| `loxilb_ai_pd_decode_kv_fill_total` | `counter` | `model` | `P` | `gateway-default` | `verified-runtime` |
+| `loxilb_ai_pd_decode_selected_total` | `counter` | `path`, `model` | `P` | `gateway-default` | `verified-runtime` |
 | `loxilb_ai_pd_decode_ttft_seconds` | `histogram` | `model` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ai_pd_kv_params_found_total` | `counter` | `model` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_ai_pd_kv_params_missing_total` | `counter` | `model` | `V` | `gateway-default` | `conditional-with-proven-writer` |
@@ -219,6 +225,7 @@ Combined codes such as `DP+V` require both conditions.
 | `loxilb_pd_connect_retry_same_ep_ok_total` | `counter` | none | `E` | `gateway-default` | `verified-runtime` |
 | `loxilb_pd_connect_retry_same_ep_total` | `counter` | none | `E` | `gateway-default` | `verified-runtime` |
 | `loxilb_pd_decode_ep_died_total` | `counter` | none | `E` | `gateway-default` | `verified-runtime` |
+| `loxilb_pd_decode_inflight` | `gauge` | none | `P` | `gateway-default` | `writer-mapped` |
 | `loxilb_pd_decode_zero_byte_eof_total` | `counter` | none | `E` | `gateway-default` | `verified-runtime` |
 | `loxilb_pd_ep_info` | `gauge` | `service`, `ep_idx`, `ep` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_pd_fallback_to_normal_total` | `counter` | none | `E` | `gateway-default` | `writer-mapped` |
@@ -229,7 +236,9 @@ Combined codes such as `DP+V` require both conditions.
 | `loxilb_pd_kv_tier15_miss_reason_total` | `counter` | `reason` | `P` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_pd_kv_tier15_spills_total` | `counter` | `ep_idx` | `V` | `gateway-default` | `conditional-with-proven-writer` |
 | `loxilb_pd_kv_zero_hit_watchdog_total` | `counter` | `service_id` | `V` | `gateway-default` | `conditional-with-proven-writer` |
+| `loxilb_pd_parked_connections` | `gauge` | none | `P` | `gateway-default` | `writer-mapped` |
 | `loxilb_pd_prefill_ep_died_total` | `counter` | none | `E` | `gateway-default` | `verified-runtime` |
+| `loxilb_pd_prefill_inflight` | `gauge` | none | `P` | `gateway-default` | `writer-mapped` |
 | `loxilb_pd_sessions_active` | `gauge` | none | `E` | `gateway-default` | `verified-runtime` |
 | `loxilb_pd_sg_decode_close_drain_total` | `counter` | none | `E` | `gateway-default` | `verified-runtime` |
 | `loxilb_pd_sg_oversize_reject_total` | `counter` | none | `E` | `gateway-default` | `verified-runtime` |
@@ -365,7 +374,7 @@ use values outside the frozen source contract.
 ## Source-declared label combinations
 
 Request outcomes, causes, P/D phases and fallback reasons are extracted from `api/prometheus/ai_metrics.go`
-at the Gateway commit above (source SHA-256: `adb72630a32b9c2d94856ad58c92f665bfb965a482983506d4b6d85e0c2ee8b7`).
+at the Gateway commit above (source SHA-256: `a96d551066ffda3976c70c7ae89c2d7cb7fd82e6203c4e87ce64e8ab7427017a`).
 The validator also rejects selectors that match none of these combinations.
 Other enums above are reviewed documentation constants. Empty cause is written as `(empty)`.
 

@@ -6,8 +6,8 @@ and `api/swagger-extras.yml`; a new or removed definition fails the docs gate
 until its public relevance is reviewed here.
 
 - Public schema baseline: `47803fb660ed54cd1f180b616db628461ad85d1a`
-- Reviewed Gateway source: `23e57a226a4803ed91699904453cc1bf147fbefa`
-- Added definitions: **46**
+- Reviewed Gateway source: `ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1`
+- Added definitions: **47**
 - Removed definitions: **0**
 - Evidence class: **source/static contract only**
 
@@ -21,7 +21,7 @@ deploy.
 | Class | Count | Meaning |
 | --- | ---: | --- |
 | `direct-operation` | 26 | Direct request, response, or operation envelope |
-| `nested-component` | 17 | Public component nested in another operation model |
+| `nested-component` | 18 | Public component nested in another operation model |
 | `shared-envelope` | 1 | Shared public wire envelope used by multiple operations |
 | `companion-error` | 2 | Public error contract in the companion raw-handler specification |
 
@@ -30,7 +30,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 
 ## `api/swagger.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/23e57a226a4803ed91699904453cc1bf147fbefa/api/swagger.yml). Definition count changed from **147** to **191**; **44** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1/api/swagger.yml). Definition count changed from **147** to **192**; **45** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |
@@ -59,6 +59,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 | `DiagnosticsStatus` | `direct-operation` | Bounded diagnostic response covering build, readiness, maintenance, datapath, and dependencies. | `version:string`, `uptime_seconds:integer(int64)`, `ready:boolean`, `maintenance_state:string{active/maintenance}` | `api_version:string`, `auto_persist:AutoPersistStatus`, `boot:BootStatus`, `build_info:string`, `ebpf_attachments:array<EbpfAttachmentStatus>`, `external_dependencies:array<DependencyDiagnostic>`, `last_persist:ConfigOpRecord`, `last_restore:ConfigOpRecord`, `maps:array<MapUtilization>`, `product:string`, `ready_reasons:array<string>` | [Details](../operations/readiness-diagnostics-maintenance.md) |
 | `EbpfAttachmentStatus` | `nested-component` | One observable eBPF hook attachment fact nested in readiness or diagnostics. | `name:string`, `mode:string{tc/xdp}`, `attached:boolean` | none | [Details](../operations/readiness-diagnostics-maintenance.md) |
 | `ExternalDependencyStatus` | `nested-component` | Credential-free identity and disposition of one external recovery dependency. | none | `digest:string`, `generation:string`, `id:string`, `required:boolean`, `status:string{ready/configured/verified/warning/failed/declared}`, `type:string` | [Details](../operations/backup-restore.md) |
+| `FcBandEffective` | `nested-component` | Read-only per-band inflight, queued, wait, queue-share, floor, and weighted-wake observations nested in fc_effective.bands; not a configuration payload. | none | `floor_units:integer(int32)`, `inflight:integer(int32)`, `min_share_pct:integer(int32)`, `queue_pct:integer(int32)`, `queued:integer(int32)`, `wait_ms:integer(int32)`, `weight:integer(int32)`, `weight_pct:integer(int32)` | [Details](../ai-gateway/configuration-reference.md) |
 | `FilesystemStatus` | `direct-operation` | Formal schema for the existing filesystem-status response. | none | `filesystemAttr:array<FileSystemInfoEntry>` | [Details](api.md) |
 | `HalfCloseConfig` | `direct-operation` | The process-wide half-close hold settings: whether new holds may be taken and the idle bound on a hold. | none | `allow:boolean`, `capSeconds:integer(int32)`, `defaultMode:string` | [Details](../ai-gateway/configuration-reference.md#half-close-hold-half_close_mode) |
 | `JWTAuthProfileEntry` | `direct-operation` | Named data-plane JWT issuer, JWKS, claim mapping, algorithm, and forwarding policy. | `name:string`, `issuer:string` | `algs:array<string>`, `audiences:array<string>`, `authorization_passthrough:boolean`, `default_tenant:string`, `forward_identity:boolean`, `jwks_url:string`, `leeway_sec:integer(int64)`, `model_authz:string{claims-required/allow-all}`, `model_role_prefix:string`, `models_claim:string`, `priority_class:string{standard/critical/sheddable}`, `refresh_sec:integer(int64)`, `roles_claim:string`, `tenant_claim:string`, `user_claim:string`, `username_claim:string` | [Details](../security/data-plane-jwt-auth.md) |
@@ -81,7 +82,7 @@ referenced objects, and braces identify a closed enum from Swagger.
 
 ## `api/swagger-extras.yml`
 
-[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/23e57a226a4803ed91699904453cc1bf147fbefa/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
+[Open the exact source](https://github.com/loxilb-io/loxilb-inference-gateway/blob/ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1/api/swagger-extras.yml). Definition count changed from **2** to **4**; **2** definitions were added and **0** removed.
 
 | Model | Relevance | Public wire role | Required fields | Other fields | Guide |
 | --- | --- | --- | --- | --- | --- |

@@ -145,6 +145,11 @@ MODEL_NOTES = {
         "Credential-free identity and disposition of one external recovery dependency.",
         "../operations/backup-restore.md",
     ),
+    "FcBandEffective": (
+        "nested-component",
+        "Read-only per-band inflight, queued, wait, queue-share, floor, and weighted-wake observations nested in fc_effective.bands; not a configuration payload.",
+        "../ai-gateway/configuration-reference.md",
+    ),
     "FilesystemStatus": (
         "direct-operation",
         "Formal schema for the existing filesystem-status response.",

@@ -14,17 +14,17 @@
         ],
         "claim": "jwt-policy-and-token-accounting",
         "matching_workflow_objects": {
-          ".github/workflows/ai-gateway-sanity.yml": "2dd932f6eac7ca465ca7ba6eea4523a8c27ca909"
+          ".github/workflows/ai-gateway-sanity.yml": "18e9328bd985bf8f441bb51ef8f80314946c4059"
         },
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
         ],
-        "scenario_object_id": "cb4e94344422583837142f52c1fd728a2d19f8d3",
+        "scenario_object_id": "6bfc30f9b7fdf8f87f13c741abd89f6e8214f203",
         "scenario_path": "cicd/ai-jwtauth",
-        "validation_object_id": "5aefa05f5e5ff2337a03eee219118ec928547da3",
+        "validation_object_id": "bb5d068d2e91c8eb9e1bbe6ae3de25669a2cab85",
         "validation_path": "cicd/ai-jwtauth/validation.sh",
         "workflow_membership": "wired",
-        "workflow_object_id": "2dd932f6eac7ca465ca7ba6eea4523a8c27ca909",
+        "workflow_object_id": "18e9328bd985bf8f441bb51ef8f80314946c4059",
         "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
       },
       {
@@ -37,15 +37,19 @@
           "QOS-HA-014"
         ],
         "claim": "qos-ha-and-scope-metrics",
-        "matching_workflow_objects": {},
-        "matching_workflows": [],
-        "scenario_object_id": "e25a8a415ee7d00989ac0d346080b60e66462dc4",
+        "matching_workflow_objects": {
+          ".github/workflows/ha-two-node-nightly.yml": "48018e63c166d9f484c0d372b2c64963f32193f1"
+        },
+        "matching_workflows": [
+          ".github/workflows/ha-two-node-nightly.yml"
+        ],
+        "scenario_object_id": "e1c16909ab2ba47749d84602dcfe698b1c4226d9",
         "scenario_path": "cicd/ai-qos-ha-sync",
-        "validation_object_id": "75d61b13e75c1b6450d5a8ae0b64f906976c0251",
+        "validation_object_id": "fa3b9d9de2cf198db4e50e00781947bc43ddb485",
         "validation_path": "cicd/ai-qos-ha-sync/validation.sh",
-        "workflow_membership": "not-wired",
-        "workflow_object_id": null,
-        "workflow_path": null
+        "workflow_membership": "wired",
+        "workflow_object_id": "48018e63c166d9f484c0d372b2c64963f32193f1",
+        "workflow_path": ".github/workflows/ha-two-node-nightly.yml"
       },
       {
         "case_ids": [
@@ -65,17 +69,17 @@
         ],
         "claim": "pd-and-worker-scrape-metrics",
         "matching_workflow_objects": {
-          ".github/workflows/ai-gateway-sanity.yml": "2dd932f6eac7ca465ca7ba6eea4523a8c27ca909"
+          ".github/workflows/ai-gateway-sanity.yml": "18e9328bd985bf8f441bb51ef8f80314946c4059"
         },
         "matching_workflows": [
           ".github/workflows/ai-gateway-sanity.yml"
         ],
-        "scenario_object_id": "281b9f40dc0c1c8218f07302ef86e53175b51f76",
+        "scenario_object_id": "6ad2070153d5a6f9e7ea15734c69362a343f6ae5",
         "scenario_path": "cicd/vllm-pd-disagg",
-        "validation_object_id": "9570628c27a79b16275fae6607e443597724ed3a",
+        "validation_object_id": "af66abffc547de2ca3eb062e6e3964a610af6f56",
         "validation_path": "cicd/vllm-pd-disagg/validation.sh",
         "workflow_membership": "wired",
-        "workflow_object_id": "2dd932f6eac7ca465ca7ba6eea4523a8c27ca909",
+        "workflow_object_id": "18e9328bd985bf8f441bb51ef8f80314946c4059",
         "workflow_path": ".github/workflows/ai-gateway-sanity.yml"
       },
       {
@@ -121,13 +125,13 @@
   "contract_version": 1,
   "metric_manifest": {
     "coverage": {
-      "default_families": 283,
+      "default_families": 292,
       "default_referenced": 184,
-      "default_unreferenced": 78,
+      "default_unreferenced": 87,
       "default_waived": 21,
-      "writer_classified": 283,
+      "writer_classified": 292,
       "writer_unclassified": 0,
-      "writer_unverified": 77
+      "writer_unverified": 80
     },
     "families": [
       {
@@ -405,6 +409,21 @@
         "implementation_status": "verified-static",
         "labels": [
           "service",
+          "band",
+          "outcome"
+        ],
+        "name": "loxilb_ai_fc_band_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "service",
           "kind"
         ],
         "name": "loxilb_ai_fc_tenant_slots",
@@ -478,6 +497,41 @@
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_ai_key_store_circuit_open",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [],
+        "name": "loxilb_ai_key_store_lookup_inflight",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
+        "activation": "C",
+        "evidence_present": true,
+        "implementation_status": "verified-static",
+        "labels": [
+          "result"
+        ],
+        "name": "loxilb_ai_key_store_lookup_seconds",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "histogram",
         "writer_present": true
       },
       {
@@ -674,6 +728,33 @@
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "histogram",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "model"
+        ],
+        "name": "loxilb_ai_pd_decode_kv_fill_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "verified-runtime",
+        "labels": [
+          "path",
+          "model"
+        ],
+        "name": "loxilb_ai_pd_decode_selected_total",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "counter",
         "writer_present": true
       },
       {
@@ -2160,6 +2241,17 @@
         "writer_present": true
       },
       {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_pd_decode_inflight",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
         "activation": "E",
         "evidence_present": true,
         "implementation_status": "verified-runtime",
@@ -2287,6 +2379,17 @@
         "writer_present": true
       },
       {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_pd_parked_connections",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
+        "writer_present": true
+      },
+      {
         "activation": "E",
         "evidence_present": true,
         "implementation_status": "verified-runtime",
@@ -2295,6 +2398,17 @@
         "release_scope": "release",
         "runtime_scope": "gateway-default",
         "type": "counter",
+        "writer_present": true
+      },
+      {
+        "activation": "P",
+        "evidence_present": true,
+        "implementation_status": "writer-mapped",
+        "labels": [],
+        "name": "loxilb_pd_prefill_inflight",
+        "release_scope": "release",
+        "runtime_scope": "gateway-default",
+        "type": "gauge",
         "writer_present": true
       },
       {
@@ -3804,15 +3918,15 @@
       }
     },
     "label_source": {
-      "sha256": "adb72630a32b9c2d94856ad58c92f665bfb965a482983506d4b6d85e0c2ee8b7",
+      "sha256": "a96d551066ffda3976c70c7ae89c2d7cb7fd82e6203c4e87ce64e8ab7427017a",
       "source_path": "api/prometheus/ai_metrics.go"
     },
     "provenance": {
-      "generated_at": "2026-10-21T02:25:08+00:00",
-      "source_revision": "ecfc3c12376bad712c61f6781fe13a9e5fc3fd9e"
+      "generated_at": "2026-10-26T11:50:00+00:00",
+      "source_revision": "82bbeaccc2b78f35149f0637f257f0bba10b83d9"
     },
     "schema_version": 1,
-    "sha256": "fece2dc500f072e69d25217f373d382347cc0196f91d6f58bbfd81658c32a78b",
+    "sha256": "a4df2fb32afb3024f9e03c6b5b9a65767f0b403cb623d81cb80e27597409e513",
     "source_path": "deploy/monitoring/manifest/metric-manifest.json"
   },
   "release_snapshot": {
@@ -3829,15 +3943,15 @@
   "scenario_evidence": {
     "trees": [
       {
-        "object_id": "36df382d19757713754b6cbceb9a825b16b96cc5",
+        "object_id": "754070d7daf98f42b63e21ce78534a7ab0eb0916",
         "path": "cicd/kv-mixed-version"
       },
       {
-        "object_id": "6b65027670141230f308fd9ee6bf898665c604f3",
+        "object_id": "b4946399183fc93ef8558879f010065ba62c184b",
         "path": "cicd/kv-profile-admission"
       },
       {
-        "object_id": "4623fcbcb1e381e0de9705e1a773d2f975984a24",
+        "object_id": "1636d1cbd931178878951c0c123d5c34043e1b0d",
         "path": "cicd/kv-sglang-attest"
       },
       {
@@ -3845,11 +3959,11 @@
         "path": "cicd/sockmap-fullproxy"
       },
       {
-        "object_id": "41069bb77ccd0568a6a2c48c8f2b926d37bb77d0",
+        "object_id": "7176135a2e00c696fbcfeeaa68a3f7bfc263cc42",
         "path": "cicd/vllm-kvcache-routing-cpu"
       },
       {
-        "object_id": "e2840fa8325d875b590e1f01779def8e9e9998db",
+        "object_id": "166270c193d2fed6c859257f586b6f1dff8b60a4",
         "path": "cicd/vllm-pd-admission-cpu"
       }
     ],
@@ -3888,6 +4002,7 @@
           "DiagnosticsStatus",
           "EbpfAttachmentStatus",
           "ExternalDependencyStatus",
+          "FcBandEffective",
           "FilesystemStatus",
           "HalfCloseConfig",
           "JWTAuthProfileEntry",
@@ -3909,7 +4024,7 @@
           "UserSummary"
         ],
         "baseline_definition_count": 147,
-        "candidate_definition_count": 191,
+        "candidate_definition_count": 192,
         "removed_definitions": [],
         "source_path": "api/swagger.yml"
       },
@@ -3926,8 +4041,8 @@
     ]
   },
   "source": {
-    "commit": "23e57a226a4803ed91699904453cc1bf147fbefa",
-    "ebpf_submodule_commit": "6b5014f49bf0df6b72f8b0423acf9a81c22e60fb",
+    "commit": "ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1",
+    "ebpf_submodule_commit": "f515ab5aeed8e8643f08906d0a90e9a2b893ba8d",
     "release_commit": "f08b18beda587217265c9ba6419159119914795c",
     "release_tag": "v0.9.8.9-rc.1",
     "release_tag_object": "db28353e50f7031157187fdd2250d1098c97963a",
@@ -5826,6 +5941,44 @@
             "dev",
             "macAddress"
           ],
+          "type": "object"
+        },
+        "FcBandEffective": {
+          "properties": {
+            "floor_units": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "inflight": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "min_share_pct": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "queue_pct": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "queued": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "wait_ms": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "weight": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "weight_pct": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          "readOnly": true,
           "type": "object"
         },
         "FileSystemInfoEntry": {
@@ -8072,6 +8225,30 @@
                   "type": "string",
                   "x-nullable": false
                 },
+                "fc_band_min_share_pct": {
+                  "type": "string",
+                  "x-nullable": false
+                },
+                "fc_band_queue_pct": {
+                  "type": "string",
+                  "x-nullable": false
+                },
+                "fc_band_wait_ms": {
+                  "type": "string",
+                  "x-nullable": false
+                },
+                "fc_band_weights": {
+                  "type": "string",
+                  "x-nullable": false
+                },
+                "fc_critical_reserve_pct": {
+                  "default": 0,
+                  "format": "int32",
+                  "maximum": 100,
+                  "minimum": 0,
+                  "type": "integer",
+                  "x-nullable": false
+                },
                 "fc_decode_max_inflight": {
                   "default": 0,
                   "format": "int32",
@@ -8107,6 +8284,40 @@
                         "off"
                       ],
                       "type": "string"
+                    },
+                    "band_fallback_reason": {
+                      "enum": [
+                        "none",
+                        "sockmap_request",
+                        "zero_weight",
+                        "no_queue"
+                      ],
+                      "type": "string"
+                    },
+                    "bands": {
+                      "properties": {
+                        "critical": {
+                          "$ref": "#/definitions/FcBandEffective"
+                        },
+                        "critical_reserve_pct": {
+                          "format": "int32",
+                          "type": "integer"
+                        },
+                        "critical_reserve_units": {
+                          "format": "int32",
+                          "type": "integer"
+                        },
+                        "sheddable": {
+                          "$ref": "#/definitions/FcBandEffective"
+                        },
+                        "standard": {
+                          "$ref": "#/definitions/FcBandEffective"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "bands_configured": {
+                      "type": "boolean"
                     },
                     "config_source": {
                       "enum": [
@@ -8149,6 +8360,13 @@
                     "inflight": {
                       "format": "int32",
                       "type": "integer"
+                    },
+                    "llmd_headers": {
+                      "enum": [
+                        "on",
+                        "off"
+                      ],
+                      "type": "string"
                     },
                     "max_outstanding": {
                       "format": "int32",
@@ -8222,9 +8440,63 @@
                     "reservation_held_truncated": {
                       "type": "boolean"
                     },
+                    "shed_queue": {
+                      "enum": [
+                        "on",
+                        "off"
+                      ],
+                      "type": "string"
+                    },
+                    "shed_queue_effective": {
+                      "enum": [
+                        "on",
+                        "off"
+                      ],
+                      "type": "string"
+                    },
                     "source": {
                       "properties": {
                         "adaptive": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "band_min_share_pct": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "band_queue_pct": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "band_wait_ms": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "band_weights": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "critical_reserve_pct": {
                           "enum": [
                             "rule",
                             "env",
@@ -8272,6 +8544,14 @@
                           ],
                           "type": "string"
                         },
+                        "llmd_headers": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
                         "max_outstanding": {
                           "enum": [
                             "rule",
@@ -8312,6 +8592,14 @@
                           ],
                           "type": "string"
                         },
+                        "shed_queue": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
                         "telemetry_stale_ms": {
                           "enum": [
                             "rule",
@@ -8328,7 +8616,23 @@
                           ],
                           "type": "string"
                         },
+                        "tenant_wake": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
                         "ttft_target_ms": {
+                          "enum": [
+                            "rule",
+                            "env",
+                            "default"
+                          ],
+                          "type": "string"
+                        },
+                        "wake_policy": {
                           "enum": [
                             "rule",
                             "env",
@@ -8368,6 +8672,20 @@
                       "format": "int32",
                       "type": "integer"
                     },
+                    "tenant_wake": {
+                      "enum": [
+                        "fifo",
+                        "rr"
+                      ],
+                      "type": "string"
+                    },
+                    "tenant_wake_effective": {
+                      "enum": [
+                        "fifo",
+                        "rr"
+                      ],
+                      "type": "string"
+                    },
                     "tenants_active": {
                       "format": "int32",
                       "type": "integer"
@@ -8376,6 +8694,20 @@
                       "format": "int32",
                       "type": "integer"
                     },
+                    "wake_policy": {
+                      "enum": [
+                        "strict",
+                        "weighted"
+                      ],
+                      "type": "string"
+                    },
+                    "wake_policy_effective": {
+                      "enum": [
+                        "strict",
+                        "weighted"
+                      ],
+                      "type": "string"
+                    },
                     "warming_endpoints": {
                       "format": "int32",
                       "type": "integer"
@@ -8383,6 +8715,9 @@
                     "warmup_ms": {
                       "format": "int32",
                       "type": "integer"
+                    },
+                    "weights_in_use": {
+                      "type": "boolean"
                     }
                   },
                   "readOnly": true,
@@ -8397,6 +8732,15 @@
                   "x-nullable": false
                 },
                 "fc_expose_headers": {
+                  "enum": [
+                    "on",
+                    "off",
+                    "inherit"
+                  ],
+                  "type": "string",
+                  "x-nullable": false
+                },
+                "fc_llmd_headers": {
                   "enum": [
                     "on",
                     "off",
@@ -8447,6 +8791,15 @@
                   "type": "integer",
                   "x-nullable": false
                 },
+                "fc_shed_queue": {
+                  "enum": [
+                    "on",
+                    "off",
+                    "inherit"
+                  ],
+                  "type": "string",
+                  "x-nullable": false
+                },
                 "fc_telemetry_stale_ms": {
                   "default": 0,
                   "format": "int32",
@@ -8463,12 +8816,30 @@
                   "type": "integer",
                   "x-nullable": false
                 },
+                "fc_tenant_wake": {
+                  "enum": [
+                    "fifo",
+                    "rr",
+                    "inherit"
+                  ],
+                  "type": "string",
+                  "x-nullable": false
+                },
                 "fc_ttft_target_ms": {
                   "default": 0,
                   "format": "int32",
                   "maximum": 3600000,
                   "minimum": 0,
                   "type": "integer",
+                  "x-nullable": false
+                },
+                "fc_wake_policy": {
+                  "enum": [
+                    "strict",
+                    "weighted",
+                    "inherit"
+                  ],
+                  "type": "string",
                   "x-nullable": false
                 },
                 "fc_warmup_ms": {
@@ -11057,6 +11428,12 @@
             "buildInfo": {
               "type": "string"
             },
+            "features": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
             "product": {
               "type": "string"
             },
@@ -11625,6 +12002,12 @@
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
+              },
+              "504": {
+                "description": "Write outcome unknown (result store_outcome_unknown). The statement was handed to the management credential store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back before deciding whether to retry.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
               }
             },
             "security": []
@@ -11667,6 +12050,12 @@
               },
               "503": {
                 "$ref": "#/responses/ManagementStoreUnavailable"
+              },
+              "504": {
+                "description": "Write outcome unknown (result store_outcome_unknown). The statement was handed to the management credential store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back before deciding whether to retry.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
               }
             },
             "security": [
@@ -11839,6 +12228,12 @@
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
+              },
+              "504": {
+                "description": "Write outcome unknown (result store_outcome_unknown). The statement was handed to the management credential store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back before deciding whether to retry.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
               }
             },
             "security": []
@@ -11875,6 +12270,12 @@
               },
               "503": {
                 "$ref": "#/responses/ManagementStoreUnavailable"
+              },
+              "504": {
+                "description": "Write outcome unknown (result store_outcome_unknown). The statement was handed to the management credential store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back before deciding whether to retry.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
               }
             },
             "security": [
@@ -11928,6 +12329,12 @@
               },
               "503": {
                 "$ref": "#/responses/ManagementStoreUnavailable"
+              },
+              "504": {
+                "description": "Write outcome unknown (result store_outcome_unknown). The statement was handed to the management credential store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back before deciding whether to retry.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
               }
             },
             "security": [
@@ -12048,6 +12455,12 @@
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
+              },
+              "504": {
+                "description": "Write outcome unknown (code ai_key_store_outcome_unknown). The statement was handed to the API-key store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back (GET) before deciding whether to retry; a blind retry of a non-idempotent write can create a second row.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
               }
             },
             "security": [
@@ -12097,6 +12510,12 @@
               },
               "503": {
                 "description": "Management credential store or API-key store unavailable",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
+              },
+              "504": {
+                "description": "Write outcome unknown (code ai_key_store_outcome_unknown). The statement was handed to the API-key store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back (GET) before deciding whether to retry; a blind retry of a non-idempotent write can create a second row.",
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
@@ -12209,6 +12628,12 @@
               },
               "503": {
                 "$ref": "#/responses/ManagementStoreUnavailable"
+              },
+              "504": {
+                "description": "Write outcome unknown (code ai_key_store_outcome_unknown). The statement was handed to the API-key store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back (GET) before deciding whether to retry; a blind retry of a non-idempotent write can create a second row.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
               }
             },
             "security": [
@@ -12832,6 +13257,12 @@
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
+              },
+              "504": {
+                "description": "Write outcome unknown (code ai_key_store_outcome_unknown). The statement was handed to the API-key store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back (GET) before deciding whether to retry; a blind retry of a non-idempotent write can create a second row.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
               }
             },
             "security": [
@@ -12881,6 +13312,12 @@
               },
               "503": {
                 "description": "Maintenance mode, no AI key store configured, or the store does not answer",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
+              },
+              "504": {
+                "description": "Write outcome unknown (code ai_key_store_outcome_unknown). The statement was handed to the API-key store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back (GET) before deciding whether to retry; a blind retry of a non-idempotent write can create a second row.",
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
@@ -12945,6 +13382,12 @@
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
+              },
+              "504": {
+                "description": "Write outcome unknown (code ai_key_store_outcome_unknown). The statement was handed to the API-key store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back (GET) before deciding whether to retry; a blind retry of a non-idempotent write can create a second row.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
               }
             },
             "security": [
@@ -12994,6 +13437,12 @@
               },
               "503": {
                 "description": "Management credential store or API-key store unavailable",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
+              },
+              "504": {
+                "description": "Write outcome unknown (code ai_key_store_outcome_unknown). The statement was handed to the API-key store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back (GET) before deciding whether to retry; a blind retry of a non-idempotent write can create a second row.",
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
@@ -13108,6 +13557,12 @@
               },
               "503": {
                 "description": "Management credential store or API-key store unavailable",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
+              },
+              "504": {
+                "description": "Write outcome unknown (code ai_key_store_outcome_unknown). The statement was handed to the API-key store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back (GET) before deciding whether to retry; a blind retry of a non-idempotent write can create a second row.",
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
@@ -13227,6 +13682,12 @@
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
+              },
+              "504": {
+                "description": "Write outcome unknown (code ai_key_store_outcome_unknown). The statement was handed to the API-key store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back (GET) before deciding whether to retry; a blind retry of a non-idempotent write can create a second row.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
               }
             },
             "security": [
@@ -13331,6 +13792,12 @@
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
+              },
+              "504": {
+                "description": "Write outcome unknown (code ai_key_store_outcome_unknown). The statement was handed to the API-key store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the resource back (GET) before deciding whether to retry; a blind retry of a non-idempotent write can create a second row.",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
               }
             },
             "security": [
@@ -13420,7 +13887,7 @@
                 }
               },
               "400": {
-                "description": "Malformed arguments for API call",
+                "description": "Malformed arguments for API call or BFD unavailable in BGP-only mode",
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
@@ -13456,7 +13923,7 @@
                 }
               },
               "503": {
-                "description": "Maintenance mode",
+                "description": "Maintenance mode or BFD subsystem unavailable",
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
@@ -13494,6 +13961,12 @@
                   "type": "object"
                 }
               },
+              "400": {
+                "description": "BFD is unavailable in BGP-only mode",
+                "schema": {
+                  "$ref": "#/definitions/Error"
+                }
+              },
               "401": {
                 "description": "Invalid authentication credentials",
                 "schema": {
@@ -13510,7 +13983,7 @@
                 }
               },
               "503": {
-                "description": "Maintenance mode",
+                "description": "Maintenance mode or BFD subsystem unavailable",
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
@@ -13541,7 +14014,7 @@
                 }
               },
               "400": {
-                "description": "Malformed arguments for API call",
+                "description": "Malformed arguments for API call or BFD unavailable in BGP-only mode",
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
@@ -13577,7 +14050,7 @@
                 }
               },
               "503": {
-                "description": "Maintenance mode",
+                "description": "Maintenance mode or BFD subsystem unavailable",
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
@@ -24675,7 +25148,7 @@
                 "$ref": "#/responses/ManagementForbidden"
               },
               "500": {
-                "description": "Internal service error",
+                "description": "Internal service error, including missing or invalid global process data or no readable processes",
                 "schema": {
                   "$ref": "#/definitions/Error"
                 }
@@ -24810,7 +25283,7 @@
           "type": "apiKey"
         }
       },
-      "sha256": "032af9fc24b2fc53290ba4c9d1ba811e62c5dd141d3787881fabe7a2fd935359",
+      "sha256": "7b6b5732ee4f28c72d097fba21cc6eec02fab8645934688bb32005dbf29deda4",
       "source_path": "api/swagger.yml"
     },
     {
@@ -25132,6 +25605,12 @@
               },
               "503": {
                 "description": "Management credential store unavailable (ManagementError), or API-key store unconfigured/unavailable (SimpleError with error equal to ai_key_store_unconfigured or ai_key_store_unavailable). The reference covers both envelope shapes. Unclassified database statement errors can instead return 500; not every database outage is normalized to 503.\n",
+                "schema": {
+                  "$ref": "#/definitions/SimpleError"
+                }
+              },
+              "504": {
+                "description": "Write outcome unknown (SimpleError with error equal to ai_key_store_outcome_unknown). The statement was handed to the API-key store and the store did not answer within the operation budget; the store may still apply it when it resumes. Not a 503: nothing says the write did not happen. Read the key back (GET) before deciding whether to retry.",
                 "schema": {
                   "$ref": "#/definitions/SimpleError"
                 }
@@ -25695,7 +26174,7 @@
           "type": "apiKey"
         }
       },
-      "sha256": "7d7d336f949d574ff8d71502def05c4b1cd4a8d53e8716dbcc6f878d3a19c132",
+      "sha256": "ce71c78472c97eafcacacc097f1cd99f62ece70f78ec09a514a029dd53abac1c",
       "source_path": "api/swagger-extras.yml"
     }
   ],

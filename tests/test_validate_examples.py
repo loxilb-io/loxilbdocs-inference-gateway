@@ -223,19 +223,19 @@ class DocumentationExampleTests(unittest.TestCase):
             family for family in manifest["families"]
             if family["release_scope"] == "release"
         ]
-        self.assertEqual(283, len(families))
-        self.assertEqual(283, len(manifest["families"]))
+        self.assertEqual(292, len(families))
+        self.assertEqual(292, len(manifest["families"]))
         self.assertTrue(all(family["writer_present"] for family in families))
         self.assertTrue(all(family["evidence_present"] for family in families))
 
     def test_gateway_main_and_release_sources_are_exactly_frozen(self) -> None:
         contract = self.validator.gateway_contract
         self.assertEqual(
-            "23e57a226a4803ed91699904453cc1bf147fbefa",
+            "ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1",
             contract["source"]["commit"],
         )
         self.assertEqual(
-            "6b5014f49bf0df6b72f8b0423acf9a81c22e60fb",
+            "f515ab5aeed8e8643f08906d0a90e9a2b893ba8d",
             contract["source"]["ebpf_submodule_commit"],
         )
         self.assertEqual("v0.9.8.9-rc.1", contract["source"]["release_tag"])
@@ -291,14 +291,14 @@ class DocumentationExampleTests(unittest.TestCase):
             for claim in self.validator.gateway_contract["claim_evidence"]["claims"]
         }
         self.assertEqual("wired", claims["jwt-policy-and-token-accounting"]["workflow_membership"])
-        self.assertEqual("not-wired", claims["qos-ha-and-scope-metrics"]["workflow_membership"])
+        self.assertEqual("wired", claims["qos-ha-and-scope-metrics"]["workflow_membership"])
         self.assertEqual("wired", claims["pd-and-worker-scrape-metrics"]["workflow_membership"])
         self.assertEqual("not-wired", claims["sockmap-observability"]["workflow_membership"])
         self.assertEqual(
             [".github/workflows/ai-gateway-sanity.yml"],
             claims["jwt-policy-and-token-accounting"]["matching_workflows"],
         )
-        self.assertEqual([], claims["qos-ha-and-scope-metrics"]["matching_workflows"])
+        self.assertEqual([".github/workflows/ha-two-node-nightly.yml"], claims["qos-ha-and-scope-metrics"]["matching_workflows"])
         self.assertEqual(
             {
                 ".github/workflows/monitoring-drill.yml",
