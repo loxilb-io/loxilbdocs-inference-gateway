@@ -27,9 +27,10 @@ class SchemaReferenceTests(unittest.TestCase):
 
     def test_current_delta_is_fully_classified(self) -> None:
         rendered = MODULE.render(self.contract)
-        self.assertIn("- Added definitions: **46**", rendered)
+        self.assertIn("- Added definitions: **47**", rendered)
         for name in ("AIObjectiveEntry", "NetIdentityEntry"):
             self.assertIn(f"| `{name}` | `direct-operation` |", rendered)
+        self.assertIn("| `FcBandEffective` | `nested-component` |", rendered)
         self.assertIn("All added definitions are public-relevant", rendered)
 
     def test_unclassified_definition_is_rejected(self) -> None:

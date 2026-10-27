@@ -5648,7 +5648,7 @@
       "sha256": "7938d3dc01f0a18b043fa87ad717c04672c25aa82b55cdf5e4d9133e74c09bde"
     }
   ],
-  "gateway_commit": "23e57a226a4803ed91699904453cc1bf147fbefa",
+  "gateway_commit": "ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1",
   "operations": {
     "DELETE /audit/sinks/{name}": [],
     "DELETE /auth/users/{id}": [],

@@ -83,6 +83,41 @@ class ClaimEvidenceWiringTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unexpectedly wired"):
             MODULE.build_claim_evidence(repo, "HEAD")
 
+    def test_reviewed_workflow_freezes_membership_and_source_objects(self) -> None:
+        tmp, repo = gateway_repo(f"run: cd {SCENARIO} && ./validation.sh\n")
+        self.addCleanup(tmp.cleanup)
+        expected = claim("validation.sh", "D1")
+        expected["workflow_path"] = ".github/workflows/ci.yml"
+        MODULE.CLAIM_EVIDENCE = (expected,)
+        result = MODULE.build_claim_evidence(repo, "HEAD")["claims"][0]
+        workflow_oid = subprocess.check_output(
+            ["git", "-C", str(repo), "rev-parse", "HEAD:.github/workflows/ci.yml"],
+            text=True,
+        ).strip()
+        self.assertEqual("wired", result["workflow_membership"])
+        self.assertEqual([expected["workflow_path"]], result["matching_workflows"])
+        self.assertEqual(workflow_oid, result["workflow_object_id"])
+        self.assertEqual({expected["workflow_path"]: workflow_oid}, result["matching_workflow_objects"])
+        self.assertEqual(["D1"], result["case_ids"])
+
+    def test_reviewed_workflow_without_the_scenario_is_rejected(self) -> None:
+        tmp, repo = gateway_repo("run: echo unrelated\n")
+        self.addCleanup(tmp.cleanup)
+        expected = claim("validation.sh", "D1")
+        expected["workflow_path"] = ".github/workflows/ci.yml"
+        MODULE.CLAIM_EVIDENCE = (expected,)
+        with self.assertRaisesRegex(ValueError, "does not invoke"):
+            MODULE.build_claim_evidence(repo, "HEAD")
+
+    def test_reviewed_workflow_cannot_hide_a_missing_case(self) -> None:
+        tmp, repo = gateway_repo(f"run: cd {SCENARIO} && ./validation.sh\n")
+        self.addCleanup(tmp.cleanup)
+        expected = claim("validation.sh", "ABSENT")
+        expected["workflow_path"] = ".github/workflows/ci.yml"
+        MODULE.CLAIM_EVIDENCE = (expected,)
+        with self.assertRaisesRegex(ValueError, "missing declared case IDs: ABSENT"):
+            MODULE.build_claim_evidence(repo, "HEAD")
+
 
 if __name__ == "__main__":
     unittest.main()

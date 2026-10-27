@@ -73,7 +73,7 @@ CLAIM_EVIDENCE = (
         "claim": "qos-ha-and-scope-metrics",
         "scenario_path": "cicd/ai-qos-ha-sync",
         "validation_path": "cicd/ai-qos-ha-sync/validation.sh",
-        "workflow_path": None,
+        "workflow_path": ".github/workflows/ha-two-node-nightly.yml",
         "case_ids": [
             "SYNC-1", "SYNC-2", "QOS-METRIC-1", "QOS-METRIC-2",
             "QOS-HA-013", "QOS-HA-014",
