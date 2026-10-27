@@ -1,0 +1,15 @@
+{
+  "serviceArguments": {
+    "externalIP": "192.0.2.254", "port": 8080, "protocol": "tcp", "sel": 0,
+    "mode": 4, "host": "192.0.2.254", "path_prefix": "/", "path_match_mode": "prefix",
+    "model_name": "shared-model", "sse_mode": true, "api_key_auth": "required",
+    "inactiveTimeOut": 60, "fc_mode": "enforce", "fc_max_outstanding": 1,
+    "fc_max_queue_depth": 32, "fc_max_queue_wait_ms": 30000,
+    "fc_expose_headers": "on", "fc_wake_policy": "strict", "fc_band_weights": "0:0:0",
+    "fc_band_min_share_pct": "0:0:0", "fc_critical_reserve_pct": 0,
+    "fc_band_wait_ms": "0:0:0", "fc_band_queue_pct": "0:0:0",
+    "fc_shed_queue": "on", "fc_tenant_wake": "fifo", "fc_tenant_max_share_pct": 100,
+    "fc_llmd_headers": "on", "ai_objective_strict": true
+  },
+  "endpoints": [{"endpointIP": "203.0.113.1", "targetPort": 8080, "weight": 1}]
+}
