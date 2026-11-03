@@ -5539,86 +5539,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#before-you-start" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Before you start
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#topology-and-execution-locations" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Topology and execution locations
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#reading-path-and-reference" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Reading path and reference
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Reading path and reference">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#previous-section-links" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Previous section links
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#check-your-result" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Check your result
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps-and-cleanup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Next steps and cleanup
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -5636,127 +5556,47 @@
 
 <h1 id="kv-routing-updated-locations">KV Routing: Updated Locations<a class="headerlink" href="#kv-routing-updated-locations" title="Permanent link">&para;</a></h1>
 <p>This page has been consolidated. Continue to the <a href="../../concepts/kv-routing/">current documentation</a>.</p>
-<h2 id="before-you-start">Before you start<a class="headerlink" href="#before-you-start" title="Permanent link">&para;</a></h2>
-<p>Choose an engine/profile hash contract and a complete deployment runbook first.</p>
-<p><strong>Focus of this page:</strong> Distinguish Gateway prefix-based selection from native engine cache reuse.</p>
-<h2 id="topology-and-execution-locations">Topology and execution locations<a class="headerlink" href="#topology-and-execution-locations" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>flowchart TD
-    C["Client workload"] --&gt; G["Selected Gateway / routing mode"]
-    G --&gt; W["Selected engine worker pool&lt;br/&gt;count and roles from its runbook"]
-    O["Operator"] -.-&gt;|"configuration and readback"| G
-    O -.-&gt;|"direct engine / receipt evidence"| W
-    style G fill:#e1f5fe,stroke:#0288d1,color:#1f2937
-    style W fill:#e8f5e9,stroke:#43a047,color:#1f2937</code></pre>
-<p>This reference diagram locates the client, Gateway and engine evidence. It does not prescribe a replica count or promote historical results to a new topology. Use the exact worker count, roles, ports and artifact identities from the selected runbook or retained result; do not mix that tuple with another guide.</p>
-<table>
-<thead>
-<tr>
-<th>Where</th>
-<th>What happens here</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Operator terminal</td>
-<td>Select the version tuple, private run directory, model snapshot and profiles.</td>
-</tr>
-<tr>
-<td>Gateway host / namespace</td>
-<td>Start the dedicated Gateway; apply and read back only the selected service.</td>
-</tr>
-<tr>
-<td>Each worker host</td>
-<td>Launch the chosen engine and prove direct inference before Gateway traffic.</td>
-</tr>
-<tr>
-<td>Client</td>
-<td>Send the same request through the Gateway and retain its HTTP/SSE observations.</td>
-</tr>
-<tr>
-<td>Independent evidence</td>
-<td>Correlate worker requests/receipts with the selected rule and request identifiers.</td>
-</tr>
-</tbody>
-</table>
-<h2 id="reading-path-and-reference">Reading path and reference<a class="headerlink" href="#reading-path-and-reference" title="Permanent link">&para;</a></h2>
-<h3 id="previous-section-links">Previous section links<a class="headerlink" href="#previous-section-links" title="Permanent link">&para;</a></h3>
-<p><a id="kv-cache-aware-routing"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: kv cache aware routing</a></p>
-<p><a id="1-what-it-is-and-where-it-sits"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 1 what it is and where it sits</a></p>
-<p><a id="2-architecture-inventory-in-go-decision-in-c"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 2 architecture inventory in go decision in c</a></p>
-<p><a id="3-what-exactly-is-synced-and-why-it-is-tiny"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 3 what exactly is synced and why it is tiny</a></p>
-<p><a id="consistency-model"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: consistency model</a></p>
-<p><a id="4-end-to-end-call-flow"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 4 end to end call flow</a></p>
-<p><a id="worked-example-two-prompts-end-to-end"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: worked example two prompts end to end</a></p>
-<p><a id="5-the-vllm-block-hash-parity-contract"></a></p>
-<p><a href="../../ai-gateway/engine-contracts/">Continue: 5 the vllm block hash parity contract</a></p>
-<p><a id="6-parity-preflight-inspect-what-is-actually-running"></a></p>
-<p><a href="../../ai-gateway/engine-contracts/">Continue: 6 parity preflight inspect what is actually running</a></p>
-<p><a id="61-the-parity-triad-as-an-operational-checklist"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 61 the parity triad as an operational checklist</a></p>
-<p><a id="62-the-read-only-preflight-read-the-live-container-not-the-script"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 62 the read only preflight read the live container not the script</a></p>
-<p><a id="63-tested-artifact-rule"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 63 tested artifact rule</a></p>
-<p><a id="64-vllm-metric-families-the-collector-needs"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 64 vllm metric families the collector needs</a></p>
-<p><a id="65-loxilb-runtime-env-worth-setting-explicitly"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 65 loxilb runtime env worth setting explicitly</a></p>
-<p><a id="7-guard-ladder-miss-reasons"></a></p>
-<p><a href="../../operations/kv-routing-verification/">Continue: 7 guard ladder miss reasons</a></p>
-<p><a id="8-configuration"></a></p>
-<p><a href="../model-engine-standard/matrix-manual/">Continue: 8 configuration</a></p>
-<p><a id="81-rest-the-load-balancer-rule"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 81 rest the load balancer rule</a></p>
-<p><a id="82-environment-variables-loxilb-process"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 82 environment variables loxilb process</a></p>
-<p><a id="83-tokenizer-staging"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 83 tokenizer staging</a></p>
-<p><a id="84-vllm-side-must-match-the-rule"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 84 vllm side must match the rule</a></p>
-<p><a id="85-onboarding-a-new-model-one-model-per-rule"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 85 onboarding a new model one model per rule</a></p>
-<p><a id="9-verify-it-actually-fired-the-mandatory-post-config-check"></a></p>
-<p><a href="../../operations/kv-routing-verification/">Continue: 9 verify it actually fired the mandatory post config check</a></p>
-<p><a id="91-step-1-the-engagement-assertion-on-get-netloxv1metrics"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 91 step 1 the engagement assertion on get netloxv1metrics</a></p>
-<p><a id="92-step-2-inventory-check"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 92 step 2 inventory check</a></p>
-<p><a id="93-step-3-subscriber-count"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 93 step 3 subscriber count</a></p>
-<p><a id="94-step-4-publisher-side-sanity-on-the-engine-host"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 94 step 4 publisher side sanity on the engine host</a></p>
-<p><a id="10-verify-inventory-metrics-reference"></a></p>
-<p><a href="../../operations/kv-routing-verification/">Continue: 10 verify inventory metrics reference</a></p>
-<p><a id="101-inspect-the-live-inventory"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 101 inspect the live inventory</a></p>
-<p><a id="102-prometheus-metrics"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 102 prometheus metrics</a></p>
-<p><a id="103-healthy-warm-route-signature"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: 103 healthy warm route signature</a></p>
-<p><a id="11-troubleshoot"></a></p>
-<p><a href="../../operations/kv-routing-verification/">Continue: 11 troubleshoot</a></p>
-<p><a id="12-known-limits"></a></p>
-<p><a href="../../operations/kv-routing-verification/">Continue: 12 known limits</a></p>
-<p><a id="load-blind-argmax-capacity-weighted-blend"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: load blind argmax capacity weighted blend</a></p>
-<p><a id="13-advanced-ai-controller-experimental"></a></p>
-<p><a href="../advanced-cache-integrations/">Continue: 13 advanced ai controller experimental</a></p>
-<p><a id="14-advanced-lmcache-tiered-cache"></a></p>
-<p><a href="../advanced-cache-integrations/">Continue: 14 advanced lmcache tiered cache</a></p>
-<p><a id="related"></a></p>
-<p><a href="../../concepts/kv-routing/">Continue: related</a></p>
-<h2 id="check-your-result">Check your result<a class="headerlink" href="#check-your-result" title="Permanent link">&para;</a></h2>
-<p>Validate metadata readiness, actual endpoint placement and engine-side reuse separately.</p>
-<p>Select a supported model/engine tuple before interpreting results. Keep direct-worker success separate from Gateway delivery, routing evidence, engine cache reuse, performance and release qualification. Historical PASS, FAIL and BLOCKED results retain their original artifact identities.</p>
-<h2 id="next-steps-and-cleanup">Next steps and cleanup<a class="headerlink" href="#next-steps-and-cleanup" title="Permanent link">&para;</a></h2>
-<p>Use the canonical deployment sequence rather than combining fragments from different engine/version pages. Drain before switching or deleting owned resources; retained result pages are evidence, not another deployment recipe. Read the <a href="../model-engine-standard/select/">lab starting point</a> if required values are missing. Use <a href="../model-engine-standard/lifecycle/">cleanup and recovery</a> when ending the run.</p>
+<!-- Previous section IDs: kept so old deep links redirect to the current page. -->
+<div class="legacy-anchors">
+<ul>
+<li><span id="kv-cache-aware-routing"></span><a href="../../concepts/kv-routing/">kv-cache-aware-routing</a></li>
+<li><span id="1-what-it-is-and-where-it-sits"></span><a href="../../concepts/kv-routing/">1-what-it-is-and-where-it-sits</a></li>
+<li><span id="2-architecture-inventory-in-go-decision-in-c"></span><a href="../../concepts/kv-routing/">2-architecture-inventory-in-go-decision-in-c</a></li>
+<li><span id="3-what-exactly-is-synced-and-why-it-is-tiny"></span><a href="../../concepts/kv-routing/">3-what-exactly-is-synced-and-why-it-is-tiny</a></li>
+<li><span id="consistency-model"></span><a href="../../concepts/kv-routing/">consistency-model</a></li>
+<li><span id="4-end-to-end-call-flow"></span><a href="../../concepts/kv-routing/">4-end-to-end-call-flow</a></li>
+<li><span id="worked-example-two-prompts-end-to-end"></span><a href="../../concepts/kv-routing/">worked-example-two-prompts-end-to-end</a></li>
+<li><span id="5-the-vllm-block-hash-parity-contract"></span><a href="../../ai-gateway/engine-contracts/">5-the-vllm-block-hash-parity-contract</a></li>
+<li><span id="6-parity-preflight-inspect-what-is-actually-running"></span><a href="../../ai-gateway/engine-contracts/">6-parity-preflight-inspect-what-is-actually-running</a></li>
+<li><span id="61-the-parity-triad-as-an-operational-checklist"></span><a href="../../concepts/kv-routing/">61-the-parity-triad-as-an-operational-checklist</a></li>
+<li><span id="62-the-read-only-preflight-read-the-live-container-not-the-script"></span><a href="../../concepts/kv-routing/">62-the-read-only-preflight-read-the-live-container-not-the-script</a></li>
+<li><span id="63-tested-artifact-rule"></span><a href="../../concepts/kv-routing/">63-tested-artifact-rule</a></li>
+<li><span id="64-vllm-metric-families-the-collector-needs"></span><a href="../../concepts/kv-routing/">64-vllm-metric-families-the-collector-needs</a></li>
+<li><span id="65-loxilb-runtime-env-worth-setting-explicitly"></span><a href="../../concepts/kv-routing/">65-loxilb-runtime-env-worth-setting-explicitly</a></li>
+<li><span id="7-guard-ladder-miss-reasons"></span><a href="../../operations/kv-routing-verification/">7-guard-ladder-miss-reasons</a></li>
+<li><span id="8-configuration"></span><a href="../model-engine-standard/matrix-manual/">8-configuration</a></li>
+<li><span id="81-rest-the-load-balancer-rule"></span><a href="../../concepts/kv-routing/">81-rest-the-load-balancer-rule</a></li>
+<li><span id="82-environment-variables-loxilb-process"></span><a href="../../concepts/kv-routing/">82-environment-variables-loxilb-process</a></li>
+<li><span id="83-tokenizer-staging"></span><a href="../../concepts/kv-routing/">83-tokenizer-staging</a></li>
+<li><span id="84-vllm-side-must-match-the-rule"></span><a href="../../concepts/kv-routing/">84-vllm-side-must-match-the-rule</a></li>
+<li><span id="85-onboarding-a-new-model-one-model-per-rule"></span><a href="../../concepts/kv-routing/">85-onboarding-a-new-model-one-model-per-rule</a></li>
+<li><span id="9-verify-it-actually-fired-the-mandatory-post-config-check"></span><a href="../../operations/kv-routing-verification/">9-verify-it-actually-fired-the-mandatory-post-config-check</a></li>
+<li><span id="91-step-1-the-engagement-assertion-on-get-netloxv1metrics"></span><a href="../../concepts/kv-routing/">91-step-1-the-engagement-assertion-on-get-netloxv1metrics</a></li>
+<li><span id="92-step-2-inventory-check"></span><a href="../../concepts/kv-routing/">92-step-2-inventory-check</a></li>
+<li><span id="93-step-3-subscriber-count"></span><a href="../../concepts/kv-routing/">93-step-3-subscriber-count</a></li>
+<li><span id="94-step-4-publisher-side-sanity-on-the-engine-host"></span><a href="../../concepts/kv-routing/">94-step-4-publisher-side-sanity-on-the-engine-host</a></li>
+<li><span id="10-verify-inventory-metrics-reference"></span><a href="../../operations/kv-routing-verification/">10-verify-inventory-metrics-reference</a></li>
+<li><span id="101-inspect-the-live-inventory"></span><a href="../../concepts/kv-routing/">101-inspect-the-live-inventory</a></li>
+<li><span id="102-prometheus-metrics"></span><a href="../../concepts/kv-routing/">102-prometheus-metrics</a></li>
+<li><span id="103-healthy-warm-route-signature"></span><a href="../../concepts/kv-routing/">103-healthy-warm-route-signature</a></li>
+<li><span id="11-troubleshoot"></span><a href="../../operations/kv-routing-verification/">11-troubleshoot</a></li>
+<li><span id="12-known-limits"></span><a href="../../operations/kv-routing-verification/">12-known-limits</a></li>
+<li><span id="load-blind-argmax-capacity-weighted-blend"></span><a href="../../concepts/kv-routing/">load-blind-argmax-capacity-weighted-blend</a></li>
+<li><span id="13-advanced-ai-controller-experimental"></span><a href="../advanced-cache-integrations/">13-advanced-ai-controller-experimental</a></li>
+<li><span id="14-advanced-lmcache-tiered-cache"></span><a href="../advanced-cache-integrations/">14-advanced-lmcache-tiered-cache</a></li>
+<li><span id="related"></span><a href="../../concepts/kv-routing/">related</a></li>
+</ul>
+</div>
 
 
 
@@ -5820,6 +5660,8 @@
       <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
       
         <script src="../../javascripts/analytics.js"></script>
+      
+        <script src="../../javascripts/legacy-anchors.js"></script>
       
     
   </body>
