@@ -5733,17 +5733,17 @@ revision. It does <strong>not</strong> prove that every family is present in a p
 deployment: feature activation, traffic, build tags, hardware, and runtime
 configuration still determine whether a series is emitted.</p>
 <ul>
-<li>Gateway source commit: <code>ef8813af4d75dc3db0bc5a9d7e02e9abd3e46bd1</code></li>
-<li>Selected Gateway eBPF submodule commit: <code>f515ab5aeed8e8643f08906d0a90e9a2b893ba8d</code></li>
+<li>Gateway source commit: <code>c7b4af87f1eda7db1a6667aa797e1d3b389d21cc</code></li>
+<li>Selected Gateway eBPF submodule commit: <code>f00d8b3f7de5b70e3971167a791ce5a3cf5d78e4</code></li>
 <li>Comparison release: <code>v0.9.8.9-rc.1</code> at <code>f08b18beda587217265c9ba6419159119914795c</code></li>
 <li>Comparison release eBPF submodule commit: <code>5536a2117ad2ad1128900a0d808ad7dec2eee2b5</code></li>
 <li>Release manifest availability: <strong>absent</strong></li>
 <li>Manifest path: <code>deploy/monitoring/manifest/metric-manifest.json</code></li>
-<li>Manifest SHA-256: <code>a4df2fb32afb3024f9e03c6b5b9a65767f0b403cb623d81cb80e27597409e513</code></li>
-<li>Embedded manifest source revision: <code>82bbeaccc2b78f35149f0637f257f0bba10b83d9</code></li>
-<li>Embedded manifest generation time: <code>2026-10-26T11:50:00+00:00</code></li>
+<li>Manifest SHA-256: <code>906b1f54c6b892f054d7ef6cf73c34027d3192be98b837347f694e2042e9fced</code></li>
+<li>Embedded manifest source revision: <code>64bd2a6c62ee24115b007ed6973dfdc5e5f66521</code></li>
+<li>Embedded manifest generation time: <code>2026-10-28T03:12:05+00:00</code></li>
 <li>Manifest schema version: <code>1</code></li>
-<li>Release-scope families: <strong>292</strong></li>
+<li>Release-scope families: <strong>298</strong></li>
 <li>Raw writer paths and evidence prose are intentionally not copied into this public catalog.</li>
 </ul>
 <p>The table below is therefore a selected-source catalog, not a claim
@@ -5764,16 +5764,20 @@ Release packaging and runtime emission require separate qualification.</p>
 <td>writer plus recorded runtime evidence in the upstream manifest</td>
 </tr>
 <tr>
-<td><code>verified-static</code> (68)</td>
+<td><code>verified-static</code> (69)</td>
 <td>writer verified by static or unit evidence; no runtime claim</td>
 </tr>
 <tr>
-<td><code>conditional-with-proven-writer</code> (74)</td>
+<td><code>conditional-with-proven-writer</code> (77)</td>
 <td>writer exists but the family appears only when its feature path is active</td>
 </tr>
 <tr>
 <td><code>writer-mapped</code> (80)</td>
 <td>writer source is mapped; runtime emission was not verified</td>
+</tr>
+<tr>
+<td><code>definition-only</code> (2)</td>
+<td>registered without a separate writer, for example a gauge computed when Prometheus scrapes it; no runtime claim</td>
 </tr>
 </tbody>
 </table>
@@ -5999,6 +6003,46 @@ lanes separate.</p>
 <td><code>loxilb_ai_engine_info</code></td>
 <td><code>gauge</code></td>
 <td><code>service</code>, <code>engine</code></td>
+<td><code>V</code></td>
+<td><code>gateway-default</code></td>
+<td><code>conditional-with-proven-writer</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_epp_candidates_rejected_total</code></td>
+<td><code>counter</code></td>
+<td><code>reason</code></td>
+<td><code>V</code></td>
+<td><code>gateway-default</code></td>
+<td><code>conditional-with-proven-writer</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_epp_duration_seconds</code></td>
+<td><code>histogram</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>conditional-with-proven-writer</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_epp_inflight</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>definition-only</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_epp_pending</code></td>
+<td><code>gauge</code></td>
+<td>none</td>
+<td><code>E</code></td>
+<td><code>gateway-default</code></td>
+<td><code>definition-only</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_epp_requests_total</code></td>
+<td><code>counter</code></td>
+<td><code>outcome</code></td>
 <td><code>V</code></td>
 <td><code>gateway-default</code></td>
 <td><code>conditional-with-proven-writer</code></td>
@@ -6346,6 +6390,14 @@ lanes separate.</p>
 <td><code>E</code></td>
 <td><code>gateway-default</code></td>
 <td><code>conditional-with-proven-writer</code></td>
+</tr>
+<tr>
+<td><code>loxilb_ai_store_write_outcome_unknown_total</code></td>
+<td><code>counter</code></td>
+<td><code>plane</code></td>
+<td><code>C</code></td>
+<td><code>gateway-default</code></td>
+<td><code>verified-static</code></td>
 </tr>
 <tr>
 <td><code>loxilb_ai_stream_early_bytes_closed_total</code></td>
@@ -8243,7 +8295,7 @@ use values outside the frozen source contract.</p>
 </table>
 <h2 id="source-declared-label-combinations">Source-declared label combinations<a class="headerlink" href="#source-declared-label-combinations" title="Permanent link">&para;</a></h2>
 <p>Request outcomes, causes, P/D phases and fallback reasons are extracted from <code>api/prometheus/ai_metrics.go</code>
-at the Gateway commit above (source SHA-256: <code>a96d551066ffda3976c70c7ae89c2d7cb7fd82e6203c4e87ce64e8ab7427017a</code>).
+at the Gateway commit above (source SHA-256: <code>ffb660a1c45b4034e5b8cc12bfb2faa835004e7afe3ed3e4a96a7a58b74b9017</code>).
 The validator also rejects selectors that match none of these combinations.
 Other enums above are reviewed documentation constants. Empty cause is written as <code>(empty)</code>.</p>
 <table>
