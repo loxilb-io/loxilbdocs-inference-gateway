@@ -17,6 +17,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   observability, a reproduction harness, troubleshooting and teardown, plus the
   measurements of the three routing modes (cache reuse, TTFT, throughput,
   failure modes) with the raw results archive.
+  The vLLM manifest starts the pods with `--enable-prompt-tokens-details`, so
+  every answer's `usage` block reports the prompt tokens served from the
+  prefix cache.
 - Backend TLS Verification and Client Certificates page: certificate registry
   entries by usage (`ca`, `client`), `mtls_backend.verify_server_cert`,
   `backend_ca_cert_id`, `backend_client_cert_id`, `backend_tls_server_name`,
@@ -48,6 +51,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Tracked Gateway contract refreshed from `b954a57` to `72de93c`: `POST /config/cert`
+  answers 409 for a certificate ID already in use (PUT rotates it), regenerated
+  metric manifest and a new eBPF pin; generated reference pages and the
+  verification-status tuple follow.
 - Tracked Gateway contract refreshed from `c7b4af8` to `b954a57`: read-only EPP
   connection state on a rule read (`eppState`, `eppStateSince`,
   `eppLastError`), an EPP on a `pd_disagg_mode` rule now requires
